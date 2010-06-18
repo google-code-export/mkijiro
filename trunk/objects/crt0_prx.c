@@ -460,7 +460,7 @@ unsigned int blockAdd(int fd, unsigned char *a_data){
 		block[blockTotal].stdVal=0xFFFFFFFF;
     }
     #ifdef _JOKER_
-    else if((block[blockTotal].address>=0xFF000000) && (block[blockTotal].address<=0xFFFCFFFF)){ // is block joker?
+    else if((block[blockTotal].address>=0xFF000000) && (block[blockTotal].address<=0xFF00FFFF)){ // is block joker?
     	block[blockTotal].flags|=FLAG_JOKER;
     	block[blockTotal].address+=0x08800000;
     	block[blockTotal].address-=0xFF000000;
@@ -753,6 +753,7 @@ void cheatDisable(unsigned int a_cheat){
 				if((cheatDMA+block[counter].address >= 0x08800000) && (cheatDMA+block[counter].address <= 0x0A000000)){
 				case FLAG_DWORD:
 				if(block[counter].flags & FLAG_JOKER){
+				//判定コード時は復元禁止にする
 				}
 				else{
 					if(block[counter].address % 4 == 0){
@@ -854,7 +855,7 @@ void cheatSave(){
 			if(fileMode == 0){
 				//Pick a mode
 				switch(fileChar){
-					case ';': fileMode=1; //sceIoWrite(tempFd, ";", 1); 
+					case ';': fileMode=1; //sceIoWrite(tempFd, ";", 1); コメント行のコピーなし
 					break;
 
 					case '#': fileMode=2; counter++;
@@ -907,7 +908,7 @@ void cheatSave(){
 									sceIoWrite(tempFd, buffer, 11);
 								}
 								else if(block[scounter].flags & FLAG_JOKER){
-									sprintf(buffer, "0x%08lX ", (block[scounter].address - 0x08800000 + 0xFF000000));   
+									sprintf(buffer, "0x%08lX ", (block[scounter].address - 0x08800000 + 0xFF000000)); //オリジナルだと間違っていたので修正
 									sceIoWrite(tempFd, buffer, 11);
 								}
 								else{
@@ -982,7 +983,7 @@ void cheatSave(){
 		sceIoClose(tempFd);
 		sceIoClose(fd);
 		//Delete the old file, rename the temporary
-		//sceIoRemove(gameDir);
+		//sceIoRemove(gameDir); GEN550では動かないっぽいので直接gemedirに変更
 		//sceIoRename("ms0:/seplugins/nitePR/temp.txt", gameDir);
 	}
 	//Open the file for appending
@@ -1008,7 +1009,7 @@ void cheatSave(){
 			//Loop through the addresses
 			scounter=cheat[counter].block;
 			while(scounter < (cheat[counter].block+cheat[counter].len)){
-				//Write out the address
+				//Write out the address　新規でもJOKER/DMA保存できるように変更
 				if(block[scounter].flags & FLAG_DMA){
 					sprintf(buffer, "0x%08lX ", (block[scounter].address));
 					sceIoWrite(fd, buffer, 11);
@@ -1346,9 +1347,9 @@ void menuDraw(){
 				case 2: pspDebugScreenPuts("  Paste address\n"); break;
 				case 3: pspDebugScreenPuts("  Copy value\n"); break;
 				case 4: pspDebugScreenPuts("  Paste value\n"); break;
-			//	case 5: pspDebugScreenPuts("  Copy to new cheat\n"); break;
-			//	case 6: pspDebugScreenPuts("  Copy to text file\n"); break;
-				case 5: pspDebugScreenPuts("  Normal cheat\n"); break;
+				//case 5: pspDebugScreenPuts("  Copy to new cheat\n"); break;　動作がよくわからないので無効
+				//case 6: pspDebugScreenPuts("  Copy to text file\n"); break; 
+				case 5: pspDebugScreenPuts("  Normal cheat\n"); break; //コードフラグの変更を追加
 				case 6: pspDebugScreenPuts("  Joker cheat\n"); break;
 				case 7: pspDebugScreenPuts("  DMA cheat\n"); break;
 			}
@@ -2264,7 +2265,7 @@ void menuDraw(){
 
 				pspDebugScreenSetTextColor(color01);
 				#ifdef _UMDMODE_
-					pspDebugScreenPuts("  MKV10 IJIRO++");
+					pspDebugScreenPuts("  MKIJIRO+ 20100618");
 				#elif _POPSMODE_
 					pspDebugScreenPuts("  MKULTRA V10 POPS ");
 				#endif
@@ -3103,7 +3104,7 @@ void menuInput(){
 					copyMenu-=1;
 				}
 				else{
-					copyMenu=7;
+					copyMenu=7;//メニューを一番下へ
 				}
 				menuDraw();
 				sceKernelDelayThread(150000);
@@ -3113,7 +3114,7 @@ void menuInput(){
 					copyMenu+=1;
 				}
 				else{
-					copyMenu=1;
+					copyMenu=1;//メニューを一番上へ
 				}
 				menuDraw();
 				sceKernelDelayThread(150000);
@@ -3300,7 +3301,7 @@ void menuInput(){
 			//	menuDraw();
 			//	sceKernelDelayThread(150000);
 			//}
-			else if(copyMenu ==5){//normal
+			else if(copyMenu ==5){//normal flagに変更
 			  if(extMenu)
 			  {
 				if(extMenu == 1)
@@ -3346,7 +3347,7 @@ void menuInput(){
 			  }
 			}
 			
-			else if(copyMenu ==6){//joker
+			else if(copyMenu ==6){//jokerフラグに変更
 			  if(extMenu)
 			  {
 				if(extMenu == 1)
@@ -3393,7 +3394,7 @@ void menuInput(){
 			  }
 			}
 			
-			else if(copyMenu ==7){//DMA
+			else if(copyMenu ==7){//DMAフラグに変更
 			  if(extMenu)
 			  {
 				if(extMenu == 1)
@@ -6148,7 +6149,7 @@ void menuInput(){
 					if((foobar >= 0x08800000) && (foobar <= 0x09FFFFFC)){ //handle pointers
 						storedAddress=decodeAddress[bdNo]+(decodeY[bdNo]*4); //store pointer address
 						foobar+=0x40000000;
-						decodeAddress[bdNo]=foobar;
+						decodeAddress[bdNo]=foobar & 0xFFFFFFFC;//アライメント修正
 						decodeY[bdNo]=0;
 					}
 					else if(((foobar >= 0x0A200000) && (foobar <= 0x0A7FFFFC)) || ((foobar >= 0x0E200000) && (foobar <= 0x0E7FFFFC))){ //handle hooks
