@@ -754,7 +754,7 @@ void cheatDisable(unsigned int a_cheat){
 				if((cheatDMA+block[counter].address >= 0x08800000) && (cheatDMA+block[counter].address <= 0x0A000000)){
 				case FLAG_DWORD:
 				if(block[counter].flags & FLAG_JOKER){
-				//È½Äê¥³¡¼¥É»þ¤ÏÉü¸µ¶Ø»ß¤Ë¤¹¤ë
+				//”»’èƒR[ƒhŽž‚Í•œŒ³‹ÖŽ~‚É‚·‚é
 				}
 				else{
 					if(block[counter].address % 4 == 0){
@@ -856,7 +856,7 @@ void cheatSave(){
 			if(fileMode == 0){
 				//Pick a mode
 				switch(fileChar){
-					case ';': fileMode=1; //sceIoWrite(tempFd, ";", 1); ¥³¥á¥ó¥È¹Ô¤Î¥³¥Ô¡¼¤Ê¤·
+					case ';': fileMode=1; //sceIoWrite(tempFd, ";", 1); ƒRƒƒ“ƒgs‚ÌƒRƒs[‚È‚µ
 					break;
 
 					case '#': fileMode=2; counter++;
@@ -909,7 +909,7 @@ void cheatSave(){
 									sceIoWrite(tempFd, buffer, 11);
 								}
 								else if(block[scounter].flags & FLAG_JOKER){
-									sprintf(buffer, "0x%08lX ", (block[scounter].address - 0x08800000 + 0xFF000000)); //¥ª¥ê¥¸¥Ê¥ë¤À¤È´Ö°ã¤Ã¤Æ¤¤¤¿¤Î¤Ç½¤Àµ
+									sprintf(buffer, "0x%08lX ", (block[scounter].address - 0x08800000 + 0xFF000000)); //ƒIƒŠƒWƒiƒ‹‚¾‚ÆŠÔˆá‚Á‚Ä‚¢‚½‚Ì‚ÅC³
 									sceIoWrite(tempFd, buffer, 11);
 								}
 								else{
@@ -984,7 +984,7 @@ void cheatSave(){
 		sceIoClose(tempFd);
 		sceIoClose(fd);
 		//Delete the old file, rename the temporary
-		//sceIoRemove(gameDir); GEN550¤Ç¤ÏÆ°¤«¤Ê¤¤¤Ã¤Ý¤¤¤Î¤ÇÄ¾ÀÜgemedir¤ËÊÑ¹¹
+		//sceIoRemove(gameDir); GEN550‚Å‚Í“®‚©‚È‚¢‚Á‚Û‚¢‚Ì‚Å’¼Úgemedir‚É•ÏX
 		//sceIoRename("ms0:/seplugins/nitePR/temp.txt", gameDir);
 	}
 	//Open the file for appending
@@ -1010,7 +1010,7 @@ void cheatSave(){
 			//Loop through the addresses
 			scounter=cheat[counter].block;
 			while(scounter < (cheat[counter].block+cheat[counter].len)){
-				//Write out the address¡¡¿·µ¬¤Ç¤âJOKER/DMAÊÝÂ¸¤Ç¤­¤ë¤è¤¦¤ËÊÑ¹¹
+				//Write out the address@V‹K‚Å‚àJOKER/DMA•Û‘¶‚Å‚«‚é‚æ‚¤‚É•ÏX
 				if(block[scounter].flags & FLAG_DMA){
 					sprintf(buffer, "0x%08lX ", (block[scounter].address));
 					sceIoWrite(fd, buffer, 11);
@@ -1348,9 +1348,9 @@ void menuDraw(){
 				case 2: pspDebugScreenPuts("  Paste address\n"); break;
 				case 3: pspDebugScreenPuts("  Copy value\n"); break;
 				case 4: pspDebugScreenPuts("  Paste value\n"); break;
-				//case 5: pspDebugScreenPuts("  Copy to new cheat\n"); break;¡¡Æ°ºî¤¬¤è¤¯¤ï¤«¤é¤Ê¤¤¤Î¤ÇÌµ¸ú
+				//case 5: pspDebugScreenPuts("  Copy to new cheat\n"); break;@“®ì‚ª‚æ‚­‚í‚©‚ç‚È‚¢‚Ì‚Å–³Œø
 				//case 6: pspDebugScreenPuts("  Copy to text file\n"); break; 
-				case 5: pspDebugScreenPuts("  Normal cheat\n"); break; //¥³¡¼¥É¥Õ¥é¥°¤ÎÊÑ¹¹¤òÄÉ²Ã
+				case 5: pspDebugScreenPuts("  Normal cheat\n"); break; //ƒR[ƒhƒtƒ‰ƒO‚Ì•ÏX‚ð’Ç‰Á
 				case 6: pspDebugScreenPuts("  Joker cheat\n"); break;
 				case 7: pspDebugScreenPuts("  DMA cheat\n"); break;
 			}
@@ -3105,7 +3105,7 @@ void menuInput(){
 					copyMenu-=1;
 				}
 				else{
-					copyMenu=7;//¥á¥Ë¥å¡¼¤ò°ìÈÖ²¼¤Ø
+					copyMenu=7;//ƒƒjƒ…[‚ðˆê”Ô‰º‚Ö
 				}
 				menuDraw();
 				sceKernelDelayThread(150000);
@@ -3115,7 +3115,7 @@ void menuInput(){
 					copyMenu+=1;
 				}
 				else{
-					copyMenu=1;//¥á¥Ë¥å¡¼¤ò°ìÈÖ¾å¤Ø
+					copyMenu=1;//ƒƒjƒ…[‚ðˆê”Ôã‚Ö
 				}
 				menuDraw();
 				sceKernelDelayThread(150000);
@@ -3302,7 +3302,7 @@ void menuInput(){
 			//	menuDraw();
 			//	sceKernelDelayThread(150000);
 			//}
-			else if(copyMenu ==5){//normal flag¤ËÊÑ¹¹
+			else if(copyMenu ==5){//normal flag‚É•ÏX
 			  if(extMenu)
 			  {
 				if(extMenu == 1)
@@ -3348,7 +3348,7 @@ void menuInput(){
 			  }
 			}
 			
-			else if(copyMenu ==6){//joker¥Õ¥é¥°¤ËÊÑ¹¹
+			else if(copyMenu ==6){//jokerƒtƒ‰ƒO‚É•ÏX
 			  if(extMenu)
 			  {
 				if(extMenu == 1)
@@ -3395,7 +3395,7 @@ void menuInput(){
 			  }
 			}
 			
-			else if(copyMenu ==7){//DMA¥Õ¥é¥°¤ËÊÑ¹¹
+			else if(copyMenu ==7){//DMAƒtƒ‰ƒO‚É•ÏX
 			  if(extMenu)
 			  {
 				if(extMenu == 1)
@@ -6148,7 +6148,7 @@ void menuInput(){
 				if((padButtons & PSP_CTRL_SQUARE) && (padButtons & PSP_CTRL_RIGHT)){
 					unsigned int Addresstmp=0;
 					unsigned int foobar=*((unsigned int*)(decodeAddress[bdNo]+(decodeY[bdNo]*4)));
-					//¥Ý¥¤¥ó¥¿¥¸¥ã¥ó¥×
+					//ƒ|ƒCƒ“ƒ^ƒWƒƒƒ“ƒv
 					if((foobar >= 0x08800000) && (foobar <= 0x09FFFF98)){ //handle pointers
 						storedAddress=decodeAddress[bdNo]+(decodeY[bdNo]*4); //store pointer address
 						foobar+=0x40000000;
@@ -6160,7 +6160,7 @@ void menuInput(){
 						foobar&=0x3FFFFFF;
 						decodeAddress[bdNo]=(mipsNum, "%08X", ((foobar<<2)))-0xC0000000; //store pointer address
 						decodeY[bdNo]=0;
-					}//¥Ö¥é¥ó¥Á¥¸¥ã¥ó¥×
+					}//ƒuƒ‰ƒ“ƒ`ƒWƒƒƒ“ƒv
 					else if(((foobar >= 0x10000000) && (foobar <= 0x1FFFFFFF)) || ((foobar >= 0x50000000) && (foobar <= 0x5FFFFFFF))){ //handle branches
 						storedAddress=decodeAddress[bdNo]+(decodeY[bdNo]*4);
 						foobar&=0xFFFF;

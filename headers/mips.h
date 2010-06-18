@@ -197,8 +197,8 @@ void mipsDec(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
 
 void mipsDecode(unsigned int a_opcode)
 {
-  //(½ÐÎÏÌ¾) (a_opcode, Z , a_more¤Î²ó¿ô)
-  //Z=2 sll¤Î¿¿¤óÃæ,1 sll¤Îº¸,3 sll¤Î±¦,T lw--(?) ,S lw ?$__()
+  //(o—Í–¼) (a_opcode, Z , a_more‚Ì‰ñ”)
+  //Z=2 sll‚Ì^‚ñ’†,1 sll‚Ì¶,3 sll‚Ì‰E,T lw--(?) ,S lw ?$__()
   //Handle opcode
   switch((a_opcode & 0xFC000000) >> 24)
   {
@@ -963,7 +963,7 @@ Syntax: lui $t, imm
 Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
       break;
 
-//FPUÌ¿Îá
+//FPU–½—ß
      case 0x44:
       switch(a_opcode >>24){
 
