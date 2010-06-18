@@ -180,8 +180,15 @@ void mipsDec(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
   else 
   {
     a_opcode&=0xFFFF;
-    pspDebugScreenSetTextColor(0xFF999999); pspDebugScreenPuts("$"); pspDebugScreenSetTextColor(color02);
-    sprintf(mipsNum, "%05lu", a_opcode); pspDebugScreenPuts(mipsNum);
+    a_opcode++;
+    if(a_opcode > 0x7FFF){
+    a_opcode=0x10000 - a_opcode;
+    pspDebugScreenSetTextColor(0xFF999999); pspDebugScreenPuts("-"); pspDebugScreenSetTextColor(color02);
+    }
+    else{
+    pspDebugScreenSetTextColor(0xFF999999); pspDebugScreenPuts("+"); pspDebugScreenSetTextColor(color02);
+	}
+    sprintf(mipsNum, "%d", a_opcode); pspDebugScreenPuts(mipsNum);
   }
   
   if(a_more) pspDebugScreenPuts(", ");
@@ -189,8 +196,8 @@ void mipsDec(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
 
 void mipsDecode(unsigned int a_opcode)
 {
-  //(o—Í–¼) (a_opcode, Z , a_more‚Ì‰ñ”)
-  //Z=2 sll‚Ì^‚ñ’†,1 sll‚Ì¶,3 sll‚Ì‰E,T lw--(?) ,S lw ?$__()
+  //(½ÐÎÏÌ¾) (a_opcode, Z , a_more¤Î²ó¿ô)
+  //Z=2 sll¤Î¿¿¤óÃæ,1 sll¤Îº¸,3 sll¤Î±¦,T lw--(?) ,S lw ?$__()
   //Handle opcode
   switch((a_opcode & 0xFC000000) >> 24)
   {
@@ -955,7 +962,7 @@ Syntax: lui $t, imm
 Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
       break;
 
-//FPU–½—ß
+//FPUÌ¿Îá
      case 0x44:
       switch(a_opcode >>24){
 
