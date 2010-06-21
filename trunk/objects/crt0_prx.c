@@ -1023,8 +1023,6 @@ void cheatSave(){
 					sprintf(buffer, "0x%08lX ", (block[scounter].address - 0x08800000));
 					sceIoWrite(fd, buffer, 11);
 								}
-				//sprintf(buffer, "0x%08lX ", (block[scounter].address - 0x08800000));
-				//sceIoWrite(fd, buffer, strlen(buffer));
 
 				//Write out the value
 				switch(block[scounter].flags & FLAG_DWORD){
@@ -1049,7 +1047,7 @@ void cheatSave(){
 			}
 			//Next cheat
 			counter++;
-			sceIoWrite(fd, "\r\n", 2);
+			//sceIoWrite(fd, "\r\n", 2)//最後に改行が１つ多いので保存がバグっぽい？
 		}
 		//Close the file
 		sceIoClose(fd);
@@ -2266,7 +2264,7 @@ void menuDraw(){
 
 				pspDebugScreenSetTextColor(color01);
 				#ifdef _UMDMODE_
-					pspDebugScreenPuts("  MKIJIRO+ 20100618");
+					pspDebugScreenPuts("  MKIJIRO+ 20100622");
 				#elif _POPSMODE_
 					pspDebugScreenPuts("  MKULTRA V10 POPS ");
 				#endif
@@ -6160,8 +6158,10 @@ void menuInput(){
 						foobar&=0x3FFFFFF;
 						decodeAddress[bdNo]=(mipsNum, "%08X", ((foobar<<2)))-0xC0000000; //store pointer address
 						decodeY[bdNo]=0;
-					}//ブランチジャンプ
-					else if(((foobar >= 0x10000000) && (foobar <= 0x1FFFFFFF)) || ((foobar >= 0x50000000) && (foobar <= 0x5FFFFFFF))){ //handle branches
+					}//ブランチジャンプ	
+						else if(((foobar >= 0x10000000) && (foobar <= 0x1FFFFFFF)) || ((foobar >= 0x50000000) && (foobar <= 0x5FFFFFFF))
+						|| ((foobar >= 0x45000000) && (foobar <= 0x4503FFFF)) || ((foobar >= 0x49000000) && (foobar <= 0x491FFFFF)))
+						{ //handle branches
 						storedAddress=decodeAddress[bdNo]+(decodeY[bdNo]*4);
 						foobar&=0xFFFF;
 						if(foobar > 0x7FFF){
