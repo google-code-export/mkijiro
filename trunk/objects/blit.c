@@ -9,10 +9,16 @@
 #include "../fonts/lucidia.h"
 #elif _FONT_originaldebug 
 #include "../fonts/originaldebug.h"
+#elif _FONT_misaki
+#include "../fonts/misaki.h"
 #elif _FONT_perl 
 #include "../fonts/perl.h"
 #elif _FONT_sparta 
 #include "../fonts/sparta.h"
+#elif _FONT_linux 
+#include "../fonts/linux.h"
+#elif _FONT_debug 
+#include "../fonts/originaldebug.h"
 /*
 #elif _FONT_font4x6 
 #include "../fonts/font4x6.h" 
@@ -41,7 +47,7 @@ int blit_string(int sx,int sy,const char *msg,int fg_col,int bg_col){
    	if( (bufferwidth==0) || (pixelformat!=3)) return -1;
 
    	for(x=0;msg[x] && x<(pwidth/8);x++){
-   		code = msg[x] & 0x7f; // 7bit ANK
+   		code = msg[x] & 0xFF; // 7bit ANK
    		for(y=0;y<7;y++)
    		{
    			offset = (sy+y)*bufferwidth + (sx+x)*8;
