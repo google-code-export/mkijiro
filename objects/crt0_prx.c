@@ -461,7 +461,7 @@ unsigned int blockAdd(int fd, unsigned char *a_data){
 		block[blockTotal].stdVal=0xFFFFFFFF;
     }
     #ifdef _JOKER_
-    else if((block[blockTotal].address>=0xFF000000) && (block[blockTotal].address<=0xFFFCFFFF)){ // is block joker?
+    else if((block[blockTotal].address>=0xFF000000) && (block[blockTotal].address<=0xFFFFF3F9)){ // is block joker?
     	block[blockTotal].flags|=FLAG_JOKER;
     	block[blockTotal].address+=0x08800000;
     	block[blockTotal].address-=0xFF000000;
@@ -601,9 +601,14 @@ void cheatEnable(unsigned int a_cheat){
 		
 		#ifdef _JOKER_
 		if(block[counter].flags & FLAG_JOKER){
+				if(block[counter].hakVal == 0){
+				if(((block[counter].address -0x8800000) & 0xFFFFFF) != (*((unsigned int*)(0x08803FFC))& ((block[counter].address -0x8800000) & 0xFFFFFF))){
+				joker=1;}
+				}
+				else{
 				if((block[counter].address - 0x8800000) != (*((unsigned int*)(0x08800000 + (block[counter].hakVal & 0x1FFFFFE)))& 0xFFFF)){
-				joker=1;
-			}
+				joker=1;}
+				}
 			counter+=1; //adjust the counter *skip the joker cheat we dont want to apply it or back it up*
 		}
 		#endif
@@ -1353,7 +1358,7 @@ void menuDraw(){
 			//	case 5: pspDebugScreenPuts("  Copy to new cheat\n"); break;
 			//	case 6: pspDebugScreenPuts("  Copy to text file\n"); break;
 				case 5: pspDebugScreenPuts("  Normal cheat\n"); break;
-				case 6: pspDebugScreenPuts("  Joker cheat\n"); break;
+				case 6: pspDebugScreenPuts("  Joker cheat (0x3FFC default,0x0000 MASKED)\n"); break;
 				case 7: pspDebugScreenPuts("  DMA cheat\n"); break;
 			}
 			counter++;
@@ -3527,9 +3532,14 @@ void menuInput(){
 							}
 							
 						if (block[extSelected[0]].flags & FLAG_JOKER){
+									if(block[extSelected[0]].hakVal == 0){
+									if(block[extSelected[0]].address > 0x097FF3F9){
+								block[extSelected[0]].address=0x097FF3F9;
+									}}
+									else{
 									if(block[extSelected[0]].address > 0x0880FFFF){
 								block[extSelected[0]].address=0x0880FFFF;
-									}
+									}}
 						}
 						if(block[extSelected[0]].address > 0x09FFFFFF)
 							{

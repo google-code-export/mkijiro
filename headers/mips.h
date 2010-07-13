@@ -1800,16 +1800,14 @@ Syntax: sw $t, offset($s)
 Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
       break;
       
-/*      case 0xB0:
-      pspDebugScreenPuts("sdl 	");
-      mipsRegister(a_opcode, T, 1);
-      mipsImm(a_opcode, 0, 0);
-      pspDebugScreenPuts("(");
-      mipsRegister(a_opcode, S, 0);
-      pspDebugScreenPuts(")");
+      case 0xB0:
+     pspDebugScreenPuts("mtvme    ");
+     mipsRegister(a_opcode, T, 1);
+     mipsImm(a_opcode,0,0);
+//        { "mtvme", 0xb0000000, 0xFC000000, "%t, %i", ADDR_TYPE_NONE, 0 },
       break;
       
-      case 0xB4:
+/*      case 0xB4:
       pspDebugScreenPuts("sdr 	");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
