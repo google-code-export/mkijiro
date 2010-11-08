@@ -1,7 +1,7 @@
 //MODED BY HAROTUBO
 //reffer to PSPLINK/RXTOOL SRC
 /*
- 	WebSVN 	
+        WebSVN  
 psp - Rev 2457
 Subversion Repositories:
 Rev:
@@ -55,42 +55,42 @@ unsigned char *VFPUSTArray[]={
 
 void colorRegisters(unsigned int a_opcode)
 {
-	a_opcode=a_opcode % 0x20;
-	switch(a_opcode)
-	{
-		case 0x00: pspDebugScreenSetTextColor(0xFFBBBBBB); break; // ZERO
-		case 0x01: pspDebugScreenSetTextColor(0xFFCCCCCC); break; //AT
-		case 0x02: pspDebugScreenSetTextColor(0xFFFFFF00); break; // V0
-		case 0x03: pspDebugScreenSetTextColor(0xFFBBBB00); break; // V1
-		case 0x04: pspDebugScreenSetTextColor(0xFFEE0000); break; //A0
-		case 0x05: pspDebugScreenSetTextColor(0xFFBB0000); break; //A1
-		case 0x06: pspDebugScreenSetTextColor(0xFF880000); break; //A2
-		case 0x07: pspDebugScreenSetTextColor(0xFF550000); break; //A3
-		case 0x08: pspDebugScreenSetTextColor(0xFF00C010); break;//  T0
-		case 0x09: pspDebugScreenSetTextColor(0xFF00B020); break;//  T1
-		case 0x0A: pspDebugScreenSetTextColor(0xFF00A030); break;//  T2
-		case 0x0B: pspDebugScreenSetTextColor(0xFF009040); break;//  T3
-		case 0x0C: pspDebugScreenSetTextColor(0xFF008050); break;//  T4
-		case 0x0D: pspDebugScreenSetTextColor(0xFF007060); break;//  T5
-		case 0x0E: pspDebugScreenSetTextColor(0xFF006070); break;//  T6
-		case 0x0F: pspDebugScreenSetTextColor(0xFF005080); break;//  T7
-		case 0x10: pspDebugScreenSetTextColor(0xFF1000F0); break;// S0
-		case 0x11: pspDebugScreenSetTextColor(0xFF2000E0); break;// S1
-		case 0x12: pspDebugScreenSetTextColor(0xFF3000D0); break;// S2
-		case 0x13: pspDebugScreenSetTextColor(0xFF4000C0); break;// S3
-		case 0x14: pspDebugScreenSetTextColor(0xFF5000B0); break;// S4
-		case 0x15: pspDebugScreenSetTextColor(0xFF6000A0); break;// S5
-		case 0x16: pspDebugScreenSetTextColor(0xFF700090); break;// S6
-		case 0x17: pspDebugScreenSetTextColor(0xFF800080); break;// S7
-		case 0x18: pspDebugScreenSetTextColor(0xFF004090); break;//  T8
-		case 0x19: pspDebugScreenSetTextColor(0xFF0030A0); break;//  T9
-		case 0x1A: pspDebugScreenSetTextColor(0xFF0000B0); break;// KO
-		case 0x1B: pspDebugScreenSetTextColor(0xFF0000D0); break;// K1
-		case 0x1C: pspDebugScreenSetTextColor(0xFF008888); break;//  GP
-		case 0x1D: pspDebugScreenSetTextColor(0xFF00BBBB); break;//  SP
-		case 0x1E: pspDebugScreenSetTextColor(0xFF900070); break;// S8
-		case 0x1F: pspDebugScreenSetTextColor(0xFF00FFFF); break;//  RA
-  	}
+        a_opcode=a_opcode % 0x20;
+        switch(a_opcode)
+        {
+                case 0x00: pspDebugScreenSetTextColor(0xFFBBBBBB); break; // ZERO
+                case 0x01: pspDebugScreenSetTextColor(0xFFCCCCCC); break; //AT
+                case 0x02: pspDebugScreenSetTextColor(0xFFFFFF00); break; // V0
+                case 0x03: pspDebugScreenSetTextColor(0xFFBBBB00); break; // V1
+                case 0x04: pspDebugScreenSetTextColor(0xFFEE0000); break; //A0
+                case 0x05: pspDebugScreenSetTextColor(0xFFBB0000); break; //A1
+                case 0x06: pspDebugScreenSetTextColor(0xFF880000); break; //A2
+                case 0x07: pspDebugScreenSetTextColor(0xFF550000); break; //A3
+                case 0x08: pspDebugScreenSetTextColor(0xFF00C010); break;//  T0
+                case 0x09: pspDebugScreenSetTextColor(0xFF00B020); break;//  T1
+                case 0x0A: pspDebugScreenSetTextColor(0xFF00A030); break;//  T2
+                case 0x0B: pspDebugScreenSetTextColor(0xFF009040); break;//  T3
+                case 0x0C: pspDebugScreenSetTextColor(0xFF008050); break;//  T4
+                case 0x0D: pspDebugScreenSetTextColor(0xFF007060); break;//  T5
+                case 0x0E: pspDebugScreenSetTextColor(0xFF006070); break;//  T6
+                case 0x0F: pspDebugScreenSetTextColor(0xFF005080); break;//  T7
+                case 0x10: pspDebugScreenSetTextColor(0xFF1000F0); break;// S0
+                case 0x11: pspDebugScreenSetTextColor(0xFF2000E0); break;// S1
+                case 0x12: pspDebugScreenSetTextColor(0xFF3000D0); break;// S2
+                case 0x13: pspDebugScreenSetTextColor(0xFF4000C0); break;// S3
+                case 0x14: pspDebugScreenSetTextColor(0xFF5000B0); break;// S4
+                case 0x15: pspDebugScreenSetTextColor(0xFF6000A0); break;// S5
+                case 0x16: pspDebugScreenSetTextColor(0xFF700090); break;// S6
+                case 0x17: pspDebugScreenSetTextColor(0xFF800080); break;// S7
+                case 0x18: pspDebugScreenSetTextColor(0xFF004090); break;//  T8
+                case 0x19: pspDebugScreenSetTextColor(0xFF0030A0); break;//  T9
+                case 0x1A: pspDebugScreenSetTextColor(0xFF0000B0); break;// KO
+                case 0x1B: pspDebugScreenSetTextColor(0xFF0000D0); break;// K1
+                case 0x1C: pspDebugScreenSetTextColor(0xFF008888); break;//  GP
+                case 0x1D: pspDebugScreenSetTextColor(0xFF00BBBB); break;//  SP
+                case 0x1E: pspDebugScreenSetTextColor(0xFF900070); break;// S8
+                case 0x1F: pspDebugScreenSetTextColor(0xFF00FFFF); break;//  RA
+        }
 }
 
 void floatRegister(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
@@ -105,84 +105,84 @@ void floatRegister(unsigned int a_opcode, unsigned char a_slot, unsigned char a_
 void vectors(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
 {
   if(VFMODE==1){
-	pspDebugScreenPuts("VFPU_");
-  	if((a_opcode & 0x7F) > 0xF){
-  	sprintf(buffer, "%d",(a_opcode &0x7F));
-	}
-	else{
-	a_opcode&=0x7F;
+        pspDebugScreenPuts("VFPU_");
+        if((a_opcode & 0x7F) > 0xF){
+        sprintf(buffer, "%d",(a_opcode &0x7F));
+        }
+        else{
+        a_opcode&=0x7F;
         sprintf(buffer, "%s", VFPUArray[a_opcode]);
-	}
+        }
   }
   else if(VFMODE==3){
-	pspDebugScreenPuts("VFPU_");
-  	if(((a_opcode >>16) & 0x1F) > 0x13){
-  	sprintf(buffer, "%d",(a_opcode >>16) & 0x1F);
-	}
-	else{
-	a_opcode=(a_opcode >>16) & 0x1F ;
+        pspDebugScreenPuts("VFPU_");
+        if(((a_opcode >>16) & 0x1F) > 0x13){
+        sprintf(buffer, "%d",(a_opcode >>16) & 0x1F);
+        }
+        else{
+        a_opcode=(a_opcode >>16) & 0x1F ;
         sprintf(buffer, "%s", VFPUSTArray[a_opcode]);
-	}
+        }
   }
   else if(VFMODE==2){
   sprintf(buffer, "%d",(a_opcode>>18)& 0x7 );
   }
   else{
-	if(VFR==1){ //lvq,svq
-	if(((a_opcode & 0x1) == 1) && ((a_opcode >>24 == 0xD4) || (a_opcode >>24 == 0xD8) || (a_opcode >>24 == 0xF4) || (a_opcode >>24 == 0xF8))){
-  	sprintf(buffer, "R%d0%d",((a_opcode>>(8*(2-a_slot)))&0x1F)/4 , (a_opcode>>(8*(2-a_slot)))& 0x3 );
-	a_opcode=4*((a_opcode>>(8*(2-a_slot)))& 0x1F) + (a_opcode & 0x3);
-		}
-	else{
-	sprintf(buffer, "C%d%d0",((a_opcode>>(8*(2-a_slot)))&0x1F)/4 , (a_opcode>>(8*(2-a_slot)))& 0x3 );
-	a_opcode=4*((a_opcode>>(8*(2-a_slot)))& 0x1F);
-		}
-	}
-	else if(VFR==4){ //pair vector
-	if (((a_opcode>>(8*(2-a_slot))) & 0x20) == 0x20){
-  	sprintf(buffer, "R%d%d%d",((a_opcode>>(8*(2-a_slot)))&0x1F)/4 ,((a_opcode>>(8*(2-a_slot)))& 0x40)/0x20 ,(a_opcode>>(8*(2-a_slot)))& 0x3);
-	a_opcode=4*((a_opcode>>(8*(2-a_slot)))& 0x1C)+ 8*(((a_opcode>>(8*(2-a_slot)))& 0x40)/0x20) +((a_opcode>>(8*(2-a_slot)))& 0x3);
-		}
-	else{
-	sprintf(buffer, "C%d%d%d",((a_opcode>>(8*(2-a_slot)))&0x1F)/4 , (a_opcode>>(8*(2-a_slot)))& 0x3,((a_opcode>>(8*(2-a_slot))& 0x40)/0x20));
-	a_opcode=4*((a_opcode>>(8*(2-a_slot)))& 0x1F) +((a_opcode>>(8*(2-a_slot)))& 0x40)/0x20;
-		}
-	}
-	else if(VFR==5){ //triple vector
-	if (((a_opcode>>(8*(2-a_slot))) & 0x20) == 0x20){
-  	sprintf(buffer, "R%d%d%d",((a_opcode>>(8*(2-a_slot)))&0x1F)/4 ,((a_opcode>>(8*(2-a_slot)))& 0x40)/0x40 ,(a_opcode>>(8*(2-a_slot)))& 0x3);
-	a_opcode=4*((a_opcode>>(8*(2-a_slot)))& 0x1C)+ 4*(((a_opcode>>(8*(2-a_slot)))& 0x40)/0x40) +((a_opcode>>(8*(2-a_slot)))& 0x3);
-		}
-	else{
-	sprintf(buffer, "C%d%d%d",((a_opcode>>(8*(2-a_slot)))&0x1F)/4 , (a_opcode>>(8*(2-a_slot)))& 0x3,((a_opcode>>(8*(2-a_slot))& 0x40)/0x40));
-	a_opcode=4*((a_opcode>>(8*(2-a_slot)))& 0x1F) +((a_opcode>>(8*(2-a_slot)))& 0x40)/0x40;
-		}
-	}
-	else if(VFR==6){ //quad vector
-	if (((a_opcode>>(8*(2-a_slot))) & 0x20) == 0x20){
-  	sprintf(buffer, "R%d0%d",((a_opcode>>(8*(2-a_slot)))&0x1F)/4 ,(a_opcode>>(8*(2-a_slot)))& 0x3);
-	a_opcode=4*((a_opcode>>(8*(2-a_slot)))& 0x1C)+((a_opcode>>(8*(2-a_slot)))& 0x3);
-		}
-	else{
-	sprintf(buffer, "C%d%d0",((a_opcode>>(8*(2-a_slot)))&0x1F)/4 , (a_opcode>>(8*(2-a_slot)))& 0x3);
-	a_opcode=4*((a_opcode>>(8*(2-a_slot)))& 0x1F);
-		}
-	}
-	else if(VFR==2){ 
-//	a_opcode=(a_opcode>>(6+(5*(3-a_slot)))) & 0x1F;
-	}
-	/*matrix
-  	sprintf(buffer, "E%d%d%d",((a_opcode>>(8*(2-a_slot)))>>2)& 0x7 , (a_opcode>>(8*(2-a_slot)))& 0x3 , (a_opcode>>(8*(2-a_slot))&0x7F)>>5);
-  	sprintf(buffer, "M%d%d%d",((a_opcode>>(8*(2-a_slot)))>>2)& 0x7 , (a_opcode>>(8*(2-a_slot)))& 0x3 , (a_opcode>>(8*(2-a_slot))&0x7F)>>5);
-	}*/
-	else if(VFR==3){
-	sprintf(buffer, "S%d%d%d" , (a_opcode >> 18) & 7, (a_opcode >> 16) & 3, a_opcode & 3);
-	a_opcode=4*((a_opcode>>(8*(2-a_slot)))& 0x1F) + (a_opcode & 0x3);
-	}
-	else{ //VFR==0
-  	sprintf(buffer, "S%d%d%d",((a_opcode>>(8*(2-a_slot)))>>2)& 0x7 , (a_opcode>>(8*(2-a_slot)))& 0x3 , (a_opcode>>(8*(2-a_slot))&0x7F)>>5);
+        if(VFR==1){ //lvq,svq
+        if(((a_opcode & 0x1) == 1) && ((a_opcode >>24 == 0xD4) || (a_opcode >>24 == 0xD8) || (a_opcode >>24 == 0xF4) || (a_opcode >>24 == 0xF8))){
+        sprintf(buffer, "R%d0%d",((a_opcode>>(8*(2-a_slot)))&0x1F)/4 , (a_opcode>>(8*(2-a_slot)))& 0x3 );
+        a_opcode=4*((a_opcode>>(8*(2-a_slot)))& 0x1F) + (a_opcode & 0x3);
+                }
+        else{
+        sprintf(buffer, "C%d%d0",((a_opcode>>(8*(2-a_slot)))&0x1F)/4 , (a_opcode>>(8*(2-a_slot)))& 0x3 );
+        a_opcode=4*((a_opcode>>(8*(2-a_slot)))& 0x1F);
+                }
+        }
+        else if(VFR==4){ //pair vector
+        if (((a_opcode>>(8*(2-a_slot))) & 0x20) == 0x20){
+        sprintf(buffer, "R%d%d%d",((a_opcode>>(8*(2-a_slot)))&0x1F)/4 ,((a_opcode>>(8*(2-a_slot)))& 0x40)/0x20 ,(a_opcode>>(8*(2-a_slot)))& 0x3);
+        a_opcode=4*((a_opcode>>(8*(2-a_slot)))& 0x1C)+ 8*(((a_opcode>>(8*(2-a_slot)))& 0x40)/0x20) +((a_opcode>>(8*(2-a_slot)))& 0x3);
+                }
+        else{
+        sprintf(buffer, "C%d%d%d",((a_opcode>>(8*(2-a_slot)))&0x1F)/4 , (a_opcode>>(8*(2-a_slot)))& 0x3,((a_opcode>>(8*(2-a_slot))& 0x40)/0x20));
+        a_opcode=4*((a_opcode>>(8*(2-a_slot)))& 0x1F) +((a_opcode>>(8*(2-a_slot)))& 0x40)/0x20;
+                }
+        }
+        else if(VFR==5){ //triple vector
+        if (((a_opcode>>(8*(2-a_slot))) & 0x20) == 0x20){
+        sprintf(buffer, "R%d%d%d",((a_opcode>>(8*(2-a_slot)))&0x1F)/4 ,((a_opcode>>(8*(2-a_slot)))& 0x40)/0x40 ,(a_opcode>>(8*(2-a_slot)))& 0x3);
+        a_opcode=4*((a_opcode>>(8*(2-a_slot)))& 0x1C)+ 4*(((a_opcode>>(8*(2-a_slot)))& 0x40)/0x40) +((a_opcode>>(8*(2-a_slot)))& 0x3);
+                }
+        else{
+        sprintf(buffer, "C%d%d%d",((a_opcode>>(8*(2-a_slot)))&0x1F)/4 , (a_opcode>>(8*(2-a_slot)))& 0x3,((a_opcode>>(8*(2-a_slot))& 0x40)/0x40));
+        a_opcode=4*((a_opcode>>(8*(2-a_slot)))& 0x1F) +((a_opcode>>(8*(2-a_slot)))& 0x40)/0x40;
+                }
+        }
+        else if(VFR==6){ //quad vector
+        if (((a_opcode>>(8*(2-a_slot))) & 0x20) == 0x20){
+        sprintf(buffer, "R%d0%d",((a_opcode>>(8*(2-a_slot)))&0x1F)/4 ,(a_opcode>>(8*(2-a_slot)))& 0x3);
+        a_opcode=4*((a_opcode>>(8*(2-a_slot)))& 0x1C)+((a_opcode>>(8*(2-a_slot)))& 0x3);
+                }
+        else{
+        sprintf(buffer, "C%d%d0",((a_opcode>>(8*(2-a_slot)))&0x1F)/4 , (a_opcode>>(8*(2-a_slot)))& 0x3);
+        a_opcode=4*((a_opcode>>(8*(2-a_slot)))& 0x1F);
+                }
+        }
+        else if(VFR==2){ 
+//      a_opcode=(a_opcode>>(6+(5*(3-a_slot)))) & 0x1F;
+        }
+        /*matrix
+        sprintf(buffer, "E%d%d%d",((a_opcode>>(8*(2-a_slot)))>>2)& 0x7 , (a_opcode>>(8*(2-a_slot)))& 0x3 , (a_opcode>>(8*(2-a_slot))&0x7F)>>5);
+        sprintf(buffer, "M%d%d%d",((a_opcode>>(8*(2-a_slot)))>>2)& 0x7 , (a_opcode>>(8*(2-a_slot)))& 0x3 , (a_opcode>>(8*(2-a_slot))&0x7F)>>5);
+        }*/
+        else if(VFR==3){
+        sprintf(buffer, "S%d%d%d" , (a_opcode >> 18) & 7, (a_opcode >> 16) & 3, a_opcode & 3);
+        a_opcode=4*((a_opcode>>(8*(2-a_slot)))& 0x1F) + (a_opcode & 0x3);
+        }
+        else{ //VFR==0
+        sprintf(buffer, "S%d%d%d",((a_opcode>>(8*(2-a_slot)))>>2)& 0x7 , (a_opcode>>(8*(2-a_slot)))& 0x3 , (a_opcode>>(8*(2-a_slot))&0x7F)>>5);
         a_opcode=4*((a_opcode>>(8*(2-a_slot)))& 0x1F) + ((a_opcode>>(8*(2-a_slot))&0x7F)>>5);
-	}
+        }
   colorRegisters(a_opcode);
   }
   VFR=0;
@@ -198,11 +198,11 @@ void specialRegister(unsigned int a_opcode, unsigned char a_slot, unsigned char 
   
   colorRegisters(a_opcode);
   if(a_opcode != 0x03 || 0x09 || 0x0D || 0x0F || 0x15 || 0x17 || 0x19 || 0x1B || 0x1D || 0x1E || 0x1F){
-  	pspDebugScreenPuts(specialRegisterArray[a_opcode]);
+        pspDebugScreenPuts(specialRegisterArray[a_opcode]);
   }
   else{
-  	pspDebugScreenSetTextColor(0xFF999999); pspDebugScreenPuts("$"); pspDebugScreenSetTextColor(color02);
-  	sprintf(buffer, "%2d", a_opcode); pspDebugScreenPuts(buffer);
+        pspDebugScreenSetTextColor(0xFF999999); pspDebugScreenPuts("$"); pspDebugScreenSetTextColor(color02);
+        sprintf(buffer, "%2d", a_opcode); pspDebugScreenPuts(buffer);
   }
   pspDebugScreenSetTextColor(color02);
   if(a_more) pspDebugScreenPuts(", ");
@@ -305,7 +305,7 @@ void mipsDec(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
     }
     else{
     pspDebugScreenSetTextColor(0xFF999999); pspDebugScreenPuts("+"); pspDebugScreenSetTextColor(color02);
-	}
+        }
     sprintf(mipsNum, "%dh", a_opcode); pspDebugScreenPuts(mipsNum);
   }
   
@@ -320,113 +320,112 @@ int i;
   {
 
     case 0x00:
-	pspDebugScreenPuts("s");
-	for(i=0; i < a_more; i++){
-	pspDebugScreenPuts(" ");
-	}
-     	vectors(a_opcode, 2, 1);
-	if(VNUM==1){
-	}
+        pspDebugScreenPuts("s");
+        for(i=0; i < a_more; i++){
+        pspDebugScreenPuts(" ");
+        }
+        vectors(a_opcode, 2, 1);
+        if(VNUM==1){
+        }
         else{
-	if(VNUM == 3){
-     	vectors(a_opcode, 1, 1);
-     	vectors(a_opcode, 0, 0);
-	}
-	else{
-     	vectors(a_opcode, 1, 0);
-	}
-	}
-	VNUM=0;
+        if(VNUM == 3){
+        vectors(a_opcode, 1, 1);
+        vectors(a_opcode, 0, 0);
+        }
+        else{
+        vectors(a_opcode, 1, 0);
+        }
+        }
+        VNUM=0;
     break;
 
     case 0x0080:
-	pspDebugScreenPuts("p");
-	for(i=0; i < a_more; i++){
-	pspDebugScreenPuts(" ");
-	}
-	if(((a_opcode>>16) & 0xFF80) == 0x6480 || 0x6600){
-	}
-	else{
-	VFR=4;}
-     	vectors(a_opcode, 2, 1);
-	if(VNUM==1){
-	}
+        pspDebugScreenPuts("p");
+        for(i=0; i < a_more; i++){
+        pspDebugScreenPuts(" ");
+        }
+        if(((a_opcode>>16) & 0xFF80) == 0x6480 || 0x6600){
+        }
         else{
-	if(VNUM == 3){
-	VFR=4;
-     	vectors(a_opcode, 1, 1);
-	VFR=4;
-     	vectors(a_opcode, 0, 0);
-	}
-	else{
-	VFR=4;
-     	vectors(a_opcode, 1, 0);
-	}
-	}
-	VNUM=0;
+        VFR=4;}
+        vectors(a_opcode, 2, 1);
+        if(VNUM==1){
+        }
+        else{
+        if(VNUM == 3){
+        VFR=4;
+        vectors(a_opcode, 1, 1);
+        VFR=4;
+        vectors(a_opcode, 0, 0);
+        }
+        else{
+        VFR=4;
+        vectors(a_opcode, 1, 0);
+        }
+        }
+        VNUM=0;
     break;
 
     case 0x8000:
-	pspDebugScreenPuts("t");
-	for(i=0; i < a_more; i++){
-	pspDebugScreenPuts(" ");
-	}
-	if(((a_opcode>>16) & 0xFF80) == 0x6480 || 0x6600){
-	}
-	else{
-	VFR=5;}
-     	vectors(a_opcode, 2, 1);
-	if(VNUM==1){
-	}
+        pspDebugScreenPuts("t");
+        for(i=0; i < a_more; i++){
+        pspDebugScreenPuts(" ");
+        }
+        if(((a_opcode>>16) & 0xFF80) == 0x6480 || 0x6600){
+        }
         else{
-	if(VNUM == 3){
-	VFR=5;
-     	vectors(a_opcode, 1, 1);
-	VFR=5;
-     	vectors(a_opcode, 0, 0);
-	}
-	else{
-	VFR=5;
-     	vectors(a_opcode, 1, 0);
-	}
-	}
-	VNUM=0;
+        VFR=5;}
+        vectors(a_opcode, 2, 1);
+        if(VNUM==1){
+        }
+        else{
+        if(VNUM == 3){
+        VFR=5;
+        vectors(a_opcode, 1, 1);
+        VFR=5;
+        vectors(a_opcode, 0, 0);
+        }
+        else{
+        VFR=5;
+        vectors(a_opcode, 1, 0);
+        }
+        }
+        VNUM=0;
     break;
 
     case 0x8080:
-	pspDebugScreenPuts("q");
-	for(i=0; i < a_more; i++){
-	pspDebugScreenPuts(" ");
-	}
-	if(((a_opcode>>16) & 0xFF80) == 0x6480 || 0x6600){
-	}
-	else{
-	VFR=6;
-	}
-     	vectors(a_opcode, 2, 1);
-	if(VNUM==1){
-	}
+        pspDebugScreenPuts("q");
+        for(i=0; i < a_more; i++){
+        pspDebugScreenPuts(" ");
+        }
+        if(((a_opcode>>16) & 0xFF80) == 0x6480 || 0x6600){
+        }
         else{
-		if(VNUM == 3){
-		VFR=6;
-     		vectors(a_opcode, 1, 1);
-		VFR=6;
-     		vectors(a_opcode, 0, 0);
-		}
-		else{
-		VFR=6;
-	     	vectors(a_opcode, 1, 0);
-		}
-	}
-	VNUM=0;
+        VFR=6;}
+        vectors(a_opcode, 2, 1);
+        if(VNUM==1){
+        }
+        else{
+        if(VNUM == 3){
+        VFR=6;
+        vectors(a_opcode, 1, 1);
+        VFR=6;
+        vectors(a_opcode, 0, 0);
+        }
+        else{
+        VFR=6;
+        vectors(a_opcode, 1, 0);
+        }
+        }
+        VNUM=0;
     break;
   }
 }
 
 void mipsDecode(unsigned int a_opcode)
 {
-  //(o—Í–¼) (a_opcode, Z , a_more‚Ì‰ñ”)
-  //Z=2 sll‚Ì^‚ñ’†,1 sll‚Ì¶,3 sll‚Ì‰E,T lw--(?) ,S lw ?$__()
+  //(?o?I??) (a_opcode, Z , a_more?I?n??)
+  //Z=2 sll?I?^?n??,1 sll?I?Â¶,3 sll?I?E,T lw--(?) ,S lw ?$__()
   //Handle opcode
   switch((a_opcode & 0xFC000000) >> 24)
   {
@@ -458,19 +457,19 @@ Encoding: 0000 00ss ssst tttt dddd dhhh hh00 0000*/
           break;
          
         case 0x02:
-	if(((a_opcode >>16) & 0xE0) == 0x20){
-          pspDebugScreenPuts("rotr	");
+        if(((a_opcode >>16) & 0xE0) == 0x20){
+          pspDebugScreenPuts("rotr      ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 1, 1);
           mipsNibble(a_opcode, 3, 0);
-	}
+        }
 //        { "rotr",               0x00200002, 0xFFE0003F, "%d, %t, %a"},
-	else{
-          pspDebugScreenPuts("srl 	");
+        else{
+          pspDebugScreenPuts("srl       ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 1, 1);
           mipsNibble(a_opcode, 3, 0);
-	}
+        }
 /*SRL -- Shift right logical
 Description: Shifts a register value right by the shift amount (shamt) and places the value in the destination register. Zeroes are shifted in.
 Operation: $d = $t >> h; advance_pc (4);
@@ -479,7 +478,7 @@ Encoding: 0000 00-- ---t tttt dddd dhhh hh00 0010*/
           break;
 
         case 0x03:
-          pspDebugScreenPuts("sra 	");
+          pspDebugScreenPuts("sra       ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 1, 1);
           mipsNibble(a_opcode, 3, 0);
@@ -506,71 +505,71 @@ Encoding: 0000 00-- ---- ---- ---- ---- --00 1100*/
           //0x0e = nothing
           
          case 0x0F:
-          pspDebugScreenPuts("sync	");
+          pspDebugScreenPuts("sync      ");
           break;
           
 /*          case 0x28:
-          pspDebugScreenPuts("mfsa	");
+          pspDebugScreenPuts("mfsa      ");
           mipsRegister(a_opcode, 2, 0);
           break;
           
           case 0x29:
-          pspDebugScreenPuts("msta	");
+          pspDebugScreenPuts("msta      ");
           mipsRegister(a_opcode, 2, 0);
           break;*/
 
 /*          case 0x30:
-           pspDebugScreenPuts("tge 	");
+           pspDebugScreenPuts("tge      ");
            //mipsRegister(a_opcode, 0, 1);
            //mipsRegister(a_opcode, 1, 1);
            //mipsImmOther(a_opcode, 2, 0);
           break;
           
           case 0x31:
-           pspDebugScreenPuts("tgeu	");
+           pspDebugScreenPuts("tgeu     ");
            //mipsRegister(a_opcode, 0, 1);
            //mipsRegister(a_opcode, 1, 1);
            //mipsImmOther(a_opcode, 2, 0);
           break;
           
           case 0x32:
-           pspDebugScreenPuts("tlt 	");
+           pspDebugScreenPuts("tlt      ");
            //mipsRegister(a_opcode, 0, 1);
            //mipsRegister(a_opcode, 1, 1);
            //mipsImmOther(a_opcode, 2, 0);
           break;
           
           case 0x33:
-           pspDebugScreenPuts("tltu	");
+           pspDebugScreenPuts("tltu     ");
            //mipsRegister(a_opcode, 0, 1);
            //mipsRegister(a_opcode, 1, 1);
            //mipsImmOther(a_opcode, 2, 0);
           break;
           
           case 0x34:
-           pspDebugScreenPuts("teq 	");
+           pspDebugScreenPuts("teq      ");
            //mipsRegister(a_opcode, 0, 1);
            //mipsRegister(a_opcode, 1, 1);
            //mipsImmOther(a_opcode, 2, 0);
           break;
           
           case 0x36:
-           pspDebugScreenPuts("tne 	");
+           pspDebugScreenPuts("tne      ");
            //mipsRegister(a_opcode, 0, 1);
            //mipsRegister(a_opcode, 1, 1);
            //mipsImmOther(a_opcode, 2, 0);
           break;
           
           case 0x38:
-           pspDebugScreenPuts("dsll	");
+           pspDebugScreenPuts("dsll     ");
           break;
           
           case 0x3A:
-           pspDebugScreenPuts("dsrl	");
+           pspDebugScreenPuts("dsrl     ");
           break;
           
           case 0x3B:
-           pspDebugScreenPuts("dsra	");
+           pspDebugScreenPuts("dsra     ");
           break;
           
           case 0x3C:
@@ -584,11 +583,11 @@ Encoding: 0000 00-- ---- ---- ---- ---- --00 1100*/
           case 0x3F:
            pspDebugScreenPuts("dsra32   ");
           break;*/
-	}
+        }
 
-	switch(a_opcode & 0x7FF){
+        switch(a_opcode & 0x7FF){
         case 0x04:
-          pspDebugScreenPuts("sllv	");
+          pspDebugScreenPuts("sllv      ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 1, 1);
           mipsRegister(a_opcode, 0, 0);
@@ -600,7 +599,7 @@ Encoding: 0000 00ss ssst tttt dddd d--- --00 0100*/
           break;
 
         case 0x06:
-          pspDebugScreenPuts("srlv	");
+          pspDebugScreenPuts("srlv      ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 1, 1);
           mipsRegister(a_opcode, 0, 0);
@@ -612,34 +611,34 @@ Encoding: 0000 00ss ssst tttt dddd d000 0000 0110*/
           break;
           
          case 0x07:
-          pspDebugScreenPuts("srav	");
+          pspDebugScreenPuts("srav      ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 1, 1);
           mipsRegister(a_opcode, 0, 0);
           break;
           
         case 0x09:
-          pspDebugScreenPuts("jalr	");
+          pspDebugScreenPuts("jalr      ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 0);
           break;
 
         case 0x0A:
-          pspDebugScreenPuts("movz	");
+          pspDebugScreenPuts("movz      ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
           break;
           
         case 0x0b:
-          pspDebugScreenPuts("movn	");
+          pspDebugScreenPuts("movn      ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
         break;
           
         case 0x10:
-          pspDebugScreenPuts("mfhi	");
+          pspDebugScreenPuts("mfhi      ");
           mipsRegister(a_opcode, 2, 0);
 /*MFHI -- Move from HI
 Description: The contents of register HI are moved to the specified register.
@@ -649,12 +648,12 @@ Encoding: 0000 0000 0000 0000 dddd d000 0001 0000*/
         break;
 
         case 0x11:
-          pspDebugScreenPuts("mthi	");
+          pspDebugScreenPuts("mthi      ");
           mipsRegister(a_opcode, 2, 0);
-	break;
+        break;
           
         case 0x12:
-          pspDebugScreenPuts("mflo	");
+          pspDebugScreenPuts("mflo      ");
           mipsRegister(a_opcode, 2, 0);
 /*MFLO -- Move from LO
 Description: The contents of register LO are moved to the specified register.
@@ -664,12 +663,12 @@ Encoding: 0000 0000 0000 0000 dddd d000 0001 0010*/
           break;
           
          case 0x13:
-          pspDebugScreenPuts("mtlo	");
+          pspDebugScreenPuts("mtlo      ");
           mipsRegister(a_opcode, 2, 0);
           break;
 
         case 0x16:
-          pspDebugScreenPuts("clz 	");
+          pspDebugScreenPuts("clz       ");
           mipsRegister(a_opcode, 1, 1);
           mipsRegister(a_opcode, 2, 0);
          break;
@@ -677,13 +676,13 @@ Encoding: 0000 0000 0000 0000 dddd d000 0001 0010*/
 //        { "clz",                0x00000016, 0xFC1F07FF, "%d, %s"},
 
          case 0x17:
-          pspDebugScreenPuts("clo 	");
+          pspDebugScreenPuts("clo       ");
           mipsRegister(a_opcode, 1, 1);
           mipsRegister(a_opcode, 2, 0);
          break;
           
         case 0x20:
-          pspDebugScreenPuts("add 	");
+          pspDebugScreenPuts("add       ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
@@ -695,7 +694,7 @@ Encoding: 0000 00ss ssst tttt dddd d000 0010 0000 */
           break;
           
         case 0x21:
-          pspDebugScreenPuts("addu	");
+          pspDebugScreenPuts("addu      ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
@@ -707,7 +706,7 @@ Encoding: 0000 00ss ssst tttt dddd d000 0010 0001*/
           break;
           
         case 0x22:
-          pspDebugScreenPuts("sub 	");
+          pspDebugScreenPuts("sub       ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
@@ -719,7 +718,7 @@ Encoding: 0000 00ss ssst tttt dddd d000 0010 0010*/
           break;
           
         case 0x23:
-          pspDebugScreenPuts("subu	");
+          pspDebugScreenPuts("subu      ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
@@ -731,7 +730,7 @@ Encoding: 0000 00ss ssst tttt dddd d000 0010 0011*/
           break;
           
         case 0x24:
-          pspDebugScreenPuts("and 	");
+          pspDebugScreenPuts("and       ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
@@ -743,7 +742,7 @@ Encoding: 0000 00ss ssst tttt dddd d000 0010 0100*/
           break;
           
         case 0x25:
-          pspDebugScreenPuts("or  	");
+          pspDebugScreenPuts("or        ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
@@ -755,7 +754,7 @@ Encoding: 0000 00ss ssst tttt dddd d000 0010 0101*/
           break;
           
         case 0x26:
-          pspDebugScreenPuts("xor 	");
+          pspDebugScreenPuts("xor       ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
@@ -768,14 +767,14 @@ Encoding: 0000 00ss ssst tttt dddd d--- --10 0110*/
           break;
           
           case 0x27:
-          pspDebugScreenPuts("nor 	");
+          pspDebugScreenPuts("nor       ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
           break;
 
         case 0x2A:
-          pspDebugScreenPuts("slt 	");
+          pspDebugScreenPuts("slt       ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
@@ -787,7 +786,7 @@ Encoding: 0000 00ss ssst tttt dddd d000 0010 1010*/
         break;
           
         case 0x2B:
-          pspDebugScreenPuts("sltu	");
+          pspDebugScreenPuts("sltu      ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
@@ -799,7 +798,7 @@ Encoding: 0000 00ss ssst tttt dddd d000 0010 1011*/
           break;
           
           case 0x2c:
-          pspDebugScreenPuts("max 	");
+          pspDebugScreenPuts("max       ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
@@ -808,14 +807,14 @@ Encoding: 0000 00ss ssst tttt dddd d000 0010 1011*/
 //        { "min",                0x0000002D, 0xFC0007FF, "%d, %s, %t"},
           
           case 0x2d:
-          pspDebugScreenPuts("min 	");
+          pspDebugScreenPuts("min       ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
           break;
 
-	case 0x46:
-          pspDebugScreenPuts("rotv	");
+        case 0x46:
+          pspDebugScreenPuts("rotv      ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
@@ -823,9 +822,9 @@ Encoding: 0000 00ss ssst tttt dddd d000 0010 1011*/
 //        { "rotv",               0x00000046, 0xFC0007FF, "%d, %t, %s"},
         }
 
-	switch(a_opcode & 0xFFFF){
+        switch(a_opcode & 0xFFFF){
         case 0x08:
-          pspDebugScreenPuts("jr  	");
+          pspDebugScreenPuts("jr        ");
           mipsRegister(a_opcode, 0, 0);
 /*JR -- Jump register
 Description: Jump to the address contained in register $s
@@ -835,7 +834,7 @@ Encoding: 0000 00ss sss0 0000 0000 0000 0000 1000*/
           break;
           
         case 0x18:
-          pspDebugScreenPuts("mult	");
+          pspDebugScreenPuts("mult      ");
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
 /*MULT -- Multiply
@@ -857,7 +856,7 @@ Encoding: 0000 00ss ssst tttt 0000 0000 0001 1001*/
           break;
           
         case 0x1A:
-          pspDebugScreenPuts("div 	");
+          pspDebugScreenPuts("div       ");
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
 /*DIV -- Divide
@@ -868,7 +867,7 @@ Encoding: 0000 00ss ssst tttt 0000 0000 0001 1010*/
           break;
           
         case 0x1B:
-          pspDebugScreenPuts("divu	");
+          pspDebugScreenPuts("divu      ");
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
 /*DIVU -- Divide unsigned
@@ -879,7 +878,7 @@ Encoding: 0000 00ss ssst tttt 0000 0000 0001 1011*/
           break;
                   
          case 0x1C:
-          pspDebugScreenPuts("madd	");
+          pspDebugScreenPuts("madd      ");
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
           break;
@@ -893,7 +892,7 @@ Encoding: 0000 00ss ssst tttt 0000 0000 0001 1011*/
           break;
 
           case 0x2e:
-          pspDebugScreenPuts("msub	");
+          pspDebugScreenPuts("msub      ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 1, 0);
           break;
@@ -912,9 +911,9 @@ Encoding: 0000 00ss ssst tttt 0000 0000 0001 1011*/
       switch((a_opcode & 0x1F0000) >> 16)
       {
           case 0x00:
-            pspDebugScreenPuts("bltz	");
+            pspDebugScreenPuts("bltz    ");
             mipsRegister(a_opcode, S, 1);
-	    mipsDec(a_opcode,0,0);
+            mipsDec(a_opcode,0,0);
 /*BLTZ -- Branch on less than zero
 Description: Branches if the register is less than zero
 Operation: if $s < 0 advance_pc (offset << 2)); else advance_pc (4);
@@ -923,9 +922,9 @@ Encoding: 0000 01ss sss0 0000 iiii iiii iiii iiii*/
           break;
             
           case 0x01:
-            pspDebugScreenPuts("bgez	");
+            pspDebugScreenPuts("bgez    ");
             mipsRegister(a_opcode, S, 1);
-	    mipsDec(a_opcode,0,0);
+            mipsDec(a_opcode,0,0);
 /*BGEZ -- Branch on greater than or equal to zero
 Description: Branches if the register is greater than or equal to zero
 Operation: if $s >= 0 advance_pc (offset << 2)); else advance_pc (4);
@@ -936,17 +935,17 @@ Encoding: 0000 01ss sss0 0001 iiii iiii iiii iiii*/
            case 0x02:
             pspDebugScreenPuts("bltzl    ");
             mipsRegister(a_opcode, S, 1);
-	    mipsDec(a_opcode,0,0);
+            mipsDec(a_opcode,0,0);
            break;
             
            case 0x03:
             pspDebugScreenPuts("bgezl    ");
             mipsRegister(a_opcode, S, 1);
-	    mipsDec(a_opcode,0,0);
+            mipsDec(a_opcode,0,0);
            break;
            
            case 0x08:
-            pspDebugScreenPuts("tgei	");
+            pspDebugScreenPuts("tgei    ");
             mipsRegister(a_opcode, S, 1);
             mipsImm(a_opcode, 0, 0);
            break;
@@ -958,7 +957,7 @@ Encoding: 0000 01ss sss0 0001 iiii iiii iiii iiii*/
            break;
           
            case 0x0A:
-            pspDebugScreenPuts("tlti	");
+            pspDebugScreenPuts("tlti    ");
             mipsRegister(a_opcode, S, 1);
             mipsImm(a_opcode, 0, 0);
            break;
@@ -970,13 +969,13 @@ Encoding: 0000 01ss sss0 0001 iiii iiii iiii iiii*/
            break;
            
            case 0x0C:
-            pspDebugScreenPuts("teqi	");
+            pspDebugScreenPuts("teqi    ");
             mipsRegister(a_opcode, S, 1);
             mipsImm(a_opcode, 0, 0);
            break;
            
            case 0x0E:
-            pspDebugScreenPuts("tnei	");
+            pspDebugScreenPuts("tnei    ");
             mipsRegister(a_opcode, S, 1);
             mipsImm(a_opcode, 0, 0);
            break;
@@ -984,7 +983,7 @@ Encoding: 0000 01ss sss0 0001 iiii iiii iiii iiii*/
           case 0x10:
             pspDebugScreenPuts("bltzal   ");
             mipsRegister(a_opcode, S, 1);
-	    mipsDec(a_opcode,0,0);
+            mipsDec(a_opcode,0,0);
 /*BLTZAL -- Branch on less than zero and link
 Description: Branches if the register is less than zero and saves the return address in $31
 Operation: if $s < 0 $31 = PC + 8 (or nPC + 4); advance_pc (offset << 2)); else advance_pc (4);
@@ -995,7 +994,7 @@ Encoding: 0000 01ss sss1 0000 iiii iiii iiii iiii*/
            case 0x11:
             pspDebugScreenPuts("bgezal   ");
             mipsRegister(a_opcode, S, 1);
-	    mipsDec(a_opcode,0,0);
+            mipsDec(a_opcode,0,0);
 /*BGEZAL -- Branch on greater than or equal to zero and link
 Description: Branches if the register is greater than or equal to zero and saves the return address in $31
 Operation: if $s >= 0 $31 = PC + 8 (or nPC + 4); advance_pc (offset << 2)); else advance_pc (4);
@@ -1006,13 +1005,13 @@ Encoding: 0000 01ss sss1 0001 iiii iiii iiii iiii*/
            case 0x12:
             pspDebugScreenPuts("bltzall  ");
             mipsRegister(a_opcode, S, 1);
-	    mipsDec(a_opcode,0,0);
+            mipsDec(a_opcode,0,0);
            break;
              
            case 0x13:
             pspDebugScreenPuts("bgezall  ");
             mipsRegister(a_opcode, S, 1);
-	    mipsDec(a_opcode,0,0);
+            mipsDec(a_opcode,0,0);
            break;    
             
            case 0x18:
@@ -1028,17 +1027,17 @@ Encoding: 0000 01ss sss1 0001 iiii iiii iiii iiii*/
            break;   
             
           default:
-            pspDebugScreenPuts("??? 	");
+            pspDebugScreenPuts("???     ");
       }
       break;
       
     case 0x08:
-	if((a_opcode >= 0x08000000) && (a_opcode < 0x8800000)){
-	pspDebugScreenPuts("kernelram");}
-	else if((a_opcode >= 0x8800000) && (a_opcode < 0xA000000)){
-	pspDebugScreenPuts("userram");	}
-	else{
-      pspDebugScreenPuts("j   	");
+        if((a_opcode >= 0x08000000) && (a_opcode < 0x8800000)){
+        pspDebugScreenPuts("kernelram");}
+        else if((a_opcode >= 0x8800000) && (a_opcode < 0xA000000)){
+        pspDebugScreenPuts("userram");  }
+        else{
+      pspDebugScreenPuts("j     ");
       mipsImm(a_opcode, 1, 0);}
 /*J -- Jump
 Description: Jumps to the calculated address
@@ -1048,7 +1047,7 @@ Encoding: 0000 10ii iiii iiii iiii iiii iiii iiii*/
       break;
       
     case 0x0C:
-      pspDebugScreenPuts("jal 	");
+      pspDebugScreenPuts("jal   ");
       mipsImm(a_opcode, 1, 0);
 /*JAL -- Jump and link
 Description: Jumps to the calculated address and stores the return address in $31
@@ -1058,7 +1057,7 @@ Encoding: 0000 11ii iiii iiii iiii iiii iiii iiii*/
       break;
       
     case 0x10:
-      pspDebugScreenPuts("beq 	");
+      pspDebugScreenPuts("beq   ");
       mipsRegister(a_opcode, S, 1);
       mipsRegister(a_opcode, T, 1);
       mipsDec(a_opcode, 0, 0);
@@ -1070,7 +1069,7 @@ Encoding: 0001 00ss ssst tttt iiii iiii iiii iiii*/
       break;
       
     case 0x14:
-      pspDebugScreenPuts("bne 	");
+      pspDebugScreenPuts("bne   ");
       mipsRegister(a_opcode, S, 1);
       mipsRegister(a_opcode, T, 1);
       mipsDec(a_opcode, 0, 0);
@@ -1082,7 +1081,7 @@ Encoding: 0001 01ss ssst tttt iiii iiii iiii iiii*/
       break;
       
     case 0x18:
-      pspDebugScreenPuts("blez	");  
+      pspDebugScreenPuts("blez  ");  
       mipsRegister(a_opcode, S, 1);
       mipsDec(a_opcode, 0, 0);
 /*BLEZ -- Branch on less than or equal to zero
@@ -1093,7 +1092,7 @@ Encoding: 0001 10ss sss0 0000 iiii iiii iiii iiii*/
       break;
       
     case 0x1C:
-      pspDebugScreenPuts("bgtz	");
+      pspDebugScreenPuts("bgtz  ");
       mipsRegister(a_opcode, S, 1);
       mipsDec(a_opcode, 0, 0);
 /*BGTZ -- Branch on greater than zero
@@ -1104,7 +1103,7 @@ Encoding: 0001 11ss sss0 0000 iiii iiii iiii iiii*/
       break;
       
     case 0x20:
-      pspDebugScreenPuts("addi	");
+      pspDebugScreenPuts("addi  ");
       mipsRegister(a_opcode, T, 1);
       mipsRegister(a_opcode, S, 1);
       mipsImm(a_opcode, 0, 0);
@@ -1128,7 +1127,7 @@ Encoding: 0010 01ss ssst tttt iiii iiii iiii iiii*/
       break;
       
     case 0x28:
-      pspDebugScreenPuts("slti	");
+      pspDebugScreenPuts("slti  ");
       mipsRegister(a_opcode, T, 1);
       mipsRegister(a_opcode, S, 1);
       mipsImm(a_opcode, 0, 0);
@@ -1152,7 +1151,7 @@ Encoding: 0010 11ss ssst tttt iiii iiii iiii iiii*/
       break;
       
     case 0x30:
-      pspDebugScreenPuts("andi	");
+      pspDebugScreenPuts("andi  ");
       mipsRegister(a_opcode, T, 1);
       mipsRegister(a_opcode, S, 1);
       mipsImm(a_opcode, 0, 0);
@@ -1164,7 +1163,7 @@ Encoding: 0011 00ss ssst tttt iiii iiii iiii iiii*/
       break;
       
     case 0x34:
-      pspDebugScreenPuts("ori 	");
+      pspDebugScreenPuts("ori   ");
       mipsRegister(a_opcode, T, 1);
       mipsRegister(a_opcode, S, 1);
       mipsImm(a_opcode, 0, 0);
@@ -1176,7 +1175,7 @@ Encoding: 0011 01ss ssst tttt iiii iiii iiii iiii*/
       break;
       
     case 0x38:
-      pspDebugScreenPuts("xori	");
+      pspDebugScreenPuts("xori  ");
       mipsRegister(a_opcode, T, 1);
       mipsRegister(a_opcode, S, 1);
       mipsImm(a_opcode, 0, 0);
@@ -1188,7 +1187,7 @@ Encoding: 0011 10ss ssst tttt iiii iiii iiii iiii*/
       break;
       
     case 0x3C:
-      pspDebugScreenPuts("lui 	");
+      pspDebugScreenPuts("lui   ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
 /*LUI -- Load upper immediate
@@ -1199,295 +1198,295 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
       break;
       
       case 0x40:
-	switch(a_opcode >> 20 & 0xFFE){
-	case 0x400:
-		pspDebugScreenPuts("mfc0	");
-		mipsRegister(a_opcode, T, 1);
-		cop0Register(a_opcode, 2, 0);
-	break;
+        switch(a_opcode >> 20 & 0xFFE){
+        case 0x400:
+                pspDebugScreenPuts("mfc0        ");
+                mipsRegister(a_opcode, T, 1);
+                cop0Register(a_opcode, 2, 0);
+        break;
 
-	case 0x408:
-		pspDebugScreenPuts("mtc0	");
-		mipsRegister(a_opcode, T, 1);
-		cop0Register(a_opcode, 2, 0);
-	break;
+        case 0x408:
+                pspDebugScreenPuts("mtc0        ");
+                mipsRegister(a_opcode, T, 1);
+                cop0Register(a_opcode, 2, 0);
+        break;
 
-	case 0x404:
-		pspDebugScreenPuts("cfc0	");
-		mipsRegister(a_opcode, T, 1);
-		mipsNibble(a_opcode, 2, 0);
-	break;
+        case 0x404:
+                pspDebugScreenPuts("cfc0        ");
+                mipsRegister(a_opcode, T, 1);
+                mipsNibble(a_opcode, 2, 0);
+        break;
 
 
-	case 0x40C:
-		pspDebugScreenPuts("ctc0	");
-		mipsRegister(a_opcode, T, 1);
-		mipsNibble(a_opcode, 2, 0);
-	break;
+        case 0x40C:
+                pspDebugScreenPuts("ctc0        ");
+                mipsRegister(a_opcode, T, 1);
+                mipsNibble(a_opcode, 2, 0);
+        break;
 //"cfc0",               0x40400000, 0xFFE007FF, "%t, %p"
 //"ctc0",               0x40C00000, 0xFFE007FF, "%t, %p"
 //"mfc0",               0x40000000, 0xFFE007FF, "%t, %0"
 //"mtc0",               0x40800000, 0xFFE007FF, "%t, %0"
 
-	case 0x420:
-	if((a_opcode & 0xFFFFFF)  == 0x18){
-		pspDebugScreenPuts("eret	");
-		}
-	break;
-	}
+        case 0x420:
+        if((a_opcode & 0xFFFFFF)  == 0x18){
+                pspDebugScreenPuts("eret        ");
+                }
+        break;
+        }
       break;
 
 
-//FPU–½—ß
+//FPU???s
      case 0x44:
       switch(a_opcode >>24){
-		case 0x44:
-		switch(a_opcode >> 16 & 0xE0){
-		case 0x40:
-		pspDebugScreenPuts("cfc1	");
-		mipsRegister(a_opcode, T, 1);
-		mipsNibble(a_opcode, 2, 0);
-		break;
+                case 0x44:
+                switch(a_opcode >> 16 & 0xE0){
+                case 0x40:
+                pspDebugScreenPuts("cfc1        ");
+                mipsRegister(a_opcode, T, 1);
+                mipsNibble(a_opcode, 2, 0);
+                break;
 
-		case 0xC0:
-		pspDebugScreenPuts("ctc1	");
-		mipsRegister(a_opcode, T, 1);
-		mipsNibble(a_opcode, 2, 0);
-		break;
+                case 0xC0:
+                pspDebugScreenPuts("ctc1        ");
+                mipsRegister(a_opcode, T, 1);
+                mipsNibble(a_opcode, 2, 0);
+                break;
 
-		case 0x00:
-		pspDebugScreenPuts("mfc1	");
-		mipsRegister(a_opcode, T, 1);
-		floatRegister(a_opcode,2,0);
-		break;
+                case 0x00:
+                pspDebugScreenPuts("mfc1        ");
+                mipsRegister(a_opcode, T, 1);
+                floatRegister(a_opcode,2,0);
+                break;
 
-		case 0x80:
-		pspDebugScreenPuts("mtc1	");
-		mipsRegister(a_opcode, T, 1);
-		floatRegister(a_opcode,2,0);
-		break;
-		}
-		break;
+                case 0x80:
+                pspDebugScreenPuts("mtc1        ");
+                mipsRegister(a_opcode, T, 1);
+                floatRegister(a_opcode,2,0);
+                break;
+                }
+                break;
 /*        {"cfc1",        0x44400000, 0xFFE007FF, "%t, %p"},
         {"ctc1",        0x44c00000, 0xFFE007FF, "%t, %p"},
         {"mfc1",        0x44000000, 0xFFE007FF, "%t, %1"},
         {"mtc1",        0x44800000, 0xFFE007FF, "%t, %1"},*/
 
-	        case 0x45:
-		switch(a_opcode >>16 & 0xFF){
-		case 0x00:
-		pspDebugScreenPuts("bc1f	");
-		mipsDec(a_opcode, 0 ,0 );
-		break;
+                case 0x45:
+                switch(a_opcode >>16 & 0xFF){
+                case 0x00:
+                pspDebugScreenPuts("bc1f        ");
+                mipsDec(a_opcode, 0 ,0 );
+                break;
 
-		case 0x01:
-		pspDebugScreenPuts("bc1t	");
-		mipsDec(a_opcode, 0 ,0 );
-		break;
+                case 0x01:
+                pspDebugScreenPuts("bc1t        ");
+                mipsDec(a_opcode, 0 ,0 );
+                break;
 
-		case 0x02:
-		pspDebugScreenPuts("bc1fl    ");
-		mipsDec(a_opcode, 0 ,0 );
-		break;
+                case 0x02:
+                pspDebugScreenPuts("bc1fl    ");
+                mipsDec(a_opcode, 0 ,0 );
+                break;
 
-		case 0x03:
-		pspDebugScreenPuts("bc1tl    ");
-		mipsDec(a_opcode, 0 ,0 );
-		break;
-		}
-		break;
+                case 0x03:
+                pspDebugScreenPuts("bc1tl    ");
+                mipsDec(a_opcode, 0 ,0 );
+                break;
+                }
+                break;
 
-	        case 0x46:
-		switch(a_opcode & 0x3F){
-		case 0x00:
-		pspDebugScreenPuts("add.s    ");
-		floatRegister(a_opcode, 3, 1);
-		floatRegister(a_opcode, 2, 1);
-		floatRegister(a_opcode, T, 0);
-		break;
-		
-		case 0x01:
-		pspDebugScreenPuts("sub.s    ");
-		floatRegister(a_opcode, 3, 1);
-		floatRegister(a_opcode, 2, 1);
-		floatRegister(a_opcode, T, 0);
-		break;
+                case 0x46:
+                switch(a_opcode & 0x3F){
+                case 0x00:
+                pspDebugScreenPuts("add.s    ");
+                floatRegister(a_opcode, 3, 1);
+                floatRegister(a_opcode, 2, 1);
+                floatRegister(a_opcode, T, 0);
+                break;
+                
+                case 0x01:
+                pspDebugScreenPuts("sub.s    ");
+                floatRegister(a_opcode, 3, 1);
+                floatRegister(a_opcode, 2, 1);
+                floatRegister(a_opcode, T, 0);
+                break;
 
-		case 0x02:
-		pspDebugScreenPuts("mul.s    ");
-		floatRegister(a_opcode, 3, 1);
-		floatRegister(a_opcode, 2, 1);
-		floatRegister(a_opcode, T, 0);
-		break;
+                case 0x02:
+                pspDebugScreenPuts("mul.s    ");
+                floatRegister(a_opcode, 3, 1);
+                floatRegister(a_opcode, 2, 1);
+                floatRegister(a_opcode, T, 0);
+                break;
 
-		case 0x03:
-		pspDebugScreenPuts("div.s    ");
-		floatRegister(a_opcode, 3, 1);
-		floatRegister(a_opcode, 2, 1);
-		floatRegister(a_opcode, T, 0);
-		break;
+                case 0x03:
+                pspDebugScreenPuts("div.s    ");
+                floatRegister(a_opcode, 3, 1);
+                floatRegister(a_opcode, 2, 1);
+                floatRegister(a_opcode, T, 0);
+                break;
 
-		case 0x04:
-		pspDebugScreenPuts("sqrt.s   ");
-		floatRegister(a_opcode, 3, 1);
-		floatRegister(a_opcode, 2, 0);
-		break;
+                case 0x04:
+                pspDebugScreenPuts("sqrt.s   ");
+                floatRegister(a_opcode, 3, 1);
+                floatRegister(a_opcode, 2, 0);
+                break;
 
-		case 0x05:
-		pspDebugScreenPuts("abs.s    ");
-		floatRegister(a_opcode, 3, 1);
-		floatRegister(a_opcode, 2, 0);
-		break;
+                case 0x05:
+                pspDebugScreenPuts("abs.s    ");
+                floatRegister(a_opcode, 3, 1);
+                floatRegister(a_opcode, 2, 0);
+                break;
 
-		case 0x06:
-		pspDebugScreenPuts("mov.s    ");
-		floatRegister(a_opcode, 3, 1);
-		floatRegister(a_opcode, 2, 0);
-		break;
+                case 0x06:
+                pspDebugScreenPuts("mov.s    ");
+                floatRegister(a_opcode, 3, 1);
+                floatRegister(a_opcode, 2, 0);
+                break;
 
-		case 0x07:
-		pspDebugScreenPuts("neg.s    ");
-		floatRegister(a_opcode, 3, 1);
-		floatRegister(a_opcode, 2, 0);
-		break;
+                case 0x07:
+                pspDebugScreenPuts("neg.s    ");
+                floatRegister(a_opcode, 3, 1);
+                floatRegister(a_opcode, 2, 0);
+                break;
 
-		case 0x0C:
-		pspDebugScreenPuts("round.w.s ");
-		floatRegister(a_opcode, 3, 1);
-		floatRegister(a_opcode, 2, 0);
-		break;
+                case 0x0C:
+                pspDebugScreenPuts("round.w.s ");
+                floatRegister(a_opcode, 3, 1);
+                floatRegister(a_opcode, 2, 0);
+                break;
 
-		case 0x0D:
-		pspDebugScreenPuts("trunc.w.s ");
-		floatRegister(a_opcode, 3, 1);
-		floatRegister(a_opcode, 2, 0);
-		break;
+                case 0x0D:
+                pspDebugScreenPuts("trunc.w.s ");
+                floatRegister(a_opcode, 3, 1);
+                floatRegister(a_opcode, 2, 0);
+                break;
 
-		case 0x0E:
-		pspDebugScreenPuts("ceil.w.s ");
-		floatRegister(a_opcode, 3, 1);
-		floatRegister(a_opcode, 2, 0);
-		break;
+                case 0x0E:
+                pspDebugScreenPuts("ceil.w.s ");
+                floatRegister(a_opcode, 3, 1);
+                floatRegister(a_opcode, 2, 0);
+                break;
 
-		case 0x0F:
-		pspDebugScreenPuts("floor.w.s ");
-		floatRegister(a_opcode, 3, 1);
-		floatRegister(a_opcode, 2, 0);
-		break;
+                case 0x0F:
+                pspDebugScreenPuts("floor.w.s ");
+                floatRegister(a_opcode, 3, 1);
+                floatRegister(a_opcode, 2, 0);
+                break;
 
-		case 0x20:
-		if((a_opcode  & 0xFF0000) == 0x800000){
-		pspDebugScreenPuts("cvt.s.w  ");
-		floatRegister(a_opcode, 3, 1);
-		floatRegister(a_opcode, 2, 0);
-		}
-		break;
+                case 0x20:
+                if((a_opcode  & 0xFF0000) == 0x800000){
+                pspDebugScreenPuts("cvt.s.w  ");
+                floatRegister(a_opcode, 3, 1);
+                floatRegister(a_opcode, 2, 0);
+                }
+                break;
 
-		case 0x24:
-		pspDebugScreenPuts("cvt.w.s  ");
-		floatRegister(a_opcode, 3, 1);
-		floatRegister(a_opcode, 2, 0);
-		break;
-		}
+                case 0x24:
+                pspDebugScreenPuts("cvt.w.s  ");
+                floatRegister(a_opcode, 3, 1);
+                floatRegister(a_opcode, 2, 0);
+                break;
+                }
 
-		switch(a_opcode & 0x7FF){
-		case 0x30:
-		pspDebugScreenPuts("c.f.s    ");
-		floatRegister(a_opcode, 2, 1);
-		floatRegister(a_opcode, T, 0);
-		break;
+                switch(a_opcode & 0x7FF){
+                case 0x30:
+                pspDebugScreenPuts("c.f.s    ");
+                floatRegister(a_opcode, 2, 1);
+                floatRegister(a_opcode, T, 0);
+                break;
 
-		case 0x31:
-		pspDebugScreenPuts("c.un.s   ");
-		floatRegister(a_opcode, 2, 1);
-		floatRegister(a_opcode, T, 0);
-		break;
+                case 0x31:
+                pspDebugScreenPuts("c.un.s   ");
+                floatRegister(a_opcode, 2, 1);
+                floatRegister(a_opcode, T, 0);
+                break;
 
-		case 0x32:
-		pspDebugScreenPuts("c.eq.s   ");
-		floatRegister(a_opcode, 2, 1);
-		floatRegister(a_opcode, T, 0);
-		break;
+                case 0x32:
+                pspDebugScreenPuts("c.eq.s   ");
+                floatRegister(a_opcode, 2, 1);
+                floatRegister(a_opcode, T, 0);
+                break;
 
-		case 0x33:
-		pspDebugScreenPuts("c.ueq.s  ");
-		floatRegister(a_opcode, 2, 1);
-		floatRegister(a_opcode, T, 0);
-		break;
+                case 0x33:
+                pspDebugScreenPuts("c.ueq.s  ");
+                floatRegister(a_opcode, 2, 1);
+                floatRegister(a_opcode, T, 0);
+                break;
 
-		case 0x34:
-		pspDebugScreenPuts("c.olt.s  ");
-		floatRegister(a_opcode, 2, 1);
-		floatRegister(a_opcode, T, 0);
-		break;
+                case 0x34:
+                pspDebugScreenPuts("c.olt.s  ");
+                floatRegister(a_opcode, 2, 1);
+                floatRegister(a_opcode, T, 0);
+                break;
 
-		case 0x35:
-		pspDebugScreenPuts("c.ult.s  ");
-		floatRegister(a_opcode, 2, 1);
-		floatRegister(a_opcode, T, 0);
-		break;
+                case 0x35:
+                pspDebugScreenPuts("c.ult.s  ");
+                floatRegister(a_opcode, 2, 1);
+                floatRegister(a_opcode, T, 0);
+                break;
 
-		case 0x36:
-		pspDebugScreenPuts("c.ole.s  ");
-		floatRegister(a_opcode, 2, 1);
-		floatRegister(a_opcode, T, 0);
-		break;
+                case 0x36:
+                pspDebugScreenPuts("c.ole.s  ");
+                floatRegister(a_opcode, 2, 1);
+                floatRegister(a_opcode, T, 0);
+                break;
 
-		case 0x37:
-		pspDebugScreenPuts("c.ule.s  ");
-		floatRegister(a_opcode, 2, 1);
-		floatRegister(a_opcode, T, 0);
-		break;
+                case 0x37:
+                pspDebugScreenPuts("c.ule.s  ");
+                floatRegister(a_opcode, 2, 1);
+                floatRegister(a_opcode, T, 0);
+                break;
 
-		case 0x38:
-		pspDebugScreenPuts("c.sf.s   ");
-		floatRegister(a_opcode, 2, 1);
-		floatRegister(a_opcode, T, 0);
-		break;
+                case 0x38:
+                pspDebugScreenPuts("c.sf.s   ");
+                floatRegister(a_opcode, 2, 1);
+                floatRegister(a_opcode, T, 0);
+                break;
 
-		case 0x39:
-		pspDebugScreenPuts("c.ngle.s ");
-		floatRegister(a_opcode, 2, 1);
-		floatRegister(a_opcode, T, 0);
-		break;
+                case 0x39:
+                pspDebugScreenPuts("c.ngle.s ");
+                floatRegister(a_opcode, 2, 1);
+                floatRegister(a_opcode, T, 0);
+                break;
 
-		case 0x3A:
-		pspDebugScreenPuts("c.seq.s  ");
-		floatRegister(a_opcode, 2, 1);
-		floatRegister(a_opcode, T, 0);
-		break;
+                case 0x3A:
+                pspDebugScreenPuts("c.seq.s  ");
+                floatRegister(a_opcode, 2, 1);
+                floatRegister(a_opcode, T, 0);
+                break;
 
-		case 0x3B:
-		pspDebugScreenPuts("c.ngl.s  ");
-		floatRegister(a_opcode, 2, 1);
-		floatRegister(a_opcode, T, 0);
-		break;
+                case 0x3B:
+                pspDebugScreenPuts("c.ngl.s  ");
+                floatRegister(a_opcode, 2, 1);
+                floatRegister(a_opcode, T, 0);
+                break;
 
-		case 0x3C:
-		pspDebugScreenPuts("c.lt.s   ");
-		floatRegister(a_opcode, 2, 1);
-		floatRegister(a_opcode, T, 0);
-		break;
+                case 0x3C:
+                pspDebugScreenPuts("c.lt.s   ");
+                floatRegister(a_opcode, 2, 1);
+                floatRegister(a_opcode, T, 0);
+                break;
 
-		case 0x3D:
-		pspDebugScreenPuts("c.nge.s  ");
-		floatRegister(a_opcode, 2, 1);
-		floatRegister(a_opcode, T, 0);
-		break;
+                case 0x3D:
+                pspDebugScreenPuts("c.nge.s  ");
+                floatRegister(a_opcode, 2, 1);
+                floatRegister(a_opcode, T, 0);
+                break;
 
-		case 0x3E:
-		pspDebugScreenPuts("c.le.s   ");
-		floatRegister(a_opcode, 2, 1);
-		floatRegister(a_opcode, T, 0);
-		break;
+                case 0x3E:
+                pspDebugScreenPuts("c.le.s   ");
+                floatRegister(a_opcode, 2, 1);
+                floatRegister(a_opcode, T, 0);
+                break;
 
-		case 0x3F:
-		pspDebugScreenPuts("c.ngt.s  ");
-		floatRegister(a_opcode, 2, 1);
-		floatRegister(a_opcode, T, 0);
-		break;
-		}
-		break;
+                case 0x3F:
+                pspDebugScreenPuts("c.ngt.s  ");
+                floatRegister(a_opcode, 2, 1);
+                floatRegister(a_opcode, T, 0);
+                break;
+                }
+                break;
 /*        {"c.f.s",       0x46000030, 0xFFE007FF, "%S, %T"},
         {"c.un.s",      0x46000031, 0xFFE007FF, "%S, %T"},
         {"c.eq.s",      0x46000032, 0xFFE007FF, "%S, %T"},
@@ -1511,35 +1510,35 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
     case 0x48:
      switch(a_opcode >>24){
        case 0x48:
-	switch(a_opcode >>16 & 0xE0){
-	case 0x60:
-		if((a_opcode & 0xFF80) == 0){
-      		pspDebugScreenPuts("mfv 	");
-		mipsRegister(a_opcode, T, 1);
-		vectors(a_opcode , 2 , 0);
-		}
-		else if((a_opcode & 0xFF00) == 0){
-      		pspDebugScreenPuts("mfvc	");
-		mipsRegister(a_opcode, T, 1);
-		VFMODE=1;
-		vectors(a_opcode, 2, 0);
-		}
-	break;
+        switch(a_opcode >>16 & 0xE0){
+        case 0x60:
+                if((a_opcode & 0xFF80) == 0){
+                pspDebugScreenPuts("mfv         ");
+                mipsRegister(a_opcode, T, 1);
+                vectors(a_opcode , 2 , 0);
+                }
+                else if((a_opcode & 0xFF00) == 0){
+                pspDebugScreenPuts("mfvc        ");
+                mipsRegister(a_opcode, T, 1);
+                VFMODE=1;
+                vectors(a_opcode, 2, 0);
+                }
+        break;
 
-	case 0xE0:
-		if((a_opcode & 0xFF80) == 0){
-      		pspDebugScreenPuts("mtv 	");
-		mipsRegister(a_opcode, T, 1);
-		vectors(a_opcode , 2 , 0);
-		}
-		else if((a_opcode & 0xFF00) == 0){
-      		pspDebugScreenPuts("mtvc	");
-		mipsRegister(a_opcode, T, 1);
-		VFMODE=1;
-		vectors(a_opcode, 2, 0);
-		}
-	break;
-	}break;
+        case 0xE0:
+                if((a_opcode & 0xFF80) == 0){
+                pspDebugScreenPuts("mtv         ");
+                mipsRegister(a_opcode, T, 1);
+                vectors(a_opcode , 2 , 0);
+                }
+                else if((a_opcode & 0xFF00) == 0){
+                pspDebugScreenPuts("mtvc        ");
+                mipsRegister(a_opcode, T, 1);
+                VFMODE=1;
+                vectors(a_opcode, 2, 0);
+                }
+        break;
+        }break;
 /*
 { "mfv", 0x48600000, 0xFFE0FF80, "%t, %zs" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%t, %zs"
 { "mfvc",0x48600000, 0xFFE0FF00, "%t, %2d" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%t, %2d"
@@ -1547,35 +1546,35 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
 { "mtvc",0x48E00000, 0xFFE0FF00, "%t, %2d" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%t, %2d"
 */
       case 0x49:
-		switch(a_opcode >>16 & 0xE3){
-		case 0x00:
-      		pspDebugScreenPuts("bvf 	");
-		VFMODE=2;
-		vectors(a_opcode, 0, 1);
-		mipsDec(a_opcode, 0, 0);
-		break;
+                switch(a_opcode >>16 & 0xE3){
+                case 0x00:
+                pspDebugScreenPuts("bvf         ");
+                VFMODE=2;
+                vectors(a_opcode, 0, 1);
+                mipsDec(a_opcode, 0, 0);
+                break;
 
-		case 0x01:
-      		pspDebugScreenPuts("bvt 	");
-		VFMODE=2;
-		vectors(a_opcode, 0, 1);
-		mipsDec(a_opcode, 0, 0);
-		break;
+                case 0x01:
+                pspDebugScreenPuts("bvt         ");
+                VFMODE=2;
+                vectors(a_opcode, 0, 1);
+                mipsDec(a_opcode, 0, 0);
+                break;
 
-		case 0x02:
-      		pspDebugScreenPuts("bvfl	");
-		VFMODE=2;
-		vectors(a_opcode, 0, 1);
-		mipsDec(a_opcode, 0, 0);
-		break;
+                case 0x02:
+                pspDebugScreenPuts("bvfl        ");
+                VFMODE=2;
+                vectors(a_opcode, 0, 1);
+                mipsDec(a_opcode, 0, 0);
+                break;
 
-		case 0x03:
-      		pspDebugScreenPuts("bvtl	");
-		VFMODE=2;
-		vectors(a_opcode, 0, 1);
-		mipsDec(a_opcode, 0, 0);
-		break;
-	}break;
+                case 0x03:
+                pspDebugScreenPuts("bvtl        ");
+                VFMODE=2;
+                vectors(a_opcode, 0, 1);
+                mipsDec(a_opcode, 0, 0);
+                break;
+        }break;
 /*
 { "bvf",         0x49000000, 0xFFE30000, "%Zc, %O" , ADDR_TYPE_16, INSTR_TYPE_PSP | INSTR_TYPE_B }, // [hlide] %Z -> %Zc
 { "bvfl",        0x49020000, 0xFFE30000, "%Zc, %O" , ADDR_TYPE_16, INSTR_TYPE_PSP | INSTR_TYPE_B }, // [hlide] %Z -> %Zc
@@ -1586,14 +1585,14 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
      break;
 
      case 0x50:
-      pspDebugScreenPuts("beql	");
+      pspDebugScreenPuts("beql  ");
       mipsRegister(a_opcode, S, 1);
       mipsRegister(a_opcode, T, 1);
       mipsDec(a_opcode, 0, 0);
      break;
       
      case 0x54:
-      pspDebugScreenPuts("bnel	");
+      pspDebugScreenPuts("bnel  ");
       mipsRegister(a_opcode, S, 1);
       mipsRegister(a_opcode, T, 1);
       mipsDec(a_opcode, 0, 0);
@@ -1615,12 +1614,12 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
 
      case 0x60:
      switch(a_opcode >>24 & 0xFF){
-	case 0x60:
-	switch(a_opcode >>16 & 0x80){
-		case 0x00:
-	        pspDebugScreenPuts("vadd.");
-		VNUM=3;
-     	 	vsel(a_opcode, 0, 3);
+        case 0x60:
+        switch(a_opcode >>16 & 0x80){
+                case 0x00:
+                pspDebugScreenPuts("vadd.");
+                VNUM=3;
+                vsel(a_opcode, 0, 3);
                 break;
 //{ "vadd.p",      0x60000080, 0xFF808080, "%zp, %yp, %xp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vadd.q",      0x60008080, 0xFF808080, "%zq, %yq, %xq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
@@ -1628,32 +1627,30 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
 //{ "vadd.t",      0x60008000, 0xFF808080, "%zt, %yt, %xt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 
 
-		case 0x80:		
-	        pspDebugScreenPuts("vsub.");
-		VNUM=3;
-		vsel(a_opcode,0,3);
-	        break;
+                case 0x80:              
+                pspDebugScreenPuts("vsub.");
+                VNUM=3;
+                vsel(a_opcode,0,3);
+                break;
         }break;
 //{ "vsub.p",      0x60800080, 0xFF808080, "%zp, %yp, %xp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vsub.q",      0x60808080, 0xFF808080, "%zq, %yq, %xq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vsub.s",      0x60800000, 0xFF808080, "%zs, %ys, %xs" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vsub.t",      0x60808000, 0xFF808080, "%zt, %yt, %xt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 
-      case 0x61:
-	        pspDebugScreenPuts("vsbn.s   ");
-     	 	vectors(a_opcode, 2, 1);
-     	 	vectors(a_opcode, 1, 1);
-     	 	vectors(a_opcode, 0, 0);
-                break;
-//{ "vsbn.s",      0x61000000, 0xFF808080, "%zs, %ys, %xs" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 
+      case 0x61:
+                pspDebugScreenPuts("vsbn.s   ");
+                vectors(a_opcode, 2, 1);
+                vectors(a_opcode, 1, 1);
+                vectors(a_opcode, 0, 0);
+                break;
 
       case 0x63:
-	if(a_opcode >> 16 & 0x80){
-	        pspDebugScreenPuts("vdiv.");
-		vsel(a_opcode, 0 , 3);
-                }
-	break;
+        if(a_opcode >> 16 & 0x80){
+                pspDebugScreenPuts("vdiv.");
+                vsel(a_opcode, 0 , 3);
+                }break;
 //{ "vdiv.p",  0x63800080, 0xFF808080, "%zp, %yp, %xp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vdiv.q",  0x63808080, 0xFF808080, "%zq, %yq, %xq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vdiv.s",  0x63800000, 0xFF808080, "%zs, %ys, %xs" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %yz -> %ys
@@ -1663,16 +1660,16 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
     }break;
 
     case 0x64:
-	switch(a_opcode >> 24){
-		case 0x64:
-		if(((a_opcode>>16) &0x80) == 0){
-	        pspDebugScreenPuts("vmul.");
-		}
-		else if(((a_opcode>>16) &0x80) == 0x80){
-	        pspDebugScreenPuts("vdot.");
-		}
-		VNUM=3;
-		vsel(a_opcode,0,3);
+        switch(a_opcode >> 24){
+                case 0x64:
+                if(((a_opcode>>16) &0x80) == 0){
+                pspDebugScreenPuts("vmul.");
+                }
+                else if(((a_opcode>>16) &0x80) == 0x80){
+                pspDebugScreenPuts("vdot.");
+                }
+                VNUM=3;
+                vsel(a_opcode,0,3);
                 break;
 //{ "vmul.p",  0x64000080, 0xFF808080, "%zp, %yp, %xp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vmul.q",  0x64008080, 0xFF808080, "%zq, %yq, %xq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
@@ -1687,46 +1684,42 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
 		VNUM=3;
 		vsel(a_opcode, 0 ,3);
                 break;
-//{ "vscl.p",      0x65000080, 0xFF808080, "%zp, %yp, %xs" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %xp -> %xs
-//{ "vscl.q",      0x65008080, 0xFF808080, "%zq, %yq, %xs" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %xq -> %xs
-//{ "vscl.t",      0x65008000, 0xFF808080, "%zt, %yt, %xs" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %xt -> %xs
 
-		case 0x66:
-		if (((a_opcode>>16)&0x80) == 0x80){
-	        pspDebugScreenPuts("vcrs.");}
-		else if (((a_opcode>>16)&0x80) == 0){
-	        pspDebugScreenPuts("vhdp.");}
-		VNUM=3;
-		vsel(a_opcode, 0 ,3);
+                case 0x66:
+                if (((a_opcode>>16)&0x80) == 0x80){
+                pspDebugScreenPuts("vcrs.");}
+                else if (((a_opcode>>16)&0x80) == 0){
+                pspDebugScreenPuts("vhdp.");}
+                VNUM=3;
+                vsel(a_opcode, 0 ,3);
                 break;
 //{ "vcrs.t",  0x66808000, 0xFF808080, "%zt, %yt, %xt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vhdp.p",  0x66000080, 0xFF808080, "%zs, %yp, %xp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zs, %yp, %xp"
 //{ "vhdp.q",  0x66008080, 0xFF808080, "%zs, %yq, %xq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zs, %yq, %xq"
 //{ "vhdp.t",  0x66008000, 0xFF808080, "%zs, %yt, %xt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zs, %yt, %xt"
 
-		case 0x67:
-	        pspDebugScreenPuts("vdet.");
-		VNUM=3;
-		vsel(a_opcode, 0 ,3);
+                case 0x67:
+                pspDebugScreenPuts("vdet.");
+                VNUM=3;
+                vsel(a_opcode, 0 ,3);
                 break;
 //{ "vdet.p",  0x67000080, 0xFF808080, "%zs, %yp, %xp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-	}break;
+        }break;
 
      case 0x68:
      pspDebugScreenPuts("mfvme    ");
      mipsRegister(a_opcode, T, 1);
      mipsImm(a_opcode,0,0);
      break;
-//{ "mfvme", 0x68000000, 0xFC000000, "%t, %i", ADDR_TYPE_NONE, 0 },
      
-     case 0x6C:
+	case 0x6C:
 	switch(a_opcode >>24){
 	case 0x6C:
 	if((a_opcode  & 0x8080F0) == 0){
-	pspDebugScreenPuts("vcmp.s   ");
-	VectorCMP(a_opcode,0,1);
-     	vectors(a_opcode, 1, 1);
-     	vectors(a_opcode, 0, 0);
+		pspDebugScreenPuts("vcmp.s   ");
+		VectorCMP(a_opcode,0,1);
+	     	vectors(a_opcode, 1, 1);
+	     	vectors(a_opcode, 0, 0);
 	}
 	else if((a_opcode  & 0xFF80F0) == 0){
 	pspDebugScreenPuts("vcmp.s   ");
@@ -1792,123 +1785,101 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
 	VectorCMP(a_opcode,0,0);
 	}
 	break;
-//{ "vcmp.s",      0x6C000000, 0xFF8080F0, "%Zn, %ys, %xs" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%Zn, %ys, %xs"
-//{ "vcmp.s",      0x6C000000, 0xFFFF80F0, "%Zn, %ys" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%Zn, %ys"
-//{ "vcmp.s",      0x6C000000, 0xFFFFFFF0, "%Zn" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%Zn"
-//{ "vcmp.p",      0x6C000080, 0xFF8080F0, "%Zn, %yp, %xp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%Zn, %zp, %xp"
-//{ "vcmp.p",      0x6C000080, 0xFFFF80F0, "%Zn, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%Zn, %xp"
-//{ "vcmp.p",      0x6C000080, 0xFFFFFFF0, "%Zn" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%Zn"
-//{ "vcmp.q",      0x6C008080, 0xFF8080F0, "%Zn, %yq, %xq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%Zn, %yq, %xq"
-//{ "vcmp.q",      0x6C008080, 0xFFFF80F0, "%Zn, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%Zn, %yq"
-//{ "vcmp.q",      0x6C008080, 0xFFFFFFF0, "%Zn" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%Zn"
-//{ "vcmp.t",      0x6C008000, 0xFF8080F0, "%Zn, %yt, %xt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%Zn, %yt, %xt"
-//{ "vcmp.t",      0x6C008000, 0xFFFF80F0, "%Zn, %yt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%Zn, %yt"
-//{ "vcmp.t",      0x6C008000, 0xFFFFFFF0, "%Zn" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zp"
 	}
-	
-	switch((a_opcode >>16) & 0xFF80){
-	case 0x6D00:
-	pspDebugScreenPuts("vmin.");
-	VNUM=3;
-	vsel(a_opcode, 0, 3);
-	break;
+
+		switch((a_opcode >>16) & 0xFF80){
+        case 0x6D00:
+        pspDebugScreenPuts("vmin.");
+        VNUM=3;
+        vsel(a_opcode, 0, 3);
+        break;
 //{ "vmin.p",  0x6D000080, 0xFF808080, "%zp, %yp, %xp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vmin.q",  0x6D008080, 0xFF808080, "%zq, %yq, %xq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vmin.s",  0x6D000000, 0xFF808080, "%zs, %ys, %xs" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vmin.t",  0x6D008000, 0xFF808080, "%zt, %yt, %xt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 
-	case 0x6D80:
-	pspDebugScreenPuts("vmax.");
-	VNUM=3;
-	vsel(a_opcode,0,3);
-	break;
+
+        case 0x6D80:
+        pspDebugScreenPuts("vmax.");
+        VNUM=3;
+        vsel(a_opcode,0,3);
+        break;
 //{ "vmax.p",  0x6D800080, 0xFF808080, "%zp, %yp, %xp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vmax.q",  0x6D808080, 0xFF808080, "%zq, %yq, %xq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vmax.s",  0x6D800000, 0xFF808080, "%zs, %ys, %xs" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vmax.t",  0x6D808000, 0xFF808080, "%zt, %yt, %xt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 
-	case 0x6E80:
-	pspDebugScreenPuts("vscmp.");
-	VNUM=3;
-	vsel(a_opcode, 0, 2);
-	break;
-//{ "vscmp.p", 0x6E800080, 0xFF808080, "%zp, %yp, %xp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vscmp.q", 0x6E808080, 0xFF808080, "%zq, %yq, %xq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vscmp.s", 0x6E800000, 0xFF808080, "%zs, %ys, %xs" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vscmp.t", 0x6E808000, 0xFF808080, "%zt, %yt, %xt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 
-	case 0x6F00:
-	pspDebugScreenPuts("vsge.");
-	VNUM=3;
-	vsel(a_opcode, 0, 3);
-	break;
-//{ "vsge.p",      0x6F000080, 0xFF808080, "%zp, %yp, %xp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vsge.q",      0x6F008080, 0xFF808080, "%zq, %yq, %xq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vsge.s",      0x6F000000, 0xFF808080, "%zs, %ys, %xs" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vsge.t",      0x6F008000, 0xFF808080, "%zt, %yt, %xt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
+        case 0x6E80:
+        pspDebugScreenPuts("vscmp.");
+                VFR=3;
+                vsel(a_opcode, 0, 3);
+        break;
 
-	case 0x6F80:
-	pspDebugScreenPuts("vslt.");
-	VNUM=3;
-	vsel(a_opcode, 0, 3);
-	break;
-//{ "vslt.p",      0x6F800080, 0xFF808080, "%zp, %yp, %xp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vslt.q",      0x6F808080, 0xFF808080, "%zq, %yq, %xq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vslt.s",      0x6F800000, 0xFF808080, "%zs, %ys, %xs" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vslt.t",      0x6F808000, 0xFF808080, "%zt, %yt, %xt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-	}
+        case 0x6F00:
+        pspDebugScreenPuts("vsge.");
+                VFR=3;
+                vsel(a_opcode, 0, 3);
+        break;
+
+        case 0x6F80:
+        pspDebugScreenPuts("vslt.");
+                VFR=3;
+                vsel(a_opcode, 0, 3);
+        break;
+        }
      break;
      
      case 0x70:
-	if(a_opcode >> 24 == 0x70){
-		switch(a_opcode & 0xE007FF){
-		case 0x24:
-	      	pspDebugScreenPuts("mfic	");
-		mipsRegister(a_opcode, T, 1);
-		mipsNibble(a_opcode, 2, 0);
-		break;
+        if(a_opcode >> 24 == 0x70){
+                switch(a_opcode & 0xE007FF){
+                case 0x24:
+                pspDebugScreenPuts("mfic        ");
+                mipsRegister(a_opcode, T, 1);
+                mipsNibble(a_opcode, 2, 0);
+                break;
 
-		case 0x26:
-	      	pspDebugScreenPuts("mtic	");
-		mipsRegister(a_opcode, T, 1);
-		mipsNibble(a_opcode, 2, 0);
-		break;
+                case 0x26:
+                pspDebugScreenPuts("mtic        ");
+                mipsRegister(a_opcode, T, 1);
+                mipsNibble(a_opcode, 2, 0);
+                break;
 
-		case 0x3D:
-	      	pspDebugScreenPuts("mfdr	");
-		mipsRegister(a_opcode, T, 1);
+                case 0x3D:
+                pspDebugScreenPuts("mfdr        ");
+                mipsRegister(a_opcode, T, 1);
                 DrRegister(a_opcode,2,0);
-		break;
+                break;
 
-		case 0x80003D:
-	      	pspDebugScreenPuts("mtdr	");
-		mipsRegister(a_opcode, T, 1);
+                case 0x80003D:
+                pspDebugScreenPuts("mtdr        ");
+                mipsRegister(a_opcode, T, 1);
                 DrRegister(a_opcode,2,0);
-		break; 
+                break; 
 //"mfdr",              0x7000003D, 0xFFE007FF, "%t, %r"},
 //"mtdr",              0x7080003D, 0xFFE007FF, "%t, %r"},
 //"mfic",              0x70000024, 0xFFE007FF, "%t, %p"},
 //"mtic",              0x70000026, 0xFFE007FF, "%t, %p"},
-		}
+                }
 
-		switch(a_opcode & 0xFFFFFF){
-		case 0x00:
-	      	pspDebugScreenPuts("halt	");
-		break;
+                switch(a_opcode & 0xFFFFFF){
+                case 0x00:
+                pspDebugScreenPuts("halt        ");
+                break;
 
-		case 0x3E:
-	      	pspDebugScreenPuts("dret	");
-		break;
+                case 0x3E:
+                pspDebugScreenPuts("dret        ");
+                break;
 
-		case 0x3F:
-	      	pspDebugScreenPuts("dbreak    ");
-		break;
-		}
-	}
+                case 0x3F:
+                pspDebugScreenPuts("dbreak    ");
+                break;
+                }
+        }
    break;
 //"dbreak",            0x7000003F, 0xFFFFFFFF, ""},
 //"dret",              0x7000003E, 0xFFFFFFFF, ""},
-//"halt",  	     0x70000000, 0xFFFFFFFF, "" },
+//"halt",            0x70000000, 0xFFFFFFFF, "" },
      
       //0x1d is empty
       
@@ -1916,60 +1887,60 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
 //      break;
 
      case 0x7C:
-	if(a_opcode >>24 == 0x7C){
+        if(a_opcode >>24 == 0x7C){
       switch(a_opcode & 0x7FF){
-	case 0x420:
-      	pspDebugScreenPuts("seb 	");
+        case 0x420:
+        pspDebugScreenPuts("seb         ");
         mipsRegister(a_opcode, 2, 1);
         mipsRegister(a_opcode, 1, 0);
-	break;
-	
-	case 0x620:
-      	pspDebugScreenPuts("seh 	");
+        break;
+        
+        case 0x620:
+        pspDebugScreenPuts("seh         ");
         mipsRegister(a_opcode, 2, 1);
         mipsRegister(a_opcode, 1, 0);
-	break;
+        break;
 
-	case 0xA0:
-      	pspDebugScreenPuts("wsbbn    ");
+        case 0xA0:
+        pspDebugScreenPuts("wsbbn    ");
         mipsRegister(a_opcode, 2, 1);
         mipsRegister(a_opcode, 1, 0);
-	break;
-	
-	case 0xE0:
-      	pspDebugScreenPuts("wsbw	");
+        break;
+        
+        case 0xE0:
+        pspDebugScreenPuts("wsbw        ");
         mipsRegister(a_opcode, 2, 1);
         mipsRegister(a_opcode, 1, 0);
-	break;       
+        break;       
 
-	case 0x520:
-      	pspDebugScreenPuts("bitrev   ");
+        case 0x520:
+        pspDebugScreenPuts("bitrev   ");
         mipsRegister(a_opcode, 2, 1);
         mipsRegister(a_opcode, 1, 0);
-	break;       
-	}}
-	switch(a_opcode & 0x03F){
-	case 0x0:
-	pspDebugScreenPuts("ext 	");
-	mipsRegister(a_opcode, T, 1);
-	mipsRegister(a_opcode, S, 1);
-      	mipsNibble(a_opcode, 3, 1);
-	a_opcode+=0x800;
-      	mipsNibble(a_opcode, 2, 0);
-	break;
-	
-	case 0x4:
-	pspDebugScreenPuts("ins 	");
-	mipsRegister(a_opcode, T, 1);
-	mipsRegister(a_opcode, S, 1);
-	mipsNibble(a_opcode, 3, 1);
-	mipsins(a_opcode, 0, 0);
-     	break;
-	}
+        break;       
+        }}
+        switch(a_opcode & 0x03F){
+        case 0x0:
+        pspDebugScreenPuts("ext         ");
+        mipsRegister(a_opcode, T, 1);
+        mipsRegister(a_opcode, S, 1);
+        mipsNibble(a_opcode, 3, 1);
+        a_opcode+=0x800;
+        mipsNibble(a_opcode, 2, 0);
+        break;
+        
+        case 0x4:
+        pspDebugScreenPuts("ins         ");
+        mipsRegister(a_opcode, T, 1);
+        mipsRegister(a_opcode, S, 1);
+        mipsNibble(a_opcode, 3, 1);
+        mipsins(a_opcode, 0, 0);
+        break;
+        }
     break;
 
     case 0x80:
-      pspDebugScreenPuts("lb  	");
+      pspDebugScreenPuts("lb    ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -1983,7 +1954,7 @@ Encoding: 1000 00ss ssst tttt iiii iiii iiii iiii*/
       break;
 
     case 0x84:
-      pspDebugScreenPuts("lh  	");
+      pspDebugScreenPuts("lh    ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -1996,7 +1967,7 @@ Syntax: lh $t, offset($s)*/
       break;
       
      case 0x88:
-      pspDebugScreenPuts("lwl 	");
+      pspDebugScreenPuts("lwl   ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -2005,7 +1976,7 @@ Syntax: lh $t, offset($s)*/
       break;
       
     case 0x8C:
-      pspDebugScreenPuts("lw  	");
+      pspDebugScreenPuts("lw    ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -2019,7 +1990,7 @@ Encoding: 1000 11ss ssst tttt iiii iiii iiii iiii*/
       break;
      
      case 0x90:
-      pspDebugScreenPuts("lbu 	");
+      pspDebugScreenPuts("lbu   ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -2028,7 +1999,7 @@ Encoding: 1000 11ss ssst tttt iiii iiii iiii iiii*/
       break;
       
       case 0x94:
-      pspDebugScreenPuts("lhu 	");
+      pspDebugScreenPuts("lhu   ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -2037,7 +2008,7 @@ Encoding: 1000 11ss ssst tttt iiii iiii iiii iiii*/
       break;
       
       case 0x98:
-      pspDebugScreenPuts("lwr 	");
+      pspDebugScreenPuts("lwr   ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -2046,7 +2017,7 @@ Encoding: 1000 11ss ssst tttt iiii iiii iiii iiii*/
       break;
       
      case 0x9C:
-      pspDebugScreenPuts("lwu 	");
+      pspDebugScreenPuts("lwu   ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -2055,7 +2026,7 @@ Encoding: 1000 11ss ssst tttt iiii iiii iiii iiii*/
       break;
       
     case 0xA0:
-      pspDebugScreenPuts("sb  	");
+      pspDebugScreenPuts("sb    ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -2069,7 +2040,7 @@ Encoding: 1010 00ss ssst tttt iiii iiii iiii iiii*/
       break;
       
      case 0xA4:
-      pspDebugScreenPuts("sh  	");
+      pspDebugScreenPuts("sh    ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -2078,7 +2049,7 @@ Encoding: 1010 00ss ssst tttt iiii iiii iiii iiii*/
       break;
       
       case 0xA8:
-      pspDebugScreenPuts("swl 	");
+      pspDebugScreenPuts("swl   ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -2087,7 +2058,7 @@ Encoding: 1010 00ss ssst tttt iiii iiii iiii iiii*/
       break;
       
     case 0xAC:
-      pspDebugScreenPuts("sw  	");
+      pspDebugScreenPuts("sw    ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -2104,11 +2075,11 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
      pspDebugScreenPuts("mtvme    ");
      mipsRegister(a_opcode, T, 1);
      mipsImm(a_opcode,0,0);
-//{ "mtvme", 0xb0000000, 0xFC000000, "%t, %i", ADDR_TYPE_NONE, 0 },
+//        { "mtvme", 0xb0000000, 0xFC000000, "%t, %i", ADDR_TYPE_NONE, 0 },
       break;
       
 /*      case 0xB4:
-      pspDebugScreenPuts("sdr 	");
+      pspDebugScreenPuts("sdr   ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -2117,7 +2088,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
       break;*/
       
       case 0xB8:
-      pspDebugScreenPuts("swr 	");
+      pspDebugScreenPuts("swr   ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -2136,7 +2107,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
       break;
      
       case 0xC0:
-      pspDebugScreenPuts("ll  	");
+      pspDebugScreenPuts("ll    ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -2145,7 +2116,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
       break;
       
       case 0xC4:
-      pspDebugScreenPuts("lwc1	");
+      pspDebugScreenPuts("lwc1  ");
       floatRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -2154,7 +2125,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
       break;
       
       case 0xC8:
-      pspDebugScreenPuts("lv.s	");
+      pspDebugScreenPuts("lv.s  ");
       VFR=3;
       vectors(a_opcode, 0, 1);
       VFR=3;
@@ -2166,7 +2137,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 //{ "lv.s",0xC8000000, 0xFC000000, "%Xs, %Y" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },      
 
       case 0xCC:
-      pspDebugScreenPuts("pref	");
+      pspDebugScreenPuts("pref  ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -2175,293 +2146,260 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
       break;
 
       case 0xD0:
-	switch(a_opcode >>16){
-	case 0xD000:
-	        pspDebugScreenPuts("vmov.");
-		vsel(a_opcode,0,3);
-		break;
+        switch(a_opcode >>16){
+        case 0xD000:
+                pspDebugScreenPuts("vmov.");
+                vsel(a_opcode,0,3);
+                break;
 //{ "vmov.p",  0xD0000080, 0xFFFF8080, "%zp, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vmov.q",  0xD0008080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vmov.s",  0xD0000000, 0xFFFF8080, "%zs, %ys" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vmov.t",  0xD0008000, 0xFFFF8080, "%zt, %yt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 
-	case 0xD001:
-	        pspDebugScreenPuts("vabs.");
-		vsel(a_opcode, 0, 3);
-	break;
+        case 0xD001:
+                pspDebugScreenPuts("vabs.");
+                vsel(a_opcode, 0, 3);
+        break;
 //{ "vabs.p",      0xD0010080, 0xFFFF8080, "%zp, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vabs.q",      0xD0018080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vabs.s",      0xD0010000, 0xFFFF8080, "%zs, %ys" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vabs.t",      0xD0018000, 0xFFFF8080, "%zt, %yt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 
-	case 0xD002:
-	        pspDebugScreenPuts("vneg.");
-		vsel(a_opcode,0,2);
-	break;
+        case 0xD002:
+                pspDebugScreenPuts("vneg.");
+                vsel(a_opcode,0,2);
+        break;
 //{ "vneg.p",      0xD0020080, 0xFFFF8080, "%zp, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vneg.q",      0xD0028080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vneg.s",      0xD0020000, 0xFFFF8080, "%zs, %ys" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vneg.t",      0xD0028000, 0xFFFF8080, "%zt, %yt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 
-	case 0xD003:
-		if((a_opcode & 0xFF80) == 0x80){
-	        pspDebugScreenPuts("vidt.p   ");
-		VFR=6;
-     	 	vectors(a_opcode, 2, 0);
-		}
-		else if((a_opcode & 0xFF80) == 0x8080){
-	        pspDebugScreenPuts("vidt.q   ");
-		VFR=6;
-     	 	vectors(a_opcode, 2, 0);
-		}
-	break;
+        case 0xD003:
+                if((a_opcode & 0xFF80) == 0x80){
+                pspDebugScreenPuts("vidt.p   ");
+                VFR=6;
+                vectors(a_opcode, 2, 0);
+                }
+                else if((a_opcode & 0xFF80) == 0x8080){
+                pspDebugScreenPuts("vidt.q   ");
+                VFR=6;
+                vectors(a_opcode, 2, 0);
+                }
+        break;
 //{ "vidt.p",  0xD0030080, 0xFFFFFF80, "%zp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vidt.q",  0xD0038080, 0xFFFFFF80, "%zq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 
-	case 0xD004:
-	        pspDebugScreenPuts("vsat0.");
-     	 	vsel(a_opcode, 0, 2);
-	break;
-//{ "vsat0.p", 0xD0040080, 0xFFFF8080, "%zp, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vsat0.q", 0xD0048080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vsat0.s", 0xD0040000, 0xFFFF8080, "%zs, %ys" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vsat0.t", 0xD0048000, 0xFFFF8080, "%zt, %yt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
+        case 0xD004:
+                pspDebugScreenPuts("vsat0.");
+                vsel(a_opcode, 0, 2);
+        break;
+//        { "vsat0.s", 0xD0040000, 0xFFFF8080, "%zs, %ys" },
 
-	case 0xD005:
-	        pspDebugScreenPuts("vsat1.");
-     	 	vsel(a_opcode, 0, 2);
-	break;
-//{ "vsat1.p", 0xD0050080, 0xFFFF8080, "%zp, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vsat1.q", 0xD0058080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vsat1.s", 0xD0050000, 0xFFFF8080, "%zs, %ys" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vsat1.t", 0xD0058000, 0xFFFF8080, "%zt, %yt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
+        case 0xD005:
+                pspDebugScreenPuts("vsat1.");
+                vsel(a_opcode, 0, 2);
+        break;
+//        { "vsat1.s", 0xD0050000, 0xFFFF8080, "%zs, %ys" },
 
-	case 0xD006:
-		if((a_opcode & 0xFF80) == 0){
-	        pspDebugScreenPuts("vzero.s  ");}
-		else if((a_opcode & 0xFF80) == 0x80){
-	        pspDebugScreenPuts("vzero.p  ");
-		VFR=4;}
-		else if((a_opcode & 0xFF80) == 0x8000){
-	        pspDebugScreenPuts("vzero.t  ");
-		VFR=5;}
-		else if((a_opcode & 0xFF80) == 0x8080){
-	        pspDebugScreenPuts("vzero.q  ");
-		VFR=6;}
-     	 	vectors(a_opcode, 2, 0);
-	break;
+        case 0xD006:
+                if((a_opcode & 0xFF80) == 0){
+                pspDebugScreenPuts("vzero.s  ");}
+                else if((a_opcode & 0xFF80) == 0x80){
+                pspDebugScreenPuts("vzero.p  ");
+                VFR=4;}
+                else if((a_opcode & 0xFF80) == 0x8000){
+                pspDebugScreenPuts("vzero.t  ");
+                VFR=5;}
+                else if((a_opcode & 0xFF80) == 0x8080){
+                pspDebugScreenPuts("vzero.q  ");
+                VFR=6;}
+                vectors(a_opcode, 2, 0);
+        break;
 //{ "vzero.p", 0xD0060080, 0xFFFFFF80, "%zp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vzero.q", 0xD0068080, 0xFFFFFF80, "%zq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vzero.s", 0xD0060000, 0xFFFFFF80, "%zs" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vzero.t", 0xD0068000, 0xFFFFFF80, "%zt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 
-	case 0xD007:
-	        pspDebugScreenPuts("vone.");
-		VNUM=1;
-     	 	vsel(a_opcode, 0, 3);
-	break;
-//{ "vone.p",      0xD0070080, 0xFFFFFF80, "%zp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vone.q",      0xD0078080, 0xFFFFFF80, "%zq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vone.s",      0xD0070000, 0xFFFFFF80, "%zs" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vone.t",      0xD0078000, 0xFFFFFF80, "%zt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
+        case 0xD007:
+                pspDebugScreenPuts("vone.");
+		vsel(a_opcode, 0, 3);
+        break;
+//        { "vone.s",      0xD0070000, 0xFFFFFF80, "%zs" },
 
-	case 0xD010:
-	        pspDebugScreenPuts("vrcp.");
-		VNUM=3;
-     	 	vsel(a_opcode, 0, 3);
-	break;
-//{ "vrcp.p",      0xD0100080, 0xFFFF8080, "%zp, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vrcp.q",      0xD0108080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vrcp.s",      0xD0100000, 0xFFFF8080, "%zs, %ys" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vrcp.t",      0xD0108000, 0xFFFF8080, "%zt, %yt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
+        case 0xD010:
+                pspDebugScreenPuts("vrcp.");
+		VFR=3;
+		vsel(a_opcode, 0, 3);
+        break;
+//        { "vrcp.s",      0xD0100000, 0xFFFF8080, "%zs, %ys" },
 
-	case 0xD011:
-	        pspDebugScreenPuts("vrsq.");
-     	 	vsel(a_opcode, 0, 3);
-	break;
-//{ "vrsq.p",      0xD0110080, 0xFFFF8080, "%zp, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vrsq.q",      0xD0118080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vrsq.s",      0xD0110000, 0xFFFF8080, "%zs, %ys" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vrsq.t",      0xD0118000, 0xFFFF8080, "%zt, %yt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
+        case 0xD011:
+                pspDebugScreenPuts("vrsq.");
+		VFR=3;
+		vsel(a_opcode, 0, 3);
+        break;
+//        { "vrsq.s",      0xD0110000, 0xFFFF8080, "%zs, %ys" },
 
-	case 0xD012:
-	        pspDebugScreenPuts("vsin.");
-     	 	VFR=3;
-     	 	vsel(a_opcode, 0, 3);
-	break;
-//{ "vsin.p",      0xD0120080, 0xFFFF8080, "%zp, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vsin.q",      0xD0128080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vsin.s",      0xD0120000, 0xFFFF8080, "%zs, %ys" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vsin.t",      0xD0128000, 0xFFFF8080, "%zt, %yt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 
-	case 0xD013:
-	        pspDebugScreenPuts("vcos.");
-		vsel(a_opcode, 0 ,3);
-	break;
+        case 0xD012:
+                pspDebugScreenPuts("vsin.");
+		VFR=3;
+		vsel(a_opcode, 0, 3);
+        break;
+//         { "vsin.s",      0xD0120000, 0xFFFF8080, "%zs, %ys" },
+
+        case 0xD013:
+                pspDebugScreenPuts("vcos.");
+                vsel(a_opcode, 0 ,3);
+        break;
 //{ "vcos.p",      0xD0130080, 0xFFFF8080, "%zp, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vcos.q",      0xD0138080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vcos.s",      0xD0130000, 0xFFFF8080, "%zs, %ys" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vcos.t",      0xD0138000, 0xFFFF8080, "%zt, %yt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 
 
-	case 0xD014:
-	        pspDebugScreenPuts("vexp2.");
-		vsel(a_opcode,0,2);
-	break;
+        case 0xD014:
+                pspDebugScreenPuts("vexp2.");
+                vsel(a_opcode,0,2);
+        break;
 //{ "vexp2.p", 0xD0140080, 0xFFFF8080, "%zp, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vexp2.q", 0xD0148080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vexp2.s", 0xD0140000, 0xFFFF8080, "%zs, %ys" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vexp2.t", 0xD0148000, 0xFFFF8080, "%zt, %yt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 
-	case 0xD015:
-	        pspDebugScreenPuts("vlog2.");
-		vsel(a_opcode,0,2);
-	break;
+
+        case 0xD015:
+                pspDebugScreenPuts("vlog2.");
+                vsel(a_opcode,0,2);
+        break;
 //{ "vlog2.p", 0xD0150080, 0xFFFF8080, "%zp, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vlog2.q", 0xD0158080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vlog2.s", 0xD0150000, 0xFFFF8080, "%zs, %ys" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vlog2.t", 0xD0158000, 0xFFFF8080, "%zt, %yt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 
-	case 0xD016:
-	        pspDebugScreenPuts("vsqrt.");
-		vsel(a_opcode,0,2);
-	break;
+        case 0xD016:
+                pspDebugScreenPuts("vsqrt.");
+                vsel(a_opcode,0,2);
+        break;
 //{ "vsqrt.p", 0xD0160080, 0xFFFF8080, "%zp, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vsqrt.q", 0xD0168080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vsqrt.s", 0xD0160000, 0xFFFF8080, "%zs, %ys" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vsqrt.t", 0xD0168000, 0xFFFF8080, "%zt, %yt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 
-	case 0xD017:
-	        pspDebugScreenPuts("vasin.");
-		vsel(a_opcode, 0, 2);
-	break;
+
+        case 0xD017:
+                pspDebugScreenPuts("vasin.");
+                vsel(a_opcode, 0, 2);
+        break;
 //{ "vasin.p", 0xD0170080, 0xFFFF8080, "%zp, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vasin.q", 0xD0178080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vasin.s", 0xD0170000, 0xFFFF8080, "%zs, %ys" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vasin.t", 0xD0178000, 0xFFFF8080, "%zt, %yt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 
-	case 0xD018:
-	        pspDebugScreenPuts("vnrcp.");
-     	 	VFR=3;
-     	 	vsel(a_opcode, 0, 2);
-	break;
-//{ "vnrcp.p", 0xD0180080, 0xFFFF8080, "%zp, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vnrcp.q", 0xD0188080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vnrcp.s", 0xD0180000, 0xFFFF8080, "%zs, %ys" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vnrcp.t", 0xD0188000, 0xFFFF8080, "%zt, %yt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
+        case 0xD018:
+                pspDebugScreenPuts("vnrcp.");
+		VFR=3;
+		vsel(a_opcode, 0, 3);
+        break;
+//        { "vnrcp.s", 0xD0180000, 0xFFFF8080, "%zs, %ys" },
 
-	case 0xD01A:
-	        pspDebugScreenPuts("vnsin.");
-     	 	VFR=3;
-     	 	vsel(a_opcode, 0, 2);
-	break;
-//{ "vnsin.p", 0xD01A0080, 0xFFFF8080, "%zp, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vnsin.q", 0xD01A8080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vnsin.s", 0xD01A0000, 0xFFFF8080, "%zs, %ys" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vnsin.t", 0xD01A8000, 0xFFFF8080, "%zt, %yt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
+        case 0xD01A:
+                pspDebugScreenPuts("vnsin.");
+		VFR=3;
+		vsel(a_opcode, 0, 3);
+        break;
+//        { "vnsin.s", 0xD01A0000, 0xFFFF8080, "%zs, %ys" },
 
-	case 0xD01C:
-	        pspDebugScreenPuts("vrexp2.");
-     	 	vsel(a_opcode, 0, 1);
-	break;
-//{ "vrexp2.p",0xD01C0080, 0xFFFF8080, "%zp, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vrexp2.q",0xD01C8080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vrexp2.s",0xD01C0000, 0xFFFF8080, "%zs, %ys" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vrexp2.t",0xD01C8000, 0xFFFF8080, "%zt, %yt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
+        case 0xD01C:
+                pspDebugScreenPuts("vrexp2.");
+		vsel(a_opcode, 0, 1);
+        break;
+//        { "vrexp2.s", 0xD01C0000, 0xFFFF8080, "%zs, %ys" },
 
-	case 0xD020:
+        case 0xD020:
 		if((a_opcode & 0x80FF) == 0){
-	        pspDebugScreenPuts("vrnds.s  ");
-     	 	vectors(a_opcode, 1, 0);
+                pspDebugScreenPuts("vrnds.s  ");
+		vectors(a_opcode, 1, 0);
 		}
-	break;
+        break;
 //        { "vrnds.s", 0xD0200000, 0xFFFF80FF, "%ys" },
 
-	case 0xD021:
-	        pspDebugScreenPuts("vrndi.");
-		VNUM=1;
-     	 	vsel(a_opcode, 0, 2);
-	break;
-//{ "vrndi.p", 0xD0210080, 0xFFFFFF80, "%zp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vrndi.q", 0xD0218080, 0xFFFFFF80, "%zq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vrndi.s", 0xD0210000, 0xFFFFFF80, "%zs" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vrndi.t", 0xD0218000, 0xFFFFFF80, "%zt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
+        case 0xD021:
+                pspDebugScreenPuts("vrndi.");
+		VFR=1;
+		vsel(a_opcode, 0, 2);
+        break;
+//        { "vrndi.s", 0xD0210000, 0xFFFFFF80, "%zs" },
 
-	case 0xD022:
-	        pspDebugScreenPuts("vrndf1.");
-		VNUM=1;
-     	 	vsel(a_opcode, 0, 0);
-	break;
-//{ "vrndf1.p", 0xD0220080, 0xFFFFFF80, "%zp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vrndf1.q",0xD0228080, 0xFFFFFF80, "%zq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vrndf1.s", 0xD0220000, 0xFFFFFF80, "%zs" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vrndf1.t",0xD0228000, 0xFFFFFF80, "%zt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
+        case 0xD022:
+                pspDebugScreenPuts("vrndf1.");
+		VFR=1;
+		vsel(a_opcode, 0, 2);
+        break;
+//        { "vrndf1.s", 0xD0220000, 0xFFFFFF80, "%zs" },
 
-	case 0xD023:
-	        pspDebugScreenPuts("vrndf2.");
-		VNUM=1;
-     	 	vsel(a_opcode, 0, 0);
-	break;
-//{ "vrndf2.p", 0xD0230080, 0xFFFFFF80, "%zp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vrndf2.q",0xD0238080, 0xFFFFFF80, "%zq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vrndf2.s", 0xD0230000, 0xFFFFFF80, "%zs" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vrndf2.t",0xD0238000, 0xFFFFFF80, "%zt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
+        case 0xD023:
+                pspDebugScreenPuts("vrndf2.");
+		VFR=1;
+		vsel(a_opcode, 0, 2);
+        break;
+//        { "vrndf2.s", 0xD0230000, 0xFFFFFF80, "%zs" },
 
-	case 0xD032:
-		if((a_opcode & 0xFF80) == 0x80){
-	        pspDebugScreenPuts("vf2h.p   ");
-     	 	vectors(a_opcode, 2, 1);
-		VFR=4;
-     	 	vectors(a_opcode, 1, 0);
-		}
-		else if((a_opcode & 0xFF80) == 0x8080){
-	        pspDebugScreenPuts("vf2h.q   ");
-		VFR=4;
-     	 	vectors(a_opcode, 2, 1);
-		VFR=6;
-     	 	vectors(a_opcode, 1, 0);
-		}
-	break;
+        case 0xD032:
+                if((a_opcode & 0xFF80) == 0x80){
+                pspDebugScreenPuts("vf2h.p   ");
+                vectors(a_opcode, 2, 1);
+                VFR=4;
+                vectors(a_opcode, 1, 0);
+                }
+                else if((a_opcode & 0xFF80) == 0x8080){
+                pspDebugScreenPuts("vf2h.q   ");
+                VFR=4;
+                vectors(a_opcode, 2, 1);
+                VFR=6;
+                vectors(a_opcode, 1, 0);
+                }
+        break;
 //{ "vf2h.p",  0xD0320080, 0xFFFF8080, "%zs, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zp -> %zs
 //{ "vf2h.q",  0xD0328080, 0xFFFF8080, "%zp, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zq -> %zp
 
-	case 0xD033:
-		if((a_opcode & 0x8080) == 0){
-	        pspDebugScreenPuts("vh2f.s   ");
-		VFR=4;
-     	 	vectors(a_opcode, 2, 1);
-     	 	vectors(a_opcode, 1, 0);
-		}
-		else if((a_opcode & 0x8080) == 0x80){
-	        pspDebugScreenPuts("vh2f.p   ");
-		VFR=6;
-     	 	vectors(a_opcode, 2, 1);
-		VFR=4;
-     	 	vectors(a_opcode, 1, 0);}
-	break;
+        case 0xD033:
+                if((a_opcode & 0x8080) == 0){
+                pspDebugScreenPuts("vh2f.s   ");
+                VFR=4;
+                vectors(a_opcode, 2, 1);
+                vectors(a_opcode, 1, 0);
+                }
+                else if((a_opcode & 0x8080) == 0x80){
+                pspDebugScreenPuts("vh2f.p   ");
+                VFR=6;
+                vectors(a_opcode, 2, 1);
+                VFR=4;
+                vectors(a_opcode, 1, 0);}
+        break;
 //{ "vh2f.p",  0xD0330080, 0xFFFF8080, "%zq, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zp -> %zq
 //{ "vh2f.s",  0xD0330000, 0xFFFF8080, "%zp, %ys" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zs -> %zp
 
-	case 0xD036:
-	        pspDebugScreenPuts("vsbz.s   ");
-     	 	vectors(a_opcode, 2, 1);
-     	 	vectors(a_opcode, 1, 0);
-	break;
-//{ "vsbz.s",      0xD0360000, 0xFFFF8080, "%zs, %ys" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
+        case 0xD036:
+                pspDebugScreenPuts("vsbz.s   ");
+                vectors(a_opcode, 2, 1);
+                vectors(a_opcode, 1, 0);
+        break;
+//        { "vsbz.s",      0xD0360000, 0xFFFF8080, "%zs, %ys" },
 
-	case 0xD037:
-	        pspDebugScreenPuts("vlgb.s   ");
-     	 	vectors(a_opcode, 2, 1);
-     	 	vectors(a_opcode, 1, 0);
-	break;
+        case 0xD037:
+                pspDebugScreenPuts("vlgb.s   ");
+                vectors(a_opcode, 2, 1);
+                vectors(a_opcode, 1, 0);
+        break;
 //{ "vlgb.s",  0xD0370000, 0xFFFF8080, "%zs, %ys" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 
-	case 0xD03A:
+        case 0xD03A:
 		if((a_opcode & 0x8080) == 0){
-	        pspDebugScreenPuts("vus2i.s  ");
+		pspDebugScreenPuts("vus2i.s  ");
 		VFR=4;
-     	 	vectors(a_opcode, 2, 1);
-     	 	vectors(a_opcode, 1, 0);
+    	 	vectors(a_opcode, 2, 1);
+		vectors(a_opcode, 1, 0);
 		}
 		else if((a_opcode & 0x8080) == 0x80){
 	        pspDebugScreenPuts("vus2i.p  ");
@@ -2470,167 +2408,158 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 		VFR=4;
      	 	vectors(a_opcode, 1, 0);
 		}
-	break;
-//{ "vus2i.p", 0xD03A0080, 0xFFFF8080, "%zq, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zq, %yp"
-//{ "vus2i.s", 0xD03A0000, 0xFFFF8080, "%zp, %ys" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zp, %ys"
+        break;
+//        { "vus2i.s", 0xD03A0000, 0xFFFF8080, "" },
 
+        case 0xD03B:
+			if((a_opcode & 0x8080) == 0){
+		        pspDebugScreenPuts("vs2i.s   ");
+			VFR=4;
+	     	 	vectors(a_opcode, 2, 1);
+	     	 	vectors(a_opcode, 1, 0);
+			}
+			else if((a_opcode & 0x8080) == 0x80){
+		        pspDebugScreenPuts("vs2i.p   ");
+			VFR=6;
+	     	 	vectors(a_opcode, 2, 1);
+			VFR=4;
+	     	 	vectors(a_opcode, 1, 0);
+			}
+        break;
+//        { "vs2i.s",      0xD03B0000, 0xFFFF8080, "%zs, %ys" },
 
-	case 0xD03B:
-		if((a_opcode & 0x8080) == 0){
-	        pspDebugScreenPuts("vs2i.s   ");
-		VFR=4;
-     	 	vectors(a_opcode, 2, 1);
-     	 	vectors(a_opcode, 1, 0);
-		}
-		else if((a_opcode & 0x8080) == 0x80){
-	        pspDebugScreenPuts("vs2i.p   ");
-		VFR=6;
-     	 	vectors(a_opcode, 2, 1);
-		VFR=4;
-     	 	vectors(a_opcode, 1, 0);
-		}
-	break;
-//{ "vs2i.p",      0xD03B0080, 0xFFFF8080, "%zq, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zp -> %zq
-//{ "vs2i.s",      0xD03B0000, 0xFFFF8080, "%zp, %ys" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zs -> %zp
-
-
-	case 0xD03C:
-	        pspDebugScreenPuts("vi2uc.q  ");
-		VFR=6;
-     	 	vectors(a_opcode, 2, 1);
-		VFR=6;
-     	 	vectors(a_opcode, 1, 0);
-	break;
+        case 0xD03C:
+                pspDebugScreenPuts("vi2uc.q  ");
+                VFR=6;
+                vectors(a_opcode, 2, 1);
+                VFR=6;
+                vectors(a_opcode, 1, 0);
+        break;
 //{ "vi2uc.q", 0xD03C8080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zp -> %zq
 
-	case 0xD03D:
-	        pspDebugScreenPuts("vs2c.q   ");
-		VFR=6;
-     	 	vectors(a_opcode, 2, 1);
-		VFR=6;
-     	 	vectors(a_opcode, 1, 0);
-	break;
+        case 0xD03D:
+                pspDebugScreenPuts("vs2c.q   ");
+                VFR=6;
+                vectors(a_opcode, 2, 1);
+                VFR=6;
+                vectors(a_opcode, 1, 0);
+        break;
 //{ "vi2c.q",  0xD03D8080, 0xFFFF8080, "%zs, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zs, %yq"
 
-	case 0xD03E:
-		if((a_opcode & 0x8080) == 0x80){
-	        pspDebugScreenPuts("vi2us.p  ");
-     	 	vectors(a_opcode, 2, 1);
-		VFR=4;
-     	 	vectors(a_opcode, 1, 0);
-		}
-		else if((a_opcode & 0x8080) == 0x8080){
-	        pspDebugScreenPuts("vi2us.q  ");
-		VFR=4;
-     	 	vectors(a_opcode, 2, 1);
-		VFR=6;
-     	 	vectors(a_opcode, 1, 0);
-		}
-	break;//?????
+        case 0xD03E:
+                if((a_opcode & 0x8080) == 0x80){
+                pspDebugScreenPuts("vi2us.p  ");
+                vectors(a_opcode, 2, 1);
+                VFR=4;
+                vectors(a_opcode, 1, 0);
+                }
+                else if((a_opcode & 0x8080) == 0x8080){
+                pspDebugScreenPuts("vi2us.q  ");
+                VFR=4;
+                vectors(a_opcode, 2, 1);
+                VFR=6;
+                vectors(a_opcode, 1, 0);
+                }
+        break;//?????
 //{ "vi2us.p", 0xD03E0080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zp -> %zq
 //{ "vi2us.q", 0xD03E8080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zp -> %zq
 
-	case 0xD03F:
-		if((a_opcode & 0x8080) == 0x80){
-	        pspDebugScreenPuts("vi2s.p   ");
-     	 	vectors(a_opcode, 2, 1);
-		VFR=4;
-     	 	vectors(a_opcode, 1, 0);
-		}
-		else if((a_opcode & 0x8080) == 0x8080){
-	        pspDebugScreenPuts("vi2s.q   ");
-		VFR=4;
-     	 	vectors(a_opcode, 2, 1);
-		VFR=6;
-     	 	vectors(a_opcode, 1, 0);
-		}
-	break;
+        case 0xD03F:
+                if((a_opcode & 0x8080) == 0x80){
+                pspDebugScreenPuts("vi2s.p   ");
+                vectors(a_opcode, 2, 1);
+                VFR=4;
+                vectors(a_opcode, 1, 0);
+                }
+                else if((a_opcode & 0x8080) == 0x8080){
+                pspDebugScreenPuts("vi2s.q   ");
+                VFR=4;
+                vectors(a_opcode, 2, 1);
+                VFR=6;
+                vectors(a_opcode, 1, 0);
+                }
+        break;
 //{ "vi2s.p",  0xD03F0080, 0xFFFF8080, "%zs, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zs, %yp"
 //{ "vi2s.q",  0xD03F8080, 0xFFFF8080, "%zp, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zp, %yq"
 
-	case 0xD040:
-	        pspDebugScreenPuts("vsrt1.q  ");
-		VFR=6;
-     	 	vectors(a_opcode, 2, 1);
-		VFR=6;
-     	 	vectors(a_opcode, 1, 0);
-	break;
+        case 0xD040:
+                pspDebugScreenPuts("vsrt1.q  ");
+                VFR=6;
+                vectors(a_opcode, 2, 1);
+                VFR=6;
+                vectors(a_opcode, 1, 0);
+        break;
 
-	case 0xD041:
-	        pspDebugScreenPuts("vsrt2.q  ");
-		VFR=6;
-     	 	vectors(a_opcode, 2, 1);
-		VFR=6;
-     	 	vectors(a_opcode, 1, 0);
-	break;
+        case 0xD041:
+                pspDebugScreenPuts("vsrt2.q  ");
+                VFR=6;
+                vectors(a_opcode, 2, 1);
+                VFR=6;
+                vectors(a_opcode, 1, 0);
+        break;
 //{ "vsrt1.q", 0xD0408080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vsrt2.q", 0xD0418080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 
-	case 0xD042:
-	        pspDebugScreenPuts("vbfy1.");
-		vsel(a_opcode, 0, 2);
-	break;
+        case 0xD042:
+                pspDebugScreenPuts("vbfy1.");
+                vsel(a_opcode, 0, 2);
+        break;
 //{ "vbfy1.p", 0xD0420080, 0xFFFF8080, "%zp, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vbfy1.q", 0xD0428080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 
-	case 0xD043:
-	        pspDebugScreenPuts("vbfy2.");
-		vsel(a_opcode, 0, 2);
-	break;
+        case 0xD043:
+                pspDebugScreenPuts("vbfy2.");
+                vsel(a_opcode, 0, 2);
+        break;
 //{ "vbfy2.q", 0xD0438080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vbfy2.q", 0xD0438080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 
-
-	case 0xD044:
-	        pspDebugScreenPuts("vocp.");
-     	 	vsel(a_opcode, 0, 3);
-	break;
-//{ "vocp.p",      0xD0440080, 0xFFFF8080, "%zp, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vocp.q",      0xD0448080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vocp.s",      0xD0440000, 0xFFFF8080, "%zs, %ys" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vocp.t",      0xD0448000, 0xFFFF8080, "%zt, %yt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-
-	case 0xD045:
-		if((a_opcode & 0x8080) == 0){
-	        pspDebugScreenPuts("vsocp.s  ");
-		VFR=4;
-     	 	vectors(a_opcode, 2, 1);
-     	 	vectors(a_opcode, 1, 0);
-		}
-		else if((a_opcode & 0x8080) == 0x80){
-	        pspDebugScreenPuts("vsocp.s  ");
-		VFR=6;
-     	 	vectors(a_opcode, 2, 1);
-		VFR=4;
-     	 	vectors(a_opcode, 1, 0);
-		}
-	break;
-//{ "vsocp.p", 0xD0450080, 0xFFFF8080, "%zq, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zp -> %zq
-//{ "vsocp.s", 0xD0450000, 0xFFFF8080, "%zp, %ys" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zs -> %zp
-
-	case 0xD046:
-	        pspDebugScreenPuts("vfad.");
+        case 0xD044:
+                pspDebugScreenPuts("vocp.");
 		vsel(a_opcode, 0, 3);
-	break;
+        break;
+//        { "vocp.s",      0xD0440000, 0xFFFF8080, "%zs, %ys" },
+
+        case 0xD045:
+	if((a_opcode & 0x8080) == 0){
+		        pspDebugScreenPuts("vsocp.s  ");
+			VFR=4;
+	     	 	vectors(a_opcode, 2, 1);
+	     	 	vectors(a_opcode, 1, 0);
+			}
+			else if((a_opcode & 0x8080) == 0x80){
+		        pspDebugScreenPuts("vsocp.s  ");
+			VFR=6;
+	     	 	vectors(a_opcode, 2, 1);
+			VFR=4;
+	     	 	vectors(a_opcode, 1, 0);
+			}
+        break;
+//        { "vsocp.s", 0xD0450000, 0xFFFF8080, "%zs, %ys" },
+
+
+        case 0xD046:
+                pspDebugScreenPuts("vfad.");
+                vsel(a_opcode, 0, 3);
+        break;
 //{ "vfad.p",  0xD0460080, 0xFFFF8080, "%zp, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vfad.q",  0xD0468080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vfad.t",  0xD0468000, 0xFFFF8080, "%zt, %yt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-
-	case 0xD047:
-	        pspDebugScreenPuts("vavg.");
-		vsel(a_opcode, 0, 3);
-	break;
+        case 0xD047:
+                pspDebugScreenPuts("vavg.");
+                vsel(a_opcode, 0, 3);
+        break;
 //{ "vavg.p",  0xD0470080, 0xFFFF8080, "%zp, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vavg.q",  0xD0478080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vavg.t",  0xD0478000, 0xFFFF8080, "%zt, %yt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-
+	
 
 	case 0xD048:
-	        pspDebugScreenPuts("vsrt3.q  ");
-		VFR=6;
-     	 	vectors(a_opcode, 2, 1);
-		VFR=6;
-     	 	vectors(a_opcode, 1, 0);
+	pspDebugScreenPuts("vsrt3.q  ");
+	VFR=6;
+	vectors(a_opcode, 2, 1);
+	VFR=6;
+	vectors(a_opcode, 2, 1);
 	break;
 
 	case 0xD049:
@@ -2652,161 +2581,159 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 //{ "vsgn.s",      0xD04A0000, 0xFFFF8080, "%zs, %ys" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vsgn.t",      0xD04A8000, 0xFFFF8080, "%zt, %yt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 
-
-	case 0xD050:
-	        pspDebugScreenPuts("vmfvc    ");
-     	 	vectors(a_opcode, 1, 1);
-		a_opcode&=0xFF;
-     	 	mipsImm(a_opcode, 0, 1);;
-	break;
+        case 0xD050:
+                pspDebugScreenPuts("vmfvc    ");
+                vectors(a_opcode, 1, 1);
+                a_opcode&=0xFF;
+                mipsImm(a_opcode, 0, 0);
+        break;
 //{ "vmfvc",   0xD0500000, 0xFFFF0080, "%zs, %2s" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zs, %2s"
 
-	case 0xD051:
-	        pspDebugScreenPuts("vmtvc    ");
+        case 0xD051:
+                pspDebugScreenPuts("vmtvc    ");
 		b_opcode=a_opcode;
-		a_opcode&=0xFF;
-		mipsImm(a_opcode, 0, 1);
+                a_opcode&=0xFF;
+                mipsImm(a_opcode, 0, 1);
 		a_opcode=b_opcode;
-     	 	vectors(a_opcode, 1, 0);
-	break;
-//{ "vmtvc",   0xD0510000, 0xFFFF8000, "%2d, %ys" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%2d, %ys"
+                vectors(a_opcode, 1, 0);
+        break;
 
-	case 0xD059:
-	        pspDebugScreenPuts("vt4444.q ");
-		VFR=1;
-     	 	vectors(a_opcode, 2, 1);
-		VFR=1;
-     	 	vectors(a_opcode, 1, 0);
-	break;
+        case 0xD059:
+                pspDebugScreenPuts("vt4444.q ");
+                VFR=1;
+                vectors(a_opcode, 2, 1);
+                VFR=1;
+                vectors(a_opcode, 1, 0);
+        break;
 
-	case 0xD05A:
-	        pspDebugScreenPuts("vt5551.q ");
-		VFR=1;
-     	 	vectors(a_opcode, 2, 1);
-		VFR=1;
-     	 	vectors(a_opcode, 1, 0);
-	break;
+        case 0xD05A:
+                pspDebugScreenPuts("vt5551.q ");
+                VFR=1;
+                vectors(a_opcode, 2, 1);
+                VFR=1;
+                vectors(a_opcode, 1, 0);
+        break;
 
-	case 0xD05B:
-	        pspDebugScreenPuts("vt5650.q ");
- 		VFR=1;
-     	 	vectors(a_opcode, 2, 1);
-		VFR=1;
-     	 	vectors(a_opcode, 1, 0);
-	break;
+        case 0xD05B:
+                pspDebugScreenPuts("vt5650.q ");
+                VFR=1;
+                vectors(a_opcode, 2, 1);
+                VFR=1;
+                vectors(a_opcode, 1, 0);
+        break;
 //{ "vt4444.q",0xD0598080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zq -> %zp
 //{ "vt5551.q",0xD05A8080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zq -> %zp
 //{ "vt5650.q",0xD05B8080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zq -> %zp
-	}
 
-	switch(a_opcode >>16 & 0xFFE0){
-	case 0xD060:
-		if((a_opcode & 0xFF80) == 0){
-	        pspDebugScreenPuts("vcst.s   ");
-     	 	vectors(a_opcode, 2, 1);
-		}
-		else if((a_opcode & 0xFF80) == 0x80){
-	        pspDebugScreenPuts("vcst.p   ");
-		VFR=4;
-     	 	vectors(a_opcode, 2, 1);
-		}
-		else if((a_opcode & 0xFF80) == 0x8000){
-	        pspDebugScreenPuts("vcst.t   ");
-		VFR=5;
-     	 	vectors(a_opcode, 2, 1);
-		}
-		else if((a_opcode & 0xFF80) == 0x8080){
-	        pspDebugScreenPuts("vcst.q   ");
-		VFR=6;
-     	 	vectors(a_opcode, 2, 1);
-		}
-		VFMODE=3;
-     	 	vectors(a_opcode, 0, 0);
-	break;
+        }
+
+        switch(a_opcode >>16 & 0xFFE0){
+        case 0xD060:
+                if((a_opcode & 0xFF80) == 0){
+                pspDebugScreenPuts("vcst.s   ");
+                vectors(a_opcode, 2, 1);
+                }
+                else if((a_opcode & 0xFF80) == 0x80){
+                pspDebugScreenPuts("vcst.p   ");
+                VFR=4;
+                vectors(a_opcode, 2, 1);
+                }
+                else if((a_opcode & 0xFF80) == 0x8000){
+                pspDebugScreenPuts("vcst.t   ");
+                VFR=5;
+                vectors(a_opcode, 2, 1);
+                }
+                else if((a_opcode & 0xFF80) == 0x8080){
+                pspDebugScreenPuts("vcst.q   ");
+                VFR=6;
+                vectors(a_opcode, 2, 1);
+                }
+                VFMODE=3;
+                vectors(a_opcode, 0, 0);
+        break;
 //{ "vcst.p",  0xD0600080, 0xFFE0FF80, "%zp, %vk" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] "%zp, %yp, %xp" -> "%zp, %vk"
 //{ "vcst.q",  0xD0608080, 0xFFE0FF80, "%zq, %vk" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] "%zq, %yq, %xq" -> "%zq, %vk"
 //{ "vcst.s",  0xD0600000, 0xFFE0FF80, "%zs, %vk" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] "%zs, %ys, %xs" -> "%zs, %vk"
 //{ "vcst.t",  0xD0608000, 0xFFE0FF80, "%zt, %vk" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] "%zt, %yt, %xt" -> "%zt, %vk"
 
-	case 0xD260:
-	pspDebugScreenPuts("vf2id.");
-	vsel(a_opcode,0,2);
-	pspDebugScreenPuts(", ");
-	a_opcode=(a_opcode>>16)&0x1F;
-	mipsImm(a_opcode,0,0);
-	break;
+        case 0xD260:
+        pspDebugScreenPuts("vf2id.");
+        vsel(a_opcode,0,2);
+        pspDebugScreenPuts(", ");
+        a_opcode=(a_opcode>>16)&0x1F;
+        mipsImm(a_opcode,0,0);
+        break;
 //{ "vf2id.p", 0xD2600080, 0xFFE08080, "%zp, %yp, %v5" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zp, %yp, %v5"
 //{ "vf2id.q", 0xD2608080, 0xFFE08080, "%zq, %yq, %v5" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zq, %yq, %v5"
 //{ "vf2id.s", 0xD2600000, 0xFFE08080, "%zs, %ys, %v5" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zs, %ys, %v5"
 //{ "vf2id.t", 0xD2608000, 0xFFE08080, "%zt, %yt, %v5" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zt, %yt, %v5"
 
-	case 0xD200:
-	pspDebugScreenPuts("vf2idn");
-	vsel(a_opcode,0,2);
-	pspDebugScreenPuts(", ");
-	a_opcode=(a_opcode>>16)&0x1F;
-	mipsImm(a_opcode,0,0);
-	break;
+        case 0xD200:
+        pspDebugScreenPuts("vf2idn");
+        vsel(a_opcode,0,2);
+        pspDebugScreenPuts(", ");
+        a_opcode=(a_opcode>>16)&0x1F;
+        mipsImm(a_opcode,0,0);
+        break;
 //{ "vf2in.p", 0xD2000080, 0xFFE08080, "%zp, %yp, %v5" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zp, %yp, %v5"
 //{ "vf2in.q", 0xD2008080, 0xFFE08080, "%zq, %yq, %v5" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zq, %yq, %v5"
 //{ "vf2in.s", 0xD2000000, 0xFFE08080, "%zs, %ys, %v5" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zs, %ys, %v5"
 //{ "vf2in.t", 0xD2008000, 0xFFE08080, "%zt, %yt, %v5" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zt, %yt, %v5"
 
-	case 0xD240:
-	pspDebugScreenPuts("vf2iu.");
-	vsel(a_opcode,0,2);
-	pspDebugScreenPuts(", ");
-	a_opcode=(a_opcode>>16)&0x1F;
-	mipsImm(a_opcode,0,0);
-	break;
+        case 0xD240:
+        pspDebugScreenPuts("vf2iu.");
+        vsel(a_opcode,0,2);
+        pspDebugScreenPuts(", ");
+        a_opcode=(a_opcode>>16)&0x1F;
+        mipsImm(a_opcode,0,0);
+        break;
 //{ "vf2iu.p", 0xD2400080, 0xFFE08080, "%zp, %yp, %v5" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zp, %yp, %v5"
 //{ "vf2iu.q", 0xD2408080, 0xFFE08080, "%zq, %yq, %v5" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zq, %yq, %v5"
 //{ "vf2iu.s", 0xD2400000, 0xFFE08080, "%zs, %ys, %v5" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zs, %ys, %v5"
 //{ "vf2iu.t", 0xD2408000, 0xFFE08080, "%zt, %yt, %v5" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zt, %yt, %v5"
 
-	case 0xD220:
-	pspDebugScreenPuts("vf2iz.");
-	vsel(a_opcode,0,2);
-	pspDebugScreenPuts(", ");
-	a_opcode=(a_opcode>>16)&0x1F;
-	mipsImm(a_opcode,0,0);
-	break;
+        case 0xD220:
+        pspDebugScreenPuts("vf2iz.");
+        vsel(a_opcode,0,2);
+        pspDebugScreenPuts(", ");
+        a_opcode=(a_opcode>>16)&0x1F;
+        mipsImm(a_opcode,0,0);
+        break;
 //{ "vf2iz.p", 0xD2200080, 0xFFE08080, "%zp, %yp, %v5" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zp, %yp, %v5"
 //{ "vf2iz.q", 0xD2208080, 0xFFE08080, "%zq, %yq, %v5" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zq, %yq, %v5"
 //{ "vf2iz.s", 0xD2200000, 0xFFE08080, "%zs, %ys, %v5" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zs, %ys, %v5"
 //{ "vf2iz.t", 0xD2208000, 0xFFE08080, "%zt, %yt, %v5" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zt, %yt, %v5"
 
-	case 0xD280:
-	pspDebugScreenPuts("vi2f.");
-	vsel(a_opcode,0,3);
-	pspDebugScreenPuts(", ");
-	a_opcode=(a_opcode>>16)&0x1F;
-	mipsImm(a_opcode,0,0);
-	break;
-	}
+        case 0xD280:
+        pspDebugScreenPuts("vi2f.");
+        vsel(a_opcode,0,3);
+        pspDebugScreenPuts(", ");
+        a_opcode=(a_opcode>>16)&0x1F;
+        mipsImm(a_opcode,0,0);
+        break;}
 //{ "vi2f.p",  0xD2800080, 0xFFE08080, "%zp, %yp, %v5" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zp, %yp, %v5"
 //{ "vi2f.q",  0xD2808080, 0xFFE08080, "%zq, %yq, %v5" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zq, %yq, %v5"
 //{ "vi2f.s",  0xD2800000, 0xFFE08080, "%zs, %ys, %v5" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zs, %ys, %v5"
 //{ "vi2f.t",  0xD2808000, 0xFFE08080, "%zt, %yt, %v5" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zt, %yt, %v5"
 
 
-	switch((a_opcode>>16)&0xFFF8){
-	case 0xD2A0:
-	pspDebugScreenPuts("vcmovt.");
-	vsel(a_opcode,0,1);
-	pspDebugScreenPuts(", ");
-	a_opcode=(a_opcode>>16) & 0x7;
-	mipsImm(a_opcode, 0 , 0);
-	break;
+        switch((a_opcode>>16)&0xFFF8){
+        case 0xD2A0:
+        pspDebugScreenPuts("vcmovt.");
+        vsel(a_opcode,0,1);
+        pspDebugScreenPuts(", ");
+        a_opcode=(a_opcode>>16) & 0x7;
+        mipsImm(a_opcode, 0 , 0);
+        break;
 
-	case 0xD2A8:
-	pspDebugScreenPuts("vcmovf.");
-	vsel(a_opcode,0,1);
-	pspDebugScreenPuts(", ");
-	a_opcode=(a_opcode>>16) & 0x7;
-	mipsImm(a_opcode, 0 ,0);
-	break;
-	}
+        case 0xD2A8:
+        pspDebugScreenPuts("vcmovf.");
+        vsel(a_opcode,0,1);
+        pspDebugScreenPuts(", ");
+        a_opcode=(a_opcode>>16) & 0x7;
+        mipsImm(a_opcode, 0 ,0);
+        break;
+        }
 //{ "vcmovf.p",0xD2A80080, 0xFFF88080, "%zp, %yp, %v3" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zp, %yp, %v3"
 //{ "vcmovf.q",0xD2A88080, 0xFFF88080, "%zq, %yq, %v3" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zq, %yq, %v3"
 //{ "vcmovf.s",0xD2A80000, 0xFFF88080, "%zs, %ys, %v3" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zs, %ys, %v3"
@@ -2815,115 +2742,113 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 //{ "vcmovt.q",0xD2A08080, 0xFFF88080, "%zq, %yq, %v3" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zq, %yq, %v3"
 //{ "vcmovt.s",0xD2A00000, 0xFFF88080, "%zs, %ys, %v3" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zs, %ys, %v3"
 //{ "vcmovt.t",0xD2A08000, 0xFFF88080, "%zt, %yt, %v3" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zt, %yt, %v3"
-	
-	switch(a_opcode>>24){
-	case 0xD3:
-	pspDebugScreenPuts("vwbn.s   ");
-	vectors(a_opcode, 2, 1);
-     	vectors(a_opcode, 1, 1);
-	mipsImm(a_opcode,0,0);
-	break;
-//{ "vwbn.s",  0xD3000000, 0xFF008080, "%zs, %xs, %I" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-	}
-	break;
+        
+        switch(a_opcode>>24){
+        case 0xD3:
+        pspDebugScreenPuts("vwbn.s   ");
+                vectors(a_opcode, 2, 1);
+                vectors(a_opcode, 1, 1);
+        mipsImm(a_opcode,0,0);
+//        { "vwbn.s",      0xD3000000, 0xFF008080, "" },
+        break;
+        }break;
       
       case 0xD4:
-	switch(a_opcode & 0x2){
-	case 0x00:
-	pspDebugScreenPuts("lvl.q    ");
-	VFR=1;
-	vectors(a_opcode,0,1);
-	VFR=3;
-	mipsImm(a_opcode,0,0);
+        switch(a_opcode & 0x2){
+        case 0x00:
+        pspDebugScreenPuts("lvl.q    ");
+        VFR=1;
+        vectors(a_opcode,0,1);
+        VFR=3;
+        mipsImm(a_opcode,0,0);
       pspDebugScreenPuts("(");
       mipsRegister(a_opcode, S, 0);
       pspDebugScreenPuts(")");
-	break;
+        break;
 
-	case 0x02:
-	pspDebugScreenPuts("lvr.q    ");
-	VFR=1;
-	vectors(a_opcode,0,1);
-	VFR=3;
-	mipsImm(a_opcode,0,0);
+        case 0x02:
+        pspDebugScreenPuts("lvr.q    ");
+        VFR=1;
+        vectors(a_opcode,0,1);
+        VFR=3;
+        mipsImm(a_opcode,0,0);
       pspDebugScreenPuts("(");
       mipsRegister(a_opcode, S, 0);
       pspDebugScreenPuts(")");
-	break;
-	}
+        break;
+        }
       break;
 //{ "lvl.q",       0xD4000000, 0xFC000002, "%Xq, %Y" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "lvr.q",       0xD4000002, 0xFC000002, "%Xq, %Y" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 
       case 0xD8:
-	if((a_opcode & 0x2) ==0){
-	pspDebugScreenPuts("lv.q	");
-	VFR=1;
-	vectors(a_opcode,0,1);
-	VFR=3;
-	mipsImm(a_opcode,0,0);
+        if((a_opcode & 0x2) ==0){
+        pspDebugScreenPuts("lv.q        ");
+        VFR=1;
+        vectors(a_opcode,0,1);
+        VFR=3;
+        mipsImm(a_opcode,0,0);
         pspDebugScreenPuts("(");
         mipsRegister(a_opcode, S, 0);
         pspDebugScreenPuts(")");
-	}
+        }
       break;
 //{ "lv.q",0xD8000000, 0xFC000002, "%Xq, %Y" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
       
       case 0xDC:
-	switch(a_opcode >>24){
-	case 0xDC:
-	pspDebugScreenPuts("vpfxd    [");
-	//Vmatrix(a_opcode, ,1);
-	//Vmatrix(a_opcode, ,1);
-	//Vmatrix(a_opcode, ,1);
-	//Vmatrix(a_opcode, ,0);
-	pspDebugScreenPuts("]");
-	break;
+        switch(a_opcode >>24){
+        case 0xDC:
+        pspDebugScreenPuts("vpfxd    [");
+        //Vmatrix(a_opcode, ,1);
+        //Vmatrix(a_opcode, ,1);
+        //Vmatrix(a_opcode, ,1);
+        //Vmatrix(a_opcode, ,0);
+        pspDebugScreenPuts("]");
+        break;
 
-	case 0xDD:
-	pspDebugScreenPuts("vpfxs    [");
-	//Vmatrix(a_opcode, ,1);
-	//Vmatrix(a_opcode, ,1);
-	//Vmatrix(a_opcode, ,1);
-	//Vmatrix(a_opcode, ,0);
-	pspDebugScreenPuts("]");
-	break;
+        case 0xDD:
+        pspDebugScreenPuts("vpfxs    [");
+        //Vmatrix(a_opcode, ,1);
+        //Vmatrix(a_opcode, ,1);
+        //Vmatrix(a_opcode, ,1);
+        //Vmatrix(a_opcode, ,0);
+        pspDebugScreenPuts("]");
+        break;
 
-	case 0xDE:
-	pspDebugScreenPuts("vpfxt    [");
-	//Vmatrix(a_opcode, ,1);
-	//Vmatrix(a_opcode, ,1);
-	//Vmatrix(a_opcode, ,1);
-	//Vmatrix(a_opcode, ,0);
-	pspDebugScreenPuts("]");
-	break;
+        case 0xDE:
+        pspDebugScreenPuts("vpfxt    [");
+        //Vmatrix(a_opcode, ,1);
+        //Vmatrix(a_opcode, ,1);
+        //Vmatrix(a_opcode, ,1);
+        //Vmatrix(a_opcode, ,0);
+        pspDebugScreenPuts("]");
+        break;
 //        { "vpfxd",       0xDE000000, 0xFF000000, "" },
 //        { "vpfxs",       0xDC000000, 0xFF000000, "" },
 //        { "vpfxt",       0xDD000000, 0xFF000000, "" },
-	
-	case 0xDF:
-	switch(a_opcode >>16 & 0x80){
-	case 0x00:
-	pspDebugScreenPuts("viim.s   ");
-	vectors(a_opcode,0,1);
-	mipsImm(a_opcode,0,0);
-	break;
-//{ "viim.s",  0xDF000000, 0xFF800000, "%xs, %vi" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%xs, %vi"
+        
+        case 0xDF:
+        switch(a_opcode >>16 & 0x80){
+        case 0x00:
+        pspDebugScreenPuts("viim.s   ");
+        vectors(a_opcode,0,1);
+        mipsImm(a_opcode,0,0);
+        break;
 
-	case 0x80:
-	pspDebugScreenPuts("vfim.s   ");
-	vectors(a_opcode,0,1);
-	mipsImm(a_opcode,0,0);
-	break;
+        case 0x80:
+        pspDebugScreenPuts("vfim.s   ");
+        vectors(a_opcode,0,1);
+        mipsImm(a_opcode,0,0);
+        break;
 //{ "vfim.s",  0xDF800000, 0xFF800000, "%xs, %vh" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%xs, %vh"
 
-	}
-	break;
-	}
+        }
+        break;
+        }
       break;
       
       case 0xE0:
-      pspDebugScreenPuts("sc  	");
+      pspDebugScreenPuts("sc    ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -2932,7 +2857,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
       break;
       
       case 0xE4:
-      pspDebugScreenPuts("swc1	");
+      pspDebugScreenPuts("swc1  ");
       floatRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -2941,7 +2866,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
       break;
       
       case 0xE8:
-      pspDebugScreenPuts("sv.s	");
+      pspDebugScreenPuts("sv.s  ");
       VFR=3;
       vectors(a_opcode, 0, 1);
       VFR=3;
@@ -2955,123 +2880,125 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
       //case 0xEC:
       //break;
       
-	case 0xF0:
-	switch(a_opcode>>16 & 0xFF80){
-/*	case 0xF080:
-	break;
+        case 0xF0:
+        switch(a_opcode>>16 & 0xFF80){
+/*      case 0xF080:
+        break;
 
-	case 0xF100:
-	break;
+        case 0xF100:
+        break;
 
-	case 0xF180:
-	break;*/
+        case 0xF180:
+        break;*/
+//"vtfm2.p"     "0xF0800080"    "0xFF808080"
+//"vtfm3.t"     "0xF1008000"    "0xFF808080"
+//"vtfm4.q"     "0xF1808080"    "0xFF808080"
 
-	case 0xF280:
-	if ((a_opcode &0x8080) == 0x8000){
-	pspDebugScreenPuts("vcrsp.");
-	VFR=5;
-	}
-	else if ((a_opcode &0x8080) == 0x8080){
-	pspDebugScreenPuts("vqmul.");
-	VFR=6;
-	}
-	VNUM=3;
-	vsel(a_opcode, 0, 2);
-	break;
+        case 0xF280:
+        if ((a_opcode &0x8080) == 0x8000){
+        pspDebugScreenPuts("vcrsp.");
+        VFR=5;
+        }
+        else if ((a_opcode &0x8080) == 0x8080){
+        pspDebugScreenPuts("vqmul.");
+        VFR=6;
+        }
+        VNUM=3;
+        vsel(a_opcode, 0, 2);
+        break;
 //{ "vcrsp.t", 0xF2808000, 0xFF808080, "%zt, %yt, %xt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vqmul.q", 0xF2808080, 0xFF808080, "%zq, %yq, %xq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zq, %yq, %xq"
-	}
+        }
 
-
-	switch(a_opcode >> 16){
-	case 0xF387:
-	pspDebugScreenPuts("vmone.");
-	VNUM=1;
-	vsel(a_opcode, 0, 2);
-	break;
+        switch(a_opcode >> 16){
+        case 0xF387:
+        pspDebugScreenPuts("vmone.");
+        VNUM=1;
+        vsel(a_opcode, 0, 2);
+        break;
 //{ "vmone.p", 0xF3870080, 0xFFFFFF80, "%zp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vmone.q", 0xF3878080, 0xFFFFFF80, "%zq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vmone.t", 0xF3878000, 0xFFFFFF80, "%zt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-	}
-	break;
+        }
+        break;
 
       case 0xF4:
-	switch(a_opcode & 0x2){
-	case 0x00:
-	pspDebugScreenPuts("svl.q    ");
-	VFR=1;
-	vectors(a_opcode,0,1);
-	VFR=3;
-	mipsImm(a_opcode,0,0);
+        switch(a_opcode & 0x2){
+        case 0x00:
+        pspDebugScreenPuts("svl.q    ");
+        VFR=1;
+        vectors(a_opcode,0,1);
+        VFR=3;
+        mipsImm(a_opcode,0,0);
         pspDebugScreenPuts("(");
         mipsRegister(a_opcode, S, 0);
         pspDebugScreenPuts(")");
-	break;
+        break;
 
-	case 0x02:
-	pspDebugScreenPuts("svr.q    ");
-	VFR=1;
-	vectors(a_opcode,0,1);
-	VFR=3;
-	mipsImm(a_opcode,0,0);
+        case 0x02:
+        pspDebugScreenPuts("svr.q    ");
+        VFR=1;
+        vectors(a_opcode,0,1);
+        VFR=3;
+        mipsImm(a_opcode,0,0);
         pspDebugScreenPuts("(");
         mipsRegister(a_opcode, S, 0);
         pspDebugScreenPuts(")");
-	break;
-	}
+        break;
+        }
       break;
 //{ "svl.q",       0xF4000000, 0xFC000002, "%Xq, %Y" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "svr.q",       0xF4000002, 0xFC000002, "%Xq, %Y" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
+      
 
      case 0xF8:
-	switch(a_opcode & 0x2){
-	case 0x00:
-	pspDebugScreenPuts("sv.q	");
-	VFR=1;
-	vectors(a_opcode,0,1);
-	VFR=3;
-	mipsImm(a_opcode,0,0);
+        switch(a_opcode & 0x2){
+        case 0x00:
+        pspDebugScreenPuts("sv.q        ");
+        VFR=1;
+        vectors(a_opcode,0,1);
+        VFR=3;
+        mipsImm(a_opcode,0,0);
         pspDebugScreenPuts("(");
         mipsRegister(a_opcode, S, 0);
         pspDebugScreenPuts(")");
-	break;
+        break;
 //{ "sv.q",0xF8000000, 0xFC000002, "%Xq, %Y" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 
-	case 0x02:
-	pspDebugScreenPuts("vwb.q    ");
-	VFR=1;
-	vectors(a_opcode,0,1);
-	VFR=3;
-	mipsImm(a_opcode,0,0);
+        case 0x02:
+        pspDebugScreenPuts("vwb.q    ");
+        VFR=1;
+        vectors(a_opcode,0,1);
+        VFR=3;
+        mipsImm(a_opcode,0,0);
         pspDebugScreenPuts("(");
         mipsRegister(a_opcode, S, 0);
         pspDebugScreenPuts(")");
-	break;
-{// "vwb.q",   0xF8000002, 0xFC000002, "%Xq, %Y" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-	}
+        break;
+//        { "vwb.q",       0xF8000002, 0xFC000002, "" },
+        }
       break;
       
       case 0xFC:
       switch(a_opcode){
-	case 0xFFFF0000:
-	pspDebugScreenPuts("vnop  	");
-	break;
+        case 0xFFFF0000:
+        pspDebugScreenPuts("vnop        ");
+        break;
 
-	case 0xFFFF040D:
-	pspDebugScreenPuts("vflush	");
-	break;
+        case 0xFFFF040D:
+        pspDebugScreenPuts("vflush      ");
+        break;
 //{ "vflush",  0xFFFF040D, 0xFFFFFFFF, "" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vnop",0xFFFF0000, 0xFFFFFFFF, "" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 
-	default:
-	pspDebugScreenPuts("vsync    ");
-	mipsImm(a_opcode,0,0);
+        default:
+        pspDebugScreenPuts("vsync    ");
+        mipsImm(a_opcode,0,0);
 //{ "vsync",       0xFFFF0000, 0xFFFF0000, "%I" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vsync",       0xFFFF0320, 0xFFFFFFFF, "" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-	}
+        }
       break;
  }
 
   pspDebugScreenSetTextColor(color02);
 }
-
