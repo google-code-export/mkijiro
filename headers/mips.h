@@ -444,7 +444,7 @@ Encoding: 0000 0000 0000 0000 0000 0000 0000 0000*/
           }
           else
           {
-            pspDebugScreenPuts("sll \t");
+            pspDebugScreenPuts("sll      ");
             mipsRegister(a_opcode, 2, 1);
             mipsRegister(a_opcode, 1, 1);
             mipsNibble(a_opcode, 3, 0);
@@ -458,14 +458,14 @@ Encoding: 0000 00ss ssst tttt dddd dhhh hh00 0000*/
          
         case 0x02:
         if(((a_opcode >>16) & 0xE0) == 0x20){
-          pspDebugScreenPuts("rotr      ");
+          pspDebugScreenPuts("rotr     ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 1, 1);
           mipsNibble(a_opcode, 3, 0);
         }
 //        { "rotr",               0x00200002, 0xFFE0003F, "%d, %t, %a"},
         else{
-          pspDebugScreenPuts("srl       ");
+          pspDebugScreenPuts("srl      ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 1, 1);
           mipsNibble(a_opcode, 3, 0);
@@ -478,7 +478,7 @@ Encoding: 0000 00-- ---t tttt dddd dhhh hh00 0010*/
           break;
 
         case 0x03:
-          pspDebugScreenPuts("sra       ");
+          pspDebugScreenPuts("sra      ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 1, 1);
           mipsNibble(a_opcode, 3, 0);
@@ -587,7 +587,7 @@ Encoding: 0000 00-- ---- ---- ---- ---- --00 1100*/
 
         switch(a_opcode & 0x7FF){
         case 0x04:
-          pspDebugScreenPuts("sllv      ");
+          pspDebugScreenPuts("sllv     ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 1, 1);
           mipsRegister(a_opcode, 0, 0);
@@ -599,7 +599,7 @@ Encoding: 0000 00ss ssst tttt dddd d--- --00 0100*/
           break;
 
         case 0x06:
-          pspDebugScreenPuts("srlv      ");
+          pspDebugScreenPuts("srlv     ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 1, 1);
           mipsRegister(a_opcode, 0, 0);
@@ -611,34 +611,34 @@ Encoding: 0000 00ss ssst tttt dddd d000 0000 0110*/
           break;
           
          case 0x07:
-          pspDebugScreenPuts("srav      ");
+          pspDebugScreenPuts("srav     ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 1, 1);
           mipsRegister(a_opcode, 0, 0);
           break;
           
         case 0x09:
-          pspDebugScreenPuts("jalr      ");
+          pspDebugScreenPuts("jalr     ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 0);
           break;
 
         case 0x0A:
-          pspDebugScreenPuts("movz      ");
+          pspDebugScreenPuts("movz     ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
           break;
           
         case 0x0b:
-          pspDebugScreenPuts("movn      ");
+          pspDebugScreenPuts("movn     ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
         break;
           
         case 0x10:
-          pspDebugScreenPuts("mfhi      ");
+          pspDebugScreenPuts("mfhi     ");
           mipsRegister(a_opcode, 2, 0);
 /*MFHI -- Move from HI
 Description: The contents of register HI are moved to the specified register.
@@ -648,12 +648,12 @@ Encoding: 0000 0000 0000 0000 dddd d000 0001 0000*/
         break;
 
         case 0x11:
-          pspDebugScreenPuts("mthi      ");
+          pspDebugScreenPuts("mthi     ");
           mipsRegister(a_opcode, 2, 0);
         break;
           
         case 0x12:
-          pspDebugScreenPuts("mflo      ");
+          pspDebugScreenPuts("mflo     ");
           mipsRegister(a_opcode, 2, 0);
 /*MFLO -- Move from LO
 Description: The contents of register LO are moved to the specified register.
@@ -663,12 +663,12 @@ Encoding: 0000 0000 0000 0000 dddd d000 0001 0010*/
           break;
           
          case 0x13:
-          pspDebugScreenPuts("mtlo      ");
+          pspDebugScreenPuts("mtlo     ");
           mipsRegister(a_opcode, 2, 0);
           break;
 
         case 0x16:
-          pspDebugScreenPuts("clz       ");
+          pspDebugScreenPuts("clz      ");
           mipsRegister(a_opcode, 1, 1);
           mipsRegister(a_opcode, 2, 0);
          break;
@@ -676,13 +676,13 @@ Encoding: 0000 0000 0000 0000 dddd d000 0001 0010*/
 //        { "clz",                0x00000016, 0xFC1F07FF, "%d, %s"},
 
          case 0x17:
-          pspDebugScreenPuts("clo       ");
+          pspDebugScreenPuts("clo      ");
           mipsRegister(a_opcode, 1, 1);
           mipsRegister(a_opcode, 2, 0);
          break;
           
         case 0x20:
-          pspDebugScreenPuts("add       ");
+          pspDebugScreenPuts("add      ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
@@ -694,7 +694,7 @@ Encoding: 0000 00ss ssst tttt dddd d000 0010 0000 */
           break;
           
         case 0x21:
-          pspDebugScreenPuts("addu      ");
+          pspDebugScreenPuts("addu     ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
@@ -706,7 +706,7 @@ Encoding: 0000 00ss ssst tttt dddd d000 0010 0001*/
           break;
           
         case 0x22:
-          pspDebugScreenPuts("sub       ");
+          pspDebugScreenPuts("sub      ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
@@ -718,7 +718,7 @@ Encoding: 0000 00ss ssst tttt dddd d000 0010 0010*/
           break;
           
         case 0x23:
-          pspDebugScreenPuts("subu      ");
+          pspDebugScreenPuts("subu     ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
@@ -730,7 +730,7 @@ Encoding: 0000 00ss ssst tttt dddd d000 0010 0011*/
           break;
           
         case 0x24:
-          pspDebugScreenPuts("and       ");
+          pspDebugScreenPuts("and      ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
@@ -742,7 +742,7 @@ Encoding: 0000 00ss ssst tttt dddd d000 0010 0100*/
           break;
           
         case 0x25:
-          pspDebugScreenPuts("or        ");
+          pspDebugScreenPuts("or       ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
@@ -754,7 +754,7 @@ Encoding: 0000 00ss ssst tttt dddd d000 0010 0101*/
           break;
           
         case 0x26:
-          pspDebugScreenPuts("xor       ");
+          pspDebugScreenPuts("xor      ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
@@ -767,14 +767,14 @@ Encoding: 0000 00ss ssst tttt dddd d--- --10 0110*/
           break;
           
           case 0x27:
-          pspDebugScreenPuts("nor       ");
+          pspDebugScreenPuts("nor      ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
           break;
 
         case 0x2A:
-          pspDebugScreenPuts("slt       ");
+          pspDebugScreenPuts("slt      ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
@@ -786,7 +786,7 @@ Encoding: 0000 00ss ssst tttt dddd d000 0010 1010*/
         break;
           
         case 0x2B:
-          pspDebugScreenPuts("sltu      ");
+          pspDebugScreenPuts("sltu     ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
@@ -798,7 +798,7 @@ Encoding: 0000 00ss ssst tttt dddd d000 0010 1011*/
           break;
           
           case 0x2c:
-          pspDebugScreenPuts("max       ");
+          pspDebugScreenPuts("max      ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
@@ -807,14 +807,14 @@ Encoding: 0000 00ss ssst tttt dddd d000 0010 1011*/
 //        { "min",                0x0000002D, 0xFC0007FF, "%d, %s, %t"},
           
           case 0x2d:
-          pspDebugScreenPuts("min       ");
+          pspDebugScreenPuts("min      ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
           break;
 
         case 0x46:
-          pspDebugScreenPuts("rotv      ");
+          pspDebugScreenPuts("rotv     ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
@@ -824,7 +824,7 @@ Encoding: 0000 00ss ssst tttt dddd d000 0010 1011*/
 
         switch(a_opcode & 0xFFFF){
         case 0x08:
-          pspDebugScreenPuts("jr        ");
+          pspDebugScreenPuts("jr       ");
           mipsRegister(a_opcode, 0, 0);
 /*JR -- Jump register
 Description: Jump to the address contained in register $s
@@ -834,7 +834,7 @@ Encoding: 0000 00ss sss0 0000 0000 0000 0000 1000*/
           break;
           
         case 0x18:
-          pspDebugScreenPuts("mult      ");
+          pspDebugScreenPuts("mult     ");
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
 /*MULT -- Multiply
@@ -856,7 +856,7 @@ Encoding: 0000 00ss ssst tttt 0000 0000 0001 1001*/
           break;
           
         case 0x1A:
-          pspDebugScreenPuts("div       ");
+          pspDebugScreenPuts("div      ");
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
 /*DIV -- Divide
@@ -867,7 +867,7 @@ Encoding: 0000 00ss ssst tttt 0000 0000 0001 1010*/
           break;
           
         case 0x1B:
-          pspDebugScreenPuts("divu      ");
+          pspDebugScreenPuts("divu     ");
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
 /*DIVU -- Divide unsigned
@@ -878,7 +878,7 @@ Encoding: 0000 00ss ssst tttt 0000 0000 0001 1011*/
           break;
                   
          case 0x1C:
-          pspDebugScreenPuts("madd      ");
+          pspDebugScreenPuts("madd     ");
           mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
           break;
@@ -892,7 +892,7 @@ Encoding: 0000 00ss ssst tttt 0000 0000 0001 1011*/
           break;
 
           case 0x2e:
-          pspDebugScreenPuts("msub      ");
+          pspDebugScreenPuts("msub     ");
           mipsRegister(a_opcode, 2, 1);
           mipsRegister(a_opcode, 1, 0);
           break;
@@ -911,7 +911,7 @@ Encoding: 0000 00ss ssst tttt 0000 0000 0001 1011*/
       switch((a_opcode & 0x1F0000) >> 16)
       {
           case 0x00:
-            pspDebugScreenPuts("bltz    ");
+            pspDebugScreenPuts("bltz     ");
             mipsRegister(a_opcode, S, 1);
             mipsDec(a_opcode,0,0);
 /*BLTZ -- Branch on less than zero
@@ -922,7 +922,7 @@ Encoding: 0000 01ss sss0 0000 iiii iiii iiii iiii*/
           break;
             
           case 0x01:
-            pspDebugScreenPuts("bgez    ");
+            pspDebugScreenPuts("bgez     ");
             mipsRegister(a_opcode, S, 1);
             mipsDec(a_opcode,0,0);
 /*BGEZ -- Branch on greater than or equal to zero
@@ -1047,7 +1047,7 @@ Encoding: 0000 10ii iiii iiii iiii iiii iiii iiii*/
       break;
       
     case 0x0C:
-      pspDebugScreenPuts("jal   ");
+      pspDebugScreenPuts("jal      ");
       mipsImm(a_opcode, 1, 0);
 /*JAL -- Jump and link
 Description: Jumps to the calculated address and stores the return address in $31
@@ -1057,7 +1057,7 @@ Encoding: 0000 11ii iiii iiii iiii iiii iiii iiii*/
       break;
       
     case 0x10:
-      pspDebugScreenPuts("beq   ");
+      pspDebugScreenPuts("beq      ");
       mipsRegister(a_opcode, S, 1);
       mipsRegister(a_opcode, T, 1);
       mipsDec(a_opcode, 0, 0);
@@ -1069,7 +1069,7 @@ Encoding: 0001 00ss ssst tttt iiii iiii iiii iiii*/
       break;
       
     case 0x14:
-      pspDebugScreenPuts("bne   ");
+      pspDebugScreenPuts("bne      ");
       mipsRegister(a_opcode, S, 1);
       mipsRegister(a_opcode, T, 1);
       mipsDec(a_opcode, 0, 0);
@@ -1081,7 +1081,7 @@ Encoding: 0001 01ss ssst tttt iiii iiii iiii iiii*/
       break;
       
     case 0x18:
-      pspDebugScreenPuts("blez  ");  
+      pspDebugScreenPuts("blez     ");  
       mipsRegister(a_opcode, S, 1);
       mipsDec(a_opcode, 0, 0);
 /*BLEZ -- Branch on less than or equal to zero
@@ -1092,7 +1092,7 @@ Encoding: 0001 10ss sss0 0000 iiii iiii iiii iiii*/
       break;
       
     case 0x1C:
-      pspDebugScreenPuts("bgtz  ");
+      pspDebugScreenPuts("bgtz     ");
       mipsRegister(a_opcode, S, 1);
       mipsDec(a_opcode, 0, 0);
 /*BGTZ -- Branch on greater than zero
@@ -1103,7 +1103,7 @@ Encoding: 0001 11ss sss0 0000 iiii iiii iiii iiii*/
       break;
       
     case 0x20:
-      pspDebugScreenPuts("addi  ");
+      pspDebugScreenPuts("addi     ");
       mipsRegister(a_opcode, T, 1);
       mipsRegister(a_opcode, S, 1);
       mipsImm(a_opcode, 0, 0);
@@ -1127,7 +1127,7 @@ Encoding: 0010 01ss ssst tttt iiii iiii iiii iiii*/
       break;
       
     case 0x28:
-      pspDebugScreenPuts("slti  ");
+      pspDebugScreenPuts("slti     ");
       mipsRegister(a_opcode, T, 1);
       mipsRegister(a_opcode, S, 1);
       mipsImm(a_opcode, 0, 0);
@@ -1151,7 +1151,7 @@ Encoding: 0010 11ss ssst tttt iiii iiii iiii iiii*/
       break;
       
     case 0x30:
-      pspDebugScreenPuts("andi  ");
+      pspDebugScreenPuts("andi     ");
       mipsRegister(a_opcode, T, 1);
       mipsRegister(a_opcode, S, 1);
       mipsImm(a_opcode, 0, 0);
@@ -1163,7 +1163,7 @@ Encoding: 0011 00ss ssst tttt iiii iiii iiii iiii*/
       break;
       
     case 0x34:
-      pspDebugScreenPuts("ori   ");
+      pspDebugScreenPuts("ori      ");
       mipsRegister(a_opcode, T, 1);
       mipsRegister(a_opcode, S, 1);
       mipsImm(a_opcode, 0, 0);
@@ -1175,7 +1175,7 @@ Encoding: 0011 01ss ssst tttt iiii iiii iiii iiii*/
       break;
       
     case 0x38:
-      pspDebugScreenPuts("xori  ");
+      pspDebugScreenPuts("xori     ");
       mipsRegister(a_opcode, T, 1);
       mipsRegister(a_opcode, S, 1);
       mipsImm(a_opcode, 0, 0);
@@ -1187,7 +1187,7 @@ Encoding: 0011 10ss ssst tttt iiii iiii iiii iiii*/
       break;
       
     case 0x3C:
-      pspDebugScreenPuts("lui   ");
+      pspDebugScreenPuts("lui      ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
 /*LUI -- Load upper immediate
@@ -1200,26 +1200,26 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
       case 0x40:
         switch(a_opcode >> 20 & 0xFFE){
         case 0x400:
-                pspDebugScreenPuts("mfc0        ");
+                pspDebugScreenPuts("mfc0     ");
                 mipsRegister(a_opcode, T, 1);
                 cop0Register(a_opcode, 2, 0);
         break;
 
         case 0x408:
-                pspDebugScreenPuts("mtc0        ");
+                pspDebugScreenPuts("mtc0     ");
                 mipsRegister(a_opcode, T, 1);
                 cop0Register(a_opcode, 2, 0);
         break;
 
         case 0x404:
-                pspDebugScreenPuts("cfc0        ");
+                pspDebugScreenPuts("cfc0     ");
                 mipsRegister(a_opcode, T, 1);
                 mipsNibble(a_opcode, 2, 0);
         break;
 
 
         case 0x40C:
-                pspDebugScreenPuts("ctc0        ");
+                pspDebugScreenPuts("ctc0     ");
                 mipsRegister(a_opcode, T, 1);
                 mipsNibble(a_opcode, 2, 0);
         break;
@@ -1230,7 +1230,7 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
 
         case 0x420:
         if((a_opcode & 0xFFFFFF)  == 0x18){
-                pspDebugScreenPuts("eret        ");
+                pspDebugScreenPuts("eret     ");
                 }
         break;
         }
@@ -1243,25 +1243,25 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
                 case 0x44:
                 switch(a_opcode >> 16 & 0xE0){
                 case 0x40:
-                pspDebugScreenPuts("cfc1        ");
+                pspDebugScreenPuts("cfc1     ");
                 mipsRegister(a_opcode, T, 1);
                 mipsNibble(a_opcode, 2, 0);
                 break;
 
                 case 0xC0:
-                pspDebugScreenPuts("ctc1        ");
+                pspDebugScreenPuts("ctc1     ");
                 mipsRegister(a_opcode, T, 1);
                 mipsNibble(a_opcode, 2, 0);
                 break;
 
                 case 0x00:
-                pspDebugScreenPuts("mfc1        ");
+                pspDebugScreenPuts("mfc1     ");
                 mipsRegister(a_opcode, T, 1);
                 floatRegister(a_opcode,2,0);
                 break;
 
                 case 0x80:
-                pspDebugScreenPuts("mtc1        ");
+                pspDebugScreenPuts("mtc1     ");
                 mipsRegister(a_opcode, T, 1);
                 floatRegister(a_opcode,2,0);
                 break;
@@ -1275,12 +1275,12 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
                 case 0x45:
                 switch(a_opcode >>16 & 0xFF){
                 case 0x00:
-                pspDebugScreenPuts("bc1f        ");
+                pspDebugScreenPuts("bc1f     ");
                 mipsDec(a_opcode, 0 ,0 );
                 break;
 
                 case 0x01:
-                pspDebugScreenPuts("bc1t        ");
+                pspDebugScreenPuts("bc1t     ");
                 mipsDec(a_opcode, 0 ,0 );
                 break;
 
@@ -1513,12 +1513,12 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
         switch(a_opcode >>16 & 0xE0){
         case 0x60:
                 if((a_opcode & 0xFF80) == 0){
-                pspDebugScreenPuts("mfv         ");
+                pspDebugScreenPuts("mfv      ");
                 mipsRegister(a_opcode, T, 1);
                 vectors(a_opcode , 2 , 0);
                 }
                 else if((a_opcode & 0xFF00) == 0){
-                pspDebugScreenPuts("mfvc        ");
+                pspDebugScreenPuts("mfvc     ");
                 mipsRegister(a_opcode, T, 1);
                 VFMODE=1;
                 vectors(a_opcode, 2, 0);
@@ -1527,12 +1527,12 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
 
         case 0xE0:
                 if((a_opcode & 0xFF80) == 0){
-                pspDebugScreenPuts("mtv         ");
+                pspDebugScreenPuts("mtv      ");
                 mipsRegister(a_opcode, T, 1);
                 vectors(a_opcode , 2 , 0);
                 }
                 else if((a_opcode & 0xFF00) == 0){
-                pspDebugScreenPuts("mtvc        ");
+                pspDebugScreenPuts("mtvc     ");
                 mipsRegister(a_opcode, T, 1);
                 VFMODE=1;
                 vectors(a_opcode, 2, 0);
@@ -1548,28 +1548,28 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
       case 0x49:
                 switch(a_opcode >>16 & 0xE3){
                 case 0x00:
-                pspDebugScreenPuts("bvf         ");
+                pspDebugScreenPuts("bvf      ");
                 VFMODE=2;
                 vectors(a_opcode, 0, 1);
                 mipsDec(a_opcode, 0, 0);
                 break;
 
                 case 0x01:
-                pspDebugScreenPuts("bvt         ");
+                pspDebugScreenPuts("bvt      ");
                 VFMODE=2;
                 vectors(a_opcode, 0, 1);
                 mipsDec(a_opcode, 0, 0);
                 break;
 
                 case 0x02:
-                pspDebugScreenPuts("bvfl        ");
+                pspDebugScreenPuts("bvfl     ");
                 VFMODE=2;
                 vectors(a_opcode, 0, 1);
                 mipsDec(a_opcode, 0, 0);
                 break;
 
                 case 0x03:
-                pspDebugScreenPuts("bvtl        ");
+                pspDebugScreenPuts("bvtl     ");
                 VFMODE=2;
                 vectors(a_opcode, 0, 1);
                 mipsDec(a_opcode, 0, 0);
@@ -1585,14 +1585,14 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
      break;
 
      case 0x50:
-      pspDebugScreenPuts("beql  ");
+      pspDebugScreenPuts("beql     ");
       mipsRegister(a_opcode, S, 1);
       mipsRegister(a_opcode, T, 1);
       mipsDec(a_opcode, 0, 0);
      break;
       
      case 0x54:
-      pspDebugScreenPuts("bnel  ");
+      pspDebugScreenPuts("bnel     ");
       mipsRegister(a_opcode, S, 1);
       mipsRegister(a_opcode, T, 1);
       mipsDec(a_opcode, 0, 0);
@@ -1813,7 +1813,7 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
         case 0x6E80:
         pspDebugScreenPuts("vscmp.");
                 VFR=3;
-                vsel(a_opcode, 0, 3);
+                vsel(a_opcode, 0, 2);
         break;
 
         case 0x6F00:
@@ -1834,25 +1834,25 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
         if(a_opcode >> 24 == 0x70){
                 switch(a_opcode & 0xE007FF){
                 case 0x24:
-                pspDebugScreenPuts("mfic        ");
+                pspDebugScreenPuts("mfic     ");
                 mipsRegister(a_opcode, T, 1);
                 mipsNibble(a_opcode, 2, 0);
                 break;
 
                 case 0x26:
-                pspDebugScreenPuts("mtic        ");
+                pspDebugScreenPuts("mtic     ");
                 mipsRegister(a_opcode, T, 1);
                 mipsNibble(a_opcode, 2, 0);
                 break;
 
                 case 0x3D:
-                pspDebugScreenPuts("mfdr        ");
+                pspDebugScreenPuts("mfdr     ");
                 mipsRegister(a_opcode, T, 1);
                 DrRegister(a_opcode,2,0);
                 break;
 
                 case 0x80003D:
-                pspDebugScreenPuts("mtdr        ");
+                pspDebugScreenPuts("mtdr     ");
                 mipsRegister(a_opcode, T, 1);
                 DrRegister(a_opcode,2,0);
                 break; 
@@ -1864,11 +1864,11 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
 
                 switch(a_opcode & 0xFFFFFF){
                 case 0x00:
-                pspDebugScreenPuts("halt        ");
+                pspDebugScreenPuts("halt     ");
                 break;
 
                 case 0x3E:
-                pspDebugScreenPuts("dret        ");
+                pspDebugScreenPuts("dret     ");
                 break;
 
                 case 0x3F:
@@ -1890,13 +1890,13 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
         if(a_opcode >>24 == 0x7C){
       switch(a_opcode & 0x7FF){
         case 0x420:
-        pspDebugScreenPuts("seb         ");
+        pspDebugScreenPuts("seb      ");
         mipsRegister(a_opcode, 2, 1);
         mipsRegister(a_opcode, 1, 0);
         break;
         
         case 0x620:
-        pspDebugScreenPuts("seh         ");
+        pspDebugScreenPuts("seh      ");
         mipsRegister(a_opcode, 2, 1);
         mipsRegister(a_opcode, 1, 0);
         break;
@@ -1908,7 +1908,7 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
         break;
         
         case 0xE0:
-        pspDebugScreenPuts("wsbw        ");
+        pspDebugScreenPuts("wsbw     ");
         mipsRegister(a_opcode, 2, 1);
         mipsRegister(a_opcode, 1, 0);
         break;       
@@ -1921,7 +1921,7 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
         }}
         switch(a_opcode & 0x03F){
         case 0x0:
-        pspDebugScreenPuts("ext         ");
+        pspDebugScreenPuts("ext      ");
         mipsRegister(a_opcode, T, 1);
         mipsRegister(a_opcode, S, 1);
         mipsNibble(a_opcode, 3, 1);
@@ -1930,7 +1930,7 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
         break;
         
         case 0x4:
-        pspDebugScreenPuts("ins         ");
+        pspDebugScreenPuts("ins      ");
         mipsRegister(a_opcode, T, 1);
         mipsRegister(a_opcode, S, 1);
         mipsNibble(a_opcode, 3, 1);
@@ -1940,7 +1940,7 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
     break;
 
     case 0x80:
-      pspDebugScreenPuts("lb    ");
+      pspDebugScreenPuts("lb       ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -1954,7 +1954,7 @@ Encoding: 1000 00ss ssst tttt iiii iiii iiii iiii*/
       break;
 
     case 0x84:
-      pspDebugScreenPuts("lh    ");
+      pspDebugScreenPuts("lh       ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -1967,7 +1967,7 @@ Syntax: lh $t, offset($s)*/
       break;
       
      case 0x88:
-      pspDebugScreenPuts("lwl   ");
+      pspDebugScreenPuts("lwl      ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -1976,7 +1976,7 @@ Syntax: lh $t, offset($s)*/
       break;
       
     case 0x8C:
-      pspDebugScreenPuts("lw    ");
+      pspDebugScreenPuts("lw       ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -1990,7 +1990,7 @@ Encoding: 1000 11ss ssst tttt iiii iiii iiii iiii*/
       break;
      
      case 0x90:
-      pspDebugScreenPuts("lbu   ");
+      pspDebugScreenPuts("lbu      ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -1999,7 +1999,7 @@ Encoding: 1000 11ss ssst tttt iiii iiii iiii iiii*/
       break;
       
       case 0x94:
-      pspDebugScreenPuts("lhu   ");
+      pspDebugScreenPuts("lhu      ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -2008,7 +2008,7 @@ Encoding: 1000 11ss ssst tttt iiii iiii iiii iiii*/
       break;
       
       case 0x98:
-      pspDebugScreenPuts("lwr   ");
+      pspDebugScreenPuts("lwr      ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -2017,7 +2017,7 @@ Encoding: 1000 11ss ssst tttt iiii iiii iiii iiii*/
       break;
       
      case 0x9C:
-      pspDebugScreenPuts("lwu   ");
+      pspDebugScreenPuts("lwu      ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -2026,7 +2026,7 @@ Encoding: 1000 11ss ssst tttt iiii iiii iiii iiii*/
       break;
       
     case 0xA0:
-      pspDebugScreenPuts("sb    ");
+      pspDebugScreenPuts("sb       ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -2040,7 +2040,7 @@ Encoding: 1010 00ss ssst tttt iiii iiii iiii iiii*/
       break;
       
      case 0xA4:
-      pspDebugScreenPuts("sh    ");
+      pspDebugScreenPuts("sh       ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -2049,7 +2049,7 @@ Encoding: 1010 00ss ssst tttt iiii iiii iiii iiii*/
       break;
       
       case 0xA8:
-      pspDebugScreenPuts("swl   ");
+      pspDebugScreenPuts("swl      ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -2058,7 +2058,7 @@ Encoding: 1010 00ss ssst tttt iiii iiii iiii iiii*/
       break;
       
     case 0xAC:
-      pspDebugScreenPuts("sw    ");
+      pspDebugScreenPuts("sw       ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -2088,7 +2088,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
       break;*/
       
       case 0xB8:
-      pspDebugScreenPuts("swr   ");
+      pspDebugScreenPuts("swr      ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -2107,7 +2107,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
       break;
      
       case 0xC0:
-      pspDebugScreenPuts("ll    ");
+      pspDebugScreenPuts("ll       ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -2116,7 +2116,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
       break;
       
       case 0xC4:
-      pspDebugScreenPuts("lwc1  ");
+      pspDebugScreenPuts("lwc1     ");
       floatRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -2125,7 +2125,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
       break;
       
       case 0xC8:
-      pspDebugScreenPuts("lv.s  ");
+      pspDebugScreenPuts("lv.s     ");
       VFR=3;
       vectors(a_opcode, 0, 1);
       VFR=3;
@@ -2167,7 +2167,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 
         case 0xD002:
                 pspDebugScreenPuts("vneg.");
-                vsel(a_opcode,0,2);
+                vsel(a_opcode,0,3);
         break;
 //{ "vneg.p",      0xD0020080, 0xFFFF8080, "%zp, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vneg.q",      0xD0028080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
@@ -2298,15 +2298,13 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 
         case 0xD018:
                 pspDebugScreenPuts("vnrcp.");
-		VFR=3;
-		vsel(a_opcode, 0, 3);
+		vsel(a_opcode, 0, 2);
         break;
 //        { "vnrcp.s", 0xD0180000, 0xFFFF8080, "%zs, %ys" },
 
         case 0xD01A:
                 pspDebugScreenPuts("vnsin.");
-		VFR=3;
-		vsel(a_opcode, 0, 3);
+		vsel(a_opcode, 0, 2);
         break;
 //        { "vnsin.s", 0xD01A0000, 0xFFFF8080, "%zs, %ys" },
 
@@ -2334,14 +2332,14 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
         case 0xD022:
                 pspDebugScreenPuts("vrndf1.");
 		VFR=1;
-		vsel(a_opcode, 0, 2);
+		vsel(a_opcode, 0, 1);
         break;
 //        { "vrndf1.s", 0xD0220000, 0xFFFFFF80, "%zs" },
 
         case 0xD023:
                 pspDebugScreenPuts("vrndf2.");
 		VFR=1;
-		vsel(a_opcode, 0, 2);
+		vsel(a_opcode, 0, 1);
         break;
 //        { "vrndf2.s", 0xD0230000, 0xFFFFFF80, "%zs" },
 
@@ -2783,7 +2781,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 
       case 0xD8:
         if((a_opcode & 0x2) ==0){
-        pspDebugScreenPuts("lv.q        ");
+        pspDebugScreenPuts("lv.q     ");
         VFR=1;
         vectors(a_opcode,0,1);
         VFR=3;
@@ -2857,7 +2855,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
       break;
       
       case 0xE4:
-      pspDebugScreenPuts("swc1  ");
+      pspDebugScreenPuts("swc1     ");
       floatRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -2866,7 +2864,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
       break;
       
       case 0xE8:
-      pspDebugScreenPuts("sv.s  ");
+      pspDebugScreenPuts("sv.s     ");
       VFR=3;
       vectors(a_opcode, 0, 1);
       VFR=3;
@@ -2954,7 +2952,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
      case 0xF8:
         switch(a_opcode & 0x2){
         case 0x00:
-        pspDebugScreenPuts("sv.q        ");
+        pspDebugScreenPuts("sv.q     ");
         VFR=1;
         vectors(a_opcode,0,1);
         VFR=3;
@@ -2982,11 +2980,11 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
       case 0xFC:
       switch(a_opcode){
         case 0xFFFF0000:
-        pspDebugScreenPuts("vnop        ");
+        pspDebugScreenPuts("vnop     ");
         break;
 
         case 0xFFFF040D:
-        pspDebugScreenPuts("vflush      ");
+        pspDebugScreenPuts("vflush");
         break;
 //{ "vflush",  0xFFFF040D, 0xFFFFFFFF, "" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vnop",0xFFFF0000, 0xFFFFFFFF, "" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
