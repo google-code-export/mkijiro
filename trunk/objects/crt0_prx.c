@@ -1516,6 +1516,28 @@ void menuDraw(){
 					else{
 						//Print out the opcode
 						mipsDecode(block[counter].hakVal);
+							unsigned int addresscode=0;
+							unsigned int addresstmp=0;
+							addresscode=block[counter].hakVal;
+							if//((addresscode & 0xFC000000) == 0x10000000)
+							(((addresscode >= 0x10000000) && (addresscode <= 0x1FFFFFFF)) || ((addresscode >= 0x50000000) && (addresscode <= 0x5FFFFFFF))
+							|| ((addresscode >= 0x45000000) && (addresscode <= 0x4503FFFF)) || ((addresscode >= 0x49000000) && (addresscode <= 0x491FFFFF))
+							|| (((addresscode & 0xFC1F0000) >= 0x04000000) && ((addresscode & 0xFC1F0000) <= 0x04030000))
+							||  (((addresscode & 0xFC1F0000) >= 0x04100000) && ((addresscode & 0xFC1F0000) <= 0x04130000)) )
+							{
+							addresstmp=addresscode & 0xFFFF;
+							addresscode=4*(addresstmp + 1);
+							if(addresstmp > 0x7FFF){
+							addresscode=(-0x40000+addresscode)+block[counter].address;}
+							else{
+							addresscode=addresscode+block[counter].address;}
+							sprintf(buffer, "$%X", addresscode);pspDebugScreenPuts(buffer);
+							if(addresstmp > 0x7FFF){
+							 sprintf(buffer, "(-%Xh)", (0x40000-4*(addresstmp+1)));}
+							else{
+							 sprintf(buffer, "(+%Xh)", 4*(addresstmp+1));}
+							 pspDebugScreenPuts(buffer);
+							}
 					}
 
 					//Skip a line, draw the pointer =)
@@ -1633,6 +1655,28 @@ void menuDraw(){
 				else{
 					//Print out the opcode
 					mipsDecode(searchHistory[0].hakVal);
+							unsigned int addresscode=0;
+							unsigned int addresstmp=0;
+							addresscode=searchHistory[0].hakVal;
+							if//((addresscode & 0xFC000000) == 0x10000000)
+							(((addresscode >= 0x10000000) && (addresscode <= 0x1FFFFFFF)) || ((addresscode >= 0x50000000) && (addresscode <= 0x5FFFFFFF))
+							|| ((addresscode >= 0x45000000) && (addresscode <= 0x4503FFFF)) || ((addresscode >= 0x49000000) && (addresscode <= 0x491FFFFF))
+							|| (((addresscode & 0xFC1F0000) >= 0x04000000) && ((addresscode & 0xFC1F0000) <= 0x04030000))
+							||  (((addresscode & 0xFC1F0000) >= 0x04100000) && ((addresscode & 0xFC1F0000) <= 0x04130000)) )
+							{
+							addresstmp=addresscode & 0xFFFF;
+							addresscode=4*(addresstmp + 1);
+							if(addresstmp > 0x7FFF){
+							addresscode=(-0x40000+addresscode)+searchHistory[0].address;}
+							else{
+							addresscode=addresscode+searchHistory[0].address;}
+							sprintf(buffer, "$%X", addresscode);pspDebugScreenPuts(buffer);
+							if(addresstmp > 0x7FFF){
+							 sprintf(buffer, "(-%Xh)", (0x40000-4*(addresstmp+1)));}
+							else{
+							 sprintf(buffer, "(+%Xh)", 4*(addresstmp+1));}
+							 pspDebugScreenPuts(buffer);
+							}
 				}
 
 				//Skip a line, draw the pointer =)
@@ -2273,7 +2317,7 @@ void menuDraw(){
 
 				pspDebugScreenSetTextColor(color01);
 				#ifdef _UMDMODE_
-					pspDebugScreenPuts("  MKIJIRO+ 20100626");
+					pspDebugScreenPuts("  MKIJIRO+ 20101110");
 				#elif _POPSMODE_
 					pspDebugScreenPuts("  MKULTRA V10 POPS ");
 				#endif
@@ -2699,8 +2743,30 @@ void menuDraw(){
 								
 						}
 						else{
+							unsigned int addresscode=0;
+							unsigned int addresstmp=0;
 							//Print out the opcode
 							mipsDecode(*((unsigned int*)(decodeAddress[bdNo]+(counter*4))));
+							addresscode=*((unsigned int*)(decodeAddress[bdNo]+(counter*4)));
+							if//((addresscode & 0xFC000000) == 0x10000000)
+							(((addresscode >= 0x10000000) && (addresscode <= 0x1FFFFFFF)) || ((addresscode >= 0x50000000) && (addresscode <= 0x5FFFFFFF))
+							|| ((addresscode >= 0x45000000) && (addresscode <= 0x4503FFFF)) || ((addresscode >= 0x49000000) && (addresscode <= 0x491FFFFF))
+							|| (((addresscode & 0xFC1F0000) >= 0x04000000) && ((addresscode & 0xFC1F0000) <= 0x04030000))
+							||  (((addresscode & 0xFC1F0000) >= 0x04100000) && ((addresscode & 0xFC1F0000) <= 0x04130000)) )
+							{
+							addresstmp=addresscode & 0xFFFF;
+							addresscode=4*(addresstmp + 1);
+							if(addresstmp > 0x7FFF){
+							addresscode=(-0x40000+addresscode)+decodeAddress[bdNo]+(counter*4)-0x40000000;}
+							else{
+							addresscode=addresscode+decodeAddress[bdNo]+(counter*4)-0x40000000;}
+							sprintf(buffer, "$%X", addresscode);pspDebugScreenPuts(buffer);
+							if(addresstmp > 0x7FFF){
+							 sprintf(buffer, "(-%Xh)", (0x40000-4*(addresstmp+1)));}
+							else{
+							 sprintf(buffer, "(+%Xh)", 4*(addresstmp+1));}
+							 pspDebugScreenPuts(buffer);
+							}
 						}
 
 						//Skip a line, draw the pointer =)
@@ -6192,7 +6258,7 @@ void menuInput(){
 				if((padButtons & PSP_CTRL_SQUARE) && (padButtons & PSP_CTRL_RIGHT)){
 					unsigned int Addresstmp=0;
 					unsigned int foobar=*((unsigned int*)(decodeAddress[bdNo]+(decodeY[bdNo]*4)));
-					//ポインタジャンプ
+					//pointer jump
 					if((foobar >= 0x08800000) && (foobar <= 0x09FFFF98)){ //handle pointers
 						storedAddress=decodeAddress[bdNo]+(decodeY[bdNo]*4); //store pointer address
 						foobar+=0x40000000;
@@ -6204,11 +6270,11 @@ void menuInput(){
 						foobar&=0x3FFFFFF;
 						decodeAddress[bdNo]=(mipsNum, "%08X", ((foobar<<2)))-0xC0000000; //store pointer address
 						decodeY[bdNo]=0;
-					}//ブランチジャンプ
+					}//branch jump
 					else if(((foobar >= 0x10000000) && (foobar <= 0x1FFFFFFF)) || ((foobar >= 0x50000000) && (foobar <= 0x5FFFFFFF))
 						|| ((foobar >= 0x45000000) && (foobar <= 0x4503FFFF)) || ((foobar >= 0x49000000) && (foobar <= 0x491FFFFF))
-						|| (((foobar & 0xF41F0000) >= 0x04000000) && ((foobar & 0xF41F0000) <= 0x04030000))
-						||  (((foobar & 0xF41F0000) >= 0x04100000) && ((foobar & 0xF41F0000) <= 0x04130000)) )
+						|| (((foobar & 0xFC1F0000) >= 0x04000000) && ((foobar & 0xFC1F0000) <= 0x04030000))
+						||  (((foobar & 0xFC1F0000) >= 0x04100000) && ((foobar & 0xFC1F0000) <= 0x04130000)) )
 						{ //handle branches
 						storedAddress=decodeAddress[bdNo]+(decodeY[bdNo]*4);
 						foobar&=0xFFFF;
