@@ -145,19 +145,19 @@ void vectors(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
 	else{
 	vectorflag=0;}
 	if(VMT==2){
-	  if (vectorflag=1){
+	  if (vectorflag==1){
 	  vmatrix=0x4D;vectorflag=0;}//M
 	  else{
 	  vmatrix=0x45;vectorflag=1;}//E
 	}
 	if(VMT==1){
-	  if (((a_opcode>>(8*(2-a_slot))) & 0x20) == 0x20){
+	  if (vectorflag==1){
 	  vmatrix=0x45;}//E
 	  else{
 	  vmatrix=0x4D;}//M
 	}
 	if(VMT==0){
-	 if (((a_opcode>>(8*(2-a_slot))) & 0x20) == 0x20){
+	 if (vectorflag==1){
 	 vmatrix=0x52;}//R
 	 else{
 	 vmatrix=0x43;}//C
