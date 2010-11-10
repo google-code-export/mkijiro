@@ -5034,6 +5034,7 @@ void menuInput(){
 					case 0x30: fileBuffer[extSelected[2]]=0x3A; break;
 					case 0x41: fileBuffer[extSelected[2]]=0x5B; break;
 					case 0x61: fileBuffer[extSelected[2]]=0x7B; break;
+
 					case 0x7F: fileBuffer[extSelected[2]]=0x20; break;
 				  }
 				  
