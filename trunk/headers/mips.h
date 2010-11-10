@@ -1,5 +1,5 @@
 //MODED BY HAROTUBO
-//reffer to PSPLINK/RXTOOL SRC
+//reffer to PSPLINK/PRXTOOL SRC
 /*
         WebSVN  
 psp - Rev 2457
@@ -14,6 +14,7 @@ Rev 2206 - Blame - Compare with Previous - Last modification - View Log - RSS fe
  *
  * disasm.C - Implementation of a MIPS disassembler
  ***************************************************************/
+ 
 //Mips.h
 #define S 0
 #define T 1
@@ -351,10 +352,11 @@ int i;
         for(i=0; i < a_more; i++){
         pspDebugScreenPuts(" ");
         }
-        vectors(a_opcode, 2, 1);
         if(VNUM==1){
+        vectors(a_opcode, 2, 0);
         }
         else{
+        vectors(a_opcode, 2, 1);
         if(VNUM == 3){
         vectors(a_opcode, 1, 1);
         vectors(a_opcode, 0, 0);
@@ -375,10 +377,11 @@ int i;
 	((a_opcode  & 0xFF800000) != 0x66000000) &&
 	((a_opcode  & 0xFF800000) != 0x67000000)){
 	VFR=4;}
-        vectors(a_opcode, 2, 1);
         if(VNUM==1){
+        vectors(a_opcode, 2, 0);
         }
         else{
+        vectors(a_opcode, 2, 1);
         if(VNUM == 3){
         VFR=4;
         if((a_opcode  & 0xFF800000) == 0xF0000000){
@@ -412,10 +415,11 @@ int i;
 	((a_opcode  & 0xFF800000) != 0x66000000) &&
 	((a_opcode  & 0xFF800000) != 0x67000000)){
 	VFR=5;}
-        vectors(a_opcode, 2, 1);
         if(VNUM==1){
+        vectors(a_opcode, 2, 0);
         }
         else{
+        vectors(a_opcode, 2, 1);
         if(VNUM == 3){
         VFR=5;
         if((a_opcode  & 0xFF800000) == 0xF0000000){
@@ -449,10 +453,11 @@ int i;
 	((a_opcode  & 0xFF800000) != 0x66000000) &&
 	((a_opcode  & 0xFF800000) != 0x67000000)){
 	VFR=6;}
-        vectors(a_opcode, 2, 1);
         if(VNUM==1){
+        vectors(a_opcode, 2, 0);
         }
         else{
+        vectors(a_opcode, 2, 1);
         if(VNUM == 3){
         VFR=6;
         if((a_opcode  & 0xFF800000) == 0xF0000000){
