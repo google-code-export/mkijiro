@@ -995,6 +995,7 @@ void cheatSave(){
 		//sceIoRemove(gameDir);
 		//sceIoRename("ms0:/seplugins/nitePR/temp.txt", gameDir);
 	}
+
 	//Open the file for appending
 	fd=sceIoOpen(gameDir, PSP_O_CREAT | PSP_O_WRONLY | PSP_O_APPEND, 0777);
 	if(fd > 0){
@@ -1533,9 +1534,9 @@ void menuDraw(){
 							addresscode=addresscode+block[counter].address;}
 							sprintf(buffer, "$%X", addresscode);pspDebugScreenPuts(buffer);
 							if(addresstmp > 0x7FFF){
-							 sprintf(buffer, "(-%Xh)", (0x40000-4*(addresstmp+1)));}
+							 sprintf(buffer, "(-%d)", (0x10000-(addresstmp+1)));}
 							else{
-							 sprintf(buffer, "(+%Xh)", 4*(addresstmp+1));}
+							 sprintf(buffer, "(+%d)", (addresstmp+1));}
 							 pspDebugScreenPuts(buffer);
 							}
 					}
@@ -1672,9 +1673,9 @@ void menuDraw(){
 							addresscode=addresscode+searchHistory[0].address;}
 							sprintf(buffer, "$%X", addresscode);pspDebugScreenPuts(buffer);
 							if(addresstmp > 0x7FFF){
-							 sprintf(buffer, "(-%Xh)", (0x40000-4*(addresstmp+1)));}
+							 sprintf(buffer, "(-%d)", (0x10000-(addresstmp+1)));}
 							else{
-							 sprintf(buffer, "(+%Xh)", 4*(addresstmp+1));}
+							 sprintf(buffer, "(+%d)", (addresstmp+1));}
 							 pspDebugScreenPuts(buffer);
 							}
 				}
@@ -2762,9 +2763,9 @@ void menuDraw(){
 							addresscode=addresscode+decodeAddress[bdNo]+(counter*4)-0x40000000;}
 							sprintf(buffer, "$%X", addresscode);pspDebugScreenPuts(buffer);
 							if(addresstmp > 0x7FFF){
-							 sprintf(buffer, "(-%Xh)", (0x40000-4*(addresstmp+1)));}
+							 sprintf(buffer, "(-%d)", (0x10000-(addresstmp+1)));}
 							else{
-							 sprintf(buffer, "(+%Xh)", 4*(addresstmp+1));}
+							 sprintf(buffer, "(+%d)", (addresstmp+1));}
 							 pspDebugScreenPuts(buffer);
 							}
 						}
@@ -3380,6 +3381,7 @@ void menuInput(){
 			  if(extMenu)
 			  {
 				if(extMenu == 1)
+
 				{
 				  block[extSelected[0]].address=0x08800000;
 				  block[extSelected[0]].flags=FLAG_DWORD;
@@ -6160,6 +6162,7 @@ void menuInput(){
 			  else if(pad.Buttons & PSP_CTRL_SQUARE){
 					if(pad.Buttons & PSP_CTRL_UP)
 				{
+
 					browseAddress[bdNo]-=browseLines;
 					if(browseAddress[bdNo] < 0x48800000)
 					{
@@ -6957,6 +6960,7 @@ int mainThread(){
 		  if((sceDisplayGetFrameBufferInternal(2, &frame_addr, &frame_width, &pixel_format, &sync) < 0) || (frame_addr == NULL)){}
 		  else{
 			p = (u32) frame_addr;
+
 			if(p & 0x80000000){
 				p |= 0xA0000000;
 			}
