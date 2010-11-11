@@ -54,16 +54,6 @@ unsigned char *VFPUSTArray[]={
 "PI_2","PI","E","LOG2E","LOG10E","LN2","LN10","2PI",
 "PI_6","LOG10TWO","LOG2TEN","SQRT3_2"
 };
-unsigned char *pfx_cst[8] =
-{
-  "0",  "1",  "2",  "1/2",  "3",  "1/3",  "1/4",  "1/6"
-};
-unsigned char *pfx_swz[4] ={
-  "x",  "y",  "z",  "w"
-};
-unsigned char *pfx_sat[4] ={
-  "",  "[0:1]",  "",  "[-1:1]"
-};
 
 void colorRegisters(unsigned int a_opcode)
 {
@@ -140,7 +130,7 @@ void vectors(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
   sprintf(buffer, "%d",(a_opcode>>18)& 0x7 );
   }
   else{
-	char vectorflag=0;
+	unsigned char vectorflag=0;
 	if(((a_opcode>>(8*(2-a_slot))) & 0x20) == 0x20){
 	vectorflag=1;}
 	else{
@@ -203,7 +193,7 @@ void vectors(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
         a_opcode=4*((a_opcode>>(8*(2-a_slot)))& 0x1F);
                 }
         }
-        else if(VFR==3){
+        else if(VFR==3){//lv.s sv.s
         sprintf(buffer, "S%d%d%d" , (a_opcode >> 18) & 7, (a_opcode >> 16) & 3, a_opcode & 3);
         a_opcode=4*((a_opcode>>(8*(2-a_slot)))& 0x1F) + (a_opcode & 0x3);
         }
@@ -326,25 +316,198 @@ void mipsDec(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
   }
   else 
   {
-/*    a_opcode&=0xFFFF;
-    a_opcode=4*(a_opcode + 1);
-    if(a_opcode > 0x7FFF){
-    a_opcode=0x40000 - a_opcode;
-    pspDebugScreenSetTextColor(0xFF999999); pspDebugScreenPuts("-"); pspDebugScreenSetTextColor(color02);
-    }
-    else{
-    pspDebugScreenSetTextColor(0xFF999999); pspDebugScreenPuts("+"); pspDebugScreenSetTextColor(color02);
-        }
-    sprintf(mipsNum, "%xh", a_opcode); pspDebugScreenPuts(mipsNum);*/
+  //
   }
   
   if(a_more) pspDebugScreenPuts(", ");
 }
 
-//VECTOR SERECTOR
+void vrot(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
+{
+
+//Special handling of the vrot instructions.
+#define VFPU_MASK_OP_SIZE       0x8080  //Masks the operand size (pair, triple, quad).
+#define VFPU_OP_SIZE_PAIR       0x80
+#define VFPU_OP_SIZE_TRIPLE     0x8000
+#define VFPU_OP_SIZE_QUAD       0x8080
+
+// Note that these are within the rotators field, and not the full opcode.
+#define VFPU_SH_ROT_HI          2
+#define VFPU_MASK_ROT_HI        0x3
+#define VFPU_SH_ROT_LO          0
+#define VFPU_MASK_ROT_LO        0x3
+#define VFPU_SH_ROT_NEG         4       //Negation.
+#define VFPU_MASK_ROT_NEG       0x1
+
+        int l=a_opcode;
+
+        const char *elements[4];
+		char elementneg=0;
+		
+        unsigned int opcode = l & VFPU_MASK_OP_SIZE;
+        unsigned int rotators = (l >> 16) & 0x1f;
+        unsigned int opsize, rothi, rotlo, negation, i;
+
+        //Determine the operand size so we'll know how many elements to output.
+        if (opcode == VFPU_OP_SIZE_PAIR)
+                opsize = 2;
+        else if (opcode == VFPU_OP_SIZE_TRIPLE)
+                opsize = 3;
+        else
+                opsize = (opcode == VFPU_OP_SIZE_QUAD) * 4;     //Sanity check. 
+
+        rothi = (rotators >> VFPU_SH_ROT_HI) & VFPU_MASK_ROT_HI;
+        rotlo = (rotators >> VFPU_SH_ROT_LO) & VFPU_MASK_ROT_LO;
+        negation = (rotators >> VFPU_SH_ROT_NEG) & VFPU_MASK_ROT_NEG;
+
+        pspDebugScreenPuts("[");
+
+        for (i = 0;;)
+        {
+        
+        if (rothi == rotlo)
+        {
+                if (negation)
+                {
+                        elements[0] = 0x73;//-s
+                        elements[1] = 0x73;
+                        elements[2] = 0x73;
+                        elements[3] = 0x73;
+		                elementneg=1;
+                }
+                else
+                {
+                        elements[0] = 0x73;
+                        elements[1] = 0x73;
+                        elements[2] = 0x73;
+                        elements[3] = 0x73;
+                }
+        }
+        else
+        {
+                elements[0] = 0x30;//0
+                elements[1] = 0x30;
+                elements[2] = 0x30;
+                elements[3] = 0x30;
+        }
+        if (negation){
+                elements[rothi] =0x73;//-s
+                elementneg=1;
+                }
+        else{
+                elements[rothi] =0x73;//s
+		        elements[rotlo] =0x63;//c
+		}
+			   if(elementneg==1){
+			   pspDebugScreenPuts("-");
+			   }
+    		   sprintf(buffer, "%c", elements[i++]); pspDebugScreenPuts(buffer);
+    		   elementneg=0;
+                if (i >= opsize)
+                        break;
+               pspDebugScreenPuts(" ,");
+        }
+		
+        pspDebugScreenPuts("]");
+}
+
+
+
+// [hlide] added print_vfpu_prefix
+void vprefix(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
+{
+/*
+// VFPU prefix instruction operands.  The *_SH_* values really specify where
+//   the bitfield begins, as VFPU prefix instructions have four operands
+//   encoded within the immediate field. 
+#define VFPU_SH_PFX_NEG         16
+#define VFPU_MASK_PFX_NEG       0x1     // Negation.
+#define VFPU_SH_PFX_CST         12
+#define VFPU_MASK_PFX_CST       0x1     // Constant.
+#define VFPU_SH_PFX_ABS_CSTHI   8
+#define VFPU_MASK_PFX_ABS_CSTHI 0x1     // Abs/Constant (bit 2).
+#define VFPU_SH_PFX_SWZ_CSTLO   0
+#define VFPU_MASK_PFX_SWZ_CSTLO 0x3     // Swizzle/Constant (bits 0-1).
+#define VFPU_SH_PFX_MASK        8
+#define VFPU_MASK_PFX_MASK      0x1     // Mask.
+#define VFPU_SH_PFX_SAT         0
+#define VFPU_MASK_PFX_SAT       0x3     // Saturation.
+
+unsigned char *pfx_cst[8] =
+{
+  "0",  "1",  "2",  "1/2",  "3",  "1/3",  "1/4",  "1/6"
+};
+unsigned char *pfx_swz[4] ={
+  "x",  "y",  "z",  "w"
+};
+unsigned char *pfx_sat[4] ={
+  "",  "[0:1]",  "",  "[-1:1]"
+};
+
+		int l=a_opcode;
+		unsigned int pos =((a_opcode >> 6) & 0x1F);
+
+        switch (pos)
+        {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+                {
+                        unsigned int base = 3;//0
+                        unsigned int negation = (l >> (pos - (base - VFPU_SH_PFX_NEG))) & VFPU_MASK_PFX_NEG;
+                        unsigned int constant = (l >> (pos - (base - VFPU_SH_PFX_CST))) & VFPU_MASK_PFX_CST;
+                        unsigned int abs_consthi = (l >> (pos - (base - VFPU_SH_PFX_ABS_CSTHI))) & VFPU_MASK_PFX_ABS_CSTHI;
+                        unsigned int swz_constlo = (l >> ((pos - base) * 2)) & VFPU_MASK_PFX_SWZ_CSTLO;
+
+                        if (negation)
+                                 pspDebugScreenPuts("-");
+                        if (constant)
+                        {
+                                printf(buffer, "%s", pfx_cst[(abs_consthi << 2) | swz_constlo]);
+                                pspDebugScreenPuts(buffer);
+                        }
+                        else
+                        {
+                                if (abs_consthi){
+                                printf(buffer, "|%s|", pfx_swz[swz_constlo]);
+                                pspDebugScreenPuts(buffer);
+                                }
+                                else{
+                                 printf(buffer, "%s", pfx_swz[swz_constlo]);
+                                pspDebugScreenPuts(buffer);
+                                }
+                        }
+                }
+                break;
+
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+                {
+                        unsigned int base = 4;
+                        unsigned int mask = (l >> (pos - (base - VFPU_SH_PFX_MASK))) & VFPU_MASK_PFX_MASK;
+                        unsigned int saturation = (l >> ((pos - base) * 2)) & VFPU_MASK_PFX_SAT;
+
+                        if (mask){
+                                pspDebugScreenPuts("m");
+                                }
+                        else{
+                                printf(buffer ,"%s", pfx_sat[saturation]);
+                                pspDebugScreenPuts(buffer);
+                                }
+                }
+                break;
+        }
+        */
+}
+
+
+//VECTOR SELECTOR
 void vsel(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
 {
-int i; 
+unsigned char i; 
   switch(a_opcode & 0x8080)
   {
     case 0x00:
@@ -384,7 +547,7 @@ int i;
         vectors(a_opcode, 2, 1);
         if(VNUM == 3){
         VFR=4;
-        if((a_opcode  & 0xFF800000) == 0xF0000000){
+        if((a_opcode  & 0xFF800000) == 0xF0000000){ 
 	VMT=2;
 	}
         vectors(a_opcode, 1, 1);
@@ -396,7 +559,10 @@ int i;
         }
         else{
         VFR=4;
-        if(((a_opcode  & 0xFF800000) == 0xF3800000) || 
+	    if((a_opcode  & 0xFFE00000) == 0xF3A00000){
+        VFR=0;
+		}
+        else if(((a_opcode  & 0xFF800000) == 0xF3800000) || 
 	((a_opcode  & 0xFF800000) == 0xF2000000)){
 	VMT=1;
 	}
@@ -422,7 +588,7 @@ int i;
         vectors(a_opcode, 2, 1);
         if(VNUM == 3){
         VFR=5;
-        if((a_opcode  & 0xFF800000) == 0xF0000000){
+        if((a_opcode  & 0xFF800000) == 0xF0000000){ 
 	VMT=2;
 	}
         vectors(a_opcode, 1, 1);
@@ -434,7 +600,10 @@ int i;
         }
         else{
         VFR=5;
-        if(((a_opcode  & 0xFF800000) == 0xF3800000) || 
+	    if((a_opcode  & 0xFFE00000) == 0xF3A00000){
+	    VFR=0;
+		}
+        else if(((a_opcode  & 0xFF800000) == 0xF3800000) || 
 	((a_opcode  & 0xFF800000) == 0xF2000000)){
 	VMT=1;
 	}
@@ -460,7 +629,7 @@ int i;
         vectors(a_opcode, 2, 1);
         if(VNUM == 3){
         VFR=6;
-        if((a_opcode  & 0xFF800000) == 0xF0000000){
+        if((a_opcode  & 0xFF800000) == 0xF0000000){ 
 	VMT=2;
 	}
         vectors(a_opcode, 1, 1);
@@ -471,11 +640,14 @@ int i;
         vectors(a_opcode, 0, 0);
         }
         else{
-        VFR=6;
-        if(((a_opcode  & 0xFF800000) == 0xF3800000) || 
+        VFR=6;        
+	    if((a_opcode  & 0xFFE00000) == 0xF3A00000){
+	    VFR=0;
+		}
+        else if(((a_opcode  & 0xFF800000) == 0xF3800000) || 
 	((a_opcode  & 0xFF800000) == 0xF2000000)){
 	VMT=1;
-	}
+	}	
         vectors(a_opcode, 1, 0);
         }
         }
@@ -1737,16 +1909,19 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
 //{ "vmul.q",  0x64008080, 0xFF808080, "%zq, %yq, %xq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vmul.s",  0x64000000, 0xFF808080, "%zs, %ys, %xs" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vmul.t",  0x64008000, 0xFF808080, "%zt, %yt, %xt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-
 //{ "vdot.p",  0x64800080, 0xFF808080, "%zs, %yp, %xp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vdot.q",  0x64808080, 0xFF808080, "%zs, %yq, %xq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vdot.t",  0x64808000, 0xFF808080, "%zs, %yt, %xt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 
 		case 0x65:
 	        pspDebugScreenPuts("vscl.");
-		VNUM=3;
-		vsel(a_opcode, 0 ,3);
-                break;
+			vsel(a_opcode, 0 ,3);
+			pspDebugScreenPuts(", ");
+			vectors(a_opcode,0,0);
+             break;
+//        { "vscl.p",      0x65000080, 0xFF808080, "%zp, %yp, %xs" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %xp -> %xs
+//        { "vscl.q",      0x65008080, 0xFF808080, "%zq, %yq, %xs" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %xq -> %xs
+ //       { "vscl.t",      0x65008000, 0xFF808080, "%zt, %yt, %xs" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %xt -> %xs
 
                 case 0x66:
                 if (((a_opcode>>16)&0x80) == 0x80){
@@ -1875,19 +2050,19 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
 
         case 0x6E80:
         pspDebugScreenPuts("vscmp.");
-                VFR=3;
+                VFR=3;VNUM=3;
                 vsel(a_opcode, 0, 2);
         break;
 
         case 0x6F00:
         pspDebugScreenPuts("vsge.");
-                VFR=3;
+                VFR=3;VNUM=3;
                 vsel(a_opcode, 0, 3);
         break;
 
         case 0x6F80:
         pspDebugScreenPuts("vslt.");
-                VFR=3;
+                VFR=3;VNUM=3;
                 vsel(a_opcode, 0, 3);
         break;
         }
@@ -2265,18 +2440,9 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 //        { "vsat1.s", 0xD0050000, 0xFFFF8080, "%zs, %ys" },
 
         case 0xD006:
-                if((a_opcode & 0xFF80) == 0){
-                pspDebugScreenPuts("vzero.s  ");}
-                else if((a_opcode & 0xFF80) == 0x80){
-                pspDebugScreenPuts("vzero.p  ");
-                VFR=4;}
-                else if((a_opcode & 0xFF80) == 0x8000){
-                pspDebugScreenPuts("vzero.t  ");
-                VFR=5;}
-                else if((a_opcode & 0xFF80) == 0x8080){
-                pspDebugScreenPuts("vzero.q  ");
-                VFR=6;}
-                vectors(a_opcode, 2, 0);
+                pspDebugScreenPuts("vzero.");
+				VNUM=1;
+				vsel(a_opcode, 0, 2);
         break;
 //{ "vzero.p", 0xD0060080, 0xFFFFFF80, "%zp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vzero.q", 0xD0068080, 0xFFFFFF80, "%zq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
@@ -2292,14 +2458,12 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 
         case 0xD010:
                 pspDebugScreenPuts("vrcp.");
-		VFR=3;
 		vsel(a_opcode, 0, 3);
         break;
 //        { "vrcp.s",      0xD0100000, 0xFFFF8080, "%zs, %ys" },
 
         case 0xD011:
                 pspDebugScreenPuts("vrsq.");
-		VFR=3;
 		vsel(a_opcode, 0, 3);
         break;
 //        { "vrsq.s",      0xD0110000, 0xFFFF8080, "%zs, %ys" },
@@ -2307,7 +2471,6 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 
         case 0xD012:
                 pspDebugScreenPuts("vsin.");
-		VFR=3;
 		vsel(a_opcode, 0, 3);
         break;
 //         { "vsin.s",      0xD0120000, 0xFFFF8080, "%zs, %ys" },
@@ -2388,21 +2551,21 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 
         case 0xD021:
                 pspDebugScreenPuts("vrndi.");
-		VFR=1;
+		VFR=1;VNUM=1;
 		vsel(a_opcode, 0, 2);
         break;
 //        { "vrndi.s", 0xD0210000, 0xFFFFFF80, "%zs" },
 
         case 0xD022:
                 pspDebugScreenPuts("vrndf1.");
-		VFR=1;
+		VFR=1;VNUM=1;
 		vsel(a_opcode, 0, 1);
         break;
 //        { "vrndf1.s", 0xD0220000, 0xFFFFFF80, "%zs" },
 
         case 0xD023:
                 pspDebugScreenPuts("vrndf2.");
-		VFR=1;
+		VFR=1;VNUM=1;
 		vsel(a_opcode, 0, 1);
         break;
 //        { "vrndf2.s", 0xD0230000, 0xFFFFFF80, "%zs" },
@@ -2487,8 +2650,10 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 			VFR=4;
 	     	 	vectors(a_opcode, 1, 0);
 			}
-        break;
-//        { "vs2i.s",      0xD03B0000, 0xFFFF8080, "%zs, %ys" },
+        break;       
+ // { "vs2i.p",      0xD03B0080, 0xFFFF8080, "%zq, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zp -> %zq
+ //{ "vs2i.s",      0xD03B0000, 0xFFFF8080, "%zp, %ys" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zs -> %zp
+  
 
         case 0xD03C:
                 pspDebugScreenPuts("vi2uc.q  ");
@@ -2621,7 +2786,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 	VFR=6;
 	vectors(a_opcode, 2, 1);
 	VFR=6;
-	vectors(a_opcode, 2, 1);
+	vectors(a_opcode, 1, 0);
 	break;
 
 	case 0xD049:
@@ -2861,28 +3026,19 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
         switch(a_opcode >>24){
         case 0xDC:
         pspDebugScreenPuts("vpfxd    [");
-        //Vmatrix(a_opcode, ,1);
-        //Vmatrix(a_opcode, ,1);
-        //Vmatrix(a_opcode, ,1);
-        //Vmatrix(a_opcode, ,0);
+        vprefix(a_opcode,0,0);
         pspDebugScreenPuts("]");
         break;
 
         case 0xDD:
         pspDebugScreenPuts("vpfxs    [");
-        //Vmatrix(a_opcode, ,1);
-        //Vmatrix(a_opcode, ,1);
-        //Vmatrix(a_opcode, ,1);
-        //Vmatrix(a_opcode, ,0);
+        vprefix(a_opcode,0,0);
         pspDebugScreenPuts("]");
         break;
 
         case 0xDE:
         pspDebugScreenPuts("vpfxt    [");
-        //Vmatrix(a_opcode, ,1);
-        //Vmatrix(a_opcode, ,1);
-        //Vmatrix(a_opcode, ,1);
-        //Vmatrix(a_opcode, ,0);
+        vprefix(a_opcode,0,0);
         pspDebugScreenPuts("]");
         break;
 //        { "vpfxd",       0xDE000000, 0xFF000000, "" },
@@ -3054,11 +3210,12 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 //{ "vmzero.q", 0xF3868080, 0xFFFFFF80, "%zo" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zq -> %zo
 //{ "vmzero.t", 0xF3868000, 0xFFFFFF80, "%zn" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zt -> %zn
 	
-	switch((a_opcode>16)& 0xFFE0){
+	switch((a_opcode>>16)& 0xFFE0){
 	case 0xF3A0:
         pspDebugScreenPuts("vrot.");
-	vsel(a_opcode,0,3);
-	pspDebugScreenPuts(", ");
+		vsel(a_opcode,0,3);
+		pspDebugScreenPuts(", ");
+		vrot(a_opcode,0,0);
 	break;
 //{ "vrot.p",      0xF3A00080, 0xFFE08080, "%zp, %ys, %vr" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zp, %ys, %vr"
 //{ "vrot.q",      0xF3A08080, 0xFFE08080, "%zq, %ys, %vr" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zq, %ys, %vr"
