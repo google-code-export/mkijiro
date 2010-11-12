@@ -24,7 +24,7 @@ unsigned char VFMODE=0;
 unsigned char VFR=0;
 unsigned char VNUM=0;
 unsigned char VMT=0;
-char vmatrix=0;
+unsigned char vmatrix=0;
 unsigned char mipsNum[16];
 unsigned char *mipsRegisterArray[]={"zero", "at", "v0", "v1", "a0", "a1", "a2", "a3", "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "s0", "s1", "s2", "s3", "s4", "s5", "s6", "s7", "t8", "t9", "k0", "k1", "gp", "sp", "s8", "ra"};
 unsigned char *specialRegisterArray[]={ "ixltg", "ixldt", "bxlbt", "$3", "ixstg", "ixsdt", "bxsbt", "ixin", "bpr", "$9", "bhinbt", "ihin", "bfh", "$13", "ifl", "$15", "dxltg", "dxldt", "dxstg", "dxsdt", "dxwbin", "$21", "dxin", "$23", "dhwbinv", "$25", "dhin", "$27", "dhwoin", "$29", "$30", "$31" };
@@ -129,7 +129,7 @@ void vectors(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
   else if(VFMODE==2){
   sprintf(buffer, "%d",(a_opcode>>18)& 0x7 );
   }
-  else{
+  else{ //VFMODE=0
 	unsigned char vectorflag=0;
 	if(((a_opcode>>(8*(2-a_slot))) & 0x20) == 0x20){
 	vectorflag=1;}
@@ -291,7 +291,6 @@ void mipsImm(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
     sprintf(mipsNum, "%08X", ((a_opcode<<2))); pspDebugScreenPuts(mipsNum);
   }
   else if(VFR==3){
-    VFR=0;
     a_opcode&=0xFFFC;
     pspDebugScreenSetTextColor(0xFF999999); pspDebugScreenPuts("$"); pspDebugScreenSetTextColor(color02);
     sprintf(mipsNum, "%04X", a_opcode); pspDebugScreenPuts(mipsNum);
@@ -302,11 +301,11 @@ void mipsImm(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
     pspDebugScreenSetTextColor(0xFF999999); pspDebugScreenPuts("$"); pspDebugScreenSetTextColor(color02);
     sprintf(mipsNum, "%04X", a_opcode); pspDebugScreenPuts(mipsNum);
   }
-  
+  VFR=0;
   if(a_more) pspDebugScreenPuts(", ");
 }
 
-void mipsDec(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
+/*void mipsDec(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
 {
   if(a_slot==1)
   {
@@ -314,13 +313,12 @@ void mipsDec(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
     pspDebugScreenSetTextColor(0xFF999999); pspDebugScreenPuts("$"); pspDebugScreenSetTextColor(color02);
     sprintf(mipsNum, "%010lu", ((a_opcode<<2))); pspDebugScreenPuts(mipsNum);
   }
-  else 
-  {
-  //
+  else if(a_slot==2){ //DEC
+    a_opcode&=0xFF;pspDebugScreenSetTextColor(0xFF999999); pspDebugScreenPuts("$");
+    sprintf(mipsNum, "%02D", a_opcode); pspDebugScreenPuts(mipsNum);
   }
-  
   if(a_more) pspDebugScreenPuts(", ");
-}
+}*/
 
 void vrot(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
 {
@@ -339,13 +337,11 @@ void vrot(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
 #define VFPU_SH_ROT_NEG         4       //Negation.
 #define VFPU_MASK_ROT_NEG       0x1
 
-        int l=a_opcode;
-
         const char *elements[4];
 		char elementneg=0;
 		
-        unsigned int opcode = l & VFPU_MASK_OP_SIZE;
-        unsigned int rotators = (l >> 16) & 0x1f;
+        unsigned int opcode = a_opcode & VFPU_MASK_OP_SIZE;
+        unsigned int rotators = (a_opcode >> 16) & 0x1f;
         unsigned int opsize, rothi, rotlo, negation, i;
 
         //Determine the operand size so we'll know how many elements to output.
@@ -411,12 +407,9 @@ void vrot(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
         pspDebugScreenPuts("]");
 }
 
-
-
 // [hlide] added print_vfpu_prefix
-void vprefix(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
+void vprefix(unsigned int a_opcode, unsigned char pos, unsigned char a_more)
 {
-/*
 // VFPU prefix instruction operands.  The *_SH_* values really specify where
 //   the bitfield begins, as VFPU prefix instructions have four operands
 //   encoded within the immediate field. 
@@ -438,69 +431,64 @@ unsigned char *pfx_cst[8] =
   "0",  "1",  "2",  "1/2",  "3",  "1/3",  "1/4",  "1/6"
 };
 unsigned char *pfx_swz[4] ={
-  "x",  "y",  "z",  "w"
+  "x",  "y",  "z",  "w" 
 };
 unsigned char *pfx_sat[4] ={
   "",  "[0:1]",  "",  "[-1:1]"
 };
 
-		int l=a_opcode;
-		unsigned int pos =((a_opcode >> 6) & 0x1F);
-
         switch (pos)
         {
-        case 0:
-        case 1:
-        case 2:
-        case 3:
+        case 0x30:
+        case 0x31:
+        case 0x32:
+        case 0x33:
                 {
-                        unsigned int base = 3;//0
-                        unsigned int negation = (l >> (pos - (base - VFPU_SH_PFX_NEG))) & VFPU_MASK_PFX_NEG;
-                        unsigned int constant = (l >> (pos - (base - VFPU_SH_PFX_CST))) & VFPU_MASK_PFX_CST;
-                        unsigned int abs_consthi = (l >> (pos - (base - VFPU_SH_PFX_ABS_CSTHI))) & VFPU_MASK_PFX_ABS_CSTHI;
-                        unsigned int swz_constlo = (l >> ((pos - base) * 2)) & VFPU_MASK_PFX_SWZ_CSTLO;
+                        unsigned int base = 0x30;
+                        unsigned int negation = (a_opcode >> (pos - (base - VFPU_SH_PFX_NEG))) & VFPU_MASK_PFX_NEG;
+                        unsigned int constant = (a_opcode >> (pos - (base - VFPU_SH_PFX_CST))) & VFPU_MASK_PFX_CST;
+                        unsigned int abs_consthi = (a_opcode >> (pos - (base - VFPU_SH_PFX_ABS_CSTHI))) & VFPU_MASK_PFX_ABS_CSTHI;
+                        unsigned int swz_constlo = (a_opcode >> ((pos - base) * 2)) & VFPU_MASK_PFX_SWZ_CSTLO;
 
                         if (negation)
                                  pspDebugScreenPuts("-");
                         if (constant)
                         {
-                                printf(buffer, "%s", pfx_cst[(abs_consthi << 2) | swz_constlo]);
-                                pspDebugScreenPuts(buffer);
+                                pspDebugScreenPuts(pfx_cst[(abs_consthi << 2) | swz_constlo]);
                         }
                         else
                         {
                                 if (abs_consthi){
-                                printf(buffer, "|%s|", pfx_swz[swz_constlo]);
-                                pspDebugScreenPuts(buffer);
+                                pspDebugScreenPuts("|");
+                                pspDebugScreenPuts(pfx_swz[swz_constlo]);
+                                pspDebugScreenPuts("|");
                                 }
                                 else{
-                                 printf(buffer, "%s", pfx_swz[swz_constlo]);
-                                pspDebugScreenPuts(buffer);
+                                pspDebugScreenPuts(pfx_swz[swz_constlo]);
                                 }
                         }
                 }
                 break;
-
-        case 4:
-        case 5:
-        case 6:
-        case 7:
+                
+        case 0x34:
+        case 0x35:
+        case 0x36:
+        case 0x37:
                 {
-                        unsigned int base = 4;
-                        unsigned int mask = (l >> (pos - (base - VFPU_SH_PFX_MASK))) & VFPU_MASK_PFX_MASK;
-                        unsigned int saturation = (l >> ((pos - base) * 2)) & VFPU_MASK_PFX_SAT;
+                        unsigned int base = 0x34;
+                        unsigned int mask = (a_opcode >> (pos - (base - VFPU_SH_PFX_MASK))) & VFPU_MASK_PFX_MASK;
+                        unsigned int saturation = (a_opcode >> ((pos - base) * 2)) & VFPU_MASK_PFX_SAT;
 
                         if (mask){
                                 pspDebugScreenPuts("m");
                                 }
                         else{
-                                printf(buffer ,"%s", pfx_sat[saturation]);
-                                pspDebugScreenPuts(buffer);
+                                pspDebugScreenPuts(pfx_sat[saturation]);
                                 }
                 }
                 break;
         }
-        */
+  if(a_more) pspDebugScreenPuts(", ");
 }
 
 
@@ -2619,6 +2607,14 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
         break;
 //{ "vlgb.s",  0xD0370000, 0xFFFF8080, "%zs, %ys" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 
+        case 0xD038:
+                pspDebugScreenPuts("v???.s   ");
+                vectors(a_opcode, 2, 1);
+                vectors(a_opcode, 1, 0);
+                pspDebugScreenPuts(" //unknown vfpu opcode");
+        break;
+//unknown vector command
+
         case 0xD03A:
 		if((a_opcode & 0x8080) == 0){
 		pspDebugScreenPuts("vus2i.s  ");
@@ -2818,10 +2814,10 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 
         case 0xD051:
                 pspDebugScreenPuts("vmtvc    ");
-		b_opcode=a_opcode;
+				b_opcode=a_opcode;
                 a_opcode&=0xFF;
                 mipsImm(a_opcode, 0, 1);
-		a_opcode=b_opcode;
+				a_opcode=b_opcode;
                 vectors(a_opcode, 1, 0);
         break;
 
@@ -2997,7 +2993,6 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
         pspDebugScreenPuts("lvr.q    ");
         VFR=1;
         vectors(a_opcode,0,1);
-        VFR=3;
         mipsImm(a_opcode,0,0);
       pspDebugScreenPuts("(");
       mipsRegister(a_opcode, S, 0);
@@ -3013,7 +3008,6 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
         pspDebugScreenPuts("lv.q     ");
         VFR=1;
         vectors(a_opcode,0,1);
-        VFR=3;
         mipsImm(a_opcode,0,0);
         pspDebugScreenPuts("(");
         mipsRegister(a_opcode, S, 0);
@@ -3024,26 +3018,36 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
       
       case 0xDC:
         switch(a_opcode >>24){
-        case 0xDC:
+        case 0xDE:
         pspDebugScreenPuts("vpfxd    [");
-        vprefix(a_opcode,0,0);
+        vprefix(a_opcode,0x34,1);
+        vprefix(a_opcode,0x35,1);
+        vprefix(a_opcode,0x36,1);
+        vprefix(a_opcode,0x37,0);
+        pspDebugScreenPuts("]");
+        break;
+
+        case 0xDC:
+        pspDebugScreenPuts("vpfxs    [");
+        vprefix(a_opcode,0x30,1);
+        vprefix(a_opcode,0x31,1);
+        vprefix(a_opcode,0x32,1);
+        vprefix(a_opcode,0x33,0);
         pspDebugScreenPuts("]");
         break;
 
         case 0xDD:
-        pspDebugScreenPuts("vpfxs    [");
-        vprefix(a_opcode,0,0);
-        pspDebugScreenPuts("]");
-        break;
-
-        case 0xDE:
         pspDebugScreenPuts("vpfxt    [");
-        vprefix(a_opcode,0,0);
+        vprefix(a_opcode,0x30,1);
+        vprefix(a_opcode,0x31,1);
+        vprefix(a_opcode,0x32,1);
+        vprefix(a_opcode,0x33,0);
         pspDebugScreenPuts("]");
         break;
-//        { "vpfxd",       0xDE000000, 0xFF000000, "" },
-//        { "vpfxs",       0xDC000000, 0xFF000000, "" },
-//        { "vpfxt",       0xDD000000, 0xFF000000, "" },
+//{ "vpfxd",       0xDE000000, 0xFF000000, "[%vp4, %vp5, %vp6, %vp7]" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "[%vp4, %vp5, %vp6, %vp7]"
+//{ "vpfxs",       0xDC000000, 0xFF000000, "[%vp0, %vp1, %vp2, %vp3]" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "[%vp0, %vp1, %vp2, %vp3]"
+//{ "vpfxt",       0xDD000000, 0xFF000000, "[%vp0, %vp1, %vp2, %vp3]" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "[%vp0, %vp1, %vp2, %vp3]"
+
         
         case 0xDF:
         switch(a_opcode >>16 & 0x80){
@@ -3229,7 +3233,6 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
         pspDebugScreenPuts("svl.q    ");
         VFR=1;
         vectors(a_opcode,0,1);
-        VFR=3;
         mipsImm(a_opcode,0,0);
         pspDebugScreenPuts("(");
         mipsRegister(a_opcode, S, 0);
@@ -3240,7 +3243,6 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
         pspDebugScreenPuts("svr.q    ");
         VFR=1;
         vectors(a_opcode,0,1);
-        VFR=3;
         mipsImm(a_opcode,0,0);
         pspDebugScreenPuts("(");
         mipsRegister(a_opcode, S, 0);
@@ -3258,7 +3260,6 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
         pspDebugScreenPuts("sv.q     ");
         VFR=1;
         vectors(a_opcode,0,1);
-        VFR=3;
         mipsImm(a_opcode,0,0);
         pspDebugScreenPuts("(");
         mipsRegister(a_opcode, S, 0);
