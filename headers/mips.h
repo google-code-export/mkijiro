@@ -290,7 +290,7 @@ void mipsImm(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
     pspDebugScreenSetTextColor(0xFF999999); pspDebugScreenPuts("$"); pspDebugScreenSetTextColor(color02);
     sprintf(mipsNum, "%08X", ((a_opcode<<2))); pspDebugScreenPuts(mipsNum);
   }
-  else if(VFR==3){
+  else if(VFR==3){ //sv.q,lv.q,lv.s,sv.s
     a_opcode&=0xFFFC;
     pspDebugScreenSetTextColor(0xFF999999); pspDebugScreenPuts("$"); pspDebugScreenSetTextColor(color02);
     sprintf(mipsNum, "%04X", a_opcode); pspDebugScreenPuts(mipsNum);
@@ -2993,6 +2993,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
         pspDebugScreenPuts("lvr.q    ");
         VFR=1;
         vectors(a_opcode,0,1);
+        VFR=3;
         mipsImm(a_opcode,0,0);
       pspDebugScreenPuts("(");
       mipsRegister(a_opcode, S, 0);
@@ -3008,6 +3009,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
         pspDebugScreenPuts("lv.q     ");
         VFR=1;
         vectors(a_opcode,0,1);
+        VFR=3;
         mipsImm(a_opcode,0,0);
         pspDebugScreenPuts("(");
         mipsRegister(a_opcode, S, 0);
@@ -3233,6 +3235,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
         pspDebugScreenPuts("svl.q    ");
         VFR=1;
         vectors(a_opcode,0,1);
+        VFR=3;
         mipsImm(a_opcode,0,0);
         pspDebugScreenPuts("(");
         mipsRegister(a_opcode, S, 0);
@@ -3243,6 +3246,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
         pspDebugScreenPuts("svr.q    ");
         VFR=1;
         vectors(a_opcode,0,1);
+        VFR=3;
         mipsImm(a_opcode,0,0);
         pspDebugScreenPuts("(");
         mipsRegister(a_opcode, S, 0);
@@ -3260,6 +3264,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
         pspDebugScreenPuts("sv.q     ");
         VFR=1;
         vectors(a_opcode,0,1);
+        VFR=3;
         mipsImm(a_opcode,0,0);
         pspDebugScreenPuts("(");
         mipsRegister(a_opcode, S, 0);
