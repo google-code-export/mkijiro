@@ -284,23 +284,36 @@ void mipsins(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
 
 void mipsImm(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
 {
+  unsigned char sign=0;
+  if(a_slot== 0xA){ //dec
+    a_opcode&=0xFFFF;
+    if(a_opcode > 0x7FFF){
+    	a_opcode=0x10000 - a_opcode;
+    	sign=0x2D;//-
+    	}
+    else{
+    	sign=0x2B;//+
+    	}
+    sprintf(mipsNum, "%c%D", sign, a_opcode); pspDebugScreenSetTextColor(color02);
+  }
+  else{
+   pspDebugScreenSetTextColor(0xFF999999); pspDebugScreenPuts("$"); pspDebugScreenSetTextColor(color02);
   if(a_slot==1)
   {
     a_opcode&=0x3FFFFFF;
-    pspDebugScreenSetTextColor(0xFF999999); pspDebugScreenPuts("$"); pspDebugScreenSetTextColor(color02);
-    sprintf(mipsNum, "%08X", ((a_opcode<<2))); pspDebugScreenPuts(mipsNum);
+    sprintf(mipsNum, "%08X", ((a_opcode<<2)));
   }
   else if(VFR==3){ //sv.q,lv.q,lv.s,sv.s
     a_opcode&=0xFFFC;
-    pspDebugScreenSetTextColor(0xFF999999); pspDebugScreenPuts("$"); pspDebugScreenSetTextColor(color02);
-    sprintf(mipsNum, "%04X", a_opcode); pspDebugScreenPuts(mipsNum);
+    sprintf(mipsNum, "%04X", a_opcode);
   }
   else 
   {
     a_opcode&=0xFFFF;
-    pspDebugScreenSetTextColor(0xFF999999); pspDebugScreenPuts("$"); pspDebugScreenSetTextColor(color02);
-    sprintf(mipsNum, "%04X", a_opcode); pspDebugScreenPuts(mipsNum);
+    sprintf(mipsNum, "%04X", a_opcode);
   }
+  }
+  pspDebugScreenPuts(mipsNum);
   VFR=0;
   if(a_more) pspDebugScreenPuts(", ");
 }
@@ -3056,13 +3069,13 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
         case 0x00:
         pspDebugScreenPuts("viim.s   ");
         vectors(a_opcode,0,1);
-        mipsImm(a_opcode,0,0);
+        mipsImm(a_opcode,0xA,0);
         break;
 
         case 0x80:
         pspDebugScreenPuts("vfim.s   ");
         vectors(a_opcode,0,1);
-        mipsImm(a_opcode,0,0);
+        //mipsImm(a_opcode,0,0);
         break;
 //{ "vfim.s",  0xDF800000, 0xFF800000, "%xs, %vh" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%xs, %vh"
 

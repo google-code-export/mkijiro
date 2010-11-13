@@ -1,4 +1,20 @@
 //MODED BY HAROTURBO
+//reffer to PSPLINK/PRXTOOL SRC
+/*
+        WebSVN  
+psp - Rev 2457
+Subversion Repositories:
+Rev:
+(root)/trunk/prxtool/disasm.C @ 2457
+Rev 2206 - Blame - Compare with Previous - Last modification - View Log - RSS feed
+
+/***************************************************************
+ * PRXTool : Utility for PSP executables.
+ * (c) TyRaNiD 2k6
+ *
+ * disasm.C - Implementation of a MIPS disassembler
+ ***************************************************************/
+
 /*
  * NitePR Original Source by: SANiK + imk + telazorn , 
  * MKULTRA By:
@@ -147,7 +163,7 @@ void *vram;
 unsigned int menuKey=PSP_CTRL_VOLUP | PSP_CTRL_VOLDOWN;
 unsigned int triggerKey=PSP_CTRL_NOTE;
 unsigned int screenKey=PSP_CTRL_SELECT | PSP_CTRL_VOLDOWN;
-unsigned int cheatHz=0x3D5C;
+unsigned int cheatHz=0x3D5C;//Cheat 15HZ
 unsigned char cheatFlash=0;
 unsigned char cheatPause=0;
 unsigned char cheatSearch=0;
@@ -182,7 +198,7 @@ unsigned char searchMode=0;
 unsigned char copyMenu=0; //0=Menu Off, 1=Menu On, Copy selected, 2=Menu On, Paste selected
 unsigned int copyData=0x08800000;
 unsigned int copyData2=0x00000000;
-unsigned int storedAddress=0x00000000;
+unsigned int storedAddress[64];
 unsigned char screenTime=0;
 unsigned int cheatRefresh=0;
 unsigned int flipme=1;
@@ -204,6 +220,13 @@ unsigned int copyToggle=0;
 unsigned char screenPath[64]={0};
 unsigned int clipboard[27]={};
 unsigned int clipSelected=0;
+unsigned char logcounter=0;
+//unsigned char backflag=0;
+unsigned int backaddress=0x48800000;
+unsigned char backaddressY=0;
+unsigned int JOKERADDRESS=0x3FFC;//out put JOKER ADDRES from kernel ram
+unsigned int logstart=0x48800800;//log start address
+unsigned char jumplog=0x20;//number of jumplog ,default 32
 int jacktoggle=0;
 int copyMenuX=25;
 int copyMenuY=0;
@@ -602,7 +625,7 @@ void cheatEnable(unsigned int a_cheat){
 		#ifdef _JOKER_
 		if(block[counter].flags & FLAG_JOKER){
 				if(block[counter].hakVal == 0){
-				if(((block[counter].address -0x8800000) & 0xFFFFFF) != (*((unsigned int*)(0x08803FFC))& ((block[counter].address -0x8800000) & 0xFFFFFF))){
+				if(((block[counter].address -0x8800000) & 0xFFFFFF) != (*((unsigned int*)(0x08800000+JOKERADDRESS))& ((block[counter].address -0x8800000) & 0xFFFFFF))){
 				joker=1;}
 				}
 				else{
@@ -1337,9 +1360,16 @@ void menuDraw(){
 	pspDebugScreenSetXY(0, 0);
   	
   	if(copyMenu){
+		unsigned char countermax=0;
 		counter=1; //we start @ 1 this time because 0 is closed
 		bgcolor=0xFF000000;
-		while(counter < 8){
+		if(extMenu ==1){
+		countermax=7;}
+		else if(tabSelected ==3){
+		countermax=5;}
+		else{
+		countermax=4;}
+		while(counter < countermax+1){
 			lineClear(counter+2); 
 			pspDebugScreenSetXY(0, counter+2);
 			pspDebugScreenSetBackColor(bgcolor);
@@ -1358,10 +1388,22 @@ void menuDraw(){
 				case 4: pspDebugScreenPuts("  Paste value\n"); break;
 			//	case 5: pspDebugScreenPuts("  Copy to new cheat\n"); break;
 			//	case 6: pspDebugScreenPuts("  Copy to text file\n"); break;
-				case 5: pspDebugScreenPuts("  Normal cheat\n"); break;
-				case 6: pspDebugScreenPuts("  Joker cheat (0x3FFC default,0x0000 MASKED)\n"); break;
-				case 7: pspDebugScreenPuts("  DMA cheat\n"); break;
-			}
+				case 5:
+				if(tabSelected ==3){
+				   if(pad.Buttons & PSP_CTRL_SQUARE){
+					pspDebugScreenPuts("  Clear Jump log\n");}
+				   else if(((decodeAddress[bdNo]+(decodeY[bdNo]*4)) >= (logstart-4)) && ((decodeAddress[bdNo]+(decodeY[bdNo]*4)) <= (logstart + 4*jumplog))){
+					pspDebugScreenPuts("  Back to Decoder\n");}
+				   else{
+					pspDebugScreenPuts("  View Jump log\n");}
+				    }
+				else{
+				pspDebugScreenPuts("  NORMAL cheat\n");}break;
+				case 6: sprintf(buffer ,"  JOKER cheat (0x%X default,0x0000 MASKED)\n",JOKERADDRESS);
+				pspDebugScreenPuts(buffer);break;
+
+				case 7:pspDebugScreenPuts("  DMA cheat\n");break;
+					}
 			counter++;
 			bgcolor+=0x00000008;
 		}
@@ -1370,56 +1412,7 @@ void menuDraw(){
 		pspDebugScreenSetBackColor(0xFF000000);
 		pspDebugScreenPuts(line); //draw spiffy line
   	}
-  	/*
-	//Extended/sub menus?
-	if(copyMenu){
-		pspDebugScreenSetXY(25, 15); 
-		pspDebugScreenSetBackColor(0xFF000000); pspDebugScreenSetTextColor(color02); sprintf(buffer, "%c", 0xDB); pspDebugScreenPuts(buffer);
-		pspDebugScreenSetBackColor(color01); pspDebugScreenSetTextColor(color02); sprintf(buffer, "%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c", 0xDF, 0xDF, 0xDF, 0xDF, 0xDF, 0xDF, 0xDF, 0xDF, 0xDF, 0xDF, 0xDF, 0xDF, 0xDF, 0xDF, 0xDF, 0xDF); pspDebugScreenPuts(buffer);
-		pspDebugScreenSetBackColor(0xFF000000); pspDebugScreenSetTextColor(color02); sprintf(buffer, "%c", 0xDB); pspDebugScreenPuts(buffer);
-		pspDebugScreenSetXY(25, 16); 
-		pspDebugScreenSetBackColor(0xFF000000); pspDebugScreenSetTextColor(color02); sprintf(buffer, "%c", 0xDB); pspDebugScreenPuts(buffer);
-		pspDebugScreenSetBackColor(color01); pspDebugScreenSetTextColor(color02); sprintf(buffer, "%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c",  0x20, 0x20, 0x20, '-',  0x20,  'C', 'o',  'p',  'i',  'e',  'r' ,  0x20, '-', 0x20, 0x20, 0x20); pspDebugScreenPuts(buffer);
-		pspDebugScreenSetBackColor(0xFF000000); pspDebugScreenSetTextColor(color02); sprintf(buffer, "%c", 0xDB); pspDebugScreenPuts(buffer);
-		pspDebugScreenSetXY(25, 17);
-		pspDebugScreenSetBackColor(0xFF000000); pspDebugScreenSetTextColor(color02); sprintf(buffer, "%c", 0xDB); pspDebugScreenPuts(buffer);
-		pspDebugScreenSetBackColor(color01); pspDebugScreenSetTextColor(color02); sprintf(buffer, "%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c",  0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20); pspDebugScreenPuts(buffer);
-		pspDebugScreenSetBackColor(0xFF000000); pspDebugScreenSetTextColor(color02); sprintf(buffer, "%c", 0xDB); pspDebugScreenPuts(buffer);
-		pspDebugScreenSetXY(25, 18); 
-		sprintf(buffer, "%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c", 0xDB, 0xDF, 0xDF, 0xDF, 0xDF, 0xDF, 0xDF, 0xDF, 0xDF, 0xDF, 0xDF, 0xDF, 0xDF, 0xDF, 0xDF, 0xDF, 0xDF, 0xDB); pspDebugScreenPuts(buffer);
-		pspDebugScreenSetXY(25, 19); 
-		pspDebugScreenSetBackColor(0xFF000000); pspDebugScreenSetTextColor(color02); sprintf(buffer, "%c%c", 0xDB, 0x20); pspDebugScreenPuts(buffer);
-		pspDebugScreenSetBackColor(0xFF000000); pspDebugScreenSetTextColor(color02); if(copyMenu==1) {  pspDebugScreenSetTextColor(color01); pspDebugScreenPuts(">"); } else { pspDebugScreenPuts(" ");}
-		pspDebugScreenSetBackColor(0xFF000000); sprintf(buffer, "%c%c%c%c%c%c%c%c%c%c%c%c%c%c", 'C',  'o',  'p',  'y', 0x20,  'A',  'd',  'd',  'r',  'e',  's',  's', 0x20, 0x20); pspDebugScreenPuts(buffer);
-		pspDebugScreenSetBackColor(0xFF000000); pspDebugScreenSetTextColor(color02); sprintf(buffer, "%c", 0xDB); pspDebugScreenPuts(buffer);
-		pspDebugScreenSetXY(25, 20); 
-		pspDebugScreenSetBackColor(0xFF000000); pspDebugScreenSetTextColor(color02); sprintf(buffer, "%c%c", 0xDB, 0x20); pspDebugScreenPuts(buffer);
-		pspDebugScreenSetBackColor(0xFF000000); pspDebugScreenSetTextColor(color02); if(copyMenu==2) {  pspDebugScreenSetTextColor(color01); pspDebugScreenPuts(">"); } else { pspDebugScreenPuts(" ");}
-		pspDebugScreenSetBackColor(0xFF000000); sprintf(buffer, "%c%c%c%c%c%c%c%c%c%c%c%c%c%c", 'P',  'a',  's',  't',  'e', 0x20,  'A',  'd',  'd',  'r',  'e',  's',  's', 0x20); pspDebugScreenPuts(buffer);
-		pspDebugScreenSetBackColor(0xFF000000); pspDebugScreenSetTextColor(color02); sprintf(buffer, "%c", 0xDB); pspDebugScreenPuts(buffer);
-		pspDebugScreenSetXY(25, 21); 
-		pspDebugScreenSetBackColor(0xFF000000); pspDebugScreenSetTextColor(color02); sprintf(buffer, "%c%c", 0xDB, 0x20); pspDebugScreenPuts(buffer);
-		pspDebugScreenSetBackColor(0xFF000000); pspDebugScreenSetTextColor(color02); if(copyMenu==3) {  pspDebugScreenSetTextColor(color01); pspDebugScreenPuts(">"); } else { pspDebugScreenPuts(" ");}
-		pspDebugScreenSetBackColor(0xFF000000); sprintf(buffer, "%c%c%c%c%c%c%c%c%c%c%c%c%c%c", 'C',  'o',  'p',  'y', 0x20,  'H',  'e',  'x',  '-',  'V',  'a',  'l', 0x20, 0x20); pspDebugScreenPuts(buffer);
-		pspDebugScreenSetBackColor(0xFF000000); pspDebugScreenSetTextColor(color02); sprintf(buffer, "%c", 0xDB); pspDebugScreenPuts(buffer);
-		pspDebugScreenSetXY(25, 22); 
-		pspDebugScreenSetBackColor(0xFF000000); pspDebugScreenSetTextColor(color02); sprintf(buffer, "%c%c", 0xDB, 0x20); pspDebugScreenPuts(buffer);
-		pspDebugScreenSetBackColor(0xFF000000); pspDebugScreenSetTextColor(color02); if(copyMenu==4) {  pspDebugScreenSetTextColor(color01); pspDebugScreenPuts(">"); } else { pspDebugScreenPuts(" ");}
-		pspDebugScreenSetBackColor(0xFF000000); sprintf(buffer, "%c%c%c%c%c%c%c%c%c%c%c%c%c%c", 'P',  'a',  's',  't',  'e', 0x20,  'H',  'e',  'x',  '-',  'V',  'a',  'l', 0x20); pspDebugScreenPuts(buffer);
-		pspDebugScreenSetBackColor(0xFF000000); pspDebugScreenSetTextColor(color02); sprintf(buffer, "%c", 0xDB); pspDebugScreenPuts(buffer);
-		pspDebugScreenSetXY(25, 23); 
-		pspDebugScreenSetBackColor(0xFF000000); pspDebugScreenSetTextColor(color02); sprintf(buffer, "%c%c", 0xDB, 0x20); pspDebugScreenPuts(buffer);
-		pspDebugScreenSetBackColor(0xFF000000); pspDebugScreenSetTextColor(color02); if(copyMenu==5) {  pspDebugScreenSetTextColor(color01); pspDebugScreenPuts(">"); } else { pspDebugScreenPuts(" ");}
-		pspDebugScreenSetBackColor(0xFF000000); sprintf(buffer, "%c%c%c%c%c%c%c%c%c%c%c%c%c%c", 'C',  'o',  'p',  'y',  0x20, 'T',  'o',  0x20,  'C',  'h',  'e',  'a',  't', 0x20); pspDebugScreenPuts(buffer);
-		pspDebugScreenSetBackColor(0xFF000000); pspDebugScreenSetTextColor(color02); sprintf(buffer, "%c", 0xDB); pspDebugScreenPuts(buffer);
-		pspDebugScreenSetXY(25, 24); 
-		pspDebugScreenSetBackColor(0xFF000000); pspDebugScreenSetTextColor(color02); sprintf(buffer, "%c%c", 0xDB, 0x20); pspDebugScreenPuts(buffer);
-		pspDebugScreenSetBackColor(0xFF000000); pspDebugScreenSetTextColor(color02); if(copyMenu==6) {  pspDebugScreenSetTextColor(color01); pspDebugScreenPuts(">"); } else { pspDebugScreenPuts(" ");}
-		pspDebugScreenSetBackColor(0xFF000000); sprintf(buffer, "%c%c%c%c%c%c%c%c%c%c%c%c%c%c", 'C',  'o',  'p',  'y',  0x20, 'T',  'o',  0x20,  'T',  'e',  'x',  't',  0x20, 0x20); pspDebugScreenPuts(buffer);
-		pspDebugScreenSetBackColor(0xFF000000); pspDebugScreenSetTextColor(color02); sprintf(buffer, "%c", 0xDB); pspDebugScreenPuts(buffer);
-		pspDebugScreenSetXY(25, 25); sprintf(buffer, "%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c", 0xDB, 0xDC, 0xDC, 0xDC, 0xDC, 0xDC, 0xDC, 0xDC, 0xDC, 0xDC, 0xDC, 0xDC, 0xDC, 0xDC, 0xDC, 0xDC, 0xDC, 0xDB); pspDebugScreenPuts(buffer);
-		pspDebugScreenSetBackColor(0xFF000000); pspDebugScreenSetTextColor(color02);
-	} */
+
 	else if(extMenu){
 		switch(extMenu){
 			
@@ -1516,29 +1509,39 @@ void menuDraw(){
 					}
 					else{
 						//Print out the opcode
-						mipsDecode(block[counter].hakVal);
-							unsigned int addresscode=0;
-							unsigned int addresstmp=0;
-							addresscode=block[counter].hakVal;
-							if//((addresscode & 0xFC000000) == 0x10000000)
-							(((addresscode >= 0x10000000) && (addresscode <= 0x1FFFFFFF)) || ((addresscode >= 0x50000000) && (addresscode <= 0x5FFFFFFF))
-							|| ((addresscode >= 0x45000000) && (addresscode <= 0x4503FFFF)) || ((addresscode >= 0x49000000) && (addresscode <= 0x491FFFFF))
-							|| (((addresscode & 0xFC1F0000) >= 0x04000000) && ((addresscode & 0xFC1F0000) <= 0x04030000))
-							||  (((addresscode & 0xFC1F0000) >= 0x04100000) && ((addresscode & 0xFC1F0000) <= 0x04130000)) )
-							{
-							addresstmp=addresscode & 0xFFFF;
-							addresscode=4*(addresstmp + 1);
-							if(addresstmp > 0x7FFF){
-							addresscode=(-0x40000+addresscode)+block[counter].address;}
-							else{
-							addresscode=addresscode+block[counter].address;}
-							sprintf(buffer, "$%X", addresscode);pspDebugScreenPuts(buffer);
-							if(addresstmp > 0x7FFF){
-							 sprintf(buffer, "(-%d)", (0x10000-(addresstmp+1)));}
-							else{
-							 sprintf(buffer, "(+%d)", (addresstmp+1));}
-							 pspDebugScreenPuts(buffer);
+						if(block[counter].flags & FLAG_BYTE){
+						}
+						else{
+							if(block[counter].flags & FLAG_DMA){
+							pspDebugScreenPuts("DMA CHEAT");
 							}
+							else if(block[counter].flags & FLAG_JOKER){
+								if(block[counter].hakVal == 0){
+								pspDebugScreenPuts("JOKER CHEAT(24BITMASKED)");}
+								else if(block[counter].hakVal == JOKERADDRESS){
+								pspDebugScreenPuts("JOKER CHEAT(16BIT_TEST)");}
+								else{
+								pspDebugScreenPuts("16BIT_TEST");}
+							}
+							else{
+							unsigned int addresscode=0;
+							 if(block[counter].flags & FLAG_DWORD){
+							    if(block[counter].flags & FLAG_DWORD){
+							        if(block[counter].flags & FLAG_WORD){
+							    	 if((block[counter].address & 0x2) == 0x2){
+							    	 addresscode=(block[counter].hakVal)<<16;
+							    	 mipsDecode(addresscode);
+								 }
+							        else if(block[counter].flags & FLAG_DWORD){
+								mipsDecode(block[counter].hakVal);
+								unsigned int addresstmp=0;
+								unsigned int counteraddress=0;
+								addresscode=block[counter].hakVal;
+								counteraddress=block[counter].address;
+								mipsSpecial(addresscode,addresstmp,counteraddress);}
+							    }}
+							}}
+						}
 					}
 
 					//Skip a line, draw the pointer =)
@@ -1658,26 +1661,10 @@ void menuDraw(){
 					mipsDecode(searchHistory[0].hakVal);
 							unsigned int addresscode=0;
 							unsigned int addresstmp=0;
+							unsigned int counteraddress=0;
 							addresscode=searchHistory[0].hakVal;
-							if//((addresscode & 0xFC000000) == 0x10000000)
-							(((addresscode >= 0x10000000) && (addresscode <= 0x1FFFFFFF)) || ((addresscode >= 0x50000000) && (addresscode <= 0x5FFFFFFF))
-							|| ((addresscode >= 0x45000000) && (addresscode <= 0x4503FFFF)) || ((addresscode >= 0x49000000) && (addresscode <= 0x491FFFFF))
-							|| (((addresscode & 0xFC1F0000) >= 0x04000000) && ((addresscode & 0xFC1F0000) <= 0x04030000))
-							||  (((addresscode & 0xFC1F0000) >= 0x04100000) && ((addresscode & 0xFC1F0000) <= 0x04130000)) )
-							{
-							addresstmp=addresscode & 0xFFFF;
-							addresscode=4*(addresstmp + 1);
-							if(addresstmp > 0x7FFF){
-							addresscode=(-0x40000+addresscode)+searchHistory[0].address;}
-							else{
-							addresscode=addresscode+searchHistory[0].address;}
-							sprintf(buffer, "$%X", addresscode);pspDebugScreenPuts(buffer);
-							if(addresstmp > 0x7FFF){
-							 sprintf(buffer, "(-%d)", (0x10000-(addresstmp+1)));}
-							else{
-							 sprintf(buffer, "(+%d)", (addresstmp+1));}
-							 pspDebugScreenPuts(buffer);
-							}
+							counteraddress=searchHistory[0].address;
+							mipsSpecial(addresscode,addresstmp,counteraddress);
 				}
 
 				//Skip a line, draw the pointer =)
@@ -2318,7 +2305,7 @@ void menuDraw(){
 
 				pspDebugScreenSetTextColor(color01);
 				#ifdef _UMDMODE_
-					pspDebugScreenPuts("  MKIJIRO+ 20101112");
+					pspDebugScreenPuts("  MKIJIRO+ 20101113");
 				#elif _POPSMODE_
 					pspDebugScreenPuts("  MKULTRA V10 POPS ");
 				#endif
@@ -2744,30 +2731,13 @@ void menuDraw(){
 								
 						}
 						else{
+							mipsDecode(*((unsigned int*)(decodeAddress[bdNo]+(counter*4))));
 							unsigned int addresscode=0;
 							unsigned int addresstmp=0;
-							//Print out the opcode
-							mipsDecode(*((unsigned int*)(decodeAddress[bdNo]+(counter*4))));
-							addresscode=*((unsigned int*)(decodeAddress[bdNo]+(counter*4)));
-							if//((addresscode & 0xFC000000) == 0x10000000)
-							(((addresscode >= 0x10000000) && (addresscode <= 0x1FFFFFFF)) || ((addresscode >= 0x50000000) && (addresscode <= 0x5FFFFFFF))
-							|| ((addresscode >= 0x45000000) && (addresscode <= 0x4503FFFF)) || ((addresscode >= 0x49000000) && (addresscode <= 0x491FFFFF))
-							|| (((addresscode & 0xFC1F0000) >= 0x04000000) && ((addresscode & 0xFC1F0000) <= 0x04030000))
-							||  (((addresscode & 0xFC1F0000) >= 0x04100000) && ((addresscode & 0xFC1F0000) <= 0x04130000)) )
-							{
-							addresstmp=addresscode & 0xFFFF;
-							addresscode=4*(addresstmp + 1);
-							if(addresstmp > 0x7FFF){
-							addresscode=(-0x40000+addresscode)+decodeAddress[bdNo]+(counter*4)-0x40000000;}
-							else{
-							addresscode=addresscode+decodeAddress[bdNo]+(counter*4)-0x40000000;}
-							sprintf(buffer, "$%X", addresscode);pspDebugScreenPuts(buffer);
-							if(addresstmp > 0x7FFF){
-							 sprintf(buffer, "(-%d)", (0x10000-(addresstmp+1)));}
-							else{
-							 sprintf(buffer, "(+%d)", (addresstmp+1));}
-							 pspDebugScreenPuts(buffer);
-							}
+							unsigned int counteraddress=0;
+							addresscode=*((unsigned int*)(decodeAddress[bdNo]+(counter*4)));;
+							counteraddress=decodeAddress[bdNo]+(counter*4)-0x40000000;
+							mipsSpecial(addresscode,addresstmp,counteraddress);
 						}
 
 						//Skip a line, draw the pointer =)
@@ -3179,19 +3149,38 @@ void menuInput(){
 				if(copyMenu > 1){
 					copyMenu-=1;
 				}
-				else{
+				else if(extMenu == 1){
 					copyMenu=7;
+				}
+				else if(tabSelected == 3){
+					copyMenu=5;
+				}
+				else{
+					copyMenu=4;
 				}
 				menuDraw();
 				sceKernelDelayThread(150000);
 		   }
 		   else if(pad.Buttons & PSP_CTRL_DOWN){
+				
+			if(extMenu == 1){
 				if(copyMenu < 7){
-					copyMenu+=1;
-				}
+				copyMenu+=1;}
 				else{
-					copyMenu=1;
-				}
+				copyMenu=1;}
+			}
+			else if(tabSelected == 3){
+				if(copyMenu < 5){
+				copyMenu+=1;}
+				else{
+				copyMenu=1;}
+			}
+			else{
+				if(copyMenu < 4){
+				copyMenu+=1;}
+				else{
+				copyMenu=1;}
+			}
 				menuDraw();
 				sceKernelDelayThread(150000);
 		  }
@@ -3366,7 +3355,6 @@ void menuInput(){
 				}
 			  }
 			}
-			
 			//if(copyMenu == 5){ //copy range to new cheat
 			//	decToCheat();
 			//	menuDraw();
@@ -3377,145 +3365,62 @@ void menuInput(){
 			//	menuDraw();
 			//	sceKernelDelayThread(150000);
 			//}
-			else if(copyMenu ==5){//normal
-			  if(extMenu)
-			  {
-				if(extMenu == 1)
-
-				{
+			else if(copyMenu ==5){//normal, viewlog,clear log
+			  if(extMenu == 1){
 				  block[extSelected[0]].address=0x08800000;
 				  block[extSelected[0]].flags=FLAG_DWORD;
 				}
-				else if(extMenu == 2)
+				else if(tabSelected == 3)
 				{
-					if(extSelected[0] < 1)
-					{
-						searchHistory[0].hakVal=copyData2;
+				   if(pad.Buttons & PSP_CTRL_SQUARE){ //clear
+					unsigned char i=0;
+				        for(i=0;  i < jumplog ; i++){
+					*(unsigned int *)(logstart + 4*i)=0;
+					storedAddress[i]=0;
+								}
+					logcounter=0;backaddress=0x48800000;
 					}
-				}
-			  }
-			  else
-			  {
-				if(tabSelected == 3)
-				{
-					if(flipme){
+				   else{ //view log
+					if(flipme){ //memoryeditor
 						if(copyData < 0x49FFFFA8){
-							browseAddress[bdNo]=copyData|0x40000000; //(browseY[bdNo] * browseLines)+
+							browseAddress[bdNo]=logstart+4*(logcounter-1); //(browseY[bdNo] * browseLines)+
 							if(browseAddress[bdNo] > (0x4A000000-(26*browseLines))){
 								browseAddress[bdNo]=(0x4A000000-(26*browseLines));
 							}
 						}
 					}
-					else{
-						if(copyData < 0x49FFFFA8){
-							decodeAddress[bdNo]=copyData|0x40000000; //+(decodeY[bdNo]*4);
+					else{ //decoder
+						if(((decodeAddress[bdNo]+(decodeY[bdNo]*4)) >= (logstart-4)) && ((decodeAddress[bdNo]+(decodeY[bdNo]*4)) <= (logstart + 4*jumplog))){ //back address decoder
+						decodeAddress[bdNo]=backaddress;decodeY[bdNo]=backaddressY;
+						}
+						else{
+						  backaddress=decodeAddress[bdNo];backaddressY=decodeY[bdNo];decodeY[bdNo]=0;
+						 if(copyData < 0x49FFFFA8){
+							decodeAddress[bdNo]=logstart+4*(logcounter-1); //+(decodeY[bdNo]*4);
 							if(decodeAddress[bdNo] > 0x49FFFFA8){
 								decodeAddress[bdNo]=0x49FFFFA8;
 							}
-						}
+						 }
+					    }   }
 					}
 				}
-				else if(tabSelected == 4)
-				{
-					if(cheatSelected == 0){
-						clipboard[clipSelected]=copyData2;
-					}
-				}
-			  }
 			}
 			
-			else if(copyMenu ==6){//joker
-			  if(extMenu)
-			  {
-				if(extMenu == 1)
-				{
+			else if(copyMenu ==6){//JOKER
+
+			  if(extMenu == 1){
 				   block[extSelected[0]].address=0x08800000;
-				   block[extSelected[0]].hakVal=0x00003FFC;
+				   block[extSelected[0]].hakVal=JOKERADDRESS;
 				   block[extSelected[0]].flags=FLAG_JOKER | FLAG_DWORD;
 				}
-				else if(extMenu == 2)
-				{
-					if(extSelected[0] < 1)
-					{
-						searchHistory[0].hakVal=copyData2;
-					}
-				}
-			  }
-			  else
-			  {
-				if(tabSelected == 3)
-				{
-					if(flipme){
-						if(copyData < 0x49FFFFA8){
-							browseAddress[bdNo]=copyData|0x40000000; //(browseY[bdNo] * browseLines)+
-							if(browseAddress[bdNo] > (0x4A000000-(26*browseLines))){
-								browseAddress[bdNo]=(0x4A000000-(26*browseLines));
-							}
-						}
-					}
-					else{
-						if(copyData < 0x49FFFFA8){
-							decodeAddress[bdNo]=copyData|0x40000000; //+(decodeY[bdNo]*4);
-							if(decodeAddress[bdNo] > 0x49FFFFA8){
-								decodeAddress[bdNo]=0x49FFFFA8;
-							}
-						}
-					}
-				}
-				else if(tabSelected == 4)
-				{
-					if(cheatSelected == 0){
-						clipboard[clipSelected]=copyData2;
-					}
-				}
-			  }
 			}
 			
 			else if(copyMenu ==7){//DMA
-			  if(extMenu)
-			  {
-				if(extMenu == 1)
-				{
+			  if(extMenu == 1){
 				   block[extSelected[0]].address=0xFFFFFFFF;
 				   block[extSelected[0]].stdVal=0xFFFFFFFF;
 				   block[extSelected[0]].flags=FLAG_DMA | FLAG_DWORD;
-				}
-				else if(extMenu == 2)
-				{
-					if(extSelected[0] < 1)
-					{
-						searchHistory[0].hakVal=copyData2;
 					}
-				}
-			  }
-			  else
-			  {
-				if(tabSelected == 3)
-				{
-					if(flipme){
-						if(copyData < 0x49FFFFA8){
-							browseAddress[bdNo]=copyData|0x40000000; //(browseY[bdNo] * browseLines)+
-							if(browseAddress[bdNo] > (0x4A000000-(26*browseLines))){
-								browseAddress[bdNo]=(0x4A000000-(26*browseLines));
-							}
-						}
-					}
-					else{
-						if(copyData < 0x49FFFFA8){
-							decodeAddress[bdNo]=copyData|0x40000000; //+(decodeY[bdNo]*4);
-							if(decodeAddress[bdNo] > 0x49FFFFA8){
-								decodeAddress[bdNo]=0x49FFFFA8;
-							}
-						}
-					}
-				}
-				else if(tabSelected == 4)
-				{
-					if(cheatSelected == 0){
-						clipboard[clipSelected]=copyData2;
-					}
-				}
-			  }
 			}
 			
 			goto hideCopyMenu;
@@ -6259,29 +6164,42 @@ void menuInput(){
 				}
 			  }
 			 }
-			 else{ //INPUT DECODER
+			else{ //INPUT DECODER
 				if((padButtons & PSP_CTRL_SQUARE) && (padButtons & PSP_CTRL_RIGHT)){
 					unsigned int Addresstmp=0;
 					unsigned int foobar=*((unsigned int*)(decodeAddress[bdNo]+(decodeY[bdNo]*4)));
-					//pointer jump
+				  if(jumplog < logcounter){
+					logcounter=jumplog;}
+				  else{ 
+				 //pointer jump
 					if((foobar >= 0x08800000) && (foobar <= 0x09FFFF98)){ //handle pointers
-						storedAddress=decodeAddress[bdNo]+(decodeY[bdNo]*4); //store pointer address
+
+						if(((decodeAddress[bdNo]+(decodeY[bdNo]*4)) >= (logstart-4)) && ((decodeAddress[bdNo]+(decodeY[bdNo]*4)) <= (logstart + 4*jumplog))){
+						logcounter=((decodeAddress[bdNo]+(decodeY[bdNo]*4))-0x48800000)/4;
+						}
+						else{
+						storedAddress[logcounter]=decodeAddress[bdNo]+(decodeY[bdNo]*4); //store pointer address
 						foobar+=0x40000000;
-						decodeAddress[bdNo]=foobar & 0xFFFFFFFC;
+						*((unsigned int*)(logstart+4*logcounter))=storedAddress[logcounter] & 0xFFFFFFF;
+						logcounter++;
+						}
+						decodeAddress[bdNo]=foobar | 0x40000000 & 0xFFFFFFFC;
 						decodeY[bdNo]=0;
 					}//jal.j
 					else if(((foobar >= 0x0A200000) && (foobar <= 0x0A7FFFE6)) || ((foobar >= 0x0E200000) && (foobar <= 0x0E7FFFE6))){ //handle hooks
-						storedAddress=decodeAddress[bdNo]+(decodeY[bdNo]*4);
+						storedAddress[logcounter]=decodeAddress[bdNo]+(decodeY[bdNo]*4);
 						foobar&=0x3FFFFFF;
 						decodeAddress[bdNo]=(mipsNum, "%08X", ((foobar<<2)))-0xC0000000; //store pointer address
 						decodeY[bdNo]=0;
+						*((unsigned int*)(logstart+4*logcounter))=storedAddress[logcounter] & 0xFFFFFFF;
+						logcounter++;
 					}//branch jump
 					else if(((foobar >= 0x10000000) && (foobar <= 0x1FFFFFFF)) || ((foobar >= 0x50000000) && (foobar <= 0x5FFFFFFF))
 						|| ((foobar >= 0x45000000) && (foobar <= 0x4503FFFF)) || ((foobar >= 0x49000000) && (foobar <= 0x491FFFFF))
 						|| (((foobar & 0xFC1F0000) >= 0x04000000) && ((foobar & 0xFC1F0000) <= 0x04030000))
 						||  (((foobar & 0xFC1F0000) >= 0x04100000) && ((foobar & 0xFC1F0000) <= 0x04130000)) )
 						{ //handle branches
-						storedAddress=decodeAddress[bdNo]+(decodeY[bdNo]*4);
+						storedAddress[logcounter]=decodeAddress[bdNo]+(decodeY[bdNo]*4);
 						foobar&=0xFFFF;
 						if(foobar > 0x7FFF){
 						Addresstmp=-(mipsNum, "%04X", 4*(0x10000 - foobar))+decodeAddress[bdNo]+(decodeY[bdNo]*4)+4; //store pointer address
@@ -6293,14 +6211,20 @@ void menuInput(){
 						decodeAddress[bdNo]=Addresstmp;
 						decodeY[bdNo]=0;
 						}
+						*((unsigned int*)(logstart+4*logcounter))=storedAddress[logcounter] & 0xFFFFFFF;
+						logcounter++;
+						decodeAddress[bdNo];
 					}
+				   }
 					menuDraw();
 					sceKernelDelayThread(150000);
 				}
 				if((padButtons & PSP_CTRL_SQUARE) && (padButtons & PSP_CTRL_LEFT)){
-					//return to pointer
+					//return to pointer;
 					decodeY[bdNo]=0;
-					if(storedAddress){ decodeAddress[bdNo]=storedAddress; }
+					if(logcounter >= 1){
+					decodeAddress[bdNo]=storedAddress[logcounter-1];
+					logcounter--;}
 					menuDraw();
 					sceKernelDelayThread(150000);
 				}
@@ -7023,4 +6947,88 @@ int _stop(SceSize args, void *argp){
 	running = 0;
  	sceKernelTerminateThread(thid);
 	return 0;
+}
+
+void mipsSpecial(unsigned int addresscode,unsigned int addresstmp,unsigned int counteraddress){
+							if(((addresscode >= 0x10000000) && (addresscode <= 0x1FFFFFFF)) || ((addresscode >= 0x50000000) && (addresscode <= 0x5FFFFFFF))
+							|| ((addresscode >= 0x45000000) && (addresscode <= 0x4503FFFF)) || ((addresscode >= 0x49000000) && (addresscode <= 0x491FFFFF))
+							|| (((addresscode & 0xFC1F0000) >= 0x04000000) && ((addresscode & 0xFC1F0000) <= 0x04030000))
+							||  (((addresscode & 0xFC1F0000) >= 0x04100000) && ((addresscode & 0xFC1F0000) <= 0x04130000)) )
+							{
+							addresstmp=addresscode & 0xFFFF;
+							addresscode=4*(addresstmp + 1);
+							if(addresstmp > 0x7FFF){
+							addresscode=(-0x40000+addresscode)+counteraddress;}
+							else{
+							addresscode=addresscode+counteraddress;}
+							sprintf(buffer, "$%X", addresscode);pspDebugScreenPuts(buffer);
+							if(extMenu==2){
+							pspDebugScreenPuts("+Offset");
+							}
+							if(addresstmp > 0x7FFF){
+							 sprintf(buffer, "(-%d)", (0x10000-(addresstmp+1)));}
+							else{
+							 sprintf(buffer, "(+%d)", (addresstmp+1));}
+							 pspDebugScreenPuts(buffer);
+							}
+							else if( (addresscode>>24 == 0x3C) && ((addresscode & 0x7FFF) > 0x3500) ){
+							addresscode=addresscode <<16;
+							pspDebugScreenPuts(" HFLOAT:");//half IEEE754 float
+							f_cvt(&addresscode, buffer, sizeof(buffer), 6, MODE_GENERIC);
+							pspDebugScreenPuts(buffer);
+							}
+							else if( ((addresscode>>16)&0xFF80) == 0xDF80){
+							pspDebugScreenPuts("VHFLOAT:");//sony's 16bit special vfpu float
+/* VFPU 16-bit floating-point format. */
+#define VFPU_FLOAT16_EXP_MAX    0x1f
+#define VFPU_SH_FLOAT16_SIGN    15
+#define VFPU_MASK_FLOAT16_SIGN  0x1
+#define VFPU_SH_FLOAT16_EXP     10
+#define VFPU_MASK_FLOAT16_EXP   0x1f
+#define VFPU_SH_FLOAT16_FRAC    0
+#define VFPU_MASK_FLOAT16_FRAC  0x3ff
+        /* Convert a VFPU 16-bit floating-point number to IEEE754. */
+        unsigned int float2int=0;
+        unsigned short float16 = addresscode & 0xFFFF;
+        unsigned int sign = (float16 >> VFPU_SH_FLOAT16_SIGN) & VFPU_MASK_FLOAT16_SIGN;
+        int exponent = (float16 >> VFPU_SH_FLOAT16_EXP) & VFPU_MASK_FLOAT16_EXP;
+        unsigned int fraction = float16 & VFPU_MASK_FLOAT16_FRAC;
+        char signchar = '+' + ((sign == 1) * 2);
+
+        if (exponent == VFPU_FLOAT16_EXP_MAX)
+        {
+                if (fraction == 0){
+                        sprintf(buffer, "%cInf", signchar);
+		pspDebugScreenPuts(buffer);
+		}
+                else{
+                        sprintf(buffer, "%cNaN", signchar);
+		pspDebugScreenPuts(buffer);
+		}
+        }
+        else if (exponent == 0 && fraction == 0)
+        {
+                sprintf(buffer, "%c0", signchar);
+		pspDebugScreenPuts(buffer);
+        }
+        else
+        {
+                if (exponent == 0)
+                {
+                        do
+                        {
+                                fraction <<= 1;
+                                exponent--;
+                        }
+                        while (!(fraction & (VFPU_MASK_FLOAT16_FRAC + 1)));
+
+                        fraction &= VFPU_MASK_FLOAT16_FRAC;
+                }
+                /* Convert to 32-bit single-precision IEEE754. */
+                float2int = (sign << 31) + ((exponent + 112) << 23) + (fraction << 13);
+		//sprintf(buffer, "%X" ,float2int); pspDebugScreenPuts(buffer);
+		f_cvt(&float2int, buffer, sizeof(buffer), 6, MODE_GENERIC);
+		pspDebugScreenPuts(buffer);
+        }
+							}
 }
