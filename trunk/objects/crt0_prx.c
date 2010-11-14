@@ -198,7 +198,6 @@ unsigned char searchMode=0;
 unsigned char copyMenu=0; //0=Menu Off, 1=Menu On, Copy selected, 2=Menu On, Paste selected
 unsigned int copyData=0x08800000;
 unsigned int copyData2=0x00000000;
-unsigned int storedAddress[64];
 unsigned char screenTime=0;
 unsigned int cheatRefresh=0;
 unsigned int flipme=1;
@@ -224,6 +223,7 @@ unsigned char logcounter=0;
 //unsigned char backflag=0;
 unsigned int backaddress=0x48800000;
 unsigned char backaddressY=0;
+unsigned int storedAddress[32];
 unsigned int JOKERADDRESS=0x3FFC;//out put JOKER ADDRES from kernel ram
 unsigned int logstart=0x48800800;//log start address
 unsigned char jumplog=0x20;//number of jumplog ,default 32
@@ -1502,10 +1502,14 @@ void menuDraw(){
 						pspDebugScreenPuts(buffer);
 
 						//Print out the float
+						if((block[counter].address & 0x2) == 0x2){
+						pspDebugScreenPuts("  UFLOAT:");//UPPER FLAOT
+						unsigned int upperfloat=block[counter].hakVal <<16;
+						f_cvt(&upperfloat, buffer, sizeof(buffer), 6, MODE_GENERIC);}
+						else{
 						pspDebugScreenPuts("         ");
-						f_cvt(&block[counter].hakVal, buffer, sizeof(buffer), 6, MODE_GENERIC);
+						f_cvt(&block[counter].hakVal, buffer, sizeof(buffer), 6, MODE_GENERIC);}
 						pspDebugScreenPuts(buffer);
-
 					}
 					else{
 						//Print out the opcode
@@ -2305,7 +2309,7 @@ void menuDraw(){
 
 				pspDebugScreenSetTextColor(color01);
 				#ifdef _UMDMODE_
-					pspDebugScreenPuts("  MKIJIRO+ 20101113");
+					pspDebugScreenPuts("  MKIJIRO+ 20101114");
 				#elif _POPSMODE_
 					pspDebugScreenPuts("  MKULTRA V10 POPS ");
 				#endif
@@ -2735,8 +2739,31 @@ void menuDraw(){
 							unsigned int addresscode=0;
 							unsigned int addresstmp=0;
 							unsigned int counteraddress=0;
-							addresscode=*((unsigned int*)(decodeAddress[bdNo]+(counter*4)));;
+							addresscode=*((unsigned int*)(decodeAddress[bdNo]+(counter*4)));
 							counteraddress=decodeAddress[bdNo]+(counter*4)-0x40000000;
+							if( (((addresscode>>24) & 0xFC) == 0x34) || (((addresscode>>24) & 0xFC) == 0x20) || (((addresscode>>24) & 0xFC) == 0x24)){
+							unsigned int backcode_lui=(*((unsigned int*)(decodeAddress[bdNo]+((counter-1)*4))))>>24;
+							unsigned int REG1=(*((unsigned int*)(decodeAddress[bdNo]+((counter-1)*4)))>>16) & 0x1F;
+							unsigned int REG2=(*((unsigned int*)(decodeAddress[bdNo]+((counter)*4)))>>21) & 0x1F;
+							unsigned int REG3=(*((unsigned int*)(decodeAddress[bdNo]+((counter)*4)))>>16) & 0x1F;
+							if( (REG1 ==REG2) && (REG2==REG3) && (backcode_lui == 0x3C) ){
+								switch( (addresscode>>24) & 0xFC){
+								case 0x20:
+								case 0x24:
+								if( (addresscode & 0xFFFF) < 0x8000){
+								addresscode=(*((unsigned int*)(decodeAddress[bdNo]+((counter-1)*4)))<<16) + (addresscode & 0xFFFF);}
+								else{
+								addresscode=(*((unsigned int*)(decodeAddress[bdNo]+((counter-1)*4)))<<16) - (addresscode & 0xFFFF);}
+								break;
+								case 0x34:
+								addresscode=(*((unsigned int*)(decodeAddress[bdNo]+((counter-1)*4)))<<16) | (addresscode & 0xFFFF);
+								break;
+								}
+								if( ((addresscode>>16)& 0x7FFF) > 0x3500){
+								pspDebugScreenPuts(" MFLOAT:");//MERGED IEEE754 FLOAT
+								f_cvt(&addresscode, buffer, sizeof(buffer), 6, MODE_GENERIC);
+								pspDebugScreenPuts(buffer);addresscode=0;}}
+							}
 							mipsSpecial(addresscode,addresstmp,counteraddress);
 						}
 
@@ -6963,7 +6990,7 @@ void mipsSpecial(unsigned int addresscode,unsigned int addresstmp,unsigned int c
 							addresscode=addresscode+counteraddress;}
 							sprintf(buffer, "$%X", addresscode);pspDebugScreenPuts(buffer);
 							if(extMenu==2){
-							pspDebugScreenPuts("+Offset");
+							pspDebugScreenPuts("+0FFSET");
 							}
 							if(addresstmp > 0x7FFF){
 							 sprintf(buffer, "(-%d)", (0x10000-(addresstmp+1)));}
@@ -6973,12 +7000,12 @@ void mipsSpecial(unsigned int addresscode,unsigned int addresstmp,unsigned int c
 							}
 							else if( (addresscode>>24 == 0x3C) && ((addresscode & 0x7FFF) > 0x3500) ){
 							addresscode=addresscode <<16;
-							pspDebugScreenPuts(" HFLOAT:");//half IEEE754 float
+							pspDebugScreenPuts(" UFLOAT:");//UPPER IEEE754 FLOAT
 							f_cvt(&addresscode, buffer, sizeof(buffer), 6, MODE_GENERIC);
 							pspDebugScreenPuts(buffer);
 							}
 							else if( ((addresscode>>16)&0xFF80) == 0xDF80){
-							pspDebugScreenPuts("VHFLOAT:");//sony's 16bit special vfpu float
+							pspDebugScreenPuts(" VHFLOAT:");//16BIT VFPU HALF FLOAT
 /* VFPU 16-bit floating-point format. */
 #define VFPU_FLOAT16_EXP_MAX    0x1f
 #define VFPU_SH_FLOAT16_SIGN    15
