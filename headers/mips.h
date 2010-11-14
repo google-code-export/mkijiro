@@ -54,6 +54,9 @@ unsigned char *VFPUSTArray[]={
 "PI_2","PI","E","LOG2E","LOG10E","LN2","LN10","2PI",
 "PI_6","LOG10TWO","LOG2TEN","SQRT3_2"
 };
+unsigned char *unknown[]={
+" //unknown opcode"," //unknown fpu opcode"," //unknown vfpu opcode"
+};
 
 void colorRegisters(unsigned int a_opcode)
 {
@@ -398,6 +401,7 @@ void vrot(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
                 elements[1] = 0x30;
                 elements[2] = 0x30;
                 elements[3] = 0x30;
+                elementneg=0;
         }
         if (negation){
                 elements[rothi] =0x73;//-s
@@ -661,7 +665,7 @@ void mipsDecode(unsigned int a_opcode)
 {
 
   //Handle opcode
-  switch((a_opcode & 0xFC000000) >> 24)
+  switch((a_opcode >>24)& 0xFC)
   {
     case 0x00:
       switch(a_opcode & 0x3F)
@@ -2624,7 +2628,13 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
                 pspDebugScreenPuts("v???.s   ");
                 vectors(a_opcode, 2, 1);
                 vectors(a_opcode, 1, 0);
-                pspDebugScreenPuts(" //unknown vfpu opcode");
+                pspDebugScreenPuts(unknown[2]);
+        break;
+        case 0xD039:
+                pspDebugScreenPuts("v???.s   ");
+                vectors(a_opcode, 2, 1);
+                vectors(a_opcode, 1, 0);
+                pspDebugScreenPuts(unknown[2]);
         break;
 //unknown vector command
 
