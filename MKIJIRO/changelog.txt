@@ -1,0 +1,132 @@
+これはMKV10のそーすを改造したものです。
+判明バグ?;
+コードを保存すると比較サーチがおかしくなる
+コード保存と読込を繰り返していると保存読込機能が反応しなくなる
+こーどが勝手に増殖することがある
+ごく一部の浮動小数が表示されない 0x
+
+this is modded mkultrav10.
+KnownProblem;
+doesnot work fine unknown value search after code save
+if code is reloaded & saved many times,save&reload function doesnot work..
+dupricated code agaist your will
+これはMKV10のそーすを改造したものです。
+判明バグ?;
+コードを保存すると比較サーチがおかしくなる
+コード保存と読込を繰り返していると保存読込機能が反応しなくなる
+こーどが勝手に増殖することがある
+ごく一部の浮動小数が表示されない 0x
+
+this is modded mkultrav10.
+KnownProblem;
+doesnot work fine unknown value search after code save
+if code is reloaded & saved many times,save&reload function doesnot work..
+dupricated code agaist your will
+
+2010/11/15
+カラーファイルでボタン設定をできるようにした
+JOKER吐き出しアドレスをASMぱっちなしに変更
+NOTEボタンでのコード選択→チートにコピーを復活させた(DECODERでコピーメニュー□ボタン)
+スクリーンショットON/OFF機能を追加(要コンパイル)
+make -f Makefile_screenshot
+
+add menukey/screeshotkey/codetoggle key by color setteing
+no more need ASM H4CK,JOKER OUTPUT
+DEC>TXT,DEC>CHEAT again,copier -> triangle,selet range by NOTE botton then use
+added screeshot toggles(need compile)
+make -f Makefile_screenshot
+
+2010/11/14
+UFLOAT 2バイトかつ&2,MFLOAT lui+addi/addiu/ori でレジスタが全部同じとき 
+UPPERFLOAT(VALUE<<16),MERGEDFLOAT LUI+ADDI/ADDIU/ORI && ALL REGISTER SAME
+unknown vfpu opcode 0xD039****
+
+2010/11/13
+コードえでぃたで奇数アドレスの時はニーモニック非表示,2バイトかつ&2の時は16BITシフトするようにした
+vfim.sとluiの半浮動小数表示対応
+ジャンプログ機能を追加した,△メニューで呼び出し可能,□を押すとクリア
+no display when 1BYTMODE,2BYTE MODE shift 16bit in cheat edit menu.
+support 16bit float for lui half_float(IEEE754),vfim.s vhalf_float(NOT IEE754,SONY SPECIAL?)
+added jumped log for copier menu,default 32 address.PRESS SQUARE CLEAR
+
+2010/11/12
+vfpu_prefixも対応,0xD038を不明VFPUとした
+support vprefix,unknown vfpu opcode 0xD038****
+
+2010/11/11
+違ってたやつを修正,vfpu_prefxiだけ未対応？
+fixed cfpu,unsupport vprefix
+
+2010/11/10
+VFPUを強化,ジャンプ先の表示を絶対アドレスにした
+support more VFPU,changed jumping destination to real address
+
+2010/07/13
+パッドコードに論理積マスク型を追加した。マスクの方は24BIT値が使用可能
+
+added MASKED JOKER like CWC TYPE 0xD0
+can be used 24bit Value for MASKED JOKER
+
+#default JOKER 16bit TEST CODE,PRESS SELECT ONLY
+0xFF000001 0x00003FFC
+#MASKE JOKER when value is 0x0000,PRESS SELECT+VOL-+ANYKEY
+0xFF200001 0x00000000
+
+2010/06/26,25
+比較サーチでアドレス範囲指定が機能してなかったのを修正(上のバグ有り)
+美咲8x8フォントに変更,SOCOMオプションを外した
+コード保存時に変な文字が残らないよう修正,bltz,bltzal他(0x0400‾,0x0410‾)のジャンプに対応。
+
+fixed unknownvalueseacher,but doesnot work fine after codesave
+changed font misaki8x8,remove SOCOM option
+if you want SOCOMop, add&build "-D_SOCOM_" at "# umd build flags" of makefile
+fixed codesave bug
+support bazzl jump
+
+2010/06/22
+しんぐるふとーと/べくたの命令を増やした。(ぺあ,とりぷる,くあっどは未対応)
+ジャンプも一応対応。
+
+support more single fpu/vfpu opcode(not pair,triple,quad)
+added vfpu/fpu branch jump
+
+2010/06/19
+コード保存の時変な文字が残っていたのを修正
+
+2010/06/18
+ブランチジャンプ/命令がマイナス未対応なので修正
+ジャンプ先が+1になってなかったので修正
+PSPLINKのそーすをもとにしていくつかMIPSこーど強化
+ポインタジャンプでのアライメント例外を修正
+
+fixed negative branch jump and decoder,fixed jump address +1 line
+fixed follow pointer against not-aligned address
+support more mipscode(notR4000,psplink based),see src diff;
+add.s,sub.s,seb,seh,ext,ins,add.slv.s,vadd.s ..etc
+
+2010/06/11
+CheatHZ,15/1000sを標準にした
+判定コードのBITを合わせるように修正
+判定コード他アライメント例外をなるべく排除
+コピーメニューからコードフラグをいじれるようにした
+判定コードのアドレス1桁目を+-1ずつできるように変更
+GEN550でコード保存がうまくいかなかったのを修正(フラグいじった場合変な文字が残る時あり)
+
+CheatHZ,15/1000s
+FIXED JOKER 16 BIT CONDITINAL(OLD MK,CODEVALUE 24BIT  VS RAM 32BIT)
+FIXED CHEATSAVE,but still buggy if changed codeflag?
+ADDED COPY MENU,CODEFLAG EDIT,threre was no way to change code flag in NPRs
+normal cheat;back to normal 32bit write
+joker cheat;joker code,
+dma cheat;pointer code
+JOKER PATCH
+0x3FFC copied JOKER VALUE from kenelram to userram
+HEX;24 18 A4 00 89 00 83 10 > 80 08 02 3C FC 3F 45 AC
+find STRING "CFG" and you'll see "04 80 00 00"(screenshotbotton),changed "FF FF FF FF"
+
+MODED BY HAROTURBO
+windows;xpsp3+MinimalistPSP+cmdhere+psplink-cmfusion-rambreak-mod
+linux;ubuntu10.10TLS+,psptoolchain+RabbitCVS+psplink
+
+GOOGLE_SVN
+http://code.google.com/p/mkijiro/
