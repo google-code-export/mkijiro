@@ -354,19 +354,18 @@ void vrot(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
 #define VFPU_MASK_ROT_NEG       0x1
 
         const char *elements[4];
-		char elementneg=0;
 		
         unsigned int opcode = a_opcode & VFPU_MASK_OP_SIZE;
         unsigned int rotators = (a_opcode >> 16) & 0x1f;
         unsigned int opsize, rothi, rotlo, negation, i;
 
         //Determine the operand size so we'll know how many elements to output.
-        if (opcode == VFPU_OP_SIZE_PAIR)
-                opsize = 2;
-        else if (opcode == VFPU_OP_SIZE_TRIPLE)
-                opsize = 3;
-        else
-                opsize = (opcode == VFPU_OP_SIZE_QUAD) * 4;     //Sanity check. 
+        if (opcode == VFPU_OP_SIZE_PAIR){
+                opsize = 2;}
+        else if (opcode == VFPU_OP_SIZE_TRIPLE){
+                opsize = 3;}
+        else{
+                opsize = (opcode == VFPU_OP_SIZE_QUAD) * 4;}     //Sanity check. 
 
         rothi = (rotators >> VFPU_SH_ROT_HI) & VFPU_MASK_ROT_HI;
         rotlo = (rotators >> VFPU_SH_ROT_LO) & VFPU_MASK_ROT_LO;
@@ -385,7 +384,6 @@ void vrot(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
                         elements[1] = 0x73;
                         elements[2] = 0x73;
                         elements[3] = 0x73;
-		                elementneg=1;
                 }
                 else
                 {
@@ -401,21 +399,18 @@ void vrot(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
                 elements[1] = 0x30;
                 elements[2] = 0x30;
                 elements[3] = 0x30;
-                elementneg=0;
         }
         if (negation){
                 elements[rothi] =0x73;//-s
-                elementneg=1;
                 }
         else{
                 elements[rothi] =0x73;//s
 		        elements[rotlo] =0x63;//c
 		}
-			   if(elementneg==1){
+			   if(negation){
 			   pspDebugScreenPuts("-");
 			   }
     		   sprintf(buffer, "%c", elements[i++]); pspDebugScreenPuts(buffer);
-    		   elementneg=0;
                 if (i >= opsize)
                         break;
                pspDebugScreenPuts(" ,");
