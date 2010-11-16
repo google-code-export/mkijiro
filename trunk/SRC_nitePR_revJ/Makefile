@@ -1,5 +1,5 @@
 TARGET = nitePR
-OBJS = crt0_prx.o exports.o module.o
+OBJS = crt0_prx.o exports.o module.o blit.o
 
 # Define to build this as a prx (instead of a static elf)
 BUILD_PRX=1
@@ -10,7 +10,7 @@ USE_KERNEL_LIBS = 1
 USE_KERNEL_LIBC = 1
 
 INCDIR = 
-CFLAGS = -O2 -G0 -w -msingle-float -g
+CFLAGS = -O2 -G0 -w -msingle-float -g -D_FONT_misaki
 CXXFLAGS = $(CFLAGS) -fno-exceptions -fno-rtti
 ASFLAGS = $(CFLAGS)
 

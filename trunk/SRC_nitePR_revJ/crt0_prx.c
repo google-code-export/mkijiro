@@ -45,7 +45,7 @@ Rev 2206 - Blame - Compare with Previous - Last modification - View Log - RSS fe
 #include <pspumd.h>
 #include "crt0_prx.h"
 #include "module.h"
-#include "telazorn.h"
+//#include "telazorn.h"
 #include "float.h"
 extern SceUID sceKernelSearchModuleByName(unsigned char *);
 
@@ -206,7 +206,7 @@ static void gamePause(SceUID thid);
 static void gameResume(SceUID thid);
 
 //Telazorn functions
-void telazornDraw()
+/*void telazornDraw()
 {
   //110 x 31
   unsigned int counterY=0;
@@ -217,7 +217,7 @@ void telazornDraw()
     offset+=110*2; //16bpp
     counterY++;
 	}
-}
+}*/
 
 //Mac Address hooking module
 unsigned char cfg[]={'C', 'F', 'G', 0x88, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00,  0x80, 0x00, 0x00, 0x00, 0x30, 0x00, 0x00, 0x40, 0x80, 0x00, 0x00};
@@ -1021,7 +1021,7 @@ void menuDraw()
   //Draw the menu
   pspDebugScreenSetXY(0, 0);
   pspDebugScreenSetTextColor(0xFFFFFFFF);
-  pspDebugScreenPuts("NitePR Rev. J++ 20101116\n");
+  pspDebugScreenPuts("NitePR Rev. J++ 20101116\nNPR_SRC Sanik,MK_SRC demonchild,PRXTOOL TyRaNiD,MODDED (¡A¡)\n");
   
   if(cheatStatus)
   {
@@ -1042,10 +1042,10 @@ void menuDraw()
   }
   
   //Draw the logo!
-  telazornDraw();
+  //telazornDraw();
   
   //User friendly note
-  if(lolInit)
+  /*if(lolInit)
   {
     pspDebugScreenSetTextColor(0xFFFFFFFF);pspDebugScreenPuts("[Initiation]");
     pspDebugScreenSetTextColor(0xFF808080);pspDebugScreenPuts("\n--------------------------------------------------------------------");
@@ -1053,7 +1053,7 @@ void menuDraw()
     pspDebugScreenSetTextColor(0xFF00FF00);pspDebugScreenPuts("HINTs:\n - To take a screenshot, press DOWN + SQUARE\n\n - Use nitePRed.exe (it comes in the same zip as nitePR.prx) to\n   change the button assignments (such as the screenshot key combo)\n\n - Some cheats need the PRX->Cheat Hz option to be set to 15/1000\n   This is for cheats that overwrite a changing value\n\n - One can use CWCheat2NitePR.htm to convert CWCheat codes to\n   nitePR format without any issues. Look in the Doc folder\n   of the nitePR.zip file for it.\n\n");
     pspDebugScreenSetTextColor(0xFFFFFFFF);pspDebugScreenPuts("                           [PRESS START]\n\n");
     return;
-  }
+  }*/
   
   //Extended/sub menus?
   if(extMenu)
@@ -4413,20 +4413,20 @@ void menuInput()
       
       //This is for the warning message at the start
       if(lolInit)
-  		{
-        if((padButtons & PSP_CTRL_START) && !(pad.Buttons & PSP_CTRL_START))
-        {
+  	{
+        //if((padButtons & PSP_CTRL_START) && !(pad.Buttons & PSP_CTRL_START))
+        //{
           //Special case for the memory viewer
           lolInit=0;
           pspDebugScreenInitEx(vram, 0, 0);
           menuDraw();
           continue;
-        }
+        //}
         
-        pspDebugScreenSetXY(0, 26);
-        pspDebugScreenSetTextColor(0xFF000000 | ((unsigned)lolValue << 16) | ((unsigned)lolValue << 8) | ((unsigned)lolValue)); pspDebugScreenPuts("                        Please insert coin!");
-    		lolValue+=lolDirection;
-    		if((unsigned)lolValue == 255){lolDirection=-1;}else if((unsigned)lolValue==0){lolDirection=1;}
+        //pspDebugScreenSetXY(0, 26);
+        //pspDebugScreenSetTextColor(0xFF000000 | ((unsigned)lolValue << 16) | ((unsigned)lolValue << 8) | ((unsigned)lolValue)); pspDebugScreenPuts("                        Please insert coin!");
+    	//	lolValue+=lolDirection;
+    	//	if((unsigned)lolValue == 255){lolDirection=-1;}else if((unsigned)lolValue==0){lolDirection=1;}
     
         sceKernelDelayThread(1000);
     		continue;
