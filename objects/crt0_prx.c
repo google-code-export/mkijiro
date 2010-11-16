@@ -209,7 +209,7 @@ unsigned int fileBufferBackup=0;
 unsigned int fileBufferFileOffset=0;
 unsigned int fileBufferOffset=1024;
 unsigned int screenNo=0;
-unsigned int editFormat=0;
+unsigned char editFormat=0;
 unsigned int usbmod=0;
 unsigned int searchStart=0x48800000;
 unsigned int searchStop=0x49FFFFFC;
@@ -229,6 +229,9 @@ unsigned char jumplog=0x20;//number of jumplog ,default 32
 unsigned char colorFile=0;
 unsigned char bdNo=0;
 unsigned char countermax=0;
+unsigned int addresscode=0;
+unsigned int addresstmp=0;
+unsigned int counteraddress=0;
 #ifdef _SCREENSHOT_
 unsigned char screenshot_mode=0;
 unsigned char *screenshotstring[]={"NONE", "TOGGLE"};
@@ -1712,9 +1715,6 @@ void menuDraw(){
 				else{
 					//Print out the opcode
 					mipsDecode(searchHistory[0].hakVal);
-							unsigned int addresscode=0;
-							unsigned int addresstmp=0;
-							unsigned int counteraddress=0;
 							addresscode=searchHistory[0].hakVal;
 							counteraddress=searchHistory[0].address;
 							mipsSpecial(addresscode,addresstmp,counteraddress);
@@ -2793,9 +2793,6 @@ void menuDraw(){
 						}
 						else{
 							mipsDecode(*((unsigned int*)(decodeAddress[bdNo]+(counter*4))));
-							unsigned int addresscode=0;
-							unsigned int addresstmp=0;
-							unsigned int counteraddress=0;
 							addresscode=*((unsigned int*)(decodeAddress[bdNo]+(counter*4)));
 							counteraddress=decodeAddress[bdNo]+(counter*4)-0x40000000;
 							if( (((addresscode>>24) & 0xFC) == 0x34) || (((addresscode>>24) & 0xFC) == 0x20) || (((addresscode>>24) & 0xFC) == 0x24)){
