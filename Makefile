@@ -1,5 +1,5 @@
 TARGET = MKIJIRO
-OBJS = objects/crt0_prx.o objects/exports.o objects/module.o objects/pspdebugkb.o objects/snprintf.o objects/usb.o objects/psid.o objects/blit.o 
+OBJS = objects/crt0_prx.o objects/exports.o objects/module.o objects/pspdebugkb.o objects/snprintf.o objects/usb.o objects/psid.o objects/blit.o
 #objects/server.o
 
 # Define to build this as a prx (instead of a static elf)
