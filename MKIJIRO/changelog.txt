@@ -12,6 +12,7 @@ if code is reloaded & saved many times,save&reload function doesnot work..
 dupricated code agaist your will
 これはMKV10のそーすを改造したものです。
 判明バグ?;
+一部のゲームでキーボードをだすとフリーズする(武装神姫)
 コードを保存すると比較サーチがおかしくなる
 コード保存と読込を繰り返していると保存読込機能が反応しなくなる
 こーどが勝手に増殖することがある
@@ -19,9 +20,17 @@ dupricated code agaist your will
 
 this is modded mkultrav10.
 KnownProblem;
+unknown freeze bug using keyboad for certail game(busosinki and so on..)
 doesnot work fine unknown value search after code save
 if code is reloaded & saved many times,save&reload function doesnot work..
 dupricated code agaist your will
+
+2010/11/16
+パッドデータがプラグイン表示以外でてなかったのを修正
+ログビューア－が５つ分保存されてなかったので修正
+設定ファイルをms0:seplugins/nitePR/colorからms0:seplugins/nitePR/MKIJROに変更
+fixed joker output,back to decoder
+change settingfile path,ms0:seplugins/nitePR/color -> ms0:seplugins/nitePR/MKIJRO
 
 2010/11/15
 カラーファイルでボタン設定をできるようにした
@@ -32,7 +41,7 @@ make -f Makefile_screenshot
 
 add menukey/screeshotkey/codetoggle key by color setteing
 no more need ASM H4CK,JOKER OUTPUT
-DEC>TXT,DEC>CHEAT again,copier -> triangle,selet range by NOTE botton then use
+DEC>TXT,DEC>CHEAT again,copier -> SQUARE,selet range by NOTE botton then use
 added screeshot toggles(need compile)
 make -f Makefile_screenshot
 
@@ -75,7 +84,7 @@ can be used 24bit Value for MASKED JOKER
 2010/06/26,25
 比較サーチでアドレス範囲指定が機能してなかったのを修正(上のバグ有り)
 美咲8x8フォントに変更,SOCOMオプションを外した
-コード保存時に変な文字が残らないよう修正,bltz,bltzal他(0x0400‾,0x0410‾)のジャンプに対応。
+コード保存時に変な文字が残らないよう修正,bltz,bltzal他(0x0400?,0x0410?)のジャンプに対応。
 
 fixed unknownvalueseacher,but doesnot work fine after codesave
 changed font misaki8x8,remove SOCOM option

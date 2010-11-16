@@ -220,8 +220,8 @@ unsigned char screenPath[64]={0};
 unsigned int clipboard[27]={};
 unsigned int clipSelected=0;
 unsigned char logcounter=0;
-unsigned int backaddress=0x48800000;
-unsigned char backaddressY=0;
+unsigned int backaddress[4];
+unsigned char backaddressY[4];
 unsigned int storedAddress[32];
 unsigned int JOKERADDRESS=0x3FFC;//out put JOKER ADDRES from kernel ram
 unsigned int logstart=0x48802800+4;//log start address
@@ -231,7 +231,7 @@ unsigned char bdNo=0;
 unsigned char countermax=0;
 #ifdef _SCREENSHOT_
 unsigned char screenshot_mode=0;
-unsigned char *screenshotstring[]={	"NONE", "TOGGLE"};
+unsigned char *screenshotstring[]={"NONE", "TOGGLE"};
 #endif
 int jacktoggle=0;
 int copyMenuX=25;
@@ -1217,6 +1217,8 @@ void buttonCallback(int curr, int last, void *arg){
   unsigned int counter;
   unsigned int scounter;
   unsigned int address;
+
+  *(unsigned int *)(0x8800000+JOKERADDRESS)=curr;
 
   if(vram==NULL) return;
   
@@ -2357,7 +2359,7 @@ void menuDraw(){
 
 				pspDebugScreenSetTextColor(color01);
 				#ifdef _UMDMODE_
-					pspDebugScreenPuts("  MKIJIRO+ 20101115");
+					pspDebugScreenPuts("  MKIJIRO+ 20101116");
 				#elif _POPSMODE_
 					pspDebugScreenPuts("  MKULTRA V10 POPS ");
 				#endif
@@ -3212,7 +3214,6 @@ void menuInput(){
   	
 		padButtons=pad.Buttons;
 		sceCtrlPeekBufferPositive(&pad, 1);
-		*(unsigned int *)(0x8800000+JOKERADDRESS)=padButtons;
 
 		//Has the HOME button screwed up the VRAM blocks?
 		unsigned int a_address=0;
@@ -3430,7 +3431,7 @@ void menuInput(){
 					*(unsigned int *)(logstart + 4*i)=0;
 					storedAddress[i]=0;
 								}
-					logcounter=0;backaddress=0x48800000;
+					logcounter=0;backaddress[i]=0x48800000;
 					}
 				   else{ //view log
 					if(flipme){ //memoryeditor
@@ -3441,12 +3442,12 @@ void menuInput(){
 							}
 						}
 					}
-					else{ //decoder
+					else{ //decoder //bakck to decoder
 						if(((decodeAddress[bdNo]+(decodeY[bdNo]*4)) >= (logstart-4)) && ((decodeAddress[bdNo]+(decodeY[bdNo]*4)) <= (logstart + 4*jumplog))){ //back address decoder
-						decodeAddress[bdNo]=backaddress;decodeY[bdNo]=backaddressY;
+						decodeAddress[bdNo]=backaddress[bdNo];decodeY[bdNo]=backaddressY[bdNo];
 						}
-						else{
-						  backaddress=decodeAddress[bdNo];backaddressY=decodeY[bdNo];decodeY[bdNo]=0;
+						else{//view log
+						  backaddress[bdNo]=decodeAddress[bdNo];backaddressY[bdNo]=decodeY[bdNo];decodeY[bdNo]=0;
 						 if(copyData < 0x49FFFFA8){
 							decodeAddress[bdNo]=logstart+4*(logcounter-1); //+(decodeY[bdNo]*4);
 							if(decodeAddress[bdNo] > 0x49FFFFA8){
@@ -5965,7 +5966,7 @@ void menuInput(){
 					sceKernelDelayThread(150000); //Delay twice
 				}
 				else if(cheatSelected == 12){
-					sprintf(buffer, "ms0:/seplugins/nitePR/color/color%d.txt", colorFile);
+					sprintf(buffer, "ms0:/seplugins/nitePR/MKIJIRO/color%d.txt", colorFile);
 					colorAdd(buffer);
 					lineClear(32); pspDebugScreenSetTextColor(color01); pspDebugScreenPuts("Colors Refreshed");
 					menuDraw();
@@ -6862,7 +6863,7 @@ int mainThread(){
 	cheatLoad();
 	
 	//load the colors!
-	colorAdd("ms0:/seplugins/nitePR/color/color0.txt");
+	colorAdd("ms0:/seplugins/nitePR/MKIJIRO/color0.txt");
 
 	#ifdef _PSID_
 		corruptPsid(psid);
@@ -6886,6 +6887,7 @@ int mainThread(){
 	
 	//Register the button callbacks
 	sceCtrlRegisterButtonCallback(3, triggerKey | menuKey | screenKey, buttonCallback, NULL);
+
 	int doonce=0;
 	//Do the loop-de-loop
 	while(running){
@@ -6952,7 +6954,7 @@ int mainThread(){
 			cheatApply(-1);
 			if(cheatFlash > 0) cheatFlash--;
 		}
-		
+
 		//Handle screenshot
 		#ifdef _SCREENSHOT_
 		if((screenTime) && (screenPath[0])){
@@ -6996,12 +6998,11 @@ int mainThread(){
 		  }
 		}
 		#endif
-		
+
 		//Wait a certain amount of seconds before reapplying cheats again
 		sceKernelDelayThread(!cheatHz ? 500000: cheatHz);
 	
 	}
-
 	return 0;
 
 }
