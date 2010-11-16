@@ -2359,7 +2359,7 @@ void menuDraw(){
 
 				pspDebugScreenSetTextColor(color01);
 				#ifdef _UMDMODE_
-					pspDebugScreenPuts("  MKIJIRO+ 20101116");
+					pspDebugScreenPuts("  MKIJIRO20101116 BY (¡A¡)");
 				#elif _POPSMODE_
 					pspDebugScreenPuts("  MKULTRA V10 POPS ");
 				#endif

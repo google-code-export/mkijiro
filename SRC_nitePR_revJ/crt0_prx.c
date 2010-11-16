@@ -1021,7 +1021,7 @@ void menuDraw()
   //Draw the menu
   pspDebugScreenSetXY(0, 0);
   pspDebugScreenSetTextColor(0xFFFFFFFF);
-  pspDebugScreenPuts("NitePR Rev. J++ 20101116\nNPR_SRC Sanik,MK_SRC demonchild,PRXTOOL TyRaNiD,MODDED (¡A¡)\n");
+  pspDebugScreenPuts("NitePR Rev. J++ 20101117\nNPR_SRC Sanik,MK_SRC demonchild,PRXTOOL TyRaNiD,MODDED (¡A¡)\n");
   
   if(cheatStatus)
   {
