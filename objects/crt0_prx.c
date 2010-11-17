@@ -199,7 +199,7 @@ unsigned char copyMenu=0; //0=Menu Off, 1=Menu On, Copy selected, 2=Menu On, Pas
 unsigned int copyData=0x08800000;
 unsigned int copyData2=0x00000000;
 unsigned char screenTime=0;
-unsigned int cheatRefresh=0;
+unsigned char cheatRefresh=0;
 unsigned int flipme=1;
 unsigned int decodeOptions=0;
 unsigned int usbonbitch=0;
@@ -1230,6 +1230,8 @@ void buttonCallback(int curr, int last, void *arg){
     if(cheatSelected >= cheatTotal) cheatSelected=0;
     tabSelected=0;
   }
+  else if(curr & PSP_CTRL_HOME){
+   	menuDrawn=0;}
 					#ifdef _SCREENSHOT_
 	else 	if(((curr & screenKey) == screenKey) && (!menuDrawn) && (screenshot_mode==1)){
     	screenTime=1;
@@ -2359,7 +2361,7 @@ void menuDraw(){
 
 				pspDebugScreenSetTextColor(color01);
 				#ifdef _UMDMODE_
-					pspDebugScreenPuts("  MKIJIRO20101116 BY (¡A¡)");
+					pspDebugScreenPuts("  MKIJIRO20101117");
 				#elif _POPSMODE_
 					pspDebugScreenPuts("  MKULTRA V10 POPS ");
 				#endif
@@ -2611,7 +2613,7 @@ void menuDraw(){
 					#ifdef _USB_
 					case 8: pspDebugScreenPuts("Enable USB Mode (* Note * Remember to turn it off!!)"); break;
 					#else
-					case 8: pspDebugScreenPuts("Usb mode is not compiled in this version");
+					case 8: pspDebugScreenPuts("Usb mode is not compiled in this version");break;
 					#endif
 					case 9: pspDebugScreenPuts("Cheat refresh rate (nitePR clock)"); break;
 					case 10: pspDebugScreenPuts("Save your cheats"); break;
@@ -2623,7 +2625,7 @@ void menuDraw(){
 					case 13: pspDebugScreenPuts("Corrupt PSID is not compiled in this version"); break;
 					#endif
 						#ifdef _SCREENSHOT_
-					case 14: pspDebugScreenPuts("TOGGLE SCREENSHOT"); break;
+					case 14: pspDebugScreenPuts("Toggle Screenshot"); break;
 						#endif
 
 				}
@@ -2865,7 +2867,7 @@ void menuDraw(){
 				pspDebugScreenSetXY(0, 31);
 				pspDebugScreenPuts(line); //draw spiffy line
 				pspDebugScreenSetTextColor(color01);
-				pspDebugScreenSetXY(0, 32); pspDebugScreenPuts(">< = Edit On/Off; \\|/ /|\\ <- -> = Cycle/Scroll;");
+				pspDebugScreenSetXY(0, 32); pspDebugScreenPuts(">< = Edit On/Off; D-PAD = Cycle/Scroll; [] + <-> = Jump");
 				pspDebugScreenSetXY(0, 33); pspDebugScreenPuts("[] + Analog/Digital = Scroll; () = Cancel/Return to Game");
 			break;
 			
@@ -3487,7 +3489,7 @@ void menuInput(){
 			
 			goto hideCopyMenu;
 		  }
-		  if((padButtons & PSP_CTRL_CIRCLE) && !(pad.Buttons & PSP_CTRL_CIRCLE)){
+		  if((padButtons & PSP_CTRL_CIRCLE) && !(pad.Buttons & PSP_CTRL_CIRCLE) || (padButtons & PSP_CTRL_HOME)){
 			hideCopyMenu:
 			pspDebugScreenInitEx(vram, 0, 0);
 			copyMenu=0;
