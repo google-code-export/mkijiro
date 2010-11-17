@@ -16,7 +16,7 @@ INCDIR =
 # CFLAGS = -O2 -G0 -w -msingle-float -g -D_POPSMODE_
 
 # umd build flags
-CFLAGS = -O2 -G0 -w -msingle-float -g -D_UMDMODE_ -D_JOKER_ -D_FONT_misaki
+CFLAGS = -O2 -G0 -w -msingle-float -g -D_UMDMODE_ -D_JOKER_ -D_PSID_ -D_FONT_misaki
 
 #-D_FONT_debug
 #-D_FONT_acorn //MKULTRA Defalut font

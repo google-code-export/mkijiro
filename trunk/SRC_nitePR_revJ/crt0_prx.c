@@ -112,13 +112,14 @@ unsigned char buffer[64];
 unsigned char cheatStatus=0;
 unsigned char cheatSaved=0;
 unsigned int cheatSelected=0;
-unsigned int tabSelected=0;
+unsigned char tabSelected=0;
+unsigned char cheatRefresh=1;
 unsigned char menuDrawn=0;
 void *vram;
 unsigned int menuKey=PSP_CTRL_VOLUP | PSP_CTRL_VOLDOWN;
 unsigned int triggerKey=PSP_CTRL_NOTE;
 unsigned int screenKey=PSP_CTRL_LTRIGGER | PSP_CTRL_SQUARE;
-unsigned int cheatHz=0x3D58;
+unsigned int cheatHz=15625;
 unsigned char cheatFlash=0;
 unsigned char cheatPause=0;
 unsigned char cheatSearch=0;
@@ -172,6 +173,7 @@ unsigned int Addresstmp=0;
 unsigned char logcounter=0;
 unsigned char jumplog=0x20;
 unsigned char countermax=0;
+unsigned char cheatLength=0;
 unsigned int logstart=0x8802800+4;
 unsigned char fileBuffer[1536];
 unsigned int fileBufferSize=0;
@@ -185,19 +187,19 @@ unsigned char screenPath[64]={0};
 #define fileBufferPeek(a_out, a_ahead) if((fileBufferOffset + a_ahead) >= 1024) { fileBufferBackup=sceIoLseek(fd, 0, SEEK_CUR); sceIoLseek(fd, a_ahead, SEEK_CUR); sceIoRead(fd, &a_out, 1); sceIoLseek(fd, fileBufferBackup, SEEK_SET); } else { a_out=fileBuffer[fileBufferOffset + a_ahead]; }
 #define fileBufferRead(a_out, a_size) if(fileBufferOffset == 1024) { fileBufferSize=sceIoRead(fd, fileBuffer, 1024); fileBufferOffset=0; } memcpy(a_out, &fileBuffer[fileBufferOffset], a_size); fileBufferOffset+=a_size; fileBufferFileOffset+=a_size;
 #define lineClear(a_line) pspDebugScreenSetXY(0, a_line); pspDebugScreenPuts("                                                                   "); pspDebugScreenSetXY(0, a_line);
-
+unsigned char *line={"--------------------------------------------------------------------"};
 //Arrays
 unsigned int decDelta[10]={1000000000, 100000000, 10000000, 1000000, 100000, 10000, 1000, 100, 10, 1};
 unsigned char* searchModeName[]={
-  "  0=Same                                                        ",
-  "  1=Different                                                   ",
-  "  2=Greater                                                     ",
-  "  3=Less                                                        ",
+  "  0=Same",
+  "  1=Different",
+  "  2=Greater",
+  "  3=Less",
   "  4=Inc by    ",
   "  5=Dec by    ",
   "  6=Equal to  "};
 
-unsigned char* trackModeName[]={"  0=Instruction BP  ","  1=Data BP         "};
+//unsigned char* trackModeName[]={"  0=Instruction BP  ","  1=Data BP         "};
 
 //Functions
 int module_start(SceSize args, void *argp) __attribute__((alias("_start")));
@@ -270,34 +272,58 @@ unsigned int char2hex(unsigned char *a_data, unsigned int *a_type)
   return dword;
 }
 
-unsigned int cheatNew(unsigned char a_size, unsigned int a_address, unsigned int a_value)
-{
-  if((cheatTotal + 1 < BLOCK_MAX) && (blockTotal + 1 < BLOCK_MAX))
-  {
+unsigned int cheatNew(unsigned char a_size, unsigned int a_address, unsigned int a_value, unsigned int a_length, unsigned int mode){
+  
+  if((cheatTotal + 1 < BLOCK_MAX) && (blockTotal + 1 < BLOCK_MAX)){
+    
     cheat[cheatTotal].block=blockTotal;
-    cheat[cheatTotal].flags=0;
-    cheat[cheatTotal].len=1;
+   	cheat[cheatTotal].flags=0;
+    cheat[cheatTotal].len=a_length;
     
-    block[blockTotal].address=a_address;
-    block[blockTotal].address&=0x0FFFFFFF;
-    block[blockTotal].address+=0x08800000;
+    int i; 
+	for(i=0; i< a_length; i++){
     
-    block[blockTotal].flags=0;
-    block[blockTotal].hakVal=a_value;
+    	/* commented out for now i'll fix this later it's frusterating me today
+		if(mode == 1){
+			block[blockTotal].flags|=FLAG_DMA;
+			block[blockTotal].address&=0x0FFFFFFF;
+			block[blockTotal].address+=0x08800000;
+			mode=0;
+		}
+		if(mode == 2){
+			block[blockTotal].flags|=FLAG_JOKER;
+			block[blockTotal].address&=0x0FFFFFFF;
+			block[blockTotal].address+=0x08800000;
+			block[blockTotal].address+=0xFF000000;
+			mode=0;
+		}
+		else{
+			block[blockTotal].address=a_address;
+			block[blockTotal].address&=0x0FFFFFFF;
+			block[blockTotal].address+=0x08800000;
+			block[blockTotal].flags=0;
+		}
+		*/
+		
+		block[blockTotal].address=a_address;
+		block[blockTotal].address&=0x0FFFFFFF;
+		block[blockTotal].address+=0x08800000;
+		block[blockTotal].flags=0;
+		
+		block[blockTotal].hakVal=a_value;
 
-    switch(a_size)
-    {
-      case 1: block[blockTotal].flags|=FLAG_BYTE; if(cheatSaved) block[blockTotal].stdVal=*((unsigned char*)(block[blockTotal].address)); break;
-      case 2: block[blockTotal].flags|=FLAG_WORD; if(cheatSaved) block[blockTotal].stdVal=*((unsigned short*)(block[blockTotal].address)); break;
-      case 4: block[blockTotal].flags|=FLAG_DWORD; if(cheatSaved) block[blockTotal].stdVal=*((unsigned int*)(block[blockTotal].address)); break;
-      default:
-      	block[blockTotal].flags|=FLAG_UWORD;
-    }
+		switch(a_size){
+		  case 1: block[blockTotal].flags|=FLAG_BYTE; if(cheatSaved) block[blockTotal].stdVal=*((unsigned char*)(block[blockTotal].address)); break;
+		  case 2: block[blockTotal].flags|=FLAG_WORD; if(cheatSaved) block[blockTotal].stdVal=*((unsigned short*)(block[blockTotal].address & 0xFFFFFFE)); break;
+		  case 4: block[blockTotal].flags|=FLAG_DWORD; if(cheatSaved) block[blockTotal].stdVal=*((unsigned int*)(block[blockTotal].address & 0xFFFFFFC)); break;
+		  default: block[blockTotal].flags|=FLAG_UWORD;
+		}
     
+    	blockTotal++;
+	}
     sprintf(&cheat[cheatTotal].name, "NEW CHEAT %d", cheatNo);
     cheatNo++;
   	cheatTotal++;
-    blockTotal++;
   }
 }
 
@@ -850,6 +876,124 @@ void cheatSave()
   }
 }
 
+void cheatLoad(){
+  unsigned char fileChar=0;
+  unsigned char fileMisc[3];
+  unsigned int fileSize=0;
+  unsigned int counter=-1;
+  unsigned int scounter=0;
+  unsigned char fileMode=0; //0=Unknown/Initial, 1=Comment, 2=Waiting for \n (ignoring)
+  int fd;
+  int tempFd;
+
+  //Load the cheats
+  fd=sceIoOpen(gameDir, PSP_O_RDONLY, 0777);
+  
+  	if(cheatRefresh){
+
+		int counter=0;
+
+		cheatSelected=counter;
+		while(counter < cheatTotal){ //cycle through cheats in ram
+			
+			int scounter=0;
+			while(scounter < blockTotal){ 
+				//delete a cheat from ram
+				block[cheatSelected].flags;
+				block[cheatSelected].address;
+				block[cheatSelected].stdVal;
+				block[cheatSelected].hakVal;
+				scounter++;
+			}
+
+			//reset the cheats info
+			cheat[cheatSelected].block=0;
+			cheat[cheatSelected].len=0;
+			cheat[cheatSelected].flags=0;
+			strcpy(cheat[cheatSelected].name, NULL);
+			counter++;
+		}
+
+		cheatTotal=0;
+		blockTotal=0;
+
+		//delay
+		sceKernelDelayThread(1500);
+		cheatRefresh=0;
+
+	}
+
+  if(fd > 0)
+  {
+    unsigned int fileSize=sceIoLseek(fd, 0, SEEK_END); sceIoLseek(fd, 0, SEEK_SET);
+    unsigned int fileOffset=0;
+    unsigned char commentMode=0;
+    unsigned char nameMode=0;
+  
+    while(fileOffset < fileSize)
+    { 
+    	sceKernelDelayThread(1500);
+    
+      sceIoRead(fd, &buffer[0], 1);
+    	
+      if((buffer[0]=='\r') || (buffer[0]=='\n')){commentMode=0;if(nameMode){cheatTotal++; nameMode=0;}}
+      else if((buffer[0]==' ') && (!nameMode)){}
+     	else if(buffer[0]==';'){commentMode=1;if(nameMode){cheatTotal++; nameMode=0;}} //Skip comments till next line
+      else if(buffer[0]=='#') //Read in the cheat name
+      {
+        if(cheatTotal >= BLOCK_MAX) { break;}
+        cheat[cheatTotal].block=blockTotal;
+        cheat[cheatTotal].flags=0;
+        cheat[cheatTotal].len=0;
+        cheat[cheatTotal].name[0]=0;
+        nameMode=1;
+      }
+      else if((buffer[0]=='!') && (nameMode))
+    	{
+        //Cheat's selected by default
+        if(cheat[cheatTotal].flags & FLAG_SELECTED) //Two ! = selected for constant on status
+        {
+          cheat[cheatTotal].flags|=FLAG_CONSTANT;
+        	cheat[cheatTotal].flags&=~FLAG_SELECTED;
+        }
+        else //One ! = selected for music on/off button
+        {
+        	cheat[cheatTotal].flags|=FLAG_SELECTED;
+      	}
+      }
+      else if((!commentMode) && (nameMode))
+      {
+        if(nameMode<32) //1 to 31 = letters, 32=Null terminator
+        {
+        	cheat[cheatTotal].name[nameMode-1]=buffer[0];
+        	nameMode++;
+        	cheat[cheatTotal].name[nameMode-1]=0;
+        }
+      }
+      else if((!commentMode) && (!nameMode))
+      {
+        //Add 0xAABBCCDD 0xAABBCCDD block
+        if(!blockAdd(fd, buffer))
+        {
+          //No more RAM?
+          if(cheatTotal != 0)
+        	{
+        		cheatTotal--;
+            break;
+      		}
+        }
+        if(cheatTotal != 0)
+        {
+        	cheat[cheatTotal-1].len++;
+      	}
+      }
+     
+      fileOffset=sceIoLseek(fd, 0, SEEK_CUR);
+    }
+    sceIoClose(fd);
+  }
+}
+
 void buttonCallback(int curr, int last, void *arg)
 {
   unsigned int counter;
@@ -866,6 +1010,8 @@ void buttonCallback(int curr, int last, void *arg)
     if(cheatSelected >= cheatTotal) cheatSelected=0;
     tabSelected=0;
   }
+  else if(curr & PSP_CTRL_HOME){
+   	menuDrawn=0;}
   else if(((curr & screenKey) == screenKey) && (!menuDrawn))
 	{
     screenTime=1;
@@ -1021,25 +1167,30 @@ void menuDraw()
   //Draw the menu
   pspDebugScreenSetXY(0, 0);
   pspDebugScreenSetTextColor(0xFFFFFFFF);
-  pspDebugScreenPuts("NitePR Rev. J++ 20101117\nNPR_SRC Sanik,MK_SRC demonchild,PRXTOOL TyRaNiD,MODDED (¡A¡)\n");
-  
+  pspDebugScreenPuts("NitePR Rev. J++ 20101117 ");
+
   if(cheatStatus)
   {
     pspDebugScreenSetTextColor(0xFF00FF00);
-    pspDebugScreenPuts("[CHEATS ARE ON]\n\n");
+    pspDebugScreenPuts("[CHEATS ARE ON]");
   }
   else
   {
     pspDebugScreenSetTextColor(0xFF0000FF);
     if(!cheatSaved)
     {
-    	pspDebugScreenPuts("[ALL CHEATS ARE OFF]\n\n");
+    	pspDebugScreenPuts("[ALL CHEATS ARE OFF]");
   	}
     else
     {
-      pspDebugScreenPuts("[CHEATS ARE OFF]\n\n");
+      pspDebugScreenPuts("[CHEATS ARE OFF]");
     }
   }
+  pspDebugScreenSetTextColor(0xFFFF0000);
+  pspDebugScreenPuts(gameId);
+  pspDebugScreenSetTextColor(0xFFFFFFFF);
+  pspDebugScreenPuts("\nNPR_SRC Sanik,MK_SRC demonchild,PRXTOOL TyRaNiD,MODDED (¡A¡)\n");
+  pspDebugScreenSetTextColor(0xFF808080);pspDebugScreenPuts(line);
   
   //Draw the logo!
   //telazornDraw();
@@ -1054,7 +1205,6 @@ void menuDraw()
     pspDebugScreenSetTextColor(0xFFFFFFFF);pspDebugScreenPuts("                           [PRESS START]\n\n");
     return;
   }*/
-  
   //Extended/sub menus?
   if(extMenu)
   {
@@ -1064,27 +1214,27 @@ void menuDraw()
     	  //Draw the tabs
     	  pspDebugScreenSetTextColor(0xFFFFFFFF); pspDebugScreenPuts("[Editing Cheat: '");
         pspDebugScreenPuts(cheat[cheatSelected].name);
-        pspDebugScreenPuts("'] ");
-    	  pspDebugScreenSetTextColor(0xFF808080);pspDebugScreenPuts("\n--------------------------------------------------------------------");
+        pspDebugScreenPuts("'] \n");
+    	  pspDebugScreenSetTextColor(0xFF808080);pspDebugScreenPuts(line);
 
 				//draw some info 
 				if(editFormat==0){
-				pspDebugScreenPuts("\n  Address     Value.Hex   Value.Dec   Value.ASCII  Value.Float \n");
+				pspDebugScreenPuts("  Address     Value.Hex   Value.Dec   Value.ASCII  Value.Float \n");
 				}
 				else{
-				pspDebugScreenPuts("\n  Address     Value.Hex   Opcode   Args\n");
+				pspDebugScreenPuts("  Address     Value.Hex   Opcode   Args\n");
 				}
         
         //Print out the cheat lines
         convBase=cheat[cheatSelected].block;
         convTotal=cheat[cheatSelected].len;
         counter=cheat[cheatSelected].block;
-        while(counter < (cheat[cheatSelected].block+cheat[cheatSelected].len))
-	      {
-          //Scroll feature right here, in two lines =3
-          if((signed int)(counter-convBase) < (signed int)(((extSelected[0]-convBase)-11) - (( ((signed int)(extSelected[0]-convBase)+11) - ((signed int)convTotal))>0? abs(((signed int)(extSelected[0]-convBase)+11) - ((signed int)convTotal)): 0)   )) {counter++; continue;}
-          if((signed int)(counter-convBase) > (signed int)(((extSelected[0]-convBase)+11) + (((signed int)(extSelected[0]-convBase)-11)<0? abs((signed int)((extSelected[0]-convBase)-11)): 0)   )) {counter++; continue;}
-          
+	while(counter < (cheat[cheatSelected].block+cheat[cheatSelected].len)){
+					
+	//Scroll feature right here, in two lines =3
+	if((signed int)(counter-convBase) < (signed int)(((extSelected[0]-convBase)-11) - (( ((signed int)(extSelected[0]-convBase)+11) - ((signed int)convTotal))>0? abs(((signed int)(extSelected[0]-convBase)+11) - ((signed int)convTotal)): 0)   )) {counter++; continue;}
+	if((signed int)(counter-convBase) > (signed int)(((extSelected[0]-convBase)+11) + (((signed int)(extSelected[0]-convBase)-11)<0? abs((signed int)((extSelected[0]-convBase)-11)): 0)   )) {counter++; continue;}
+
           //Apply the row color
           if(counter == extSelected[0])
           {
@@ -1241,14 +1391,16 @@ void menuDraw()
 	      }
         
         //Helper
-        pspDebugScreenSetXY(0, 33);
-        pspDebugScreenSetTextColor(0xFFFF8000); pspDebugScreenPuts(">< = Edit On/Off; \\|/ /|\\ <- -> = Cycle; [] = Alt-Type; () = Close");
+        pspDebugScreenSetXY(0, 31);
+	pspDebugScreenSetTextColor(0xFF808080);pspDebugScreenPuts(line);
+        pspDebugScreenSetTextColor(0xFFFF8000);
+	pspDebugScreenPuts("><=Edit On/Off; D-PAD=Cycle; []=Alt-Type;\nSTART=Switch Dec/Val; ()=Close");
         break;
         
       case 2: //DRAW EXT SEARCH
       	//Draw the tabs
-    	  pspDebugScreenSetTextColor(0xFFFFFFFF); pspDebugScreenPuts("[Editing Search]");
-    	  pspDebugScreenSetTextColor(0xFF808080);pspDebugScreenPuts("\n--------------------------------------------------------------------");
+    	  pspDebugScreenSetTextColor(0xFFFFFFFF); pspDebugScreenPuts("[Editing Search]\n");
+    	  pspDebugScreenSetTextColor(0xFF808080);pspDebugScreenPuts(line);
 
 				if(editFormat){
     	  pspDebugScreenSetTextColor(0xFF808080); pspDebugScreenPuts("  Value.Hex   Value.Dec   Opcode\n");
@@ -1363,8 +1515,8 @@ void menuDraw()
       	
         //Print out results
         pspDebugScreenSetTextColor(0xFFFFFFFF); pspDebugScreenPuts("\n[Search Results: ");
-        sprintf(buffer, "%d Found - Only showing first 100]", searchResultCounter); pspDebugScreenPuts(buffer);
-    	  pspDebugScreenSetTextColor(0xFF808080); pspDebugScreenPuts("\n--------------------------------------------------------------------");
+        sprintf(buffer, "%d Found - Only showing first 100]\n", searchResultCounter); pspDebugScreenPuts(buffer);
+    	  pspDebugScreenSetTextColor(0xFF808080); pspDebugScreenPuts(line);
     	  pspDebugScreenSetTextColor(0xFF808080); pspDebugScreenPuts("  Address     Value.Hex   Value.Dec   Value.ASCII  Value.Float\n");
         
         //Print out the results variables
@@ -1453,33 +1605,35 @@ void menuDraw()
 	      }
 
       	//Helper
-        pspDebugScreenSetXY(0, 33);
+        pspDebugScreenSetXY(0, 32);
+        pspDebugScreenSetTextColor(0xFF808080);
+	pspDebugScreenPuts(line);
         pspDebugScreenSetTextColor(0xFFFF8000);
         if(extSelected[0] == 0)
         {
           if(searchNo == 0)
           {
-        		pspDebugScreenPuts(">< = Edit On/Off; \\|/ /|\\ <- -> = Cycle; [] = Alt-Type; () = Cancel");
+        		pspDebugScreenPuts("><=Edit On/Off; D-PAD=Cycle; []=Alt-Type; ()=Cancel");
         	}
           else
           {
-            pspDebugScreenPuts(">< = Edit On/Off; \\|/ /|\\ <- -> = Cycle; () = Cancel               ");
+            pspDebugScreenPuts("><=Edit On/Off; D-PAD=Cycle; ()=Cancel");
           }
         }
         else if((extSelected[0] == 1) || (extSelected[0] == 2))
         {
-          pspDebugScreenPuts(">< = Select; () = Cancel                                           ");  
+          pspDebugScreenPuts("><=Select; ()=Cancel");
         }
         else
         {
-          pspDebugScreenPuts(">< = Add Selected Cheat; () = Cancel                               ");  
+          pspDebugScreenPuts("><=Add Selected Cheat; ()=Cancel");  
         }
         break;
         
 			case 3: //DRAW EXT DIFF SEARCH
       	//Draw the tabs
-    	  pspDebugScreenSetTextColor(0xFFFFFFFF); pspDebugScreenPuts("[Editing Search]");
-    	  pspDebugScreenSetTextColor(0xFF808080);pspDebugScreenPuts("\n--------------------------------------------------------------------");
+    	  pspDebugScreenSetTextColor(0xFFFFFFFF); pspDebugScreenPuts("[Editing Search]\n");
+    	  pspDebugScreenSetTextColor(0xFF808080);pspDebugScreenPuts(line);
     	  pspDebugScreenSetTextColor(0xFF808080); 
         if(searchMode > 3)
         {
@@ -1596,8 +1750,8 @@ void menuDraw()
       	
         //Print out results
         pspDebugScreenSetTextColor(0xFFFFFFFF); pspDebugScreenPuts("\n[Search Results: ");
-        sprintf(buffer, "%d Found - Only showing first 100]", searchResultCounter); pspDebugScreenPuts(buffer);
-    	  pspDebugScreenSetTextColor(0xFF808080); pspDebugScreenPuts("\n--------------------------------------------------------------------");
+        sprintf(buffer, "%d Found - Only showing first 100]\n", searchResultCounter); pspDebugScreenPuts(buffer);
+    	  pspDebugScreenSetTextColor(0xFF808080); pspDebugScreenPuts(line);
     	  pspDebugScreenSetTextColor(0xFF808080); pspDebugScreenPuts("  Address     Value.Hex   Value.Dec   Value.ASCII  Value.Float\n");
         
         //Print out the results variables
@@ -1686,26 +1840,28 @@ void menuDraw()
 	      }
 
       	//Helper
-        pspDebugScreenSetXY(0, 33);
+        pspDebugScreenSetXY(0, 32);
+        pspDebugScreenSetTextColor(0xFF808080);
+	pspDebugScreenPuts(line);
         pspDebugScreenSetTextColor(0xFFFF8000);
         if(extSelected[0] == 0)
         {
-          pspDebugScreenPuts(">< = Edit On/Off; \\|/ /|\\ <- -> = Cycle; () = Cancel               ");
+          pspDebugScreenPuts("><=Edit On/Off; D-PAD=Cycle; ()=Cancel");
         }
         else if((extSelected[0] == 1) || (extSelected[0] == 2))
         {
-          pspDebugScreenPuts(">< = Select; () = Cancel                                           ");  
+          pspDebugScreenPuts("><=Select; ()=Cancel");  
         }
         else
         {
-          pspDebugScreenPuts(">< = Add Selected Cheat; () = Cancel                               ");  
+          pspDebugScreenPuts("><=Add Selected Cheat; ()=Cancel");  
         }
         break;
 
 		case 4: //DRAW EXT TEXT search
       	//Draw the tabs
-    	  pspDebugScreenSetTextColor(0xFFFFFFFF); pspDebugScreenPuts("[Editing Search]");
-    	  pspDebugScreenSetTextColor(0xFF808080);pspDebugScreenPuts("\n--------------------------------------------------------------------");
+    	  pspDebugScreenSetTextColor(0xFFFFFFFF); pspDebugScreenPuts("[Editing Search]\n");
+    	  pspDebugScreenSetTextColor(0xFF808080);pspDebugScreenPuts(line);
     	  pspDebugScreenSetTextColor(0xFF808080); 
         pspDebugScreenPuts("  Text                                                          \n");
       
@@ -1756,8 +1912,8 @@ void menuDraw()
         pspDebugScreenSetTextColor(extSelected[0] == 1? 0xFF0000FF: 0xFF808080); pspDebugScreenPuts("  Search\n");
     		
         //Print out results
-        pspDebugScreenSetTextColor(0xFFFFFFFF); pspDebugScreenPuts("\n[Search Results: Only showing first 100]");
-    	  pspDebugScreenSetTextColor(0xFF808080); pspDebugScreenPuts("\n--------------------------------------------------------------------");
+        pspDebugScreenSetTextColor(0xFFFFFFFF); pspDebugScreenPuts("\n[Search Results: Only showing first 100]\n");
+    	  pspDebugScreenSetTextColor(0xFF808080); pspDebugScreenPuts(line);
     	  pspDebugScreenSetTextColor(0xFF808080); pspDebugScreenPuts("  Address   Text                                              \n");
         
         //Print out the results variables
@@ -1806,15 +1962,17 @@ void menuDraw()
 	      }
 
       	//Helper
-        pspDebugScreenSetXY(0, 33);
+        pspDebugScreenSetXY(0, 32);
+        pspDebugScreenSetTextColor(0xFF808080);
+	pspDebugScreenPuts(line);
         pspDebugScreenSetTextColor(0xFFFF8000);
         if(extSelected[0] == 0)
         {
-          pspDebugScreenPuts(">< = Edit On/Off; \\|/ /|\\ <- -> = Cycle; [] = Trim; () = Cancel    ");
+          pspDebugScreenPuts("><=Edit On/Off; D-PAD=Cycle; []=Trim; ()=Cancel");
         }
         else if(extSelected[0] == 1)
         {
-          pspDebugScreenPuts(">< = Select; () = Cancel                                           ");  
+          pspDebugScreenPuts("><=Select; ()=Cancel");  
         }
         else
         {
@@ -1830,9 +1988,9 @@ void menuDraw()
     pspDebugScreenSetTextColor(tabSelected == 1? 0xFFFFFFFF: 0xFF808080); pspDebugScreenPuts("[Searcher] ");
     pspDebugScreenSetTextColor(tabSelected == 2? 0xFFFFFFFF: 0xFF808080); pspDebugScreenPuts("[PRX] ");
     pspDebugScreenSetTextColor(tabSelected == 3? 0xFFFFFFFF: 0xFF808080); pspDebugScreenPuts("[Browser] ");
-    pspDebugScreenSetTextColor(tabSelected == 4? 0xFFFFFFFF: 0xFF808080); pspDebugScreenPuts("[Decoder] ");
+    pspDebugScreenSetTextColor(tabSelected == 4? 0xFFFFFFFF: 0xFF808080); pspDebugScreenPuts("[Decoder] \n");
     //pspDebugScreenSetTextColor(tabSelected == 5? 0xFFFFFFFF: 0xFF808080); pspDebugScreenPuts("[Logger] ");
-    pspDebugScreenSetTextColor(0xFF808080);pspDebugScreenPuts("\n--------------------------------------------------------------------");
+    pspDebugScreenSetTextColor(0xFF808080);pspDebugScreenPuts(line);
     
     //Draw the options for the respective tab
     switch(tabSelected)
@@ -1884,10 +2042,12 @@ void menuDraw()
         }
         
         //Helper
+        pspDebugScreenSetXY(0, 32); 
+        pspDebugScreenSetTextColor(0xFF808080);
+	pspDebugScreenPuts(line);
         pspDebugScreenSetTextColor(0xFFFF8000); 
-        pspDebugScreenSetXY(0, 31); pspDebugScreenPuts(">< = Select Cheat for On/Off mode;");
-        pspDebugScreenSetXY(0, 32); pspDebugScreenPuts("[] = Select Cheat for Always On mode; /\\ = Edit Cheat;");
-        pspDebugScreenSetXY(0, 33); pspDebugScreenPuts("() = Cancel/Return to Game");
+	pspDebugScreenPuts("><=On/Off; []=Always On; /\\= Edit Cheat;");
+        pspDebugScreenSetXY(0, 33); pspDebugScreenPuts("()=Cancel/Return to Game");
         break;
         
       case 1: //DRAW SEARCHER
@@ -1932,8 +2092,8 @@ void menuDraw()
         }
         
         //Print out search history
-        pspDebugScreenSetTextColor(0xFFFFFFFF); pspDebugScreenPuts("\n[Search History]");
-    	  pspDebugScreenSetTextColor(0xFF808080); pspDebugScreenPuts("\n--------------------------------------------------------------------");
+        pspDebugScreenSetTextColor(0xFFFFFFFF); pspDebugScreenPuts("\n[Search History]\n");
+    	  pspDebugScreenSetTextColor(0xFF808080); pspDebugScreenPuts(line);
     	  pspDebugScreenSetTextColor(0xFF808080); pspDebugScreenPuts("  Mode          Value.Hex   Value.Dec   Value.ASCII  Value.Float\n");
         scounter=0;
         while(scounter < searchHistoryCounter)
@@ -2018,22 +2178,23 @@ void menuDraw()
           switch(counter)
           {
             case 0: pspDebugScreenPuts("  Pause Game? "); if(cheatPause) { pspDebugScreenPuts("True\n"); } else { pspDebugScreenPuts("False\n"); } break;
-            case 1: pspDebugScreenPuts("  Add Empty Cheat?\n"); break;
-            case 2: sprintf(buffer, "  Reset Codes? Slot #%d\n", dumpNo); pspDebugScreenPuts(buffer); break;
+            case 1: sprintf(buffer, "  Add new cheat #%d line(s) long.\n", cheatLength); pspDebugScreenPuts(buffer); break;
+	    case 2: sprintf(buffer, "  Reset Codes? Slot #%d\n", dumpNo); pspDebugScreenPuts(buffer); break;
             case 3: sprintf(buffer, "  Dump RAM? Slot #%d\n", dumpNo); pspDebugScreenPuts(buffer); break;
             case 4: sprintf(buffer, "  Bytes per Line in Browser? %d\n", browseLines); pspDebugScreenPuts(buffer); break;
             case 5: pspDebugScreenPuts("  Real Addressing in Browser? "); if(browseFormat==0x40000000) { pspDebugScreenPuts("True\n"); } else { pspDebugScreenPuts("False\n"); } break;
             case 6: pspDebugScreenPuts("  Real Addressing in Decoder? "); if(decodeFormat==0x40000000) { pspDebugScreenPuts("True\n"); } else { pspDebugScreenPuts("False\n"); } break;
-            case 7: pspDebugScreenPuts("  Real Addressing in Logger? "); if(trackFormat==0x40000000) { pspDebugScreenPuts("True\n"); } else { pspDebugScreenPuts("False\n"); } break; 
-            case 8: sprintf(buffer, "  Cheat Hz? %d/1000 seconds\n", (cheatHz/1000)); pspDebugScreenPuts(buffer); break;
+            case 8: pspDebugScreenPuts("  Reload cheats?\n"); break; 
+            case 7: sprintf(buffer, "  Cheat Hz? %d/1000 seconds\n", (cheatHz/1000)); pspDebugScreenPuts(buffer); break;
             case 9: pspDebugScreenPuts("  Save cheats?\n"); break;
           }
           counter++;
         }
         //Helper
-        pspDebugScreenSetTextColor(0xFFFF8000);
-        lineClear(31);
         lineClear(32);
+        pspDebugScreenSetTextColor(0xFF808080);
+	pspDebugScreenPuts(line);
+        pspDebugScreenSetTextColor(0xFFFF8000);
         switch(cheatSelected)
         {
           case 0: pspDebugScreenPuts("Pauses the game while nitePR's menu is showing"); break;
@@ -2041,14 +2202,15 @@ void menuDraw()
           case 2: pspDebugScreenPuts("Uses the selected 'RAM dump' to regenerate OFF codes"); break;
           case 3: pspDebugScreenPuts("Saves the Game's RAM to MemoryStick"); break;
           case 4: pspDebugScreenPuts("Alters the number of bytes displayed in the Browser"); break;
-          case 5: pspDebugScreenPuts("If enabled, REAL PSP hardware addresses will be used in Browser"); break;
+	  case 5: pspDebugScreenPuts("If enabled, REAL PSP hardware addresses will be used in Browser"); break;
           case 6: pspDebugScreenPuts("If enabled, REAL PSP hardware addresses will be used in Decoder"); break;
-          case 7: pspDebugScreenPuts("If enabled, REAL PSP hardware addresses will be used in Logger"); break;
-          case 8: lineClear(31);pspDebugScreenPuts("nitePR only applies a cheat once - set this to anything other");  lineClear(32); pspDebugScreenPuts("than 0 to make it apply the same cheat every X amount of seconds"); break;
-          case 9: pspDebugScreenPuts("Save your cheats"); break;
+          //case 7: pspDebugScreenPuts("If enabled, REAL PSP hardware addresses will be used in Logger"); break;
+          case 7: pspDebugScreenPuts("nitePR's cheat lock interval"); break;
+          case 8: pspDebugScreenPuts("Reload your cheats"); break;
+	  case 9: pspDebugScreenPuts("Save your cheats"); break;
         }
         lineClear(33);
-        if((cheatSelected != 8) && (cheatSelected != 3) && (cheatSelected != 2))
+        if((cheatSelected != 7) && (cheatSelected != 3) && (cheatSelected != 2))
         {
         	 pspDebugScreenPuts(">< = Toggle; () = Cancel/Return to Game");
         }
@@ -2071,7 +2233,7 @@ void menuDraw()
 
         //Write out the RAM
         counter=0;
-        while(counter < 22)
+        while(counter < 24)
 	      {
           //Apply the row color
           if(counter == browseY)
@@ -2176,9 +2338,11 @@ void menuDraw()
 	      }
         
         //Helper
+        pspDebugScreenSetTextColor(0xFF808080);
+	pspDebugScreenPuts(line);
         pspDebugScreenSetTextColor(0xFFFF8000);
-        pspDebugScreenSetXY(0, 32); pspDebugScreenPuts(">< = Edit On/Off; \\|/ /|\\ <- -> = Cycle/Scroll; [] = Teleport Cursor");
-        pspDebugScreenSetXY(0, 33); pspDebugScreenPuts("[] + Analog/Digital = Scroll; () = Cancel/Return to Game");
+        pspDebugScreenSetXY(0, 32); pspDebugScreenPuts("><=Edit On/Off; D-PAD=Cycle/Scroll; []=Teleport Cursor");
+        pspDebugScreenSetXY(0, 33); pspDebugScreenPuts("[]+Analog/Digital=Scroll; ()=Cancel/Return to Game");
       	break;
         
       case 4: //DRAW DECODER
@@ -2186,7 +2350,7 @@ void menuDraw()
         
         //Write out the RAM
         counter=0;
-        while(counter < 22)
+        while(counter < 24)
 	      {
           //Apply the row color
           if(counter == decodeY)
@@ -2223,7 +2387,7 @@ void menuDraw()
 								addresscode=(*((unsigned int*)(decodeAddress+((counter-1)*4)))<<16) + (addresscode & 0xFFFF);}
 								else{
 								addresscode=(*((unsigned int*)(decodeAddress+((counter-1)*4)))<<16) - (addresscode & 0xFFFF);}
-								
+								break;
 								case 0x34:
 								addresscode=(*((unsigned int*)(decodeAddress+((counter-1)*4)))<<16) | (addresscode & 0xFFFF);
 								break;
@@ -2277,9 +2441,11 @@ void menuDraw()
 	      }
         
         //Helper
+        pspDebugScreenSetTextColor(0xFF808080);
+	pspDebugScreenPuts(line);
         pspDebugScreenSetTextColor(0xFFFF8000);
-        pspDebugScreenSetXY(0, 32); pspDebugScreenPuts(">< = Edit On/Off; \\|/ /|\\ <- -> = Cycle/Scroll;");
-        pspDebugScreenSetXY(0, 33); pspDebugScreenPuts("[] + Analog/Digital = Scroll; () = Cancel/Return to Game");
+        pspDebugScreenSetXY(0, 32); pspDebugScreenPuts("><=Edit On/Off; D-PAD=Cycle/Scroll; []+<->=JUMP");
+        pspDebugScreenSetXY(0, 33); pspDebugScreenPuts("[]+Analog/Digital=Scroll; ()=Cancel/Return to Game");
       	break;
         
      /* case 5: //Draw tracker
@@ -2369,7 +2535,7 @@ void menuDraw()
         {
           //Print out log
           pspDebugScreenSetTextColor(0xFFFFFFFF); pspDebugScreenPuts("\n[Data Log - UNIMPLEMENTED]");
-    	    pspDebugScreenSetTextColor(0xFF808080); pspDebugScreenPuts("\n--------------------------------------------------------------------");
+    	    pspDebugScreenSetTextColor(0xFF808080); pspDebugScreenPuts(line);
         }
         
       	//Helper
@@ -2960,7 +3126,7 @@ void menuInput()
             cheatButtonAgeX=0;
           }
           
-        	if((padButtons & PSP_CTRL_CIRCLE) && !(pad.Buttons & PSP_CTRL_CIRCLE))
+        	if((padButtons & PSP_CTRL_CIRCLE) && !(pad.Buttons & PSP_CTRL_CIRCLE) ||(padButtons & PSP_CTRL_HOME))
       		{
             if(extSelected[3])
             {
@@ -3292,13 +3458,13 @@ void menuInput()
               switch(searchHistory[0].flags & FLAG_DWORD)
               {
               	case FLAG_DWORD:
-                  cheatNew(4, searchAddress[extSelected[0]-3]  - 0x48800000, *((unsigned int*)(searchAddress[extSelected[0]-3])));
+                  cheatNew(4, searchAddress[extSelected[0]-3]  - 0x48800000, *((unsigned int*)(searchAddress[extSelected[0]-3])), 1, 0);
                   break;
                 case FLAG_WORD:
-                  cheatNew(2, searchAddress[extSelected[0]-3]  - 0x48800000, *((unsigned short*)(searchAddress[extSelected[0]-3])));
+                  cheatNew(2, searchAddress[extSelected[0]-3]  - 0x48800000, *((unsigned short*)(searchAddress[extSelected[0]-3])), 1, 0);
                   break;
                 case FLAG_BYTE:
-                  cheatNew(1, searchAddress[extSelected[0]-3]  - 0x48800000, *((unsigned char*)(searchAddress[extSelected[0]-3])));
+                  cheatNew(1, searchAddress[extSelected[0]-3]  - 0x48800000, *((unsigned char*)(searchAddress[extSelected[0]-3])), 1, 0);
                   break;
                 default:
                 	break;
@@ -3917,13 +4083,13 @@ void menuInput()
               switch(searchHistory[0].flags & FLAG_DWORD)
               {
               	case FLAG_DWORD:
-                  cheatNew(4, searchAddress[extSelected[0]-3]  - 0x48800000, *((unsigned int*)(searchAddress[extSelected[0]-3])));
+                  cheatNew(4, searchAddress[extSelected[0]-3]  - 0x48800000, *((unsigned int*)(searchAddress[extSelected[0]-3])), 1, 0);
                   break;
                 case FLAG_WORD:
-                  cheatNew(2, searchAddress[extSelected[0]-3]  - 0x48800000, *((unsigned short*)(searchAddress[extSelected[0]-3])));
+                  cheatNew(2, searchAddress[extSelected[0]-3]  - 0x48800000, *((unsigned short*)(searchAddress[extSelected[0]-3])), 1, 0);
                   break;
                 case FLAG_BYTE:
-                  cheatNew(1, searchAddress[extSelected[0]-3]  - 0x48800000, *((unsigned char*)(searchAddress[extSelected[0]-3])));
+                  cheatNew(1, searchAddress[extSelected[0]-3]  - 0x48800000, *((unsigned char*)(searchAddress[extSelected[0]-3])), 1, 0);
                   break;
                 default:
                 	break;
@@ -4676,7 +4842,10 @@ void menuInput()
           }
           if(pad.Buttons & PSP_CTRL_LEFT)
           {
-            if((cheatSelected == 8) && (cheatHz > 0))
+				if((cheatSelected==1) && (cheatLength >0) ){
+					cheatLength-=1;
+				}
+            if((cheatSelected == 7) && (cheatHz > 0))
             {
               cheatHz-=15625;
             }
@@ -4693,7 +4862,10 @@ void menuInput()
           }
           else if(pad.Buttons & PSP_CTRL_RIGHT)
           {
-            if(cheatSelected==8)
+				if(cheatSelected==1){
+					cheatLength+=1;
+				}
+            if(cheatSelected==7)
             {
             	cheatHz+=15625;
           	}
@@ -4730,7 +4902,7 @@ void menuInput()
             }
             else if(cheatSelected == 1)
             {
-							cheatNew(4, 0x4000, 0);
+               cheatNew(4, 0x4000, 0, cheatLength, 0);
               
               //Switch to the cheat editor
               pspDebugScreenInitEx(vram, 0, 0);
@@ -4879,17 +5051,12 @@ void menuInput()
              	}
               menuDraw();
             }
-            else if(cheatSelected == 7)
+            else if(cheatSelected == 8)
             {
-              if(trackFormat == 0x48800000)
-              {
-                trackFormat=0x40000000;
-              }
-              else
-              {
-                trackFormat=0x48800000;
-             	}
+		cheatRefresh=1;
+              cheatLoad();
               menuDraw();
+            	sceKernelDelayThread(150000); //Delay twice
             }
             else if(cheatSelected == 9)
             {
@@ -5737,77 +5904,7 @@ int mainThread()
   sceIoClose(fd);
   memcpy(&gameDir[22], gameId, 10);
   
-  //Load the cheats
-  fd=sceIoOpen(gameDir, PSP_O_RDONLY, 0777);
-  if(fd > 0)
-  {
-    unsigned int fileSize=sceIoLseek(fd, 0, SEEK_END); sceIoLseek(fd, 0, SEEK_SET);
-    unsigned int fileOffset=0;
-    unsigned char commentMode=0;
-    unsigned char nameMode=0;
-  
-    while(fileOffset < fileSize)
-    { 
-    	sceKernelDelayThread(1500);
-    
-      sceIoRead(fd, &buffer[0], 1);
-    	
-      if((buffer[0]=='\r') || (buffer[0]=='\n')){commentMode=0;if(nameMode){cheatTotal++; nameMode=0;}}
-      else if((buffer[0]==' ') && (!nameMode)){}
-     	else if(buffer[0]==';'){commentMode=1;if(nameMode){cheatTotal++; nameMode=0;}} //Skip comments till next line
-      else if(buffer[0]=='#') //Read in the cheat name
-      {
-        if(cheatTotal >= BLOCK_MAX) { break;}
-        cheat[cheatTotal].block=blockTotal;
-        cheat[cheatTotal].flags=0;
-        cheat[cheatTotal].len=0;
-        cheat[cheatTotal].name[0]=0;
-        nameMode=1;
-      }
-      else if((buffer[0]=='!') && (nameMode))
-    	{
-        //Cheat's selected by default
-        if(cheat[cheatTotal].flags & FLAG_SELECTED) //Two ! = selected for constant on status
-        {
-          cheat[cheatTotal].flags|=FLAG_CONSTANT;
-        	cheat[cheatTotal].flags&=~FLAG_SELECTED;
-        }
-        else //One ! = selected for music on/off button
-        {
-        	cheat[cheatTotal].flags|=FLAG_SELECTED;
-      	}
-      }
-      else if((!commentMode) && (nameMode))
-      {
-        if(nameMode<32) //1 to 31 = letters, 32=Null terminator
-        {
-        	cheat[cheatTotal].name[nameMode-1]=buffer[0];
-        	nameMode++;
-        	cheat[cheatTotal].name[nameMode-1]=0;
-        }
-      }
-      else if((!commentMode) && (!nameMode))
-      {
-        //Add 0xAABBCCDD 0xAABBCCDD block
-        if(!blockAdd(fd, buffer))
-        {
-          //No more RAM?
-          if(cheatTotal != 0)
-        	{
-        		cheatTotal--;
-            break;
-      		}
-        }
-        if(cheatTotal != 0)
-        {
-        	cheat[cheatTotal-1].len++;
-      	}
-      }
-     
-      fileOffset=sceIoLseek(fd, 0, SEEK_CUR);
-    }
-    sceIoClose(fd);
-  }
+  cheatLoad();
   
   //Set the VRAM to null, use the current screen
   pspDebugScreenInitEx(0x44000000, 0, 0);

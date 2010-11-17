@@ -25,9 +25,10 @@ doesnot work fine unknown value search after code save
 if code is reloaded & saved many times,save&reload function doesnot work..
 dupricated code agaist your will
 
-2010/11/17
-PSPLINK互換のためPSIDとUSBを外したmakeを作成
-added newmakefile(remove USB,PSID) because PSPLINK compatibility
+2010/11/18
+HOMEKEY押したときはメニュー外に移動に変更
+PSPLINK互換のためUSBを外した(PSIDは復活)
+added newmakefile(remove USB) because PSPLINK compatibility
 
 2010/11/16
 パッドデータがプラグイン表示以外でてなかったのを修正
