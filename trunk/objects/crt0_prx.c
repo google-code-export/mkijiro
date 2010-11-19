@@ -377,7 +377,7 @@ void decToText(){
 			sprintf(buffer, "0x%08lX ", (a_address+(counter*4))-0x48800000);
 			sceIoWrite(fd, buffer, strlen(buffer));
 			
-			sprintf(buffer, "0x%08lX ", *((unsigned int*)(a_address+(counter*4))));
+			sprintf(buffer, "0x%08lX\n", *((unsigned int*)(a_address+(counter*4))));
 			sceIoWrite(fd, buffer, strlen(buffer));			
 						
 			counter++;
@@ -449,6 +449,7 @@ unsigned int blockAdd(int fd, unsigned char *a_data){
   unsigned int offset;
   unsigned char hex[8];
   unsigned char temp[8];
+
 
   unsigned char chartemp[4];
   int counter=0;
@@ -731,6 +732,7 @@ void cheatEnable(unsigned int a_cheat){
 							block[counter].stdVal=*((unsigned int*)(cheatDMA+block[counter].address & 0xFFFFFFC));
 							}
 						break;
+
 						case FLAG_WORD:
 							if(block[counter].address % 2 == 0){
 							block[counter].stdVal=*((unsigned short*)(cheatDMA+block[counter].address & 0xFFFFFFE));
