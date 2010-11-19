@@ -9,21 +9,29 @@ this is modded mkultrav10.
 KnownProblem;
 doesnot work fine unknown value search after code save
 if code is reloaded & saved many times,save&reload function doesnot work..
-dupricated code agaist your will
 これはMKV10のそーすを改造したものです。
 判明バグ?;
 一部のゲームでキーボードをだすとフリーズする(武装神姫)
 コードを保存すると比較サーチがおかしくなる
 コード保存と読込を繰り返していると保存読込機能が反応しなくなる
-こーどが勝手に増殖することがある
 ごく一部の浮動小数が表示されない 0x
+カラーファイルを切り替えるのをくりかえしてると効かなくなる
 
 this is modded mkultrav10.
 KnownProblem;
 unknown freeze bug using keyboad for certail game(busosinki and so on..)
 doesnot work fine unknown value search after code save
 if code is reloaded & saved many times,save&reload function doesnot work..
-dupricated code agaist your will
+
+2010/11/19
+コピーメニューのDMAとJOKERを入れ替えた
+カラーファイルの上限を8つまでに変更
+チート選択メニューで斜め押しだとフリーズするのを修正
+メニューの説明がおかしかったので修正
+swap DMA/JOKER FLAG changer
+max color*.txt file up tp eight
+fix freeze bug,DPAD UPLEFT/UPRIGHT/DONWLEFT/DOWNRIGHT
+fixed cheat menu hints
 
 2010/11/18
 HOMEKEY押したときはメニュー外に移動に変更

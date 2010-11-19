@@ -1,0 +1,9 @@
+0x00300000 ;menukey
+0x00800000 ;cheat toggle
+0xFFFFFFFF ;screenshotkey
+0xFFFF0F00 ;color1 1st color 
+0xFF030000 ;color1 fade amount
+0xFFCCCC00 ;color2 2nd color
+0xFF060600 ;color2 fade amount
+0xFF80FF00 ;color3 
+0xFF0080FF ;color4 

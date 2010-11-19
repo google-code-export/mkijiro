@@ -163,7 +163,7 @@ void *vram;
 unsigned int menuKey=PSP_CTRL_VOLUP | PSP_CTRL_VOLDOWN;
 unsigned int triggerKey=PSP_CTRL_NOTE;
 unsigned int screenKey=PSP_CTRL_SQUARE | PSP_CTRL_VOLDOWN;
-unsigned int cheatHz=0x3D5C;//Cheat 15HZ
+unsigned int cheatHz=15625;//Cheat 15HZ
 unsigned char cheatFlash=0;
 unsigned char cheatPause=0;
 unsigned char cheatSearch=0;
@@ -377,9 +377,9 @@ void decToText(){
 			sprintf(buffer, "0x%08lX ", (a_address+(counter*4))-0x48800000);
 			sceIoWrite(fd, buffer, strlen(buffer));
 			
-			sprintf(buffer, "0x%08lX\n", *((unsigned int*)(a_address+(counter*4))));
-			sceIoWrite(fd, buffer, strlen(buffer));
-			
+			sprintf(buffer, "0x%08lX ", *((unsigned int*)(a_address+(counter*4))));
+			sceIoWrite(fd, buffer, strlen(buffer));			
+						
 			counter++;
 			
 		}
@@ -449,6 +449,7 @@ unsigned int blockAdd(int fd, unsigned char *a_data){
   unsigned int offset;
   unsigned char hex[8];
   unsigned char temp[8];
+
   unsigned char chartemp[4];
   int counter=0;
   int cheatType=0;
@@ -986,6 +987,9 @@ void cheatSave(){
 									}
 									sprintf(buffer , "\r\n");
 									sceIoWrite(tempFd, buffer, 2);
+
+
+
 								}
 								else{
 									switch(block[scounter].flags & FLAG_DWORD){
@@ -1427,32 +1431,32 @@ void menuDraw(){
 				   if(pad.Buttons & PSP_CTRL_SQUARE){
 					pspDebugScreenPuts("  Clear Jump log\n");}
 				   else if(((decodeAddress[bdNo]+(decodeY[bdNo]*4)) >= (logstart-4)) && ((decodeAddress[bdNo]+(decodeY[bdNo]*4)) <= (logstart + 4*jumplog))){
-					pspDebugScreenPuts("  Back to Decoder\n");}
+					pspDebugScreenPuts("  Back to Decoder, [] = switch menu\n");}
 				   else{
-					pspDebugScreenPuts("  View Jump log\n");}
+					pspDebugScreenPuts("  View Jump log, [] = switch menu\n");}
 				    }
 				else{
 				pspDebugScreenPuts("  NORMAL cheat\n");}break;
 				case 6: 				
 				if(tabSelected ==3){
 				   if(pad.Buttons & PSP_CTRL_SQUARE){
-				   		pspDebugScreenPuts("  SELECTED CODE BY NOTE to new cheat,\n");
+				   		pspDebugScreenPuts("  Selected Range by NOTE to new cheat\n");
 				   }
 				}  
 				else{   
-				sprintf(buffer ,"  JOKER cheat (0x%X default,0x0000 MASKED)\n",JOKERADDRESS);	
-				pspDebugScreenPuts(buffer);
+				pspDebugScreenPuts("  DMA cheat\n");
 				}
 				break;
 
 				case 7:
 				if(tabSelected ==3){
 				   if(pad.Buttons & PSP_CTRL_SQUARE){
-					pspDebugScreenPuts("  SELECTED CODE BY NOTE to text file\n");
+					pspDebugScreenPuts("  Selected Range by NOTE to text file\n");
 					}
 				}
 				else{
-				pspDebugScreenPuts("  DMA cheat\n");
+				sprintf(buffer ,"  JOKER cheat (0x%X default,0x0000 MASKED)\n",JOKERADDRESS);	
+				pspDebugScreenPuts(buffer);
 				}
 				break;
 					}
@@ -1592,8 +1596,6 @@ void menuDraw(){
 								 }
 							        else if(block[counter].flags & FLAG_DWORD){
 								mipsDecode(block[counter].hakVal);
-								unsigned int addresstmp=0;
-								unsigned int counteraddress=0;
 								addresscode=block[counter].hakVal;
 								counteraddress=block[counter].address;
 								mipsSpecial(addresscode,addresstmp,counteraddress);}
@@ -2208,6 +2210,8 @@ void menuDraw(){
 				pspDebugScreenPuts("\n");
 				if(extSelected[0] == 0){
 					//Skip the desired amount?
+
+
 					pspDebugScreenPuts("    ");
 					if(extSelected[1] != 0){ //Skip Hex
 						pspDebugScreenPuts("            "); 
@@ -2361,7 +2365,7 @@ void menuDraw(){
 
 				pspDebugScreenSetTextColor(color01);
 				#ifdef _UMDMODE_
-					pspDebugScreenPuts("  MKIJIRO20101117");
+					pspDebugScreenPuts("  MKIJIRO20101119 ");
 				#elif _POPSMODE_
 					pspDebugScreenPuts("  MKULTRA V10 POPS ");
 				#endif
@@ -2411,6 +2415,7 @@ void menuDraw(){
 					pspDebugScreenSetTextColor(0xFF00FF00);
 					sprintf(buffer, "%d%% ", scePowerGetBatteryLifePercent()); 
 				}			
+
 				else{
 					sprintf(buffer, "N/A ");
 				}
@@ -2440,7 +2445,7 @@ void menuDraw(){
 				pspDebugScreenSetTextColor(color01);
 				pspDebugScreenSetXY(0, 31); pspDebugScreenPuts(">< = Select Cheat for On/Off mode;");
 				pspDebugScreenSetXY(0, 32); pspDebugScreenPuts("[] = Select Cheat for Always On mode; /\\ = Edit Cheat;");
-				pspDebugScreenSetXY(0, 33); pspDebugScreenPuts("() = Cancel/Return to Game");
+				pspDebugScreenSetXY(0, 33); pspDebugScreenPuts("SELECT =Duplicate Cheat;  () = Cancel/Return to Game");
 			break;
 			
 			case 1: //DRAW SEARCHER
@@ -2587,8 +2592,10 @@ void menuDraw(){
 						#endif
 						#ifdef _SCREENSHOT_
 						case 14:
-						pspDebugScreenPuts("  SCREENSHOT_MODE:");	pspDebugScreenPuts(screenshotstring[screenshot_mode]); break;
+						pspDebugScreenPuts("  SCREENSHOT_MODE:");	
+						pspDebugScreenPuts(screenshotstring[screenshot_mode]); break;
 						#endif
+
 						
 					}
 					counter++;
@@ -2630,7 +2637,7 @@ void menuDraw(){
 
 				}
 				lineClear(33);
-				if((cheatSelected != 8) && (cheatSelected != 3) && (cheatSelected != 2) && (cheatSelected != 1)){
+				if((cheatSelected != 9) && (cheatSelected != 12) && (cheatSelected != 3) && (cheatSelected != 2) && (cheatSelected != 1)){
 					pspDebugScreenPuts(">< = Toggle; () = Cancel/Return to Game");
 				}
 				else{
@@ -2867,7 +2874,7 @@ void menuDraw(){
 				pspDebugScreenSetXY(0, 31);
 				pspDebugScreenPuts(line); //draw spiffy line
 				pspDebugScreenSetTextColor(color01);
-				pspDebugScreenSetXY(0, 32); pspDebugScreenPuts(">< = Edit On/Off; D-PAD = Cycle/Scroll; [] + <-> = Jump");
+				pspDebugScreenSetXY(0, 32); pspDebugScreenPuts(">< = Edit On/Off; D-PAD = Cycle/Scroll; [] + <-> = Back/Jump;");
 				pspDebugScreenSetXY(0, 33); pspDebugScreenPuts("[] + Analog/Digital = Scroll; () = Cancel/Return to Game");
 			break;
 			
@@ -3439,6 +3446,7 @@ void menuInput(){
 							if(browseAddress[bdNo] > (0x4A000000-(26*browseLines))){
 								browseAddress[bdNo]=(0x4A000000-(26*browseLines));
 							}
+
 						}
 					}
 					else{ //decoder //bakck to decoder
@@ -3458,12 +3466,12 @@ void menuInput(){
 				}
 			}
 			
-			else if(copyMenu ==6){//JOKER
+			else if(copyMenu ==6){//DMA
 
 			  if(extMenu == 1){
-				   block[extSelected[0]].address=0x08800000;
-				   block[extSelected[0]].hakVal=JOKERADDRESS;
-				   block[extSelected[0]].flags=FLAG_JOKER | FLAG_DWORD;
+				   block[extSelected[0]].address=0xFFFFFFFF;
+				   block[extSelected[0]].stdVal=0xFFFFFFFF;
+				   block[extSelected[0]].flags=FLAG_DMA | FLAG_DWORD;			  
 				}
 			 else if(tabSelected==3){ //copy range to new cheat
 				   if(pad.Buttons & PSP_CTRL_SQUARE){
@@ -3473,11 +3481,11 @@ void menuInput(){
 				}
 			}
 			
-			else if(copyMenu ==7){//DMA
+			else if(copyMenu ==7){//JOKER
 			  if(extMenu == 1){
-				   block[extSelected[0]].address=0xFFFFFFFF;
-				   block[extSelected[0]].stdVal=0xFFFFFFFF;
-				   block[extSelected[0]].flags=FLAG_DMA | FLAG_DWORD;
+				   block[extSelected[0]].address=0x08800000;
+				   block[extSelected[0]].hakVal=JOKERADDRESS;
+				   block[extSelected[0]].flags=FLAG_JOKER | FLAG_DWORD;
 					}
 				else if(tabSelected==3){ //copy range to new cheat
 				   if(pad.Buttons & PSP_CTRL_SQUARE){
@@ -5448,7 +5456,7 @@ void menuInput(){
 				}
 				
 				//regular controls
-				if(pad.Buttons & PSP_CTRL_UP){
+				if((pad.Buttons & PSP_CTRL_UP) || (pad.Buttons & PSP_CTRL_LEFT)){
 					if(cheatSelected > 0){
 						cheatSelected--;
 					}
@@ -5456,9 +5464,16 @@ void menuInput(){
 						cheatSelected=cheatTotal-1;
 					}
 					menuDraw();
-					if(cheatButtonAgeY < 13) cheatButtonAgeY++; sceKernelDelayThread(150000-(10000*cheatButtonAgeY));
+					if( (pad.Buttons & 0xFFFF) == PSP_CTRL_UP){
+					if(cheatButtonAgeY < 13){
+					cheatButtonAgeY++; sceKernelDelayThread(150000-(10000*cheatButtonAgeY));}
+					}
+					else{
+					if(cheatButtonAgeY < 12){
+					cheatButtonAgeY++; sceKernelDelayThread(15000-(1200*cheatButtonAgeY));}					
+					}
 				}
-				else if(pad.Buttons & PSP_CTRL_DOWN){
+				else if((pad.Buttons & PSP_CTRL_DOWN) ||(pad.Buttons & PSP_CTRL_RIGHT) ){
 					if(cheatSelected < (cheatTotal-1)){
 						cheatSelected++;
 					}
@@ -5466,28 +5481,15 @@ void menuInput(){
 					cheatSelected=0;
 					}
 					menuDraw();
-					if(cheatButtonAgeY < 13) cheatButtonAgeY++; sceKernelDelayThread(150000-(10000*cheatButtonAgeY));
+					if((pad.Buttons & 0xFFFF) == PSP_CTRL_DOWN){
+						if(cheatButtonAgeY < 13){
+						cheatButtonAgeY++; sceKernelDelayThread(150000-(10000*cheatButtonAgeY));}
+					}	
+					else{	
+						if(cheatButtonAgeY < 12){
+						cheatButtonAgeY++; sceKernelDelayThread(15000-(1200*cheatButtonAgeY));}
+					}
 				}
-				else if(pad.Buttons & PSP_CTRL_LEFT){
-					if(cheatSelected > 0){
-						cheatSelected-=1;
-					}
-					else if(cheatSelected == 0){
-						cheatSelected=cheatTotal-1;
-					}
-					menuDraw();
-					if(cheatButtonAgeY < 12) cheatButtonAgeY++; sceKernelDelayThread(15000-(1200*cheatButtonAgeY));
-				}
-				else if(pad.Buttons & PSP_CTRL_RIGHT){
-					if(cheatSelected < (cheatTotal-1)){
-						cheatSelected+=1;
-					}
-					else if(cheatSelected == (cheatTotal-1)){
-						cheatSelected=0;
-					}
-					menuDraw();
-					if(cheatButtonAgeY < 12) cheatButtonAgeY++; sceKernelDelayThread(15000-(1200*cheatButtonAgeY));
-				}	
 				else{
 					cheatButtonAgeY=0;
 				}
@@ -5759,7 +5761,8 @@ void menuInput(){
 					cheatHz+=15625;
 				}
 				if(cheatSelected==12){
-					colorFile++;
+					if(colorFile < 7){
+					colorFile++;}
 				}
 				#ifdef _SCREENSHOT_
 				if(cheatSelected==14){
@@ -5816,6 +5819,7 @@ void menuInput(){
 						if(block[scounter].flags & FLAG_DMA)
 						{
 						  if(block[scounter].hakVal!=0xFFFFFFFF)
+
 						  {
 							sceIoLseek(fd, block[scounter].hakVal, SEEK_SET);
 							sceIoRead(fd, &cheatDMA, sizeof(unsigned int));
@@ -7043,88 +7047,3 @@ int _stop(SceSize args, void *argp){
 	return 0;
 }
 
-void mipsSpecial(unsigned int addresscode,unsigned int addresstmp,unsigned int counteraddress){
-							if(((addresscode >= 0x10000000) && (addresscode <= 0x1FFFFFFF)) || ((addresscode >= 0x50000000) && (addresscode <= 0x5FFFFFFF))
-							|| ((addresscode >= 0x45000000) && (addresscode <= 0x4503FFFF)) || ((addresscode >= 0x49000000) && (addresscode <= 0x491FFFFF))
-							|| (((addresscode & 0xFC1F0000) >= 0x04000000) && ((addresscode & 0xFC1F0000) <= 0x04030000))
-							||  (((addresscode & 0xFC1F0000) >= 0x04100000) && ((addresscode & 0xFC1F0000) <= 0x04130000)) )
-							{
-							addresstmp=addresscode & 0xFFFF;
-							addresscode=4*(addresstmp + 1);
-							if(addresstmp > 0x7FFF){
-							addresscode=(-0x40000+addresscode)+counteraddress;}
-							else{
-							addresscode=addresscode+counteraddress;}
-							sprintf(buffer, "$%X", addresscode);pspDebugScreenPuts(buffer);
-							if(extMenu==2){
-							pspDebugScreenPuts("+0FFSET");
-							}
-							if(addresstmp > 0x7FFF){
-							 sprintf(buffer, "(-%d)", (0x10000-(addresstmp+1)));}
-							else{
-							 sprintf(buffer, "(+%d)", (addresstmp+1));}
-							 pspDebugScreenPuts(buffer);
-							}
-							else if( (addresscode>>24 == 0x3C) && ((addresscode & 0x7FFF) > 0x3500) ){
-							addresscode=addresscode <<16;
-							pspDebugScreenPuts(" UFLOAT:");//UPPER IEEE754 FLOAT
-							f_cvt(&addresscode, buffer, sizeof(buffer), 6, MODE_GENERIC);
-							pspDebugScreenPuts(buffer);
-							}
-							else if( ((addresscode>>16)&0xFF80) == 0xDF80){
-							pspDebugScreenPuts(" VHFLOAT:");//16BIT VFPU HALF FLOAT
-/* VFPU 16-bit floating-point format. */
-#define VFPU_FLOAT16_EXP_MAX    0x1f
-#define VFPU_SH_FLOAT16_SIGN    15
-#define VFPU_MASK_FLOAT16_SIGN  0x1
-#define VFPU_SH_FLOAT16_EXP     10
-#define VFPU_MASK_FLOAT16_EXP   0x1f
-#define VFPU_SH_FLOAT16_FRAC    0
-#define VFPU_MASK_FLOAT16_FRAC  0x3ff
-        /* Convert a VFPU 16-bit floating-point number to IEEE754. */
-        unsigned int float2int=0;
-        unsigned short float16 = addresscode & 0xFFFF;
-        unsigned int sign = (float16 >> VFPU_SH_FLOAT16_SIGN) & VFPU_MASK_FLOAT16_SIGN;
-        int exponent = (float16 >> VFPU_SH_FLOAT16_EXP) & VFPU_MASK_FLOAT16_EXP;
-        unsigned int fraction = float16 & VFPU_MASK_FLOAT16_FRAC;
-        char signchar = '+' + ((sign == 1) * 2);
-
-        if (exponent == VFPU_FLOAT16_EXP_MAX)
-        {
-                if (fraction == 0){
-                        sprintf(buffer, "%cInf", signchar);
-		pspDebugScreenPuts(buffer);
-		}
-                else{
-                        sprintf(buffer, "%cNaN", signchar);
-		pspDebugScreenPuts(buffer);
-		}
-        }
-        else if (exponent == 0 && fraction == 0)
-        {
-                sprintf(buffer, "%c0", signchar);
-		pspDebugScreenPuts(buffer);
-        }
-        else
-        {
-                if (exponent == 0)
-                {
-                        do
-
-                        {
-                                fraction <<= 1;
-                                exponent--;
-                        }
-                        while (!(fraction & (VFPU_MASK_FLOAT16_FRAC + 1)));
-
-                        fraction &= VFPU_MASK_FLOAT16_FRAC;
-                }
-                /* Convert to 32-bit single-precision IEEE754. */
-                float2int = (sign << 31) + ((exponent + 112) << 23) + (fraction << 13);
-		//sprintf(buffer, "%X" ,float2int); pspDebugScreenPuts(buffer);
-		f_cvt(&float2int, buffer, sizeof(buffer), 6, MODE_GENERIC);
-		pspDebugScreenPuts(buffer);
-        }
-							}
-
-}
