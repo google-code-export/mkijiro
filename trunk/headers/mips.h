@@ -723,7 +723,7 @@ Encoding: 0000 00-- ---t tttt dddd dhhh hh00 0011*/
           break;
           
         case 0x0C:
-          pspDebugScreenPuts("syscall  ");
+          pspDebugScreenPuts("syscall");
 /*SYSCALL -- System call
 Description: Generates a software interrupt.
 Operation: advance_pc (4);
@@ -732,13 +732,13 @@ Encoding: 0000 00-- ---- ---- ---- ---- --00 1100*/
           break;
           
         case 0x0D:
-          pspDebugScreenPuts("break    ");
+          pspDebugScreenPuts("break");
           break;
           
           //0x0e = nothing
           
          case 0x0F:
-          pspDebugScreenPuts("sync      ");
+          pspDebugScreenPuts("sync");
           break;
           
 /*          case 0x28:
@@ -1260,7 +1260,7 @@ Encoding: 0000 01ss sss1 0001 iiii iiii iiii iiii*/
            break;   
             
           default:
-            pspDebugScreenPuts("???     ");
+            pspDebugScreenPuts("???");
       }
       break;
       
@@ -1463,7 +1463,7 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
 
         case 0x420:
         if((a_opcode & 0xFFFFFF)  == 0x18){
-                pspDebugScreenPuts("eret     ");
+                pspDebugScreenPuts("eret");
                 }
         break;
         }
@@ -2102,15 +2102,15 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
 
                 switch(a_opcode & 0xFFFFFF){
                 case 0x00:
-                pspDebugScreenPuts("halt     ");
+                pspDebugScreenPuts("halt");
                 break;
 
                 case 0x3E:
-                pspDebugScreenPuts("dret     ");
+                pspDebugScreenPuts("dret");
                 break;
 
                 case 0x3F:
-                pspDebugScreenPuts("dbreak    ");
+                pspDebugScreenPuts("dbreak");
                 break;
                 }
         }
@@ -3307,7 +3307,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
       case 0xFC:
       switch(a_opcode){
         case 0xFFFF0000:
-        pspDebugScreenPuts("vnop     ");
+        pspDebugScreenPuts("vnop");
         break;
 
         case 0xFFFF040D:
@@ -3342,8 +3342,8 @@ void mipsSpecial(unsigned int addresscode,unsigned int addresstmp,unsigned int c
 							else{
 							addresscode=addresscode+counteraddress;}
 							sprintf(buffer, "$%X", addresscode);pspDebugScreenPuts(buffer);
-							if(extMenu==2){
-							pspDebugScreenPuts("+0FFSET");
+							if(extMenu==2 && offsetadd==1){
+								pspDebugScreenPuts("+0FFSET");
 							}
 							if(addresstmp > 0x7FFF){
 							 sprintf(buffer, "(-%d)", (0x10000-(addresstmp+1)));}
@@ -3358,7 +3358,7 @@ void mipsSpecial(unsigned int addresscode,unsigned int addresstmp,unsigned int c
 							pspDebugScreenPuts(buffer);
 							}
 							else if( ((addresscode>>16)&0xFF80) == 0xDF80){
-							pspDebugScreenPuts(" VHFLOAT:");//16BIT VFPU HALF FLOAT
+							pspDebugScreenPuts("VHFLOAT:");//16BIT VFPU HALF FLOAT
 /* VFPU 16-bit floating-point format. */
 #define VFPU_FLOAT16_EXP_MAX    0x1f
 #define VFPU_SH_FLOAT16_SIGN    15
