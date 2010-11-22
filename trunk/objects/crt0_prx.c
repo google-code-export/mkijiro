@@ -250,11 +250,13 @@ unsigned int color01_to=0x00000006; //fade amount
 unsigned int color01=0xFF00CCFF; //bright Yellow
 unsigned int color01_to=0x00000606; //fade amount
 #endif
-
 unsigned int color02=0xFFCCCCCC; //grey
 unsigned int color02_to=0x00060606; //fade amount
 unsigned int color03=0xFFFF0000; //blue
 unsigned int color04=0xFF00FF00; //lime green
+unsigned int bgcolor=0xFF000000; //black
+unsigned int select_cheat=0xFF00FF00;
+unsigned int constant_cheat=0xFFFF0000;
 
 char line[78]={0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D};
 
@@ -576,7 +578,7 @@ unsigned int colorAdd(unsigned char colorDir[]){
 	int scounter=0;
     
     counter=0;
-    while(counter < 5){
+    while(counter < 0xC){
     
 		//find seperator
 		scounter=0;
@@ -619,10 +621,13 @@ unsigned int colorAdd(unsigned char colorDir[]){
 				color04=char2hex(hex, &type);
 			break;
 			case 9:
-				menuKey=char2hex(hex, &type);
+				bgcolor=char2hex(hex, &type);
 			break;
 			case 0xA:
-				color04=char2hex(hex, &type);
+				select_cheat=char2hex(hex, &type);
+			break;
+			case 0xB:
+				constant_cheat=char2hex(hex, &type);
 			break;
 		}
 		
@@ -1394,14 +1399,15 @@ void menuDraw(){
 	unsigned int scounter;
 	unsigned int convBase;
 	unsigned int convTotal;
-	unsigned int bgcolor=0xFF000000;
+	unsigned int tempbgcolor;
+	
 	
 	//Draw the menu
 	pspDebugScreenSetXY(0, 0);
   	
   	if(copyMenu){
 		counter=1; //we start @ 1 this time because 0 is closed
-		bgcolor=0xFF000000;
+		tempbgcolor=bgcolor;
 		if(extMenu ==1){
 		countermax=7;}
 		else if(tabSelected ==3){	
@@ -1415,7 +1421,7 @@ void menuDraw(){
 		while(counter < countermax+1){
 			lineClear(counter+2); 
 			pspDebugScreenSetXY(0, counter+2);
-			pspDebugScreenSetBackColor(bgcolor);
+			pspDebugScreenSetBackColor(tempbgcolor);
 			if(copyMenu == counter){
 				//Highlight the selection
 				pspDebugScreenSetTextColor(color01);
@@ -1464,11 +1470,11 @@ void menuDraw(){
 				break;
 					}
 			counter++;
-			bgcolor+=0x00000008;
+			tempbgcolor+=0x00000008;
 		}
 		//Helper
 		pspDebugScreenSetTextColor(color02); 
-		pspDebugScreenSetBackColor(0xFF000000);
+		pspDebugScreenSetBackColor(bgcolor);
 		pspDebugScreenPuts(line); //draw spiffy line
   	}
 
@@ -2376,11 +2382,11 @@ void menuDraw(){
 						pspDebugScreenPuts(">");
 						//Highlight the selection
 						if(cheat[cheatSelected].flags & FLAG_SELECTED){
-							pspDebugScreenSetTextColor(0xFF00FF00);  pspDebugScreenPuts("    [!] ");
+							pspDebugScreenSetTextColor(select_cheat);  pspDebugScreenPuts("    [!] ");
 						}
 						else if(cheat[cheatSelected].flags & FLAG_CONSTANT){
-							pspDebugScreenSetTextColor(0xFFFF0000);  pspDebugScreenPuts("   [!!] ");
-						}
+							pspDebugScreenSetTextColor(constant_cheat);  pspDebugScreenPuts("   [!!] ");
+						}               
 						else{
 							pspDebugScreenSetTextColor(color01); pspDebugScreenPuts("  [OFF] ");
 						}
@@ -2389,10 +2395,10 @@ void menuDraw(){
 						pspDebugScreenPuts(" ");
 						//Don't highlight the selection
 						if(cheat[counter].flags & FLAG_SELECTED){
-							pspDebugScreenSetTextColor(0xFF00FF00); pspDebugScreenPuts("    [!] "); pspDebugScreenSetTextColor(color02);
+							pspDebugScreenSetTextColor(select_cheat); pspDebugScreenPuts("    [!] "); pspDebugScreenSetTextColor(color02);
 						}
 						else if(cheat[counter].flags & FLAG_CONSTANT){
-							pspDebugScreenSetTextColor(0xFFFF0000);  pspDebugScreenPuts("   [!!] "); pspDebugScreenSetTextColor(color02);
+							pspDebugScreenSetTextColor(constant_cheat);  pspDebugScreenPuts("   [!!] "); pspDebugScreenSetTextColor(color02);
 						}
 						else{
 							pspDebugScreenSetTextColor(color01); pspDebugScreenPuts("  [OFF] "); pspDebugScreenSetTextColor(color02);
@@ -2405,10 +2411,10 @@ void menuDraw(){
 					if(cheatSelected == counter){
 						//Highlight the selection
 						if(cheat[cheatSelected].flags & FLAG_SELECTED){
-							pspDebugScreenSetTextColor(color04); pspDebugScreenPuts(" (ACTIVE WITH NOTE) ");
+							pspDebugScreenSetTextColor(select_cheat); pspDebugScreenPuts(" (ACTIVE WITH NOTE) ");
 						}
 						else if(cheat[cheatSelected].flags & FLAG_CONSTANT){
-							pspDebugScreenSetTextColor(color03);  pspDebugScreenPuts(" (ALWAYS ACTIVE) ");
+							pspDebugScreenSetTextColor(constant_cheat);  pspDebugScreenPuts(" (ALWAYS ACTIVE) ");
 						}
 						else{
 							pspDebugScreenSetTextColor(color01); pspDebugScreenPuts(" (NOT ENABLED) ");
@@ -2417,10 +2423,10 @@ void menuDraw(){
 					else{
 						//Don't highlight the selection
 						if(cheat[counter].flags & FLAG_SELECTED){
-							pspDebugScreenSetTextColor(color04); pspDebugScreenPuts(" (ACTIVE WITH NOTE) "); pspDebugScreenSetTextColor(color02);
+							pspDebugScreenSetTextColor(select_cheat); pspDebugScreenPuts(" (ACTIVE WITH NOTE) "); pspDebugScreenSetTextColor(color02);
 						}
 						else if(cheat[counter].flags & FLAG_CONSTANT){
-							pspDebugScreenSetTextColor(color03);  pspDebugScreenPuts(" (ALWAYS ACTIVE) "); pspDebugScreenSetTextColor(color02);
+							pspDebugScreenSetTextColor(constant_cheat);  pspDebugScreenPuts(" (ALWAYS ACTIVE) "); pspDebugScreenSetTextColor(color02);
 						}
 						else{
 							pspDebugScreenSetTextColor(color01); pspDebugScreenSetTextColor(color02);
@@ -2433,7 +2439,7 @@ void menuDraw(){
 
 				pspDebugScreenSetXY(0, 28);
 				pspDebugScreenSetTextColor(color02); 
-				pspDebugScreenSetBackColor(0xFF000000);
+				pspDebugScreenSetBackColor(bgcolor);
 				pspDebugScreenPuts(line); //draw spiffy line
 
 				pspDebugScreenSetXY(0, 29);
