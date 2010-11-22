@@ -12,6 +12,9 @@ doesnot work fine unknown value search after code save
 if code is reloaded & saved many times,save&reload function doesnot work..
 this is modded mkultrav10.
 
+2010/11/23
+カラー設定を追加＋読み込んでなかったので修正
+
 2010/11/22
 メモリビューワーでのバイト書き込み修正
 サーチメニューでもDECOERを見れるようにした(3bitMASKあどれす)
