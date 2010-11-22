@@ -3473,7 +3473,12 @@ void menuInput(){
 				if(tabSelected == 3)
 				{
 					if(flipme){
-						copyData2=*(unsigned char*)(browseAddress[bdNo]+(browseX[bdNo]/2)+(browseY[bdNo]*0x10));
+						if(browseC[bdNo]==0){
+						copyData2=*(unsigned char*)(browseAddress[bdNo]+(browseY[bdNo]*0x10));}
+						else if(browseC[bdNo]==1){
+						copyData2=*(unsigned char*)(browseAddress[bdNo]+(browseX[bdNo]/2)+(browseY[bdNo]*0x10));}
+						else{
+						copyData2=*(unsigned char*)(browseAddress[bdNo]+(browseX[bdNo])+(browseY[bdNo]*0x10));}
 					}
 					else{
 						copyData2=*((unsigned int*)(decodeAddress[bdNo]+(decodeY[bdNo]*4)));
@@ -3504,8 +3509,13 @@ void menuInput(){
 						/*
 						swl ,$003()
 						swr ,$000()
-						*/
-						*(unsigned char*)(browseAddress[bdNo]+(browseX[bdNo]/2)+(browseY[bdNo]*0x10))=copyData2;
+						*/	
+						if(browseC[bdNo]==0){
+						*(unsigned char*)(browseAddress[bdNo]+(browseY[bdNo]*0x10))=copyData2;}
+						else if(browseC[bdNo]==1){
+						*(unsigned char*)(browseAddress[bdNo]+(browseX[bdNo]/2)+(browseY[bdNo]*0x10))=copyData2;}
+						else{
+						*(unsigned char*)(browseAddress[bdNo]+(browseX[bdNo])+(browseY[bdNo]*0x10))=copyData2;}
 					}
 					else{
 						*((unsigned int*)(decodeAddress[bdNo]+(decodeY[bdNo]*4)))=copyData2;
