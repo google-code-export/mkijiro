@@ -3473,7 +3473,7 @@ void menuInput(){
 				if(tabSelected == 3)
 				{
 					if(flipme){
-						copyData2=*(unsigned char*)(browseAddress[bdNo]+browseY[bdNo]);
+						copyData2=*(unsigned char*)(browseAddress[bdNo]+(browseX[bdNo]/2)+(browseY[bdNo]*0x10));
 					}
 					else{
 						copyData2=*((unsigned int*)(decodeAddress[bdNo]+(decodeY[bdNo]*4)));
@@ -3501,7 +3501,11 @@ void menuInput(){
 				if(tabSelected == 3)
 				{
 					if(flipme){
-						*(unsigned char*)(browseAddress[bdNo]+browseY[bdNo])=copyData2;
+						/*
+						swl ,$003()
+						swr ,$000()
+						*/
+						*(unsigned char*)(browseAddress[bdNo]+(browseX[bdNo]/2)+(browseY[bdNo]*0x10))=copyData2;
 					}
 					else{
 						*((unsigned int*)(decodeAddress[bdNo]+(decodeY[bdNo]*4)))=copyData2;
