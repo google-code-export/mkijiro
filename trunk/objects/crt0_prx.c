@@ -3943,7 +3943,7 @@ void menuInput(){
 						  if(!cheatPause) sceKernelDelayThread(1500);
 						  
 							lineClear(33);
-							pspDebugScreenSetTextColor(color02); sprintf(buffer, "Task = %02d%%; () = Hold to Abort", (counter-searchStart + 0x64)/((searchStop-searchStart + 0x64)/0x64)); pspDebugScreenPuts(buffer); 
+							pspDebugScreenSetTextColor(color02); sprintf(buffer, "Task = %02d%%; () = Hold to Abort", (counter-searchStart + 1)/((searchStop-searchStart + 0x64)/0x64)); pspDebugScreenPuts(buffer); 
 
 						  sceCtrlPeekBufferPositive(&pad, 1);
 						  
@@ -4061,7 +4061,7 @@ void menuInput(){
 						  if(!cheatPause) sceKernelDelayThread(1500);
 						  
 										lineClear(33);
-										pspDebugScreenSetTextColor(color02); sprintf(buffer, "Task = %02d%%; () = Hold to Abort", (scounter-searchStart + 0x64)/((searchStop-searchStart+ 0x64)/0x64)); pspDebugScreenPuts(buffer); 
+										pspDebugScreenSetTextColor(color02); sprintf(buffer, "Task = %02d%%; () = Hold to Abort", (scounter-searchStart +1 )/((searchStop-searchStart+ 0x64)/0x64)); pspDebugScreenPuts(buffer); 
 							
 						  sceCtrlPeekBufferPositive(&pad, 1);
 						  
@@ -4440,7 +4440,7 @@ void menuInput(){
 			lineClear(33);
         		pspDebugScreenSetTextColor(color02);
 			//sprintf(buffer, "Task = %02d%%; () = Hold to Abort", (counter-0x48804000)/((0x4A000000-0x48804000)/0x64));
-			sprintf(buffer, "Task = %02d%%; () = Hold to Abort", (counter - searchStart + 0x64)/((searchStop - searchStart + 0x64)/0x64));
+			sprintf(buffer, "Task = %02d%%; () = Hold to Abort", (counter - searchStart + 1)/((searchStop - searchStart + 0x64)/0x64));
 			pspDebugScreenPuts(buffer); 
                   		
                       sceCtrlPeekBufferPositive(&pad, 1);
@@ -4632,7 +4632,7 @@ void menuInput(){
 						  
 							lineClear(33);
 							pspDebugScreenSetTextColor(color02);
-							sprintf(buffer, "Task = %02d%%; () = Hold to Abort", (scounter - searchStart+ 0x64)/((searchStop - searchStart+ 0x64)/0x64));
+							sprintf(buffer, "Task = %02d%%; () = Hold to Abort", (scounter - searchStart+ 1)/((searchStop - searchStart+ 0x64)/0x64));
 							pspDebugScreenPuts(buffer);
 							
 						  sceCtrlPeekBufferPositive(&pad, 1);
@@ -5041,7 +5041,7 @@ void menuInput(){
 					  if(!cheatPause) sceKernelDelayThread(1500);
 						  
 					  lineClear(33);
-					  pspDebugScreenSetTextColor(color02); sprintf(buffer, "Task = %02d%%; () = Hold to Abort", (counter - searchStart + 0x64)/((searchStop-searchStart + 0x64)/0x64)); pspDebugScreenPuts(buffer); 
+					  pspDebugScreenSetTextColor(color02); sprintf(buffer, "Task = %02d%%; () = Hold to Abort", (counter - searchStart + 1)/((searchStop-searchStart + 0x64)/0x64)); pspDebugScreenPuts(buffer); 
 						
 					  sceCtrlPeekBufferPositive(&pad, 1);
 					  
