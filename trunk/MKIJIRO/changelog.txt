@@ -13,6 +13,7 @@ if code is reloaded & saved many times,save&reload function doesnot work..
 this is modded mkultrav10.
 
 2010/11/22
+メモリビューワーでのバイト書き込み修正
 サーチメニューでもDECOERを見れるようにした(3bitMASKあどれす)
 16bitサーチで半浮動小数を出すように変更
 桁あふれの半浮動小数は表示しないように変更
@@ -23,6 +24,7 @@ this is modded mkultrav10.
 アドレス範囲でコピーが使えなかったので修正
 アドレス範囲が短い時進歩の割り算が0でフリーズしていたのを修正
 Value.ASCII → ASCII
+fixed byte store copy menu on ram browser
 support decoder on search result(3bitmask aligned)
 support 16bit upper/half float search
 fixed 16bit float display
