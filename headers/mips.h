@@ -3079,7 +3079,8 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 
         case 0x80:
         pspDebugScreenPuts("vfim.s   ");
-        vectors(a_opcode,0,1);
+        vectors(a_opcode,0,0);
+        pspDebugScreenPuts(",");
         //mipsImm(a_opcode,0,0);
         break;
 //{ "vfim.s",  0xDF800000, 0xFF800000, "%xs, %vh" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%xs, %vh"
@@ -3351,14 +3352,14 @@ void mipsSpecial(unsigned int addresscode,unsigned int addresstmp,unsigned int c
 							 sprintf(buffer, "(+%d)", (addresstmp+1));}
 							 pspDebugScreenPuts(buffer);
 							}
-							else if( (addresscode>>24 == 0x3C) && ((addresscode & 0x7FFF) > 0x3500) ){
+							else if( (addresscode>>24 == 0x3C) && ((addresscode & 0x7FFF) > 0x38D1) && ((addresscode & 0x7FFF) < 0x4B19) ){
 							addresscode=addresscode <<16;
-							pspDebugScreenPuts(" UFLOAT:");//UPPER IEEE754 FLOAT
+							pspDebugScreenPuts("  UFLOAT:");//UPPER IEEE754 FLOAT
 							f_cvt(&addresscode, buffer, sizeof(buffer), 6, MODE_GENERIC);
 							pspDebugScreenPuts(buffer);
 							}
-							else if( ((addresscode>>16)&0xFF80) == 0xDF80){
-							pspDebugScreenPuts("VHFLOAT:");//16BIT VFPU HALF FLOAT
+							else if( (((addresscode>>16)&0xFF80) == 0xDF80)&& ((addresscode & 0x7FFF) > 0x68E) ){
+							pspDebugScreenPuts(" VHFLOAT:");//16BIT VFPU HALF FLOAT
 /* VFPU 16-bit floating-point format. */
 #define VFPU_FLOAT16_EXP_MAX    0x1f
 #define VFPU_SH_FLOAT16_SIGN    15

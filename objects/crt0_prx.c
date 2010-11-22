@@ -1483,10 +1483,10 @@ void menuDraw(){
 				
 				//draw some info 
 				if(editFormat==0){
-					pspDebugScreenSetTextColor(color02); pspDebugScreenPuts("\n  Address     Value.Hex   Value.Dec   Value.ASCII  Value.Float \n");
+					pspDebugScreenSetTextColor(color02); pspDebugScreenPuts("  Address     Value.Hex   Value.Dec   ASCII Value.Float \n");
 				}
 				else{
-					pspDebugScreenSetTextColor(color02); pspDebugScreenPuts("\n  Address     Value.Hex   Opcode   Args                        \n");
+					pspDebugScreenSetTextColor(color02); pspDebugScreenPuts("  Address     Value.Hex   Opcode   Args                        \n");
 				}
 
 				//Print out the cheat lines
@@ -1496,8 +1496,10 @@ void menuDraw(){
 				while(counter < (cheat[cheatSelected].block+cheat[cheatSelected].len)){
 					
 					//Scroll feature right here, in two lines =3
-					if((signed int)(counter-convBase) < (signed int)(((extSelected[0]-convBase)-11) - (( ((signed int)(extSelected[0]-convBase)+11) - ((signed int)convTotal))>0? abs(((signed int)(extSelected[0]-convBase)+11) - ((signed int)convTotal)): 0)   )) {counter++; continue;}
-					if((signed int)(counter-convBase) > (signed int)(((extSelected[0]-convBase)+11) + (((signed int)(extSelected[0]-convBase)-11)<0? abs((signed int)((extSelected[0]-convBase)-11)): 0)   )) {counter++; continue;}
+					//if((signed int)(counter-convBase) < (signed int)(((extSelected[0]-convBase)-11) - (( ((signed int)(extSelected[0]-convBase)+11) - ((signed int)convTotal))>0? abs(((signed int)(extSelected[0]-convBase)+11) - ((signed int)convTotal)): 0)   )) {counter++; continue;}
+					//if((signed int)(counter-convBase) > (signed int)(((extSelected[0]-convBase)+11) + (((signed int)(extSelected[0]-convBase)-11)<0? abs((signed int)((extSelected[0]-convBase)-11)): 0)   )) {counter++; continue;}
+					if((signed int)(counter-convBase) < (signed int)(((extSelected[0]-convBase)-13) - (( ((signed int)(extSelected[0]-convBase)+13) - ((signed int)convTotal))>0? abs(((signed int)(extSelected[0]-convBase)+13) - ((signed int)convTotal)): 0)   )) {counter++; continue;}
+					if((signed int)(counter-convBase) > (signed int)(((extSelected[0]-convBase)+13) + (((signed int)(extSelected[0]-convBase)-13)<0? abs((signed int)((extSelected[0]-convBase)-13)): 0)   )) {counter++; continue;}
 
 					//Apply the row color
 					if(counter == extSelected[0]){
@@ -1562,14 +1564,16 @@ void menuDraw(){
 
 						//Print out the float
 						if((block[counter].address & 0x2) == 0x2){
-						pspDebugScreenPuts("  UFLOAT:");//UPPER FLAOT
-
-						unsigned int upperfloat=block[counter].hakVal <<16;
-						f_cvt(&upperfloat, buffer, sizeof(buffer), 6, MODE_GENERIC);}
+					    	addresscode=(block[counter].hakVal & 0xFFFF) | 0x3C000000;
+						mipsSpecial(addresscode,addresstmp,counteraddress);
+						//pspDebugScreenPuts("  UFLOAT:");//UPPER FLAOT
+						//unsigned int upperfloat=block[counter].hakVal <<16;
+						//f_cvt(&upperfloat, buffer, sizeof(buffer), 6, MODE_GENERIC);
+						}
 						else{
-						pspDebugScreenPuts("         ");
-						f_cvt(&block[counter].hakVal, buffer, sizeof(buffer), 6, MODE_GENERIC);}
-						pspDebugScreenPuts(buffer);
+						pspDebugScreenPuts("  ");
+						f_cvt(&block[counter].hakVal, buffer, sizeof(buffer), 6, MODE_GENERIC);
+						pspDebugScreenPuts(buffer);}
 					}
 					else{
 						//Print out the opcode
@@ -1661,10 +1665,10 @@ void menuDraw(){
 				pspDebugScreenPuts("\n"); pspDebugScreenSetTextColor(color02); pspDebugScreenPuts(line);
 				//draw some info 
 				if(editFormat==0){
-					pspDebugScreenPuts("\n  Value.Hex   Value.Dec   Value.ASCII  Value.Float\n");
+					pspDebugScreenPuts("  Value.Hex   Value.Dec   ASCII Value.Float\n");
 				}
 				else{
-					pspDebugScreenPuts("\n  Value.Hex   Opcode   Args\n");
+					pspDebugScreenPuts("  Value.Hex   Opcode   Args\n");
 				}
 
 				//Apply the row color
@@ -1718,13 +1722,19 @@ void menuDraw(){
 					}
 					else{
 					if((searchHistory[0].flags & FLAG_DWORD) == FLAG_WORD){
-					pspDebugScreenPuts("  UFLOAT:");
-						unsigned int upperfloat=searchHistory[0].hakVal <<16;
-						f_cvt(&upperfloat, buffer, sizeof(buffer), 6, MODE_GENERIC);}
+				    	addresscode=(searchHistory[0].hakVal & 0xFFFF) | 0x3C000000;
+					mipsSpecial(addresscode,addresstmp,counteraddress);
+				    	addresscode=(searchHistory[0].hakVal & 0xFFFF) | 0xDF800000;
+					pspDebugScreenPuts(" ");
+					mipsSpecial(addresscode,addresstmp,counteraddress);
+					//pspDebugScreenPuts("  UFLOAT:");
+					//unsigned int upperfloat=searchHistory[0].hakVal <<16;
+					//f_cvt(&upperfloat, buffer, sizeof(buffer), 6, MODE_GENERIC);
+					}
 					else{
-					pspDebugScreenPuts("         ");
-					f_cvt(&searchHistory[0].hakVal, buffer, sizeof(buffer), 6, MODE_GENERIC);}
-					pspDebugScreenPuts(buffer);
+					pspDebugScreenPuts("  ");
+					f_cvt(&searchHistory[0].hakVal, buffer, sizeof(buffer), 6, MODE_GENERIC);
+					pspDebugScreenPuts(buffer);}
 					}
 				}
 				else{
@@ -1781,12 +1791,12 @@ void menuDraw(){
 				if(searchNo){pspDebugScreenSetTextColor(extSelected[0] == 2? color01: color02); pspDebugScreenPuts("  Undo Search\n");}
 
 				//Print out results
-				pspDebugScreenPuts("\n"); pspDebugScreenSetTextColor(color02); pspDebugScreenPuts(line);
+				pspDebugScreenSetTextColor(color02); pspDebugScreenPuts(line);
 				pspDebugScreenSetTextColor(color01); pspDebugScreenPuts("  [Search Results: "); sprintf(buffer, "%d Found - Only showing first 100]", searchResultCounter); pspDebugScreenPuts(buffer);
 				pspDebugScreenPuts("\n"); pspDebugScreenSetTextColor(color02); pspDebugScreenPuts(line);
 				pspDebugScreenSetTextColor(color02); 
 				if(editFormat==0){
-				pspDebugScreenPuts("  Address     Value.Hex   Value.Dec   Value.ASCII  Value.Float\n");}
+				pspDebugScreenPuts("  Address     Value.Hex   Value.Dec   ASCII Value.Float\n");}
 				else{
 				pspDebugScreenPuts("  Address     Value.Hex   Opcode   Args(alinged address)\n");}
 
@@ -1795,8 +1805,10 @@ void menuDraw(){
 				counter=0;
 				while(counter < convTotal){
 					//Scroll feature right here, in two lines =3
-					if((signed int)(counter) < (signed int)(((extSelected[0]-3)-7) - (( ((signed int)(extSelected[0]-3)+7) - ((signed int)convTotal))>0? abs(((signed int)(extSelected[0]-3)+7) - ((signed int)convTotal)): 0)   )) {counter++; continue;}
-					if((signed int)(counter) > (signed int)(((extSelected[0]-3)+7) + (((signed int)(extSelected[0]-3)-7)<0? abs((signed int)((extSelected[0]-3)-7)): 0)   )) {counter++; continue;}
+					if((signed int)(counter) < (signed int)(((extSelected[0]-3)-10) - (( ((signed int)(extSelected[0]-3)+10) - ((signed int)convTotal))>0? abs(((signed int)(extSelected[0]-3)+10) - ((signed int)convTotal)): 0)   )) {counter++; continue;}
+					if((signed int)(counter) > (signed int)(((extSelected[0]-3)+10) + (((signed int)(extSelected[0]-3)-10)<0? abs((signed int)((extSelected[0]-3)-10)): 0)   )) {counter++; continue;}
+					//if((signed int)(counter) < (signed int)(((extSelected[0]-3)-7) - (( ((signed int)(extSelected[0]-3)+7) - ((signed int)convTotal))>0? abs(((signed int)(extSelected[0]-3)+7) - ((signed int)convTotal)): 0)   )) {counter++; continue;}
+					//if((signed int)(counter) > (signed int)(((extSelected[0]-3)+7) + (((signed int)(extSelected[0]-3)-7)<0? abs((signed int)((extSelected[0]-3)-7)): 0)   )) {counter++; continue;}
 
 					//Apply the row color
 					if(counter == (extSelected[0]-3)){
@@ -1858,7 +1870,7 @@ void menuDraw(){
 					pspDebugScreenPuts(buffer);
 
 					//Print out the float
-					pspDebugScreenPuts("         ");
+					pspDebugScreenPuts("  ");
 					f_cvt(searchAddress[counter], buffer, sizeof(buffer), 6, MODE_GENERIC);
 					pspDebugScreenPuts(buffer);
 				}
@@ -1899,11 +1911,11 @@ void menuDraw(){
 			case 3: //DRAW EXT DIFF SEARCH
 				//Draw the tabs
 				pspDebugScreenSetTextColor(color02); pspDebugScreenPuts(line);
-				pspDebugScreenSetTextColor(color01); pspDebugScreenPuts("  [Editing Search]");
-				pspDebugScreenPuts("\n"); pspDebugScreenSetTextColor(color02); pspDebugScreenPuts(line);
+				pspDebugScreenSetTextColor(color01); pspDebugScreenPuts("  [Editing Search]\n");
+				pspDebugScreenSetTextColor(color02); pspDebugScreenPuts(line);
 				pspDebugScreenSetTextColor(color02); 
 				if(searchMode > 3){
-					pspDebugScreenPuts("  Mode          Value.Hex   Value.Dec   Value.ASCII  Value.Float\n");
+					pspDebugScreenPuts("  Mode          Value.Hex   Value.Dec\n");
 				}
 				else{
 					pspDebugScreenPuts("  Mode\n");
@@ -1953,7 +1965,7 @@ void menuDraw(){
 					pspDebugScreenPuts(buffer);
 
 					//Print out the ASCII
-					buffer[0]=*((unsigned char*)(((unsigned int)&searchHistory[0].hakVal)+0)); if((buffer[0]<=0x20) || (buffer[0]==0xFF)) buffer[0]='.';
+					/*buffer[0]=*((unsigned char*)(((unsigned int)&searchHistory[0].hakVal)+0)); if((buffer[0]<=0x20) || (buffer[0]==0xFF)) buffer[0]='.';
 					buffer[1]=*((unsigned char*)(((unsigned int)&searchHistory[0].hakVal)+1)); if((buffer[1]<=0x20) || (buffer[1]==0xFF)) buffer[1]='.';
 					buffer[2]=*((unsigned char*)(((unsigned int)&searchHistory[0].hakVal)+2)); if((buffer[2]<=0x20) || (buffer[2]==0xFF)) buffer[2]='.';
 					buffer[3]=*((unsigned char*)(((unsigned int)&searchHistory[0].hakVal)+3)); if((buffer[3]<=0x20) || (buffer[3]==0xFF)) buffer[3]='.';
@@ -1964,16 +1976,21 @@ void menuDraw(){
 				   	}
 				   	else{
 						if((searchHistory[0].flags & FLAG_DWORD) == FLAG_WORD){
-						pspDebugScreenPuts("  UFLOAT:");
-						unsigned int upperfloat=searchHistory[0].hakVal <<16;
-						f_cvt(&upperfloat, buffer, sizeof(buffer), 6, MODE_GENERIC);
+					    	addresscode=(searchHistory[0].hakVal & 0xFFFF) | 0x3C000000;
+						mipsSpecial(addresscode,addresstmp,counteraddress);
+					    	addresscode=(searchHistory[0].hakVal & 0xFFFF) | 0xDF800000;
+						pspDebugScreenPuts(" ");
+						mipsSpecial(addresscode,addresstmp,counteraddress);
+						//pspDebugScreenPuts("  UFLOAT:");
+						//unsigned int upperfloat=searchHistory[0].hakVal <<16;
+						//f_cvt(&upperfloat, buffer, sizeof(buffer), 6, MODE_GENERIC);
 						}
 						else{
-						pspDebugScreenPuts("         ");
+						pspDebugScreenPuts("  ");
 						f_cvt(&searchHistory[0].hakVal, buffer, sizeof(buffer), 6, MODE_GENERIC);
+						pspDebugScreenPuts(buffer);
 						}
-					pspDebugScreenPuts(buffer);
-					}
+					}*/
 			}
 
 				//Skip a line, draw the pointer =)
@@ -2018,12 +2035,12 @@ void menuDraw(){
 				if(searchNo){pspDebugScreenSetTextColor(extSelected[0] == 2? color01: color02); pspDebugScreenPuts("  Undo Search\n");}
 
 				//Print out results
-				pspDebugScreenPuts("\n"); pspDebugScreenSetTextColor(color02); pspDebugScreenPuts(line);
+				pspDebugScreenSetTextColor(color02); pspDebugScreenPuts(line);
 				pspDebugScreenSetTextColor(color01); pspDebugScreenPuts("  [Search Results: "); sprintf(buffer, "%d Found - Only showing first 100]", searchResultCounter); pspDebugScreenPuts(buffer);
 				pspDebugScreenPuts("\n"); pspDebugScreenSetTextColor(color02); pspDebugScreenPuts(line);
 				pspDebugScreenSetTextColor(color02); 
 				if(editFormat==0){
-				pspDebugScreenPuts("  Address     Value.Hex   Value.Dec   Value.ASCII  Value.Float\n");}
+				pspDebugScreenPuts("  Address     Value.Hex   Value.Dec   ASCII Value.Float\n");}
 				else{
 				pspDebugScreenPuts("  Address     Value.Hex   Opcode   Args(aligned address)\n");}
 
@@ -2032,8 +2049,10 @@ void menuDraw(){
 				counter=0;
 				while(counter < convTotal){
 					//Scroll feature right here, in two lines =3
-					if((signed int)(counter) < (signed int)(((extSelected[0]-3)-7) - (( ((signed int)(extSelected[0]-3)+7) - ((signed int)convTotal))>0? abs(((signed int)(extSelected[0]-3)+7) - ((signed int)convTotal)): 0)   )) {counter++; continue;}
-					if((signed int)(counter) > (signed int)(((extSelected[0]-3)+7) + (((signed int)(extSelected[0]-3)-7)<0? abs((signed int)((extSelected[0]-3)-7)): 0)   )) {counter++; continue;}
+					//if((signed int)(counter) < (signed int)(((extSelected[0]-3)-9) - (( ((signed int)(extSelected[0]-3)+9) - ((signed int)convTotal))>0? abs(((signed int)(extSelected[0]-3)+9) - ((signed int)convTotal)): 0)   )) {counter++; continue;}
+					//if((signed int)(counter) > (signed int)(((extSelected[0]-3)+9) + (((signed int)(extSelected[0]-3)-9)<0? abs((signed int)((extSelected[0]-3)-9)): 0)   )) {counter++; continue;}
+					if((signed int)(counter) < (signed int)(((extSelected[0]-3)-10) - (( ((signed int)(extSelected[0]-3)+10) - ((signed int)convTotal))>0? abs(((signed int)(extSelected[0]-3)+10) - ((signed int)convTotal)): 0)   )) {counter++; continue;}
+					if((signed int)(counter) > (signed int)(((extSelected[0]-3)+10) + (((signed int)(extSelected[0]-3)-10)<0? abs((signed int)((extSelected[0]-3)-10)): 0)   )) {counter++; continue;}
 
 					//Apply the row color
 					if(counter == (extSelected[0]-3)){
@@ -2096,7 +2115,7 @@ void menuDraw(){
 					pspDebugScreenPuts(buffer);
 
 					//Print out the float
-					pspDebugScreenPuts("         ");
+					pspDebugScreenPuts("  ");
 					f_cvt(searchAddress[counter], buffer, sizeof(buffer), 6, MODE_GENERIC);
 					pspDebugScreenPuts(buffer);
 
@@ -2120,7 +2139,7 @@ void menuDraw(){
 				pspDebugScreenSetXY(0, 33);
 				pspDebugScreenSetTextColor(color01);
 				if(extSelected[0] == 0){
-					pspDebugScreenPuts("START = Switch Dec/Val; >< = Edit On/Off; D-PAD = Cycle; () = Cancel");
+					pspDebugScreenPuts(">< = Edit On/Off; D-PAD = Cycle; () = Cancel");
 				}
 				else if((extSelected[0] == 1) || (extSelected[0] == 2)){
 					pspDebugScreenPuts(">< = Select; () = Cancel");  
@@ -2179,7 +2198,7 @@ void menuDraw(){
 				pspDebugScreenSetTextColor(extSelected[0] == 1? color01: color02); pspDebugScreenPuts("  Search\n");
 
 				//Print out results
-				pspDebugScreenPuts("\n"); pspDebugScreenSetTextColor(color02); pspDebugScreenPuts(line);
+				pspDebugScreenSetTextColor(color02); pspDebugScreenPuts(line);
 				pspDebugScreenSetTextColor(color01); pspDebugScreenPuts("  [Search Results: Only showing first 100]");
 				pspDebugScreenPuts("\n"); pspDebugScreenSetTextColor(color02); pspDebugScreenPuts(line);
 				pspDebugScreenSetTextColor(color02); pspDebugScreenPuts("  Address     Text\n");
@@ -2189,8 +2208,8 @@ void menuDraw(){
 				counter=0;
 				while(counter < convTotal){
 					//Scroll feature right here, in two lines =3
-					if((signed int)(counter) < (signed int)(((extSelected[0]-2)-7) - (( ((signed int)(extSelected[0]-2)+7) - ((signed int)convTotal))>0? abs(((signed int)(extSelected[0]-2)+7) - ((signed int)convTotal)): 0)   )) {counter++; continue;}
-					if((signed int)(counter) > (signed int)(((extSelected[0]-2)+7) + (((signed int)(extSelected[0]-2)-7)<0? abs((signed int)((extSelected[0]-2)-7)): 0)   )) {counter++; continue;}
+					if((signed int)(counter) < (signed int)(((extSelected[0]-2)-10) - (( ((signed int)(extSelected[0]-2)+10) - ((signed int)convTotal))>0? abs(((signed int)(extSelected[0]-2)+10) - ((signed int)convTotal)): 0)   )) {counter++; continue;}
+					if((signed int)(counter) > (signed int)(((extSelected[0]-2)+10) + (((signed int)(extSelected[0]-2)-10)<0? abs((signed int)((extSelected[0]-2)-10)): 0)   )) {counter++; continue;}
 
 					//Apply the row color
 					if(counter == (extSelected[0]-2)){
@@ -2233,18 +2252,18 @@ void menuDraw(){
 					pspDebugScreenPuts(">< = Edit On/Off; D-PAD = Cycle; [] = Trim; () = Cancel    ");
 				}
 				else if(extSelected[0] == 1){
-					pspDebugScreenPuts(">< = Select; () = Cancel                                           ");  
+					pspDebugScreenPuts(">< = Select; () = Cancel");  
 				}
 				else{
-					pspDebugScreenPuts("<- -> = Scroll Address; () = Cancel                                ");  
+					pspDebugScreenPuts("<- -> = Scroll Address; () = Cancel");  
 				}
 			break;
 			
 			case 5: //Search range
 				//Draw the tabs
 				pspDebugScreenSetTextColor(color02); pspDebugScreenPuts(line);
-				pspDebugScreenSetTextColor(color01); pspDebugScreenPuts("  [Editing Search Range]");
-				pspDebugScreenPuts("\n"); pspDebugScreenSetTextColor(color02); pspDebugScreenPuts(line);
+				pspDebugScreenSetTextColor(color01); pspDebugScreenPuts("  [Editing Search Range]\n");
+				pspDebugScreenSetTextColor(color02); pspDebugScreenPuts(line);
 				pspDebugScreenSetTextColor(color01); pspDebugScreenPuts("\n  If you edit you're starting address and ending address here,\n  NitePR will search inbetween the two. \n\n  (This increases speed of searches and reduces your chances of \n  crashing while searching.)\n\n");
 				pspDebugScreenSetTextColor(color02); pspDebugScreenPuts("  Start       Stop\n");
 
@@ -2421,7 +2440,7 @@ void menuDraw(){
 
 				pspDebugScreenSetTextColor(color01);
 				#ifdef _UMDMODE_
-					pspDebugScreenPuts("  MKIJIRO20101119 ");
+					pspDebugScreenPuts("  MKIJIRO20101122 ");
 				#elif _POPSMODE_
 					pspDebugScreenPuts("  MKULTRA V10 POPS ");
 				#endif
@@ -2499,7 +2518,7 @@ void menuDraw(){
 				pspDebugScreenSetXY(0, 30);
 				pspDebugScreenPuts(line); //draw spiffy line
 				pspDebugScreenSetTextColor(color01);
-				pspDebugScreenSetXY(0, 31); pspDebugScreenPuts(">< = Select Cheat for On/Off mode;");
+				pspDebugScreenSetXY(0, 31); pspDebugScreenPuts(">< = Select Cheat for On/Off mode; START = Rename;");
 				pspDebugScreenSetXY(0, 32); pspDebugScreenPuts("[] = Select Cheat for Always On mode; /\\ = Edit Cheat;");
 				pspDebugScreenSetXY(0, 33); pspDebugScreenPuts("SELECT =Duplicate Cheat;  () = Cancel/Return to Game");
 			break;
@@ -2527,14 +2546,14 @@ void menuDraw(){
 							case 3: pspDebugScreenPuts("  Find Unknown Value - 32bit\n");break;
 							case 4: pspDebugScreenPuts("  Find Text\n");break;
 							case 5: pspDebugScreenPuts("  Search Range\n"); break;
-							case 6: pspDebugScreenPuts("  Reset Search\n\n");break;
+							case 6: pspDebugScreenPuts("  Reset Search\n");break;
 						}
 					}
 					else{
 						switch(counter){
 							case 0: pspDebugScreenPuts("  Continue to find Exact Value\n"); break;
 							case 1: pspDebugScreenPuts("  Continue to find Unknown Value\n"); break;
-							case 2: pspDebugScreenPuts("  Reset search\n\n"); break;
+							case 2: pspDebugScreenPuts("  Reset search\n"); break;
 						}
 					}
 					counter++;
@@ -2544,7 +2563,7 @@ void menuDraw(){
 				pspDebugScreenSetTextColor(color02); pspDebugScreenPuts(line);
 				pspDebugScreenSetTextColor(color01); pspDebugScreenPuts("  [Search History]");
 				pspDebugScreenPuts("\n"); pspDebugScreenSetTextColor(color02); pspDebugScreenPuts(line);
-				pspDebugScreenSetTextColor(color02); pspDebugScreenPuts("  Mode          Value.Hex   Value.Dec   Value.ASCII  Value.Float\n");
+				pspDebugScreenSetTextColor(color02); pspDebugScreenPuts("  Mode          Value.Hex   Value.Dec   ASCII Value.Float\n");
 				scounter=0;
 				while(scounter < searchHistoryCounter){
 					//Apply the row color
@@ -2591,7 +2610,7 @@ void menuDraw(){
 						pspDebugScreenPuts(buffer);
 
 						//Print out the float
-						pspDebugScreenPuts("         ");
+						pspDebugScreenPuts("  ");
 						f_cvt(&searchHistory[scounter+1].hakVal, buffer, sizeof(buffer), 6, MODE_GENERIC);
 						pspDebugScreenPuts(buffer);
 						
@@ -3337,6 +3356,13 @@ void menuInput(){
 					copyData=searchAddress[extSelected[0]-2]-0x40000000;
 					}
 				}
+				else if(extMenu == 5)
+				{
+					if(extSelected[1]==0){
+					copyData=searchStart-0x40000000;}
+					else{
+					copyData=searchStop -0x40000000;}
+				}
 			  }
 			  else
 			  {
@@ -3376,8 +3402,15 @@ void menuInput(){
 				{
 					if(extSelected[0] < 1)
 					{
-						searchHistory[0].hakVal=copyData;
+						searchHistory[0].hakVal=copyData-0x8800000;
 					}
+				}
+				else if(extMenu == 5)
+				{
+					if(extSelected[1]==0){
+					searchStart=copyData + 0x40000000;}
+					else{
+					searchStop =copyData + 0x40000000;}
 				}
 			  }
 			  else
@@ -3401,12 +3434,6 @@ void menuInput(){
 						}
 					}
 				}
-				else if(tabSelected == 4)
-				{
-					if(cheatSelected == 0){
-						clipboard[clipSelected]=copyData;
-					}
-				}
 			  }
 			}
 			
@@ -3423,26 +3450,35 @@ void menuInput(){
 					{
 						copyData2=searchHistory[0].hakVal;
 					}
+					//else if(extSelected[0] > 2){					
+					//	copyData2=searchAddress[extSelected[0]-3];}
 				}
+				/*else if(extMenu == 3)
+				{
+				  if(extSelected[0] > 2)
+				  {
+					copyData2=searchAddress[extSelected[0]-3];
+					}
+				}
+				else if(extMenu == 4)
+				{
+				  if(extSelected[0] > 1)
+				  {
+					copyDat2a=searchAddress[extSelected[0]-2]-0x40000000;
+					}
+				}*/
 			  }
 			  else
 			  {
 				if(tabSelected == 3)
 				{
 					if(flipme){
-						copyData2=*((unsigned char*)(browseAddress[bdNo]+(browseY[bdNo])));
+						copyData2=*(unsigned char*)(browseAddress[bdNo]+browseY[bdNo]);
 					}
 					else{
 						copyData2=*((unsigned int*)(decodeAddress[bdNo]+(decodeY[bdNo]*4)));
 					}
 				}
-				else if(tabSelected == 4)
-				{
-					if(cheatSelected == 0){
-						copyData2=clipboard[clipSelected];
-					}
-				}
-
 			  }
 			}
 			else if(copyMenu == 4){//Paste val
@@ -3465,16 +3501,10 @@ void menuInput(){
 				if(tabSelected == 3)
 				{
 					if(flipme){
-						*((unsigned char*)(browseAddress[bdNo]+(browseY[bdNo])))=copyData2;
+						*(unsigned char*)(browseAddress[bdNo]+browseY[bdNo])=copyData2;
 					}
 					else{
 						*((unsigned int*)(decodeAddress[bdNo]+(decodeY[bdNo]*4)))=copyData2;
-					}
-				}
-				else if(tabSelected == 4)
-				{
-					if(cheatSelected == 0){
-						clipboard[clipSelected]=copyData2;
 					}
 				}
 			  }
@@ -3568,7 +3598,10 @@ void menuInput(){
 			  if(pad.Buttons & PSP_CTRL_START){
 				//change format
 				if(editFormat==0){
-					editFormat=1;
+				  editFormat=1;
+				  if(extSelected[1] >1){
+				  extSelected[2]=7;
+				  extSelected[1]=1;}
 				}
 				else{
 					editFormat=0;
@@ -3786,7 +3819,12 @@ void menuInput(){
 				switch(extSelected[1])
 				{
 				  case 0: if(extSelected[2] > 7) { extSelected[2]=0; extSelected[1]++; } break;
-				  case 1: if(extSelected[2] > 7) { extSelected[2]=0; extSelected[1]++; } break;
+					
+				  case 1: if(editFormat==1){
+					if(extSelected[2] > 7) { extSelected[2]=7;}}
+					else{
+					  if(extSelected[2] > 7) { extSelected[2]=0; extSelected[1]++; }}
+					break;
 				  case 2: if(extSelected[2] > 9) { extSelected[2]=0; extSelected[1]++; } break;
 				  case 3: if(extSelected[2] > 3) { extSelected[2]=3; } break;
 				}
@@ -3827,6 +3865,8 @@ void menuInput(){
 					//change format
 					if(editFormat==0){
 						editFormat=1;
+					if(extSelected[1] >0) {
+					extSelected[2]=7; extSelected[1]=0;}
 					}
 					else{
 						editFormat=0;
@@ -3903,8 +3943,8 @@ void menuInput(){
 						  if(!cheatPause) sceKernelDelayThread(1500);
 						  
 							lineClear(33);
-							pspDebugScreenSetTextColor(color02); sprintf(buffer, "Task = %02d%%; () = Hold to Abort", (counter-searchStart)/((searchStop-searchStart)/100)); pspDebugScreenPuts(buffer); 
-			
+							pspDebugScreenSetTextColor(color02); sprintf(buffer, "Task = %02d%%; () = Hold to Abort", (counter-searchStart + 0x64)/((searchStop-searchStart + 0x64)/0x64)); pspDebugScreenPuts(buffer); 
+
 						  sceCtrlPeekBufferPositive(&pad, 1);
 						  
 						  if(pad.Buttons & PSP_CTRL_CIRCLE)
@@ -4021,7 +4061,7 @@ void menuInput(){
 						  if(!cheatPause) sceKernelDelayThread(1500);
 						  
 										lineClear(33);
-										pspDebugScreenSetTextColor(color02); sprintf(buffer, "Task = %02d%%; () = Hold to Abort", (scounter-searchStart)/((searchStop-searchStart)/100)); pspDebugScreenPuts(buffer); 
+										pspDebugScreenSetTextColor(color02); sprintf(buffer, "Task = %02d%%; () = Hold to Abort", (scounter-searchStart + 0x64)/((searchStop-searchStart+ 0x64)/0x64)); pspDebugScreenPuts(buffer); 
 							
 						  sceCtrlPeekBufferPositive(&pad, 1);
 						  
@@ -4277,8 +4317,9 @@ void menuInput(){
 				  extSelected[2]++;
 					switch(extSelected[1])
 				  {
-					case 0: if(extSelected[2] > 7) { extSelected[2]=0; extSelected[1]++; } break;
-					case 1: if(extSelected[2] > 9) { extSelected[2]=0; extSelected[1]++; } break;
+					case 0: if(editFormat==1){ if(extSelected[2] > 7) { extSelected[2]=7; }}
+						else{ if(extSelected[2] > 7) { extSelected[2]=0; extSelected[1]++; }} break;
+					case 1:	if(extSelected[2] > 9) { extSelected[2]=0; extSelected[1]++; } break;
 					case 2: if(extSelected[2] > 3) { extSelected[2]=3; } break;
 				  }
 					menuDraw();
@@ -4398,8 +4439,8 @@ void menuInput(){
                       
 			lineClear(33);
         		pspDebugScreenSetTextColor(color02);
-			//sprintf(buffer, "Task = %02d%%; () = Hold to Abort", (counter-0x48804000)/((0x4A000000-0x48804000)/100));
-			sprintf(buffer, "Task = %02d%%; () = Hold to Abort", (counter - searchStart)/((searchStop - searchStart)/100));
+			//sprintf(buffer, "Task = %02d%%; () = Hold to Abort", (counter-0x48804000)/((0x4A000000-0x48804000)/0x64));
+			sprintf(buffer, "Task = %02d%%; () = Hold to Abort", (counter - searchStart + 0x64)/((searchStop - searchStart + 0x64)/0x64));
 			pspDebugScreenPuts(buffer); 
                   		
                       sceCtrlPeekBufferPositive(&pad, 1);
@@ -4589,8 +4630,10 @@ void menuInput(){
 						{
 						  if(!cheatPause) sceKernelDelayThread(1500);
 						  
-										lineClear(33);
-										pspDebugScreenSetTextColor(color02); sprintf(buffer, "Task = %02d%%; () = Hold to Abort", (scounter-searchStart)/((searchStop-searchStart)/100)); pspDebugScreenPuts(buffer); 
+							lineClear(33);
+							pspDebugScreenSetTextColor(color02);
+							sprintf(buffer, "Task = %02d%%; () = Hold to Abort", (scounter - searchStart+ 0x64)/((searchStop - searchStart+ 0x64)/0x64));
+							pspDebugScreenPuts(buffer);
 							
 						  sceCtrlPeekBufferPositive(&pad, 1);
 						  
@@ -4684,7 +4727,7 @@ void menuInput(){
 							case FLAG_BYTE:
 							sceIoRead(fd, &dcounter, sizeof(unsigned char));
 
-													if(searchMode==0)
+							if(searchMode==0)
 							{
 							  if((unsigned char)dcounter != *((unsigned char*)(scounter))) break;
 							}
@@ -4924,14 +4967,14 @@ void menuInput(){
 				  {
 					extSelected[2]=0;
 				  }
-				  else
+				  else//inc,dec
 					{
 					  switch(extSelected[1])
 					{
 					  case 0: if(extSelected[2] > 0) { extSelected[2]=0; extSelected[1]++; } break;
 					  case 1: if(extSelected[2] > 7) { extSelected[2]=0; extSelected[1]++; } break;
-					  case 2: if(extSelected[2] > 9) { extSelected[2]=0; extSelected[1]++; } break;
-					  case 3: if(extSelected[2] > 3) { extSelected[2]=3; } break;
+					  case 2: if(extSelected[2] > 9) { extSelected[2]=9;} break;
+					  //case 3: if(extSelected[2] > 3) { extSelected[2]=3; } break;
 					}
 				  }
 					menuDraw();
@@ -4998,7 +5041,7 @@ void menuInput(){
 					  if(!cheatPause) sceKernelDelayThread(1500);
 						  
 					  lineClear(33);
-					  pspDebugScreenSetTextColor(color02); sprintf(buffer, "Task = %02d%%; () = Hold to Abort", (counter-searchStart)/((searchStop-searchStart)/100)); pspDebugScreenPuts(buffer); 
+					  pspDebugScreenSetTextColor(color02); sprintf(buffer, "Task = %02d%%; () = Hold to Abort", (counter - searchStart + 0x64)/((searchStop-searchStart + 0x64)/0x64)); pspDebugScreenPuts(buffer); 
 						
 					  sceCtrlPeekBufferPositive(&pad, 1);
 					  
