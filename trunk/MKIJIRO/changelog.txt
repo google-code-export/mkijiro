@@ -1,27 +1,34 @@
 これはMKV10のそーすを改造したものです。
 判明バグ?;
-コードを保存すると比較サーチがおかしくなる
-コード保存と読込を繰り返していると保存読込機能が反応しなくなる
-こーどが勝手に増殖することがある
-ごく一部の浮動小数が表示されない 0x
-
-this is modded mkultrav10.
-KnownProblem;
-doesnot work fine unknown value search after code save
-if code is reloaded & saved many times,save&reload function doesnot work..
-これはMKV10のそーすを改造したものです。
-判明バグ?;
 一部のゲームでキーボードをだすとフリーズする(武装神姫)
 コードを保存すると比較サーチがおかしくなる
 コード保存と読込を繰り返していると保存読込機能が反応しなくなる
-ごく一部の浮動小数が表示されない 0x
+ごく一部の浮動小数が表示されない 0.01,0.001
 カラーファイルを切り替えるのをくりかえしてると効かなくなる
 
 this is modded mkultrav10.
 KnownProblem;
-unknown freeze bug using keyboad for certail game(busosinki and so on..)
 doesnot work fine unknown value search after code save
 if code is reloaded & saved many times,save&reload function doesnot work..
+this is modded mkultrav10.
+
+2010/11/22
+サーチメニューでもDECOERを見れるようにした(3bitMASKあどれす)
+16bitサーチで半浮動小数を出すように変更
+桁あふれの半浮動小数は表示しないように変更
+描写してなかったところをいっぱいまでに変更
+1度に見れるサーチ結果の表示を増やした
+カーソルのはみ出し修正
+増加分サーチのアスキーと浮動小数表示廃止(浮動小数加減未対応)
+アドレス範囲でコピーが使えなかったので修正
+アドレス範囲が短い時進歩の割り算が0でフリーズしていたのを修正
+Value.ASCII → ASCII
+support decoder on search result(3bitmask aligned)
+support 16bit upper/half float search
+fixed 16bit float display
+fixed cursor position
+fixed address range bug
+delete ASCII/FLOAT on searcher dec/inc by
 
 2010/11/19
 コピーメニューのDMAとJOKERを入れ替えた
