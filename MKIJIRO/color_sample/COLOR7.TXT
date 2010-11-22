@@ -7,3 +7,6 @@
 0xFF060006 ;color2 fade amount
 0xFFC080FF ;color3
 0xFF00FFC0 ;color4
+0xFF000000 ;bgcolor
+0xFF00FF00 ;select_cheat
+0xFFFF0000 ;constant_cheat
