@@ -3,8 +3,8 @@
 一部のゲームでキーボードをだすとフリーズする(武装神姫)
 コードを保存すると比較サーチがおかしくなる
 コード保存と読込を繰り返していると保存読込機能が反応しなくなる
-ごく一部の浮動小数が表示されない 0.01,0.001
-カラーファイルを切り替えるのをくりかえしてると効かなくなる
+一部の浮動小数が表示されない 0.01,0.001
+カラーファイルを切り替えるのをくりかえしてると効かなくなる,ゲームがバグる
 
 this is modded mkultrav10.
 KnownProblem;
@@ -12,8 +12,17 @@ doesnot work fine unknown value search after code save
 if code is reloaded & saved many times,save&reload function doesnot work..
 this is modded mkultrav10.
 
-2010/11/23
+2010/11/24
+DMAとJOKERは値の方をアドレスコピーに変更,□でベースアドレス
+コピー開始と終了位置の色の変更(=コード実行状態)とメニューから飛べるようにした
+レジスタzeroの表示をprxtoolと同じくzrに変更
+合成浮動小数のチェック修正＋行間を変更できるようにした
 カラー設定を追加＋読み込んでなかったので修正
+change DMA/JOKER addresscopy,from hackvalue,[] DMA BASEADDRESS
+added jumpmenu [] copystart,copyend position
+change zero register to zr like PSPLINK/PRXTOOL
+fixed mergegfloat,and can be changed backline
+more color for color.txt
 
 2010/11/22
 メモリビューワーでのバイト書き込み修正
