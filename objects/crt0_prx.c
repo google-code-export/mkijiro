@@ -96,7 +96,11 @@ PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 #endif
 
 //Globals
+#ifdef _UMDMODE_
 unsigned char *gameDir="ms0:/seplugins/nitePR/__________.txt";
+#elif _POPSMODE_
+unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
+#endif
 unsigned char gameId[10];
 unsigned char running=0;
 SceUID thid;
@@ -6086,11 +6090,6 @@ void menuInput(){
 				  sceKernelDelayThread(150000); //Delay twice
 				}
 				else if(cheatSelected == 4){
-					void dump_memregion(const char* file, void *addr, int len){
-						int fd = sceIoOpen(file, PSP_O_CREAT | PSP_O_TRUNC | PSP_O_WRONLY, 0777);
-						sceIoWrite(fd, addr, len);
-						sceIoClose(fd);
-					}
 					dump_memregion("ms0:/boot.bin", (void*) 0xBFC00000, 0x100000);
 					dump_memregion("ms0:/kmem.bin", (void*) 0x88000000, 0x400000);
 				}
@@ -7049,9 +7048,24 @@ int mainThread(){
 		sceIoClose(fd);
 		memcpy(&gameDir[22], gameId, 10);
 	#elif _POPSMODE_
+		dump_memregion("ms0:/hbid", (void*) 0x8818A240, 0x20);
+		fd=sceIoOpen("ms0:/hbid", PSP_O_RDONLY, 0777);
+		/*unsigned char tempcounter=0;
+		unsigned char hex[20];
+		while(tempcounter < 20){ //correct missaligned addressing in db
+			sceIoRead(fd, hex, 1);
+			if(hex[0]==0){ break; }
+			tempcounter++;
+		}*/
+		if(fd >0){
+		sceIoRead(fd, gameId, 10);
+		sceIoClose(fd);
+		memcpy(&gameDir[27], gameId, 10);}
+		else{
 		strcpy(gameId, "popstation");
-		memcpy(&gameDir[22], gameId, 10);
+		memcpy(&gameDir[27], gameId, 10);}
   	#endif
+
 
   	//Compare the gameID to see if the game is....
   	#ifdef _SOCOM_
@@ -7246,3 +7260,8 @@ int _stop(SceSize args, void *argp){
 	return 0;
 }
 
+void dump_memregion(const char* file, void *addr, int len){
+		int fd = sceIoOpen(file, PSP_O_CREAT | PSP_O_TRUNC | PSP_O_WRONLY, 0777);
+		sceIoWrite(fd, addr, len);
+		sceIoClose(fd);
+}

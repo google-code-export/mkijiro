@@ -13,6 +13,9 @@ doesnot work fine unknown value search after code save
 if code is reloaded & saved many times,save&reload function doesnot work..
 this is modded mkultrav10.
 
+2010/11/26
+HOMEBREWに試験的に対応？GEN3でしか確認してないので不明
+
 2010/11/25
 コピー別メニューで文字がでていたのを修正
 コピー開始終了ジャンプをメニュー1,2番に変更、メモリエディタでも使用可能
