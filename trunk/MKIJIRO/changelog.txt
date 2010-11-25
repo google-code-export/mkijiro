@@ -5,12 +5,23 @@
 コード保存と読込を繰り返していると保存読込機能が反応しなくなる
 一部の浮動小数が表示されない 0.01,0.001
 カラーファイルを切り替えるのをくりかえしてると効かなくなる,ゲームがバグる
+8byte時メモリエディタのコピー箇所がおかしい
 
 this is modded mkultrav10.
 KnownProblem;
 doesnot work fine unknown value search after code save
 if code is reloaded & saved many times,save&reload function doesnot work..
 this is modded mkultrav10.
+
+2010/11/25
+コピー別メニューで文字がでていたのを修正
+コピー開始終了ジャンプをメニュー1,2番に変更、メモリエディタでも使用可能
+コピー開始終了位置が０のままなので0x48800000に変更(指定してないとフリーズするため)
+16bit半浮動小数サーチで両方でてるときはみ出すことがあったので下に揃えるように変更
+VHFLOAT -> VFLOAT
+fixed string copymenu
+fixed copyStart/CopyEnd jump,support ram browser
+aligned upper/half float on 16bit value search
 
 2010/11/24
 DMAとJOKERは値の方をアドレスコピーに変更,□でベースアドレス
