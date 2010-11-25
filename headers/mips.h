@@ -3352,14 +3352,14 @@ void mipsSpecial(unsigned int addresscode,unsigned int addresstmp,unsigned int c
 							 sprintf(buffer, "(+%d)", (addresstmp+1));}
 							 pspDebugScreenPuts(buffer);
 							}
-							else if( (addresscode>>24 == 0x3C) && ((addresscode & 0x7FFF) > 0x38D1) && ((addresscode & 0x7FFF) < 0x4B19) ){
+							else if( (addresscode>>24 == 0x3C) && (((addresscode & 0x7FFF) > 0x38D1) && ((addresscode & 0x7FFF) < 0x4B19) ||((addresscode & 0x7FFF) > 0x7F7F))){
 							addresscode=addresscode <<16;
 							pspDebugScreenPuts("  UFLOAT:");//UPPER IEEE754 FLOAT
 							f_cvt(&addresscode, buffer, sizeof(buffer), 6, MODE_GENERIC);
 							pspDebugScreenPuts(buffer);
 							}
 							else if( (((addresscode>>16)&0xFF80) == 0xDF80)&& ((addresscode & 0x7FFF) > 0x68E) ){
-							pspDebugScreenPuts(" VHFLOAT:");//16BIT VFPU HALF FLOAT
+							pspDebugScreenPuts(" VFLOAT:");//16BIT VFPU HALF FLOAT
 /* VFPU 16-bit floating-point format. */
 #define VFPU_FLOAT16_EXP_MAX    0x1f
 #define VFPU_SH_FLOAT16_SIGN    15
