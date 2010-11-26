@@ -13,6 +13,9 @@ doesnot work fine unknown value search after code save
 if code is reloaded & saved many times,save&reload function doesnot work..
 this is modded mkultrav10.
 
+2010/11/27
+HOMEBREWGENだけ初回起動修正、なぜかM33だとうまくいかず
+
 2010/11/26
 HOMEBREWに試験的に対応？GEN3でしか確認してないので不明
 

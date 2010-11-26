@@ -161,7 +161,7 @@ unsigned char buffer[64];
 unsigned char cheatStatus=0;
 unsigned char cheatSaved=0;
 unsigned int cheatSelected=0;
-unsigned int tabSelected=0;
+unsigned char tabSelected=0;
 unsigned char menuDrawn=0;
 void *vram;
 unsigned int cheatHz=15625;//Cheat 15HZ
@@ -173,7 +173,7 @@ unsigned char extMenu=0;
 unsigned int extSelected[4]={0,0,0,0};
 unsigned char extOpt=0;
 unsigned int extOptArg=0;
-unsigned int dumpNo=0;
+unsigned char dumpNo=0;
 unsigned int cheatNo=0;
 unsigned int searchNo=0;
 unsigned int searchMax=0;
@@ -203,7 +203,6 @@ unsigned char screenTime=0;
 unsigned char cheatRefresh=0;
 unsigned char flipme=1;
 unsigned int decodeOptions=0;
-unsigned int usbonbitch=0;
 unsigned char fileBuffer[1536];
 unsigned int fileBufferSize=0;
 unsigned int fileBufferBackup=0;
@@ -235,6 +234,9 @@ unsigned int addresscode=0;
 unsigned int addresstmp=0;
 unsigned int counteraddress=0;
 unsigned char backline=1;
+#ifdef _USB_
+unsigned int usbonbitch=0;
+#endif
 #ifdef _SCREENSHOT_
 unsigned char screenshot_mode=0;
 unsigned char *screenshotstring[]={"NONE", "TOGGLE"};
@@ -689,8 +691,8 @@ void cheatEnable(unsigned int a_cheat){
 				}
 			}
 			else if(!resetDMA){
+			if((cheatDMA+block[counter].address >= 0x08800000) && (cheatDMA+block[counter].address <= 0x0A000000)){
 				switch(block[counter].flags & FLAG_DWORD){
-					if((cheatDMA+block[counter].address >= 0x08800000) && (cheatDMA+block[counter].address <= 0x0A000000)){
 					case FLAG_DWORD:
 					if(block[counter].address % 4 == 0){
 						*((unsigned int*)(cheatDMA+block[counter].address & 0xFFFFFFC))=block[counter].stdVal;
@@ -731,13 +733,12 @@ void cheatEnable(unsigned int a_cheat){
 				else{
 					cheatDMA=0;
 					resetDMA=0;
-				}	
+				}
 			}
-			else{
+			else if((cheatDMA+block[counter].address >= 0x08800000) && (cheatDMA+block[counter].address <= 0x0A000000)){
 				//Backup data?
 				if(((cheatDMA) && (resetDMA)) || ((cheat[a_cheat].flags & FLAG_FRESH) && (block[counter].flags & FLAG_FREEZE))){
 					switch(block[counter].flags & FLAG_DWORD){
-					if((cheatDMA+block[counter].address >= 0x08800000) && (cheatDMA+block[counter].address <= 0x0A000000)){
 						case FLAG_DWORD:
 							if(block[counter].address % 4 == 0){
 							block[counter].stdVal=*((unsigned int*)(cheatDMA+block[counter].address & 0xFFFFFFC));
@@ -753,14 +754,12 @@ void cheatEnable(unsigned int a_cheat){
 							block[counter].stdVal=*((unsigned char*)(cheatDMA+block[counter].address));
 						break;
 					}
-					}
 					if(block[counter].flags & FLAG_FREEZE){
 						block[counter].hakVal=block[counter].stdVal;
 					}
 				}
 				//Apply cheat!
 				switch(block[counter].flags & FLAG_DWORD){
-					if((cheatDMA+block[counter].address >= 0x08800000) && (cheatDMA+block[counter].address <= 0x0A000000)){
 					case FLAG_DWORD:
 					if(block[counter].address % 4 == 0){
 						*((unsigned int*)(cheatDMA+block[counter].address & 0xFFFFFFC))=block[counter].hakVal;
@@ -780,7 +779,6 @@ void cheatEnable(unsigned int a_cheat){
 						sceKernelDcacheWritebackInvalidateRange(cheatDMA+block[counter].address,1);
 						sceKernelIcacheInvalidateRange(cheatDMA+block[counter].address,1);
 					break;
-					}
 				}
 			}
 		}
@@ -814,17 +812,17 @@ void cheatDisable(unsigned int a_cheat){
 			}
 		}
 		else if(!resetDMA){
+			if((cheatDMA+block[counter].address >= 0x08800000) && (cheatDMA+block[counter].address < 0x0A000000)){
 			switch(block[counter].flags & FLAG_DWORD){
-				if((cheatDMA+block[counter].address >= 0x08800000) && (cheatDMA+block[counter].address <= 0x0A000000)){
 				case FLAG_DWORD:
 				if(block[counter].flags & FLAG_JOKER){
+				//nocode
 				}
 				else{
 					if(block[counter].address % 4 == 0){
 					*((unsigned int*)(cheatDMA+block[counter].address & 0xFFFFFFC))=block[counter].stdVal;
 					sceKernelDcacheWritebackInvalidateRange(cheatDMA+block[counter].address,4);
-					sceKernelIcacheInvalidateRange(cheatDMA+block[counter].address,4);
-					}
+					sceKernelIcacheInvalidateRange(cheatDMA+block[counter].address,4);}
 				}
 				break;
 				case FLAG_WORD:
@@ -7048,22 +7046,22 @@ int mainThread(){
 		sceIoClose(fd);
 		memcpy(&gameDir[22], gameId, 10);
 	#elif _POPSMODE_
-		dump_memregion("ms0:/hbid", (void*) 0x8818A240, 0x20);
-		fd=sceIoOpen("ms0:/hbid", PSP_O_RDONLY, 0777);
-		/*unsigned char tempcounter=0;
-		unsigned char hex[20];
-		while(tempcounter < 20){ //correct missaligned addressing in db
-			sceIoRead(fd, hex, 1);
-			if(hex[0]==0){ break; }
-			tempcounter++;
-		}*/
-		if(fd >0){
-		sceIoRead(fd, gameId, 10);
+		unsigned char *hbpath[50];
+		dump_memregion("ms0:/hbpath", (void*) 0x882F9600, 0x50);
+ 		fd=sceIoOpen("ms0:/hbpath", PSP_O_RDONLY, 0777);
+		if(fd > 0){
+		sceIoRead(fd, hbpath, 50);
 		sceIoClose(fd);
+		fd=sceIoOpen(hbpath, PSP_O_RDONLY, 0777);
+		if(fd > 0){
+		sceIoLseek( fd, 0x140, SEEK_CUR);
+		sceIoRead(fd, gameId, 10);
+		}
 		memcpy(&gameDir[27], gameId, 10);}
 		else{
 		strcpy(gameId, "popstation");
 		memcpy(&gameDir[27], gameId, 10);}
+		sceIoClose(fd);
   	#endif
 
 
