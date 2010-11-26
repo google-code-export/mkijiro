@@ -96,11 +96,7 @@ PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 #endif
 
 //Globals
-#ifdef _UMDMODE_
-unsigned char *gameDir="ms0:/seplugins/nitePR/__________.txt";
-#elif _POPSMODE_
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
-#endif
 unsigned char gameId[10];
 unsigned char running=0;
 SceUID thid;
@@ -7036,33 +7032,41 @@ int mainThread(){
 	}	skipPatch: //Skip the evil patch
 	#endif
 
-	#ifdef _UMDMODE_
+	//#ifdef _UMDMODE_
 		//Find the GAME ID
-		do{
-			fd=sceIoOpen("disc0:/UMD_DATA.BIN", PSP_O_RDONLY, 0777); 
-			sceKernelDelayThread(1000);
-		} while(fd<=0);
+		fd=sceIoOpen("disc0:/UMD_DATA.BIN", PSP_O_RDONLY, 0777); 
+		sceKernelDelayThread(1000);
+		if(fd >0){
+		strcpy(gameId, ".txt\x0");
+		memcpy(&gameDir[32], gameId, 5);
 		sceIoRead(fd, gameId, 10);
 		sceIoClose(fd);
 		memcpy(&gameDir[22], gameId, 10);
-	#elif _POPSMODE_
-		unsigned char *hbpath[50];
+	//#elif _POPSMODE_
+		}
+		else{
+		sceIoClose(fd);
+		unsigned char *hbpath[0x50];
 		dump_memregion("ms0:/hbpath", (void*) 0x882F9600, 0x50);
  		fd=sceIoOpen("ms0:/hbpath", PSP_O_RDONLY, 0777);
+		sceKernelDelayThread(1000);
 		if(fd > 0){
-		sceIoRead(fd, hbpath, 50);
+		sceIoRead(fd, hbpath, 0x50);
 		sceIoClose(fd);
 		fd=sceIoOpen(hbpath, PSP_O_RDONLY, 0777);
+		sceKernelDelayThread(1000);
 		if(fd > 0){
 		sceIoLseek( fd, 0x140, SEEK_CUR);
 		sceIoRead(fd, gameId, 10);
 		}
-		memcpy(&gameDir[27], gameId, 10);}
+		memcpy(&gameDir[27], gameId, 10);
+		}
 		else{
 		strcpy(gameId, "popstation");
 		memcpy(&gameDir[27], gameId, 10);}
 		sceIoClose(fd);
-  	#endif
+		}
+  	//#endif
 
 
   	//Compare the gameID to see if the game is....

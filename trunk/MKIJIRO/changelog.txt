@@ -14,10 +14,14 @@ if code is reloaded & saved many times,save&reload function doesnot work..
 this is modded mkultrav10.
 
 2010/11/27
-HOMEBREWGENだけ初回起動修正、なぜかM33だとうまくいかず
+HOMEBREWGENをパス(hbpath)をダンプして読ますように変更、0x140だけ対応(M33/GEN)
+POPS版は通常UMDゲームでも一応うごくのでID処理共通化。
+now support HOMEBREW cheat HACK(name offset 0x140only)
+POPSver,normal UMDgame/HB hybridmode
 
 2010/11/26
 HOMEBREWに試験的に対応？GEN3でしか確認してないので不明
+hbtest
 
 2010/11/25
 コピー別メニューで文字がでていたのを修正
