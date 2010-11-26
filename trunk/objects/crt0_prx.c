@@ -86,14 +86,13 @@ Rev 2206 - Blame - Compare with Previous - Last modification - View Log - RSS fe
 extern SceUID sceKernelSearchModuleByName(unsigned char *);
 
 //Defines
-#ifdef _UMDMODE_
-PSP_MODULE_INFO("nitePR", 0x3007, 1, 2); //0x3007
+//#ifdef _UMDMODE_
+PSP_MODULE_INFO("MKIJIRO", 0x3007, 1, 2); //0x3007
 PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
-#elif _POPSMODE_
-PSP_MODULE_INFO("nitePRpops", 0x3007, 1, 2); //0x3007
-//PSP_MODULE_INFO("nitePRpops", PSP_MODULE_KERNEL, 1, 1);
-PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
-#endif
+//#elif _POPSMODE_
+//PSP_MODULE_INFO("nitePRpops", 0x3007, 1, 2); //0x3007
+//PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
+//#endif
 
 //Globals
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
@@ -237,6 +236,7 @@ unsigned int usbonbitch=0;
 unsigned char screenshot_mode=0;
 unsigned char *screenshotstring[]={"NONE", "TOGGLE"};
 #endif
+unsigned char UMDMODE=0;
 int jacktoggle=0;
 int copyMenuX=25;
 int copyMenuY=0;
@@ -2476,10 +2476,11 @@ void menuDraw(){
 				pspDebugScreenSetXY(0, 29);
 
 				pspDebugScreenSetTextColor(color01);
+				pspDebugScreenPuts("  MKIJIRO20101127");
 				#ifdef _UMDMODE_
-					pspDebugScreenPuts("  MKIJIRO20101124 ");
+					pspDebugScreenPuts(" ");
 				#elif _POPSMODE_
-					pspDebugScreenPuts("  MKULTRA V10 POPS ");
+					pspDebugScreenPuts("POPS ");
 				#endif
 
 				//battery info
@@ -7037,6 +7038,7 @@ int mainThread(){
 		fd=sceIoOpen("disc0:/UMD_DATA.BIN", PSP_O_RDONLY, 0777); 
 		sceKernelDelayThread(1000);
 		if(fd >0){
+		UMDMODE=1;
 		strcpy(gameId, ".txt\x0");
 		memcpy(&gameDir[32], gameId, 5);
 		sceIoRead(fd, gameId, 10);
@@ -7097,11 +7099,11 @@ int mainThread(){
 
 	SceUID block_id;
 
-	#ifndef _UMDMODE_
+	if(UMDMODE){
 	//fix!
 	block_id = sceKernelAllocPartitionMemory(4, "mkmenu", PSP_SMEM_Low, 512*272*2, NULL);
 	vram = (void*) (0xA0000000 | (unsigned int) sceKernelGetBlockHeadAddr(block_id));
-	#endif
+	}
 	
 	//Register the button callbacks
 	sceCtrlRegisterButtonCallback(3, triggerKey | menuKey | screenKey, buttonCallback, NULL);
@@ -7117,8 +7119,8 @@ int mainThread(){
 			}
 		}
 		#endif
-
-		#ifdef _UMDMODE_
+		
+		if(UMDMODE){
 		if(vram == NULL){
 			//Has the HOME button been pressed?
 			unsigned int a_address=0;
@@ -7143,7 +7145,7 @@ int mainThread(){
 			sceKernelDelayThread(1500);
 			continue;
 		}
-		#endif
+		}
 		
 		//Handle menu
 		if(menuDrawn){
