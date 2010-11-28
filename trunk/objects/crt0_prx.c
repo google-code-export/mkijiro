@@ -86,13 +86,14 @@ Rev 2206 - Blame - Compare with Previous - Last modification - View Log - RSS fe
 extern SceUID sceKernelSearchModuleByName(unsigned char *);
 
 //Defines
-//#ifdef _UMDMODE_
-PSP_MODULE_INFO("MKIJIRO", 0x3007, 1, 2); //0x3007
+#ifdef _UMDMODE_
+PSP_MODULE_INFO("nitePR", 0x3007, 1, 2); //0x3007
 PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
-//#elif _POPSMODE_
-//PSP_MODULE_INFO("nitePRpops", 0x3007, 1, 2); //0x3007
-//PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
-//#endif
+#elif _POPSMODE_
+PSP_MODULE_INFO("nitePRpops", 0x3007, 1, 2); //0x3007
+//PSP_MODULE_INFO("nitePRpops", PSP_MODULE_KERNEL, 1, 1);
+PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
+#endif
 
 //Globals
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
@@ -197,15 +198,14 @@ unsigned int copyData2=0x00000000;
 unsigned char screenTime=0;
 unsigned char cheatRefresh=0;
 unsigned char flipme=1;
-unsigned int decodeOptions=0;
-unsigned char fileBuffer[1536];
+unsigned char decodeOptions=0;
+unsigned char fileBuffer[2048];
 unsigned int fileBufferSize=0;
 unsigned int fileBufferBackup=0;
 unsigned int fileBufferFileOffset=0;
 unsigned int fileBufferOffset=1024;
 unsigned int screenNo=0;
 unsigned char editFormat=0;
-unsigned int usbmod=0;
 unsigned int searchStart=0x48800000;
 unsigned int searchStop=0x49FFFFFC;
 unsigned int copyStartFlag=0x48800000;
@@ -230,13 +230,13 @@ unsigned int addresstmp=0;
 unsigned int counteraddress=0;
 unsigned char backline=1;
 #ifdef _USB_
-unsigned int usbonbitch=0;
+unsigned char usbmod=0;
+unsigned char usbonbitch=0;
 #endif
 #ifdef _SCREENSHOT_
 unsigned char screenshot_mode=0;
 unsigned char *screenshotstring[]={"NONE", "TOGGLE"};
 #endif
-unsigned char UMDMODE=0;
 int jacktoggle=0;
 int copyMenuX=25;
 int copyMenuY=0;
@@ -640,7 +640,7 @@ unsigned int colorAdd(unsigned char colorDir[]){
 	}
   
   }	
-  
+  sceIoClose(fd);
   return 0;
   
 }
@@ -907,16 +907,25 @@ void cheatSave(){
 		while(fileBufferFileOffset < fileSize){
 			
 			//Read a byte
-			fileBufferRead(&fileChar, 1);
+		/*#define fileBufferRead(a_out, a_size) 
+		if(fileBufferOffset == 1536) {
+		fileBufferSize=sceIoRead(fd, fileBuffer, 1536);
+		fileBufferOffset=0; 
+		} 
+		memcpy(&fileChar, &fileBuffer	[fileBufferOffset], 1); 
+		fileBufferOffset++;
+		fileBufferFileOffset++;*/
+		fileBufferRead(&fileChar, 1);
 			if(fileBufferSize == 0) break;
 			//Interpret the byte based on the mode
+			
 			if(fileMode == 0){
 				//Pick a mode
 				switch(fileChar){
 					case ';': fileMode=1; //sceIoWrite(tempFd, ";", 1); 
 					break;
 
-					case '#': fileMode=2; counter++;
+					case '#': fileMode=2;  counter++;
 						//Add a double line skip?
 						if(counter != 0){
 							sceIoWrite(tempFd, "\r\n", 2); 
@@ -975,6 +984,7 @@ void cheatSave(){
 								}
 								//Write out the value
 								if(block[scounter].flags & FLAG_FREEZE){
+
 									switch(block[scounter].flags & FLAG_DWORD){
 										case FLAG_DWORD:
 											sprintf(buffer, "0x________");
@@ -995,24 +1005,25 @@ void cheatSave(){
 									sprintf(buffer , "\r\n");
 									sceIoWrite(tempFd, buffer, 2);
 
-
-
 								}
 								else{
 									switch(block[scounter].flags & FLAG_DWORD){
 										case FLAG_DWORD:
 											sprintf(buffer, "0x%08lX", block[scounter].hakVal);
 											sceIoWrite(tempFd, buffer, 10);
+											sprintf(buffer , "");//destory buffer
 										break;
 
 										case FLAG_WORD:
 											sprintf(buffer, "0x%04hX", (unsigned short)block[scounter].hakVal);
 											sceIoWrite(tempFd, buffer, 6);
+											sprintf(buffer , "");
 										break;
 
 										case FLAG_BYTE:
 											sprintf(buffer, "0x%02hX", (unsigned char)block[scounter].hakVal);
 											sceIoWrite(tempFd, buffer, 4);
+											sprintf(buffer , "");
 										break;
 									}
 										sprintf(buffer , "\r\n");
@@ -1034,7 +1045,7 @@ void cheatSave(){
 					fileMode=0;
 				}
 				else{
-     					//sceIoWrite(tempFd, &fileChar, 1);
+     					sceIoWrite(tempFd, &fileChar, 1);
 				}
 			}
 			else if(fileMode == 2){
@@ -1096,16 +1107,19 @@ void cheatSave(){
 					case FLAG_DWORD:
 						sprintf(buffer, "0x%08lX", block[scounter].hakVal);
 						sceIoWrite(fd, buffer, 10);
+						sprintf(buffer , "");//destory buffer
 					break;
 
 					case FLAG_WORD:
 						sprintf(buffer, "0x%04hX", (unsigned short)block[scounter].hakVal);
 						sceIoWrite(fd, buffer, 6);
+						sprintf(buffer , "");
 					break;
 
 					case FLAG_BYTE:
 						sprintf(buffer, "0x%02hX", (unsigned char)block[scounter].hakVal);
 						sceIoWrite(fd, buffer, 4);
+						sprintf(buffer , "");
 					break;
 				}
 				sprintf(buffer , "\r\n");
@@ -1124,7 +1138,6 @@ void cheatSave(){
 
 void cheatLoad(){
 	int fd;
-	fd=sceIoOpen(gameDir, PSP_O_RDONLY, 0777);
 
 	if(cheatRefresh){
 
@@ -2476,11 +2489,11 @@ void menuDraw(){
 				pspDebugScreenSetXY(0, 29);
 
 				pspDebugScreenSetTextColor(color01);
-				pspDebugScreenPuts("  MKIJIRO20101127");
+				pspDebugScreenPuts("  MKIJIRO20101128 ");
 				#ifdef _UMDMODE_
-					pspDebugScreenPuts(" ");
+				pspDebugScreenPuts(" ");
 				#elif _POPSMODE_
-					pspDebugScreenPuts("POPS ");
+				pspDebugScreenPuts("POPS ");
 				#endif
 
 				//battery info
@@ -4134,6 +4147,7 @@ void menuInput(){
 
 										//Write out the searcHistory[0] type
 					  switch(searchHistory[0].flags & FLAG_DWORD)
+
 					  {
 						case FLAG_DWORD:if(sceIoWrite(fd2, "4", 1)!=1) goto ErrorReadExactB;break;   
 						case FLAG_WORD:if(sceIoWrite(fd2, "2", 1)!=1) goto ErrorReadExactB;break;
@@ -4820,6 +4834,7 @@ void menuInput(){
 							case FLAG_BYTE:
 							sceIoRead(fd, &dcounter, sizeof(unsigned char));
 
+
 							if(searchMode==0)
 							{
 							  if((unsigned char)dcounter != *((unsigned char*)(scounter))) break;
@@ -4987,7 +5002,10 @@ void menuInput(){
 				{
 				  switch(extSelected[1])
 				  {
-					case 0: if(searchMode < 5) searchMode++; break;
+					case 0: if(searchMode < 5) searchMode++; 
+				  	if(searchMode >5){
+				  	searchMode=5;}
+				  	break;
 					case 1: searchHistory[0].hakVal+=(1 << (4*(7-extSelected[2]))); break;
 					case 2: searchHistory[0].hakVal+=decDelta[extSelected[2]]; break;
 					case 3: searchHistory[0].hakVal+=(1 << (8*(extSelected[2]))); break;
@@ -5341,7 +5359,7 @@ void menuInput(){
 							}
 							
 							//Reset fields
-							searchHistory[0].flags=0;
+							//searchHistory[0].flags=0;
 							searchNo=0;
 							searchHistoryCounter=0;
 							cheatSearch=0;
@@ -5368,7 +5386,7 @@ void menuInput(){
 							}
 							
 							//Reset fields
-							searchHistory[0].flags=0;
+							//searchHistory[0].flags=0;
 							searchHistoryCounter=0;
 							searchNo=0;
 							cheatSearch=0;
@@ -5793,7 +5811,7 @@ void menuInput(){
 					}
 					
 					//Reset fields
-					searchHistory[0].flags=0;
+					//searchHistory[0].flags=0;
 					searchNo=0;
 					cheatSearch=0;
 					cheatSelected=0;
@@ -5870,7 +5888,7 @@ void menuInput(){
 					}
 					
 					//Reset fields
-					searchHistory[0].flags=0;
+					//searchHistory[0].flags=0;
 					searchNo=0;
 					cheatSearch=0;
 					cheatSelected=0;
@@ -5960,8 +5978,7 @@ void menuInput(){
 					cheatHz+=15625;
 				}
 				if(cheatSelected==12){
-					if(colorFile < 7){
-					colorFile++;}
+					colorFile++;
 				}
 				#ifdef _SCREENSHOT_
 				if(cheatSelected==14){
@@ -7034,11 +7051,10 @@ int mainThread(){
 	#endif
 
 	//#ifdef _UMDMODE_
-		//Find the GAME ID
+		//Find the GAME ID　	///ID
 		fd=sceIoOpen("disc0:/UMD_DATA.BIN", PSP_O_RDONLY, 0777); 
 		sceKernelDelayThread(1000);
 		if(fd >0){
-		UMDMODE=1;
 		strcpy(gameId, ".txt\x0");
 		memcpy(&gameDir[32], gameId, 5);
 		sceIoRead(fd, gameId, 10);
@@ -7099,11 +7115,11 @@ int mainThread(){
 
 	SceUID block_id;
 
-	if(UMDMODE){
+	#ifndef _UMDMODE_
 	//fix!
 	block_id = sceKernelAllocPartitionMemory(4, "mkmenu", PSP_SMEM_Low, 512*272*2, NULL);
 	vram = (void*) (0xA0000000 | (unsigned int) sceKernelGetBlockHeadAddr(block_id));
-	}
+	#endif
 	
 	//Register the button callbacks
 	sceCtrlRegisterButtonCallback(3, triggerKey | menuKey | screenKey, buttonCallback, NULL);
@@ -7119,8 +7135,8 @@ int mainThread(){
 			}
 		}
 		#endif
-		
-		if(UMDMODE){
+
+		#ifdef _UMDMODE_
 		if(vram == NULL){
 			//Has the HOME button been pressed?
 			unsigned int a_address=0;
@@ -7145,7 +7161,7 @@ int mainThread(){
 			sceKernelDelayThread(1500);
 			continue;
 		}
-		}
+		#endif
 		
 		//Handle menu
 		if(menuDrawn){

@@ -4,20 +4,30 @@
 コードを保存すると比較サーチがおかしくなる
 コード保存と読込を繰り返していると保存読込機能が反応しなくなる
 一部の浮動小数が表示されない 0.01,0.001
-カラーファイルを切り替えるのをくりかえしてると効かなくなる,ゲームがバグる
 8byte時メモリエディタのコピー箇所がおかしい
 
 this is modded mkultrav10.
 KnownProblem;
+certain game,kenybord PSP freeze(BUSOSINKI etc)
 doesnot work fine unknown value search after code save
-if code is reloaded & saved many times,save&reload function doesnot work..
-this is modded mkultrav10.
+if code is reloaded & saved many times,save&reload function doesnot work
+certain float,doesnot display (0.01,0.001)
+as for 8byte RAMeditor,strange copy position
+
+2010/11/29
+セーブ時に変な文字がまたのこることがあったので修正？
+カラーファイルの閉じ忘れを修正,ファイルの上限を撤廃
+colorfixed
+
+2010/11/28
+フリーズするのでNOHOME廃止,home2度おしに変更
+HOMEBREW互換になった？
+normal UMDgame/HB hybridmode
 
 2010/11/27
 HOMEBREWGENをパス(hbpath)をダンプして読ますように変更、0x140だけ対応(M33/GEN)
 POPS版は通常UMDゲームでも一応うごくのでID処理共通化。
 now support HOMEBREW cheat HACK(name offset 0x140only)
-POPSver,normal UMDgame/HB hybridmode
 
 2010/11/26
 HOMEBREWに試験的に対応？GEN3でしか確認してないので不明
