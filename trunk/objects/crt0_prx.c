@@ -989,18 +989,20 @@ void cheatSave(){
 										case FLAG_DWORD:
 											sprintf(buffer, "0x________");
 											sceIoWrite(tempFd, buffer, 10);
+					sprintf(buffer , "");//destory buffer
 										break;
 
 										case FLAG_WORD:
 											sprintf(buffer, "0x____");
 											sceIoWrite(tempFd, buffer, 6);
-
+					sprintf(buffer , "");//destory buffer
 										break;
 
 										case FLAG_BYTE:
 											sprintf(buffer, "0x__");
 											sceIoWrite(tempFd, buffer, 4);
-										break;
+					sprintf(buffer , "");//destory buffer
+										break;										
 									}
 									sprintf(buffer , "\r\n");
 									sceIoWrite(tempFd, buffer, 2);
@@ -1011,19 +1013,19 @@ void cheatSave(){
 										case FLAG_DWORD:
 											sprintf(buffer, "0x%08lX", block[scounter].hakVal);
 											sceIoWrite(tempFd, buffer, 10);
-											sprintf(buffer , "");//destory buffer
+					sprintf(buffer , "");//destory buffer
 										break;
 
 										case FLAG_WORD:
 											sprintf(buffer, "0x%04hX", (unsigned short)block[scounter].hakVal);
 											sceIoWrite(tempFd, buffer, 6);
-											sprintf(buffer , "");
+					sprintf(buffer , "");//destory buffer
 										break;
 
 										case FLAG_BYTE:
 											sprintf(buffer, "0x%02hX", (unsigned char)block[scounter].hakVal);
 											sceIoWrite(tempFd, buffer, 4);
-											sprintf(buffer , "");
+											sprintf(buffer , "");//destory buffer
 										break;
 									}
 										sprintf(buffer , "\r\n");
@@ -1044,9 +1046,9 @@ void cheatSave(){
 					sceIoWrite(tempFd, "\r\n",2); 
 					fileMode=0;
 				}
-				else{
-     					sceIoWrite(tempFd, &fileChar, 1);
-				}
+				//else{
+     			//		sceIoWrite(tempFd, &fileChar, 1);
+				//}
 			}
 			else if(fileMode == 2){
 				//Just wait for an '\r' or '\n'
@@ -1107,19 +1109,19 @@ void cheatSave(){
 					case FLAG_DWORD:
 						sprintf(buffer, "0x%08lX", block[scounter].hakVal);
 						sceIoWrite(fd, buffer, 10);
-						sprintf(buffer , "");//destory buffer
+					sprintf(buffer , "");//destory buffer
 					break;
 
 					case FLAG_WORD:
 						sprintf(buffer, "0x%04hX", (unsigned short)block[scounter].hakVal);
 						sceIoWrite(fd, buffer, 6);
-						sprintf(buffer , "");
+					sprintf(buffer , "");//destory buffer
 					break;
 
 					case FLAG_BYTE:
 						sprintf(buffer, "0x%02hX", (unsigned char)block[scounter].hakVal);
 						sceIoWrite(fd, buffer, 4);
-						sprintf(buffer , "");
+					sprintf(buffer , "");//destory buffer
 					break;
 				}
 				sprintf(buffer , "\r\n");
