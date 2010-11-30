@@ -5,17 +5,23 @@
 コード保存と読込を繰り返していると保存読込機能が反応しなくなる
 一部の浮動小数が表示されない 0.01,0.001
 8byte時メモリエディタのコピー箇所がおかしい
+セーブ時に変な文字がまたのこる
 
 this is modded mkultrav10.
 KnownProblem;
 certain game,kenybord PSP freeze(BUSOSINKI etc)
 doesnot work fine unknown value search after code save
+save cheat,leave strange strings?
 if code is reloaded & saved many times,save&reload function doesnot work
 certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
 
+2010/11/31
+ヒカクサーチと数値サーチの速度向上
+とりあえず500件まで
+speedup search speed,result up to 500
+
 2010/11/29
-セーブ時に変な文字がまたのこることがあったので修正？
 カラーファイルの閉じ忘れを修正,ファイルの上限を撤廃
 colorfixed
 
