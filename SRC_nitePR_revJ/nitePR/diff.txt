@@ -1,5 +1,6 @@
 ported PRXTOOL/PSPLINK decoder
 ported some mkultra function
+search speed up
 changed font misaki
 
 BY ----(,A,)----

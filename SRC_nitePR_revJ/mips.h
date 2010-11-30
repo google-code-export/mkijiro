@@ -3277,3 +3277,90 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 
   //pspDebugScreenSetTextColor(color02);
 }
+
+
+void mipsSpecial(unsigned int addresscode,unsigned int addresstmp,unsigned int counteraddress){
+							if(((addresscode >= 0x10000000) && (addresscode <= 0x1FFFFFFF)) || ((addresscode >= 0x50000000) && (addresscode <= 0x5FFFFFFF))
+							|| ((addresscode >= 0x45000000) && (addresscode <= 0x4503FFFF)) || ((addresscode >= 0x49000000) && (addresscode <= 0x491FFFFF))
+							|| (((addresscode & 0xFC1F0000) >= 0x04000000) && ((addresscode & 0xFC1F0000) <= 0x04030000))
+							||  (((addresscode & 0xFC1F0000) >= 0x04100000) && ((addresscode & 0xFC1F0000) <= 0x04130000)) )
+							{
+							addresstmp=addresscode & 0xFFFF;
+							addresscode=4*(addresstmp + 1);
+							if(addresstmp > 0x7FFF){
+							addresscode=(-0x40000+addresscode)+counteraddress;}
+							else{
+							addresscode=addresscode+counteraddress;}
+							sprintf(buffer, "$%X", addresscode);pspDebugScreenPuts(buffer);
+							if(extMenu==2){
+							pspDebugScreenPuts("+0FFSET");
+							}
+							if(addresstmp > 0x7FFF){
+							 sprintf(buffer, "(-%d)", (0x10000-(addresstmp+1)));}
+							else{
+							 sprintf(buffer, "(+%d)", (addresstmp+1));}
+							 pspDebugScreenPuts(buffer);
+							}
+							else if( (addresscode>>24 == 0x3C) && (((addresscode & 0x7FFF) > 0x38D1) && ((addresscode & 0x7FFF) < 0x4B19) ||((addresscode & 0x7FFF) > 0x7F7F))){
+							addresscode=addresscode <<16;
+							pspDebugScreenPuts("  UFLOAT:");//UPPER IEEE754 FLOAT
+							f_cvt(&addresscode, buffer, sizeof(buffer), 6, MODE_GENERIC);
+							pspDebugScreenPuts(buffer);
+							}
+							else if( (((addresscode>>16)&0xFF80) == 0xDF80)&& ((addresscode & 0x7FFF) > 0x68E) ){
+							pspDebugScreenPuts(" VFLOAT:");//16BIT VFPU HALF FLOAT
+/* VFPU 16-bit floating-point format. */
+#define VFPU_FLOAT16_EXP_MAX    0x1f
+#define VFPU_SH_FLOAT16_SIGN    15
+#define VFPU_MASK_FLOAT16_SIGN  0x1
+#define VFPU_SH_FLOAT16_EXP     10
+#define VFPU_MASK_FLOAT16_EXP   0x1f
+#define VFPU_SH_FLOAT16_FRAC    0
+#define VFPU_MASK_FLOAT16_FRAC  0x3ff
+        /* Convert a VFPU 16-bit floating-point number to IEEE754. */
+        unsigned int float2int=0;
+        unsigned short float16 = addresscode & 0xFFFF;
+        unsigned int sign = (float16 >> VFPU_SH_FLOAT16_SIGN) & VFPU_MASK_FLOAT16_SIGN;
+        int exponent = (float16 >> VFPU_SH_FLOAT16_EXP) & VFPU_MASK_FLOAT16_EXP;
+        unsigned int fraction = float16 & VFPU_MASK_FLOAT16_FRAC;
+        char signchar = '+' + ((sign == 1) * 2);
+
+        if (exponent == VFPU_FLOAT16_EXP_MAX)
+        {
+                if (fraction == 0){
+                        sprintf(buffer, "%cInf", signchar);
+		pspDebugScreenPuts(buffer);
+		}
+                else{
+                        sprintf(buffer, "%cNaN", signchar);
+		pspDebugScreenPuts(buffer);
+		}
+        }
+        else if (exponent == 0 && fraction == 0)
+        {
+                sprintf(buffer, "%c0", signchar);
+		pspDebugScreenPuts(buffer);
+        }
+        else
+        {
+                if (exponent == 0)
+                {
+                        do
+
+                        {
+                                fraction <<= 1;
+                                exponent--;
+                        }
+                        while (!(fraction & (VFPU_MASK_FLOAT16_FRAC + 1)));
+
+                        fraction &= VFPU_MASK_FLOAT16_FRAC;
+                }
+                /* Convert to 32-bit single-precision IEEE754. */
+                float2int = (sign << 31) + ((exponent + 112) << 23) + (fraction << 13);
+		//sprintf(buffer, "%X" ,float2int); pspDebugScreenPuts(buffer);
+		f_cvt(&float2int, buffer, sizeof(buffer), 6, MODE_GENERIC);
+		pspDebugScreenPuts(buffer);
+        }
+							}
+
+}
