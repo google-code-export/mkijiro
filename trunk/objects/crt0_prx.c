@@ -1091,15 +1091,18 @@ void cheatSave(){
 				//Write out the address
 				if(block[scounter].flags & FLAG_DMA){
 					sprintf(buffer, "0x%08lX ", (block[scounter].address));
-					sceIoWrite(fd, buffer, 11);
+					sceIoWrite(fd, buffer, 11);	sceIoWrite(tempFd, buffer, 10);
+					sprintf(buffer , "");//destory buffer
 								}
 				else if(block[scounter].flags & FLAG_JOKER){
 					sprintf(buffer, "0x%08lX ", (block[scounter].address - 0x8800000 + 0xFF000000));
-					sceIoWrite(fd, buffer, 11);
+					sceIoWrite(fd, buffer, 11);	sceIoWrite(tempFd, buffer, 10);
+					sprintf(buffer , "");//destory buffer
 								}
 				else{
 					sprintf(buffer, "0x%08lX ", (block[scounter].address - 0x08800000));
-					sceIoWrite(fd, buffer, 11);
+					sceIoWrite(fd, buffer, 11);	sceIoWrite(tempFd, buffer, 10);
+					sprintf(buffer , "");//destory buffer
 								}
 				//sprintf(buffer, "0x%08lX ", (block[scounter].address - 0x08800000));
 				//sceIoWrite(fd, buffer, strlen(buffer));
@@ -4079,7 +4082,7 @@ void menuInput(){
 							if(*((unsigned int*)(counter)) == (unsigned int)searchHistory[0].hakVal)
 							{
 							  //Add it
-							  if(searchResultCounter<100){
+							  if(searchResultCounter<500){
 							  *(unsigned int *)(0x8802890+8*searchResultCounter)=counter;
 							  *(unsigned int *)(0x8802894+8*searchResultCounter)=searchHistory[0].hakVal;
 							  }
@@ -4094,7 +4097,7 @@ void menuInput(){
 							if(*((unsigned short*)(counter)) == (unsigned short)searchHistory[0].hakVal)
 							{
 							  //Add it
-							  if(searchResultCounter<100){
+							  if(searchResultCounter<500){
 							  *(unsigned short *)(0x8802892+6*searchResultCounter)=counter>>16;
 							  *(unsigned short *)(0x8802890+6*searchResultCounter)=counter;
 							  *(unsigned short *)(0x8802894+6*searchResultCounter)=searchHistory[0].hakVal;
@@ -4110,7 +4113,7 @@ void menuInput(){
 							if(*((unsigned char*)(counter)) == (unsigned char)searchHistory[0].hakVal)
 							{
 							  //Add it
-							  if(searchResultCounter<100){
+							  if(searchResultCounter<500){
 							  *(unsigned char *)(0x8802893+5*searchResultCounter)=counter>>24;
 							  *(unsigned char *)(0x8802892+5*searchResultCounter)=counter>>16;
 							  *(unsigned char *)(0x8802891+5*searchResultCounter)=counter>>8;
@@ -4129,6 +4132,8 @@ void menuInput(){
 					  //Close the file since we are done with the search
 					sceIoClose(fd);
 					fd=sceIoOpen("ms0:/search1.dat", PSP_O_WRONLY | PSP_O_CREAT, 0777);
+					if(searchResultCounter>500){
+					searchResultCounter=500;}
 					sceIoWrite(fd, (void*)0x0880288F, DumpByte*searchResultCounter+1);
 					sceIoClose(fd);
 					  
@@ -4227,7 +4232,7 @@ void menuInput(){
 							if(*((unsigned int*)(scounter)) == (unsigned int)searchHistory[0].hakVal)
 							{
 							  //Add it
-							  if(searchResultCounter<100){
+							  if(searchResultCounter<500){
 							  *(unsigned int *)(0x8802890+8*searchResultCounter)=scounter;
 							  *(unsigned int *)(0x8802894+8*searchResultCounter)=searchHistory[0].hakVal;
 							  }
@@ -4242,7 +4247,7 @@ void menuInput(){
 							if(*((unsigned short*)(scounter)) == (unsigned short)searchHistory[0].hakVal)
 							{
 							  //Add it
-							  if(searchResultCounter<100){
+							  if(searchResultCounter<500){
 							  *(unsigned short *)(0x8802892+6*searchResultCounter)=scounter>>16;
 							  *(unsigned short *)(0x8802890+6*searchResultCounter)=scounter;
 							  *(unsigned short *)(0x8802894+6*searchResultCounter)=searchHistory[0].hakVal;
@@ -4258,7 +4263,7 @@ void menuInput(){
 							if(*((unsigned char*)(scounter)) == (unsigned char)searchHistory[0].hakVal)
 							{
 							  //Add it
-							  if(searchResultCounter<100){
+							  if(searchResultCounter<500){
 							  *(unsigned char *)(0x8802893+5*searchResultCounter)=scounter>>24;
 							  *(unsigned char *)(0x8802892+5*searchResultCounter)=scounter>>16;
 							  *(unsigned char *)(0x8802891+5*searchResultCounter)=scounter>>8;
@@ -4278,6 +4283,8 @@ void menuInput(){
 					  //Close the files
 					  sceIoClose(fd);
 					  sprintf(buffer, "ms0:/search%d.dat", searchNo);
+					if(searchResultCounter>500){
+					searchResultCounter=500;}
 					  fd=sceIoOpen(buffer, PSP_O_WRONLY | PSP_O_CREAT, 0777);
 					  sceIoWrite(fd, (void*)0x0880288F, DumpByte*searchResultCounter+1);
 					  sceIoClose(fd);
@@ -4550,7 +4557,7 @@ void menuInput(){
 				  
 				  //Move the cursor back
 				  extSelected[0]=0;
-
+		unsigned char DumpByte=0;
               //Is it the first search? //OLD NPR SRC
               if(searchNo == 0)
               {
@@ -4560,12 +4567,13 @@ void menuInput(){
                 
                 //Setup the variables
                 searchResultCounter=0;
+		
                 
                 //Open the files
                 fd=sceIoOpen("ms0:/search.ram", PSP_O_RDONLY, 0777);
-                sprintf(buffer, "ms0:/search%d.dat", searchNo);
-                fd2=sceIoOpen(buffer, PSP_O_WRONLY | PSP_O_CREAT, 0777);
-                if((fd>0) && (fd2>0))
+                //sprintf(buffer, "ms0:/search%d.dat", searchNo-1);
+                //fd2=sceIoOpen(buffer, PSP_O_WRONLY | PSP_O_CREAT, 0777);
+                if(fd>0)
                 {
                   //Skip the initial 0x4000 bytes
                   //sceIoLseek(fd, 0x4000, SEEK_SET);
@@ -4574,9 +4582,12 @@ void menuInput(){
      		//Write out the searcHistory[0] type
                   switch(searchHistory[0].flags & FLAG_DWORD)
                   {
-                  	case FLAG_DWORD:if(sceIoWrite(fd2, "4", 1)!=1) goto ErrorReadDiffA;miscType=4;break;   
-                  	case FLAG_WORD:if(sceIoWrite(fd2, "2", 1)!=1) goto ErrorReadDiffA;miscType=2;break;
-                  	case FLAG_BYTE:if(sceIoWrite(fd2, "1", 1)!=1) goto ErrorReadDiffA;miscType=1;break;
+			case FLAG_DWORD: *(unsigned char *)(0x880288F)=0x34;DumpByte=8;miscType=4;break;
+			case FLAG_WORD:	*(unsigned char *)(0x880288F)=0x32;DumpByte=6;miscType=2;break;
+			case FLAG_BYTE:	*(unsigned char *)(0x880288F)=0x31;DumpByte=5;miscType=1;break;
+                  	//case FLAG_DWORD:if(sceIoWrite(fd2, "4", 1)!=1) goto ErrorReadDiffA;miscType=4;break;   
+                  	//case FLAG_WORD:if(sceIoWrite(fd2, "2", 1)!=1) goto ErrorReadDiffA;miscType=2;break;
+                  	//case FLAG_BYTE:if(sceIoWrite(fd2, "1", 1)!=1) goto ErrorReadDiffA;miscType=1;break;
 	                }
                   
                   //Get ready
@@ -4648,8 +4659,12 @@ void menuInput(){
                         scounter=*((unsigned int*)(counter));
                         
                         //Add it
-                        if(sceIoWrite(fd2, &counter, sizeof(unsigned int))!=4) goto ErrorReadDiffA;
-                        if(sceIoWrite(fd2, &scounter, sizeof(unsigned int))!=4) goto ErrorReadDiffA;
+			if(searchResultCounter<500){
+			 *(unsigned int *)(0x8802890+8*searchResultCounter)=counter;
+			 *(unsigned int *)(0x8802894+8*searchResultCounter)=scounter;
+			 }
+                        //if(sceIoWrite(fd2, &counter, sizeof(unsigned int))!=4) goto ErrorReadDiffA;
+                        //if(sceIoWrite(fd2, &scounter, sizeof(unsigned int))!=4) goto ErrorReadDiffA;
                         searchResultCounter++;
                       	break;
                         
@@ -4681,8 +4696,13 @@ void menuInput(){
                         scounter=*((unsigned short*)(counter));
                       
                         //Add it
-                        if(sceIoWrite(fd2, &counter, sizeof(unsigned int))!=4) goto ErrorReadDiffA;
-                        if(sceIoWrite(fd2, &scounter, sizeof(unsigned short))!=2) goto ErrorReadDiffA;
+			if(searchResultCounter<500){
+			 *(unsigned short *)(0x8802892+6*searchResultCounter)=counter>>16;
+			 *(unsigned short *)(0x8802890+6*searchResultCounter)=counter;
+			 *(unsigned short *)(0x8802894+6*searchResultCounter)=scounter;
+			 }
+                        //if(sceIoWrite(fd2, &counter, sizeof(unsigned int))!=4) goto ErrorReadDiffA;
+                        //if(sceIoWrite(fd2, &scounter, sizeof(unsigned short))!=2) goto ErrorReadDiffA;
                         searchResultCounter++;
                       	break;
                          
@@ -4714,8 +4734,15 @@ void menuInput(){
                         scounter=*((unsigned char*)(counter));
                       
                         //Add it
-                        if(sceIoWrite(fd2, &counter, sizeof(unsigned int))!=4) goto ErrorReadDiffA;
-                        if(sceIoWrite(fd2, &scounter, sizeof(unsigned char))!=1) goto ErrorReadDiffA;
+			if(searchResultCounter<500){
+			 *(unsigned char *)(0x8802893+5*searchResultCounter)=counter>>24;
+			 *(unsigned char *)(0x8802892+5*searchResultCounter)=counter>>16;
+			 *(unsigned char *)(0x8802891+5*searchResultCounter)=counter>>8;
+			 *(unsigned char *)(0x8802890+5*searchResultCounter)=counter;
+			 *(unsigned char *)(0x8802894+5*searchResultCounter)=scounter;
+			 }
+                        //if(sceIoWrite(fd2, &counter, sizeof(unsigned int))!=4) goto ErrorReadDiffA;
+                        //if(sceIoWrite(fd2, &scounter, sizeof(unsigned char))!=1) goto ErrorReadDiffA;
                         searchResultCounter++;
                       	break;
 	                	}
@@ -4724,8 +4751,13 @@ void menuInput(){
                   	counter+=miscType;
                   }
                   //Close the files
-	 	  sceIoClose(fd);
-                  sceIoClose(fd2);
+		sceIoClose(fd);
+		sprintf(buffer, "ms0:/search1.dat");
+		if(searchResultCounter>500){
+		searchResultCounter=500;}
+		fd=sceIoOpen(buffer, PSP_O_WRONLY | PSP_O_CREAT, 0777);
+		sceIoWrite(fd, (void*)0x0880288F, DumpByte*searchResultCounter+1);
+		sceIoClose(fd);
                   
                   while(1)
                   {
@@ -4760,9 +4792,9 @@ void menuInput(){
 					//Open the files
 					sprintf(buffer, "ms0:/search%d.dat", searchNo-1);
 					fd=sceIoOpen(buffer, PSP_O_RDONLY, 0777);
-					sprintf(buffer, "ms0:/search%d.dat", searchNo);
-					fd2=sceIoOpen(buffer, PSP_O_WRONLY | PSP_O_CREAT, 0777);
-					if((fd>0) && (fd2>0))
+					//sprintf(buffer, "ms0:/search%d.dat", searchNo);
+					//fd2=sceIoOpen(buffer, PSP_O_WRONLY | PSP_O_CREAT, 0777);
+					if(fd>0)
 					{
 					  //Get ready to go through and check the addresses
 					  sceIoLseek(fd, 1, SEEK_SET);
@@ -4770,10 +4802,10 @@ void menuInput(){
 										//Write out the searcHistory[0] type
 					  switch(searchHistory[0].flags & FLAG_DWORD)
 					  {
-						case FLAG_DWORD:if(sceIoWrite(fd2, "4", 1)!=1) goto ErrorReadDiffB;break;
-						case FLAG_WORD:if(sceIoWrite(fd2, "2", 1)!=1) goto ErrorReadDiffB;break;
-						case FLAG_BYTE:if(sceIoWrite(fd2, "1", 1)!=1) goto ErrorReadDiffB;break;
-						}
+					case FLAG_DWORD: *(unsigned char *)(0x880288F)=0x34;DumpByte=8;miscType=4;break;
+					case FLAG_WORD:	*(unsigned char *)(0x880288F)=0x32;DumpByte=6;miscType=2;break;
+					case FLAG_BYTE:	*(unsigned char *)(0x880288F)=0x31;DumpByte=5;miscType=1;break;
+		                  	}
 					  
 					  //Loop through the list checking each one
 					  counter=searchResultCounter;
@@ -4809,6 +4841,7 @@ void menuInput(){
 						  }
 						}
 						
+						if(scounter>0){
 						//Check
 						switch(searchHistory[0].flags & FLAG_DWORD)
 						{
@@ -4842,8 +4875,12 @@ void menuInput(){
 							dcounter=*((unsigned int*)(scounter));
 							
 							//Add it
-							if(sceIoWrite(fd2, &scounter, sizeof(unsigned int))!=4) goto ErrorReadDiffB;
-							if(sceIoWrite(fd2, &dcounter, sizeof(unsigned int))!=4) goto ErrorReadDiffB;
+							if(searchResultCounter<500){
+							 *(unsigned int *)(0x8802890+8*searchResultCounter)=scounter;
+							 *(unsigned int *)(0x8802894+8*searchResultCounter)=dcounter;
+			 				}
+							//if(sceIoWrite(fd2, &scounter, sizeof(unsigned int))!=4) goto ErrorReadDiffB;
+							//if(sceIoWrite(fd2, &dcounter, sizeof(unsigned int))!=4) goto ErrorReadDiffB;
 							searchResultCounter++;
 							break;
 							
@@ -4877,14 +4914,18 @@ void menuInput(){
 							dcounter=*((unsigned short*)(scounter));
 
 							//Add it
-							if(sceIoWrite(fd2, &scounter, sizeof(unsigned int))!=4) goto ErrorReadDiffB;
-							if(sceIoWrite(fd2, &dcounter, sizeof(unsigned short))!=2) goto ErrorReadDiffB;
+							if(searchResultCounter<500){
+							 *(unsigned short *)(0x8802892+6*searchResultCounter)=scounter>>16;
+							 *(unsigned short *)(0x8802890+6*searchResultCounter)=scounter;
+			 				*(unsigned short *)(0x8802894+6*searchResultCounter)=dcounter;
+			 				}
+							//if(sceIoWrite(fd2, &scounter, sizeof(unsigned int))!=4) goto ErrorReadDiffB;
+							//if(sceIoWrite(fd2, &dcounter, sizeof(unsigned short))!=2) goto ErrorReadDiffB;
 							searchResultCounter++;
 							break;
 							 
 							case FLAG_BYTE:
 							sceIoRead(fd, &dcounter, sizeof(unsigned char));
-
 
 							if(searchMode==0)
 							{
@@ -4913,19 +4954,31 @@ void menuInput(){
 							dcounter=*((unsigned char*)(scounter));
 
 							//Add it
-							if(sceIoWrite(fd2, &scounter, sizeof(unsigned int))!=4) goto ErrorReadDiffB;
-							if(sceIoWrite(fd2, &dcounter, sizeof(unsigned char))!=1) goto ErrorReadDiffB;
+							if(searchResultCounter<500){
+			 				*(unsigned char *)(0x8802893+5*searchResultCounter)=scounter>>24;
+							*(unsigned char *)(0x8802892+5*searchResultCounter)=scounter>>16;
+							*(unsigned char *)(0x8802891+5*searchResultCounter)=scounter>>8;
+			 				*(unsigned char *)(0x8802890+5*searchResultCounter)=scounter;
+			 				*(unsigned char *)(0x8802894+5*searchResultCounter)=dcounter;
+							 }
+							//if(sceIoWrite(fd2, &scounter, sizeof(unsigned int))!=4) goto ErrorReadDiffB;
+							//if(sceIoWrite(fd2, &dcounter, sizeof(unsigned char))!=1) goto ErrorReadDiffB;
 							searchResultCounter++;
 							break;
 							}
-						
+						}
 						//Next
 						counter--;
 					  }
 					  
 					  //Close the files
 					  sceIoClose(fd);
-					  sceIoClose(fd2);
+					  sprintf(buffer, "ms0:/search%d.dat", searchNo);
+					  fd=sceIoOpen(buffer, PSP_O_WRONLY | PSP_O_CREAT, 0777);
+					  if(searchResultCounter>500){
+					  searchResultCounter=500;}
+					  sceIoWrite(fd, (void*)0x0880288F, DumpByte*searchResultCounter+1);
+					  sceIoClose(fd);
 					  
 					  while(1)
 					  {
@@ -4939,7 +4992,8 @@ void menuInput(){
 						sceIoRemove(buffer);
 						
 						lineClear(33);
-								pspDebugScreenSetTextColor(color01); pspDebugScreenPuts("ERROR: MemoryStick out of Space!"); 
+						pspDebugScreenSetTextColor(color01);
+						pspDebugScreenPuts("ERROR: MemoryStick out of Space!"); 
 						sceKernelDelayThread(3000000);
 						break;
 					  }
