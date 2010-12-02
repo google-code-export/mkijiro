@@ -4159,7 +4159,10 @@ void menuInput(){
 							  //}
 					  }
 					  //Close the file since we are done with the search
-					sceIoWrite(fd, (void*)0x08802890, DumpByte*searchResultCounterMax);
+					  if(searchResultCounter<searchResultCounterMax){
+					sceIoWrite(fd, (void*)0x08802890, DumpByte*searchResultCounter);}
+					  else{
+					sceIoWrite(fd, (void*)0x08802890, DumpByte*searchResultCounterMax);}
 					sceIoClose(fd);
 					  
 					  while(1)
@@ -4314,7 +4317,10 @@ void menuInput(){
 						counter--;
 					  }
 					  //Close the files
-					  sceIoWrite(fd2, (void*)0x08802890, DumpByte*searchResultCounterMax);
+					  if(searchResultCounter<searchResultCounterMax){
+					sceIoWrite(fd, (void*)0x08802890, DumpByte*searchResultCounter);}
+					  else{
+					sceIoWrite(fd, (void*)0x08802890, DumpByte*searchResultCounterMax);}
 					  sceIoClose(fd);sceIoClose(fd2);
 					  
 					  while(1)
@@ -4811,7 +4817,10 @@ void menuInput(){
                   	counter+=miscType;
                   }
                   //Close the files
-		sceIoWrite(fd2, (void*)0x08802890, DumpByte*searchResultCounterMax);
+		  if(searchResultCounter<searchResultCounterMax){
+		sceIoWrite(fd, (void*)0x08802890, DumpByte*searchResultCounter);}
+		  else{
+		sceIoWrite(fd, (void*)0x08802890, DumpByte*searchResultCounterMax);}
 		sceIoClose(fd);sceIoClose(fd2);
                   
                   while(1)
@@ -5034,7 +5043,10 @@ void menuInput(){
 					  }
 					  
 					  //Close the files
-					  sceIoWrite(fd2, (void*)0x08802890, DumpByte*searchResultCounterMax);
+					  if(searchResultCounter<searchResultCounterMax){
+					sceIoWrite(fd, (void*)0x08802890, DumpByte*searchResultCounter);}
+					  else{
+					sceIoWrite(fd, (void*)0x08802890, DumpByte*searchResultCounterMax);}
 					  sceIoClose(fd);sceIoClose(fd2);
 					  
 					  while(1)
