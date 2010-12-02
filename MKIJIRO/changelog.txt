@@ -1,20 +1,31 @@
 これはMKV10のそーすを改造したものです。
+
 判明バグ?;
 一部のゲームでキーボードをだすとフリーズする(武装神姫)
-コードを保存すると比較サーチがおかしくなる
+比較サーチがおかしくなる
 コード保存と読込を繰り返していると保存読込機能が反応しなくなる
 一部の浮動小数が表示されない 0.01,0.001
 8byte時メモリエディタのコピー箇所がおかしい
-セーブ時に変な文字がまたのこる
 
 this is modded mkultrav10.
 KnownProblem;
 certain game,kenybord PSP freeze(BUSOSINKI etc)
-doesnot work fine unknown value search after code save
-save cheat,leave strange strings?
+doesnot work fine unknown value search
 if code is reloaded & saved many times,save&reload function doesnot work
 certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
+
+2010/12/2
+NPR旧CWCモードの32bit書き込みを復元なしに変更
+コピーメニューのフラグをNPR/CWC([])に変更
+サーチ結果を499件まで拡大
+L/Rで20件分結果を飛ばせるようにした
+コードの保存をメモリに変更したため早くなった
+changed old NPR of CWC32bitWrite,need nobackup code for joker
+copy menu,CWC cheat;32bit write nobackup&restore
+display searchresult 500
+L/R skip +-20 searchReesult
+speedup cheatsave
 
 2010/11/31
 ヒカクサーチと数値サーチの速度向上
@@ -196,13 +207,9 @@ CheatHZ,15/1000s
 FIXED JOKER 16 BIT CONDITINAL(OLD MK,CODEVALUE 24BIT  VS RAM 32BIT)
 FIXED CHEATSAVE,but still buggy if changed codeflag?
 ADDED COPY MENU,CODEFLAG EDIT,threre was no way to change code flag in NPRs
-normal cheat;back to normal 32bit write
+NPR cheat;back to normal 32bit write
 joker cheat;joker code,
 dma cheat;pointer code
-JOKER PATCH
-0x3FFC copied JOKER VALUE from kenelram to userram
-HEX;24 18 A4 00 89 00 83 10 > 80 08 02 3C FC 3F 45 AC
-find STRING "CFG" and you'll see "04 80 00 00"(screenshotbotton),changed "FF FF FF FF"
 
 MODED BY HAROTURBO
 windows;xpsp3+MinimalistPSP+cmdhere+psplink-cmfusion-rambreak-mod
