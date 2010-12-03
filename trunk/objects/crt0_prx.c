@@ -4068,8 +4068,6 @@ void menuInput(){
 						//case FLAG_BYTE:if(sceIoWrite(fd, "1", 1)!=1) goto ErrorReadExactA;break;
 						}
 					  //if(speedmode){DumpInterval=500;}
-					fd=sceIoOpen("ms0:/search1.dat", PSP_O_WRONLY | PSP_O_CREAT, 0777);
-					sceIoWrite(fd, (void*)0x0880288F, 1);
 					  //Search!
 					  counter=searchStart;
 					  
@@ -4159,10 +4157,11 @@ void menuInput(){
 							  //}
 					  }
 					  //Close the file since we are done with the search
+					fd=sceIoOpen("ms0:/search1.dat", PSP_O_WRONLY | PSP_O_CREAT, 0777);
 					  if(searchResultCounter<searchResultCounterMax){
-					sceIoWrite(fd, (void*)0x08802890, DumpByte*searchResultCounter);}
+					sceIoWrite(fd, (void*)0x0880288F, DumpByte*searchResultCounter+1);}
 					  else{
-					sceIoWrite(fd, (void*)0x08802890, DumpByte*searchResultCounterMax);}
+					sceIoWrite(fd, (void*)0x0880288F, DumpByte*searchResultCounterMax+1);}
 					sceIoClose(fd);
 					  
 					  while(1)
@@ -4184,7 +4183,7 @@ void menuInput(){
 					else
 					{
 					  //ERROR - file couldn't be opened - undo search attempt
-					  if(searchNo > 0) searchNo--;
+					if(searchNo > 0) searchNo--;
 					}
 				  }
 					else //Continue the search with a different exact number
@@ -4194,8 +4193,8 @@ void menuInput(){
 					searchMax++;
 					
 					//Open the files
-					sprintf(buffer, "ms0:/search%d.dat", searchNo-1);
-					fd=sceIoOpen(buffer, PSP_O_RDONLY, 0777);
+					  sprintf(buffer, "ms0:/search%d.dat", searchNo-1);
+					  fd=sceIoOpen(buffer, PSP_O_RDONLY, 0777);
 					//sprintf(buffer, "ms0:/search%d.dat", searchNo);
 					//fd2=sceIoOpen(buffer, PSP_O_WRONLY | PSP_O_CREAT, 0777);
 					if(fd>0)
@@ -4204,24 +4203,21 @@ void menuInput(){
 					  sceIoLseek(fd, 1, SEEK_SET);
 
 										//Write out the searcHistory[0] type
-					 /* switch(searchHistory[0].flags & FLAG_DWORD)
+					 switch(searchHistory[0].flags & FLAG_DWORD)
 
 					  {
-						case FLAG_DWORD: *(unsigned char *)(0x880288F)=0x34;
-					DumpByte=8;DumpInterval=500;break;
-						case FLAG_WORD:	*(unsigned char *)(0x880288F)=0x32;
-					DumpByte=6;DumpInterval=666;break;
-						case FLAG_BYTE:	*(unsigned char *)(0x880288F)=0x31;
-					DumpByte=5;DumpInterval=800;break;*/
+						case FLAG_DWORD: *(unsigned char *)(0x880288F)=0x34;DumpByte=8;//DumpInterval=500;
+						break;
+						case FLAG_WORD:	*(unsigned char *)(0x880288F)=0x32;DumpByte=6;//DumpInterval=666;
+						break;
+						case FLAG_BYTE:	*(unsigned char *)(0x880288F)=0x31;DumpByte=5;//DumpInterval=800;
+						break;
 						//case FLAG_DWORD:if(sceIoWrite(fd2, "4", 1)!=1) goto ErrorReadExactB;break;   
 						//case FLAG_WORD:if(sceIoWrite(fd2, "2", 1)!=1) goto ErrorReadExactB;break;
 						//case FLAG_BYTE:if(sceIoWrite(fd2, "1", 1)!=1) goto ErrorReadExactB;break;
-						//}
+						}
 					  
 					  //Loop through the list checking each one
-					sprintf(buffer, "ms0:/search%d.dat", searchNo);
-					fd2=sceIoOpen(buffer, PSP_O_WRONLY | PSP_O_CREAT, 0777);
-					sceIoWrite(fd2, (void*)0x0880288F, 1);
 					  counter=searchResultCounter;
 					  searchResultCounter=0;
 					  while(counter > 0)
@@ -4308,7 +4304,6 @@ void menuInput(){
 							}
 							break;
 							}
-
 							  //if((searchResultCounter<searchResultCounterMax)&&(((searchResultCounter+1) % DumpInterval)==0)){
 							  //sceIoWrite(fd, (void*)0x08802890, DumpByte*DumpInterval);
 							  //}
@@ -4317,11 +4312,14 @@ void menuInput(){
 						counter--;
 					  }
 					  //Close the files
+					sceIoClose(fd);
+					  sprintf(buffer, "ms0:/search%d.dat", searchNo);
+					  fd=sceIoOpen(buffer, PSP_O_WRONLY | PSP_O_CREAT, 0777);
 					  if(searchResultCounter<searchResultCounterMax){
-					sceIoWrite(fd, (void*)0x08802890, DumpByte*searchResultCounter);}
+					sceIoWrite(fd, (void*)0x0880288F, DumpByte*searchResultCounter+1);}
 					  else{
-					sceIoWrite(fd, (void*)0x08802890, DumpByte*searchResultCounterMax);}
-					  sceIoClose(fd);sceIoClose(fd2);
+					sceIoWrite(fd, (void*)0x0880288F, DumpByte*searchResultCounterMax+1);}
+					  sceIoClose(fd);
 					  
 					  while(1)
 					  {
@@ -4647,9 +4645,6 @@ void menuInput(){
 	                }
                   
                   //Get ready
-		 sprintf(buffer, "ms0:/search%d.dat", searchNo);
-		 fd2=sceIoOpen(buffer, PSP_O_WRONLY | PSP_O_CREAT, 0777);
-		 sceIoWrite(fd2, (void*)0x0880288F, 1);
                   //counter=0x48804000;
                   counter=searchStart;
                   //Go!
@@ -4816,12 +4811,14 @@ void menuInput(){
                     //Next
                   	counter+=miscType;
                   }
-                  //Close the files
+                  //Close the files		
+		  sceIoClose(fd);
+		 fd=sceIoOpen("ms0:/search1.dat", PSP_O_WRONLY | PSP_O_CREAT, 0777);
 		  if(searchResultCounter<searchResultCounterMax){
-		sceIoWrite(fd, (void*)0x08802890, DumpByte*searchResultCounter);}
+		sceIoWrite(fd, (void*)0x0880288F, DumpByte*searchResultCounter+1);}
 		  else{
-		sceIoWrite(fd, (void*)0x08802890, DumpByte*searchResultCounterMax);}
-		sceIoClose(fd);sceIoClose(fd2);
+		sceIoWrite(fd, (void*)0x0880288F, DumpByte*searchResultCounterMax+1);}
+		sceIoClose(fd);
                   
                   while(1)
                   {
@@ -4856,10 +4853,6 @@ void menuInput(){
 					//Open the files
 					sprintf(buffer, "ms0:/search%d.dat", searchNo-1);
 					fd=sceIoOpen(buffer, PSP_O_RDONLY, 0777);
-					sceKernelDelayThread(1000);
-					sprintf(buffer, "ms0:/search%d.dat", searchNo);
-					fd2=sceIoOpen(buffer, PSP_O_WRONLY | PSP_O_CREAT, 0777);
-					sceIoWrite(fd2, (void*)0x0880288F, 1);
 					//sprintf(buffer, "ms0:/search%d.dat", searchNo);
 					//fd2=sceIoOpen(buffer, PSP_O_WRONLY | PSP_O_CREAT, 0777);
 					if(searchNo>0)
@@ -4876,6 +4869,7 @@ void menuInput(){
 		                  	}
 					  
 					  //Loop through the list checking each one
+				
 					  counter=searchResultCounter;
 					  searchResultCounter=0;
 					  while(counter > 0)
@@ -5042,12 +5036,15 @@ void menuInput(){
 						counter--;
 					  }
 					  
-					  //Close the files
+					  //Close the files	
+					sceIoClose(fd);
+					sprintf(buffer, "ms0:/search%d.dat", searchNo);
+					fd=sceIoOpen(buffer, PSP_O_WRONLY | PSP_O_CREAT, 0777);
 					  if(searchResultCounter<searchResultCounterMax){
-					sceIoWrite(fd, (void*)0x08802890, DumpByte*searchResultCounter);}
+					sceIoWrite(fd, (void*)0x0880288F, DumpByte*searchResultCounter+1);}
 					  else{
-					sceIoWrite(fd, (void*)0x08802890, DumpByte*searchResultCounterMax);}
-					  sceIoClose(fd);sceIoClose(fd2);
+					sceIoWrite(fd, (void*)0x0880288F, DumpByte*searchResultCounterMax+1);}
+					  sceIoClose(fd);
 					  
 					  while(1)
 					  {
