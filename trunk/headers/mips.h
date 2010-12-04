@@ -19,7 +19,6 @@ Rev 2206 - Blame - Compare with Previous - Last modification - View Log - RSS fe
 #define S 0
 #define T 1
 #define D 2
-unsigned int  b_opcode=0;
 unsigned char VFMODE=0;
 unsigned char VFR=0;
 unsigned char VNUM=0;
@@ -505,7 +504,7 @@ unsigned char *pfx_sat[4] ={
 
 
 //VECTOR SELECTOR
-void vsel(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
+void vsel(unsigned int a_opcode, unsigned char VNUM, unsigned char a_more)
 {
 unsigned char i; 
   switch(a_opcode & 0x8080)
@@ -528,7 +527,6 @@ unsigned char i;
         vectors(a_opcode, 1, 0);
         }
         }
-        VNUM=0;
     break;
 
     case 0x0080:
@@ -569,7 +567,6 @@ unsigned char i;
         vectors(a_opcode, 1, 0);
         }
         }
-        VNUM=0;
     break;
 
     case 0x8000:
@@ -610,7 +607,6 @@ unsigned char i;
         vectors(a_opcode, 1, 0);
         }
         }
-        VNUM=0;
     break;
 
     case 0x8080:
@@ -651,7 +647,6 @@ unsigned char i;
         vectors(a_opcode, 1, 0);
         }
         }
-        VNUM=0;
     break;
   }
 }
@@ -1851,8 +1846,7 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
         switch(a_opcode >>16 & 0x80){
                 case 0x00:
                 pspDebugScreenPuts("vadd.");
-                VNUM=3;
-                vsel(a_opcode, 0, 3);
+                vsel(a_opcode, 3, 3);
                 break;
 //{ "vadd.p",      0x60000080, 0xFF808080, "%zp, %yp, %xp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vadd.q",      0x60008080, 0xFF808080, "%zq, %yq, %xq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
@@ -1862,8 +1856,7 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
 
                 case 0x80:              
                 pspDebugScreenPuts("vsub.");
-                VNUM=3;
-                vsel(a_opcode,0,3);
+                vsel(a_opcode,3,3);
                 break;
         }break;
 //{ "vsub.p",      0x60800080, 0xFF808080, "%zp, %yp, %xp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
@@ -1882,8 +1875,7 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
       case 0x63:
         if(a_opcode >> 16 & 0x80){
                 pspDebugScreenPuts("vdiv.");
-		VNUM=3;
-                vsel(a_opcode, 0 , 3);
+                vsel(a_opcode, 3 , 3);
                 }break;
 //{ "vdiv.p",  0x63800080, 0xFF808080, "%zp, %yp, %xp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vdiv.q",  0x63808080, 0xFF808080, "%zq, %yq, %xq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
@@ -1902,8 +1894,7 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
                 else if(((a_opcode>>16) &0x80) == 0x80){
                 pspDebugScreenPuts("vdot.");
                 }
-                VNUM=3;
-                vsel(a_opcode,0,3);
+                vsel(a_opcode,3,3);
                 break;
 //{ "vmul.p",  0x64000080, 0xFF808080, "%zp, %yp, %xp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vmul.q",  0x64008080, 0xFF808080, "%zq, %yq, %xq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
@@ -1928,8 +1919,7 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
                 pspDebugScreenPuts("vcrs.");}
                 else if (((a_opcode>>16)&0x80) == 0){
                 pspDebugScreenPuts("vhdp.");}
-                VNUM=3;
-                vsel(a_opcode, 0 ,3);
+                vsel(a_opcode, 3 ,3);
                 break;
 //{ "vcrs.t",  0x66808000, 0xFF808080, "%zt, %yt, %xt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vhdp.p",  0x66000080, 0xFF808080, "%zs, %yp, %xp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zs, %yp, %xp"
@@ -1938,8 +1928,7 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
 
                 case 0x67:
                 pspDebugScreenPuts("vdet.");
-                VNUM=3;
-                vsel(a_opcode, 0 ,3);
+                vsel(a_opcode, 3 ,3);
                 break;
 //{ "vdet.p",  0x67000080, 0xFF808080, "%zs, %yp, %xp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
         }break;
@@ -2028,8 +2017,7 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
 		switch((a_opcode >>16) & 0xFF80){
         case 0x6D00:
         pspDebugScreenPuts("vmin.");
-        VNUM=3;
-        vsel(a_opcode, 0, 3);
+        vsel(a_opcode, 3, 3);
         break;
 //{ "vmin.p",  0x6D000080, 0xFF808080, "%zp, %yp, %xp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vmin.q",  0x6D008080, 0xFF808080, "%zq, %yq, %xq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
@@ -2039,8 +2027,7 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
 
         case 0x6D80:
         pspDebugScreenPuts("vmax.");
-        VNUM=3;
-        vsel(a_opcode,0,3);
+        vsel(a_opcode,3,3);
         break;
 //{ "vmax.p",  0x6D800080, 0xFF808080, "%zp, %yp, %xp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vmax.q",  0x6D808080, 0xFF808080, "%zq, %yq, %xq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
@@ -2050,20 +2037,20 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
 
         case 0x6E80:
         pspDebugScreenPuts("vscmp.");
-                VFR=3;VNUM=3;
-                vsel(a_opcode, 0, 2);
+                VFR=3;
+                vsel(a_opcode, 3, 2);
         break;
 
         case 0x6F00:
         pspDebugScreenPuts("vsge.");
-                VFR=3;VNUM=3;
-                vsel(a_opcode, 0, 3);
+                VFR=3;
+                vsel(a_opcode, 3, 3);
         break;
 
         case 0x6F80:
         pspDebugScreenPuts("vslt.");
-                VFR=3;VNUM=3;
-                vsel(a_opcode, 0, 3);
+                VFR=3;
+                vsel(a_opcode, 3, 3);
         break;
         }
      break;
@@ -2441,8 +2428,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 
         case 0xD006:
                 pspDebugScreenPuts("vzero.");
-				VNUM=1;
-				vsel(a_opcode, 0, 2);
+				vsel(a_opcode, 1, 2);
         break;
 //{ "vzero.p", 0xD0060080, 0xFFFFFF80, "%zp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vzero.q", 0xD0068080, 0xFFFFFF80, "%zq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
@@ -2450,14 +2436,13 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 //{ "vzero.t", 0xD0068000, 0xFFFFFF80, "%zt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 
         case 0xD007:
-                pspDebugScreenPuts("vone.");
-		VNUM=1;
-		vsel(a_opcode, 0, 3);
+        pspDebugScreenPuts("vone.");
+		vsel(a_opcode, 1, 3);
         break;
 //        { "vone.s",      0xD0070000, 0xFFFFFF80, "%zs" },
 
         case 0xD010:
-                pspDebugScreenPuts("vrcp.");
+        pspDebugScreenPuts("vrcp.");
 		vsel(a_opcode, 0, 3);
         break;
 //        { "vrcp.s",      0xD0100000, 0xFFFF8080, "%zs, %ys" },
@@ -2551,22 +2536,22 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 
         case 0xD021:
                 pspDebugScreenPuts("vrndi.");
-		VFR=1;VNUM=1;
-		vsel(a_opcode, 0, 2);
+		VFR=1;
+		vsel(a_opcode, 1, 2);
         break;
 //        { "vrndi.s", 0xD0210000, 0xFFFFFF80, "%zs" },
 
         case 0xD022:
                 pspDebugScreenPuts("vrndf1.");
-		VFR=1;VNUM=1;
-		vsel(a_opcode, 0, 1);
+		VFR=1;
+		vsel(a_opcode, 1, 1);
         break;
 //        { "vrndf1.s", 0xD0220000, 0xFFFFFF80, "%zs" },
 
         case 0xD023:
                 pspDebugScreenPuts("vrndf2.");
-		VFR=1;VNUM=1;
-		vsel(a_opcode, 0, 1);
+		VFR=1;
+		vsel(a_opcode, 1, 1);
         break;
 //        { "vrndf2.s", 0xD0230000, 0xFFFFFF80, "%zs" },
 
@@ -2832,10 +2817,10 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 
         case 0xD051:
                 pspDebugScreenPuts("vmtvc    ");
-				b_opcode=a_opcode;
+				addresstmp=a_opcode;
                 a_opcode&=0xFF;
                 mipsImm(a_opcode, 0, 1);
-				a_opcode=b_opcode;
+				a_opcode=addresstmp;
                 vectors(a_opcode, 1, 0);
         break;
 
@@ -3163,8 +3148,8 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 
 	case 0xF000:
         pspDebugScreenPuts("vmmul.");
-	VNUM=3;VMT=1;
-	vsel(a_opcode,0,2);
+	VNUM=3;
+	vsel(a_opcode,1,2);
         break;
 //{ "vmmul.p", 0xF0000080, 0xFF808080, "%zm, %ym, %xm" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%?%zm, %ym, %xm"
 //{ "vmmul.q", 0xF0008080, 0xFF808080, "%zo, %yo, %xo" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
@@ -3190,8 +3175,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
         pspDebugScreenPuts("vqmul.");
         VFR=6;
         }
-        VNUM=3;
-        vsel(a_opcode, 0, 2);
+        vsel(a_opcode, 3, 2);
         break;
 //{ "vcrsp.t", 0xF2808000, 0xFF808080, "%zt, %yt, %xt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vqmul.q", 0xF2808080, 0xFF808080, "%zq, %yq, %xq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zq, %yq, %xq"
@@ -3200,8 +3184,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
         switch(a_opcode >> 16){
         case 0xF387:
         pspDebugScreenPuts("vmone.");
-        VNUM=1;
-        vsel(a_opcode, 0, 2);
+        vsel(a_opcode, 1, 2);
         break;
 //{ "vmone.p", 0xF3870080, 0xFFFFFF80, "%zp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vmone.q", 0xF3878080, 0xFFFFFF80, "%zq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
@@ -3209,8 +3192,8 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 
 	case 0xF383:
         pspDebugScreenPuts("vmidt.");
-        VNUM=1;VMT=1;
-        vsel(a_opcode, 0, 2);
+        VMT=1;
+        vsel(a_opcode, 1, 2);
         break;
 //{ "vmidt.p", 0xF3830080, 0xFFFFFF80, "%zm" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zp -> %zm
 //{ "vmidt.q", 0xF3838080, 0xFFFFFF80, "%zo" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zq -> %zo
@@ -3227,8 +3210,8 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 
 	case 0xF386:
         pspDebugScreenPuts("vmzero.");
-        VNUM=1;VMT=1;
-        vsel(a_opcode, 0, 1);
+        VMT=1;
+        vsel(a_opcode, 1, 1);
         break;
 	}
 //{ "vmzero.p", 0xF3860080, 0xFFFFFF80, "%zm" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zp -> %zm
