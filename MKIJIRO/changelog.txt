@@ -6,6 +6,8 @@
 コード保存と読込を繰り返していると保存読込機能が反応しなくなる
 一部の浮動小数が表示されない 0.01,0.001
 8byte時メモリエディタのコピー箇所がおかしい
+コードサイズが13キロバイトこえると保存できない
+コードテキストが巨大だと保存時途中NULL文字が入る
 
 this is modded mkultrav10.
 KnownProblem;
@@ -14,6 +16,14 @@ doesnot work fine unknown value search
 if code is reloaded & saved many times,save&reload function doesnot work
 certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
+codesavelimit 6Kbyte
+
+2010/12/3
+サーチをスクラッチ領域に変更、サーチ保存件数1500まで拡大
+チート編集でもLRで27行分とばせるようにした
+fix null string,big database
+use search terampory,0x10004 scrachzone
+L/R skip +-27line cheatedit
 
 2010/12/2
 NPR旧CWCモードの32bit書き込みを復元なしに変更
@@ -23,7 +33,7 @@ L/Rで20件分結果を飛ばせるようにした
 コードの保存をメモリに変更したため早くなった
 changed old NPR of CWC32bitWrite,need nobackup code for joker
 copy menu,CWC cheat;32bit write nobackup&restore
-display searchresult 500
+display searchresult 499
 L/R skip +-20 searchReesult
 speedup cheatsave
 
