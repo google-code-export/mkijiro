@@ -18,6 +18,9 @@ certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
 codesavelimit 6Kbyte
 
+2010/12/6
+保存領域オフセットを150kbずらした(他のプラグイン 150KB以内なら共用可能？)
+
 2010/12/3
 サーチをスクラッチ領域に変更、サーチ保存件数1500まで拡大
 チート編集でもLRで27行分とばせるようにした
