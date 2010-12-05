@@ -241,10 +241,12 @@ unsigned char usbonbitch=0;
 unsigned char screenshot_mode=0;
 unsigned char *screenshotstring[]={"NONE", "TOGGLE"};
 #endif
-unsigned char jacktoggle=0;
 unsigned char copyMenuX=25;
 unsigned char copyMenuY=0;
+#ifdef _SOCOM_
+unsigned char jacktoggle=0;
 unsigned char hijack=0;
+#endif
 
 //gui shit
 unsigned int menuKey=PSP_CTRL_VOLUP | PSP_CTRL_VOLDOWN;
@@ -902,7 +904,11 @@ void cheatSave(){
 	unsigned int ramcounter=0;
 	unsigned int tmpramcounter=0;
 	//unsigned char loop=0;
-	#define SAVETEMP 0x88242F10//freekernelram
+	#ifdef _IJIRO_
+	#define SAVETEMP 0x88242F10 //freekernelram
+	#elif _IJIRO150_
+	#define SAVETEMP 0x88267900 //freekernelram
+	#endif
 	unsigned char *codehead[]={"#!!","#!","#","\n"};
 	unsigned char fileMode=0; //0=Unknown/Initial, 1=Comment, 2=Waiting for \n (ignoring)
 	int fd;
