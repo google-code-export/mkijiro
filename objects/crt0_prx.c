@@ -222,6 +222,7 @@ unsigned char logcounter=0;
 unsigned int backaddress[4];
 unsigned char backaddressY[4];
 unsigned int storedAddress[32];
+unsigned int SAVETEMP=0x8838DBF0; //freekernelram
 #define logstart 0x48802804 //log start address
 #define jumplog 0x20 //number of jumplog ,default 32
 #define JOKERADDRESS 0x3FFC //out put JOKER ADDRES from kernel ram
@@ -588,7 +589,7 @@ unsigned int colorAdd(unsigned char colorDir[]){
 	int scounter=0;
     
     counter=0;
-    while(counter < 0xC){
+    while(counter < 0xD){
     
 		//find seperator
 		scounter=0;
@@ -639,6 +640,10 @@ unsigned int colorAdd(unsigned char colorDir[]){
 			case 0xB:
 				constant_cheat=char2hex(hex, &type);
 			break;
+			case 0xC:
+				SAVETEMP=char2hex(hex, &type);
+			break;
+
 		}
 		
 		counter++;
@@ -904,11 +909,6 @@ void cheatSave(){
 	unsigned int ramcounter=0;
 	unsigned int tmpramcounter=0;
 	//unsigned char loop=0;
-	#ifdef _IJIRO_
-	#define SAVETEMP 0x88242F10 //freekernelram
-	#elif _IJIRO150_
-	#define SAVETEMP 0x88267900 //freekernelram
-	#endif
 	unsigned char *codehead[]={"#!!","#!","#","\n"};
 	unsigned char fileMode=0; //0=Unknown/Initial, 1=Comment, 2=Waiting for \n (ignoring)
 	int fd;

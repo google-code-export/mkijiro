@@ -18,6 +18,10 @@ certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
 codesavelimit 6Kbyte
 
+2010/12/7
+0x8838DBF0に変更してみる
+カラーファイルで変更可能
+
 2010/12/6
 保存領域オフセットを150kbずらした(他のプラグイン 150KB以内なら共用可能？)
 
