@@ -10,6 +10,7 @@
 0xFF000000 ;bgcolor
 0xFFF0C060 ;select_cheat/copystart
 0xFFF090C0 ;constant_cheat/copyend
+0x8838DBF0 ;savetemp_address
 
 ;0xFFF060F0=ピンク
 ;0xFFF0C060=ライトブルー?
