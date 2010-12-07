@@ -6,8 +6,7 @@
 コード保存と読込を繰り返していると保存読込機能が反応しなくなる
 一部の浮動小数が表示されない 0.01,0.001
 8byte時メモリエディタのコピー箇所がおかしい
-コードサイズが13キロバイトこえると保存できない
-コードテキストが巨大だと保存時途中NULL文字が入る
+コードがないとき新規コードが保存されない
 
 this is modded mkultrav10.
 KnownProblem;
@@ -16,7 +15,13 @@ doesnot work fine unknown value search
 if code is reloaded & saved many times,save&reload function doesnot work
 certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
-codesavelimit 6Kbyte
+
+2010/12/8
+コードがないとき左端タブを選択できないよう変更
+カラーファイルで設定項目追加
+保存したとき同じとこを使っているのでサーチを初期化するよう変更
+0x8838DBF0 ;searchtemp_address
+0x0000E400 ;searchresult_Max
 
 2010/12/7
 0x8838DBF0に変更してみる

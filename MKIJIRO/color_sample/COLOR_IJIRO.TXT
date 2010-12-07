@@ -11,6 +11,8 @@
 0xFFF0C060 ;select_cheat/copystart
 0xFFF090C0 ;constant_cheat/copyend
 0x8838DBF0 ;savetemp_address
+0x8838DBF0 ;searchtemp_address
+0x0000E400 ;searchresult_Max
 
 ;0xFFF060F0=ピンク
 ;0xFFF0C060=ライトブルー?
