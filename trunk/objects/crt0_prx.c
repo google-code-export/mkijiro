@@ -179,8 +179,8 @@ Block searchHistory[16];
 unsigned int searchResultCounter=0;
 unsigned int searchAddress[500];
 #define searchResultMax 499
-#define searchResultCounterMax 1500
-#define RAMTEMP 0x10004 //scrachzone
+unsigned int searchResultCounterMax=1500;
+unsigned int RAMTEMP=0x10004; //scrachzone
 unsigned int browseAddress[5]={0x48800000,0x48800000,0x48800000,0x48800000,0x48800000};
 unsigned int browseY[5]={0,0,0,0,0};
 unsigned int browseC[5]={0,0,0,0,0};
@@ -274,10 +274,10 @@ char line[78]={0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D,
 unsigned int socomftb1=1;
 unsigned int socomftb2=1;
 #endif
-
+unsigned char lineC[78]={"                                                                   "};
 #define fileBufferPeek(a_out, a_ahead) if((fileBufferOffset + a_ahead) >= 1024) { fileBufferBackup=sceIoLseek(fd, 0, SEEK_CUR); sceIoLseek(fd, a_ahead, SEEK_CUR); sceIoRead(fd, &a_out, 1); sceIoLseek(fd, fileBufferBackup, SEEK_SET); } else { a_out=fileBuffer[fileBufferOffset + a_ahead]; }
 #define fileBufferRead(a_out, a_size) if(fileBufferOffset == 1024) { fileBufferSize=sceIoRead(fd, fileBuffer, 1024); fileBufferOffset=0; } memcpy(a_out, &fileBuffer[fileBufferOffset], a_size); fileBufferOffset+=a_size; fileBufferFileOffset+=a_size;
-#define lineClear(a_line) pspDebugScreenSetXY(0, a_line); pspDebugScreenPuts("                                                                   "); pspDebugScreenSetXY(0, a_line);
+#define lineClear(a_line) pspDebugScreenSetXY(0, a_line); pspDebugScreenPuts(lineC); pspDebugScreenSetXY(0, a_line);
 
 //Functions
 int module_start(SceSize args, void *argp) __attribute__((alias("_start")));
@@ -366,7 +366,7 @@ void decToCheat(){
 	}
     sprintf(&cheat[cheatTotal].name, "NEW CHEAT %d", cheatNo);
     cheatNo++;
-  	cheatTotal++;
+    cheatTotal++;
   }
 }
 
@@ -391,8 +391,8 @@ void decToText(){
 			sceIoWrite(fd, buffer, strlen(buffer));
 			
 			sprintf(buffer, "0x%08lX\n", *((unsigned int*)(a_address+(counter*4))));
-			sceIoWrite(fd, buffer, strlen(buffer));			
-						
+			sceIoWrite(fd, buffer, strlen(buffer));	
+
 			counter++;
 			
 		}
@@ -406,7 +406,7 @@ unsigned int cheatNew(unsigned char a_size, unsigned int a_address, unsigned int
   if((cheatTotal + 1 < BLOCK_MAX) && (blockTotal + 1 < BLOCK_MAX)){
     
     cheat[cheatTotal].block=blockTotal;
-   	cheat[cheatTotal].flags=0;
+    cheat[cheatTotal].flags=0;
     cheat[cheatTotal].len=a_length;
     
     int i; 
@@ -452,7 +452,7 @@ unsigned int cheatNew(unsigned char a_size, unsigned int a_address, unsigned int
 	}
     sprintf(&cheat[cheatTotal].name, "NEW CHEAT %d", cheatNo);
     cheatNo++;
-  	cheatTotal++;
+    cheatTotal++;
   }
 }
 
@@ -589,7 +589,7 @@ unsigned int colorAdd(unsigned char colorDir[]){
 	int scounter=0;
     
     counter=0;
-    while(counter < 0xD){
+    while(counter < 0xF){
     
 		//find seperator
 		scounter=0;
@@ -642,6 +642,12 @@ unsigned int colorAdd(unsigned char colorDir[]){
 			break;
 			case 0xC:
 				SAVETEMP=char2hex(hex, &type);
+			break;
+			case 0xD:
+				RAMTEMP=char2hex(hex, &type);
+			break;
+			case 0xE:
+				searchResultCounterMax=char2hex(hex, &type);
 			break;
 
 		}
@@ -908,7 +914,6 @@ void cheatSave(){
 	unsigned int scounter=0;
 	unsigned int ramcounter=0;
 	unsigned int tmpramcounter=0;
-	//unsigned char loop=0;
 	unsigned char *codehead[]={"#!!","#!","#","\n"};
 	unsigned char fileMode=0; //0=Unknown/Initial, 1=Comment, 2=Waiting for \n (ignoring)
 	int fd;
@@ -918,7 +923,8 @@ void cheatSave(){
 	fd=sceIoOpen(gameDir, PSP_O_RDONLY, 0777);
 	if(fd>0){
 		//Find the file size
-		fileSize=sceIoLseek(fd, 0, SEEK_END); sceIoLseek(fd, 0, SEEK_SET);
+		fileSize=sceIoLseek(fd, 0, SEEK_END);
+		sceIoLseek(fd, 0, SEEK_SET);
 		//Initiate the read buffer
 		fileBufferOffset=1024;
 		fileBufferFileOffset=0;
@@ -1140,14 +1146,19 @@ void cheatSave(){
 			counter++;
 		}
 		//Close the file
-		sceIoClose(fd);
+		//sceIoClose(fd);
 	}
 	//sceIoRemove(gameDir);
 	dump_memregion("ms0:/temp.txt", (void*)SAVETEMP, ramcounter);
-	//int i=0;
-	//for(i; i<ramcounter/4; i++){
-	//*(unsigned int *)(SAVETEMP+4*i)=0;
-	//}
+	sceKernelDelayThread(1500);
+	int i=0;
+	for(i; i<ramcounter/4; i++){
+	*(unsigned int *)(SAVETEMP+4*i)=0;
+	}
+	searchNo=0;
+	cheatSearch=0;
+	searchHistoryCounter=0;
+	searchResultCounter=0;
 }
 
 void cheatLoad(){
@@ -1262,11 +1273,11 @@ void buttonCallback(int curr, int last, void *arg){
   *(unsigned int *)(0x8800000+JOKERADDRESS)=curr;
 
   if(vram==NULL) return;
-  
+
   if(((curr & menuKey) == menuKey) && (!menuDrawn)){
    	menuDrawn=1;
-    if(cheatSelected >= cheatTotal) cheatSelected=0;
-    tabSelected=0;
+    if(cheatSelected >= cheatTotal){
+	tabSelected=0;cheatSelected=0;}
   }
   else if(curr & PSP_CTRL_HOME){
    	menuDrawn=0;}
@@ -1426,11 +1437,12 @@ void menuDraw(){
 	unsigned int convBase;
 	unsigned int convTotal;
 	unsigned int tempbgcolor;
-	
-	
+
 	//Draw the menu
+	if(cheatTotal==0 && tabSelected==0){
+ 	tabSelected=1;}
 	pspDebugScreenSetXY(0, 0);
-  	
+
   	if(copyMenu){
 		counter=1; //we start @ 1 this time because 0 is closed
 		tempbgcolor=bgcolor;
@@ -4099,8 +4111,6 @@ void menuInput(){
 					  //Helper
 					  while(counter < searchStop)
 						{
-					//if((counter>=0x48802800) && (counter<0x48803C00)){
-					//counter=0x48803C00;}
 						//Helper
 						if(!((counter - searchStart) & 0xFFFF))
 						{
@@ -4397,15 +4407,15 @@ void menuInput(){
 				  }
 				  
 				  //Switch to the cheat editor
-				  extOptArg=extSelected[0];
-				  pspDebugScreenInitEx(vram, 0, 0);
-					extSelected[1]=extSelected[2]=extSelected[3]=0;
-					extSelected[0]=cheat[cheatTotal - 1].block;
-				  cheatSelected=cheatTotal - 1;
-					extMenu=1;
-				  extOpt=1;
-					menuDraw();
-					sceKernelDelayThread(150000);
+				extOptArg=extSelected[0];
+				pspDebugScreenInitEx(vram, 0, 0);
+				extSelected[1]=extSelected[2]=extSelected[3]=0;
+				extSelected[0]=cheat[cheatTotal - 1].block;
+				cheatSelected=cheatTotal - 1;
+				extMenu=1;
+				extOpt=1;
+				menuDraw();
+				sceKernelDelayThread(150000);
 				}
 				
 				//Load the file again, get the sample numbers
@@ -4599,8 +4609,8 @@ void menuInput(){
 				  cheatSelected=0;
 					pspDebugScreenInitEx(vram, 0, 0);
 					extSelected[0]=extSelected[1]=extSelected[2]=extSelected[3]=0;
-						extMenu=0;
-				  extOpt=0;
+					extMenu=0;
+				        extOpt=0;
 					menuDraw();
 					sceKernelDelayThread(150000);
 					break;
@@ -5133,13 +5143,13 @@ void menuInput(){
 				  //Switch to the cheat editor
 				  extOptArg=extSelected[0];
 				  pspDebugScreenInitEx(vram, 0, 0);
-					extSelected[1]=extSelected[2]=extSelected[3]=0;
-					extSelected[0]=cheat[cheatTotal - 1].block;
+				  extSelected[1]=extSelected[2]=extSelected[3]=0;
+				  extSelected[0]=cheat[cheatTotal - 1].block;
 				  cheatSelected=cheatTotal - 1;
-					extMenu=1;
+			          extMenu=1;
 				  extOpt=2;
-					menuDraw();
-					sceKernelDelayThread(150000);
+				  menuDraw();
+				  sceKernelDelayThread(150000);
 				}
 				
 				//Load the file again, get the sample numbers
@@ -6239,7 +6249,7 @@ void menuInput(){
 					extSelected[1]=extSelected[2]=extSelected[3]=0;
 					extSelected[0]=cheat[cheatTotal - 1].block;
 				  cheatSelected=cheatTotal - 1;
-					extMenu=1;
+				  extMenu=1;
 				  extOpt=1;
 					menuDraw();
 					sceKernelDelayThread(150000);
