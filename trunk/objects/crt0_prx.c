@@ -1150,7 +1150,7 @@ void cheatSave(){
 		//sceIoClose(fd);
 	}
 	//sceIoRemove(gameDir);
-	dump_memregion("ms0:/temp.txt", (void*)SAVETEMP, ramcounter);
+	dump_memregion(gameDir, (void*)SAVETEMP, ramcounter-1);
 	sceKernelDelayThread(1500);
 	int i=0;
 	for(i; i<ramcounter/4; i++){
