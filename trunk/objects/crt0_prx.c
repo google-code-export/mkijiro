@@ -2529,7 +2529,7 @@ void menuDraw(){
 				pspDebugScreenSetXY(0, 29);
 
 				pspDebugScreenSetTextColor(color01);
-				pspDebugScreenPuts("  MKIJIRO20101203");
+				pspDebugScreenPuts("  MKIJIRO20101209");
 				#ifdef _UMDMODE_
 				pspDebugScreenPuts(" ");
 				#elif _POPSMODE_
@@ -7289,35 +7289,80 @@ int mainThread(){
 		//Find the GAME ID　	///ID
 		fd=sceIoOpen("disc0:/UMD_DATA.BIN", PSP_O_RDONLY, 0777); 
 		sceKernelDelayThread(1000);
-		if(fd >0){
+	if(fd >0){
 		strcpy(gameId, ".txt\x0");
 		memcpy(&gameDir[32], gameId, 5);
 		sceIoRead(fd, gameId, 10);
 		sceIoClose(fd);
 		memcpy(&gameDir[22], gameId, 10);
 	//#elif _POPSMODE_
-		}
-		else{
+	}
+	else{
 		sceIoClose(fd);
 		unsigned char *hbpath[50];
-		dump_memregion("ms0:/hbpath", (void*) 0x882F9600, 0x50);
+		dump_memregion("ms0:/hbpath", (void*)0x882F9600, 0x50);
  		fd=sceIoOpen("ms0:/hbpath", PSP_O_RDONLY, 0777);
-		sceKernelDelayThread(1000);
-		 if(fd > 0){
+	     if(fd > 0){
 		 sceIoRead(fd, hbpath, 0x50);
 		 sceIoClose(fd);
 		 fd=sceIoOpen(hbpath, PSP_O_RDONLY, 0777);
-		 sceKernelDelayThread(1000);
-		  if(fd > 0){
+		 if(fd > 0){
+	#ifdef _CWCHASH_ //waltall CWCHASH finally discovered ME&raing3
+	sceIoRead(fd, fileBuffer, 0x800);
+	//raing3 find SCEMD5HASH="jal $0800e844"
+	sceKernelUtilsMd5Digest(fileBuffer, 0x800, buffer);
+	unsigned int hash = (*(unsigned int *)(buffer + 4)) ^ (*(unsigned int *)(buffer)) ^
+		(*(unsigned int *)(buffer + 8)) ^ (*(unsigned int *)(buffer + 12));
+
+		  /*sceIoRead(fd, fileBuffer, 0x800); old ASM DEADCOPY
+	          sceIoClose(fd);
+		__asm__ volatile (
+		"nop\n"
+		"nop\n"
+		"nop\n"
+		"nop\n"
+		"nop\n"
+		"nop\n"
+		"nop\n"
+		"nop\n"
+		"nop\n"
+		"nop\n"
+		"nop\n"
+		"nop\n"
+		"nop\n"
+		"nop\n"
+		"nop\n"
+		/*
+		"lui a0,$8818\n"  //fileBuffer address  this DMA
+		"ori  a0,a0,$A100\n"  /fileBuffer address this DMA
+		"jal $0800e844\n" //this unknow SCE/SDK???
+		"addiu a1, zero, $0800\n"
+		"lw a2, $004C(sp)\n"
+		"lw v0, $0048(sp)\n"
+		"xor a2, a2, v0"
+		"lw v0, $0050(sp)\n"
+		"xor a2, a2, v0"
+		"lw v0, $0054(sp)\n"
+		"xor a2, a2, v0\n"
+		"lui t0, $8839\n"
+		"sw  a2, $DBF0(t0)\n"
+		);
+                addresstmp=*(unsigned int*)(0x8838DBF0);*/
+		  sprintf(buffer,"HB%X",hash);
+		  memcpy(&gameDir[27], buffer, 10);
+		  memcpy(&gameId[0], buffer, 10);}
+	   #elif _HBIJIRO_
 		  sceIoLseek( fd, 0x140, SEEK_CUR);
 		  sceIoRead(fd, gameId, 10);}
 		  memcpy(&gameDir[27], gameId, 10);
-		}
-		else{
+	   #endif
+	    }
+	    else{
 		strcpy(gameId, "popstation");
-		memcpy(&gameDir[27], gameId, 10);}
-		sceIoClose(fd);
-		}
+		memcpy(&gameDir[27], gameId, 10);
+	    }
+          sceIoClose(fd);
+	}
   	//#endif
 
 

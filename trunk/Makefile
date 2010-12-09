@@ -16,8 +16,10 @@ INCDIR =
 # CFLAGS = -O2 -G0 -w -msingle-float -g -D_POPSMODE_
 
 # umd build flags
-CFLAGS = -O2 -G0 -w -msingle-float -g -D_UMDMODE_ -D_JOKER_ -D_PSID_ -D_FONT_misaki
+CFLAGS = -O2 -G0 -w -msingle-float -g -D_UMDMODE_ -D_JOKER_ -D_PSID_ -D_FONT_misaki -D_HBIJIRO_
 
+#-D_CWCHASH_
+#-D_HBIJIRO_
 #-D_FONT_debug
 #-D_FONT_acorn //MKULTRA Defalut font
 #-D_SERVER_ //unfinished socket mode for pc debugging
