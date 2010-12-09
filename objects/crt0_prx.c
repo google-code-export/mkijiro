@@ -168,7 +168,7 @@ unsigned char cheatSearch=0;
 unsigned int cheatLength=1;
 unsigned char extMenu=0;
 unsigned int extSelected[4]={0,0,0,0};
-unsigned char extOpt=0;
+char extOpt=0;
 unsigned int extOptArg=0;
 unsigned char dumpNo=0;
 unsigned int cheatNo=0;
@@ -179,8 +179,6 @@ Block searchHistory[16];
 unsigned int searchResultCounter=0;
 unsigned int searchAddress[500];
 #define searchResultMax 499
-unsigned int searchResultCounterMax=1500;
-unsigned int RAMTEMP=0x10004; //scrachzone
 unsigned int browseAddress[5]={0x48800000,0x48800000,0x48800000,0x48800000,0x48800000};
 unsigned int browseY[5]={0,0,0,0,0};
 unsigned int browseC[5]={0,0,0,0,0};
@@ -224,6 +222,8 @@ unsigned char backaddressY[4];
 unsigned int storedAddress[32];
 unsigned char *hbpath = NULL;
 unsigned int SAVETEMP=0x8838DBF0; //freekernelram
+unsigned int RAMTEMP=0x8838DBF0;
+unsigned int searchResultCounterMax=0xE400;
 #define logstart 0x48802804 //log start address
 #define jumplog 0x20 //number of jumplog ,default 32
 #define JOKERADDRESS 0x3FFC //out put JOKER ADDRES from kernel ram
@@ -2530,7 +2530,7 @@ void menuDraw(){
 				pspDebugScreenSetXY(0, 29);
 
 				pspDebugScreenSetTextColor(color01);
-				pspDebugScreenPuts("  MKIJIRO20101209");
+				pspDebugScreenPuts("  MKIJIRO20101210");
 				#ifdef _UMDMODE_
 				pspDebugScreenPuts(" ");
 				#elif _POPSMODE_
@@ -3710,9 +3710,16 @@ void menuInput(){
 				}
 			 else if(tabSelected==3){ //copy range to new cheat
 				   if(pad.Buttons & PSP_CTRL_SQUARE){
-					decToCheat();
-					menuDraw();
-					sceKernelDelayThread(150000);}
+				  decToCheat();
+				  pspDebugScreenInitEx(vram, 0, 0);
+				  extSelected[1]=extSelected[2]=extSelected[3]=0;
+				  extSelected[0]=cheat[cheatTotal - 1].block;
+				  cheatSelected=cheatTotal - 1;
+				  extMenu=1;
+				  extOpt=-2;
+				  menuDraw();
+				  sceKernelDelayThread(150000);
+					}
 				}
 			}
 			
@@ -4015,13 +4022,17 @@ void menuInput(){
 						pspDebugScreenInitEx(vram, 0, 0);
 						extSelected[0]=extSelected[1]=extSelected[2]=extSelected[3]=0;
 						extMenu=0;
-						if(extOpt){
+						if(extOpt>0){
 							extSelected[0]=extOptArg;
 							pspDebugScreenInitEx(vram, 0, 0);
 							extSelected[1]=extSelected[2]=extSelected[3]=0;
 							extMenu=1+extOpt;
 							cheatSearch=1;
 						}
+						else if(extOpt==-1){
+						tabSelected=2;cheatSelected=1;}
+						else if(extOpt==-2){
+						tabSelected=3;}
 						extOpt=0;
 						menuDraw();
 						sceKernelDelayThread(150000);
@@ -6247,13 +6258,13 @@ void menuInput(){
 				  
 				  //Switch to the cheat editor
 				  pspDebugScreenInitEx(vram, 0, 0);
-					extSelected[1]=extSelected[2]=extSelected[3]=0;
-					extSelected[0]=cheat[cheatTotal - 1].block;
+				  extSelected[1]=extSelected[2]=extSelected[3]=0;
+				  extSelected[0]=cheat[cheatTotal - 1].block;
 				  cheatSelected=cheatTotal - 1;
 				  extMenu=1;
-				  extOpt=1;
-					menuDraw();
-					sceKernelDelayThread(150000);
+				  extOpt=-1;
+				  menuDraw();
+				  sceKernelDelayThread(150000);
 				}
 				else if(cheatSelected == 2){
 				  sprintf(buffer, "ms0:/dump%d.ram", dumpNo);
