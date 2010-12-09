@@ -16,12 +16,19 @@ if code is reloaded & saved many times,save&reload function doesnot work
 certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
 
+2010/12/10
+ディスアセンブラ,PRXメニューからチートを足しても元の場所に戻れるようにした
+
 2010/12/8
 コードがないとき左端タブを選択できないよう変更
 カラーファイルで設定項目追加
 保存したとき同じとこを使っているのでサーチを初期化するよう変更
+//PSPFAT
 0x8838DBF0 ;searchtemp_address
 0x0000E400 ;searchresult_Max
+//PSPSLIM
+0x8A000000 ;searchtemp_address
+0x00040000 ;searchresult_Max
 
 2010/12/7
 0x8838DBF0に変更してみる
