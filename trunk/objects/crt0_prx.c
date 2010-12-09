@@ -222,6 +222,7 @@ unsigned char logcounter=0;
 unsigned int backaddress[4];
 unsigned char backaddressY[4];
 unsigned int storedAddress[32];
+unsigned char *hbpath = NULL;
 unsigned int SAVETEMP=0x8838DBF0; //freekernelram
 #define logstart 0x48802804 //log start address
 #define jumplog 0x20 //number of jumplog ,default 32
@@ -7299,15 +7300,19 @@ int mainThread(){
 	}
 	else{
 		sceIoClose(fd);
-		unsigned char *hbpath[50];
-		dump_memregion("ms0:/hbpath", (void*)0x882F9600, 0x50);
- 		fd=sceIoOpen("ms0:/hbpath", PSP_O_RDONLY, 0777);
+		///unsigned char *hbpath[50];
+		//dump_memregion("ms0:/hbpath", (void*)0x882F9600, 0x50);
+ 		fd=sceIoOpen(hbpath, PSP_O_RDONLY, 0777);
 	     if(fd > 0){
-		 sceIoRead(fd, hbpath, 0x50);
-		 sceIoClose(fd);
-		 fd=sceIoOpen(hbpath, PSP_O_RDONLY, 0777);
-		 if(fd > 0){
-	#ifdef _CWCHASH_ //waltall CWCHASH finally discovered ME&raing3
+		 //sceIoRead(fd, hbpath, 0x50);
+		 //sceIoClose(fd);
+		 //fd=sceIoOpen(hbpath, PSP_O_RDONLY, 0777);
+		 //if(fd > 0){
+	 #ifdef _HBIJIRO_
+		  sceIoLseek( fd, 0x140, SEEK_CUR);
+		  sceIoRead(fd, gameId, 10);
+		  memcpy(&gameDir[27], gameId, 10);//}
+	#elif _CWCHASH_ //waltall CWCHASH finally discovered ME&raing3
 	sceIoRead(fd, fileBuffer, 0x800);
 	//raing3 find SCEMD5HASH="jal $0800e844"
 	sceKernelUtilsMd5Digest(fileBuffer, 0x800, buffer);
@@ -7350,11 +7355,7 @@ int mainThread(){
                 addresstmp=*(unsigned int*)(0x8838DBF0);*/
 		  sprintf(buffer,"HB%X",hash);
 		  memcpy(&gameDir[27], buffer, 10);
-		  memcpy(&gameId[0], buffer, 10);}
-	   #elif _HBIJIRO_
-		  sceIoLseek( fd, 0x140, SEEK_CUR);
-		  sceIoRead(fd, gameId, 10);}
-		  memcpy(&gameDir[27], gameId, 10);
+		  memcpy(&gameId[0], buffer, 10);//}
 	   #endif
 	    }
 	    else{
@@ -7523,7 +7524,8 @@ int mainThread(){
 }
 
 int _start(SceSize args, void *argp){
-  
+  hbpath = sceKernelInitFileName();
+
   #ifdef _PSID_
   //Load the CFG
   if(cfg[4]){
