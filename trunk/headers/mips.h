@@ -43,7 +43,8 @@ unsigned char *DrArray[]={
 };
 unsigned char *VFPUArray[]={
 "PFXS", "PFXT", "PFXD", "CC" ,"INF4", "5" ,"6" ,"REV",
-"RCX0","RCX1","RCX2","RCX3","RCX4","RCX5","RCX6","RCX7"
+"RCX"
+//,"RCX1","RCX2","RCX3","RCX4","RCX5","RCX6","RCX7"
 };
 unsigned char *VFPUCMPArray[]={
 "FL","EQ","LT","LE","TR","NE","GE","GT","EZ","EN","EI","ES","NZ","NN","NI","NS"
@@ -54,7 +55,7 @@ unsigned char *VFPUSTArray[]={
 "PI_6","LOG10TWO","LOG2TEN","SQRT3_2"
 };
 unsigned char *unknown[]={
-" //unknown opcode"," //unknown fpu opcode"," //unknown vfpu opcode"
+"v???.s   ", " //unknown opcode"
 };
 
 void colorRegisters(unsigned int a_opcode)
@@ -110,13 +111,14 @@ void vectors(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
 {
   if(VFMODE==1){
         pspDebugScreenPuts("VFPU_");
-        if((a_opcode & 0x7F) > 0xF){
-        sprintf(buffer, "%d",(a_opcode &0x7F));
+        a_opcode&=0x7F;
+        if(a_opcode>7 && a_opcode<0x10){
+        sprintf(buffer, "%s%d", VFPUArray[8],a_opcode-8);}
+        else if(a_opcode>0xF){
+        sprintf(buffer, "%d",a_opcode);
         }
         else{
-        a_opcode&=0x7F;
-        sprintf(buffer, "%s", VFPUArray[a_opcode]);
-        }
+        sprintf(buffer, "%s", VFPUArray[a_opcode]);}
   }
   else if(VFMODE==3){
         pspDebugScreenPuts("VFPU_");
@@ -2605,16 +2607,16 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 //{ "vlgb.s",  0xD0370000, 0xFFFF8080, "%zs, %ys" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 
         case 0xD038:
-                pspDebugScreenPuts("v???.s   ");
+                pspDebugScreenPuts(unknown[0]);
                 vectors(a_opcode, 2, 1);
                 vectors(a_opcode, 1, 0);
-                pspDebugScreenPuts(unknown[2]);
+                pspDebugScreenPuts(unknown[1]);
         break;
         case 0xD039:
-                pspDebugScreenPuts("v???.s   ");
+                pspDebugScreenPuts(unknown[0]);
                 vectors(a_opcode, 2, 1);
                 vectors(a_opcode, 1, 0);
-                pspDebugScreenPuts(unknown[2]);
+                pspDebugScreenPuts(unknown[1]);
         break;
 //unknown vector command
 

@@ -7,6 +7,7 @@
 一部の浮動小数が表示されない 0.01,0.001
 8byte時メモリエディタのコピー箇所がおかしい
 コードがないとき新規コードが保存されない
+コード最後の行が4BYTEモード以外だと再読込時あどれすが2重に読まれる
 
 this is modded mkultrav10.
 KnownProblem;
@@ -16,7 +17,12 @@ if code is reloaded & saved many times,save&reload function doesnot work
 certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
 
+2010/12/14
+IJIROHBIDを0x140以外も対応
+
 2010/12/10
+サーチ範囲で開始アドレスが終了アドレスを超えないよう修正
+ブラウザでもコピー場所に色をつけるようにした
 ディスアセンブラ,PRXメニューからチートを足しても元の場所に戻れるようにした
 
 2010/12/8
@@ -24,11 +30,13 @@ as for 8byte RAMeditor,strange copy position
 カラーファイルで設定項目追加
 保存したとき同じとこを使っているのでサーチを初期化するよう変更
 //PSPFAT
+0x8838DBF0 ;savecode_address
 0x8838DBF0 ;searchtemp_address
 0x0000E400 ;searchresult_Max
 //PSPSLIM
+0x8A000000 ;savecode_address
 0x8A000000 ;searchtemp_address
-0x00040000 ;searchresult_Max
+0x00040000 ;searchresult_Max 32MiB/8=最大0x00400000,約419万件?
 
 2010/12/7
 0x8838DBF0に変更してみる
