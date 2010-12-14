@@ -349,7 +349,7 @@ void decToCheat(){
     
     cheat[cheatTotal].block=blockTotal;
    	cheat[cheatTotal].flags=0;
-    cheat[cheatTotal].len=a_length/4;
+    cheat[cheatTotal].len=a_length>>2;
     
     int i; 
 	for(i=0; i< a_length; i++){
@@ -379,14 +379,14 @@ void decToText(){
 	unsigned int tempaddy2=copyEndFlag;
 	unsigned int a_length=copyEndFlag - copyStartFlag;
 	
-	int fd=sceIoOpen("ms0:/nitePRfnc.txt", PSP_O_CREAT | PSP_O_WRONLY | PSP_O_APPEND, 0777);
+	int fd=sceIoOpen("ms0:/MKIJIROfnc.txt", PSP_O_CREAT | PSP_O_WRONLY | PSP_O_APPEND, 0777);
 	if(fd > 0){
 
 		sprintf(buffer, "#FNC %d \n", fnc);
 		sceIoWrite(fd, buffer, strlen(buffer));
 		
 		unsigned int counter=0; 
-		while(counter < a_length/4){
+		while(counter < (a_length>>2)){
 			
 			sprintf(buffer, "0x%08lX ", (a_address+(counter*4))-0x48800000);
 			sceIoWrite(fd, buffer, strlen(buffer));
@@ -910,13 +910,12 @@ void cheatApply(unsigned char a_type){ //0=Enable/Disable FLAG_FRESH, -1=Enable 
 void cheatSave(){ 
 	unsigned char fileChar=0;
 	unsigned char fileMisc[3];
-	unsigned int fileSize=0;
-	unsigned int counter=-1;
-	unsigned int scounter=0;
-	unsigned int ramcounter=0;
-	unsigned int tmpramcounter=0;
-	unsigned char *codehead[]={"#!!","#!","#","\n"};
-	unsigned char fileMode=0; //0=Unknown/Initial, 1=Comment, 2=Waiting for \n (ignoring)
+	int fileSize=0;
+	int counter=-1;
+	int scounter=0;
+	int ramcounter=0;
+	char *codehead[]={"#!!","#!","#"};
+	char fileMode=0; //0=Unknown/Initial, 1=Comment, 2=Waiting for \n (ignoring)
 	int fd;
 	int tempFd;
 
@@ -933,7 +932,7 @@ void cheatSave(){
 		//if(tempFd<=0) { sceIoClose(fd); return;}
 		//Add the codes that are already there
 		while(fileBufferFileOffset < fileSize){
-			
+
 		fileBufferRead(&fileChar, 1);
 			if(fileBufferSize == 0) break;
 			//Interpret the byte based on the mode
@@ -976,7 +975,7 @@ void cheatSave(){
 						//Write out the name of the cheat
 						memcpy(SAVETEMP+ramcounter,cheat[counter].name,strlen(cheat[counter].name));
 						ramcounter+=strlen(cheat[counter].name);
-						memcpy(SAVETEMP+ramcounter,codehead[3],1);ramcounter++;
+						*(unsigned char *)(SAVETEMP+ramcounter)=0xA;ramcounter++;
 					break;
 					
 					case '0':
@@ -1074,9 +1073,9 @@ void cheatSave(){
 				}
 			}
 		}
-		//Close the files
-		sceIoClose(fd);
 	}
+	//Close the file
+	sceIoClose(fd);
 
 	//Open the file for appending
 	fd=sceIoOpen(gameDir, PSP_O_CREAT | PSP_O_WRONLY | PSP_O_APPEND, 0777);
@@ -1146,14 +1145,13 @@ void cheatSave(){
 			//Next cheat
 			counter++;
 		}
-		//Close the file
-		//sceIoClose(fd);
 	}
-	//sceIoRemove(gameDir);
-	dump_memregion(gameDir, (void*)SAVETEMP, ramcounter-1);
+	//Close the file
+	sceIoClose(fd);
+	dump_memregion(gameDir, (void*)SAVETEMP, ramcounter);
 	sceKernelDelayThread(1500);
 	int i=0;
-	for(i; i<ramcounter/4; i++){
+	for(i; i<(ramcounter>>2); i++){
 	*(unsigned int *)(SAVETEMP+4*i)=0;
 	}
 	searchNo=0;
@@ -1165,6 +1163,7 @@ void cheatSave(){
 void cheatLoad(){
 	int fd;
 
+	fd=sceIoOpen(gameDir, PSP_O_RDONLY, 0777);
 	if(cheatRefresh){
 
 		int counter=0;
@@ -1200,7 +1199,6 @@ void cheatLoad(){
 	}
 
 	//Load the cheats
-	fd=sceIoOpen(gameDir, PSP_O_RDONLY, 0777);
 	if(fd > 0){
 		unsigned int fileSize=sceIoLseek(fd, 0, SEEK_END); sceIoLseek(fd, 0, SEEK_SET);
 		unsigned int fileOffset=0;
@@ -2355,7 +2353,7 @@ void menuDraw(){
 				pspDebugScreenSetTextColor(color02); pspDebugScreenPuts(line);
 				pspDebugScreenSetTextColor(color01); pspDebugScreenPuts("  [Editing Search Range]\n");
 				pspDebugScreenSetTextColor(color02); pspDebugScreenPuts(line);
-				pspDebugScreenSetTextColor(color01); pspDebugScreenPuts("\n  If you edit you're starting address and ending address here,\n  NitePR will search inbetween the two. \n\n  (This increases speed of searches and reduces your chances of \n  crashing while searching.)\n\n");
+				pspDebugScreenSetTextColor(color01); pspDebugScreenPuts("\n  If you edit you're starting address and ending address here,\n  MKIJIRO will search inbetween the two. \n\n  (This increases speed of searches and reduces your chances of \n  crashing while searching.)\n\n");
 				pspDebugScreenSetTextColor(color02); pspDebugScreenPuts("  Start       Stop\n");
 
 				//Apply the row color
@@ -2365,12 +2363,15 @@ void menuDraw(){
 				else{
 					pspDebugScreenSetTextColor(color02);
 				}
-
 				sprintf(buffer, "  0x%08lX ", searchStart - 0x48800000);
 				pspDebugScreenPuts(buffer);
 
 				sprintf(buffer, " 0x%08lX", searchStop - 0x48800000);
 				pspDebugScreenPuts(buffer);
+
+
+				if(searchStart>searchStop){
+				searchStop=searchStart;}
 
 				//Skip a line, draw the pointer =)
 				pspDebugScreenPuts("\n");
@@ -2789,7 +2790,7 @@ void menuDraw(){
 					#else
 					case 8: pspDebugScreenPuts("Usb mode is not compiled in this version");break;
 					#endif
-					case 9: pspDebugScreenPuts("Cheat refresh rate (nitePR clock)"); break;
+					case 9: pspDebugScreenPuts("Cheat refresh rate (MKIJIRO clock)"); break;
 					case 10: pspDebugScreenPuts("Save your cheats"); break;
 					case 11: pspDebugScreenPuts("Reload Cheats"); break;
 					case 12: pspDebugScreenPuts("Load or reload setting file"); break;
@@ -2844,6 +2845,14 @@ void menuDraw(){
 					  }
 					
 					  //Print out the address
+						if(browseLines==8){
+						addresscode=0xFFFFFFF8;}
+						else{
+						addresscode=0xFFFFFFF0;}
+					  if(((browseAddress[bdNo]+(counter*browseLines))&addresscode)==(copyStartFlag&addresscode)){
+						  pspDebugScreenSetTextColor(select_cheat);}
+					else if(((browseAddress[bdNo]+(counter*browseLines))&addresscode)==(copyEndFlag&addresscode)){
+						  pspDebugScreenSetTextColor(constant_cheat);}
 					  sprintf(buffer, "  0x%08lX  ", (browseAddress[bdNo]+(counter*browseLines)) - browseFormat);
 					  pspDebugScreenPuts(buffer);
 					  
@@ -3490,14 +3499,18 @@ void menuInput(){
 				{
 					if(flipme){
 					  if(pad.Buttons & PSP_CTRL_SQUARE){//jump copy start
+						if(copyStartFlag<0x49FFFE60){
 						browseAddress[bdNo]=copyStartFlag;}
+						else{
+						browseAddress[bdNo]=0x49FFFE60;}
+					  }
 					  else{
 					  copyData=browseAddress[bdNo]+(browseY[bdNo] * browseLines);
 					  copyData-=0x40000000;}
-					}
+					  }
 					else{
 				       		if(pad.Buttons & PSP_CTRL_SQUARE){//jump copy start
-					decodeAddress[bdNo]=copyStartFlag;}
+						decodeAddress[bdNo]=copyStartFlag;}
 						else{
 					  copyData=decodeAddress[bdNo]+(decodeY[bdNo]*4);
 					  copyData-=0x40000000;}
@@ -3548,7 +3561,10 @@ void menuInput(){
 				{
 					if(flipme){
 				        	if(pad.Buttons & PSP_CTRL_SQUARE){//jump copy end
-						browseAddress[bdNo]=copyEndFlag;
+							if(copyStartFlag<0x49FFFE60){
+							browseAddress[bdNo]=copyEndFlag;}
+							else{
+							browseAddress[bdNo]=0x49FFFE60;}
 						}
 						else if(copyData < 0x49FFFFA8){
 							browseAddress[bdNo]=copyData|0x40000000; //(browseY[bdNo] * browseLines)+
@@ -4703,10 +4719,6 @@ void menuInput(){
                   //Go!
                   while(counter < searchStop)//0x4A000000)
                   { 
-                    if((counter>=0x48802800)&&(counter<0x48803C00)){
-			counter=0x48803C00;
-                        sceIoLseek(fd,0x1400, SEEK_CUR);
-			}
                     //Load it
                     //sceIoRead(fd, &scounter, miscType);
                     fileBufferRead(&scounter, miscType);
@@ -4719,7 +4731,6 @@ void menuInput(){
                       
 			lineClear(33);
         		pspDebugScreenSetTextColor(color02);
-			//sprintf(buffer, "Task = %02d%%; () = Hold to Abort", (counter-0x48804000)/((0x4A000000-0x48804000)/0x64));
 			sprintf(buffer, "Task = %02d%%; () = Hold to Abort", (counter - searchStart + 1)/((searchStop - searchStart + 0x64)/0x64));
 			pspDebugScreenPuts(buffer); 
                   		
@@ -6729,7 +6740,7 @@ void menuInput(){
 					if((foobar >= 0x08800000) && (foobar <= 0x09FFFF98)){ //handle pointers
 
 						if(((decodeAddress[bdNo]+(decodeY[bdNo]*4)) >= (logstart-4)) && ((decodeAddress[bdNo]+(decodeY[bdNo]*4)) <= (logstart + 4*jumplog))){
-						logcounter=((decodeAddress[bdNo]+(decodeY[bdNo]*4))-0x48800000)/4;
+						logcounter=((decodeAddress[bdNo]+(decodeY[bdNo]*4))-0x48800000)>>2;
 						}
 						else{
 						storedAddress[logcounter]=decodeAddress[bdNo]+(decodeY[bdNo]*4); //store pointer address
@@ -7319,10 +7330,15 @@ int mainThread(){
 		 //sceIoClose(fd);
 		 //fd=sceIoOpen(hbpath, PSP_O_RDONLY, 0777);
 		 //if(fd > 0){
-	 #ifdef _HBIJIRO_
-		  sceIoLseek( fd, 0x140, SEEK_CUR);
-		  sceIoRead(fd, gameId, 10);
-		  memcpy(&gameDir[27], gameId, 10);//}
+	 #ifdef _HBIJIRO_ //WORK ONLY FOR HOMEBREW PBP HEADER.
+		sceIoRead(fd, fileBuffer,0x200);
+		addresstmp=*(unsigned int *)(&fileBuffer[0x30]);
+		counteraddress=*(unsigned int *)(&fileBuffer[0x34]);
+		addresscode=*(unsigned int *)(&fileBuffer[0x24]+addresstmp);
+		if(addresscode>0x30){//official SCE_PBP big offset?particial fix,may not work
+		addresscode=*(unsigned int *)(&fileBuffer[0x14]+addresstmp);}
+		memcpy(&gameId[0],&fileBuffer[0x28]+counteraddress+addresscode,10);
+		memcpy(&gameDir[27], gameId, 10);//}
 	#elif _CWCHASH_ //waltall CWCHASH finally discovered ME&raing3
 	sceIoRead(fd, fileBuffer, 0x800);
 	//raing3 find SCEMD5HASH="jal $0800e844"
@@ -7366,7 +7382,7 @@ int mainThread(){
                 addresstmp=*(unsigned int*)(0x8838DBF0);*/
 		  sprintf(buffer,"HB%X",hash);
 		  memcpy(&gameDir[27], buffer, 10);
-		  memcpy(&gameId[0], buffer, 10);//}
+		  memcpy(&gameId[0], buffer, 10);
 	   #endif
 	    }
 	    else{
@@ -7429,12 +7445,12 @@ int mainThread(){
 
 		#ifdef _UMDMODE_
 		if(vram == NULL){
-			//Has the HOME button been pressed?
 			unsigned int a_address=0;
 			unsigned int a_bufferWidth=0;
 			unsigned int a_bufferHeight=0;
 			unsigned int a_pixelFormat=0;
 			unsigned int a_sync;
+			//Has the HOME button been pressed?
 
 			sceDisplayGetFrameBufferInternal(0, &a_address, &a_bufferWidth, &a_pixelFormat, &a_sync);
 
@@ -7516,7 +7532,7 @@ int mainThread(){
 			else{
 				p |= 0x40000000;
 			}
-		  
+
 			gamePause(thid);
 			bitmapWrite((void *) p, NULL, pixel_format, buffer);
 			gameResume(thid);
@@ -7555,7 +7571,7 @@ int _start(SceSize args, void *argp){
   
   //Create thread
   sceKernelGetThreadmanIdList(SCE_KERNEL_TMID_Thread, thread_buf_start, MAX_THREAD, &thread_count_start);
-  thid=sceKernelCreateThread("nitePRThread", &mainThread, 0x18, 0x1000, 0, NULL);
+  thid=sceKernelCreateThread("MKIJIROThread", &mainThread, 0x18, 0x2000, 0, NULL);
       
   //Start thread
   if(thid >= 0) sceKernelStartThread(thid, 0, NULL);
