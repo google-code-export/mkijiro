@@ -4,7 +4,7 @@
 一部のゲームでキーボードをだすとフリーズする(武装神姫)
 比較サーチがおかしくなる
 コード保存と読込を繰り返していると保存読込機能が反応しなくなる
-一部の浮動小数が表示されない 0.01,0.001
+一部の浮動小数が表示されない 0.01(0x3C23D70A),0.001 (0x3A83126E)
 8byte時メモリエディタのコピー箇所がおかしい
 コードがないとき新規コードが保存されない
 コード最後の行が4BYTEモード以外だと再読込時あどれすが2重に読まれる
@@ -16,6 +16,14 @@ doesnot work fine unknown value search
 if code is reloaded & saved many times,save&reload function doesnot work
 certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
+canot save newcode when none cheat
+
+2010/12/15
+表示アドレスを0xA000000以内に拡大
+メモリエディタで8/16切り替えたときはみ出していたので修正
+負のMFLOATがはみでることがあったので修正
+PRXメニューに□押しで電源OFF追加
+DECODERのオフセットアドレス表示対応
 
 2010/12/14
 IJIROHBIDを0x140以外も対応
