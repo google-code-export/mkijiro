@@ -305,7 +305,7 @@ void mipsImm(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
   if(a_slot==1)
   {
     a_opcode&=0x3FFFFFF;
-    sprintf(mipsNum, "%08X", ((a_opcode<<2)));
+    sprintf(mipsNum, "%08X", (a_opcode<<2)-decodeFormat+0x40000000);
   }
   else if(VFR==3){ //sv.q,lv.q,lv.s,sv.s
     a_opcode&=0xFFFC;
@@ -1265,7 +1265,11 @@ Encoding: 0000 01ss sss1 0001 iiii iiii iiii iiii*/
         if((a_opcode >= 0x08000000) && (a_opcode < 0x8800000)){
         pspDebugScreenPuts("kernelram");}
         else if((a_opcode >= 0x8800000) && (a_opcode < 0xA000000)){
-        pspDebugScreenPuts("userram");  }
+        pspDebugScreenPuts("userram  ");  
+        if(decodeFormat==0x48800000){
+        	sprintf(buffer,"$%08X",a_opcode-0x8800000);
+            pspDebugScreenPuts(buffer);}
+        }
         else{
       pspDebugScreenPuts("j        ");
       mipsImm(a_opcode, 1, 0);}
@@ -3078,7 +3082,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
       break;
       
       case 0xE0:
-      pspDebugScreenPuts("sc      ");
+      pspDebugScreenPuts("sc       ");
       mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
@@ -3327,7 +3331,7 @@ void mipsSpecial(unsigned int addresscode,unsigned int addresstmp,unsigned int c
 							addresscode=(-0x40000+addresscode)+counteraddress;}
 							else{
 							addresscode=addresscode+counteraddress;}
-							sprintf(buffer, "$%X", addresscode);pspDebugScreenPuts(buffer);
+							sprintf(buffer, "$%X", addresscode-decodeFormat+0x40000000);pspDebugScreenPuts(buffer);
 							if(extMenu==2 && offsetadd==1){
 								pspDebugScreenPuts("+0FFSET");
 							}

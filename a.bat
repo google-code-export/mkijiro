@@ -1,1 +1,0 @@
-copy g:\seplugins\nitePR\NPJH-50311.bk g:\seplugins\nitePR\NPJH-50311.txt
