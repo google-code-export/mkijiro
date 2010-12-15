@@ -3518,7 +3518,7 @@ void menuInput(){
 					  }
 					else{
 				       		if(pad.Buttons & PSP_CTRL_SQUARE){//jump copy start
-						decodeAddress[bdNo]=copyStartFlag;}
+						decodeAddress[bdNo]=copyStartFlag;decodeMAX();}
 						else{
 					  copyData=decodeAddress[bdNo]+(decodeY[bdNo]*4);
 					  copyData-=0x40000000;}
@@ -6735,6 +6735,7 @@ void menuInput(){
 					if(logcounter >= 1){
 					decodeAddress[bdNo]=storedAddress[logcounter-1];
 					logcounter--;}
+					decodeMAX();
 					menuDraw();
 					sceKernelDelayThread(150000);
 				}
@@ -6807,7 +6808,10 @@ void menuInput(){
 							}
 							else{
 								decodeAddress[bdNo]+=(1 << (4*(7-decodeX[bdNo])));
-							}decodeMAX();
+							}
+							if(decodeAddress[bdNo]>0x49FFFF98){
+							decodeAddress[bdNo]=decodeAddress[bdNo]+decodeY[bdNo]*4;}
+							decodeMAX();
 						break;
 						case 1:
 							*((unsigned int*)(decodeAddress[bdNo]+(decodeY[bdNo]*4)))+=(1 << (4*(7-decodeX[bdNo])));
@@ -6852,7 +6856,7 @@ void menuInput(){
 					}
 					else if(pad.Buttons & PSP_CTRL_DOWN){
 						if(decodeAddress[bdNo] < 0x49FFFF98){
-							decodeAddress[bdNo]+=4;
+							decodeAddress[bdNo]+=4;decodeMAX();
 						}
 						menuDraw();
 						if(cheatButtonAgeY < 12) cheatButtonAgeY++; sceKernelDelayThread(150000-(10000*cheatButtonAgeY));
@@ -7535,5 +7539,6 @@ void decodeMAX(){
  decodeAddress[bdNo]=0x48800000;}
  if(decodeAddress[bdNo] > 0x49FFFF98){
  decodeY[bdNo]=(decodeAddress[bdNo]-0x49FFFF98)>>2;
- decodeAddress[bdNo]=0x49FFFF98;}
+ decodeAddress[bdNo]=0x49FFFF98;
+ if(decodeY[bdNo]>25){decodeY[bdNo]=25;}}
 }
