@@ -18,6 +18,9 @@ certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
 canot save newcode when none cheat
 
+2010/12/22
+コピーアドレスにも色をつける様にした
+
 2010/12/15
 表示アドレスを0xA000000以内に拡大
 メモリエディタで8/16切り替えたときはみ出していたので修正
