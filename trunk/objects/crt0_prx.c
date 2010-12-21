@@ -96,7 +96,7 @@ PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 #endif
 
 //Globals
-unsigned char *MKVER="  MKIJIRO20101215";
+unsigned char *MKVER="  MKIJIRO20101222";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -2860,6 +2860,8 @@ void menuDraw(){
 						  pspDebugScreenSetTextColor(select_cheat);}
 					else if(((browseAddress[bdNo]+(counter*browseLines))&addresscode)==(copyEndFlag&addresscode)){
 						  pspDebugScreenSetTextColor(constant_cheat);}
+					else if(((browseAddress[bdNo]+(counter*browseLines))&addresscode)==((copyData|0x40000000)&addresscode)){
+						 pspDebugScreenSetTextColor(color04);}
 					  sprintf(buffer, "  0x%08lX  ", (browseAddress[bdNo]+(counter*browseLines)) - browseFormat);
 					  pspDebugScreenPuts(buffer);
 					  
@@ -2951,6 +2953,9 @@ void menuDraw(){
 							}
 							else if((decodeAddress[bdNo]+(counter*4)) == copyEndFlag){
 								pspDebugScreenSetTextColor(constant_cheat);
+							}
+							else if((decodeAddress[bdNo]+(counter*4)) == (copyData|0x40000000)){
+								pspDebugScreenSetTextColor(color04);
 							}
 							else{
 								pspDebugScreenSetTextColor(color02 - (counter * color02_to));
@@ -7243,35 +7248,44 @@ int mainThread(){
 
 	//#ifdef _UMDMODE_
 		//Find the GAME ID　	///ID
-		fd=sceIoOpen("disc0:/UMD_DATA.BIN", PSP_O_RDONLY, 0777); 
-		sceKernelDelayThread(1000);
-	if(fd >0){
+		fd=sceIoOpen("disc0:/UMD_DATA.BIN", PSP_O_RDONLY, 0777);
+if(fd >0){
 		strcpy(gameId, ".txt\x0");
 		memcpy(&gameDir[32], gameId, 5);
 		sceIoRead(fd, gameId, 10);
 		sceIoClose(fd);
 		memcpy(&gameDir[22], gameId, 10);
 	//#elif _POPSMODE_
-	}
-	else{
-		sceIoClose(fd);
+}
+else{
+/*		sceIoClose(fd);
+		fd=sceIoOpen("disc0:/SYSTEM.CNF", PSP_O_RDONLY, 0777);
+  if(fd > 0){//pops
+		sceIoRead(fd, fileBuffer,0x40);
+		memcpy(&gameId[0],&fileBuffer[0xE],8);
+		memcpy(&gameId[8],&fileBuffer[0x17],2);}
+  else{*/
 		///unsigned char *hbpath[50];
 		//dump_memregion("ms0:/hbpath", (void*)0x882F9600, 0x50);
+		sceIoClose(fd);
  		fd=sceIoOpen(hbpath, PSP_O_RDONLY, 0777);
-	     if(fd > 0){
+     if(fd > 0){
 		 //sceIoRead(fd, hbpath, 0x50);
 		 //sceIoClose(fd);
 		 //fd=sceIoOpen(hbpath, PSP_O_RDONLY, 0777);
 		 //if(fd > 0){
 	 #ifdef _HBIJIRO_ //WORK ONLY FOR HOMEBREW PBP HEADER.
-		sceIoRead(fd, fileBuffer,0x200);
+		sceIoRead(fd, fileBuffer,0x400);
 		addresstmp=*(unsigned int *)(&fileBuffer[0x30]);
 		counteraddress=*(unsigned int *)(&fileBuffer[0x34]);
 		addresscode=*(unsigned int *)(&fileBuffer[0x24]+addresstmp);
-		if(addresscode>0x30){//official SCE_PBP big offset?particial fix,may not work
-		addresscode=*(unsigned int *)(&fileBuffer[0x14]+addresstmp);}
-		memcpy(&gameId[0],&fileBuffer[0x28]+counteraddress+addresscode,10);
-		memcpy(&gameDir[27], gameId, 10);//}
+	if(addresscode>0x30){//official SCE_PBP big offset?particial fix,may not work
+		//addresscode=*(unsigned int *)(&fileBuffer[0x14]+addresstmp);
+		memcpy(&gameId[0],&fileBuffer[0x30]+counteraddress,10);}
+	else{//HOMEBREW
+		memcpy(&gameId[0],&fileBuffer[0x28]+counteraddress+addresscode,10);}
+  //}
+		memcpy(&gameDir[27], gameId, 10);
 	#elif _CWCHASH_ //waltall CWCHASH finally discovered ME&raing3
 	sceIoRead(fd, fileBuffer, 0x800);
 	//raing3 find SCEMD5HASH="jal $0800e844"
@@ -7317,13 +7331,9 @@ int mainThread(){
 		  memcpy(&gameDir[27], buffer, 10);
 		  memcpy(&gameId[0], buffer, 10);
 	   #endif
-	    }
-	    else{
-		strcpy(gameId, "popstation");
-		memcpy(&gameDir[27], gameId, 10);
-	    }
-          sceIoClose(fd);
 	}
+          sceIoClose(fd);
+}
   	//#endif
 
 

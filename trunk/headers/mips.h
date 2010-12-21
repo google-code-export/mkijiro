@@ -3331,10 +3331,12 @@ void mipsSpecial(unsigned int addresscode,unsigned int addresstmp,unsigned int c
 							addresscode=(-0x40000+addresscode)+counteraddress;}
 							else{
 							addresscode=addresscode+counteraddress;}
-							sprintf(buffer, "$%X", addresscode-decodeFormat+0x40000000);pspDebugScreenPuts(buffer);
 							if(extMenu==2 && offsetadd==1){
-								pspDebugScreenPuts("+0FFSET");
+							sprintf(buffer, "$%X+0FFSET", addresscode);
 							}
+							else{
+							sprintf(buffer, "$%X", addresscode-decodeFormat+0x40000000);}
+							pspDebugScreenPuts(buffer);
 							if(addresstmp > 0x7FFF){
 							 sprintf(buffer, "(-%d)", (0x10000-(addresstmp+1)));}
 							else{
