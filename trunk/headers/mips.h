@@ -158,7 +158,7 @@ void vectors(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
 	 vmatrix=0x43;}//C
 	}
         if(VFR==1){ //lvq,svq
-        if(((a_opcode & 0x1) == 1) && ((a_opcode >>24 == 0xD4) || (a_opcode >>24 == 0xD8) || (a_opcode >>24 == 0xF4) || (a_opcode >>24 == 0xF8))){
+        if(((a_opcode & 0x1) == 1) && ((a_opcode >>26 == 0xD4>>2) || (a_opcode >>26 == 0xD8>>2) || (a_opcode >>26 == 0xF4>>2) || (a_opcode >>26 == 0xF8>>2))){
         sprintf(buffer, "R%d0%d",((a_opcode>>(8*(2-a_slot)))&0x1F)/4 , (a_opcode>>(8*(2-a_slot)))& 0x3 );
         a_opcode=4*((a_opcode>>(8*(2-a_slot)))& 0x1F) + (a_opcode & 0x3);
                 }
@@ -271,19 +271,20 @@ void mipsNibble(unsigned int a_opcode, unsigned char a_slot, unsigned char a_mor
 {
   a_opcode=(a_opcode>>(6+(5*(3-a_slot)))) & 0x1F;
   pspDebugScreenSetTextColor(0xFF999999);
-  sprintf(mipsNum, "$%D", a_opcode);
-  pspDebugScreenPuts(mipsNum);
+  pspDebugScreenPuts("$");
   pspDebugScreenSetTextColor(color02);
+  sprintf(mipsNum, "%D", a_opcode);
+  pspDebugScreenPuts(mipsNum);
   if(a_more) pspDebugScreenPuts(", ");
 }
 
 
-void mipsins(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
+void mipsins(unsigned int a_opcode)
 {
   a_opcode=((a_opcode>>11)& 0x1F )- ((a_opcode>>6)  & 0x1F) +1;
   pspDebugScreenSetTextColor(0xFF999999); pspDebugScreenPuts("$"); pspDebugScreenSetTextColor(color02);
   sprintf(mipsNum, "%D", a_opcode); pspDebugScreenPuts(mipsNum);
-  if(a_more) pspDebugScreenPuts(", ");
+  //if(a_more) pspDebugScreenPuts(", ");
 }
 
 void mipsImm(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
@@ -508,14 +509,15 @@ unsigned char *pfx_sat[4] ={
 //VECTOR SELECTOR
 void vsel(unsigned int a_opcode, unsigned char VNUM, unsigned char a_more)
 {
-unsigned char i; 
+//unsigned char i;
   switch(a_opcode & 0x8080)
   {
     case 0x00:
         pspDebugScreenPuts("s");
-        for(i=0; i < a_more; i++){
-        pspDebugScreenPuts(" ");
-        }
+    	spaceman(a_more);
+        //for(i=0; i < a_more; i++){
+        //pspDebugScreenPuts(" ");
+        //}
         if(VNUM==1){
         vectors(a_opcode, 2, 0);
         }
@@ -533,9 +535,10 @@ unsigned char i;
 
     case 0x0080:
         pspDebugScreenPuts("p");
-        for(i=0; i < a_more; i++){
-        pspDebugScreenPuts(" ");
-        }
+    	spaceman(a_more);
+        //for(i=0; i < a_more; i++){
+        //pspDebugScreenPuts(" ");
+        //}
         if(((a_opcode  & 0xFF800000) != 0x64800000) &&
 	((a_opcode  & 0xFF800000) != 0x66000000) &&
 	((a_opcode  & 0xFF800000) != 0x67000000)){
@@ -573,9 +576,10 @@ unsigned char i;
 
     case 0x8000:
         pspDebugScreenPuts("t");
-        for(i=0; i < a_more; i++){
-        pspDebugScreenPuts(" ");
-        }
+    	spaceman(a_more);
+        //for(i=0; i < a_more; i++){
+        //pspDebugScreenPuts(" ");
+        //}
         if(((a_opcode  & 0xFF800000) != 0x64800000) &&
 	((a_opcode  & 0xFF800000) != 0x66000000) &&
 	((a_opcode  & 0xFF800000) != 0x67000000)){
@@ -613,9 +617,10 @@ unsigned char i;
 
     case 0x8080:
         pspDebugScreenPuts("q");
-        for(i=0; i < a_more; i++){
-        pspDebugScreenPuts(" ");
-        }
+    	spaceman(a_more);
+        //for(i=0; i < a_more; i++){
+        //pspDebugScreenPuts(" ");
+        //}
         if(((a_opcode  & 0xFF800000) != 0x64800000) &&
 	((a_opcode  & 0xFF800000) != 0x66000000) &&
 	((a_opcode  & 0xFF800000) != 0x67000000)){
@@ -651,6 +656,13 @@ unsigned char i;
         }
     break;
   }
+}
+
+void spaceman(unsigned char a_more){
+	unsigned char i;
+	for(i=0; i < a_more; i++){
+    pspDebugScreenPuts(" ");
+    }
 }
 
 void mipsDecode(unsigned int a_opcode)
@@ -2165,7 +2177,7 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
         mipsRegister(a_opcode, T, 1);
         mipsRegister(a_opcode, S, 1);
         mipsNibble(a_opcode, 3, 1);
-        mipsins(a_opcode, 0, 0);
+        mipsins(a_opcode);
         break;
         }
     break;
@@ -3154,8 +3166,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 
 	case 0xF000:
         pspDebugScreenPuts("vmmul.");
-	VNUM=3;
-	vsel(a_opcode,1,2);
+	vsel(a_opcode,3,2);
         break;
 //{ "vmmul.p", 0xF0000080, 0xFF808080, "%zm, %ym, %xm" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%?%zm, %ym, %xm"
 //{ "vmmul.q", 0xF0008080, 0xFF808080, "%zo, %yo, %xo" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },

@@ -2,6 +2,7 @@
 	PSP 24bpp text bliter (from devhook 043sdk)
 */
 #include <psptypes.h>
+#include <pspdisplay.h>
 
 #ifdef _FONT_acorn  
 #include "../fonts/acorn.h"
@@ -11,6 +12,8 @@
 #include "../fonts/originaldebug.h"
 #elif _FONT_misaki
 #include "../fonts/misaki.h"
+#elif _FONT_misaki_hira
+#include "../fonts/misaki_hira.h"
 #elif _FONT_perl 
 #include "../fonts/perl.h"
 #elif _FONT_sparta 
@@ -39,10 +42,10 @@ int blit_string(int sx,int sy,const char *msg,int fg_col,int bg_col){
 	char code;
 	unsigned char font;
 	int pwidth, pheight, bufferwidth, pixelformat, unk;
-	unsigned int* vram32;
+	unsigned int* vram;
 
    	sceDisplayGetMode(&unk, &pwidth, &pheight);
-   	sceDisplayGetFrameBuf((void*)&vram32, &bufferwidth, &pixelformat, &unk);
+   	sceDisplayGetFrameBuf((void*)&vram, &bufferwidth, &pixelformat, &unk);
 
    	if( (bufferwidth==0) || (pixelformat!=3)) return -1;
 
@@ -53,11 +56,12 @@ int blit_string(int sx,int sy,const char *msg,int fg_col,int bg_col){
    			offset = (sy+y)*bufferwidth + (sx+x)*8;
    			font = msx[ code*8 + y ];
    			for(p=0;p<8;p++){
-   				vram32[offset] = (font & 0x80) ? fg_col : bg_col;
+				vram[offset] = (font & 0x80) ? fg_col : bg_col;
    				font <<= 1;
    				offset++;
    			}
    		}
    	}
+
 	return x;
 }
