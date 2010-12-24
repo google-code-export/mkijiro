@@ -18,23 +18,37 @@
 #include "headers/pspdebugkb.h"
 #include "headers/snprintf.h"
 #define pspDebugScreenPrintf pspDebugScreenKprintf
-
 extern int snprintf(char *str, size_t str_m, const char *fmt, /*args*/ ...);
 
 static char loCharTable[PSP_DEBUG_KB_NUM_ROWS][PSP_DEBUG_KB_NUM_CHARS] = {
-  { '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=' },
-  { 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '{', '}', '\\' }, // { } remember to remove the brackets
-  { 0x20, 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', 0x20 },
-  { 0x20, 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 0x20, 0x20 }
+  { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '^', '\\' },
+  { 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '@', '[', ']' }, // { } remember to remove the brackets
+  { 0x20, 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', ':', 0x20 },
+  { 0x20, 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', '\\', 0x20 }
 };
 
  //this is the row for the {}
 static char hiCharTable[PSP_DEBUG_KB_NUM_ROWS][PSP_DEBUG_KB_NUM_CHARS] = {
-  { '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+' },
-  { 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '[', ']', '|' },
-  { 0x20, 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ':', '"', 0x20 },
-  { 0x20, 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '<', '>', '?', 0x20, 0x20 }
+  { '!', '"', '#', '$', '%', '&', '\'', '(',  ')', 0x20, '=', '~', '|' },
+  { 'Q', 'W', 'E', 'R', 'T', 'Y', 'U' ,  'I', 'O', 'P', '`',  '{', '}'  },
+  { 0x20, 'A', 'S', 'D', 'F', 'G', 'H' ,  'J', 'K', 'L', '+', '*', 0x20},
+  { 0x20, 'Z', 'X', 'C', 'V', 'B', 'N' ,  'M', '<', '>', '?', '_', 0x20}
 };
+
+static char hankakuCharTable[PSP_DEBUG_KB_NUM_ROWS][PSP_DEBUG_KB_NUM_CHARS] = {
+  { 'Ç', 'Ì', '±', '³', '´', 'µ', 'Ô', 'Õ', 'Ö', 'Ü', 'Î', 'Í', '_' },
+  { 'À', 'Ã', '²', '½', '¶', 'Ý', 'Å', 'Æ', '×', '¾', 'Þ', 'ß', 0x20 },
+  { 0x20, 'Á', 'Ä', '¼', 'Ê', '·', '¸', 'Ï', 'É', 'Ø', 'Ú', '¹', 'Ñ' },
+  { 0x20, 'Â', '»', '¿', 'Ë', 'º', 'Ð', 'Ó', 'È', 'Ù', 'Ò', 'Û', 0x20 }
+};
+
+static char hankakukomojiCharTable[PSP_DEBUG_KB_NUM_ROWS][PSP_DEBUG_KB_NUM_CHARS] = {
+  { 'Ç', 'Ì', '§', '©', 'ª', '«', '¬', '­', '®', '¦', 'Î', 'Í', 0x20},
+  { 'À', 'Ã', '¨', '½', '¶', 'Ý', 'Å', 'Æ', '×', '¾', 'Þ', 'ß', 0x20},
+  { 0x20, 'Á', 'Ä', '¼', 'Ê', '·', '¸', 'Ï', 'É', 'Ø', 'Ú', '¹', 'Ñ'},
+  { 0x20, '¯', '»', '¿', 'Ë', 'º', 'Ð', 'Ó', '¤', '¡', '¥', 0x20, 0x20}
+};
+
 
 static char *commandRow[] = { "Shift", "[    ]", "Back", "Clear", "Done" };
 
@@ -43,6 +57,8 @@ char charTable[PSP_DEBUG_KB_NUM_ROWS][PSP_DEBUG_KB_NUM_CHARS];
 /* Switch charTable when Shift is pressed */
 void pspDebugKbShift(int* shiftState) {
   int i, j;
+  SceCtrlData input;
+  sceCtrlReadBufferPositive(&input, 1);
   if (*shiftState != 0) {
     for (i=0; i<PSP_DEBUG_KB_NUM_ROWS; i++) {
       for (j=0; j<PSP_DEBUG_KB_NUM_CHARS; j++) {
@@ -50,7 +66,22 @@ void pspDebugKbShift(int* shiftState) {
       }
     }
     *shiftState = 0;
-  } else {
+  } 
+  else if(input.Buttons & PSP_CTRL_RTRIGGER){
+    for (i=0; i<PSP_DEBUG_KB_NUM_ROWS; i++) {
+      for (j=0; j<PSP_DEBUG_KB_NUM_CHARS; j++) {
+      	charTable[i][j] = hankakuCharTable[i][j];
+      }
+    }
+  }
+  else if(input.Buttons & PSP_CTRL_LTRIGGER){
+    for (i=0; i<PSP_DEBUG_KB_NUM_ROWS; i++) {
+      for (j=0; j<PSP_DEBUG_KB_NUM_CHARS; j++) {
+      	charTable[i][j] = hankakukomojiCharTable[i][j];
+      }
+    }
+  }
+  else {
     for (i=0; i<PSP_DEBUG_KB_NUM_ROWS; i++) {
       for (j=0; j<PSP_DEBUG_KB_NUM_CHARS; j++) {
       	charTable[i][j] = loCharTable[i][j];
@@ -248,7 +279,10 @@ void pspDebugKbInit(char* str) {
     }
 
     if (input.Buttons != lastinput.Buttons
-	&& (input.Buttons & PSP_CTRL_CROSS || input.Buttons & PSP_CTRL_CIRCLE)) {
+	&& (input.Buttons & PSP_CTRL_CROSS || input.Buttons & PSP_CTRL_CIRCLE || input.Buttons & PSP_CTRL_HOME)){
+      	if(input.Buttons & PSP_CTRL_HOME){
+		row=PSP_DEBUG_KB_COMMAND_ROW;
+      	col=4;}
       if (row == PSP_DEBUG_KB_COMMAND_ROW) {
 	switch(col) {
 	case 0: // Shift

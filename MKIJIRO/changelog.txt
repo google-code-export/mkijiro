@@ -6,7 +6,6 @@
 コード保存と読込を繰り返していると保存読込機能が反応しなくなる
 一部の浮動小数が表示されない 0.01(0x3C23D70A),0.001 (0x3A83126E)
 8byte時メモリエディタのコピー箇所がおかしい
-コードがないとき新規コードが保存されない
 コード最後の行が4BYTEモード以外だと再読込時あどれすが2重に読まれる
 
 this is modded mkultrav10.
@@ -18,7 +17,14 @@ certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
 canot save newcode when none cheat
 
-2010/12/22
+2010/12/24
+コードがないときはダミーチートを作成して再読込させるように変更
+fnc.txtを番号で分けるようにした,RAM使用に変更
+HB/POPSでのID取得判定を厳格化?
+decoder一部修正(lvq,svq)
+R+SHIFT(SELECTボタン)で半角入力追加,L+SHIFTで小文字
+キーボード出したままHOMEを押すとキーボードメニューがのこるのを修正
+半角平仮名に変更
 コピーアドレスにも色をつける様にした
 
 2010/12/15
