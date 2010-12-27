@@ -6447,7 +6447,7 @@ void menuInput(){
 					sceKernelDelayThread(150000); //Delay twice
 				}
 				else if(cheatSelected == 11){
-					cheatRefresh=1;
+					cheatRefresh=1;GETID();
 					cheatLoad();
 					lineClear(32); pspDebugScreenSetTextColor(color01); pspDebugScreenPuts("Cheats Refreshed");
 					menuDraw();
@@ -7136,8 +7136,7 @@ static const unsigned char patchA[]={
 #endif
 
 int mainThread(){
-
-	signed int fd;
+	int fd;
 	running=1;
 	unsigned int counter=0;
 
@@ -7263,93 +7262,7 @@ int mainThread(){
 	}	skipPatch: //Skip the evil patch
 	#endif
 
-	//GAMEID
-		fd=sceIoOpen("disc0:/UMD_DATA.BIN", PSP_O_RDONLY, 0777);
-if(fd >0){
-		strcpy(gameId, ".txt\x0");
-		memcpy(&gameDir[32], gameId, 5);
-		sceIoRead(fd, gameId, 10);
-		sceIoClose(fd);
-		memcpy(&gameDir[22], gameId, 10);
-}
-else{
-		sceIoClose(fd);
- 		fd=sceIoOpen(hbpath, PSP_O_RDONLY, 0777);
-     if(fd > 0){
-	 #ifdef _HBIJIRO_ //WORK ONLY FOR HOMEBREW PBP HEADER.
-		sceIoRead(fd, fileBuffer,0x400);
-		counteraddress=*(unsigned int *)(&fileBuffer[0x34]);
-		addresscode=*(unsigned int *)(&fileBuffer[0x38]);
-		unsigned char i;
-		addresscode=*(unsigned int *)(&fileBuffer[0x28]+counteraddress+4);
-		if(addresscode==0x454D){//ME,POPS
-		 	for(i=0;i<addresscode;i++){
-		addresstmp=*(unsigned int *)(&fileBuffer[0x44+(0x10*i)]);
-		 		if(addresstmp==0x10) break;
-		}
-		addresstmp=*(unsigned int *)(&fileBuffer[0x48+(0x10*i)]);
-		memcpy(&gameId[0],&fileBuffer[0x28]+counteraddress+addresstmp,4);
-		sprintf(buffer,"-");
-		memcpy(&gameId[4],buffer,1);
-		memcpy(&gameId[5],&fileBuffer[0x2C]+counteraddress+addresstmp,5);}
-	 	else{//MG,HOMEBREW
-		addresscode=*(unsigned int *)(&fileBuffer[0x38]);
-		 	for(i=0;i<addresscode;i++){
-		addresstmp=*(unsigned int *)(&fileBuffer[0x44+(0x10*i)]);
-		 		if(addresstmp==0x80) break;
-		}
-		addresscode=*(unsigned int *)(&fileBuffer[0x48+(0x10*i)]);
-		memcpy(&gameId[0],&fileBuffer[0x28]+counteraddress+addresscode,10);}
-		memcpy(&gameDir[27], gameId, 10);
-	#elif _CWCHASH_ //waltall CWCHASH finally worked out by ME&raing3
-	sceIoRead(fd, fileBuffer, 0x800);
-	//raing3 found SCEMD5HASH="jal $0800e844"
-	sceKernelUtilsMd5Digest(fileBuffer, 0x800, buffer);
-	unsigned int hash = (*(unsigned int *)(buffer + 4)) ^ (*(unsigned int *)(buffer)) ^
-		(*(unsigned int *)(buffer + 8)) ^ (*(unsigned int *)(buffer + 12));
-
-		  /*sceIoRead(fd, fileBuffer, 0x800); old ASM DEADCOPY
-	          sceIoClose(fd);
-		__asm__ volatile (
-		"nop\n"
-		"nop\n"
-		"nop\n"
-		"nop\n"
-		"nop\n"
-		"nop\n"
-		"nop\n"
-		"nop\n"
-		"nop\n"
-		"nop\n"
-		"nop\n"
-		"nop\n"
-		"nop\n"
-		"nop\n"
-		"nop\n"
-		/*
-		"lui a0,$8818\n"  //fileBuffer address  this DMA
-		"ori  a0,a0,$A100\n"  /fileBuffer address this DMA
-		"jal $0800e844\n" //this unknow SCE/SDK???
-		"addiu a1, zero, $0800\n"
-		"lw a2, $004C(sp)\n"
-		"lw v0, $0048(sp)\n"
-		"xor a2, a2, v0"
-		"lw v0, $0050(sp)\n"
-		"xor a2, a2, v0"
-		"lw v0, $0054(sp)\n"
-		"xor a2, a2, v0\n"
-		"lui t0, $8839\n"
-		"sw  a2, $DBF0(t0)\n"
-		);
-                addresstmp=*(unsigned int*)(0x8838DBF0);*/
-		  sprintf(gameId,"HB%08X",hash);}
-		  memcpy(&gameDir[27], buffer, 10);
-	   #endif
-	}
-	sceIoClose(fd);
-}
-  	//#endif
-
+	GETID();
 
   	//Compare the gameID to see if the game is....
   	#ifdef _SOCOM_
@@ -7430,6 +7343,7 @@ else{
 				pspDebugScreenPuts("Press home twice and then press volume + and - at the same time");
 			}
 
+			
 			sceKernelDelayThread(1500);
 			continue;
 		}
@@ -7574,3 +7488,92 @@ void decodeMAX(){
  decodeAddress[bdNo]=0x49FFFF98;
  if(decodeY[bdNo]>25){decodeY[bdNo]=25;}}
 }
+
+void GETID(){
+	//GAMEID
+		int fd=sceIoOpen("disc0:/UMD_DATA.BIN", PSP_O_RDONLY, 0777);
+if(fd >0){
+		strcpy(gameId, ".txt\x0");
+		memcpy(&gameDir[32], gameId, 5);
+		sceIoRead(fd, gameId, 10);
+		sceIoClose(fd);
+		memcpy(&gameDir[22], gameId, 10);
+}
+else{
+		sceIoClose(fd);
+ 		fd=sceIoOpen(hbpath, PSP_O_RDONLY, 0777);
+     if(fd > 0){
+	 #ifdef _HBIJIRO_ //WORK ONLY FOR HOMEBREW PBP HEADER.
+		sceIoRead(fd, fileBuffer,0x400);
+		counteraddress=*(unsigned int *)(&fileBuffer[0x34]);
+		addresscode=*(unsigned int *)(&fileBuffer[0x38]);
+		unsigned char i;
+		addresscode=*(unsigned int *)(&fileBuffer[0x28]+counteraddress+4);
+		if(addresscode==0x454D){//ME,POPS
+		 	for(i=0;i<addresscode;i++){
+		addresstmp=*(unsigned int *)(&fileBuffer[0x44+(0x10*i)]);
+		 		if(addresstmp==0x10) break;
+		}
+		addresstmp=*(unsigned int *)(&fileBuffer[0x48+(0x10*i)]);
+		memcpy(&gameId[0],&fileBuffer[0x28]+counteraddress+addresstmp,4);
+		sprintf(buffer,"-");
+		memcpy(&gameId[4],buffer,1);
+		memcpy(&gameId[5],&fileBuffer[0x2C]+counteraddress+addresstmp,5);}
+	 	else{//MG,HOMEBREW
+		addresscode=*(unsigned int *)(&fileBuffer[0x38]);
+		 	for(i=0;i<addresscode;i++){
+		addresstmp=*(unsigned int *)(&fileBuffer[0x44+(0x10*i)]);
+		 		if(addresstmp==0x80) break;
+		}
+		addresscode=*(unsigned int *)(&fileBuffer[0x48+(0x10*i)]);
+		memcpy(&gameId[0],&fileBuffer[0x28]+counteraddress+addresscode,10);}
+		memcpy(&gameDir[27], gameId, 10);
+	#elif _CWCHASH_ //waltall CWCHASH finally worked out by ME&raing3
+	sceIoRead(fd, fileBuffer, 0x800);
+	//raing3 found SCEMD5HASH="jal $0800e844"
+	sceKernelUtilsMd5Digest(fileBuffer, 0x800, buffer);
+	unsigned int hash = (*(unsigned int *)(buffer + 4)) ^ (*(unsigned int *)(buffer)) ^
+		(*(unsigned int *)(buffer + 8)) ^ (*(unsigned int *)(buffer + 12));
+
+		  /*sceIoRead(fd, fileBuffer, 0x800); old ASM DEADCOPY
+	          sceIoClose(fd);
+		__asm__ volatile (
+		"nop\n"
+		"nop\n"
+		"nop\n"
+		"nop\n"
+		"nop\n"
+		"nop\n"
+		"nop\n"
+		"nop\n"
+		"nop\n"
+		"nop\n"
+		"nop\n"
+		"nop\n"
+		"nop\n"
+		"nop\n"
+		"nop\n"
+		/*
+		"lui a0,$8818\n"  //fileBuffer address  this DMA
+		"ori  a0,a0,$A100\n"  /fileBuffer address this DMA
+		"jal $0800e844\n" //this unknow SCE/SDK???
+		"addiu a1, zero, $0800\n"
+		"lw a2, $004C(sp)\n"
+		"lw v0, $0048(sp)\n"
+		"xor a2, a2, v0"
+		"lw v0, $0050(sp)\n"
+		"xor a2, a2, v0"
+		"lw v0, $0054(sp)\n"
+		"xor a2, a2, v0\n"
+		"lui t0, $8839\n"
+		"sw  a2, $DBF0(t0)\n"
+		);
+                addresstmp=*(unsigned int*)(0x8838DBF0);*/
+		  sprintf(gameId,"HB%08X",hash);}
+		  memcpy(&gameDir[27], buffer, 10);
+	   #endif
+	}
+	sceIoClose(fd);
+	}
+}
+  	
