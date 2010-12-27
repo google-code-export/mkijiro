@@ -17,6 +17,10 @@ certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
 canot save newcode when none cheat
 
+2010/12/28
+OPENIDEA,PROMETEUSのときHBIDになるため
+リロードで再取得するように変更
+
 2010/12/24
 コードがないときはダミーチートを作成して再読込させるように変更
 fnc.txtを番号で分けるようにした,RAM使用に変更
