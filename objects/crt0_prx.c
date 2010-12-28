@@ -97,7 +97,7 @@ PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 #endif
 
 //Globals
-unsigned char *MKVER="  MKIJIRO20101224";
+unsigned char *MKVER="  MKIJIRO20101229";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -237,6 +237,9 @@ unsigned int addresscode=0;
 unsigned int addresstmp=0;
 unsigned int counteraddress=0;
 unsigned char backline=1;
+#ifdef _HEN_
+unsigned char IDAGAIN=1;
+#endif
 #ifdef _USB_
 unsigned char usbmod=0;
 unsigned char usbonbitch=0;
@@ -1286,19 +1289,18 @@ void buttonCallback(int curr, int last, void *arg){
   unsigned int scounter;
   unsigned int address;
 
-  *(unsigned int *)(0x8800000+JOKERADDRESS)=curr;
-
+	
+  *(unsigned int *)(0x8800000+JOKERADDRESS)=curr;	
+	
   if(vram==NULL) return;
 
+	
   if(((curr & menuKey) == menuKey) && (!menuDrawn)){
    	menuDrawn=1;
+  	
     if(cheatSelected >= cheatTotal){
 	tabSelected=0;cheatSelected=0;}
   }
-  //else if(curr & PSP_CTRL_HOME){
-	//pspDebugKbInit(cheat[cheatSelected].name);
-	//menuDrawn=0;
-    //return;}
   #ifdef _SCREENSHOT_
   else if(((curr & screenKey) == screenKey) && (!menuDrawn) && (screenshot_mode==1)){
   screenTime=1;
@@ -1455,6 +1457,22 @@ void menuDraw(){
 	unsigned int convTotal;
 	unsigned int tempbgcolor;
 
+	#ifdef _HEN_
+	if(IDAGAIN){
+		GETID();
+		cheatLoad();
+		IDAGAIN=0;
+	//load cheats!
+	if(cheatTotal==0){
+		sprintf(buffer, "#%s\n0x00000000 0x00000000" ,gameId);
+		int fd = sceIoOpen(gameDir, PSP_O_CREAT | PSP_O_WRONLY, 0777);
+		sceIoWrite(fd,buffer,strlen(buffer));
+		sceIoClose(fd);
+		cheatRefresh=1;
+		cheatLoad();
+	}
+	}
+	#endif
 	//Draw the menu
 	//if(cheatTotal==0 && tabSelected==0){
  	//tabSelected=1;}
@@ -2451,7 +2469,8 @@ void menuDraw(){
 		pspDebugScreenSetTextColor(color01 - ((bdNo * 4) * color01_to)); sprintf(buffer, "%d", bdNo); pspDebugScreenPuts(buffer); 
 		pspDebugScreenSetTextColor(tabSelected == 3? color01: color02); pspDebugScreenPuts("] ");
 		
-		pspDebugScreenSetTextColor(tabSelected == 4? color01: color02); pspDebugScreenPuts(gameId); pspDebugScreenPuts(" ");
+		pspDebugScreenSetTextColor(tabSelected == 4? color01: color02);
+		pspDebugScreenPuts(gameId); pspDebugScreenPuts(" ");
 		
 		if(cheatStatus){
 			pspDebugScreenSetTextColor(0xFF00FF00);
@@ -6447,7 +6466,8 @@ void menuInput(){
 					sceKernelDelayThread(150000); //Delay twice
 				}
 				else if(cheatSelected == 11){
-					cheatRefresh=1;GETID();
+					cheatRefresh=1;
+					GETID();
 					cheatLoad();
 					lineClear(32); pspDebugScreenSetTextColor(color01); pspDebugScreenPuts("Cheats Refreshed");
 					menuDraw();
@@ -7261,8 +7281,20 @@ int mainThread(){
 		sceKernelIcacheInvalidateAll();
 	}	skipPatch: //Skip the evil patch
 	#endif
-
+	
+	#ifdef _CFW_
 	GETID();
+	cheatLoad();
+	if(cheatTotal==0){
+		sprintf(buffer, "#%s\n0x00000000 0x00000000" ,gameId);
+		int fd = sceIoOpen(gameDir, PSP_O_CREAT | PSP_O_WRONLY, 0777);
+		sceIoWrite(fd,buffer,strlen(buffer));
+		sceIoClose(fd);
+		cheatRefresh=1;
+		cheatLoad();
+	}
+	#endif
+	
 
   	//Compare the gameID to see if the game is....
   	#ifdef _SOCOM_
@@ -7271,17 +7303,6 @@ int mainThread(){
   		if(socomftb1){ ftb1modules(); }
 		if(socomftb2){ ftb2modules(); }
   	#endif
-
-	//load cheats!
-	cheatLoad();
-	if(cheatTotal==0){
-		sprintf(buffer, "#%s\n0x00000000 0x00000000" ,gameId);
-		fd = sceIoOpen(gameDir, PSP_O_CREAT | PSP_O_WRONLY, 0777);
-		sceIoWrite(fd,buffer,strlen(buffer));
-		sceIoClose(fd);
-		cheatRefresh=1;
-		cheatLoad();
-	}
 	
 	//load the colors!
 	colorAdd("ms0:/seplugins/nitePR/MKIJIRO/color0.txt");
@@ -7308,6 +7329,8 @@ int mainThread(){
 	
 	//Register the button callbacks
 	sceCtrlRegisterButtonCallback(3, triggerKey | menuKey | screenKey, buttonCallback, NULL);
+	
+	
 
 	int doonce=0;
 	//Do the loop-de-loop
@@ -7358,7 +7381,7 @@ int mainThread(){
 			//Setup a custom VRAM
 			sceDisplaySetFrameBufferInternal(0, vram, 512, 0, 1);
 			pspDebugScreenInitEx(vram, 0, 0);
-
+			
 			//Draw menu
 			if(cheatPause) gamePause(thid);
 			menuInput();
@@ -7493,8 +7516,8 @@ void GETID(){
 	//GAMEID
 		int fd=sceIoOpen("disc0:/UMD_DATA.BIN", PSP_O_RDONLY, 0777);
 if(fd >0){
-		strcpy(gameId, ".txt\x0");
-		memcpy(&gameDir[32], gameId, 5);
+		strcpy(buffer, ".txt\x0");
+		memcpy(&gameDir[32], buffer, 5);
 		sceIoRead(fd, gameId, 10);
 		sceIoClose(fd);
 		memcpy(&gameDir[22], gameId, 10);
@@ -7528,7 +7551,7 @@ else{
 		addresscode=*(unsigned int *)(&fileBuffer[0x48+(0x10*i)]);
 		memcpy(&gameId[0],&fileBuffer[0x28]+counteraddress+addresscode,10);}
 		memcpy(&gameDir[27], gameId, 10);
-	#elif _CWCHASH_ //waltall CWCHASH finally worked out by ME&raing3
+	#elif _CWCHASH_ //weltall CWCHASH finally worked out by ME&raing3
 	sceIoRead(fd, fileBuffer, 0x800);
 	//raing3 found SCEMD5HASH="jal $0800e844"
 	sceKernelUtilsMd5Digest(fileBuffer, 0x800, buffer);
@@ -7575,5 +7598,10 @@ else{
 	}
 	sceIoClose(fd);
 	}
+	
+	//if(strncmp(gameId, "Prometheus", 10)){
+	//IDAGAIN=0;}
+	//else if(strncmp(gameId, "OpenIdea I", 10));{
+	//IDAGAIN=0;}
 }
   	
