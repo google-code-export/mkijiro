@@ -17,6 +17,9 @@ certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
 canot save newcode when none cheat
 
+2010/12/29
+HENの場合は最初の１回だけメニューのボタンをおした際コードをよむようにした。
+
 2010/12/28
 OPENIDEA,PROMETEUSのときHBIDになるため
 リロードで再取得するように変更
