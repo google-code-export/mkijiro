@@ -18,6 +18,7 @@ as for 8byte RAMeditor,strange copy position
 canot save newcode when none cheat
 
 2010/12/29
+LIBS =  -lpsppower_driver でないと電源関係がだめっぽいので修正
 HENの場合は最初の１回だけメニューのボタンをおした際コードをよむようにした。
 
 2010/12/28

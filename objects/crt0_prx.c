@@ -7299,10 +7299,10 @@ int mainThread(){
   	//Compare the gameID to see if the game is....
   	#ifdef _SOCOM_
 		if(strncmp(gameId, "UCUS-98615", 10)){ socomftb1=0; } //Game isn't SOCOM FTB1 lets not load ftb1 modules
-  		if(strncmp(gameId, "UCUS-98645", 10)){ socomftb2=0; } //Game isn't SOCOM FTB2 lets not load ftb2 modules
-  		if(socomftb1){ ftb1modules(); }
+		if(strncmp(gameId, "UCUS-98645", 10)){ socomftb2=0; } //Game isn't SOCOM FTB2 lets not load ftb2 modules
+		if(socomftb1){ ftb1modules(); }
 		if(socomftb2){ ftb2modules(); }
-  	#endif
+	#endif
 	
 	//load the colors!
 	colorAdd("ms0:/seplugins/nitePR/MKIJIRO/color0.txt");
