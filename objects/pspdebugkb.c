@@ -126,7 +126,7 @@ void pspDebugKbDrawKey(int row, int col, int highlight) {
 
 void pspDebugKbClearBox() {
   int i, j;
-
+	
   pspDebugScreenSetTextColor(PSP_DEBUG_KB_CHAR_COLOUR);
   pspDebugScreenSetBackColor(PSP_DEBUG_KB_BACK_COLOUR);
 
@@ -302,8 +302,11 @@ void pspDebugKbInit(char* str) {
 	  }
 	  break;
 	case 3: // Clear
-	  bzero(str, PSP_DEBUG_KB_MAXLEN);
-	  pspDebugKbDrawString(str);
+	  //bzero(str, PSP_DEBUG_KB_MAXLEN);
+	  while (strlen(str) > 0) {
+	    str[strlen(str)-1] = '\0';
+	    pspDebugKbDrawString(str);
+	  }
 	  break;
 	case 4:
 	  // Clean up the screen
