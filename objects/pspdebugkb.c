@@ -303,10 +303,11 @@ void pspDebugKbInit(char* str) {
 	  break;
 	case 3: // Clear
 	  //bzero(str, PSP_DEBUG_KB_MAXLEN);
-	  while (strlen(str) > 0) {
-	    str[strlen(str)-1] = '\0';
-	    pspDebugKbDrawString(str);
-	  }
+	  //while (strlen(str) > 0) {
+	  //  str[strlen(str)-1] = '\0';
+	  //}
+	  str[0] = 0;
+	  pspDebugKbDrawString(str);
 	  break;
 	case 4:
 	  // Clean up the screen
