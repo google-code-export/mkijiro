@@ -7,5 +7,5 @@ del objects\*.o
 move MKIJIRO_POPS.prx g:\seplugins\MKIJIRO_POPS.prx
 move MKIJIRO_SC.prx g:\seplugins\MKIJIRO_SC.prx
 move MKIJIROHEN620.prx f:\seplugins\HEN620TA\MKIJIRO.prx
-move MKIJIRO.prx g:\seplugins\MKIJIRO.prx
+move MKIJIRO.prx f:\seplugins\MKIJIRO.prx
 move MKIJIROHEN620.prx g:\seplugins\MKIJIRO.prx

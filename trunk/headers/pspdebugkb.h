@@ -20,7 +20,7 @@ extern "C" {
 
 enum PspDebugKbSettings {
   /** Maximum string length */
-  PSP_DEBUG_KB_MAXLEN = 40,
+  PSP_DEBUG_KB_MAXLEN = 33,
   /** Place the box' upper-left corner at this location */
   PSP_DEBUG_KB_BOX_X = 6,
   PSP_DEBUG_KB_BOX_Y = 8,
