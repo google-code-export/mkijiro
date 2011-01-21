@@ -17,6 +17,9 @@ certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
 canot save newcode when none cheat
 
+2011/1/21
+635PRO対応版同梱
+
 2011/1/15
 チート名が32文字以上だとalways on のときはみ出すので32文字以内に修正
 キーボードのバグも32文字以上クリアーしてるのが原因ぽいので修正
