@@ -39,7 +39,7 @@ LIBDIR =
 # LIBS = -lpspchnnlsv -lpsputility -lpspdebug -lpspge_driver -lpspwlan
 
 # umd
-LIBS =  -lpspchnnlsv -lpsputility -lpspdebug -lpspge_driver -lpspwlan -lpsppower -lpspumd -lpspusb -lpspusbstor
+LIBS =  -lpspchnnlsv -lpsputility -lpspdebug -lpspge_driver -lpspwlan -lpsppower_driver -lpspumd -lpspusb -lpspusbstor
 #-lpspsdk -lpspnet -lpspnet_apctl -lpspnet_inet pc debugging shit leave it alone
 #look maw no nand driver!! wowies! (what a nice guy huh? yeah who gives a fuck what you think n00b stfu get b00ted)
 

@@ -1,4 +1,4 @@
-TARGET = MKIJIROHEN620
+TARGET = MKIJIRO620
 OBJS = objects/crt0_prx.o objects/exports.o objects/module.o objects/pspdebugkb.o objects/snprintf.o objects/usb.o objects/psid.o objects/blit.o
 #objects/server.o
 
