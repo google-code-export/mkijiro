@@ -7301,18 +7301,20 @@ int mainThread(){
 	sceCtrlRegisterButtonCallback(3, triggerKey | menuKey | screenKey, buttonCallback, NULL);
 	
 	#ifdef _POPS_
-	if(IDAGAIN==1 && cheatTotal<2){
+	if(IDAGAIN==1){
 	GETID();
-	cheatRefresh=1;
-	cheatLoad();
-	if(cheatTotal==0){
-		sprintf(buffer, "#%s\n0x00000000 0x00000000" ,gameId);
-		int fd = sceIoOpen(gameDir, PSP_O_CREAT | PSP_O_WRONLY, 0777);
-		sceIoWrite(fd,buffer,strlen(buffer));
-		sceIoClose(fd);
+		if(IDAGAIN==0){
 		cheatRefresh=1;
 		cheatLoad();
-	}
+			if(cheatTotal==0){
+			sprintf(buffer, "#%s\n0x00000000 0x00000000\n" ,gameId);
+			int fd = sceIoOpen(gameDir, PSP_O_CREAT | PSP_O_WRONLY, 0777);
+			sceIoWrite(fd,buffer,strlen(buffer));
+			sceIoClose(fd);
+			cheatRefresh=1;
+			cheatLoad();
+			}
+		}
 	}
 	#endif
 
@@ -7352,18 +7354,18 @@ int mainThread(){
 	#ifdef _CFW_
 	if(IDAGAIN==1){
 	GETID();
-	if(IDAGAIN==0){
-	cheatRefresh=1;
-	cheatLoad();
-	}
-	if(cheatTotal==0){
-		sprintf(buffer, "#%s\n0x00000000 0x00000000" ,gameId);
-		int fd = sceIoOpen(gameDir, PSP_O_CREAT | PSP_O_WRONLY, 0777);
-		sceIoWrite(fd,buffer,strlen(buffer));
-		sceIoClose(fd);
+		if(IDAGAIN==0){
 		cheatRefresh=1;
 		cheatLoad();
-	}
+			if(cheatTotal==0){
+			sprintf(buffer, "#%s\n0x00000000 0x00000000\n" ,gameId);
+			int fd = sceIoOpen(gameDir, PSP_O_CREAT | PSP_O_WRONLY, 0777);
+			sceIoWrite(fd,buffer,strlen(buffer));
+			sceIoClose(fd);
+			cheatRefresh=1;
+			cheatLoad();
+			}
+		}
 	}
 	#endif
 			}
@@ -7550,11 +7552,10 @@ else{
 		memcpy(&gameId[5],&fileBuffer[0x2C]+counteraddress+addresstmp,5);
 		}
 		addresscode=*(unsigned int *)(&fileBuffer[0x28]+counteraddress+4);
-		if(addresscode==0x454D){}//ME,POPS
+		if(addresscode==0x454D){IDAGAIN=0;}//ME,POPS
 	 	else{//MG,HOMEBREW
-	   if(strncmp(gameId, "UCJS-10041", 10) && nameflag==0){
-	   }
-	   else{
+	   if(strncmp(gameId, "UCJS-10041", 10) && nameflag==0){}
+	   else{//when UCJS
 		addresscode=*(unsigned int *)(&fileBuffer[0x28]+counteraddress+4);
 		addresscode=*(unsigned int *)(&fileBuffer[0x38]);
 		 	for(i=0;i<addresscode;i++){
@@ -7564,9 +7565,9 @@ else{
 		addresscode=*(unsigned int *)(&fileBuffer[0x48+(0x10*i)]);
 		memcpy(&gameId[0],&fileBuffer[0x28]+counteraddress+addresscode,10);
 		memcpy(&gameDir[27], gameId, 10);
-	   if(strncmp(gameId, "Prometheus", 10)){IDAGAIN=1;}
-	   else if(strncmp(gameId, "OpenIdea I", 10)){IDAGAIN=1;}
-	   else{ IDAGAIN=0;}
+	   if(strncmp(gameId, "Prometheus", 10)){IDAGAIN=0;}
+	   else if(strncmp(gameId, "OpenIdea I", 10)){IDAGAIN=0;}
+	   else{ IDAGAIN=1;}//when prometheus,openid
 	    }}
 	#elif _CWCHASH_ //weltall CWCHASH finally worked out by ME&raing3
 	sceIoRead(fd, fileBuffer, 0x800);
