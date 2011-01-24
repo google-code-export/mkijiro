@@ -238,6 +238,7 @@ unsigned int addresstmp=0;
 unsigned int counteraddress=0;
 unsigned char backline=1;
 unsigned char IDAGAIN=1;
+unsigned char HBFLAG=0;
 #ifdef _USB_
 unsigned char usbmod=0;
 unsigned char usbonbitch=0;
@@ -7316,6 +7317,11 @@ int mainThread(){
 			}
 		}
 	}
+	if(HBFLAG==1){
+		cheatRefresh=1;
+		cheatLoad();
+		HBFLAG=2;
+	}
 	#endif
 
 	int doonce=0;
@@ -7366,6 +7372,11 @@ int mainThread(){
 			cheatLoad();
 			}
 		}
+	}
+	if(HBFLAG==1){
+		cheatRefresh=1;
+		cheatLoad();
+		HBFLAG=2;
 	}
 	#endif
 			}
@@ -7565,9 +7576,12 @@ else{
 		addresscode=*(unsigned int *)(&fileBuffer[0x48+(0x10*i)]);
 		memcpy(&gameId[0],&fileBuffer[0x28]+counteraddress+addresscode,10);
 		memcpy(&gameDir[27], gameId, 10);
-	   if(strncmp(gameId, "Prometheus", 10)){IDAGAIN=0;}
-	   else if(strncmp(gameId, "OpenIdea I", 10)){IDAGAIN=0;}
-	   else{ IDAGAIN=1;}//when prometheus,openid
+		if(HBFLAG>1){HBFLAG=2;}
+		else{HBFLAG=0;}
+	   if(strncmp(gameId, "Prometheus", 10)){IDAGAIN=1;HBFLAG++;}
+	   else if(strncmp(gameId, "OpenIdea I", 10)){IDAGAIN=1;HBFLAG++;}
+	   else if(strncmp(gameId, "loder", 5)){IDAGAIN=1;HBFLAG++;}
+	   else{ IDAGAIN=0;}//when prometheus,openid
 	    }}
 	#elif _CWCHASH_ //weltall CWCHASH finally worked out by ME&raing3
 	sceIoRead(fd, fileBuffer, 0x800);
@@ -7616,10 +7630,4 @@ else{
 	}
 	sceIoClose(fd);
 	}
-	
-	//if(strncmp(gameId, "Prometheus", 10)){
-	//IDAGAIN=0;}
-	//else if(strncmp(gameId, "OpenIdea I", 10));{
-	//IDAGAIN=0;}
 }
-  	
