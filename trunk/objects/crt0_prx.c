@@ -7535,7 +7535,6 @@ if(fd >0){
 		memcpy(&gameDir[32], buffer, 5);
 		sceIoRead(fd, gameId, 10);
 		sceIoClose(fd);
-		memcpy(&gameDir[22], gameId, 10);
 		IDAGAIN=0;
 }
 else{
@@ -7575,7 +7574,6 @@ else{
 			}
 		addresscode=*(unsigned int *)(&fileBuffer[0x48+(0x10*i)]);
 		memcpy(&gameId[0],&fileBuffer[0x28]+counteraddress+addresscode,10);
-		memcpy(&gameDir[27], gameId, 10);
 		if(HBFLAG>1){HBFLAG=2;}
 		else{HBFLAG=0;}
 	   if(strncmp(gameId, "Prometheus", 10)){IDAGAIN=1;HBFLAG++;}
@@ -7630,4 +7628,5 @@ else{
 	}
 	sceIoClose(fd);
 	}
+	memcpy(&gameDir[27], gameId, 10);
 }
