@@ -1,16 +1,9 @@
 copy MKIJIRO.prx MKIJIRO\MKIJIRO.prx
 copy MKIJIRO_POPS.prx MKIJIRO\MKIJIRO_POPS.prx
-copy MKIJIRO620.prx MKIJIRO635.prx
-copy MKIJIRO_POPS.prx MKIJIRO620POPS.prx
-copy MKIJIRO_POPS.prx MKIJIRO635POPS.prx
-copy MKIJIRO620.prx MKIJIRO\MKIJIRO620.prx
-copy MKIJIRO635.prx MKIJIRO\MKIJIRO635.prx
-copy MKIJIRO620POPS.prx MKIJIRO\MKIJIRO620POPS.prx
-copy MKIJIRO635POPS.prx MKIJIRO\MKIJIRO635POPS.prx
+copy MKIJIRO.prx patches\MKIJIRO.prx
+copy MKIJIRO_POPS.prx patches\MKIJIRO_POPS.prx
 del *.elf
 del objects\*.o
-move MKIJIRO_POPS.prx g:\seplugins\MKIJIRO_POPS.prx
-move MKIJIRO.prx f:\seplugins\MKIJIRO.prx
-move MKIJIROHEN620.prx f:\seplugins\HEN620TA\MKIJIRO.prx
-move MKIJIROHEN635.prx g:\plugins\MKIJIRO.prx
+move MKIJIRO_POPS.prx e:\seplugins\MKIJIRO_POPS.prx
+move MKIJIRO.prx e:\seplugins\MKIJIRO.prx
 del *.prx

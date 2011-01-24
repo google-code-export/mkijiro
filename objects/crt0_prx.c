@@ -97,7 +97,7 @@ PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 #endif
 
 //Globals
-unsigned char *MKVER="  MKIJIRO20110115";
+unsigned char *MKVER="  MKIJIRO20110124";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -237,9 +237,7 @@ unsigned int addresscode=0;
 unsigned int addresstmp=0;
 unsigned int counteraddress=0;
 unsigned char backline=1;
-#ifdef _HEN_
 unsigned char IDAGAIN=1;
-#endif
 #ifdef _USB_
 unsigned char usbmod=0;
 unsigned char usbonbitch=0;
@@ -1456,23 +1454,7 @@ void menuDraw(){
 	unsigned int convBase;
 	unsigned int convTotal;
 	unsigned int tempbgcolor;
-
-	#ifdef _HEN_
-	if(IDAGAIN){
-		GETID();
-		cheatLoad();
-		IDAGAIN=0;
-	//load cheats!
-	if(cheatTotal==0){
-		sprintf(buffer, "#%s\n0x00000000 0x00000000" ,gameId);
-		int fd = sceIoOpen(gameDir, PSP_O_CREAT | PSP_O_WRONLY, 0777);
-		sceIoWrite(fd,buffer,strlen(buffer));
-		sceIoClose(fd);
-		cheatRefresh=1;
-		cheatLoad();
-	}
-	}
-	#endif
+	
 	//Draw the menu
 	//if(cheatTotal==0 && tabSelected==0){
  	//tabSelected=1;}
@@ -7282,18 +7264,6 @@ int mainThread(){
 	}	skipPatch: //Skip the evil patch
 	#endif
 	
-	#ifdef _CFW_
-	GETID();
-	cheatLoad();
-	if(cheatTotal==0){
-		sprintf(buffer, "#%s\n0x00000000 0x00000000" ,gameId);
-		int fd = sceIoOpen(gameDir, PSP_O_CREAT | PSP_O_WRONLY, 0777);
-		sceIoWrite(fd,buffer,strlen(buffer));
-		sceIoClose(fd);
-		cheatRefresh=1;
-		cheatLoad();
-	}
-	#endif
 	
 
   	//Compare the gameID to see if the game is....
@@ -7330,7 +7300,21 @@ int mainThread(){
 	//Register the button callbacks
 	sceCtrlRegisterButtonCallback(3, triggerKey | menuKey | screenKey, buttonCallback, NULL);
 	
-	
+	#ifdef _POPS_
+	if(IDAGAIN==1 && cheatTotal<2){
+	GETID();
+	cheatRefresh=1;
+	cheatLoad();
+	if(cheatTotal==0){
+		sprintf(buffer, "#%s\n0x00000000 0x00000000" ,gameId);
+		int fd = sceIoOpen(gameDir, PSP_O_CREAT | PSP_O_WRONLY, 0777);
+		sceIoWrite(fd,buffer,strlen(buffer));
+		sceIoClose(fd);
+		cheatRefresh=1;
+		cheatLoad();
+	}
+	}
+	#endif
 
 	int doonce=0;
 	//Do the loop-de-loop
@@ -7364,6 +7348,24 @@ int mainThread(){
 				pspDebugScreenSetXY(0, 0);
 				pspDebugScreenSetTextColor(color01);
 				pspDebugScreenPuts("Press home twice and then press volume + and - at the same time");
+				
+	#ifdef _CFW_
+	if(IDAGAIN==1){
+	GETID();
+	if(IDAGAIN==0){
+	cheatRefresh=1;
+	cheatLoad();
+	}
+	if(cheatTotal==0){
+		sprintf(buffer, "#%s\n0x00000000 0x00000000" ,gameId);
+		int fd = sceIoOpen(gameDir, PSP_O_CREAT | PSP_O_WRONLY, 0777);
+		sceIoWrite(fd,buffer,strlen(buffer));
+		sceIoClose(fd);
+		cheatRefresh=1;
+		cheatLoad();
+	}
+	}
+	#endif
 			}
 
 			
@@ -7521,6 +7523,7 @@ if(fd >0){
 		sceIoRead(fd, gameId, 10);
 		sceIoClose(fd);
 		memcpy(&gameDir[22], gameId, 10);
+		IDAGAIN=0;
 }
 else{
 		sceIoClose(fd);
@@ -7531,26 +7534,40 @@ else{
 		counteraddress=*(unsigned int *)(&fileBuffer[0x34]);
 		addresscode=*(unsigned int *)(&fileBuffer[0x38]);
 		unsigned char i;
-		addresscode=*(unsigned int *)(&fileBuffer[0x28]+counteraddress+4);
-		if(addresscode==0x454D){//ME,POPS
 		 	for(i=0;i<addresscode;i++){
 		addresstmp=*(unsigned int *)(&fileBuffer[0x44+(0x10*i)]);
-		 		if(addresstmp==0x10) break;
+		 		if(addresstmp==0x10 || addresstmp==0xC || addresstmp==0x80) break;
 		}
+		unsigned char nameflag=0;
+		if(addresstmp==0x80){
+	    nameflag=1;
+		}
+		else{
 		addresstmp=*(unsigned int *)(&fileBuffer[0x48+(0x10*i)]);
 		memcpy(&gameId[0],&fileBuffer[0x28]+counteraddress+addresstmp,4);
 		sprintf(buffer,"-");
 		memcpy(&gameId[4],buffer,1);
-		memcpy(&gameId[5],&fileBuffer[0x2C]+counteraddress+addresstmp,5);}
+		memcpy(&gameId[5],&fileBuffer[0x2C]+counteraddress+addresstmp,5);
+		}
+		addresscode=*(unsigned int *)(&fileBuffer[0x28]+counteraddress+4);
+		if(addresscode==0x454D){}//ME,POPS
 	 	else{//MG,HOMEBREW
+	   if(strncmp(gameId, "UCJS-10041", 10) && nameflag==0){
+	   }
+	   else{
+		addresscode=*(unsigned int *)(&fileBuffer[0x28]+counteraddress+4);
 		addresscode=*(unsigned int *)(&fileBuffer[0x38]);
 		 	for(i=0;i<addresscode;i++){
 		addresstmp=*(unsigned int *)(&fileBuffer[0x44+(0x10*i)]);
-		 		if(addresstmp==0x80) break;
-		}
+		 		if(addresstmp==0x80 || addresstmp==0x14 || addresstmp==0x18) break;
+			}
 		addresscode=*(unsigned int *)(&fileBuffer[0x48+(0x10*i)]);
-		memcpy(&gameId[0],&fileBuffer[0x28]+counteraddress+addresscode,10);}
+		memcpy(&gameId[0],&fileBuffer[0x28]+counteraddress+addresscode,10);
 		memcpy(&gameDir[27], gameId, 10);
+	   if(strncmp(gameId, "Prometheus", 10)){IDAGAIN=1;}
+	   else if(strncmp(gameId, "OpenIdea I", 10)){IDAGAIN=1;}
+	   else{ IDAGAIN=0;}
+	    }}
 	#elif _CWCHASH_ //weltall CWCHASH finally worked out by ME&raing3
 	sceIoRead(fd, fileBuffer, 0x800);
 	//raing3 found SCEMD5HASH="jal $0800e844"
