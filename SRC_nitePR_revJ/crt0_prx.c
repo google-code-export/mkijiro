@@ -421,13 +421,14 @@ void cheatEnable(unsigned int a_cheat)
       //Backup data?
       if(((cheatDMA) && (resetDMA)) || ((cheat[a_cheat].flags & FLAG_FRESH) && (block[counter].flags & FLAG_FREEZE)))
       {
+		if((cheatDMA+block[counter].address >= 0x08800000) && (cheatDMA+block[counter].address <= 0x0A000000)){
         switch(block[counter].flags & FLAG_DWORD)
       	{
       		case FLAG_DWORD:
-        		block[counter].stdVal=*((unsigned int*)(cheatDMA+block[counter].address));
+        		block[counter].stdVal=*((unsigned int*)(cheatDMA+block[counter].address& 0xFFFFFFC));
           	break;
         	case FLAG_WORD:
-        		block[counter].stdVal=*((unsigned short*)(cheatDMA+block[counter].address));
+        		block[counter].stdVal=*((unsigned short*)(cheatDMA+block[counter].address& 0xFFFFFFE));
         		break;
         	case FLAG_BYTE:
         		block[counter].stdVal=*((unsigned char*)(cheatDMA+block[counter].address));
@@ -437,18 +438,21 @@ void cheatEnable(unsigned int a_cheat)
         {
           block[counter].hakVal=block[counter].stdVal;
         }
+        }
       }
       
       //Apply cheat!
+      
+	  if((cheatDMA+block[counter].address >= 0x08800000) && (cheatDMA+block[counter].address <= 0x0A000000)){
       switch(block[counter].flags & FLAG_DWORD)
       {
         case FLAG_DWORD:
-  	  		*((unsigned int*)(cheatDMA+block[counter].address))=block[counter].hakVal;
+  	  		*((unsigned int*)(cheatDMA+block[counter].address & 0xFFFFFFC))=block[counter].hakVal;
   	  		sceKernelDcacheWritebackInvalidateRange(cheatDMA+block[counter].address,4);
  		  		sceKernelIcacheInvalidateRange(cheatDMA+block[counter].address,4);
 		  		break;
         case FLAG_WORD:
-        	*((unsigned short*)(cheatDMA+block[counter].address))=(unsigned short)block[counter].hakVal;
+        	*((unsigned short*)(cheatDMA+block[counter].address & 0xFFFFFFE))=(unsigned short)block[counter].hakVal;
           sceKernelDcacheWritebackInvalidateRange(cheatDMA+block[counter].address,2);
  		  		sceKernelIcacheInvalidateRange(cheatDMA+block[counter].address,2);
           break;
@@ -457,6 +461,7 @@ void cheatEnable(unsigned int a_cheat)
   	  		sceKernelDcacheWritebackInvalidateRange(cheatDMA+block[counter].address,1);
  		  		sceKernelIcacheInvalidateRange(cheatDMA+block[counter].address,1);
         	break;
+      }
       }
     }
 		counter++;
@@ -495,15 +500,16 @@ void cheatDisable(unsigned int a_cheat)
     }
     else if(!resetDMA)
     {
+	  if((cheatDMA+block[counter].address >= 0x08800000) && (cheatDMA+block[counter].address < 0x0A000000)){
       switch(block[counter].flags & FLAG_DWORD)
       {
         case FLAG_DWORD:
-  	  		*((unsigned int*)(cheatDMA+block[counter].address))=block[counter].stdVal;
+  	  		*((unsigned int*)(cheatDMA+block[counter].address & 0xFFFFFFC))=block[counter].stdVal;
   	  		sceKernelDcacheWritebackInvalidateRange(cheatDMA+block[counter].address,4);
  		  		sceKernelIcacheInvalidateRange(cheatDMA+block[counter].address,4);
           break;
         case FLAG_WORD:
-        	*((unsigned short*)(cheatDMA+block[counter].address))=(unsigned short)block[counter].stdVal;
+        	*((unsigned short*)(cheatDMA+block[counter].address & 0xFFFFFFE))=(unsigned short)block[counter].stdVal;
   	  		sceKernelDcacheWritebackInvalidateRange(cheatDMA+block[counter].address,2);
  		  		sceKernelIcacheInvalidateRange(cheatDMA+block[counter].address,2);
         	break;
@@ -512,6 +518,7 @@ void cheatDisable(unsigned int a_cheat)
   	  		sceKernelDcacheWritebackInvalidateRange(cheatDMA+block[counter].address,1);
  		  		sceKernelIcacheInvalidateRange(cheatDMA+block[counter].address,1);
         	break;
+      }
 		  }
     }
 		counter++;
@@ -5997,7 +6004,6 @@ int mainThread()
 	}	skipPatch: //Skip the evil patch
 
   //Find the GAME ID
-  GETID();
   /*do
   {
   	fd=sceIoOpen("disc0:/UMD_DATA.BIN", PSP_O_RDONLY, 0777); 
@@ -6006,8 +6012,8 @@ int mainThread()
   sceIoRead(fd, gameId, 10);
   sceIoClose(fd);
   memcpy(&gameDir[22], gameId, 10);*/
-  
-  cheatLoad();
+  //GETID();
+  //cheatLoad();
   
   //Set the VRAM to null, use the current screen
   pspDebugScreenInitEx(0x44000000, 0, 0);
@@ -6046,23 +6052,23 @@ int mainThread()
   			pspDebugScreenPuts("nitePR: Double tap the home button to initate nitePR\nWhen initiated: Vol+&- = cheat menu; Music Button = turn on/off cheats");
       }
       
-	#ifdef _CFW_
+	//#ifdef _CFW_
 	if(IDAGAIN==1){
 	GETID();
-	if(IDAGAIN==0){
-	cheatRefresh=1;
-	cheatLoad();
-	}
-	if(cheatTotal==0){
-		sprintf(buffer, "#%s\n0x00000000 0x00000000" ,gameId);
-		int fd = sceIoOpen(gameDir, PSP_O_CREAT | PSP_O_WRONLY, 0777);
-		sceIoWrite(fd,buffer,strlen(buffer));
-		sceIoClose(fd);
+		if(IDAGAIN==0){
 		cheatRefresh=1;
 		cheatLoad();
+			if(cheatTotal==0){
+			sprintf(buffer, "#%s\n0x00000000 0x00000000\n" ,gameId);
+			int fd = sceIoOpen(gameDir, PSP_O_CREAT | PSP_O_WRONLY, 0777);
+			sceIoWrite(fd,buffer,strlen(buffer));
+			sceIoClose(fd);
+			cheatRefresh=1;
+			cheatLoad();
+			}
+		}
 	}
-	}
-	#endif
+	//#endif
       sceKernelDelayThread(1500);
       continue;
     }
@@ -6225,11 +6231,10 @@ else{
 		memcpy(&gameId[5],&fileBuffer[0x2C]+counteraddress+addresstmp,5);
 		}
 		addresscode=*(unsigned int *)(&fileBuffer[0x28]+counteraddress+4);
-		if(addresscode==0x454D){}//ME,POPS
+		if(addresscode==0x454D){IDAGAIN=0;}//ME,POPS
 	 	else{//MG,HOMEBREW
-	   if(strncmp(gameId, "UCJS-10041", 10) && nameflag==0){
-	   }
-	   else{
+	   if(strncmp(gameId, "UCJS-10041", 10) && nameflag==0){}
+	   else{//when UCJS
 		addresscode=*(unsigned int *)(&fileBuffer[0x28]+counteraddress+4);
 		addresscode=*(unsigned int *)(&fileBuffer[0x38]);
 		 	for(i=0;i<addresscode;i++){
@@ -6239,9 +6244,9 @@ else{
 		addresscode=*(unsigned int *)(&fileBuffer[0x48+(0x10*i)]);
 		memcpy(&gameId[0],&fileBuffer[0x28]+counteraddress+addresscode,10);
 		memcpy(&gameDir[27], gameId, 10);
-	   if(strncmp(gameId, "Prometheus", 10)){IDAGAIN=1;}
-	   else if(strncmp(gameId, "OpenIdea I", 10)){IDAGAIN=1;}
-	   else{ IDAGAIN=0;}
+	   if(strncmp(gameId, "Prometheus", 10)){IDAGAIN=0;}
+	   else if(strncmp(gameId, "OpenIdea I", 10)){IDAGAIN=0;}
+	   else{ IDAGAIN=1;}//when prometheus,openid
 	    }}
 	#elif _CWCHASH_ //weltall CWCHASH finally worked out by ME&raing3
 	sceIoRead(fd, fileBuffer, 0x800);
