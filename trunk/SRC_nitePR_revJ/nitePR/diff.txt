@@ -2,5 +2,7 @@ ported PRXTOOL/PSPLINK decoder
 ported some mkultra function
 search speed up
 changed font misaki
+support HOMEBREW hacking nitePR/POPS folder
+gameID fixed for prometheus loader
 
 BY ----(,A,)----
