@@ -97,7 +97,7 @@ PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 #endif
 
 //Globals
-unsigned char *MKVER="  MKIJIRO20110124";
+unsigned char *MKVER="  MKIJIRO20110207";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -239,6 +239,7 @@ unsigned int counteraddress=0;
 unsigned char backline=1;
 unsigned char IDAGAIN=1;
 unsigned char HBFLAG=0;
+unsigned char k=0;
 #ifdef _USB_
 unsigned char usbmod=0;
 unsigned char usbonbitch=0;
@@ -7320,7 +7321,7 @@ int mainThread(){
 	if(HBFLAG==1){
 		cheatRefresh=1;
 		cheatLoad();
-		HBFLAG=2;
+	HBFLAG=2;
 	}
 	#endif
 
@@ -7374,9 +7375,9 @@ int mainThread(){
 		}
 	}
 	if(HBFLAG==1){
-		cheatRefresh=1;
-		cheatLoad();
-		HBFLAG=2;
+	cheatRefresh=1;
+	cheatLoad();
+	HBFLAG=2;
 	}
 	#endif
 			}
@@ -7535,6 +7536,8 @@ if(fd >0){
 		memcpy(&gameDir[32], buffer, 5);
 		sceIoRead(fd, gameId, 10);
 		sceIoClose(fd);
+		k=5;
+		memcpy(&gameDir[22], gameId, 10);
 		IDAGAIN=0;
 }
 else{
@@ -7562,8 +7565,8 @@ else{
 		memcpy(&gameId[5],&fileBuffer[0x2C]+counteraddress+addresstmp,5);
 		}
 		addresscode=*(unsigned int *)(&fileBuffer[0x28]+counteraddress+4);
-		if(addresscode==0x454D){IDAGAIN=0;}//ME,POPS
-	 	else{//MG,HOMEBREW
+	if(addresscode==0x454D){memcpy(&gameDir[27], gameId, 10);IDAGAIN=0;}//ME,POPS
+	else{//MG,HOMEBREW
 	   if(strncmp(gameId, "UCJS-10041", 10) && nameflag==0){}
 	   else{//when UCJS
 		addresscode=*(unsigned int *)(&fileBuffer[0x28]+counteraddress+4);
@@ -7574,13 +7577,16 @@ else{
 			}
 		addresscode=*(unsigned int *)(&fileBuffer[0x48+(0x10*i)]);
 		memcpy(&gameId[0],&fileBuffer[0x28]+counteraddress+addresscode,10);
-		if(HBFLAG>1){HBFLAG=2;}
-		else{HBFLAG=0;}
-	   if(strncmp(gameId, "Prometheus", 10)){IDAGAIN=1;HBFLAG++;}
-	   else if(strncmp(gameId, "OpenIdea I", 10)){IDAGAIN=1;HBFLAG++;}
-	   else if(strncmp(gameId, "loder", 5)){IDAGAIN=1;HBFLAG++;}
-	   else{ IDAGAIN=0;}//when prometheus,openid
-	    }}
+		if(HBFLAG==2){}
+		else{
+	   if(strncmp(gameId, "Prometheus", 10)){IDAGAIN=1;HBFLAG=1;}
+	   else if(strncmp(gameId, "OpenIdea I", 10)){IDAGAIN=1;HBFLAG=1;}
+	   else if(strncmp(gameId, "loader", 5)){IDAGAIN=1;HBFLAG=1;}
+	   else{k=5;IDAGAIN=0;strcpy(buffer, ".txt\x0");memcpy(&gameDir[32], buffer, 5);}//when prometheus,openid
+	    memcpy(&gameDir[27-k], gameId, 10);
+	   }
+	   }
+	 }
 	#elif _CWCHASH_ //weltall CWCHASH finally worked out by ME&raing3
 	sceIoRead(fd, fileBuffer, 0x800);
 	//raing3 found SCEMD5HASH="jal $0800e844"
@@ -7628,5 +7634,4 @@ else{
 	}
 	sceIoClose(fd);
 	}
-	memcpy(&gameDir[27], gameId, 10);
 }

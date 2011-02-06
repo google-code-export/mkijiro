@@ -7,6 +7,7 @@
 一部の浮動小数が表示されない 0.01(0x3C23D70A),0.001 (0x3A83126E)
 8byte時メモリエディタのコピー箇所がおかしい
 コード最後の行が4BYTEモード以外だと再読込時あどれすが2重に読まれる
+ムービー中にサーチ/保存するとフリーズする(0x8838DBF0 むび領域っぽい？)
 
 this is modded mkultrav10.
 KnownProblem;
@@ -15,7 +16,9 @@ doesnot work fine unknown value search
 if code is reloaded & saved many times,save&reload function doesnot work
 certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
-canot save newcode when none cheat
+
+20011/2/7
+635PROでもID取得できるように修正
 
 2011/1/24
 GAMEID取得方法を何度でもでるまで取得するように変更
