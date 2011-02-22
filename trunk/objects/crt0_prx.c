@@ -97,7 +97,7 @@ PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 #endif
 
 //Globals
-unsigned char *MKVER="  MKIJIRO20110207";
+unsigned char *MKVER="  MKIJIRO20110222";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -1547,7 +1547,14 @@ void menuDraw(){
 					}
 				}
 				else{
-				sprintf(buffer ,"  JOKER cheat (0x%X default,0x0000 MASKED)\n",JOKERADDRESS);	
+				sprintf(buffer ,"  JOKER cheat (0x");
+				pspDebugScreenPuts(buffer);
+				if(pad.Buttons & PSP_CTRL_SQUARE){
+				sprintf(buffer ,"0000 MASKED)\n");
+				}
+				else{
+				sprintf(buffer ,"%X default)\n" ,JOKERADDRESS);
+				}
 				pspDebugScreenPuts(buffer);
 				}
 				break;
@@ -3010,6 +3017,7 @@ void menuDraw(){
 							mipsDecode(*((unsigned int*)(decodeAddress[bdNo]+(counter*4))));
 							addresscode=*((unsigned int*)(decodeAddress[bdNo]+(counter*4)));
 							counteraddress=decodeAddress[bdNo]+(counter*4)-0x40000000;
+							if(decodeAddress[bdNo]-(4*backline) > 0x48800000){
 							if( (((addresscode>>24) & 0xFC) == 0x34) || (((addresscode>>24) & 0xFC) == 0x20) || (((addresscode>>24) & 0xFC) == 0x24)){
 							unsigned int backcode_lui=(*((unsigned int*)(decodeAddress[bdNo]+((counter-backline)*4))))>>24;
 							unsigned int REG1=(*((unsigned int*)(decodeAddress[bdNo]+((counter-backline)*4)))>>16) & 0x1F;
@@ -3034,7 +3042,9 @@ void menuDraw(){
 								if(((addresscode>>16)& 0x7FFF)>0x47C2){
 								overlimit=1;}
 								f_cvt(&addresscode, buffer, sizeof(buffer), 6-overlimit, MODE_GENERIC);
-								pspDebugScreenPuts(buffer);addresscode=0;}}
+								pspDebugScreenPuts(buffer);}}
+								addresscode=0;
+							}
 							}
 							mipsSpecial(addresscode,addresstmp,counteraddress);
 						}
@@ -3692,10 +3702,16 @@ void menuInput(){
 			  }
 			}
 			else if(copyMenu ==5){//normal, viewlog,clear log
-			  if(extMenu == 1){					
+			  if(extMenu == 1){
+			  	  if(block[extSelected[0]].flags & FLAG_DMA){
 				  block[extSelected[0]].address=0x08800000;
-			if(pad.Buttons & PSP_CTRL_SQUARE){block[extSelected[0]].flags=FLAG_CWC|FLAG_DWORD;}
-			else{block[extSelected[0]].flags=FLAG_DWORD;}
+				  }
+			if(pad.Buttons & PSP_CTRL_SQUARE){
+				block[extSelected[0]].flags=FLAG_CWC|FLAG_DWORD;
+			}
+			else{
+			block[extSelected[0]].flags=FLAG_DWORD;
+			}
 				}
 				else if(tabSelected == 3)
 				{
@@ -3754,7 +3770,12 @@ void menuInput(){
 			else if(copyMenu ==7){//JOKER
 			  if(extMenu == 1){
 				   block[extSelected[0]].address=0x08800000;
+				   if(pad.Buttons & PSP_CTRL_SQUARE){
+				   block[extSelected[0]].hakVal=0x0;
+				   }
+				   else{
 				   block[extSelected[0]].hakVal=JOKERADDRESS;
+				   }
 				   block[extSelected[0]].flags=FLAG_JOKER | FLAG_DWORD;
 					}
 				else if(tabSelected==3){ //copy range to new cheat
@@ -7532,12 +7553,9 @@ void GETID(){
 	//GAMEID
 		int fd=sceIoOpen("disc0:/UMD_DATA.BIN", PSP_O_RDONLY, 0777);
 if(fd >0){
-		strcpy(buffer, ".txt\x0");
-		memcpy(&gameDir[32], buffer, 5);
 		sceIoRead(fd, gameId, 10);
 		sceIoClose(fd);
 		k=5;
-		memcpy(&gameDir[22], gameId, 10);
 		IDAGAIN=0;
 }
 else{
@@ -7565,7 +7583,7 @@ else{
 		memcpy(&gameId[5],&fileBuffer[0x2C]+counteraddress+addresstmp,5);
 		}
 		addresscode=*(unsigned int *)(&fileBuffer[0x28]+counteraddress+4);
-	if(addresscode==0x454D){memcpy(&gameDir[27], gameId, 10);IDAGAIN=0;}//ME,POPS
+	if(addresscode==0x454D){IDAGAIN=0;}//ME,POPS
 	else{//MG,HOMEBREW
 	   if(strncmp(gameId, "UCJS-10041", 10) && nameflag==0){}
 	   else{//when UCJS
@@ -7582,8 +7600,7 @@ else{
 	   if(strncmp(gameId, "Prometheus", 10)){IDAGAIN=1;HBFLAG=1;}
 	   else if(strncmp(gameId, "OpenIdea I", 10)){IDAGAIN=1;HBFLAG=1;}
 	   else if(strncmp(gameId, "loader", 5)){IDAGAIN=1;HBFLAG=1;}
-	   else{k=5;IDAGAIN=0;strcpy(buffer, ".txt\x0");memcpy(&gameDir[32], buffer, 5);}//when prometheus,openid
-	    memcpy(&gameDir[27-k], gameId, 10);
+	   else{k=5;IDAGAIN=0;}//when prometheus,openid
 	   }
 	   }
 	 }
@@ -7633,5 +7650,10 @@ else{
 	   #endif
 	}
 	sceIoClose(fd);
+	}
+    memcpy(&gameDir[27-k], gameId, 10);
+    if(k==5){
+	strcpy(buffer, ".txt\x0");
+	memcpy(&gameDir[32], buffer, 5);
 	}
 }
