@@ -1,4 +1,4 @@
-TARGET = nitePR
+TARGET = nitePRmod
 OBJS = crt0_prx.o exports.o module.o blit.o
 
 # Define to build this as a prx (instead of a static elf)

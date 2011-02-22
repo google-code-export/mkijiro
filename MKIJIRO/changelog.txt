@@ -1,13 +1,13 @@
 これはMKV10のそーすを改造したものです。
 
 判明バグ?;
-一部のゲームでキーボードをだすとフリーズする(武装神姫)
+一部のゲームでキーボードをだすとフリーズする(武装神姫のムービ時)
 比較サーチがおかしくなる
 コード保存と読込を繰り返していると保存読込機能が反応しなくなる
 一部の浮動小数が表示されない 0.01(0x3C23D70A),0.001 (0x3A83126E)
 8byte時メモリエディタのコピー箇所がおかしい
 コード最後の行が4BYTEモード以外だと再読込時あどれすが2重に読まれる
-ムービー中にサーチ/保存するとフリーズする(0x8838DBF0 むび領域っぽい？)
+ムービー中にサーチ/保存するとフリーズする(0x8838DBF0 むび領域っぽい？),GEN/M33で薄型本体なら拡張RAM定義でたぶん回避可能
 
 this is modded mkultrav10.
 KnownProblem;
@@ -16,6 +16,12 @@ doesnot work fine unknown value search
 if code is reloaded & saved many times,save&reload function doesnot work
 certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
+
+2011/2/22
+半浮動小数表示のバッファがのこってたので修正
+半浮動小数の行間がでかい/切り替え時フリーズするのを修正
+□押しでパッドコードマスクタイプになるよう変更
+CWC<>NPRでDMAの時のみアドレス初期化し、他はフラグをいじるだけに変更
 
 20011/2/7
 635PROでもID取得できるように修正
