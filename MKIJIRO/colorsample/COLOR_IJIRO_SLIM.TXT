@@ -1,0 +1,25 @@
+0x00300000 ;menukey
+0x00800000 ;cheat toggle
+0xFFFFFFFF ;screenshotkey
+0xFFFFFF00 ;color1 1st color (yellow)
+0xFF030300 ;color1 fade amount
+0xFFCCCCCC ;color2 2nd color (grey)
+0xFF060606 ;color2 fade amount
+0xFFFF0000 ;color3 (blue)
+0xFF00FF00 ;color4 (green)
+0xFF000000 ;bgcolor
+0xFFF0C060 ;select_cheat/copystart
+0xFFF090C0 ;constant_cheat/copyend
+0x8A001000 ;savetemp_address
+0x8A001000 ;searchtemp_address
+0x00010000 ;searchresult_Max
+
+;PROだとなにか常駐していて0x8A000000だと使えないみたいです,0x8A001000だとおｋ
+;0xFFF060F0=ピンク
+;0xFFF0C060=ライトブルー?
+;0xFFFFFF00=マリンブルー?
+;0xFF09FFFF=黄色
+;0xFF60F0C0=ライトグリーン
+;0xFFF090C0=紫
+;0xFF33CCFF=黄土
+;カラーパス ms0:seplugins/nitePR/MKIJRO/color0.txt がデフォルト
