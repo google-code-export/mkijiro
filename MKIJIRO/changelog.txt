@@ -16,6 +16,7 @@ doesnot work fine unknown value search
 if code is reloaded & saved many times,save&reload function doesnot work
 certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
+0x8838DBF0 moviezone,fat should freeze after search/save.slim user use extraram setting
 
 2011/2/22
 半浮動小数表示のバッファがのこってたので修正
