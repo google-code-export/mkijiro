@@ -2772,11 +2772,19 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 //{ "vsgn.s",      0xD04A0000, 0xFFFF8080, "%zs, %ys" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 //{ "vsgn.t",      0xD04A8000, 0xFFFF8080, "%zt, %yt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 
+
         case 0xD050:
                 pspDebugScreenPuts("vmfvc    ");
-                vectors(a_opcode, 1, 1);
+                vectors(a_opcode, 2, 1);
+                a_opcode=a_opcode>>8;
+                if(a_opcode & 0x80){
+                VFMODE=1;
+                vectors(a_opcode, 1, 0);
+                }
+                else{
                 a_opcode&=0xFF;
                 mipsImm(a_opcode, 0, 0);
+                }
         break;
 //{ "vmfvc",   0xD0500000, 0xFFFF0080, "%zs, %2s" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zs, %2s"
 

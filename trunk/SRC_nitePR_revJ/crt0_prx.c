@@ -54,7 +54,7 @@ PSP_MODULE_INFO("nitePR", 0x3007, 1, 2); //0x3007
 PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 
 //Globals
-unsigned char *NPRVER="nitePRmod 20110207";
+unsigned char *NPRVER="nitePRmod 20110302";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -2407,7 +2407,8 @@ void menuDraw()
 								if( ((addresscode>>16)& 0x7FFF) > 0x3500){
 								pspDebugScreenPuts(" MFLOAT:");//MERGED IEEE754 FLOAT
 								f_cvt(&addresscode, buffer, sizeof(buffer), 6, MODE_GENERIC);
-								pspDebugScreenPuts(buffer);addresscode=0;}
+								pspDebugScreenPuts(buffer);}
+								addresscode=0;
 								}
 							}
 							mipsSpecial(addresscode,addresstmp,counteraddress);
