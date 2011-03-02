@@ -19,8 +19,9 @@ as for 8byte RAMeditor,strange copy position
 0x8838DBF0 moviezone,pspfat should freeze after search/save...slim user use extraram setting
 
 2011/3/2
-vmfvcがまちがってたっぽいので修正
+vmfvc/vmtvcがまちがってたっぽいので修正
 cwcflagとjokermaskにディレイを追加
+拡張RAM定義を0x1000ずらした
 
 2011/2/22
 半浮動小数表示のバッファがのこってたので修正
