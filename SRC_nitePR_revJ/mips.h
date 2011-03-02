@@ -2788,14 +2788,20 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
         break;
 //{ "vmfvc",   0xD0500000, 0xFFFF0080, "%zs, %2s" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zs, %2s"
 
-        case 0xD051:
+       case 0xD051:
                 pspDebugScreenPuts("vmtvc    ");
-				b_opcode=a_opcode;
+				addresstmp=a_opcode;
+                if(a_opcode & 0x80){
+                VFMODE=1;
+                vectors(a_opcode, 0, 1);
+                }
+                else{
                 a_opcode&=0xFF;
                 mipsImm(a_opcode, 0, 1);
-				a_opcode=b_opcode;
+                }
+				a_opcode=addresstmp;
                 vectors(a_opcode, 1, 0);
-        break;
+             break;
 
         case 0xD059:
                 pspDebugScreenPuts("vt4444.q ");

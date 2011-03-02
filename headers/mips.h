@@ -2843,8 +2843,14 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
         case 0xD051:
                 pspDebugScreenPuts("vmtvc    ");
 				addresstmp=a_opcode;
+                if(a_opcode & 0x80){
+                VFMODE=1;
+                vectors(a_opcode, 0, 1);
+                }
+                else{
                 a_opcode&=0xFF;
                 mipsImm(a_opcode, 0, 1);
+                }
 				a_opcode=addresstmp;
                 vectors(a_opcode, 1, 0);
         break;
