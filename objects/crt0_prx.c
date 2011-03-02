@@ -97,7 +97,7 @@ PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 #endif
 
 //Globals
-unsigned char *MKVER="  MKIJIRO20110222";
+unsigned char *MKVER="  MKIJIRO20110302";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -3708,6 +3708,7 @@ void menuInput(){
 				  }
 			if(pad.Buttons & PSP_CTRL_SQUARE){
 				block[extSelected[0]].flags=FLAG_CWC|FLAG_DWORD;
+					sceKernelDelayThread(100000);
 			}
 			else{
 			block[extSelected[0]].flags=FLAG_DWORD;
@@ -3777,6 +3778,7 @@ void menuInput(){
 				   block[extSelected[0]].hakVal=JOKERADDRESS;
 				   }
 				   block[extSelected[0]].flags=FLAG_JOKER | FLAG_DWORD;
+					sceKernelDelayThread(100000);
 					}
 				else if(tabSelected==3){ //copy range to new cheat
 				   if(pad.Buttons & PSP_CTRL_SQUARE){
