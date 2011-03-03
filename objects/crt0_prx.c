@@ -97,7 +97,7 @@ PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 #endif
 
 //Globals
-unsigned char *MKVER="  MKIJIRO20110302";
+unsigned char *MKVER="  MKIJIRO20110304";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -1510,7 +1510,12 @@ void menuDraw(){
 				pspDebugScreenPuts("  Copy value\n");
 				break;
 				case 4:
+					if(pad.Buttons & PSP_CTRL_SQUARE){
+				pspDebugScreenPuts("  Paste Converted Jumpaddress+1\n");
+				}
+				else{
 				pspDebugScreenPuts("  Paste value\n");
+				}
 				break;
 				case 5:
 				if(tabSelected==3 && flipme==0){
@@ -3673,7 +3678,16 @@ void menuInput(){
 			  {
 				if(extMenu == 1)
 				{
-				  if(!(block[extSelected[0]].flags & FLAG_DMA)) block[extSelected[0]].hakVal=copyData2;
+				  if(!(block[extSelected[0]].flags & FLAG_DMA)){
+				  	  if(pad.Buttons & PSP_CTRL_SQUARE){
+				  	  	  block[extSelected[0]].hakVal=0x0A200001 | (copyData-0x8800000)>>2;
+				  	  	  sceKernelDelayThread(100000);
+				  	  }
+				  	  else{
+				  block[extSelected[0]].hakVal=copyData2;
+				  	  }
+				  
+				  }
 				}
 				else if(extMenu == 2)
 				{
@@ -3696,7 +3710,13 @@ void menuInput(){
 						*(unsigned char*)(browseAddress[bdNo]+(browseX[bdNo])+(browseY[bdNo]*0x10))=copyData2;}
 					}
 					else{
+				  	  if(pad.Buttons & PSP_CTRL_SQUARE){
+				  	  	 *((unsigned int*)(decodeAddress[bdNo]+(decodeY[bdNo]*4)))=0x0A200001 | (copyData-0x8800000)>>2;
+				  	  	 	sceKernelDelayThread(100000);
+				  	  }
+				  	  else{
 						*((unsigned int*)(decodeAddress[bdNo]+(decodeY[bdNo]*4)))=copyData2;
+						}
 					}
 				}
 			  }
@@ -3755,12 +3775,13 @@ void menuInput(){
 				}
 			 else if(tabSelected==3){ //copy range to new cheat
 				   if(pad.Buttons & PSP_CTRL_SQUARE){
+				  extMenu=1;
+				  tabSelected=0;
 				  decToCheat();
 				  pspDebugScreenInitEx(vram, 0, 0);
 				  extSelected[1]=extSelected[2]=extSelected[3]=0;
 				  extSelected[0]=cheat[cheatTotal - 1].block;
 				  cheatSelected=cheatTotal - 1;
-				  extMenu=1;
 				  extOpt=-2;
 				  menuDraw();
 				  sceKernelDelayThread(150000);
