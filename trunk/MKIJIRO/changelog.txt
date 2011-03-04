@@ -22,6 +22,7 @@ as for 8byte RAMeditor,strange copy position
 0x8838DBF0 moviezone,pspfat should freeze after search/save...slim user use extraram setting
 
 2011/3/4
+joker/dmaのアドレスが0x1800000以上にできたので修正
 decoder時セレクト+十字キーでサーチ結果のアドレスに飛べるようにした,メニュー右下にジャンプ番号表示
 サーチ結果のアドレスコピー時ジャンプ番号連動
 ジャンプ変換アドレス+8に変更,論理和になっていたので修正

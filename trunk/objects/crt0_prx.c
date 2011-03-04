@@ -3509,7 +3509,7 @@ void menuInput(){
 					sceKernelDelayThread(1500000);
 				     }
                                     else{
-	 			    copyData=block[extSelected[0]].hakVal+0x8800000;}
+	 			    copyData=(block[extSelected[0]].hakVal & 0x1FFFFFE)+0x8800000;}
 				  }
 				  else{
 				  copyData=block[extSelected[0]].address;}
@@ -3933,6 +3933,11 @@ void menuInput(){
 					  block[extSelected[0]].hakVal+=(1 << (4*(7-extSelected[2]))); break;
 					case 2: block[extSelected[0]].hakVal+=decDelta[extSelected[2]]; break;
 					case 3: block[extSelected[0]].hakVal+=(1 << (8*(extSelected[2]))); break;
+					}
+					if((block[extSelected[0]].flags & FLAG_DMA) || (block[extSelected[0]].flags & FLAG_JOKER)){
+						if(block[extSelected[0]].hakVal> 0x017FFFFF){
+							block[extSelected[0]].hakVal=0x017FFFFE;
+						}
 				  }
 				  menuDraw();
 					if(cheatButtonAgeY < 12) cheatButtonAgeY++; sceKernelDelayThread(150000-(10000*cheatButtonAgeY));
@@ -3992,6 +3997,11 @@ void menuInput(){
 						block[extSelected[0]].hakVal-=(1 << (4*(7-extSelected[2]))); break;
 					case 2: block[extSelected[0]].hakVal-=decDelta[extSelected[2]]; break;
 					case 3: block[extSelected[0]].hakVal-=(1 << (8*(extSelected[2]))); break;
+				  }
+				  if((block[extSelected[0]].flags & FLAG_DMA) || (block[extSelected[0]].flags & FLAG_JOKER)){
+						if(block[extSelected[0]].hakVal> 0x017FFFFF){
+							block[extSelected[0]].hakVal=0;
+						}
 				  }
 				  menuDraw();
 					if(cheatButtonAgeY < 12) cheatButtonAgeY++; sceKernelDelayThread(150000-(10000*cheatButtonAgeY));
