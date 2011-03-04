@@ -1,16 +1,19 @@
 これはMKV10のそーすを改造したものです。
+バグ修正とPRXTOOL移植などDECODER系をやたら強化してあるだけであんまり変わりません。
 
 判明バグ?;
+一部ホームブリューで縦線が出る,homekeyがマスクされて起動できない(NPR共通)
 一部のゲームでキーボードをだすとフリーズする(武装神姫のムービ時)
-比較サーチがおかしくなる
+比較サーチがおかしくなる(NPR共通)
 コード保存と読込を繰り返していると保存読込機能が反応しなくなる
-一部の浮動小数が表示されない 0.01(0x3C23D70A),0.001 (0x3A83126E)
+一部の浮動小数が表示されない 0.01(0x3C23D70A),0.001 (0x3A83126E)(NPR共通)
 8byte時メモリエディタのコピー箇所がおかしい
 コード最後の行が4BYTEモード以外だと再読込時あどれすが2重に読まれる
 ムービー中にサーチ/保存するとフリーズする(0x8838DBF0 むび領域っぽい？),GEN/M33で薄型本体なら拡張RAM定義でたぶん回避可能
 
-this is modded mkultrav10.
+this is modded mkultrav10.prxtool ported,but this mod incule nothing new.
 KnownProblem;
+some homebrew not work fine
 certain game,keybord PSP freeze(BUSOSINKI etc)
 doesnot work fine unknown value search
 if code is reloaded & saved many times,save&reload function doesnot work
@@ -19,6 +22,12 @@ as for 8byte RAMeditor,strange copy position
 0x8838DBF0 moviezone,pspfat should freeze after search/save...slim user use extraram setting
 
 2011/3/4
+decoder時セレクト+十字キーでサーチ結果のアドレスに飛べるようにした,メニュー右下にジャンプ番号表示
+サーチ結果のアドレスコピー時ジャンプ番号連動
+ジャンプ変換アドレス+8に変更,論理和になっていたので修正
+0x0A200002 + ((copyData-0x8800000)>>2);
+例;0x233BC0　→ 0x0A228CEF2 j 0x233BC0+8
+
 decoderからコードを足した際ポップアップメニューがdecode時のものになっていたので修正
 □押しメニューでアドレス+1のジャンプ命令貼りつけ追加
 例;0x233BC0　→ 0x0A228CEF1 j 0x233BC0+4

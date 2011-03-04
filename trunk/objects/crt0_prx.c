@@ -97,7 +97,7 @@ PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 #endif
 
 //Globals
-unsigned char *MKVER="  MKIJIRO20110304";
+unsigned char *MKVER="  MKIJIRO20110305";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -226,6 +226,7 @@ unsigned char *hbpath = NULL;
 unsigned int SAVETEMP=0x8838DBF0; //freekernelram
 unsigned int RAMTEMP=0x8838DBF0;
 unsigned int searchResultCounterMax=0xE400;
+unsigned short searchjumpNo=0;
 #define logstart 0x48802804 //log start address
 #define jumplog 0x20 //number of jumplog ,default 32
 #define JOKERADDRESS 0x3FFC //out put JOKER ADDRES from kernel ram
@@ -1510,8 +1511,8 @@ void menuDraw(){
 				pspDebugScreenPuts("  Copy value\n");
 				break;
 				case 4:
-					if(pad.Buttons & PSP_CTRL_SQUARE){
-				pspDebugScreenPuts("  Paste Converted Jumpaddress+1\n");
+					if(pad.Buttons & PSP_CTRL_SQUARE && ((tabSelected==3 && flipme==0) || extMenu == 1)){
+				pspDebugScreenPuts("  Paste Converted Jumpaddress+8\n");
 				}
 				else{
 				pspDebugScreenPuts("  Paste value\n");
@@ -3100,6 +3101,7 @@ void menuDraw(){
 				pspDebugScreenSetTextColor(color01);
 				pspDebugScreenSetXY(0, 32); pspDebugScreenPuts(">< = Edit On/Off; D-PAD = Cycle/Scroll; [] + <-> = Back/Jump;");
 				pspDebugScreenSetXY(0, 33); pspDebugScreenPuts("[] + Analog/Digital = Scroll; () = Cancel/Return to Game");
+				sprintf(buffer," JumpNo:%3d",searchjumpNo);pspDebugScreenPuts(buffer);
 			break;
 			
 			case 4:
@@ -3517,6 +3519,7 @@ void menuInput(){
 					if(extSelected[0] > 2)
 					{
 					copyData=searchAddress[extSelected[0]-3]-0x40000000;
+					searchjumpNo=extSelected[0]-3;
 					}
 				}
 				else if(extMenu == 3)
@@ -3524,6 +3527,7 @@ void menuInput(){
 				  if(extSelected[0] > 2)
 				  {
 					copyData=searchAddress[extSelected[0]-3]-0x40000000;
+					searchjumpNo=extSelected[0]-3;
 					}
 				}
 				else if(extMenu == 4)
@@ -3531,6 +3535,7 @@ void menuInput(){
 				  if(extSelected[0] > 1)
 				  {
 					copyData=searchAddress[extSelected[0]-2]-0x40000000;
+					searchjumpNo=extSelected[0]-3;
 					}
 				}
 				else if(extMenu == 5)
@@ -3680,7 +3685,7 @@ void menuInput(){
 				{
 				  if(!(block[extSelected[0]].flags & FLAG_DMA)){
 				  	  if(pad.Buttons & PSP_CTRL_SQUARE){
-				  	  	  block[extSelected[0]].hakVal=0x0A200001 | (copyData-0x8800000)>>2;
+				  	  	  block[extSelected[0]].hakVal=0x0A200002 + ((copyData-0x8800000)>>2);
 				  	  	  sceKernelDelayThread(100000);
 				  	  }
 				  	  else{
@@ -3711,7 +3716,7 @@ void menuInput(){
 					}
 					else{
 				  	  if(pad.Buttons & PSP_CTRL_SQUARE){
-				  	  	 *((unsigned int*)(decodeAddress[bdNo]+(decodeY[bdNo]*4)))=0x0A200001 | (copyData-0x8800000)>>2;
+				  	  	 *((unsigned int*)(decodeAddress[bdNo]+(decodeY[bdNo]*4)))=0x0A200002 + ((copyData-0x8800000)>>2);
 				  	  	 	sceKernelDelayThread(100000);
 				  	  }
 				  	  else{
@@ -6809,7 +6814,7 @@ void menuInput(){
 					menuDraw();
 					sceKernelDelayThread(150000);
 				}
-				if(pad.Buttons & PSP_CTRL_SELECT){
+				if((pad.Buttons & 0xFFFF) == 0x1){
 					if(decodeOptions==0){
 						decodeOptions=1;
 					}
@@ -6819,6 +6824,46 @@ void menuInput(){
 					menuDraw();
 					sceKernelDelayThread(150000);
 				}
+				if((pad.Buttons & PSP_CTRL_SELECT) && (pad.Buttons & PSP_CTRL_RIGHT)){
+				if(searchjumpNo<499){
+					searchjumpNo++;
+				}
+				if(searchAddress[searchjumpNo]> 0x48800000){
+				decodeY[bdNo]=0;
+				decodeAddress[bdNo]=searchAddress[searchjumpNo] & 0xFFFFFFFC;
+				sceKernelDelayThread(150000);
+				}
+				}
+				if((pad.Buttons & PSP_CTRL_SELECT) && (pad.Buttons & PSP_CTRL_LEFT)){
+				if(searchjumpNo>0){
+				searchjumpNo--;
+				}
+				if(searchAddress[searchjumpNo]> 0x48800000){
+				decodeY[bdNo]=0;
+				decodeAddress[bdNo]=searchAddress[searchjumpNo] & 0xFFFFFFFC;
+				sceKernelDelayThread(150000);
+				}
+				}
+				if((pad.Buttons & PSP_CTRL_SELECT) && (pad.Buttons & PSP_CTRL_UP)){
+				if(searchjumpNo<489){
+					searchjumpNo+=10;
+				}
+				if(searchAddress[searchjumpNo]> 0x48800000){
+				decodeY[bdNo]=0;
+				decodeAddress[bdNo]=searchAddress[searchjumpNo] & 0xFFFFFFFC;
+				sceKernelDelayThread(150000);
+				}
+				}
+				if((pad.Buttons & PSP_CTRL_SELECT) && (pad.Buttons & PSP_CTRL_DOWN)){
+				if(searchjumpNo>9){
+				searchjumpNo-=10;
+				}
+				if(searchAddress[searchjumpNo]> 0x48800000){
+				decodeY[bdNo]=0;
+				decodeAddress[bdNo]=searchAddress[searchjumpNo] & 0xFFFFFFFC;
+				sceKernelDelayThread(150000);
+				}
+				}				
 				if(pad.Buttons & PSP_CTRL_TRIANGLE){ 
 					copyMenu=1; 
 					menuDraw(); 
