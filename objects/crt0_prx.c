@@ -1293,14 +1293,14 @@ void buttonCallback(int curr, int last, void *arg){
   
   #ifdef _CFW_
   analog[1]=*(unsigned char *)(0x880E5ED5);//0x880E5ED4 ,0x88235684 635CUSTOM16 2k
-  analog[0]=*(unsigned char *)(0x880E5ED4);	//0x8822C894 0x88124904 TNC 1k,not worked
+  analog[0]=*(unsigned char *)(0x880E5ED4);//0x8822C894 0x88124904 TNC 1k,not worked
   if(analog[0] > 200){					//also i know &pad.Lx,but it work MKmenu only, never in game
-	curr=curr | 0x0800;
+	curr=curr | 0x0800; //analog right
 	}
-  else if(analog[0] < 40){
+  else if(analog[0] < 40){//analog left
 	curr=curr | 0x0400;
 	}
-  else if(analog[1] > 200){
+  else if(analog[1] > 200){//analog down
 	curr=curr | 0x0C00;
 	}
    else{
