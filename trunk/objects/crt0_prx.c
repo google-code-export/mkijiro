@@ -97,7 +97,7 @@ PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 #endif
 
 //Globals
-unsigned char *MKVER="  MKIJIRO20110305";
+unsigned char *MKVER="  MKIJIRO20110306";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -1289,26 +1289,34 @@ void buttonCallback(int curr, int last, void *arg){
   unsigned int counter;
   unsigned int scounter;
   unsigned int address;
-  unsigned char analog;
+  unsigned char analog[1];
   
   #ifdef _CFW_
-  analog=*(unsigned char *)(0x880E5ED4);//0x880E5ED4 ,0x88235684 635CUSTOM15 2k
-  if(analog > 200){						//0x8822C894 0x88124904 TNC 1k
+  analog[1]=*(unsigned char *)(0x880E5ED5);//0x880E5ED4 ,0x88235684 635CUSTOM16 2k
+  analog[0]=*(unsigned char *)(0x880E5ED4);	//0x8822C894 0x88124904 TNC 1k,not worked
+  if(analog[0] > 200){					//also i know &pad.Lx,but it work MKmenu only, never in game
 	curr=curr | 0x0800;
 	}
-  else if(analog < 40){
+  else if(analog[0] < 40){
 	curr=curr | 0x0400;
+	}
+  else if(analog[1] > 200){
+	curr=curr | 0x0C00;
 	}
    else{
 	curr=curr & 0xFFFFFBFF;
 	}
    #endif
    #ifdef _POPS_
-  analog=*(unsigned char *)(0x880DAED4);//0x880DAED4,635CUSTOM15 2k
-  if(analog > 200){						
+  analog[1]=*(unsigned char *)(0x880DAED5);//0x880DAED5,635CUSTOM15 2k analogy
+  analog[0]=*(unsigned char *)(0x880DAED4);//0x880DAED4,635CUSTOM15 2k analogx
+  if(analog[0] > 200){					//also i know &pad.Lx,but it work MKmenu only, never in game
 	curr=curr | 0x0800;
 	}
-  else if(analog < 40){
+  else if(analog[0] < 40){
+	curr=curr | 0x0400;
+	}
+  else if(analog[1] > 200){
 	curr=curr | 0x0400;
 	}
    else{
@@ -7389,7 +7397,20 @@ int mainThread(){
 	}	skipPatch: //Skip the evil patch
 	#endif
 	
-	
+	#ifdef _NOHB_
+	 //Find the GAME ID
+	  do
+	  {
+	  	fd=sceIoOpen("disc0:/UMD_DATA.BIN", PSP_O_RDONLY, 0777); 
+    	sceKernelDelayThread(1000);
+	  } while(fd<=0);
+  sceIoRead(fd, gameId, 10);
+  sceIoClose(fd);
+  memcpy(&gameDir[22], gameId, 10);
+	strcpy(buffer, ".txt\x0");
+	memcpy(&gameDir[32], buffer, 5);
+	cheatLoad();
+	#endif
 
   	//Compare the gameID to see if the game is....
   	#ifdef _SOCOM_
