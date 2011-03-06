@@ -21,6 +21,12 @@ certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
 0x8838DBF0 moviezone,pspfat should freeze after search/save...slim user use extraram setting
 
+2011/3/6
+一部ホームブリューで起動障害が残ってるためNOHBビルドまけふぁいる追加
+とりえずCUSTOM16専用しかつかえんけどアナログの左/右をパッドボタン化。カーネルパッドの未使用BITを使用。
+アナログ左 0x0400
+アナログ右 0x0800
+
 2011/3/4
 joker/dmaのアドレスが0x1800000以上にできたので修正
 decoder時セレクト+十字キーでサーチ結果のアドレスに飛べるようにした,メニュー右下にジャンプ番号表示
