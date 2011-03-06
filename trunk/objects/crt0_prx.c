@@ -1289,9 +1289,33 @@ void buttonCallback(int curr, int last, void *arg){
   unsigned int counter;
   unsigned int scounter;
   unsigned int address;
-
-	
-  *(unsigned int *)(0x8800000+JOKERADDRESS)=curr;	
+  unsigned char analog;
+  
+  #ifdef _CFW_
+  analog=*(unsigned char *)(0x880E5ED4);//0x880E5ED4 ,0x88235684 635CUSTOM15 2k
+  if(analog > 200){						//0x8822C894 0x88124904 TNC 1k
+	curr=curr | 0x0800;
+	}
+  else if(analog < 40){
+	curr=curr | 0x0400;
+	}
+   else{
+	curr=curr & 0xFFFFFBFF;
+	}
+   #endif
+   #ifdef _POPS_
+  analog=*(unsigned char *)(0x880DAED4);//0x880DAED4,635CUSTOM15 2k
+  if(analog > 200){						
+	curr=curr | 0x0800;
+	}
+  else if(analog < 40){
+	curr=curr | 0x0400;
+	}
+   else{
+	curr=curr & 0xFFFFFBFF;
+	}
+   #endif
+  *(unsigned int *)(0x8800000+JOKERADDRESS)=curr;
 	
   if(vram==NULL) return;
 
