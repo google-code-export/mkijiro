@@ -6,4 +6,3 @@ copy MKIJIRONOHB.prx g:\seplugins\MKIJIRONOHB.prx
 copy MKIJIRONOHB.prx f:\seplugins\MKIJIRONOHB.prx
 del objects\*.o
 del *prx
-pause

@@ -54,7 +54,7 @@ PSP_MODULE_INFO("nitePR", 0x3007, 1, 2); //0x3007
 PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 
 //Globals
-unsigned char *NPRVER="nitePRmod 20110302";
+unsigned char *NPRVER="nitePRmod 20110306";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -6006,18 +6006,21 @@ int mainThread()
     sceKernelIcacheInvalidateAll();
 	}	skipPatch: //Skip the evil patch
 
-  //Find the GAME ID
-  /*do
-  {
-  	fd=sceIoOpen("disc0:/UMD_DATA.BIN", PSP_O_RDONLY, 0777); 
-    sceKernelDelayThread(1000);
-  } while(fd<=0);
+	#ifdef _NOHB_
+	 //Find the GAME ID
+	  do
+	  {
+	  	fd=sceIoOpen("disc0:/UMD_DATA.BIN", PSP_O_RDONLY, 0777); 
+    	sceKernelDelayThread(1000);
+	  } while(fd<=0);
   sceIoRead(fd, gameId, 10);
   sceIoClose(fd);
-  memcpy(&gameDir[22], gameId, 10);*/
-  //GETID();
-  //cheatLoad();
-  
+  memcpy(&gameDir[22], gameId, 10);
+	strcpy(buffer, ".txt\x0");
+	memcpy(&gameDir[32], buffer, 5);
+	cheatLoad();
+	#endif
+
   //Set the VRAM to null, use the current screen
   pspDebugScreenInitEx(0x44000000, 0, 0);
   vram=NULL;
@@ -6055,7 +6058,7 @@ int mainThread()
   			pspDebugScreenPuts("nitePR: Double tap the home button to initate nitePR\nWhen initiated: Vol+&- = cheat menu; Music Button = turn on/off cheats");
       }
       
-	//#ifdef _CFW_
+	#ifdef _CFW_
 	if(IDAGAIN==1){
 	GETID();
 		if(IDAGAIN==0){
@@ -6076,7 +6079,7 @@ int mainThread()
 		cheatLoad();
 		HBFLAG=2;
 	}
-	//#endif
+	#endif
       sceKernelDelayThread(1500);
       continue;
     }

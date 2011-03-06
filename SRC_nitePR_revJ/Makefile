@@ -11,7 +11,7 @@ USE_KERNEL_LIBC = 1
 
 INCDIR = 
 #HBIJIRO
-CFLAGS = -O2 -G0 -w -msingle-float -g -D_FONT_misaki -D_HBIJIRO_
+CFLAGS = -O2 -G0 -w -msingle-float -g -D_FONT_misaki -D_HBIJIRO_ -D_CFW_
 CXXFLAGS = $(CFLAGS) -fno-exceptions -fno-rtti
 ASFLAGS = $(CFLAGS)
 
