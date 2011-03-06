@@ -1317,7 +1317,7 @@ void buttonCallback(int curr, int last, void *arg){
 	curr=curr | 0x0400;
 	}
   else if(analog[1] > 200){
-	curr=curr | 0x0400;
+	curr=curr | 0x0C00;
 	}
    else{
 	curr=curr & 0xFFFFFBFF;
