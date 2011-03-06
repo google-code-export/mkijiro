@@ -97,7 +97,7 @@ PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 #endif
 
 //Globals
-unsigned char *MKVER="  MKIJIRO20110306";
+unsigned char *MKVER="  MKIJIRO20110307";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -1291,7 +1291,7 @@ void buttonCallback(int curr, int last, void *arg){
   unsigned int address;
   unsigned char analog[1];
   
-  #ifdef _CFW_
+ #ifdef _CFW_
   analog[1]=*(unsigned char *)(0x880E5ED5);//0x880E5ED4 ,0x88235684 635CUSTOM16 2k
   analog[0]=*(unsigned char *)(0x880E5ED4);//0x8822C894 0x88124904 TNC 1k,not worked
   if(analog[0] > 200){					//also i know &pad.Lx,but it work MKmenu only, never in game
@@ -2599,6 +2599,8 @@ void menuDraw(){
 				pspDebugScreenPuts(" ");
 				#elif _POPSMODE_
 				pspDebugScreenPuts("POPS ");
+				#elif _NOHB_
+				pspDebugScreenPuts("NOHB ");
 				#endif
 
 				//battery info
@@ -7444,8 +7446,9 @@ int mainThread(){
 	#endif
 	
 	//Register the button callbacks
-	sceCtrlRegisterButtonCallback(3, triggerKey | menuKey | screenKey, buttonCallback, NULL);
-	
+	//sceCtrlRegisterButtonCallback(3, triggerKey | menuKey | screenKey, buttonCallback, NULL);
+	sceCtrlRegisterButtonCallback(3, 0xFFFFFFFF, buttonCallback, NULL);
+
 	#ifdef _POPS_
 	if(IDAGAIN==1){
 	GETID();

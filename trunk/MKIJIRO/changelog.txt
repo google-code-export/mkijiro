@@ -21,6 +21,9 @@ certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
 0x8838DBF0 moviezone,pspfat should freeze after search/save...slim user use extraram setting
 
+2011/3/7
+スクリーンショットが0xFFFFFFFF以外の時パッドボタンがマスクされていたので修正
+
 2011/3/6
 一部ホームブリューで起動障害が残ってるためNOHBビルドまけふぁいる追加
 とりえずCUSTOM16専用しかつかえんけどアナログの左/右をパッドボタン化。カーネルパッドの未使用BITを使用。
