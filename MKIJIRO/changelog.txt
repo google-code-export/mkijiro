@@ -2,7 +2,7 @@
 バグ修正とPRXTOOL移植などDECODER系をやたら強化してあるだけであんまり変わりません。
 
 判明バグ?;
-一部ホームブリューで縦線が出る,homekeyがマスクされて起動できない(NPR共通)
+一部ホームブリューで縦線が出る(MK),homekeyがマスクされて起動できない(NPR共通)
 一部のゲームでキーボードをだすとフリーズする(武装神姫のムービ時)
 比較サーチがおかしくなる(NPR共通)
 コード保存と読込を繰り返していると保存読込機能が反応しなくなる
@@ -20,6 +20,10 @@ if code is reloaded & saved many times,save&reload function doesnot work
 certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
 0x8838DBF0 moviezone,pspfat should freeze after search/save...slim user use extraram setting
+
+2011/3/15
+プロメテウス他ろだ経由のID処理を改善
+サーチ結果ジャンプを結果最大以上にならないよう修正
 
 2011/3/7
 スクリーンショットが0xFFFFFFFF以外の時パッドボタンがマスクされていたので修正

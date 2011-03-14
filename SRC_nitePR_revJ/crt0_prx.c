@@ -54,7 +54,7 @@ PSP_MODULE_INFO("nitePR", 0x3007, 1, 2); //0x3007
 PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 
 //Globals
-unsigned char *NPRVER="nitePRmod 20110306";
+unsigned char *NPRVER="nitePRmod 20110315";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -183,7 +183,6 @@ unsigned int fileBufferFileOffset=0;
 unsigned int fileBufferOffset=1024;
 unsigned int screenNo=0;
 unsigned char screenPath[64]={0};
-unsigned char IDAGAIN=1;
 unsigned char HBFLAG=0;
 unsigned char k=0;
 char *hbpath=NULL;
@@ -6006,6 +6005,21 @@ int mainThread()
     sceKernelIcacheInvalidateAll();
 	}	skipPatch: //Skip the evil patch
 
+
+	#ifdef _CFW_
+	GETID();
+	cheatRefresh=1;
+	cheatLoad();
+		if(cheatTotal==0){
+		sprintf(buffer, "#%s\n0x00000000 0x00000000\n" ,gameId);
+		int fd = sceIoOpen(gameDir, PSP_O_CREAT | PSP_O_WRONLY, 0777);
+		sceIoWrite(fd,buffer,strlen(buffer));
+		sceIoClose(fd);
+		cheatRefresh=1;
+		cheatLoad();
+		}
+	#endif
+		
 	#ifdef _NOHB_
 	 //Find the GAME ID
 	  do
@@ -6058,28 +6072,6 @@ int mainThread()
   			pspDebugScreenPuts("nitePR: Double tap the home button to initate nitePR\nWhen initiated: Vol+&- = cheat menu; Music Button = turn on/off cheats");
       }
       
-	#ifdef _CFW_
-	if(IDAGAIN==1){
-	GETID();
-		if(IDAGAIN==0){
-		cheatRefresh=1;
-		cheatLoad();
-			if(cheatTotal==0){
-			sprintf(buffer, "#%s\n0x00000000 0x00000000\n" ,gameId);
-			int fd = sceIoOpen(gameDir, PSP_O_CREAT | PSP_O_WRONLY, 0777);
-			sceIoWrite(fd,buffer,strlen(buffer));
-			sceIoClose(fd);
-			cheatRefresh=1;
-			cheatLoad();
-			}
-		}
-	}
-	if(HBFLAG==1){
-		cheatRefresh=1;
-		cheatLoad();
-		HBFLAG=2;
-	}
-	#endif
       sceKernelDelayThread(1500);
       continue;
     }
@@ -6210,13 +6202,9 @@ void GETID(){
 	//GAMEID
 		int fd=sceIoOpen("disc0:/UMD_DATA.BIN", PSP_O_RDONLY, 0777);
 if(fd >0){
-		strcpy(buffer, ".txt\x0");
-		memcpy(&gameDir[32], buffer, 5);
 		sceIoRead(fd, gameId, 10);
 		sceIoClose(fd);
 		k=5;
-		memcpy(&gameDir[22], gameId, 10);
-		IDAGAIN=0;
 }
 else{
 		sceIoClose(fd);
@@ -6243,9 +6231,9 @@ else{
 		memcpy(&gameId[5],&fileBuffer[0x2C]+counteraddress+addresstmp,5);
 		}
 		addresscode=*(unsigned int *)(&fileBuffer[0x28]+counteraddress+4);
-	if(addresscode==0x454D){memcpy(&gameDir[27], gameId, 10);IDAGAIN=0;}//ME,POPS
+	if(addresscode==0x454D){}//ME,POPS
 	else{//MG,HOMEBREW
-	   if(strncmp(gameId, "UCJS-10041", 10) && nameflag==0){}
+	   if(strncmp(gameId, "UCJS-10041", 10) && nameflag==0){k=5;}//PSNDEMO,DOWNLOAD
 	   else{//when UCJS
 		addresscode=*(unsigned int *)(&fileBuffer[0x28]+counteraddress+4);
 		addresscode=*(unsigned int *)(&fileBuffer[0x38]);
@@ -6255,14 +6243,26 @@ else{
 			}
 		addresscode=*(unsigned int *)(&fileBuffer[0x48+(0x10*i)]);
 		memcpy(&gameId[0],&fileBuffer[0x28]+counteraddress+addresscode,10);
-		if(HBFLAG==2){}
-		else{
-	   if(strncmp(gameId, "Prometheus", 10)){IDAGAIN=1;HBFLAG=1;}
-	   else if(strncmp(gameId, "OpenIdea I", 10)){IDAGAIN=1;HBFLAG=1;}
-	   else if(strncmp(gameId, "loader", 5)){IDAGAIN=1;HBFLAG=1;}
-	   else{k=5;IDAGAIN=0;strcpy(buffer, ".txt\x0");memcpy(&gameDir[32], buffer, 5);}//when prometheus,openid
-	    memcpy(&gameDir[27-k], gameId, 10);
-	   }
+	    HBFLAG=strcmp(gameId, "Prometheus");//prometheus
+	    if(HBFLAG!=0){
+	   	HBFLAG=strcmp(gameId, "OpenIdea I");//openisoloader
+	   	}
+	    if(HBFLAG!=0){
+	    HBFLAG=strcmp(gameId, "Template");//635custom_prometheus
+	    }
+	    if(HBFLAG!=0){
+	   	HBFLAG=strcmp(gameId, "loader");//openisoloader??
+	   	}
+			if(HBFLAG==0){
+	   	k=5;
+		  do
+		  {
+	  		fd=sceIoOpen("disc0:/UMD_DATA.BIN", PSP_O_RDONLY, 0777); 
+	    	sceKernelDelayThread(1000);
+		  } while(fd<=0);
+	  	sceIoRead(fd, gameId, 10);
+  	 	 sceIoClose(fd);
+	   		}
 	   }
 	 }
 	#elif _CWCHASH_ //weltall CWCHASH finally worked out by ME&raing3
@@ -6311,5 +6311,10 @@ else{
 	   #endif
 	}
 	sceIoClose(fd);
+	}
+    memcpy(&gameDir[27-k], gameId, 10);
+    if(k==5){
+	strcpy(buffer, ".txt\x0");
+	memcpy(&gameDir[32], buffer, 5);
 	}
 }
