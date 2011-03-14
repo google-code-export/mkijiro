@@ -97,7 +97,7 @@ PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 #endif
 
 //Globals
-unsigned char *MKVER="  MKIJIRO20110307";
+unsigned char *MKVER="  MKIJIRO20110315";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -216,7 +216,7 @@ unsigned int copyStartFlag=0x48800000;
 unsigned int copyEndFlag=0x48800000;
 unsigned char copyToggle=0;
 unsigned char screenPath[64]={0};
-unsigned int clipboard[27]={};
+//unsigned int clipboard[27]={};
 unsigned int clipSelected=0;
 unsigned char logcounter=0;
 unsigned int backaddress[4];
@@ -227,6 +227,7 @@ unsigned int SAVETEMP=0x8838DBF0; //freekernelram
 unsigned int RAMTEMP=0x8838DBF0;
 unsigned int searchResultCounterMax=0xE400;
 unsigned short searchjumpNo=0;
+unsigned short searchjumpNoMax=0;
 #define logstart 0x48802804 //log start address
 #define jumplog 0x20 //number of jumplog ,default 32
 #define JOKERADDRESS 0x3FFC //out put JOKER ADDRES from kernel ram
@@ -238,7 +239,6 @@ unsigned int addresscode=0;
 unsigned int addresstmp=0;
 unsigned int counteraddress=0;
 unsigned char backline=1;
-unsigned char IDAGAIN=1;
 unsigned char HBFLAG=0;
 unsigned char k=0;
 #ifdef _USB_
@@ -3600,12 +3600,12 @@ void menuInput(){
 					  copyData-=0x40000000;}
 					}
 				}
-				else if(tabSelected == 4)
-				{
-					if(cheatSelected == 0){
-						copyData=clipboard[clipSelected];
-					}
-				}
+				//else if(tabSelected == 4)
+				//{
+				//	if(cheatSelected == 0){
+				//		copyData=clipboard[clipSelected];
+				//	}
+				//}
 			  }
 			  copyData&=0xFFFFFFFC;
 
@@ -6868,8 +6868,14 @@ void menuInput(){
 					menuDraw();
 					sceKernelDelayThread(150000);
 				}
+				if(searchResultCounter>499){
+					searchjumpNoMax=499;
+				}
+				else{
+					searchjumpNoMax=searchResultCounter;
+				}
 				if((pad.Buttons & PSP_CTRL_SELECT) && (pad.Buttons & PSP_CTRL_RIGHT)){
-				if(searchjumpNo<499){
+				if(searchjumpNo<searchjumpNoMax){
 					searchjumpNo++;
 				}
 				if(searchAddress[searchjumpNo]> 0x48800000){
@@ -6889,8 +6895,11 @@ void menuInput(){
 				}
 				}
 				if((pad.Buttons & PSP_CTRL_SELECT) && (pad.Buttons & PSP_CTRL_UP)){
-				if(searchjumpNo<489){
+				if(searchjumpNo<searchjumpNoMax-10){
 					searchjumpNo+=10;
+				}
+				else{
+					searchjumpNo=searchjumpNoMax;
 				}
 				if(searchAddress[searchjumpNo]> 0x48800000){
 				decodeY[bdNo]=0;
@@ -6901,6 +6910,9 @@ void menuInput(){
 				if((pad.Buttons & PSP_CTRL_SELECT) && (pad.Buttons & PSP_CTRL_DOWN)){
 				if(searchjumpNo>9){
 				searchjumpNo-=10;
+				}
+				else{
+				searchjumpNo=0;
 				}
 				if(searchAddress[searchjumpNo]> 0x48800000){
 				decodeY[bdNo]=0;
@@ -7450,26 +7462,31 @@ int mainThread(){
 	sceCtrlRegisterButtonCallback(3, 0xFFFFFFFF, buttonCallback, NULL);
 
 	#ifdef _POPS_
-	if(IDAGAIN==1){
 	GETID();
-		if(IDAGAIN==0){
+	cheatRefresh=1;
+	cheatLoad();
+		if(cheatTotal==0){
+		sprintf(buffer, "#%s\n0x00000000 0x00000000\n" ,gameId);
+		int fd = sceIoOpen(gameDir, PSP_O_CREAT | PSP_O_WRONLY, 0777);
+		sceIoWrite(fd,buffer,strlen(buffer));
+		sceIoClose(fd);
 		cheatRefresh=1;
 		cheatLoad();
-			if(cheatTotal==0){
-			sprintf(buffer, "#%s\n0x00000000 0x00000000\n" ,gameId);
-			int fd = sceIoOpen(gameDir, PSP_O_CREAT | PSP_O_WRONLY, 0777);
-			sceIoWrite(fd,buffer,strlen(buffer));
-			sceIoClose(fd);
-			cheatRefresh=1;
-			cheatLoad();
-			}
 		}
-	}
-	if(HBFLAG==1){
+	#endif
+			
+	#ifdef _CFW_
+	GETID();
+	cheatRefresh=1;
+	cheatLoad();
+		if(cheatTotal==0){
+		sprintf(buffer, "#%s\n0x00000000 0x00000000\n" ,gameId);
+		int fd = sceIoOpen(gameDir, PSP_O_CREAT | PSP_O_WRONLY, 0777);
+		sceIoWrite(fd,buffer,strlen(buffer));
+		sceIoClose(fd);
 		cheatRefresh=1;
 		cheatLoad();
-	HBFLAG=2;
-	}
+		}
 	#endif
 
 	int doonce=0;
@@ -7504,29 +7521,7 @@ int mainThread(){
 				pspDebugScreenSetXY(0, 0);
 				pspDebugScreenSetTextColor(color01);
 				pspDebugScreenPuts("Press home twice and then press volume + and - at the same time");
-				
-	#ifdef _CFW_
-	if(IDAGAIN==1){
-	GETID();
-		if(IDAGAIN==0){
-		cheatRefresh=1;
-		cheatLoad();
-			if(cheatTotal==0){
-			sprintf(buffer, "#%s\n0x00000000 0x00000000\n" ,gameId);
-			int fd = sceIoOpen(gameDir, PSP_O_CREAT | PSP_O_WRONLY, 0777);
-			sceIoWrite(fd,buffer,strlen(buffer));
-			sceIoClose(fd);
-			cheatRefresh=1;
-			cheatLoad();
-			}
-		}
-	}
-	if(HBFLAG==1){
-	cheatRefresh=1;
-	cheatLoad();
-	HBFLAG=2;
-	}
-	#endif
+		
 			}
 
 			
@@ -7682,7 +7677,6 @@ if(fd >0){
 		sceIoRead(fd, gameId, 10);
 		sceIoClose(fd);
 		k=5;
-		IDAGAIN=0;
 }
 else{
 		sceIoClose(fd);
@@ -7709,9 +7703,9 @@ else{
 		memcpy(&gameId[5],&fileBuffer[0x2C]+counteraddress+addresstmp,5);
 		}
 		addresscode=*(unsigned int *)(&fileBuffer[0x28]+counteraddress+4);
-	if(addresscode==0x454D){IDAGAIN=0;}//ME,POPS
+	if(addresscode==0x454D){}//ME,POPS
 	else{//MG,HOMEBREW
-	   if(strncmp(gameId, "UCJS-10041", 10) && nameflag==0){}
+	   if(strncmp(gameId, "UCJS-10041", 10) && nameflag==0){k=5;}//PSNDEMO,DOWNLOAD
 	   else{//when UCJS
 		addresscode=*(unsigned int *)(&fileBuffer[0x28]+counteraddress+4);
 		addresscode=*(unsigned int *)(&fileBuffer[0x38]);
@@ -7721,13 +7715,26 @@ else{
 			}
 		addresscode=*(unsigned int *)(&fileBuffer[0x48+(0x10*i)]);
 		memcpy(&gameId[0],&fileBuffer[0x28]+counteraddress+addresscode,10);
-		if(HBFLAG==2){}
-		else{
-	   if(strncmp(gameId, "Prometheus", 10)){IDAGAIN=1;HBFLAG=1;}
-	   else if(strncmp(gameId, "OpenIdea I", 10)){IDAGAIN=1;HBFLAG=1;}
-	   else if(strncmp(gameId, "loader", 5)){IDAGAIN=1;HBFLAG=1;}
-	   else{k=5;IDAGAIN=0;}//when prometheus,openid
-	   }
+	    HBFLAG=strcmp(gameId, "Prometheus");//prometheus
+	    if(HBFLAG!=0){
+	   	HBFLAG=strcmp(gameId, "OpenIdea I");//openisoloader
+	   	}
+	    if(HBFLAG!=0){
+	    HBFLAG=strcmp(gameId, "Template");//635custom_prometheus
+	    }
+	    if(HBFLAG!=0){
+	   	HBFLAG=strcmp(gameId, "loader");//openisoloader??
+	   	}
+			if(HBFLAG==0){
+	   	k=5;
+		  do
+		  {
+	  		fd=sceIoOpen("disc0:/UMD_DATA.BIN", PSP_O_RDONLY, 0777); 
+	    	sceKernelDelayThread(1000);
+		  } while(fd<=0);
+	  	sceIoRead(fd, gameId, 10);
+  	 	 sceIoClose(fd);
+	   		}
 	   }
 	 }
 	#elif _CWCHASH_ //weltall CWCHASH finally worked out by ME&raing3
