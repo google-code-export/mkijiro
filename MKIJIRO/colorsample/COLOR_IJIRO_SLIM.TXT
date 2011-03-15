@@ -22,4 +22,4 @@
 ;0xFF60F0C0=ライトグリーン
 ;0xFFF090C0=紫
 ;0xFF33CCFF=黄土
-;カラーパス ms0:seplugins/nitePR/MKIJRO/color0.txt がデフォルト
+;カラーパス ms0:seplugins/nitePR/MKIJIRO/color0.txt がデフォルト
