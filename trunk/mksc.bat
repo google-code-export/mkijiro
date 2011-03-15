@@ -1,6 +1,6 @@
 make -f sc
-copy MKIJIRO_SC.prx MKIJIRO\MKIJIRO.prx
-copy MKIJIRO_SC.prx patches\MKIJIRO.prx
+copy MKIJIRO_SC.prx MKIJIRO\MKIJIRO_SC.prx
+copy MKIJIRO_SC.prx patches\MKIJIRO_SC.prx
 del *.elf
 del objects\*.o
 move MKIJIRO_SC.prx g:\seplugins\MKIJIRO_SC.prx
