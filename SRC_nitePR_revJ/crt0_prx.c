@@ -6251,7 +6251,7 @@ else{
 	    HBFLAG=strcmp(gameId, "Template");//635custom_prometheus
 	    }
 	    if(HBFLAG!=0){
-	   	HBFLAG=strcmp(gameId, "loader");//openisoloader??
+	   	HBFLAG=strcmp(gameId, "aloader");//aloader
 	   	}
 			if(HBFLAG==0){
 	   	k=5;
