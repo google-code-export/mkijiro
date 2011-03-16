@@ -21,6 +21,10 @@ certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
 0x8838DBF0 moviezone,pspfat should freeze after search/save...slim user use extraram setting
 
+2011/3/16
+cwchbを使わないけどびるどできるようにした
+aloader1.24/custompromethesu/prometheus以外ろだ(openisoloader/aloader120以前)は古いため廃止
+
 2011/3/15
 プロメテウス他ろだ経由のID処理を改善
 サーチ結果ジャンプを結果最大以上にならないよう修正
@@ -330,9 +334,33 @@ NPR cheat;back to normal 32bit write
 joker cheat;joker code,
 dma cheat;pointer code
 
-MODED BY HAROTURBO
-windows;xpsp3+MinimalistPSP+cmdhere+psplink-cmfusion-rambreak-mod
-linux;ubuntu10.10TLS+,psptoolchain+RabbitCVS+psplink
-
-GOOGLE_SVN
+by HAROTURBO
 http://code.google.com/p/mkijiro/
+
+ORIGINAL REDHATE(COLDFUSION)
+MODDED BY HAROTURBO
+
+What's deferrent(details:see changelog,ESPECIALLY　NOTHING NEW)
+support more opcode(fpu,vfpu) from PRXTOOL
+fix sevaral freeze problem HOMEBREW/POPS support
+
+DEVTOOL;
+WINDOWS XP,MinimalistPSP+cmdhere+psplink-rambreakmod+tortoisesvn
+UBUNTU,psptoolchain+RabitVCS(subversion)+psplink
+
+LINK;
+AIOLAB(ORG MK SRCCODE)
+http://aiolab.com/forum/forum.php
+MinimalistPSPSDK
+http://minpspw.sourceforge.net/
+CMDHERE
+http://www.commandline.co.uk/cmdhere/index.html
+PSPLINK(ORG PSPSDK,MODDED BY CMFUSION AUTHOR,SUPPORT RAMBREAK
+http://ps2dev.org/
+http://www.mediafire.com?sharekey=7f16f54968c3aaecd41644271fb54c6c1da59e1a751b9939f0a154af670496da
+TORTOISESVN
+http://tortoisesvn.tigris.org/
+RabitVCS
+http://www.rabbitvcs.org/
+WGET
+http://gnuwin32.sourceforge.net/packages/wget.htm
