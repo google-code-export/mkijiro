@@ -97,7 +97,7 @@ PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 #endif
 
 //Globals
-unsigned char *MKVER="  MKIJIRO20110316";
+unsigned char *MKVER="  MKIJIRO20110401";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -690,7 +690,8 @@ void cheatEnable(unsigned int a_cheat){
 	unsigned int counter;
 	unsigned char resetDMA=0;
 	cheatDMA=0;
-        unsigned char joker=0;
+	unsigned char NULLPOINTER=0;
+    unsigned char joker=0;
   	
 	counter=cheat[a_cheat].block;
 	while(counter < (cheat[a_cheat].block+cheat[a_cheat].len)){
@@ -711,14 +712,20 @@ void cheatEnable(unsigned int a_cheat){
 		
 		if(joker){
 			if(block[counter].flags & FLAG_DMA){
-				if(block[counter].hakVal!=0xFFFFFFFF){
+				if(block[counter].address==0xFFFFFFFF){
 					cheatDMA=*((unsigned int*)(0x08800000 + (block[counter].hakVal & 0x1FFFFFC))) - 0x08800000;
-					if(block[counter].stdVal != cheatDMA){
+					if(cheatDMA>0 && cheatDMA<0x1800000){
+						if(block[counter].stdVal != cheatDMA){
 						resetDMA=1;
 						block[counter].stdVal=cheatDMA;
+							NULLPOINTER=0;
+							}
+						else{
+						resetDMA=0;
+						}
 					}
 					else{
-						resetDMA=0;
+						NULLPOINTER=1;
 					}
 				}
 				else{
@@ -727,7 +734,7 @@ void cheatEnable(unsigned int a_cheat){
 				}
 			}
 			else if(!resetDMA){
-			if((cheatDMA+block[counter].address >= 0x08800000) && (cheatDMA+block[counter].address <= 0x0A000000)){
+			if((cheatDMA+block[counter].address >= 0x08800000) && (cheatDMA+block[counter].address <= 0x0A000000) && NULLPOINTER==0){
 				switch(block[counter].flags & FLAG_DWORD){
 					case FLAG_DWORD:
 						if(block[counter].flags & FLAG_CWC){
@@ -756,26 +763,32 @@ void cheatEnable(unsigned int a_cheat){
 		}
 		else{
 			if(block[counter].flags & FLAG_DMA){
-				if(block[counter].hakVal!=0xFFFFFFFF){ 
-					if((*((unsigned int*)(0x08800000 + (block[counter].hakVal & 0x1FFFFFC))) >= 0x08800000) && (*((unsigned int*)(0x08800000 + (block[counter].hakVal & 0x1FFFFFC))) <= 0x09FFFFFC)){
+				if(block[counter].address==0xFFFFFFFF){ 
+					//if((*((unsigned int*)(0x08800000 + (block[counter].hakVal & 0x1FFFFFC))) >= 0x08800000) && (*((unsigned int*)(0x08800000 + (block[counter].hakVal & 0x1FFFFFC))) <= 0x09FFFFFC)){
 						cheatDMA=*((unsigned int*)(0x08800000 + (block[counter].hakVal & 0x1FFFFFC))) - 0x08800000;
+						if(cheatDMA>0 && cheatDMA<0x1800000){
 						if(block[counter].stdVal != cheatDMA){
-							resetDMA=1;
-							block[counter].stdVal=cheatDMA;
-						}
+						resetDMA=1;
+						block[counter].stdVal=cheatDMA;
+							NULLPOINTER=0;
+							}
 						else{
 							resetDMA=0;
 						}
-					}
+						}
+						else{
+							NULLPOINTER=1;
+						}
+					//}
 				}
 				else{
 					cheatDMA=0;
 					resetDMA=0;
 				}
 			}
-			else if((cheatDMA+block[counter].address >= 0x08800000) && (cheatDMA+block[counter].address <= 0x0A000000)){
+			else if((cheatDMA+block[counter].address >= 0x08800000) && (cheatDMA+block[counter].address <= 0x0A000000) && NULLPOINTER==0){
 				//Backup data?
-				if(((cheatDMA) && (resetDMA)) || ((cheat[a_cheat].flags & FLAG_FRESH) && (block[counter].flags & FLAG_FREEZE))){
+				if(((cheatDMA) && (resetDMA==1)) || ((cheat[a_cheat].flags & FLAG_FRESH) && (block[counter].flags & FLAG_FREEZE))){
 					switch(block[counter].flags & FLAG_DWORD){
 						case FLAG_DWORD:
 						if(block[counter].flags & FLAG_CWC){
@@ -822,9 +835,7 @@ void cheatEnable(unsigned int a_cheat){
 				}
 			}
 		}
-		
 		counter++;
-		
 	}
 	joker=0;
 }
@@ -832,15 +843,22 @@ void cheatEnable(unsigned int a_cheat){
 void cheatDisable(unsigned int a_cheat){
 	unsigned int counter;
 	unsigned char resetDMA=0;
+	unsigned char NULLPOINTER=0;
 	cheatDMA=0;
 	counter=cheat[a_cheat].block;
 	while(counter < (cheat[a_cheat].block+cheat[a_cheat].len)){
 		if(block[counter].flags & FLAG_DMA) {
-			if(block[counter].hakVal!=0xFFFFFFFF) {
+			if(block[counter].address==0xFFFFFFFF) {
 				cheatDMA=*((unsigned int*)(0x08800000 + (block[counter].hakVal & 0x1FFFFFC))) - 0x08800000;
 				if(block[counter].stdVal != cheatDMA){
-					resetDMA=1;
-					block[counter].stdVal=cheatDMA;
+				if(cheatDMA>0 && cheatDMA<0x1800000){
+						resetDMA=1;
+						block[counter].stdVal=cheatDMA;
+						NULLPOINTER=0;
+						}
+						else{
+						NULLPOINTER=1;
+						}
 				}
 				else{
 					resetDMA=0;
@@ -852,7 +870,7 @@ void cheatDisable(unsigned int a_cheat){
 			}
 		}
 		else if(!resetDMA){
-			if((cheatDMA+block[counter].address >= 0x08800000) && (cheatDMA+block[counter].address < 0x0A000000)){
+			if((cheatDMA+block[counter].address >= 0x08800000) && (cheatDMA+block[counter].address < 0x0A000000)&& NULLPOINTER==0){
 			switch(block[counter].flags & FLAG_DWORD){
 				case FLAG_DWORD:
 				if((block[counter].flags & FLAG_JOKER)){
@@ -1291,7 +1309,7 @@ void buttonCallback(int curr, int last, void *arg){
   unsigned int address;
   unsigned char analog[1];
   
- #ifdef _CFW_
+ /*#ifdef _CFW_
   analog[1]=*(unsigned char *)(0x880E5ED5);//0x880E5ED4 ,0x88235684 635CUSTOM16 2k
   analog[0]=*(unsigned char *)(0x880E5ED4);//0x8822C894 0x88124904 TNC 1k,not worked
   if(analog[0] > 200){					//also i know &pad.Lx,but it work MKmenu only, never in game
@@ -1323,6 +1341,7 @@ void buttonCallback(int curr, int last, void *arg){
 	curr=curr & 0xFFFFFBFF;
 	}
    #endif
+   */
   *(unsigned int *)(0x8800000+JOKERADDRESS)=curr;
 	
   if(vram==NULL) return;
@@ -1341,10 +1360,10 @@ void buttonCallback(int curr, int last, void *arg){
   else if(((curr & screenKey) == screenKey) && (!menuDrawn)){
   screenTime=1;
   #endif
-  }	  
+  }
   else if(((curr & triggerKey) == triggerKey) && (!menuDrawn)){
 	//Backup all the cheat "blocks"
-	if(!cheatSaved){
+	if(!cheatSaved){//unsaved cheat
 		counter=0;
 		scounter=0;
 		while(counter < blockTotal){	
@@ -3949,12 +3968,14 @@ void menuInput(){
 					  if(cheatSaved) //Re-Update the stdVal
 					  {
 						switch(block[extSelected[0]].flags & FLAG_DWORD) 
-						{
-							case FLAG_BYTE:  block[extSelected[0]].stdVal=*((unsigned char*)(block[extSelected[0]].address)); break;
-							case FLAG_WORD:  block[extSelected[0]].stdVal=*((unsigned short*)(block[extSelected[0]].address & 0xFFFFFFE)); break;
-							case FLAG_DWORD: block[extSelected[0]].stdVal=*((unsigned int*)(block[extSelected[0]].address & 0xFFFFFFC)); break;
+						{							
+						if(((cheatDMA+block[extSelected[0]].address)>0x8800000) && ((cheatDMA+block[extSelected[0]].address)<0xA000000)){
+							case FLAG_BYTE:  block[extSelected[0]].stdVal=*((unsigned char*)(cheatDMA+block[extSelected[0]].address)); break;
+							case FLAG_WORD:  block[extSelected[0]].stdVal=*((unsigned short*)(cheatDMA+block[extSelected[0]].address & 0xFFFFFFE)); break;
+							case FLAG_DWORD: block[extSelected[0]].stdVal=*((unsigned int*)(cheatDMA+block[extSelected[0]].address & 0xFFFFFFC)); break;
 							default:
 								block[blockTotal].flags|=FLAG_UWORD;
+						}
 						}
 					  }
 					  break;
@@ -4014,11 +4035,13 @@ void menuInput(){
 					  {
 						switch(block[extSelected[0]].flags & FLAG_DWORD) 
 						{
-							case FLAG_BYTE:  block[extSelected[0]].stdVal=*((unsigned char*)(block[extSelected[0]].address)); break;
-							case FLAG_WORD:  block[extSelected[0]].stdVal=*((unsigned short*)(block[extSelected[0]].address & 0xFFFFFFE)); break;
-							case FLAG_DWORD: block[extSelected[0]].stdVal=*((unsigned int*)(block[extSelected[0]].address & 0xFFFFFFC)); break;
+							if(((cheatDMA+block[extSelected[0]].address)>0x8800000) && ((cheatDMA+block[extSelected[0]].address)<0xA000000)){
+							case FLAG_BYTE:  block[extSelected[0]].stdVal=*((unsigned char*)(cheatDMA+block[extSelected[0]].address)); break;
+							case FLAG_WORD:  block[extSelected[0]].stdVal=*((unsigned short*)(cheatDMA+block[extSelected[0]].address & 0xFFFFFFE)); break;
+							case FLAG_DWORD: block[extSelected[0]].stdVal=*((unsigned int*)(cheatDMA+block[extSelected[0]].address & 0xFFFFFFC)); break;
 							default:
 								block[blockTotal].flags|=FLAG_UWORD;
+							}
 						}
 					  }
 					  break;
