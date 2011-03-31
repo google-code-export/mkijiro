@@ -21,6 +21,12 @@ certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
 0x8838DBF0 moviezone,pspfat should freeze after search/save...slim user use extraram setting
 
+2011/3/31
+コードアドレスを変更したときポインタコードの復号値がベースアドレス+オフセットになってなかったので修正
+無効なベースアドレスの時コードが実行されていたので実行しないように修正
+FFFFFFFF 00000000 //
+00001000 11111111 //修正前は1000に書き込まれてしまう
+
 2011/3/16
 cwchbを使わないけどびるどできるようにした
 aloader1.24/custompromethesu/prometheus以外ろだ(openisoloader/aloader120以前)は古いため廃止
