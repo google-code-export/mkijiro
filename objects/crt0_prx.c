@@ -3967,9 +3967,9 @@ void menuInput(){
 							}
 					  if(cheatSaved) //Re-Update the stdVal
 					  {
+						if(((cheatDMA+block[extSelected[0]].address)>0x8800000) && ((cheatDMA+block[extSelected[0]].address)<0xA000000)){
 						switch(block[extSelected[0]].flags & FLAG_DWORD) 
 						{							
-						if(((cheatDMA+block[extSelected[0]].address)>0x8800000) && ((cheatDMA+block[extSelected[0]].address)<0xA000000)){
 							case FLAG_BYTE:  block[extSelected[0]].stdVal=*((unsigned char*)(cheatDMA+block[extSelected[0]].address)); break;
 							case FLAG_WORD:  block[extSelected[0]].stdVal=*((unsigned short*)(cheatDMA+block[extSelected[0]].address & 0xFFFFFFE)); break;
 							case FLAG_DWORD: block[extSelected[0]].stdVal=*((unsigned int*)(cheatDMA+block[extSelected[0]].address & 0xFFFFFFC)); break;
@@ -4033,15 +4033,15 @@ void menuInput(){
 							}
 					  if(cheatSaved) //Re-Update the stdVal
 					  {
+						if(((cheatDMA+block[extSelected[0]].address)>0x8800000) && ((cheatDMA+block[extSelected[0]].address)<0xA000000)){
 						switch(block[extSelected[0]].flags & FLAG_DWORD) 
 						{
-							if(((cheatDMA+block[extSelected[0]].address)>0x8800000) && ((cheatDMA+block[extSelected[0]].address)<0xA000000)){
 							case FLAG_BYTE:  block[extSelected[0]].stdVal=*((unsigned char*)(cheatDMA+block[extSelected[0]].address)); break;
 							case FLAG_WORD:  block[extSelected[0]].stdVal=*((unsigned short*)(cheatDMA+block[extSelected[0]].address & 0xFFFFFFE)); break;
 							case FLAG_DWORD: block[extSelected[0]].stdVal=*((unsigned int*)(cheatDMA+block[extSelected[0]].address & 0xFFFFFFC)); break;
 							default:
 								block[blockTotal].flags|=FLAG_UWORD;
-							}
+						}
 						}
 					  }
 					  break;
