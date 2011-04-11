@@ -21,6 +21,20 @@ certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
 0x8838DBF0 moviezone,pspfat should freeze after search/save...slim user use extraram setting
 
+2011/4/12
+NPR/CWCフラグ変更時bit情報を継続するように修正
+JOKER/DMA時はBIT変更できないよう修正
+bit変更をアライメント例外がおきない範囲で拡張(BYTE->WORD アドレス偶数,WORD->DWORD アドレス4倍数)
+8bit/16bitCWCこーどが復元ありになっていたので修正
+#CWC NO RESTORE FIX
+0x20001000 0x11
+0x20001002 0x2222
+0x20001004 0x44444444
+0xFF000300 0x00000000
+0x20001000 0x10
+0x20001002 0x2020
+0x20001004 0x40404040
+
 2011/3/31
 コードアドレスを変更したときポインタコードの復号値がベースアドレス+オフセットになってなかったので修正
 無効なベースアドレスの時コードが実行されていたので実行しないように修正

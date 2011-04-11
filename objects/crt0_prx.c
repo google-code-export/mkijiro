@@ -97,7 +97,7 @@ PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 #endif
 
 //Globals
-unsigned char *MKVER="  MKIJIRO20110401";
+unsigned char *MKVER="  MKIJIRO20110412";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -735,11 +735,12 @@ void cheatEnable(unsigned int a_cheat){
 			}
 			else if(!resetDMA){
 			if((cheatDMA+block[counter].address >= 0x08800000) && (cheatDMA+block[counter].address <= 0x0A000000) && NULLPOINTER==0){
+				if(block[counter].flags & FLAG_CWC){
+				}
+				else{
 				switch(block[counter].flags & FLAG_DWORD){
 					case FLAG_DWORD:
-						if(block[counter].flags & FLAG_CWC){
-						}
-						else if(block[counter].address % 4 == 0){
+						if(block[counter].address % 4 == 0){
 						*((unsigned int*)(cheatDMA+block[counter].address & 0xFFFFFFC))=block[counter].stdVal;
 						sceKernelDcacheWritebackInvalidateRange(cheatDMA+block[counter].address,4);
 						sceKernelIcacheInvalidateRange(cheatDMA+block[counter].address,4);
@@ -757,6 +758,7 @@ void cheatEnable(unsigned int a_cheat){
 						sceKernelDcacheWritebackInvalidateRange(cheatDMA+block[counter].address,1);
 						sceKernelIcacheInvalidateRange(cheatDMA+block[counter].address,1);
 					break;
+						}
 					}
 				}
 			}
@@ -789,11 +791,12 @@ void cheatEnable(unsigned int a_cheat){
 			else if((cheatDMA+block[counter].address >= 0x08800000) && (cheatDMA+block[counter].address <= 0x0A000000) && NULLPOINTER==0){
 				//Backup data?
 				if(((cheatDMA) && (resetDMA==1)) || ((cheat[a_cheat].flags & FLAG_FRESH) && (block[counter].flags & FLAG_FREEZE))){
+					if(block[counter].flags & FLAG_CWC){
+					}
+					else{
 					switch(block[counter].flags & FLAG_DWORD){
 						case FLAG_DWORD:
-						if(block[counter].flags & FLAG_CWC){
-						}
-							else if(block[counter].address % 4 == 0){
+							if(block[counter].address % 4 == 0){
 							block[counter].stdVal=*((unsigned int*)(cheatDMA+block[counter].address & 0xFFFFFFC));
 							}
 						break;
@@ -807,8 +810,9 @@ void cheatEnable(unsigned int a_cheat){
 							block[counter].stdVal=*((unsigned char*)(cheatDMA+block[counter].address));
 						break;
 						}
-					if(block[counter].flags & FLAG_FREEZE){
+						if(block[counter].flags & FLAG_FREEZE){
 						block[counter].hakVal=block[counter].stdVal;
+					}
 					}
 				}
 				//Apply cheat!
@@ -871,19 +875,19 @@ void cheatDisable(unsigned int a_cheat){
 		}
 		else if(!resetDMA){
 			if((cheatDMA+block[counter].address >= 0x08800000) && (cheatDMA+block[counter].address < 0x0A000000)&& NULLPOINTER==0){
-			switch(block[counter].flags & FLAG_DWORD){
-				case FLAG_DWORD:
-				if((block[counter].flags & FLAG_JOKER)){
+				if(block[counter].flags & FLAG_CWC){
+				}
+				else if((block[counter].flags & FLAG_JOKER)){
 				//nocode
 				}
-				else if(block[counter].flags & FLAG_CWC){
-				}
 				else{
+			switch(block[counter].flags & FLAG_DWORD){
+				case FLAG_DWORD:
 					if(block[counter].address % 4 == 0){
 					*((unsigned int*)(cheatDMA+block[counter].address & 0xFFFFFFC))=block[counter].stdVal;
 					sceKernelDcacheWritebackInvalidateRange(cheatDMA+block[counter].address,4);
-					sceKernelIcacheInvalidateRange(cheatDMA+block[counter].address,4);}
-				}
+					sceKernelIcacheInvalidateRange(cheatDMA+block[counter].address,4);
+					}
 				break;
 				case FLAG_WORD:
 					if(block[counter].address % 2 == 0){
@@ -898,6 +902,7 @@ void cheatDisable(unsigned int a_cheat){
 					sceKernelIcacheInvalidateRange(cheatDMA+block[counter].address,1);
 				break;
 				}
+			}
 			}
 		}
 		counter++;
@@ -3781,15 +3786,23 @@ void menuInput(){
 			}
 			else if(copyMenu ==5){//normal, viewlog,clear log
 			  if(extMenu == 1){
-			  	  if(block[extSelected[0]].flags & FLAG_DMA){
+			  	if(block[extSelected[0]].flags & FLAG_DMA){
 				  block[extSelected[0]].address=0x08800000;
-				  }
-			if(pad.Buttons & PSP_CTRL_SQUARE){
-				block[extSelected[0]].flags=FLAG_CWC|FLAG_DWORD;
-					sceKernelDelayThread(100000);
-			}
-			else{
-			block[extSelected[0]].flags=FLAG_DWORD;
+				}
+				if(pad.Buttons & PSP_CTRL_SQUARE){
+				switch(block[extSelected[0]].flags & FLAG_DWORD){
+				case FLAG_BYTE:block[extSelected[0]].flags=FLAG_CWC|FLAG_BYTE;break;
+				case FLAG_WORD:block[extSelected[0]].flags=FLAG_CWC|FLAG_WORD;break;
+				case FLAG_DWORD:block[extSelected[0]].flags=FLAG_CWC|FLAG_DWORD;break;
+				}
+				sceKernelDelayThread(100000);
+				}
+				else{
+				switch(block[extSelected[0]].flags & FLAG_DWORD){
+				case FLAG_BYTE:block[extSelected[0]].flags=FLAG_BYTE;break;
+				case FLAG_WORD:block[extSelected[0]].flags=FLAG_WORD;break;
+				case FLAG_DWORD:block[extSelected[0]].flags=FLAG_DWORD;break;
+				}
 			}
 				}
 				else if(tabSelected == 3)
@@ -3904,15 +3917,29 @@ void menuInput(){
 			  }
 			  if(pad.Buttons & PSP_CTRL_SQUARE){
 				//Don't allow the user to cause a dword/byte misalignment!!!
-				if(!(block[extSelected[0]].address % 4))
-				{
+					if(block[extSelected[0]].flags & FLAG_DMA){
+					}
+					else if(block[extSelected[0]].flags & FLAG_JOKER){
+					}
+					else{
 					switch(block[extSelected[0]].flags & FLAG_DWORD)
 					{
-					case FLAG_BYTE: block[extSelected[0]].flags=(block[extSelected[0]].flags & ~FLAG_DWORD) | FLAG_WORD; break;
-					case FLAG_WORD: block[extSelected[0]].flags=(block[extSelected[0]].flags & ~FLAG_DWORD) | FLAG_DWORD; break;
-					case FLAG_DWORD: block[extSelected[0]].flags=(block[extSelected[0]].flags & ~FLAG_DWORD) | FLAG_BYTE; break;
+					case FLAG_BYTE:
+					if(block[extSelected[0]].address % 2==0){
+					block[extSelected[0]].flags=(block[extSelected[0]].flags & ~FLAG_DWORD) | FLAG_WORD;
 					}
-				}
+					break;
+					case FLAG_WORD:
+					if(block[extSelected[0]].address % 4==0){
+					block[extSelected[0]].flags=(block[extSelected[0]].flags & ~FLAG_DWORD) | FLAG_DWORD; 
+					}
+					break;
+					case FLAG_DWORD:
+					block[extSelected[0]].flags=(block[extSelected[0]].flags & ~FLAG_DWORD) | FLAG_BYTE;
+					break;
+					}
+					}
+				//}
 				menuDraw();
 				sceKernelDelayThread(150000);
 			  }
@@ -7776,9 +7803,12 @@ else{
 	    HBFLAG=strcmp(gameId, "HB54764196");//635custom_prometheus,
 	    }
 	    if(HBFLAG!=0){
-	   	HBFLAG=strcmp(gameId, "HB58B0E31E");//aloader1.24
+	   	HBFLAG=strcmp(gameId, "HB86CA566E");//aloader1.25
 	   	}
-	  /*if(HBFLAG!=0){ these are old loder,use lasteloader
+	  /*if(HBFLAG!=0){
+	   	HBFLAG=strcmp(gameId, "HB58B0E31E");//aloader1.21
+	   	}
+	    if(HBFLAG!=0){ these are old loder,use lasteloader
 	    HBFLAG=strcmp(gameId, "HB1F811640");//openisoloader2.4beta
 	    }
 	   	if(HBFLAG!=0){
