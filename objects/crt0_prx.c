@@ -97,7 +97,7 @@ PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 #endif
 
 //Globals
-unsigned char *MKVER="  MKIJIRO20110412";
+unsigned char *MKVER="  MKIJIRO20110415";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -1567,8 +1567,13 @@ void menuDraw(){
 				pspDebugScreenPuts("  Copy value\n");
 				break;
 				case 4:
-					if(pad.Buttons & PSP_CTRL_SQUARE && ((tabSelected==3 && flipme==0) || extMenu == 1)){
+				if(pad.Buttons & PSP_CTRL_SQUARE){
+				if((tabSelected==3 && flipme==0 && searchHistory[0].hakVal!=0x03E00008) || extMenu == 1){
 				pspDebugScreenPuts("  Paste Converted Jumpaddress+8\n");
+				}
+				else if((tabSelected==3 && flipme==0) && searchHistory[0].hakVal==0x03E00008){
+				pspDebugScreenPuts("  Quick Hook Find by break exception\n");
+				}
 				}
 				else{
 				pspDebugScreenPuts("  Paste value\n");
@@ -3774,8 +3779,24 @@ void menuInput(){
 					}
 					else{
 				  	  if(pad.Buttons & PSP_CTRL_SQUARE){
+						if(searchHistory[0].hakVal==0x03E00008 && searchResultCounter!=0){
+							int i=0;
+							int searchHookMax=0;
+							if(searchResultCounter>499){
+							searchHookMax=499;
+							}
+							else{
+							searchHookMax=searchResultCounter;
+							}
+							while(i<searchHookMax){
+							*(unsigned int*)(searchAddress[i]&0x0FFFFFFC)=0x000001CD;
+							i++;
+							}
+						}
+						else{
 				  	  	 *((unsigned int*)(decodeAddress[bdNo]+(decodeY[bdNo]*4)))=0x0A200002 + ((copyData-0x8800000)>>2);
 				  	  	 	sceKernelDelayThread(100000);
+				  	  	}
 				  	  }
 				  	  else{
 						*((unsigned int*)(decodeAddress[bdNo]+(decodeY[bdNo]*4)))=copyData2;
@@ -3947,6 +3968,7 @@ void menuInput(){
 			  if(extSelected[3]){
 				if(pad.Buttons & PSP_CTRL_UP)
 				{
+					restore(0);
 				  switch(extSelected[1])
 				  {
 					case 0: 
@@ -3992,19 +4014,7 @@ void menuInput(){
 								block[extSelected[0]].address=0x09FFFFFC;
 							
 							}
-					  if(cheatSaved) //Re-Update the stdVal
-					  {
-						if(((cheatDMA+block[extSelected[0]].address)>0x8800000) && ((cheatDMA+block[extSelected[0]].address)<0xA000000)){
-						switch(block[extSelected[0]].flags & FLAG_DWORD) 
-						{							
-							case FLAG_BYTE:  block[extSelected[0]].stdVal=*((unsigned char*)(cheatDMA+block[extSelected[0]].address)); break;
-							case FLAG_WORD:  block[extSelected[0]].stdVal=*((unsigned short*)(cheatDMA+block[extSelected[0]].address & 0xFFFFFFE)); break;
-							case FLAG_DWORD: block[extSelected[0]].stdVal=*((unsigned int*)(cheatDMA+block[extSelected[0]].address & 0xFFFFFFC)); break;
-							default:
-								block[blockTotal].flags|=FLAG_UWORD;
-						}
-						}
-					  }
+					restore(1);
 					  break;
 					case 1:
 						if(block[extSelected[0]].flags & FLAG_FREEZE)
@@ -4026,6 +4036,7 @@ void menuInput(){
 				}
 				else if(pad.Buttons & PSP_CTRL_DOWN)
 				{
+					restore(0);
 				  switch(extSelected[1])
 				  {
 					case 0:
@@ -4058,19 +4069,7 @@ void menuInput(){
 							{
 								block[extSelected[0]].address=0x09FFFFFC;
 							}
-					  if(cheatSaved) //Re-Update the stdVal
-					  {
-						if(((cheatDMA+block[extSelected[0]].address)>0x8800000) && ((cheatDMA+block[extSelected[0]].address)<0xA000000)){
-						switch(block[extSelected[0]].flags & FLAG_DWORD) 
-						{
-							case FLAG_BYTE:  block[extSelected[0]].stdVal=*((unsigned char*)(cheatDMA+block[extSelected[0]].address)); break;
-							case FLAG_WORD:  block[extSelected[0]].stdVal=*((unsigned short*)(cheatDMA+block[extSelected[0]].address & 0xFFFFFFE)); break;
-							case FLAG_DWORD: block[extSelected[0]].stdVal=*((unsigned int*)(cheatDMA+block[extSelected[0]].address & 0xFFFFFFC)); break;
-							default:
-								block[blockTotal].flags|=FLAG_UWORD;
-						}
-						}
-					  }
+					restore(1);
 					  break;
 					case 1: 
 						if(block[extSelected[0]].flags & FLAG_FREEZE)
@@ -7718,6 +7717,47 @@ void decodeMAX(){
  decodeY[bdNo]=(decodeAddress[bdNo]-0x49FFFF98)>>2;
  decodeAddress[bdNo]=0x49FFFF98;
  if(decodeY[bdNo]>25){decodeY[bdNo]=25;}}
+}
+
+void restore(unsigned char restore_flag){
+					if(cheatSaved)//backup
+					  {
+						if(((cheatDMA+block[extSelected[0]].address)>0x8800000) && ((cheatDMA+block[extSelected[0]].address)<0xA000000)){
+						if(block[extSelected[0]].flags & FLAG_CWC){}
+						else if(block[extSelected[0]].flags & FLAG_JOKER){}
+						else{
+						switch(block[extSelected[0]].flags & FLAG_DWORD)
+						{	
+							case FLAG_BYTE:
+							if(restore_flag){
+							block[extSelected[0]].stdVal=*((unsigned char*)(cheatDMA+block[extSelected[0]].address));
+							}
+							else{
+							*((unsigned char*)(cheatDMA+block[extSelected[0]].address))=block[extSelected[0]].stdVal; break;
+							}
+							break;
+							case FLAG_WORD:
+							if(restore_flag){
+							block[extSelected[0]].stdVal=*((unsigned short*)(cheatDMA+block[extSelected[0]].address & 0xFFFFFFFE));
+							}
+							else{
+							*((unsigned short*)(cheatDMA+block[extSelected[0]].address & 0xFFFFFFFE))=block[extSelected[0]].stdVal; break;
+							}
+							break;
+							case FLAG_DWORD:
+							if(restore_flag){
+							block[extSelected[0]].stdVal=*((unsigned int*)(cheatDMA+block[extSelected[0]].address& 0xFFFFFFFC));
+							}
+							else{
+							*((unsigned int*)(cheatDMA+block[extSelected[0]].address& 0xFFFFFFFC))=block[extSelected[0]].stdVal; break;
+							}
+							break;
+							default:
+							block[blockTotal].flags|=FLAG_UWORD;
+						}
+ 						}
+ 						}
+					}
 }
 
 void GETID(){
