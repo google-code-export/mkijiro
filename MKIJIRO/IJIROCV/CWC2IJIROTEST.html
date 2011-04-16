@@ -376,13 +376,13 @@
 							value&=0x0FFFFFFF;
 							if(value >= 0x8000){
 						//0x00002014 0x3C0Beeee
-							funcOutSect=funcOutSect+decDigi(ASM+40, 8)+' '+decDigi((value>>16)|0x3C0B0000,8)+'<br>';
+							funcOutSect=funcOutSect+decDigi(ASM+44, 8)+' '+decDigi((value>>16)|0x3C0B0000,8)+'<br>';
 						//0x00002018 0x356Beeee
-							funcOutSect=funcOutSect+decDigi(ASM+44, 8)+' '+decDigi((value&0xFFFF)|0x356B0000,8)+'<br>';
+							funcOutSect=funcOutSect+decDigi(ASM+48, 8)+' '+decDigi((value&0xFFFF)|0x356B0000,8)+'<br>';
 						//0x01EB7821 addu t7 t7 t3
-							funcOutSect=funcOutSect+decDigi(ASM+48, 8)+' 0x01EB7823<br>';
+							funcOutSect=funcOutSect+decDigi(ASM+52, 8)+' 0x01EB7823<br>';
 						//0x00002028 0x8DEF0000
-							funcOutSect=funcOutSect+decDigi(ASM+52, 8)+' 0x8DEF0000<br>';
+							funcOutSect=funcOutSect+decDigi(ASM+56, 8)+' 0x8DEF0000<br>';
 						//0x0000202C 0x00000000
 							//nop ASM+56
 						ASM+=20;
@@ -448,7 +448,7 @@
 						//0x00002034 0x254AFFFF
 							funcOutSect=funcOutSect+decDigi(ASM+48, 8)+' 0x254AFFFF<br>';
 						//0x00002038 0x1540FFF7
-							funcOutSect=funcOutSect+decDigi(ASM+52, 8)+' '+decDigi(-(lbline+sbline+lbline2)+0x1540FFF8,8)+'<br>';
+							funcOutSect=funcOutSect+decDigi(ASM+52, 8)+' '+decDigi(-(lbline+sbline+lbline2)+0x5540FFF8,8)+'<br>';
 						//0x0000203C 0x010C4021
 							funcOutSect=funcOutSect+decDigi(ASM+56, 8)+' 0x010C4021<br>';
 						ASM+=60;
@@ -583,13 +583,13 @@
 							value&=0x0FFFFFFF;
 							if(value >= 0x8000){
 						//0x00002014 0x3C0Beeee
-							funcOutSect=funcOutSect+decDigi(ASM+40, 8)+' '+decDigi((value>>16)|0x3C0B0000,8)+'<br>';
+							funcOutSect=funcOutSect+decDigi(ASM+44, 8)+' '+decDigi((value>>16)|0x3C0B0000,8)+'<br>';
 						//0x00002018 0x356Beeee
-							funcOutSect=funcOutSect+decDigi(ASM+44, 8)+' '+decDigi((value&0xFFFF)|0x356B0000,8)+'<br>';
+							funcOutSect=funcOutSect+decDigi(ASM+48, 8)+' '+decDigi((value&0xFFFF)|0x356B0000,8)+'<br>';
 						//0x01EB7821 addu t7 t7 t3
-							funcOutSect=funcOutSect+decDigi(ASM+48, 8)+' 0x01EB7823<br>';
+							funcOutSect=funcOutSect+decDigi(ASM+52, 8)+' 0x01EB7823<br>';
 						//0x00002028 0x8DEF0000
-							funcOutSect=funcOutSect+decDigi(ASM+52, 8)+' 0x8DEF0000<br>';
+							funcOutSect=funcOutSect+decDigi(ASM+56, 8)+' 0x8DEF0000<br>';
 						//0x0000202C 0x00000000
 							//nop ASM+56
 						ASM+=20;
@@ -655,7 +655,7 @@
 						//0x00002034 0x254AFFFF
 							funcOutSect=funcOutSect+decDigi(ASM+48, 8)+' 0x254AFFFF<br>';
 						//0x00002038 0x1540FFF7
-							funcOutSect=funcOutSect+decDigi(ASM+52, 8)+' '+decDigi(-(lbline+sbline+lbline2)+0x1540FFF8,8)+'<br>';
+							funcOutSect=funcOutSect+decDigi(ASM+52, 8)+' '+decDigi(-(lbline+sbline+lbline2)+0x5540FFF8,8)+'<br>';
 						//0x0000203C 0x010C4021
 							funcOutSect=funcOutSect+decDigi(ASM+56, 8)+' 0x010C4021<br>';													
 						ASM+=60;
