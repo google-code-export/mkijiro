@@ -390,9 +390,9 @@
 							if(value < 0x8000){
 							seoffset=(0x10000-value)&0xFFFF;
 						//0x00002028 0x8DEFiiii
-							funcOutSect=funcOutSect+decDigi(ASM+40, 8)+' '+decDigi(seoffset|0x8DEF0000,8)+'<br>';
+							funcOutSect=funcOutSect+decDigi(ASM+44, 8)+' '+decDigi(seoffset|0x8DEF0000,8)+'<br>';
 						//0x0000202C 0x00000000
-						//nop ASM+40
+						//nop ASM+48
 						ASM+=8;
 							}
 							}
@@ -591,15 +591,15 @@
 						//0x00002028 0x8DEF0000
 							funcOutSect=funcOutSect+decDigi(ASM+56, 8)+' 0x8DEF0000<br>';
 						//0x0000202C 0x00000000
-							//nop ASM+56
+							//nop ASM+60
 						ASM+=20;
 							}
 							if(value < 0x8000){
 							seoffset=(0x10000-value)&0xFFFF;
 						//0x00002028 0x8DEFiiii
-							funcOutSect=funcOutSect+decDigi(ASM+40, 8)+' '+decDigi(seoffset|0x8DEF0000,8)+'<br>';
+							funcOutSect=funcOutSect+decDigi(ASM+44, 8)+' '+decDigi(seoffset|0x8DEF0000,8)+'<br>';
 						//0x0000202C 0x00000000
-						//nop ASM+40
+						//nop ASM+48
 						ASM+=8;
 							}
 							}
