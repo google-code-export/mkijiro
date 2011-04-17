@@ -2,6 +2,7 @@
 <!--
 	var hexDigits = new Array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'a', 'b', 'c', 'd', 'e', 'f');
 
+
 	function pad(text, len)
 	{
 		var textLen=text.length;
@@ -74,7 +75,8 @@
 		var lbline=0;
 		var sbline=0;
 		var lbline2=0;
-		var seoffset=0;
+		var seoffset=0;	
+		var DMA=0;
 		//Convert what's given
 		while (counter < size) {
 			letC = text.substr(counter,1);
@@ -117,6 +119,7 @@
 				if(funcOut != "")
 				{
 					funcOut=funcOut + funcOutSect + '\n#';
+					DMA=0;
 				}
 				else
 				{
@@ -1092,7 +1095,9 @@
 							if(bkAddress==0){
 							bkAddress=fcp;
 							}
+							if(DMA!=bkAddress){
 							funcOutSect=funcOutSect+'0xFFFFFFFF '+decDigi(bkAddress, 8)+'\n';
+							}DMA=bkAddress;
 							if(bit==2){
 							funcOutSect=funcOutSect+decDigi(value, 8)+' '+decDigi(bkValue, 8)+'\n';
 							}
@@ -1401,7 +1406,7 @@ document.cvcode.elements[0].value = funcOut;
 MKIJIRO CODE CONVETER 20110417 BY (ßÍß)<br>POWERED BY <a href="http://unzu127xp.pa.land.to/data/asme.html">FAKE-CWC<a><br>
 <a href="http://unzu127xp.pa.land.to/data/asme.html#sp">MUST NEED HOOK&STACPOINTER</a></b><br>
 modded SANiK's superlicious CWCheat to nitePR convert tool<br>
-DOESNOTSUPPORT MORE THAN 4 MULTIPOINTER/BRANCHTEST<br></font>
+DOESNOTSUPPORT MORE THAN 4 MULTIPOINTER/BRANCHTEST,<a href="http://translate.google.co.jp/translate?u=http%3A%2F%2Funzu127xp.pa.land.to%2Fdata%2FCWC.html&amp;sl=ja&amp;tl=en&amp;hl=&amp;ie=UTF-8">SUPPORT FORMAT</a><br></font>
 <form name="asc2hex">
 CWCheat code:<br><textarea name="text" rows="10" cols="50"></textarea><br>
 <input type="Submit" value="Convert" Generate" onclick="doHex(document.asc2hex.text.value);return false">
