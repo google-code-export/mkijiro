@@ -1443,6 +1443,10 @@
 						}
 						else if(bit>2&& (address & 0xFFFF)==1){
 					if(DMAFLAG==1){funcOutSect=funcOutSect+'#DMAKILLER\n';DMAFLAG=0;DMA=0;}
+						if(JOKERFLAG>0){
+						JOKERFLAG-=2;
+						}
+						else if(JOKERFLAG==0){funcOutSect=funcOutSect+'#JOKERKILLER\n';JOKERFLAG--;}
 						//funcOutSect=funcOutSect+';Unsupported cheat - negative offset\n';
 						funcOutSect=funcOutSect+';ASM negative offset pointercode,NEED HOOK\n';
 						if(value < 0x8000){sbline=0;}
