@@ -1181,24 +1181,28 @@
 					else if((bkDecompress == 0) && ((address >> 28) ==-3) && ((value >> 28) ==1))//0xD 1
 					{					
 					if(DMAFLAG==1){funcOutSect=funcOutSect+'#DMAKILLER\n';DMAFLAG=0;DMA=0;}
-					if(JOKERFLAG>=0){funcOutSect=funcOutSect+';double joker not support\n';JOKERFLAG--;}
-						else{
-							funcOutSect=funcOutSect+decDigi(value&0xFFFFFF|0xFF000000, 8)+' 0x00000000\n';
+					if(JOKERFLAG>0){funcOutSect=funcOutSect+';double joker not support\n';JOKERFLAG--;}
+					else{
+					if(JOKERFLAG==0){funcOutSect=funcOutSect+'#JOKERKILLER\n';JOKERFLAG--;}
+					funcOutSect=funcOutSect+decDigi(value&0xFFFFFF|0xFF000000, 8)+' 0x00000000\n';
 					JOKERFLAG=(address&0xFF)+1;}
 							valueMode=0;
 					}
 					else if((bkDecompress == 0) && ((address >> 28) ==-3) && ((value >> 28) ==3))//0xD 3
 					{					
 					if(DMAFLAG==1){funcOutSect=funcOutSect+'#DMAKILLER\n';DMAFLAG=0;DMA=0;}
-						if(JOKERFLAG>=0){funcOutSect=funcOutSect+';double joker not support\n';JOKERFLAG--;}
-							funcOutSect=funcOutSect+';Unsupported cheat - inverse joker\n';
-							valueMode=0;
+						if(JOKERFLAG>0){funcOutSect=funcOutSect+';double joker not support\n';JOKERFLAG--;}
+						else{
+						if(JOKERFLAG==0){funcOutSect=funcOutSect+'#JOKERKILLER\n';JOKERFLAG--;}
+						funcOutSect=funcOutSect+';Unsupported cheat - inverse joker\n';}
+						valueMode=0;
 					}
 					else if((bkDecompress == 0) && ((address >> 24) ==-0x20) && ((value >> 28) ==0))//0xE0 0
 					{					
 					if(DMAFLAG==1){funcOutSect=funcOutSect+'#DMAKILLER\n';DMAFLAG=0;DMA=0;}
-						if(JOKERFLAG>=0){funcOutSect=funcOutSect+';double joker not support\n';JOKERFLAG--;}
+						if(JOKERFLAG>0){funcOutSect=funcOutSect+';double joker not support\n';JOKERFLAG--;}
 						else{
+						if(JOKERFLAG==0){funcOutSect=funcOutSect+'#JOKERKILLER\n';JOKERFLAG--;}
 							funcOutSect=funcOutSect+decDigi(address&0xFFFF|0xFF000000, 8)+' '+decDigi(value&0x01FFFFFF,8)+'\n';
 					JOKERFLAG=(address>>16)&0xFF;}
 							valueMode=0;
