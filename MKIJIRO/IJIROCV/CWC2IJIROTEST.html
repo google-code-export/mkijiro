@@ -1443,10 +1443,6 @@
 						}
 						else if(bit>2&& (address & 0xFFFF)==1){
 					if(DMAFLAG==1){funcOutSect=funcOutSect+'#DMAKILLER\n';DMAFLAG=0;DMA=0;}
-						if(JOKERFLAG>0){
-						JOKERFLAG-=2;
-						}
-						else if(JOKERFLAG==0){funcOutSect=funcOutSect+'#JOKERKILLER\n';JOKERFLAG--;}
 						//funcOutSect=funcOutSect+';Unsupported cheat - negative offset\n';
 						funcOutSect=funcOutSect+';ASM negative offset pointercode,NEED HOOK\n';
 						if(value < 0x8000){sbline=0;}
@@ -1698,7 +1694,7 @@ document.cvcode.elements[0].value = funcOut;
 </script>
 
 <center><font size="5" color="#60C0F0"><b>
-MKIJIRO CODE CONVETER 20110417 BY (ﬂÅÕﬂ)<br>POWERED BY <a href="http://unzu127xp.pa.land.to/data/asme.html">FAKE-CWC<a><br>
+MKIJIRO CODE CONVETER 20110420 BY (ﬂÅÕﬂ)<br>POWERED BY <a href="http://unzu127xp.pa.land.to/data/asme.html">FAKE-CWC<a><br>
 <a href="http://unzu127xp.pa.land.to/data/asme.html#sp">MUST NEED HOOK&STACPOINTER</a></b><br>
 modded SANiK's superlicious CWCheat to nitePR convert tool<br>
 DOESNOTSUPPORT MORE THAN 4 MULTIPOINTER/BRANCHTEST,<a href="http://translate.google.co.jp/translate?u=http%3A%2F%2Funzu127xp.pa.land.to%2Fdata%2FCWC.html&amp;sl=ja&amp;tl=en&amp;hl=&amp;ie=UTF-8">SUPPORT FORMAT</a><br></font>
