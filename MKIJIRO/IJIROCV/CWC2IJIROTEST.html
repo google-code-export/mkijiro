@@ -1186,7 +1186,7 @@
 					if(JOKERFLAG==0){funcOutSect=funcOutSect+'#JOKERKILLER\n';JOKERFLAG--;}
 					funcOutSect=funcOutSect+decDigi(value&0xFFFFFF|0xFF000000, 8)+' 0x00000000\n';
 					JOKERFLAG=(address&0xFF)+1;}
-							valueMode=0;
+							//valueMode=0;
 					}
 					else if((bkDecompress == 0) && ((address >> 28) ==-3) && ((value >> 28) ==3))//0xD 3
 					{					
@@ -1195,7 +1195,7 @@
 						else{
 						if(JOKERFLAG==0){funcOutSect=funcOutSect+'#JOKERKILLER\n';JOKERFLAG--;}
 						funcOutSect=funcOutSect+';Unsupported cheat - inverse joker\n';}
-						valueMode=0;
+						//valueMode=0;
 					}
 					else if((bkDecompress == 0) && ((address >> 24) ==-0x20) && ((value >> 28) ==0))//0xE0 0
 					{					
@@ -1205,7 +1205,7 @@
 						if(JOKERFLAG==0){funcOutSect=funcOutSect+'#JOKERKILLER\n';JOKERFLAG--;}
 							funcOutSect=funcOutSect+decDigi(address&0xFFFF|0xFF000000, 8)+' '+decDigi(value&0x01FFFFFF,8)+'\n';
 					JOKERFLAG=(address>>16)&0xFF;}
-							valueMode=0;
+							//valueMode=0;
 					}
 					else if(bkDecompress == 4)
 					{
