@@ -69,7 +69,10 @@
 		var pointerNo=0;
 		var pointerNoMulti=0;
 		var ASM=eval(document.ASM.elements[0].value)&0x01FFFFFC;//0x00002000;
+		var ASM2=ASM;
 		var fcp=eval(document.FCP.elements[0].value)&0x01FFFFFC;//0x00001FCC;
+		var hook=eval(document.HOOK.elements[0].value)&0x01FFFFFC;//HOOKADDRESS
+		var hook2=eval(document.HOOK.elements[1].value);//HOOKADDRESS NEXTLINE ASM
 		var pointerSE=0;
 		var qqq=0;
 		var DMA=0;
@@ -81,6 +84,8 @@
 		var valueline2=0;
 		var DMAFLAG=0;
 		var JOKERFLAG=-1;
+		var pointerfirst=0;
+		var moffset=0;
 		//Convert what's given
 		while (counter < size) {
 			letC = text.substr(counter,1);
@@ -358,11 +363,148 @@
 					if(DMAFLAG==1){funcOutSect=funcOutSect+'#DMAKILLER\n';DMAFLAG=0;DMA=0;}
 						if(pointerNoMulti>0) {
 						if(pointerNo>3){
-						if(JOKERFLAG>0){
-						JOKERFLAG--;
-						}
+						if(JOKERFLAG>0){JOKERFLAG--;}
 						else if(JOKERFLAG==0){funcOutSect=funcOutSect+'#JOKERKILLER\n';JOKERFLAG--;}
-						funcOutSect=funcOutSect+';unsupopted more than 4DMA\n';
+						funcOutSect=funcOutSect+';ASM HIGH LEVEL POINTER CODE,NEEDHOOK\n';
+						address&=0x01FFFFFC;
+						if(pointerfirst==1){
+						if(bit==2 && bit==5){
+						if((bkValue&3)!=0){sbline=1;}
+						if((bkValue&3)==0){sbline=0;}}
+						if(bit==1 && bit==4){
+						if((bkValue&1)!=0){sbline=2;}
+						if((bkValue&1)==0){sbline=0;}}
+						//0x3C080aaa
+							funcOutSect=funcOutSect+decDigi(ASM, 8)+' '+decDigi(((bkAddress2 >>16)+0x880)|0x3C080000,8)+'\n';
+						//0x3508aaaa
+							funcOutSect=funcOutSect+decDigi(ASM+4, 8)+' '+decDigi((bkAddress2 &0xFFFF)|0x35080000,8)+'\n';
+						if(bit==2 || bit==5){
+						//0x3C09bbbb
+							funcOutSect=funcOutSect+decDigi(ASM+8, 8)+' '+decDigi((bkValue2 >>16)|0x3C090000,8)+'\n';
+						//0x3529bbbb
+							funcOutSect=funcOutSect+decDigi(ASM+12, 8)+' '+decDigi((bkValue2 &0xFFFF)|0x35290000,8)+'\n';
+							}
+							if(bit==1 || bit==4){
+						//0x3409bbbb
+							ASM-=4;
+							funcOutSect=funcOutSect+decDigi(ASM+12, 8)+' '+decDigi((bkValue2 &0xFFFF)|0x34090000,8)+'\n';
+							}
+							if(bit==0 || bit==3){
+						//0x3409bbbb
+							ASM-=4;
+							funcOutSect=funcOutSect+decDigi(ASM+12, 8)+' '+decDigi((bkValue2 &0xFF)|0x34090000,8)+'\n';
+							}
+						//0x340A00cc
+							funcOutSect=funcOutSect+decDigi(ASM+16, 8)+' '+decDigi((bkAddress &0xFFFF)|0x340A0000,8)+'\n';
+						//0x340C0qqq
+							funcOutSect=funcOutSect+decDigi(ASM+20, 8)+' '+decDigi(qqq|0x340C0000,8)+'\n';
+						//0x000C6080
+							funcOutSect=funcOutSect+decDigi(ASM+24, 8)+' 0x000C6080\n';
+						//0x00002010 0x8D0F0000
+							funcOutSect=funcOutSect+decDigi(ASM+28, 8)+' 0x8D0F0000\n';
+						//0x00002014 0x110000XX
+							funcOutSect=funcOutSect+decDigi(ASM+32, 8)+' '+decDigi(pointerNo*4+sbline+0x11000000,8)+'\n';
+						//0x3C0Bpppp
+							funcOutSect=funcOutSect+decDigi(ASM+36, 8)+' '+decDigi((address>>16)|0x3C0B0000,8)+'\n';
+						//0x356Bpppp
+							funcOutSect=funcOutSect+decDigi(ASM+40, 8)+' '+decDigi((address&0xFFFF)|0x356B0000,8)+'\n';
+						//0x01EB7821
+							funcOutSect=funcOutSect+decDigi(ASM+44, 8)+' 0x01EB7821\n';
+						//0x8DEF0000
+							funcOutSect=funcOutSect+decDigi(ASM+48, 8)+' 0x8DEF0000\n';
+						if(pointerNo>2){
+						moffset=value>>28;
+						value&=0x01FFFFFC;
+						//0x3C0Bqqqq
+							funcOutSect=funcOutSect+decDigi(ASM+52, 8)+' '+decDigi((value>>16)|0x3C0B0000,8)+'\n';
+						//0x356Bqqqq
+							funcOutSect=funcOutSect+decDigi(ASM+56, 8)+' '+decDigi((value&0xFFFF)|0x356B0000,8)+'\n';
+						//0x01EB7821
+							if(moffset==2){
+							funcOutSect=funcOutSect+decDigi(ASM+76, 8)+' 0x01EB7821\n';
+							}
+							if(moffset==3){
+							funcOutSect=funcOutSect+decDigi(ASM+76, 8)+' 0x01EB7823\n';
+							}
+						//0x8DEF0000
+							funcOutSect=funcOutSect+decDigi(ASM+64, 8)+' 0x8DEF0000\n';
+						ASM+=16;
+						}
+						}
+						if(pointerNoMulti>0 && pointerfirst==0){
+						//0x3C0Bpppp
+							funcOutSect=funcOutSect+decDigi(ASM+52, 8)+' '+decDigi((address>>16)|0x3C0B0000,8)+'\n';
+						//0x356Bpppp
+							funcOutSect=funcOutSect+decDigi(ASM+56, 8)+' '+decDigi((address&0xFFFF)|0x356B0000,8)+'\n';
+						//0x01EB7821
+							funcOutSect=funcOutSect+decDigi(ASM+60, 8)+' 0x01EB7821\n';
+						//0x8DEF0000
+							funcOutSect=funcOutSect+decDigi(ASM+64, 8)+' 0x8DEF0000\n';
+						if(((pointerNo)&1)==1){
+						moffset=value>>28;
+						value&=0x01FFFFFC;
+						//0x3C0Bqqqq
+							funcOutSect=funcOutSect+decDigi(ASM+68, 8)+' '+decDigi((value>>16)|0x3C0B0000,8)+'\n';
+						//0x356Bqqqq
+							funcOutSect=funcOutSect+decDigi(ASM+72, 8)+' '+decDigi((value&0xFFFF)|0x356B0000,8)+'\n';
+						//0x01EB7821
+							if(moffset==2){
+							funcOutSect=funcOutSect+decDigi(ASM+76, 8)+' 0x01EB7821\n';
+							}
+							if(moffset==3){
+							funcOutSect=funcOutSect+decDigi(ASM+76, 8)+' 0x01EB7823\n';
+							}
+						//0x8DEF0000
+							funcOutSect=funcOutSect+decDigi(ASM+80, 8)+' 0x8DEF0000\n';
+						ASM+=16;
+						}
+						}
+						pointerfirst=0;
+						if(pointerNoMulti==1){
+						//0x3C0Bqqqq
+							funcOutSect=funcOutSect+decDigi(ASM+68, 8)+' '+decDigi((bkValue>>16)|0x3C0B0000,8)+'\n';
+						//0x356Bqqqq
+							funcOutSect=funcOutSect+decDigi(ASM+72, 8)+' '+decDigi((bkValue&0xFFFF)|0x356B0000,8)+'\n';
+						//0x01EB7821
+							if(bit<3){
+							funcOutSect=funcOutSect+decDigi(ASM+76, 8)+' 0x01EB7821\n';
+							}
+							if(bit>2){
+							funcOutSect=funcOutSect+decDigi(ASM+76, 8)+' 0x01EB7823\n';
+							}
+							
+							if(bit==0 || bit==3){
+							funcOutSect=funcOutSect+decDigi(ASM+80, 8)+' 0xA1E90000\n';
+						}
+							if(bit==1 || bit==4){
+						if((bkValue&1)==0){
+						//0xADE90000
+							funcOutSect=funcOutSect+decDigi(ASM+80, 8)+' 0xA5E90000\n';
+						}
+						if((bkValue&1)!=0){
+						//0xA9E90003
+							funcOutSect=funcOutSect+decDigi(ASM+80, 8)+' 0xA1E90000\n';
+						//0xB9E90000
+							funcOutSect=funcOutSect+decDigi(ASM+84, 8)+' 0x00095A02\n';
+							funcOutSect=funcOutSect+decDigi(ASM+88, 8)+' 0xA1EB0001\n';
+							ASM+=8;
+						}}
+							if(bit==2 || bit==5){
+						if((bkValue&3)==0){
+						//0xADE90000
+							funcOutSect=funcOutSect+decDigi(ASM+80, 8)+' 0xADE90000\n';
+						}
+						if((bkValue&3)!=0){
+						//0xA9E90003
+							funcOutSect=funcOutSect+decDigi(ASM+80, 8)+' 0xA9E90003\n';
+						//0xB9E90000
+							funcOutSect=funcOutSect+decDigi(ASM+84, 8)+' 0xB9E90000\n';
+							ASM+=4;
+						}}
+							funcOutSect=funcOutSect+decDigi(ASM+84, 8)+' 0x254AFFFF\n';
+							funcOutSect=funcOutSect+decDigi(ASM+88, 8)+' '+decDigi(-sbline-(4*pointerNo)+0x5540FFFF,8)+'\n';
+							funcOutSect=funcOutSect+decDigi(ASM+92, 8)+' 0x010C4021\n';
+						ASM+=96;}
 						}
 						else if(pointerNo<4){
 						if(JOKERFLAG>0){
@@ -648,7 +790,146 @@
 						JOKERFLAG--;
 						}
 						else if(JOKERFLAG==0){funcOutSect=funcOutSect+'#JOKERKILLER\n';JOKERFLAG--;}
-						funcOutSect=funcOutSect+';unsupopted more than 4DMA\n';
+						//funcOutSect=funcOutSect+';unsupopted more than 4DMA\n';	funcOutSect=funcOutSect+';ASM HIGH LEVEL POINTER CODE,NEEDHOOK\n';
+						address&=0x01FFFFFC;
+						if(pointerfirst==1){
+						if(bit==2 && bit==5){
+						if((bkValue&3)!=0){sbline=1;}
+						if((bkValue&3)==0){sbline=0;}}
+						if(bit==1 && bit==4){
+						if((bkValue&1)!=0){sbline=2;}
+						if((bkValue&1)==0){sbline=0;}}
+						//0x3C080aaa
+							funcOutSect=funcOutSect+decDigi(ASM, 8)+' '+decDigi(((bkAddress2 >>16)+0x880)|0x3C080000,8)+'\n';
+						//0x3508aaaa
+							funcOutSect=funcOutSect+decDigi(ASM+4, 8)+' '+decDigi((bkAddress2 &0xFFFF)|0x35080000,8)+'\n';
+						if(bit==2 || bit==5){
+						//0x3C09bbbb
+							funcOutSect=funcOutSect+decDigi(ASM+8, 8)+' '+decDigi((bkValue2 >>16)|0x3C090000,8)+'\n';
+						//0x3529bbbb
+							funcOutSect=funcOutSect+decDigi(ASM+12, 8)+' '+decDigi((bkValue2 &0xFFFF)|0x35290000,8)+'\n';
+							}
+							if(bit==1 || bit==4){
+						//0x3409bbbb
+							ASM-=4;
+							funcOutSect=funcOutSect+decDigi(ASM+12, 8)+' '+decDigi((bkValue2 &0xFFFF)|0x34090000,8)+'\n';
+							}
+							if(bit==0 || bit==3){
+						//0x3409bbbb
+							ASM-=4;
+							funcOutSect=funcOutSect+decDigi(ASM+12, 8)+' '+decDigi((bkValue2 &0xFF)|0x34090000,8)+'\n';
+							}
+						//0x340A00cc
+							funcOutSect=funcOutSect+decDigi(ASM+16, 8)+' '+decDigi((bkAddress &0xFFFF)|0x340A0000,8)+'\n';
+						//0x340C0qqq
+							funcOutSect=funcOutSect+decDigi(ASM+20, 8)+' '+decDigi(qqq|0x340C0000,8)+'\n';
+						//0x000C6080
+							funcOutSect=funcOutSect+decDigi(ASM+24, 8)+' 0x000C6080\n';
+						//0x00002010 0x8D0F0000
+							funcOutSect=funcOutSect+decDigi(ASM+28, 8)+' 0x8D0F0000\n';
+						//0x00002014 0x110000XX
+							funcOutSect=funcOutSect+decDigi(ASM+32, 8)+' '+decDigi(pointerNo*4+sbline+0x11000000,8)+'\n';
+						//0x3C0Bpppp
+							funcOutSect=funcOutSect+decDigi(ASM+36, 8)+' '+decDigi((address>>16)|0x3C0B0000,8)+'\n';
+						//0x356Bpppp
+							funcOutSect=funcOutSect+decDigi(ASM+40, 8)+' '+decDigi((address&0xFFFF)|0x356B0000,8)+'\n';
+						//0x01EB7821
+							funcOutSect=funcOutSect+decDigi(ASM+44, 8)+' 0x01EB7823\n';
+						//0x8DEF0000
+							funcOutSect=funcOutSect+decDigi(ASM+48, 8)+' 0x8DEF0000\n';
+						if(pointerNo>2){
+						moffset=value>>28;
+						value&=0x01FFFFFC;
+						//0x3C0Bqqqq
+							funcOutSect=funcOutSect+decDigi(ASM+52, 8)+' '+decDigi((value>>16)|0x3C0B0000,8)+'\n';
+						//0x356Bqqqq
+							funcOutSect=funcOutSect+decDigi(ASM+56, 8)+' '+decDigi((value&0xFFFF)|0x356B0000,8)+'\n';
+						//0x01EB7821
+							if(moffset==2){
+							funcOutSect=funcOutSect+decDigi(ASM+76, 8)+' 0x01EB7821\n';
+							}
+							if(moffset==3){
+							funcOutSect=funcOutSect+decDigi(ASM+76, 8)+' 0x01EB7823\n';
+							}
+						//0x8DEF0000
+							funcOutSect=funcOutSect+decDigi(ASM+64, 8)+' 0x8DEF0000\n';
+						ASM+=16;
+						}
+						}
+						if(pointerNoMulti>0 && pointerfirst==0){
+						//0x3C0Bpppp
+							funcOutSect=funcOutSect+decDigi(ASM+52, 8)+' '+decDigi((address>>16)|0x3C0B0000,8)+'\n';
+						//0x356Bpppp
+							funcOutSect=funcOutSect+decDigi(ASM+56, 8)+' '+decDigi((address&0xFFFF)|0x356B0000,8)+'\n';
+						//0x01EB7821
+							funcOutSect=funcOutSect+decDigi(ASM+60, 8)+' 0x01EB7823\n';
+						//0x8DEF0000
+							funcOutSect=funcOutSect+decDigi(ASM+64, 8)+' 0x8DEF0000\n';
+						if(((pointerNo)&1)==1){
+						moffset=value>>28;
+						value&=0x01FFFFFC;
+						//0x3C0Bqqqq
+							funcOutSect=funcOutSect+decDigi(ASM+68, 8)+' '+decDigi((value>>16)|0x3C0B0000,8)+'\n';
+						//0x356Bqqqq
+							funcOutSect=funcOutSect+decDigi(ASM+72, 8)+' '+decDigi((value&0xFFFF)|0x356B0000,8)+'\n';
+						//0x01EB7821
+							if(moffset==2){
+							funcOutSect=funcOutSect+decDigi(ASM+76, 8)+' 0x01EB7821\n';
+							}
+							if(moffset==3){
+							funcOutSect=funcOutSect+decDigi(ASM+76, 8)+' 0x01EB7823\n';
+							}
+						//0x8DEF0000
+							funcOutSect=funcOutSect+decDigi(ASM+80, 8)+' 0x8DEF0000\n';
+						ASM+=16;
+						}
+						}
+						pointerfirst=0;
+						if(pointerNoMulti==1){
+						//0x3C0Bqqqq
+							funcOutSect=funcOutSect+decDigi(ASM+68, 8)+' '+decDigi((bkValue>>16)|0x3C0B0000,8)+'\n';
+						//0x356Bqqqq
+							funcOutSect=funcOutSect+decDigi(ASM+72, 8)+' '+decDigi((bkValue&0xFFFF)|0x356B0000,8)+'\n';
+						//0x01EB7821
+							if(bit<3){
+							funcOutSect=funcOutSect+decDigi(ASM+76, 8)+' 0x01EB7821\n';
+							}
+							if(bit>2){
+							funcOutSect=funcOutSect+decDigi(ASM+76, 8)+' 0x01EB7823\n';
+							}
+							
+							if(bit==0 || bit==3){
+							funcOutSect=funcOutSect+decDigi(ASM+80, 8)+' 0xA1E90000\n';
+						}
+							if(bit==1 || bit==4){
+						if((bkValue&1)==0){
+						//0xADE90000
+							funcOutSect=funcOutSect+decDigi(ASM+80, 8)+' 0xA5E90000\n';
+						}
+						if((bkValue&1)!=0){
+						//0xA9E90003
+							funcOutSect=funcOutSect+decDigi(ASM+80, 8)+' 0xA1E90000\n';
+						//0xB9E90000
+							funcOutSect=funcOutSect+decDigi(ASM+84, 8)+' 0x00095A02\n';
+							funcOutSect=funcOutSect+decDigi(ASM+88, 8)+' 0xA1EB0001\n';
+							ASM+=8;
+						}}
+							if(bit==2 || bit==5){
+						if((bkValue&3)==0){
+						//0xADE90000
+							funcOutSect=funcOutSect+decDigi(ASM+80, 8)+' 0xADE90000\n';
+						}
+						if((bkValue&3)!=0){
+						//0xA9E90003
+							funcOutSect=funcOutSect+decDigi(ASM+80, 8)+' 0xA9E90003\n';
+						//0xB9E90000
+							funcOutSect=funcOutSect+decDigi(ASM+84, 8)+' 0xB9E90000\n';
+							ASM+=4;
+						}}
+							funcOutSect=funcOutSect+decDigi(ASM+84, 8)+' 0x254AFFFF\n';
+							funcOutSect=funcOutSect+decDigi(ASM+88, 8)+' '+decDigi(-sbline-(4*pointerNo)+0x5540FFFF,8)+'\n';
+							funcOutSect=funcOutSect+decDigi(ASM+92, 8)+' 0x010C4021\n';
+						ASM+=96;}
 						}
 						else if(pointerNo<4){
 						if(JOKERFLAG>0){
@@ -969,7 +1250,7 @@
 					{
 							bkDecompress=6;
 							bkAddress=address;
-							bkValue=value;
+							bkValue=value;pointerfirst=1;
 					}
 					else if((bkDecompress == 0) && ((address >> 28 ) ==7))//0x7
 					{
@@ -1879,26 +2160,82 @@
 			counter++;
 		}
 		//code.innerHTML = funcOut;
-document.cvcode.elements[0].value = funcOut;
+funcOut=funcOut+'#HOOK+STACPOINTERt0-t9\n';
+funcOut=funcOut+decDigi(hook,8)+' '+decDigi((ASM2-0x30)/4+0x0A200000,8)+'\n'
+funcOut=funcOut+decDigi(hook+4,8)+' 0x00000000\n'
+//0x00002330 0x03E00008
+//;0x000002334 0x(program3ÇÃ16êiêî)
+funcOut=funcOut+decDigi(ASM+0x30,8)+' 0x03E00008\n'
+funcOut=funcOut+decDigi(ASM+0x34,8)+' '+decDigi(hook2,8)+'\n'
+//0x00001FD0 0x27BDFFD8
+funcOut=funcOut+decDigi(ASM2-0x30,8)+' 0x27BDFFD8\n'
+var i=0;
+while(i<8){
+//0x00001FD4 0xAFA80000
+funcOut=funcOut+decDigi(ASM2-0x2C+4*i,8)+' '+decDigi(0xAFA80000+(0x00010004*i),8)+'\n'
+i++;
+}
+//0x00001FD8 0xAFA90004
+//0x00001FDC 0xAFAA0008
+//0x00001FE0 0xAFAB000C
+//0x00001FE4 0xAFAC0010
+//0x00001FE8 0xAFAD0014
+//0x00001FEC 0xAFAE0018
+//0x00001FF0 0xAFAF001C
+//0x00001FF4 0xAFB80020
+funcOut=funcOut+decDigi(ASM2-0xC,8)+' 0xAFB80020\n'
+//0x00001FF8 0xAFB90024
+funcOut=funcOut+decDigi(ASM2-0x8,8)+' 0xAFB90024\n'
+//0x00002300 0x8FA80000
+//0x00002304 0x8FA90004
+//0x00002308 0x8FAA0008
+//0x0000230C 0x8FAB000C
+//0x00002310 0x8FAC0010
+//0x00002314 0x8FAD0014
+//0x00002318 0x8FAE0018
+//0x0000231C 0x8FAF001C
+i=0;
+while(i<8){
+//0x00001FD4 0xAFA80000
+funcOut=funcOut+decDigi(ASM+4*i,8)+' '+decDigi(0x8FA80000+(0x00010004*i),8)+'\n'
+i++;
+}
+//0x00002320 0x8FB80020
+funcOut=funcOut+decDigi(ASM+0x20,8)+' 0x8FB80020\n'
+//0x00002324 0x8FB90024
+funcOut=funcOut+decDigi(ASM+0x24,8)+' 0x8FB90024\n'
+//0x00002328 0x27BD0028
+funcOut=funcOut+decDigi(ASM+0x28,8)+' 0x27BD0028\n'
+		document.cvcode.elements[0].value = funcOut;
 		return false;
 	}
 -->
 </script>
 
 <center><font size="5" color="#60C0F0"><b>
-MKIJIRO CODE CONVETER 20110421 BY (ﬂÅÕﬂ)<br>POWERED BY <a href="http://unzu127xp.pa.land.to/data/asme.html">FAKE-CWC<a><br>
+MKIJIRO CODE CONVETER 20110422 BY (ﬂÅÕﬂ)<br>POWERED BY <a href="http://unzu127xp.pa.land.to/data/asme.html">FAKE-CWC<a><br>
 <a href="http://unzu127xp.pa.land.to/data/asme.html#sp">MUST NEED HOOK&STACPOINTER</a></b><br>
 modded SANiK's superlicious CWCheat to nitePR convert tool<br>
-DOESNOTSUPPORT MORE THAN 4 MULTIPOINTER/BRANCHTEST,<a href="http://translate.google.co.jp/translate?u=http%3A%2F%2Funzu127xp.pa.land.to%2Fdata%2FCWC.html&amp;sl=ja&amp;tl=en&amp;hl=&amp;ie=UTF-8">SUPPORT FORMAT</a><br></font>
+DOESNOTSUPPORT BRANCHTEST,<a href="http://translate.google.co.jp/translate?u=http%3A%2F%2Funzu127xp.pa.land.to%2Fdata%2FCWC.html&amp;sl=ja&amp;tl=en&amp;hl=&amp;ie=UTF-8">SUPPORT FORMAT</a><br></font>
 <form name="asc2hex">
 CWCheat code:<br><textarea name="text" rows="10" cols="50"></textarea><br>
 <input type="Submit" value="Convert" Generate" onclick="doHex(document.asc2hex.text.value);return false">
 <input type="reset" value="Clear">
 <br>
 </form>
+ENTER HOOK PATTERN(NEXTLINE NORMALY NOP)
+<FORM NAME="HOOK">
+HOOKADDRESS
+<INPUT TYPE="text" NAME="text1" SIZE="40" VALUE="0x4000"><br>
+NEXTLINEASM
+<INPUT TYPE="text" NAME="text1" SIZE="40" VALUE="0x00000000">
+<BR>
+</FORM>
+
 ASM START ADDRESS
 <FORM NAME="ASM">
-<INPUT TYPE="text" NAME="text1" SIZE="40" VALUE="0x2000"><BR>
+<INPUT TYPE="text" NAME="text1" SIZE="40" VALUE="0x2000">
+<BR>
 </FORM>
 
 FREECHEAT TEMPORARY POINTER
