@@ -368,10 +368,10 @@
 						address&=0x01FFFFFC;
 						if(pointerfirst==1){
 						funcOutSect=funcOutSect+';ASM HIGH LEVEL POINTER CODE,NEEDHOOK\n';
-						if(bit==2 && bit==5){
+						if(bit==2 || bit==5){
 						if((bkValue&3)!=0){sbline=1;}
 						if((bkValue&3)==0){sbline=0;}}
-						if(bit==1 && bit==4){
+						if(bit==1 || bit==4){
 						if((bkValue&1)!=0){sbline=2;}
 						if((bkValue&1)==0){sbline=0;}}
 						//0x3C080aaa
@@ -403,7 +403,7 @@
 						//0x00002010 0x8D0F0000
 							funcOutSect=funcOutSect+decDigi(ASM+28, 8)+' 0x8D0F0000\n';
 						//0x00002014 0x110000XX
-							funcOutSect=funcOutSect+decDigi(ASM+32, 8)+' '+decDigi((pointerNo)*4+sbline+0x11000003,8)+'\n';
+							funcOutSect=funcOutSect+decDigi(ASM+32, 8)+' '+decDigi((pointerNo)*4+sbline+0x100F0003,8)+'\n';
 						//0x3C0Bpppp
 							funcOutSect=funcOutSect+decDigi(ASM+36, 8)+' '+decDigi((address>>16)|0x3C0B0000,8)+'\n';
 						//0x356Bpppp
@@ -794,10 +794,10 @@
 						address&=0x01FFFFFC;
 						if(pointerfirst==1){
 						funcOutSect=funcOutSect+';ASM HIGH LEVEL POINTER CODE,NEEDHOOK\n';
-						if(bit==2 && bit==5){
+						if(bit==2 || bit==5){
 						if((bkValue&3)!=0){sbline=1;}
 						if((bkValue&3)==0){sbline=0;}}
-						if(bit==1 && bit==4){
+						if(bit==1 || bit==4){
 						if((bkValue&1)!=0){sbline=2;}
 						if((bkValue&1)==0){sbline=0;}}
 						//0x3C080aaa
@@ -829,7 +829,7 @@
 						//0x00002010 0x8D0F0000
 							funcOutSect=funcOutSect+decDigi(ASM+28, 8)+' 0x8D0F0000\n';
 						//0x00002014 0x110000XX
-							funcOutSect=funcOutSect+decDigi(ASM+32, 8)+' '+decDigi((pointerNo)*4+sbline+0x11000003,8)+'\n';
+							funcOutSect=funcOutSect+decDigi(ASM+32, 8)+' '+decDigi((pointerNo)*4+sbline+0x100F0003,8)+'\n';
 						//0x3C0Bpppp
 							funcOutSect=funcOutSect+decDigi(ASM+36, 8)+' '+decDigi((address>>16)|0x3C0B0000,8)+'\n';
 						//0x356Bpppp
