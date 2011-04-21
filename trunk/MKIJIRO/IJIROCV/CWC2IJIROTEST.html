@@ -365,9 +365,9 @@
 						if(pointerNo>3){
 						if(JOKERFLAG>0){JOKERFLAG--;}
 						else if(JOKERFLAG==0){funcOutSect=funcOutSect+'#JOKERKILLER\n';JOKERFLAG--;}
-						funcOutSect=funcOutSect+';ASM HIGH LEVEL POINTER CODE,NEEDHOOK\n';
 						address&=0x01FFFFFC;
 						if(pointerfirst==1){
+						funcOutSect=funcOutSect+';ASM HIGH LEVEL POINTER CODE,NEEDHOOK\n';
 						if(bit==2 && bit==5){
 						if((bkValue&3)!=0){sbline=1;}
 						if((bkValue&3)==0){sbline=0;}}
@@ -403,7 +403,7 @@
 						//0x00002010 0x8D0F0000
 							funcOutSect=funcOutSect+decDigi(ASM+28, 8)+' 0x8D0F0000\n';
 						//0x00002014 0x110000XX
-							funcOutSect=funcOutSect+decDigi(ASM+32, 8)+' '+decDigi(pointerNo*4+sbline+0x11000000,8)+'\n';
+							funcOutSect=funcOutSect+decDigi(ASM+32, 8)+' '+decDigi((pointerNo)*4+sbline+0x11000003,8)+'\n';
 						//0x3C0Bpppp
 							funcOutSect=funcOutSect+decDigi(ASM+36, 8)+' '+decDigi((address>>16)|0x3C0B0000,8)+'\n';
 						//0x356Bpppp
@@ -440,8 +440,8 @@
 							funcOutSect=funcOutSect+decDigi(ASM+60, 8)+' 0x01EB7821\n';
 						//0x8DEF0000
 							funcOutSect=funcOutSect+decDigi(ASM+64, 8)+' 0x8DEF0000\n';
-						if(((pointerNo)&1)==1){
 						moffset=value>>28;
+						if(moffset>0){
 						value&=0x01FFFFFC;
 						//0x3C0Bqqqq
 							funcOutSect=funcOutSect+decDigi(ASM+68, 8)+' '+decDigi((value>>16)|0x3C0B0000,8)+'\n';
@@ -502,7 +502,7 @@
 							ASM+=4;
 						}}
 							funcOutSect=funcOutSect+decDigi(ASM+84, 8)+' 0x254AFFFF\n';
-							funcOutSect=funcOutSect+decDigi(ASM+88, 8)+' '+decDigi(-sbline-(4*pointerNo)+0x5540FFFF,8)+'\n';
+							funcOutSect=funcOutSect+decDigi(ASM+88, 8)+' '+decDigi(-sbline-(4*(pointerNo))+0x5540FFFC,8)+'\n';
 							funcOutSect=funcOutSect+decDigi(ASM+92, 8)+' 0x010C4021\n';
 						ASM+=96;}
 						}
@@ -790,9 +790,10 @@
 						JOKERFLAG--;
 						}
 						else if(JOKERFLAG==0){funcOutSect=funcOutSect+'#JOKERKILLER\n';JOKERFLAG--;}
-						//funcOutSect=funcOutSect+';unsupopted more than 4DMA\n';	funcOutSect=funcOutSect+';ASM HIGH LEVEL POINTER CODE,NEEDHOOK\n';
+						//funcOutSect=funcOutSect+';unsupopted more than 4DMA\n';
 						address&=0x01FFFFFC;
 						if(pointerfirst==1){
+						funcOutSect=funcOutSect+';ASM HIGH LEVEL POINTER CODE,NEEDHOOK\n';
 						if(bit==2 && bit==5){
 						if((bkValue&3)!=0){sbline=1;}
 						if((bkValue&3)==0){sbline=0;}}
@@ -828,7 +829,7 @@
 						//0x00002010 0x8D0F0000
 							funcOutSect=funcOutSect+decDigi(ASM+28, 8)+' 0x8D0F0000\n';
 						//0x00002014 0x110000XX
-							funcOutSect=funcOutSect+decDigi(ASM+32, 8)+' '+decDigi(pointerNo*4+sbline+0x11000000,8)+'\n';
+							funcOutSect=funcOutSect+decDigi(ASM+32, 8)+' '+decDigi((pointerNo)*4+sbline+0x11000003,8)+'\n';
 						//0x3C0Bpppp
 							funcOutSect=funcOutSect+decDigi(ASM+36, 8)+' '+decDigi((address>>16)|0x3C0B0000,8)+'\n';
 						//0x356Bpppp
@@ -865,8 +866,8 @@
 							funcOutSect=funcOutSect+decDigi(ASM+60, 8)+' 0x01EB7823\n';
 						//0x8DEF0000
 							funcOutSect=funcOutSect+decDigi(ASM+64, 8)+' 0x8DEF0000\n';
-						if(((pointerNo)&1)==1){
 						moffset=value>>28;
+						if(moffset>0){
 						value&=0x01FFFFFC;
 						//0x3C0Bqqqq
 							funcOutSect=funcOutSect+decDigi(ASM+68, 8)+' '+decDigi((value>>16)|0x3C0B0000,8)+'\n';
@@ -927,7 +928,7 @@
 							ASM+=4;
 						}}
 							funcOutSect=funcOutSect+decDigi(ASM+84, 8)+' 0x254AFFFF\n';
-							funcOutSect=funcOutSect+decDigi(ASM+88, 8)+' '+decDigi(-sbline-(4*pointerNo)+0x5540FFFF,8)+'\n';
+							funcOutSect=funcOutSect+decDigi(ASM+88, 8)+' '+decDigi(-sbline-(4*(pointerNo))+0x5540FFFC,8)+'\n';
 							funcOutSect=funcOutSect+decDigi(ASM+92, 8)+' 0x010C4021\n';
 						ASM+=96;}
 						}
@@ -2160,6 +2161,7 @@
 			counter++;
 		}
 		//code.innerHTML = funcOut;
+if(hook!=0x0){
 funcOut=funcOut+'#HOOK+STACPOINTERt0-t9\n';
 funcOut=funcOut+decDigi(hook,8)+' '+decDigi((ASM2-0x30)/4+0x0A200000,8)+'\n'
 funcOut=funcOut+decDigi(hook+4,8)+' 0x00000000\n'
@@ -2206,6 +2208,7 @@ funcOut=funcOut+decDigi(ASM+0x20,8)+' 0x8FB80020\n'
 funcOut=funcOut+decDigi(ASM+0x24,8)+' 0x8FB90024\n'
 //0x00002328 0x27BD0028
 funcOut=funcOut+decDigi(ASM+0x28,8)+' 0x27BD0028\n'
+}
 		document.cvcode.elements[0].value = funcOut;
 		return false;
 	}
@@ -2226,7 +2229,7 @@ CWCheat code:<br><textarea name="text" rows="10" cols="50"></textarea><br>
 ENTER HOOK PATTERN(NEXTLINE NORMALY NOP)
 <FORM NAME="HOOK">
 HOOKADDRESS
-<INPUT TYPE="text" NAME="text1" SIZE="40" VALUE="0x4000"><br>
+<INPUT TYPE="text" NAME="text1" SIZE="40" VALUE="0x0000"><br>
 NEXTLINEASM
 <INPUT TYPE="text" NAME="text1" SIZE="40" VALUE="0x00000000">
 <BR>
