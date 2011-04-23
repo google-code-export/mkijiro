@@ -21,6 +21,15 @@ certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
 0x8838DBF0 moviezone,pspfat should freeze after search/save...slim user use extraram setting
 
+2011/4/23
+テキストサーチ関連
+大小無視(SEL+右)と1文字ワイルド(SEL+上,文字　.)を追加
+文字指定分になってなかったので修正
+カーソルのはみ出し修正
+結果を残すように変更(他サーチへ引継ぎは不可)
+コピー連動ジャンプ番号がずれてたので修正
+LRの高速スクロール追加
+
 2011/4/15
 HOOKサーチを強化
 0x003E00008 jr_raをサーチしたときにデコーダー時コピーメニュー+□で0x000001CD breakを
