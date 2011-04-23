@@ -67,8 +67,8 @@
 		var bkDecompress=0;
 		var errorMode=0;
 		var pointerNo=0;
-		var pointerNoMulti=0;
 		var tempNo=0;
+		var pointerNoMulti=0;
 		var ASM=eval(document.ASM.elements[0].value)&0x01FFFFFC;//0x00002000;
 		var ASM2=ASM;
 		var fcp=eval(document.FCP.elements[0].value)&0x01FFFFFC;//0x00001FCC;
@@ -368,8 +368,8 @@
 						else if(JOKERFLAG==0){funcOutSect=funcOutSect+'#JOKERKILLER\n';JOKERFLAG--;}
 						address&=0x01FFFFFC;
 						if(pointerfirst==1){
-						tempNo=pointerNo;
 						funcOutSect=funcOutSect+';ASM HIGH LEVEL POINTER CODE,NEEDHOOK\n';
+						tempNo=pointerNo;
 						if(bit==2 || bit==5){
 						if((bkValue&3)!=0){sbline=1;}
 						if((bkValue&3)==0){sbline=0;}}
@@ -414,7 +414,7 @@
 							funcOutSect=funcOutSect+decDigi(ASM+44, 8)+' 0x01EB7821\n';
 						//0x8DEF0000
 							funcOutSect=funcOutSect+decDigi(ASM+48, 8)+' 0x8DEF0000\n';
-							tempNo-=2;
+						tempNo-=2;
 						if(pointerNo>2){
 						moffset=value>>28;
 						value&=0x01FFFFFC;
@@ -431,7 +431,8 @@
 							}
 						//0x8DEF0000
 							funcOutSect=funcOutSect+decDigi(ASM+64, 8)+' 0x8DEF0000\n';
-						ASM+=16;tempNo--;
+						tempNo--;
+						ASM+=16;
 						}
 						}
 						if(pointerNoMulti>0 && pointerfirst==0){
@@ -443,8 +444,9 @@
 							funcOutSect=funcOutSect+decDigi(ASM+60, 8)+' 0x01EB7821\n';
 						//0x8DEF0000
 							funcOutSect=funcOutSect+decDigi(ASM+64, 8)+' 0x8DEF0000\n';ASM+=16;
-						moffset=value>>28;tempNo--;
-						if(moffset>0 && (tempNo&1)==1){
+						tempNo--;
+						moffset=value>>28;
+						if(moffset>0 && tempNo>0){
 						value&=0x01FFFFFC;
 						//0x3C0Bqqqq
 							funcOutSect=funcOutSect+decDigi(ASM+52, 8)+' '+decDigi((value>>16)|0x3C0B0000,8)+'\n';
@@ -459,6 +461,7 @@
 							}
 						//0x8DEF0000
 							funcOutSect=funcOutSect+decDigi(ASM+64, 8)+' 0x8DEF0000\n';
+						tempNo--;
 						ASM+=16;
 						}
 						}
@@ -797,13 +800,13 @@
 						address&=0x01FFFFFC;
 						if(pointerfirst==1){
 						funcOutSect=funcOutSect+';ASM HIGH LEVEL POINTER CODE,NEEDHOOK\n';
+						tempNo=pointerNo;
 						if(bit==2 || bit==5){
 						if((bkValue&3)!=0){sbline=1;}
 						if((bkValue&3)==0){sbline=0;}}
 						if(bit==1 || bit==4){
 						if((bkValue&1)!=0){sbline=2;}
 						if((bkValue&1)==0){sbline=0;}}
-						tempNo=pointerNo;
 						//0x3C080aaa
 							funcOutSect=funcOutSect+decDigi(ASM, 8)+' '+decDigi(((bkAddress2 >>16)+0x880)|0x3C080000,8)+'\n';
 						//0x3508aaaa
@@ -859,7 +862,8 @@
 							}
 						//0x8DEF0000
 							funcOutSect=funcOutSect+decDigi(ASM+64, 8)+' 0x8DEF0000\n';
-						ASM+=16;tempNo--;
+						tempNo--;
+						ASM+=16;
 						}
 						}
 						if(pointerNoMulti>0 && pointerfirst==0){
@@ -871,8 +875,9 @@
 							funcOutSect=funcOutSect+decDigi(ASM+60, 8)+' 0x01EB7823\n';
 						//0x8DEF0000
 							funcOutSect=funcOutSect+decDigi(ASM+64, 8)+' 0x8DEF0000\n';ASM+=16;
-						moffset=value>>28;tempNo--;
-						if(moffset>0 && (tempNo&1)==1){
+						tempNo--;
+						moffset=value>>28;
+						if(moffset>0 && tempNo>0){
 						value&=0x01FFFFFC;
 						//0x3C0Bqqqq
 							funcOutSect=funcOutSect+decDigi(ASM+52, 8)+' '+decDigi((value>>16)|0x3C0B0000,8)+'\n';
@@ -887,6 +892,7 @@
 							}
 						//0x8DEF0000
 							funcOutSect=funcOutSect+decDigi(ASM+64, 8)+' 0x8DEF0000\n';
+						tempNo--;
 						ASM+=16;
 						}
 						}
