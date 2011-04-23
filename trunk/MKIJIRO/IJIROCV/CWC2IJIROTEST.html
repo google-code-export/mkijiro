@@ -68,6 +68,7 @@
 		var errorMode=0;
 		var pointerNo=0;
 		var pointerNoMulti=0;
+		var tempNo=0;
 		var ASM=eval(document.ASM.elements[0].value)&0x01FFFFFC;//0x00002000;
 		var ASM2=ASM;
 		var fcp=eval(document.FCP.elements[0].value)&0x01FFFFFC;//0x00001FCC;
@@ -362,11 +363,12 @@
 					{
 					if(DMAFLAG==1){funcOutSect=funcOutSect+'#DMAKILLER\n';DMAFLAG=0;DMA=0;}
 						if(pointerNoMulti>0) {
-						if(pointerNo>3){
+						if(pointerNo>3 || ((bkValue&1)==1 && (bit==1 || bit==4)) || ((bkValue&3)!=0 && (bit==2 || bit==5)) ){
 						if(JOKERFLAG>0){JOKERFLAG--;}
 						else if(JOKERFLAG==0){funcOutSect=funcOutSect+'#JOKERKILLER\n';JOKERFLAG--;}
 						address&=0x01FFFFFC;
 						if(pointerfirst==1){
+						tempNo=pointerNo;
 						funcOutSect=funcOutSect+';ASM HIGH LEVEL POINTER CODE,NEEDHOOK\n';
 						if(bit==2 || bit==5){
 						if((bkValue&3)!=0){sbline=1;}
@@ -412,6 +414,7 @@
 							funcOutSect=funcOutSect+decDigi(ASM+44, 8)+' 0x01EB7821\n';
 						//0x8DEF0000
 							funcOutSect=funcOutSect+decDigi(ASM+48, 8)+' 0x8DEF0000\n';
+							tempNo-=2;
 						if(pointerNo>2){
 						moffset=value>>28;
 						value&=0x01FFFFFC;
@@ -428,7 +431,7 @@
 							}
 						//0x8DEF0000
 							funcOutSect=funcOutSect+decDigi(ASM+64, 8)+' 0x8DEF0000\n';
-						ASM+=16;
+						ASM+=16;tempNo--;
 						}
 						}
 						if(pointerNoMulti>0 && pointerfirst==0){
@@ -440,8 +443,8 @@
 							funcOutSect=funcOutSect+decDigi(ASM+60, 8)+' 0x01EB7821\n';
 						//0x8DEF0000
 							funcOutSect=funcOutSect+decDigi(ASM+64, 8)+' 0x8DEF0000\n';ASM+=16;
-						moffset=value>>28;
-						if(moffset>0){
+						moffset=value>>28;tempNo--;
+						if(moffset>0 && (tempNo&1)==1){
 						value&=0x01FFFFFC;
 						//0x3C0Bqqqq
 							funcOutSect=funcOutSect+decDigi(ASM+52, 8)+' '+decDigi((value>>16)|0x3C0B0000,8)+'\n';
@@ -785,7 +788,7 @@
 					if(DMAFLAG==1){funcOutSect=funcOutSect+'#DMAKILLER\n';DMAFLAG=0;DMA=0;}
 						if(pointerNoMulti>0) {
 						
-						if(pointerNo>3){
+						if(pointerNo>3 || ((bkValue&1)==1 && (bit==1 || bit==4)) || ((bkValue&3)!=0 && (bit==2 || bit==5)) ){
 						if(JOKERFLAG>0){
 						JOKERFLAG--;
 						}
@@ -800,6 +803,7 @@
 						if(bit==1 || bit==4){
 						if((bkValue&1)!=0){sbline=2;}
 						if((bkValue&1)==0){sbline=0;}}
+						tempNo=pointerNo;
 						//0x3C080aaa
 							funcOutSect=funcOutSect+decDigi(ASM, 8)+' '+decDigi(((bkAddress2 >>16)+0x880)|0x3C080000,8)+'\n';
 						//0x3508aaaa
@@ -838,6 +842,7 @@
 							funcOutSect=funcOutSect+decDigi(ASM+44, 8)+' 0x01EB7823\n';
 						//0x8DEF0000
 							funcOutSect=funcOutSect+decDigi(ASM+48, 8)+' 0x8DEF0000\n';
+						tempNo-=2;
 						if(pointerNo>2){
 						moffset=value>>28;
 						value&=0x01FFFFFC;
@@ -854,7 +859,7 @@
 							}
 						//0x8DEF0000
 							funcOutSect=funcOutSect+decDigi(ASM+64, 8)+' 0x8DEF0000\n';
-						ASM+=16;
+						ASM+=16;tempNo--;
 						}
 						}
 						if(pointerNoMulti>0 && pointerfirst==0){
@@ -866,8 +871,8 @@
 							funcOutSect=funcOutSect+decDigi(ASM+60, 8)+' 0x01EB7823\n';
 						//0x8DEF0000
 							funcOutSect=funcOutSect+decDigi(ASM+64, 8)+' 0x8DEF0000\n';ASM+=16;
-						moffset=value>>28;
-						if(moffset>0){
+						moffset=value>>28;tempNo--;
+						if(moffset>0 && (tempNo&1)==1){
 						value&=0x01FFFFFC;
 						//0x3C0Bqqqq
 							funcOutSect=funcOutSect+decDigi(ASM+52, 8)+' '+decDigi((value>>16)|0x3C0B0000,8)+'\n';
@@ -2216,7 +2221,7 @@ funcOut=funcOut+decDigi(ASM+0x28,8)+' 0x27BD0028\n'
 </script>
 
 <center><font size="5" color="#60C0F0"><b>
-MKIJIRO CODE CONVETER 20110422 BY (ﬂÅÕﬂ)<br>POWERED BY <a href="http://unzu127xp.pa.land.to/data/asme.html">FAKE-CWC<a><br>
+MKIJIRO ASM CODE CONVETER 20110423 BY (ﬂÅÕﬂ)<br>POWERED BY <a href="http://unzu127xp.pa.land.to/data/asme.html">FAKE-CWC<a><br>
 <a href="http://unzu127xp.pa.land.to/data/asme.html#sp">MUST NEED HOOK&STACPOINTER</a></b><br>
 modded SANiK's superlicious CWCheat to nitePR convert tool<br>
 DOESNOTSUPPORT BRANCHTEST,<a href="http://translate.google.co.jp/translate?u=http%3A%2F%2Funzu127xp.pa.land.to%2Fdata%2FCWC.html&amp;sl=ja&amp;tl=en&amp;hl=&amp;ie=UTF-8">SUPPORT FORMAT</a> <a href="test.txt">TESTEDCODES</a><br></font>
@@ -2226,7 +2231,7 @@ CWCheat code:<br><textarea name="text" rows="10" cols="50"></textarea><br>
 <input type="reset" value="Clear">
 <br>
 </form>
-ENTER HOOK PATTERN(NEXTLINE NORMALY NOP)
+ENTER HOOK PATTERN(NEXTLINEASM NORMALY NOP,0x00000000)
 <FORM NAME="HOOK">
 HOOKADDRESS
 <INPUT TYPE="text" NAME="text1" SIZE="40" VALUE="0x0000"><br>
