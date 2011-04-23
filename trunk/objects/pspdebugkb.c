@@ -306,7 +306,8 @@ void pspDebugKbInit(char* str) {
 	  //while (strlen(str) > 0) {
 	  //  str[strlen(str)-1] = '\0';
 	  //}
-	  str[0] = 0;
+	  //str[0] = 0;
+	  bzero(str, PSP_DEBUG_KB_MAXLEN);
 	  pspDebugKbDrawString(str);
 	  break;
 	case 4:
@@ -333,5 +334,4 @@ void pspDebugKbInit(char* str) {
 
     lastinput = input;
   }
-
 }

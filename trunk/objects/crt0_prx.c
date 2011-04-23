@@ -97,7 +97,7 @@ PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 #endif
 
 //Globals
-unsigned char *MKVER="  MKIJIRO20110415";
+unsigned char *MKVER="  MKIJIRO20110423";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -241,6 +241,8 @@ unsigned int counteraddress=0;
 unsigned char backline=1;
 unsigned char HBFLAG=0;
 unsigned char k=0;
+char BIGSMALL=0;
+char FAKEHYOGEN=-1;
 #ifdef _USB_
 unsigned char usbmod=0;
 unsigned char usbonbitch=0;
@@ -2005,10 +2007,10 @@ void menuDraw(){
 					//Print out the hex
 					switch(searchHistory[0].flags & FLAG_DWORD){
 						case FLAG_DWORD:
-							sprintf(buffer, "0x%08lX  ", *((unsigned int*)(searchAddress[counter])));
+							sprintf(buffer, "0x%08lX  ", *((unsigned int*)(searchAddress[counter]&0xFFFFFFFC)));
 						break;
 						case FLAG_WORD:
-							sprintf(buffer, "0x____%04hX  ", *((unsigned short*)(searchAddress[counter])));
+							sprintf(buffer, "0x____%04hX  ", *((unsigned short*)(searchAddress[counter]&0xFFFFFFFE)));
 						break;
 						case FLAG_BYTE:
 							sprintf(buffer, "0x______%02hX  ", *((unsigned char*)(searchAddress[counter])));
@@ -2020,10 +2022,10 @@ void menuDraw(){
 					//Print out the decimal
 					switch(searchHistory[0].flags & FLAG_DWORD){
 						case FLAG_DWORD:
-							sprintf(buffer, "%010lu  ", *((unsigned int*)(searchAddress[counter])));
+							sprintf(buffer, "%010lu  ", *((unsigned int*)(searchAddress[counter]&0xFFFFFFFC)));
 						break;
 						case FLAG_WORD:
-							sprintf(buffer, "%010lu  ", *((unsigned short*)(searchAddress[counter])));
+							sprintf(buffer, "%010lu  ", *((unsigned short*)(searchAddress[counter]&0xFFFFFFFE)));
 						break;
 						case FLAG_BYTE:
 							sprintf(buffer, "%010lu  ", *((unsigned char*)(searchAddress[counter])));
@@ -2250,10 +2252,10 @@ void menuDraw(){
 					//Print out the hex
 					switch(searchHistory[0].flags & FLAG_DWORD){
 						case FLAG_DWORD:
-							sprintf(buffer, "0x%08lX  ", *((unsigned int*)(searchAddress[counter])));
+							sprintf(buffer, "0x%08lX  ", *((unsigned int*)(searchAddress[counter]&0xFFFFFFFC)));
 						break;
 						case FLAG_WORD:
-							sprintf(buffer, "0x____%04hX  ", *((unsigned short*)(searchAddress[counter])));
+							sprintf(buffer, "0x____%04hX  ", *((unsigned short*)(searchAddress[counter]&0xFFFFFFFE)));
 						break;
 						case FLAG_BYTE:
 							sprintf(buffer, "0x______%02hX  ", *((unsigned char*)(searchAddress[counter])));
@@ -2265,10 +2267,10 @@ void menuDraw(){
 					//Print out the decimal
 					switch(searchHistory[0].flags & FLAG_DWORD){
 						case FLAG_DWORD:
-							sprintf(buffer, "%010lu  ", *((unsigned int*)(searchAddress[counter])));
+							sprintf(buffer, "%010lu  ", *((unsigned int*)(searchAddress[counter]&0xFFFFFFFC)));
 						break;
 						case FLAG_WORD:
-							sprintf(buffer, "%010lu  ", *((unsigned short*)(searchAddress[counter])));
+							sprintf(buffer, "%010lu  ", *((unsigned short*)(searchAddress[counter]&0xFFFFFFFE)));
 						break;
 						case FLAG_BYTE:
 							sprintf(buffer, "%010lu  ", *((unsigned char*)(searchAddress[counter])));
@@ -2332,9 +2334,11 @@ void menuDraw(){
 			case 4: //DRAW EXT TEXT search
 				//Draw the tabs
 				pspDebugScreenSetTextColor(color02); pspDebugScreenPuts(line);
-				pspDebugScreenSetTextColor(color01); pspDebugScreenPuts("  [Editing Search]");
-				pspDebugScreenPuts("\n"); pspDebugScreenSetTextColor(color02); pspDebugScreenPuts(line);
-				pspDebugScreenSetTextColor(color02); 
+				pspDebugScreenSetTextColor(color01); //pspDebugScreenPuts("  [Editing Search]\n");
+				sprintf(buffer,"[Editing Search] A/a;%c WD;%c\n",0x59+0xB*BIGSMALL,0x59+0xB*FAKEHYOGEN);
+				pspDebugScreenPuts(buffer);
+				pspDebugScreenSetTextColor(color02);
+				pspDebugScreenPuts(line);
 				pspDebugScreenPuts("  Text\n");
 
 				//Apply the row color
@@ -2379,7 +2383,7 @@ void menuDraw(){
 
 				//Print out results
 				pspDebugScreenSetTextColor(color02); pspDebugScreenPuts(line);
-				pspDebugScreenSetTextColor(color01); pspDebugScreenPuts("  [Search Results: Only showing first 100]");
+				pspDebugScreenSetTextColor(color01); pspDebugScreenPuts("  [Search Results: Only showing first 499]");
 				pspDebugScreenPuts("\n"); pspDebugScreenSetTextColor(color02); pspDebugScreenPuts(line);
 				pspDebugScreenSetTextColor(color02); pspDebugScreenPuts("  Address     Text\n");
 
@@ -3598,7 +3602,7 @@ void menuInput(){
 				  if(extSelected[0] > 1)
 				  {
 					copyData=searchAddress[extSelected[0]-2]-0x40000000;
-					searchjumpNo=extSelected[0]-3;
+					searchjumpNo=extSelected[0]-2;
 					}
 				}
 				else if(extMenu == 5)
@@ -5456,6 +5460,12 @@ void menuInput(){
 				  {
 					extSelected[0]=extSelected[0]+20;
 				  }
+				  else{
+				  	if(searchResultCounter>searchResultMax){
+				  	extSelected[0]=searchResultMax+2;}
+				  	else{
+				  	extSelected[0]=searchResultCounter+2;}
+				  }
 				  menuDraw();
 					if(cheatButtonAgeY < 12) cheatButtonAgeY++; sceKernelDelayThread(150000-(10000*cheatButtonAgeY));
 				}
@@ -5532,9 +5542,26 @@ void menuInput(){
 				if(pad.Buttons & PSP_CTRL_START){
 					keyboard=1;
 					pspDebugKbInit(fileBuffer);
-					sceKernelDelayThread(150000);keyboard=0;
+					sceKernelDelayThread(150000);
+					unsigned char i=1;
+					if(fileBuffer[0]==0){
+						fileBuffer[0]='A';
+					}
+					while(i<33){
+						if(fileBuffer[i]==0){ break;}
+						i++;
+					}
+					if(extSelected[2]>i-1) extSelected[2]=i-1;
+					keyboard=0;
+					menuDraw();
 				}
-				if(pad.Buttons & PSP_CTRL_TRIANGLE) { copyMenu=1; menuDraw(); sceKernelDelayThread(150000);}
+				if(pad.Buttons & PSP_CTRL_SELECT){
+				if(pad.Buttons & PSP_CTRL_RIGHT) BIGSMALL=~BIGSMALL;
+				if(pad.Buttons & PSP_CTRL_UP) FAKEHYOGEN=~FAKEHYOGEN;
+					menuDraw();
+					sceKernelDelayThread(300000);
+				}
+			if(pad.Buttons & PSP_CTRL_TRIANGLE) { copyMenu=1; menuDraw(); sceKernelDelayThread(150000);}
 				
 			  if(pad.Buttons & PSP_CTRL_CROSS)
 			  {
@@ -5552,12 +5579,12 @@ void menuInput(){
 				  
 				  //Search!
 				  counter=searchStart;
-				 
+				  //char acounter=0;
 				  //Helper
 				  while(counter < searchStop)
 				  {
-		if((counter>0x48802800) && (counter<0x48803C00)){
-		counter=0x48803C00;}
+				if((counter>0x48802800) && (counter<0x48803C00)){
+				counter=0x48803C00;}
 					//Helper
 					if(!((counter - searchStart) & 0xFFFF))
 					{
@@ -5571,8 +5598,7 @@ void menuInput(){
 					  if(pad.Buttons & PSP_CTRL_CIRCLE)
 					  {
 						lineClear(33);
-						pspDebugScreenSetTextColor(color02); pspDebugScreenPuts("Task Aborted!!!"); 
-						
+						pspDebugScreenSetTextColor(color02); pspDebugScreenPuts("Task Aborted!!!");
 
 						do
 						{
@@ -5585,25 +5611,46 @@ void menuInput(){
 					
 					//Check
 					scounter=0;
-					while(scounter < 50)
+					while(scounter < 33)
 					{
 					  if(counter+scounter <= 0x49FFFFFF)
 					  {
 						unsigned char tempLetter=*((unsigned char*)(counter+scounter));
-						if((tempLetter >= 0x61) && (tempLetter <= 0x7A)) tempLetter-=0x20;
+						//big small chara
+						if(BIGSMALL==0 && (tempLetter >= 0x61) && (tempLetter <= 0x7A)) tempLetter-=0x20;
 						if(tempLetter == (unsigned char)fileBuffer[scounter])
 						{
 						  scounter++;
-						  if(!fileBuffer[scounter+1])
+						  if(!fileBuffer[scounter])
 						  {
 							//Add it
 							searchAddress[searchResultCounter]=counter;
-								searchResultCounter++;
+							searchResultCounter++;
 							break;
 						  }
 						}
+						// . wildcard
+						else if(FAKEHYOGEN==0 && *((unsigned char*)(&fileBuffer[0]+scounter))==0x2E){
+						scounter++;
+						}
+						// /. nowildcard
+						//else if(FAKEHYOGEN==0 && (*((unsigned char*)(&fileBuffer[0]+scounter))==0x5C && *((unsigned char*)(&fileBuffer[0]+scounter+1))==0x2E)&& tempLetter==0x2E){
+						//scounter+=2;
+						//}
+						// c?
+						//else if(FAKEHYOGEN==0 && *((unsigned char*)(&fileBuffer[0]+scounter+1))==0x3F){
+						//if(tempLetter==*((unsigned char*)(&fileBuffer[0]+scounter))){
+						//acounter=-1;
+						//scounter+=2;
+						//}
+						//else{
+						//acounter=-2;
+						//scounter+=2;
+						//}
+						//}
 						else
 						{
+						  //acounter=0;
 						  if(scounter == 0)
 						  {
 							scounter=1;
@@ -5693,6 +5740,33 @@ void menuInput(){
 				  menuDraw();
 					if(cheatButtonAgeY < 12) cheatButtonAgeY++; sceKernelDelayThread(150000-(10000*cheatButtonAgeY));
 				}
+				if(pad.Buttons & PSP_CTRL_LTRIGGER)
+				{
+				  if(extSelected[0] > 22)
+				  {
+					extSelected[0]=extSelected[0]-21;
+				  }
+				  else{
+				  extSelected[0]=2;}
+				  menuDraw();
+					if(cheatButtonAgeY < 12) cheatButtonAgeY++; sceKernelDelayThread(150000-(10000*cheatButtonAgeY));
+				
+				}
+				else if(pad.Buttons & PSP_CTRL_RTRIGGER)
+				{
+				  if(extSelected[0]+22 < (searchResultCounter>searchResultMax? searchResultMax:searchResultCounter))
+				  {
+					extSelected[0]=extSelected[0]+21;
+				  }
+				  else{
+				  	if(searchResultCounter>searchResultMax){
+				  	extSelected[0]=searchResultMax+1;}
+				  	else{
+				  	extSelected[0]=searchResultCounter+1;}
+				  }
+				  menuDraw();
+					if(cheatButtonAgeY < 12) cheatButtonAgeY++; sceKernelDelayThread(150000-(10000*cheatButtonAgeY));
+				}
 				else
 				{
 				  cheatButtonAgeY=0;
@@ -5713,7 +5787,7 @@ void menuInput(){
 				else if(pad.Buttons & PSP_CTRL_RIGHT)
 				{
 				  extSelected[2]++;
-				  if(extSelected[2] == 50) { extSelected[2]=49; }
+				  if(extSelected[2] == 33) { extSelected[2]=32; }
 				  if(fileBuffer[extSelected[2]] == 0x00) fileBuffer[extSelected[2]]='A';
 					menuDraw();
 					if(cheatButtonAgeX < 12) cheatButtonAgeX++; sceKernelDelayThread(150000-(10000*cheatButtonAgeX));
@@ -5758,9 +5832,8 @@ void menuInput(){
 						
 						if(extSelected[3])
 						{
-							
 							//sceIoRemove("ms0:/search.ram");
-							sprintf(buffer, "ms0:/search.ram");
+						/*sprintf(buffer, "ms0:/search.ram");
 							sceIoRemove(buffer);
 
 							while(searchMax > 0)
@@ -5777,7 +5850,7 @@ void menuInput(){
 							cheatSearch=0;
 							cheatSelected=0;
 							searchResultCounter=0;
-							searchHistoryCounter=0;
+							searchHistoryCounter=0;*/
 							
 							extSelected[3]=0;
 							menuDraw();
@@ -5787,7 +5860,7 @@ void menuInput(){
 						{
 							
 							//sceIoRemove("ms0:/search.ram");
-							sprintf(buffer, "ms0:/search.ram");
+						/*	sprintf(buffer, "ms0:/search.ram");
 					 		sceIoRemove(buffer);
 
 							while(searchMax > 0)
@@ -5807,7 +5880,7 @@ void menuInput(){
 							searchResultCounter=0;
 							
 							//Go back
-							cheatSelected=0;
+							//cheatSelected=0;*/
 							pspDebugScreenInitEx(vram, 0, 0);
 							extSelected[0]=extSelected[1]=extSelected[2]=extSelected[3]=0;
 							extMenu=0;
