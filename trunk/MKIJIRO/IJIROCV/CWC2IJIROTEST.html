@@ -415,8 +415,8 @@
 						//0x8DEF0000
 							funcOutSect=funcOutSect+decDigi(ASM+48, 8)+' 0x8DEF0000\n';
 						tempNo-=2;
-						if(pointerNo>2){
 						moffset=value>>28;
+						if(pointerNo>2 && (moffset==2 || moffset==3)){
 						value&=0x01FFFFFC;
 						//0x3C0Bqqqq
 							funcOutSect=funcOutSect+decDigi(ASM+52, 8)+' '+decDigi((value>>16)|0x3C0B0000,8)+'\n';
@@ -446,7 +446,7 @@
 							funcOutSect=funcOutSect+decDigi(ASM+64, 8)+' 0x8DEF0000\n';ASM+=16;
 						tempNo--;
 						moffset=value>>28;
-						if(moffset>0 && tempNo>0){
+						if(tempNo>0 && (moffset==2 || moffset==3)){
 						value&=0x01FFFFFC;
 						//0x3C0Bqqqq
 							funcOutSect=funcOutSect+decDigi(ASM+52, 8)+' '+decDigi((value>>16)|0x3C0B0000,8)+'\n';
@@ -845,9 +845,8 @@
 							funcOutSect=funcOutSect+decDigi(ASM+44, 8)+' 0x01EB7823\n';
 						//0x8DEF0000
 							funcOutSect=funcOutSect+decDigi(ASM+48, 8)+' 0x8DEF0000\n';
-						tempNo-=2;
-						if(pointerNo>2){
-						moffset=value>>28;
+						tempNo-=2;moffset=value>>28;
+						if(pointerNo>2 && (moffset==2 || moffset==3)){
 						value&=0x01FFFFFC;
 						//0x3C0Bqqqq
 							funcOutSect=funcOutSect+decDigi(ASM+52, 8)+' '+decDigi((value>>16)|0x3C0B0000,8)+'\n';
@@ -877,7 +876,7 @@
 							funcOutSect=funcOutSect+decDigi(ASM+64, 8)+' 0x8DEF0000\n';ASM+=16;
 						tempNo--;
 						moffset=value>>28;
-						if(moffset>0 && tempNo>0){
+						if(tempNo>0 && (moffset==2 || moffset==3)){
 						value&=0x01FFFFFC;
 						//0x3C0Bqqqq
 							funcOutSect=funcOutSect+decDigi(ASM+52, 8)+' '+decDigi((value>>16)|0x3C0B0000,8)+'\n';
