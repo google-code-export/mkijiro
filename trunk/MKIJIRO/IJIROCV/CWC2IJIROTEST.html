@@ -562,7 +562,7 @@
 							funcOutSect=funcOutSect+decDigi(ASM+4, 8)+' '+decDigi((bkAddress2 &0xFFFF)|0x35080000,8)+'\n';
 							//}
 							if(bit==2 || bit==5){
-							bkkValue2=bkValue2>>>0;
+							bkValue2=bkValue2>>>0;
 							if(bkValue2>= 0x10000){
 						//0x00002008 0x3C09bbbb
 							funcOutSect=funcOutSect+decDigi(ASM+8, 8)+' '+decDigi(((bkValue2 >>16)&0xFFFF)|0x3C090000,8)+'\n';
@@ -1904,7 +1904,7 @@
 						else if(JOKERFLAG==0){funcOutSect=funcOutSect+'#JOKERKILLER\n';JOKERFLAG--;}
 						//funcOutSect=funcOutSect+';Unsupported cheat - negative offset\n';
 						funcOutSect=funcOutSect+';ASM negative offset pointercode,NEED HOOK\n';
-						value=value>>>0;
+						value=value>>>0;bkValue=bkValue>>>0;
 						if(value < 0x8000 && ((bit==4 && (value&0x1)==0) || (bit==5 && (value&0x3)==0)||bit==3 )){
 						sbline=0;}
 						else{
@@ -1919,7 +1919,6 @@
 						sbline=2;}
 						}
 							if(bkAddress==0){
-							bkValue=bkValue>>>0;
 							if(bkValue>=0x10000){
 							if((bkValue&0xFFFF)!=0){
 							valueline=1;
@@ -1949,7 +1948,6 @@
 							funcOutSect=funcOutSect+decDigi(ASM+4,8)+' '+decDigi((bkAddress&0xFFFF)|0x35080000, 8)+'\n';
 							}
 						if(bit==5){
-						//bkValue=bkValue>>>0;
 						if(bkValue<0x10000){
 						funcOutSect=funcOutSect+decDigi(ASM+8,8)+' '+decDigi((bkValue&0xFFFF)|0x34090000, 8)+'\n';
 						}
