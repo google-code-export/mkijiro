@@ -21,6 +21,11 @@ certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
 0x8838DBF0 moviezone,pspfat should freeze after search/save...slim user use extraram setting
 
+2011/4/25
+フリーズ対策のためHOME押した際スレッドを再開させるように変更
+TXTサーチの文字バッファを記録しておくように変更
+レジスタ表示をs8からfpにかえた
+
 2011/4/23
 テキストサーチ関連
 大小無視(SEL+右)と1文字ワイルド(SEL+上,文字　.)を追加

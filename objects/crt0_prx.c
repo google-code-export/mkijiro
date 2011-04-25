@@ -97,7 +97,7 @@ PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 #endif
 
 //Globals
-unsigned char *MKVER="  MKIJIRO20110423";
+unsigned char *MKVER="  MKIJIRO20110425";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -2351,7 +2351,7 @@ void menuDraw(){
 
 				//Print out the ASCII
 				pspDebugScreenPuts("  '");
-				fileBuffer[50]=0;
+				fileBuffer[33]=0;
 				pspDebugScreenPuts(fileBuffer);
 
 				//Skip a line, draw the pointer =)
@@ -2382,8 +2382,10 @@ void menuDraw(){
 				pspDebugScreenSetTextColor(extSelected[0] == 1? color01: color02); pspDebugScreenPuts("  Search\n");
 
 				//Print out results
+				convTotal=((searchResultCounter > searchResultMax)? searchResultMax:searchResultCounter);
 				pspDebugScreenSetTextColor(color02); pspDebugScreenPuts(line);
-				pspDebugScreenSetTextColor(color01); pspDebugScreenPuts("  [Search Results: Only showing first 499]");
+				pspDebugScreenSetTextColor(color01); sprintf(buffer,"  [Search Results %d: Only showing first 499]",convTotal);
+				pspDebugScreenPuts(buffer);
 				pspDebugScreenPuts("\n"); pspDebugScreenSetTextColor(color02); pspDebugScreenPuts(line);
 				pspDebugScreenSetTextColor(color02); pspDebugScreenPuts("  Address     Text\n");
 
@@ -3909,6 +3911,7 @@ void menuInput(){
 		  if(((padButtons & PSP_CTRL_CIRCLE) && !(pad.Buttons & PSP_CTRL_CIRCLE)) || (pad.Buttons & PSP_CTRL_HOME)){
 		  	hideCopyMenu:
 			pspDebugScreenInitEx(vram, 0, 0);
+			if(cheatPause)	gameResume(thid);
 			copyMenu=0;
 			menuDraw();
 			sceKernelDelayThread(150000);
@@ -6095,6 +6098,7 @@ void menuInput(){
 			{
 				if(keyboard){
 				pspDebugKbInit(cheat[cheatSelected].name);keyboard=0;}
+				if(cheatPause) gameResume(thid);
 			  //Unregister the O key so that the user mode game doesn't pick it up
 				menuDrawn=0;
 				return;
@@ -6269,10 +6273,11 @@ void menuInput(){
 				  }
 				  else if(cheatSelected == 4){ //find text
 					//Goto Find text
-					searchResultCounter=0;
+					//searchResultCounter=0;
 					pspDebugScreenInitEx(vram, 0, 0);
-					memset(fileBuffer, 0, 50);
-					fileBuffer[0]='A';
+					if(fileBuffer[0]==0) {
+					memset(fileBuffer, 0, 33);
+					fileBuffer[0]='A';}
 					extSelected[0]=extSelected[1]=extSelected[2]=extSelected[3]=0;
 					extMenu=4;
 					extOpt=0;
