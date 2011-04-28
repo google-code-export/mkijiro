@@ -217,6 +217,8 @@ void pspDebugKbInit(char* str) {
   pspDebugKbDrawKey(row, col, 1);
   pspDebugKbDrawString(str);
 
+  sleep=scePowerGetResumeCount();
+  
   while (1) {
     sceCtrlReadBufferPositive(&input, 1);
 
@@ -232,10 +234,8 @@ void pspDebugKbInit(char* str) {
       // Update inputTime
       inputTime = input.TimeStamp;
     }
-  if(scePowerGetResumeCount()-sleep>1){
-  sleep=scePowerGetResumeCount();
-  }
-  else if(sleep!=scePowerGetResumeCount()){
+    
+  if(sleep<scePowerGetResumeCount()){
   	  sleep++;
 	  return;
   }
