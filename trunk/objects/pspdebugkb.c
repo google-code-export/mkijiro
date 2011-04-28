@@ -232,11 +232,13 @@ void pspDebugKbInit(char* str) {
       // Update inputTime
       inputTime = input.TimeStamp;
     }
-    
-  if(sleep==(scePowerGetResumeCount()-1)){
+  if(scePowerGetResumeCount()-sleep>1){
+  sleep=scePowerGetResumeCount();
+  }
+  else if(sleep!=scePowerGetResumeCount()){
   	  sleep++;
 	  return;
-}
+  }
     
     if (input.Buttons & PSP_CTRL_RIGHT
 	&& ((row == PSP_DEBUG_KB_COMMAND_ROW && col < PSP_DEBUG_KB_NUM_COMMANDS - 1)
