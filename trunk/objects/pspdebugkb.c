@@ -19,7 +19,8 @@
 #include "headers/snprintf.h"
 #define pspDebugScreenPrintf pspDebugScreenKprintf
 extern int snprintf(char *str, size_t str_m, const char *fmt, /*args*/ ...);
-
+int sleep=0;
+  
 static char loCharTable[PSP_DEBUG_KB_NUM_ROWS][PSP_DEBUG_KB_NUM_CHARS] = {
   { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '^', '\\' },
   { 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '@', '[', ']' }, // { } remember to remove the brackets
@@ -231,6 +232,12 @@ void pspDebugKbInit(char* str) {
       // Update inputTime
       inputTime = input.TimeStamp;
     }
+    
+  if(sleep==(scePowerGetResumeCount()-1)){
+  	  sleep++;
+	  return;
+}
+    
     if (input.Buttons & PSP_CTRL_RIGHT
 	&& ((row == PSP_DEBUG_KB_COMMAND_ROW && col < PSP_DEBUG_KB_NUM_COMMANDS - 1)
 	    || (row != PSP_DEBUG_KB_COMMAND_ROW && col < PSP_DEBUG_KB_NUM_CHARS - 1

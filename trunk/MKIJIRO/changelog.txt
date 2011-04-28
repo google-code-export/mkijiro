@@ -21,6 +21,13 @@ certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
 0x8838DBF0 moviezone,pspfat should freeze after search/save...slim user use extraram setting
 
+2011/4/28
+スリープするとHOMEメニューのバッファが消されるので対策
+スリープメニュー追加、一部ISOドライバー？は完全にスリープできないらしい
+
+2011/4/27
+GOでの温度計が機能しないらしいので修正(thanks,raing3)
+
 2011/4/25
 フリーズ対策のためHOME押した際スレッドを再開させるように変更
 TXTサーチの文字バッファを記録しておくように変更

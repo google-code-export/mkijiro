@@ -97,7 +97,7 @@ PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 #endif
 
 //Globals
-unsigned char *MKVER="  MKIJIRO20110425";
+unsigned char *MKVER="  MKIJIRO20110428";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -287,7 +287,7 @@ unsigned int socomftb2=1;
 #define fileBufferPeek(a_out, a_ahead) if((fileBufferOffset + a_ahead) >= 1024) { fileBufferBackup=sceIoLseek(fd, 0, SEEK_CUR); sceIoLseek(fd, a_ahead, SEEK_CUR); sceIoRead(fd, &a_out, 1); sceIoLseek(fd, fileBufferBackup, SEEK_SET); } else { a_out=fileBuffer[fileBufferOffset + a_ahead]; }
 #define fileBufferRead(a_out, a_size) if(fileBufferOffset == 1024) { fileBufferSize=sceIoRead(fd, fileBuffer, 1024); fileBufferOffset=0; } memcpy(a_out, &fileBuffer[fileBufferOffset], a_size); fileBufferOffset+=a_size; fileBufferFileOffset+=a_size;
 //#define lineClear(a_line) pspDebugScreenSetXY(0, a_line); pspDebugScreenPuts(lineC); pspDebugScreenSetXY(0, a_line);
-#define lineClear(a_line) pspDebugScreenSetXY(0, a_line); spaceman(60);pspDebugScreenSetXY(0, a_line);
+#define lineClear(a_line) pspDebugScreenSetXY(0, a_line); if(a_line==33){spaceman(67);}else{spaceman(68);}pspDebugScreenSetXY(0, a_line);
 
 
 //Functions
@@ -295,6 +295,8 @@ int module_start(SceSize args, void *argp) __attribute__((alias("_start")));
 int module_stop(SceSize args, void *argp) __attribute__((alias("_stop")));
 static void gamePause(SceUID thid);
 static void gameResume(SceUID thid);
+unsigned char suspend = 0; // global var
+
 
 //Arrays
 unsigned int decDelta[10]={1000000000, 100000000, 10000000, 1000000, 100000, 10000, 1000, 100, 10, 1};
@@ -2691,8 +2693,9 @@ void menuDraw(){
 
 				pspDebugScreenSetTextColor(color02);
 				pspDebugScreenPuts("Temp:");
-				pspDebugScreenSetTextColor(color01); 
-				if(scePowerGetBatteryLifePercent() > 1){
+				pspDebugScreenSetTextColor(color01);
+				//if(scePowerGetBatteryLifePercent() > 1){
+				if(scePowerGetBatteryTemp() >= 0){
 					sprintf(buffer, "%d C ", scePowerGetBatteryTemp());
 				}
 				else{
@@ -2851,7 +2854,7 @@ void menuDraw(){
 							if(pad.Buttons & PSP_CTRL_SQUARE){
 							pspDebugScreenPuts("  PSP Shutdown\n");}
 							else{
-							pspDebugScreenPuts("  USB (not compiled)\n");}
+							pspDebugScreenPuts("  PSP Sleep\n");}
 							break;
 						#endif
 						case 9: sprintf(buffer, "  Cheat Hz? %d/1000 seconds\n", (cheatHz/1000)); pspDebugScreenPuts(buffer); break;
@@ -2893,7 +2896,7 @@ void menuDraw(){
 					#ifdef _USB_
 					case 8: pspDebugScreenPuts("Enable USB Mode (* Note * Remember to turn it off!!)"); break;
 					#else
-					case 8: pspDebugScreenPuts("Usb mode is not compiled in this version");break;
+					case 8: pspDebugScreenPuts("Quick PSP Sleep,[] Shutdown");break;
 					#endif
 					case 9: pspDebugScreenPuts("Cheat refresh rate (MKIJIRO clock)"); break;
 					case 10: pspDebugScreenPuts("Save your cheats"); break;
@@ -3502,7 +3505,7 @@ void menuInput(){
 	//unsigned short DumpInterval=0;
 	pad.Buttons=0;
 	menuDraw();
-  
+
    	#ifdef _SOCOM_
        if(socomftb2){
     	if(hijack){
@@ -3532,6 +3535,7 @@ void menuInput(){
 		}
 
 		if(copyMenu){ //copy menu
+		   remenu();
 		   if(pad.Buttons & PSP_CTRL_UP){
 				if(copyMenu > 1){
 					copyMenu-=1;}
@@ -3911,7 +3915,7 @@ void menuInput(){
 		  if(((padButtons & PSP_CTRL_CIRCLE) && !(pad.Buttons & PSP_CTRL_CIRCLE)) || (pad.Buttons & PSP_CTRL_HOME)){
 		  	hideCopyMenu:
 			pspDebugScreenInitEx(vram, 0, 0);
-			if(cheatPause)	gameResume(thid);
+			if(cheatPause && (pad.Buttons & PSP_CTRL_HOME))  cheatPause=!cheatPause;gameResume(thid);
 			copyMenu=0;
 			menuDraw();
 			sceKernelDelayThread(150000);
@@ -3921,7 +3925,7 @@ void menuInput(){
 		  switch(extMenu)
 		  {
 			case 1: //INPUT EXT CHEAT
-			 
+			  remenu();
 			  if(pad.Buttons & PSP_CTRL_START){
 				//change format
 				if(editFormat==0){
@@ -4218,6 +4222,7 @@ void menuInput(){
 				break;
 			  
 			case 2: //INPUT EXT SEARCH
+		   remenu();
 				if(pad.Buttons & PSP_CTRL_START){
 					//change format
 					if(editFormat==0){
@@ -4807,6 +4812,7 @@ void menuInput(){
 				break;
 			  
 			case 3: //INPUT EXT DIFF SEARCH
+		   remenu();
 				if(pad.Buttons & PSP_CTRL_START){
 					//change format
 					if(editFormat==0){
@@ -5542,20 +5548,23 @@ void menuInput(){
 				break;
 			  
 		  case 4: //INPUT EXT TEXT SEARCH
+		  remenu();
 				if(pad.Buttons & PSP_CTRL_START){
 					keyboard=1;
 					pspDebugKbInit(fileBuffer);
 					sceKernelDelayThread(150000);
-					unsigned char i=1;
 					if(fileBuffer[0]==0){
 						fileBuffer[0]='A';
 					}
-					while(i<33){
-						if(fileBuffer[i]==0){ break;}
-						i++;
+					unsigned char i=33;
+					while(i){
+						if(fileBuffer[i]!=0){ break;}
+						extSelected[2]=i-1;
+						i--;
 					}
-					if(extSelected[2]>i-1) extSelected[2]=i-1;
+					//if(extSelected[2]>i-1) extSelected[2]=i-1;
 					keyboard=0;
+					remenu();
 					menuDraw();
 				}
 				if(pad.Buttons & PSP_CTRL_SELECT){
@@ -5897,6 +5906,7 @@ void menuInput(){
 			break;
 				
 			case 5: //search range features
+		   remenu();
 				if(pad.Buttons & PSP_CTRL_TRIANGLE) { copyMenu=1; menuDraw(); sceKernelDelayThread(150000);}
 			  if(pad.Buttons & PSP_CTRL_CROSS)
 			  {
@@ -6079,14 +6089,14 @@ void menuInput(){
 			cheatSelected=0;
 			extSelected[0]=extSelected[1]=extSelected[2]=extSelected[3]=0;
 			extOpt=0;
-			if(tabSelected < 4)
+			if(tabSelected < 3)
 			{
 				tabSelected++;
 			}
 			menuDraw();
 			sceKernelDelayThread(150000);
 		  }
-		  if(((padButtons & PSP_CTRL_CIRCLE) && !(pad.Buttons & PSP_CTRL_CIRCLE)) || ((pad.Buttons & PSP_CTRL_HOME)&&!(pad.Buttons & PSP_CTRL_HOME))){
+		  if(((padButtons & PSP_CTRL_CIRCLE) && !(pad.Buttons & PSP_CTRL_CIRCLE)) || ((pad.Buttons & PSP_CTRL_HOME)&&!(pad.Buttons & PSP_CTRL_HOME)) || suspend==1){
 			//Special case for the memory viewer
 			if(extSelected[3])
 			{
@@ -6096,9 +6106,11 @@ void menuInput(){
 			}
 			else
 			{
-				if(keyboard){
-				pspDebugKbInit(cheat[cheatSelected].name);keyboard=0;}
-				if(cheatPause) gameResume(thid);
+				if(keyboard && ((pad.Buttons & PSP_CTRL_HOME) || suspend==1)){
+					if(extMenu==3){pspDebugKbInit(fileBuffer);}else{
+				pspDebugKbInit(cheat[cheatSelected].name);}
+				keyboard=0;}
+				if(cheatPause && (pad.Buttons & PSP_CTRL_HOME))   cheatPause=!cheatPause;gameResume(thid);
 			  //Unregister the O key so that the user mode game doesn't pick it up
 				menuDrawn=0;
 				return;
@@ -6108,6 +6120,7 @@ void menuInput(){
 		  //Choose the appropriate action based on the tabSelected
 		  switch(tabSelected){
 			case 0: //INPUT CHEATER
+		   remenu();
 				//nofx's analog shit
 				if(pad.Ly < 50){
 					if(cheatSelected > 0){
@@ -6234,6 +6247,7 @@ void menuInput(){
 			break;
 			  
 			case 1: //INPUT SEARCHER
+		   remenu();
 			  if(pad.Buttons & PSP_CTRL_UP){
 				if(cheatSelected > 0)
 
@@ -6396,6 +6410,7 @@ void menuInput(){
 			break;
 			  
 			case 2: //INPUT PRX
+		   remenu();
 			  if(pad.Buttons & PSP_CTRL_UP){
 				if(cheatSelected > 0){
 					cheatSelected--;
@@ -6661,6 +6676,10 @@ void menuInput(){
 					#else
 					if(pad.Buttons & PSP_CTRL_SQUARE){
 					scePowerRequestStandby();}
+					else{
+					if(cheatPause) {cheatPause=!cheatPause;gameResume(thid);menuDrawn=0;}
+					suspend=1;
+					}
 					#endif
 				}
 				else if(cheatSelected == 10){
@@ -6734,6 +6753,7 @@ void menuInput(){
 			break;
 			  
 			case 3: //INPUT BROWSER & DECODER
+		   remenu();
 			 if(flipme){//INPUT BROWSER
 			  if(pad.Buttons & PSP_CTRL_SELECT) {
 				  
@@ -7227,6 +7247,7 @@ void menuInput(){
 			break;
 			
 			case 4: //OPTIONS MENU
+			//*(unsigned int*)(vram+4*colorFile)=0xFFFFFFFF;
 				#ifdef _SOCOM_
 				if(socomftb2){
 					unsigned int IDpointer=(unsigned int*) ((unsigned int*) (*pPointer));
@@ -7685,6 +7706,11 @@ int mainThread(){
 			if(cheatFlash > 0) cheatFlash--;
 		}
 		
+		if(suspend){
+		suspend=0;
+		scePowerRequestSuspend();
+		}
+		
 		//Handle screenshot
 		#ifdef _SCREENSHOT_
 		if((screenTime) && (screenPath[0])){
@@ -7836,6 +7862,17 @@ void restore(unsigned char restore_flag){
  						}
  						}
 					}
+}
+
+void remenu(){
+    		if( (bgcolor&0xFF) != *(unsigned char*)(vram)){
+    		int i=0;
+    		while(i<34){
+    		lineClear(i);i++;
+    		}
+    		if(copyMenu) copyMenu=0;
+    		menuDraw();//redraw or hide menu
+			}
 }
 
 void GETID(){
