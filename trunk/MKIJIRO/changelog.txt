@@ -21,6 +21,15 @@ certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
 0x8838DBF0 moviezone,pspfat should freeze after search/save...slim user use extraram setting
 
+2011/5/2
+結果ジャンプが最大結果+1でもできたので修正
+decoderでのCWCHEAT表示を廃止
+リアルアドレス表示をチートメニューに全体に適用
+びるどまーくに○Ｘ交換追加,コピーメニュなどの□＋○はきついので変えたとき△＋○
+バイナリ設定ファイル追加,WW=ポーズ(ポーズ有りは01),XXブラウザライン(00,01),YYボタン交換(00,01),ZZリアルアドレス(00,01)
+カラーのとこで□押しで保存可能
+BINARY WWXXYYZZ
+
 2011/4/28
 スリープするとHOMEメニューのバッファが消されるので対策
 スリープメニュー追加、一部ISOドライバー？は完全にスリープできないらしい
