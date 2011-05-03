@@ -100,7 +100,7 @@ PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 #endif
 
 //Globals
-unsigned char *MKVER="  MKIJIRO20110502";
+unsigned char *MKVER="  MKIJIRO20110503";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -266,10 +266,6 @@ unsigned char *screenshotstring[]={"NONE", "TOGGLE"};
 #endif
 unsigned char copyMenuX=25;
 unsigned char copyMenuY=0;
-#ifdef _SOCOM_
-unsigned char jacktoggle=0;
-unsigned char hijack=0;
-#endif
 
 //gui shit
 unsigned int menuKey=PSP_CTRL_VOLUP | PSP_CTRL_VOLDOWN;
@@ -292,10 +288,6 @@ unsigned int constant_cheat=0xFFF090C0;
 
 char line[78]={0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D};
 
-#ifdef _SOCOM_
-unsigned int socomftb1=1;
-unsigned int socomftb2=1;
-#endif
 //unsigned char lineC[78]={"                                                                   "};
 #define fileBufferPeek(a_out, a_ahead) if((fileBufferOffset + a_ahead) >= 1024) { fileBufferBackup=sceIoLseek(fd, 0, SEEK_CUR); sceIoLseek(fd, a_ahead, SEEK_CUR); sceIoRead(fd, &a_out, 1); sceIoLseek(fd, fileBufferBackup, SEEK_SET); } else { a_out=fileBuffer[fileBufferOffset + a_ahead]; }
 #define fileBufferRead(a_out, a_size) if(fileBufferOffset == 1024) { fileBufferSize=sceIoRead(fd, fileBuffer, 1024); fileBufferOffset=0; } memcpy(a_out, &fileBuffer[fileBufferOffset], a_size); fileBufferOffset+=a_size; fileBufferFileOffset+=a_size;
@@ -525,20 +517,6 @@ unsigned int blockAdd(int fd, unsigned char *a_data){
     sceIoRead(fd, hex, 8);
     block[blockTotal].address=char2hex(hex, &type);
     
-    #ifdef _JUNK_
-	if(socomftb2){
-		if(block[blockTotal].address==0x0055A048){
-			block[blockTotal].address=0x00000000;
-    	}
-    	else if(block[blockTotal].address==0x00505858){
-			block[blockTotal].address=0x00000000;
-    	}
-    	else if(block[blockTotal].address==0x0050238C){
-			block[blockTotal].address=0x00000000;
-    	}
-	}
-	#endif
-
 	//is our addressing within bounds?
     if(block[blockTotal].address==0xFFFFFFFF){ // is block dma?
 		block[blockTotal].flags|=FLAG_DMA;
@@ -706,11 +684,12 @@ void settingload(unsigned char set[]){
    int fd=sceIoOpen(set, PSP_O_RDONLY, 0777);
    if(fd>0){
     sceIoRead(fd,&setting,4);
+    sceIoRead(fd,&cheatHz,4);
 	cheatPause=(setting>>24)&0x01;
 	browseLines=16-8*((setting>>16)&0x1);
 	#ifdef _SWAPBUTTON_
 	SWAPBUTTON=0x4000-0x2000*((setting>>8)&0x1);
-	SWAPBUTTON2=0x200+0x2000*((setting>>8)&0x1);
+	SWAPBUTTON2=0x2000+0x2000*((setting>>8)&0x1);
 	SWAPBUTTON3=0x8000-0x7000*((setting>>8)&0x1);
 	#endif
 	decodeFormat=0x48800000-0x8800000*(setting&0x1);
@@ -1518,10 +1497,6 @@ static void gameResume(SceUID thid){
 	}
 }
 
-#ifdef _SOCOM_
-	#include "headers/grabnames.h"
-#endif
-
 /*
 #include "headers/logo.h"
 //Telazorn functions
@@ -1600,11 +1575,11 @@ void menuDraw(){
 				pspDebugScreenPuts("  Copy value\n");
 				break;
 				case 4:
-				if(pad.Buttons & SWAPBUTTON3){
-				if((tabSelected==3 && flipme==0 && searchHistory[0].hakVal!=0x03E00008) || extMenu == 1){
+				if((pad.Buttons & SWAPBUTTON3) && (tabSelected==3 && flipme==0)){
+				if((searchHistory[0].hakVal!=0x03E00008) || extMenu == 1){
 				pspDebugScreenPuts("  Paste Converted Jumpaddress+8\n");
 				}
-				else if((tabSelected==3 && flipme==0) && searchHistory[0].hakVal==0x03E00008){
+				else if(searchHistory[0].hakVal==0x03E00008){
 				pspDebugScreenPuts("  Quick Hook Find by break exception\n");
 				}
 				}
@@ -2584,7 +2559,6 @@ void menuDraw(){
 		pspDebugScreenSetTextColor(color02); pspDebugScreenPuts(line); //draw spiffy line
 		//Draw the options for the respective tab
 		switch(tabSelected){
-			
 			case 0: //DRAW CHEATER
 				counter=0;
 				while(counter < cheatTotal){
@@ -3227,315 +3201,8 @@ void menuDraw(){
 				pspDebugScreenPuts(buffer);
 				pspDebugScreenSetXY(10, 21);sprintf(buffer,"SET 0x%08X,PAUSE %02X,BLINE %D,DFOMAT 0x%08X\n",setting,cheatPause,browseLines,decodeFormat);
 				pspDebugScreenPuts(buffer);
-				#ifdef _SOCOM_
-				if(socomftb2){
-					//display peoples names in game
-					//DRAW OPTIONS MENU
-					pspDebugScreenSetTextColor(color02);
-					
-					if(datatype > 0){
-						pspDebugScreenPuts("  "); 					
-						sprintf(buffer, "0x%08lX ", (decodeAddress[bdNo]+(decodeY[bdNo]*4)) - decodeFormat);
-						pspDebugScreenPuts(buffer);
-						sprintf(buffer, "0x%08lX", *((unsigned int*)(decodeAddress[bdNo]+(decodeY[bdNo]*4))));
-						pspDebugScreenPuts(buffer);
-						pspDebugScreenPuts("\n");
-					}
-					else{
-						pspDebugScreenPuts("  "); 
-						pspDebugScreenPuts(MyImpostorBuffer); 
-						pspDebugScreenPuts(" \n");
-					}
-	
-					pspDebugScreenPuts(line);
-					
-					//DRAW PRX
-					counter=0;
-					while(counter < 19){
-						
-						if(cheatSelected == counter){
-							//Highlight the selection
-							pspDebugScreenSetTextColor(color01);
-						}
-						else{
-							//Don't highlight the selection
-							pspDebugScreenSetTextColor(color02 - (counter * color02_to));
-						}
-						
-						switch(counter){
-							
-							case 0: 
-								if(hijack){
-									pspDebugScreenPuts("  Hi Jack is On \n");
-								}
-								else{
-									pspDebugScreenPuts("  Hi Jack Off \n");
-								}
-							break;
-							
-							case 1: 
-								if(NameSwap){
-									pspDebugScreenPuts("  User Name \n");
-								}
-								else{
-									pspDebugScreenPuts("  Clan Tag \n");
-								}
-							break;
-							
-							case 2: 
-								switch(datatype){
-									case 0:
-										pspDebugScreenPuts("  User Input \n");
-									break;
-									case 1:
-										pspDebugScreenPuts("  Hex \n");
-									break;
-									case 2:
-										pspDebugScreenPuts("  Op Code \n");
-									break;
-									case 3:
-										pspDebugScreenPuts("  ASCII \n");
-									break;
-									case 4:
-										pspDebugScreenPuts("  Decimal \n");
-									break;
-									case 5:
-										pspDebugScreenPuts("  Float \n");
-									break;
-									case 6:
-										pspDebugScreenPuts("  Battery \n");
-									break;
-									case 7:
-										pspDebugScreenPuts("  Temp \n");
-									break;
-								}
-							break;
-							
-							case 3: 
-								if(*socomLobbyData01 != 0xFFFFFFFF){
-									pspDebugScreenPuts("  01: ");
-									grabCharNegative(0x0056145C, 0x78);
-									pspDebugScreenPuts(" "); 
-									grabCharPositive(0x0056145C, 0x0E); 
-									pspDebugScreenPuts("\n");
-								}
-								else{
-									pspDebugScreenPuts("  01: \n");
-								}
-							break;
-							
-							case 4: 
-								if(*socomLobbyData02 != 0xFFFFFFFF){
-									pspDebugScreenPuts("  02: ");
-									grabCharNegative(0x00561464, 0x78);
-									pspDebugScreenPuts(" "); 
-									grabCharPositive(0x00561464, 0x0E); 
-									pspDebugScreenPuts("\n");
-								}
-								else{
-									pspDebugScreenPuts("  02: \n");
-								}
-							break;
-							
-							case 5: 
-								if(*socomLobbyData03 != 0xFFFFFFFF){
-									pspDebugScreenPuts("  03: ");
-									grabCharNegative(0x0056146C, 0x78);
-									pspDebugScreenPuts(" "); 
-									grabCharPositive(0x0056146C, 0x0E); 
-									pspDebugScreenPuts("\n");
-								}
-								else{
-									pspDebugScreenPuts("  03: \n");
-								}
-							break;
-							
-							case 6: 
-								if(*socomLobbyData04 != 0xFFFFFFFF){
-									pspDebugScreenPuts("  04: ");
-									grabCharNegative(0x00561474, 0x78);
-									pspDebugScreenPuts(" "); 
-									grabCharPositive(0x00561474, 0x0E); 
-									pspDebugScreenPuts("\n");
-								}
-								else{
-									pspDebugScreenPuts("  04: \n");
-								}
-							break;
-							
-							case 7: 
-								if(*socomLobbyData05 != 0xFFFFFFFF){
-									pspDebugScreenPuts("  05: "); 
-									grabCharNegative(0x0056147C, 0x78);
-									pspDebugScreenPuts(" "); 
-									grabCharPositive(0x0056147C, 0x0E); 
-									pspDebugScreenPuts("\n");
-								}
-								else{
-									pspDebugScreenPuts("  05: \n");
-								}
-							break;
-							
-							case 8: 
-								if(*socomLobbyData06 != 0xFFFFFFFF){
-									pspDebugScreenPuts("  06: "); 
-									grabCharNegative(0x00561484, 0x78);
-									pspDebugScreenPuts(" "); 
-									grabCharPositive(0x00561484, 0x0E); 
-									pspDebugScreenPuts("\n");
-								}
-								else{
-									pspDebugScreenPuts("  06: \n");
-								}
-							break;
-							
-							case 9: 
-								if(*socomLobbyData07 != 0xFFFFFFFF){
-									pspDebugScreenPuts("  07: ");
-									grabCharNegative(0x0056148C, 0x78);
-									pspDebugScreenPuts(" "); 
-									grabCharPositive(0x0056148C, 0x0E); 
-									pspDebugScreenPuts("\n");
-								}
-								else{
-									pspDebugScreenPuts("  07: \n");
-								}
-							break;
-							
-							case 10: 
-								if(*socomLobbyData08 != 0xFFFFFFFF){
-									pspDebugScreenPuts("  08: ");
-									grabCharNegative(0x00561494, 0x78);
-									pspDebugScreenPuts(" "); 
-									grabCharPositive(0x00561494, 0x0E); 
-									pspDebugScreenPuts("\n");
-								}
-								else{
-									pspDebugScreenPuts("  08: \n");
-								}
-							break;
-							
-							case 11: 
-								if(*socomLobbyData09 != 0xFFFFFFFF){
-									pspDebugScreenPuts("  09: ");
-									grabCharNegative(0x0056149C, 0x78);
-									pspDebugScreenPuts(" "); 
-									grabCharPositive(0x0056149C, 0x0E); 
-									pspDebugScreenPuts("\n");
-								}
-								else{
-									pspDebugScreenPuts("  09: \n");
-								}
-							break;
-							
-							case 12: 
-								if(*socomLobbyData10 != 0xFFFFFFFF){
-									pspDebugScreenPuts("  10: ");
-									grabCharNegative(0x005614A4, 0x78);
-									pspDebugScreenPuts(" "); 
-									grabCharPositive(0x005614A4, 0x0E); 
-									pspDebugScreenPuts("\n");
-								}
-								else{
-									pspDebugScreenPuts("  10: \n");
-								}
-							break;
-							
-							case 13: 
-								if(*socomLobbyData11 != 0xFFFFFFFF){
-									pspDebugScreenPuts("  11: ");
-									grabCharNegative(0x005614AC, 0x78);
-									pspDebugScreenPuts(" "); 
-									grabCharPositive(0x005614AC, 0x0E); 
-									pspDebugScreenPuts("\n");
-								}
-								else{
-									pspDebugScreenPuts("  11: \n");
-								}
-							break;
-							
-							case 14: 
-								if(*socomLobbyData12 != 0xFFFFFFFF){
-									pspDebugScreenPuts("  12: ");
-									grabCharNegative(0x005614B4, 0x78);
-									pspDebugScreenPuts(" "); 
-									grabCharPositive(0x005614B4, 0x0E); 
-									pspDebugScreenPuts("\n");
-								}
-								else{
-									pspDebugScreenPuts("  12: \n");
-								}
-							break;
-							
-							case 15: 
-								if(*socomLobbyData13 != 0xFFFFFFFF){
-									pspDebugScreenPuts("  13: ");
-									grabCharNegative(0x005614BC, 0x78);
-									pspDebugScreenPuts(" "); 
-									grabCharPositive(0x005614BC, 0x0E); 
-									pspDebugScreenPuts("\n");
-								}
-								else{
-									pspDebugScreenPuts("  13: \n");
-								}
-							break;
-							
-							case 16: 
-								if(*socomLobbyData14 != 0xFFFFFFFF){
-									pspDebugScreenPuts("  14: "); 
-									grabCharNegative(0x005614C4, 0x78);
-									pspDebugScreenPuts(" "); 
-									grabCharPositive(0x005614C4, 0x0E); 
-									pspDebugScreenPuts("\n");
-								}
-								else{
-									pspDebugScreenPuts("  14: \n");
-								}
-							break;
-							
-							case 17: 
-								if(*socomLobbyData15 != 0xFFFFFFFF){
-									pspDebugScreenPuts("  15: ");
-									grabCharNegative(0x005614CC, 0x78);
-									pspDebugScreenPuts(" "); 
-									grabCharPositive(0x005614CC, 0x0E); 
-									pspDebugScreenPuts("\n");
-								}
-								else{
-									pspDebugScreenPuts("  15: \n");
-								}
-							break;
-							
-							case 18: 
-								if(*socomLobbyData16 != 0xFFFFFFFF){
-									pspDebugScreenPuts("  16: ");
-									grabCharNegative(0x005614D4, 0x78);
-									pspDebugScreenPuts(" "); 
-									grabCharPositive(0x005614D4, 0x0E); 
-									pspDebugScreenPuts("\n");
-								}
-								else{
-									pspDebugScreenPuts("  16: \n");
-								}
-							break;
-							
-						}
-						
-						counter++;
-						
-					}
-				
-					pspDebugScreenSetTextColor(color02); 
-					pspDebugScreenSetXY(0, 31);
-					pspDebugScreenPuts(line); //draw spiffy line
-					pspDebugScreenSetTextColor(color01);
-					lineClear(32); pspDebugScreenPuts(">< To toggle");
-					lineClear(33); pspDebugScreenPuts("() = Cancel/Return to Game");
-				}
-				#endif
 				//telazornDraw(logo, 40, 100);
 			break;
-			
 		}
 	
 	}
@@ -3555,14 +3222,6 @@ void menuInput(){
 	//unsigned short DumpInterval=0;
 	pad.Buttons=0;
 	menuDraw();
-
-   	#ifdef _SOCOM_
-       if(socomftb2){
-    	if(hijack){
-			applyname();
-		}
-	}
-	#endif
 	
   	//Loop for input
 	while(1){
@@ -3976,7 +3635,6 @@ void menuInput(){
 		  switch(extMenu)
 		  {
 			case 1: //INPUT EXT CHEAT
-			  remenu();
 			  if(pad.Buttons & PSP_CTRL_START){
 				//change format
 				if(editFormat==0){
@@ -4278,7 +3936,6 @@ void menuInput(){
 				break;
 			  
 			case 2: //INPUT EXT SEARCH
-		   remenu();
 				if(pad.Buttons & PSP_CTRL_START){
 					//change format
 					if(editFormat==0){
@@ -4868,7 +4525,6 @@ void menuInput(){
 				break;
 			  
 			case 3: //INPUT EXT DIFF SEARCH
-		   remenu();
 				if(pad.Buttons & PSP_CTRL_START){
 					//change format
 					if(editFormat==0){
@@ -5604,7 +5260,6 @@ void menuInput(){
 				break;
 			  
 		  case 4: //INPUT EXT TEXT SEARCH
-		  remenu();
 				if(pad.Buttons & PSP_CTRL_START){
 					keyboard=1;
 					pspDebugKbInit(fileBuffer);
@@ -5629,7 +5284,7 @@ void menuInput(){
 					menuDraw();
 					sceKernelDelayThread(300000);
 				}
-			if(pad.Buttons & PSP_CTRL_TRIANGLE) { copyMenu=1; menuDraw(); sceKernelDelayThread(150000);}
+			if((pad.Buttons & PSP_CTRL_TRIANGLE) && extSelected[0]>1) { copyMenu=1; menuDraw(); sceKernelDelayThread(150000);}
 				
 			  if(pad.Buttons & SWAPBUTTON)
 			  {
@@ -5686,19 +5341,9 @@ void menuInput(){
 						unsigned char tempLetter=*((unsigned char*)(counter+scounter));
 						//big small chara
 						if(BIGSMALL==0 && (tempLetter >= 0x61) && (tempLetter <= 0x7A)) tempLetter-=0x20;
-						if(tempLetter == (unsigned char)fileBuffer[scounter])
-						{
-						  scounter++;
-						  if(!fileBuffer[scounter])
-						  {
-							//Add it
-							searchAddress[searchResultCounter]=counter;
-							searchResultCounter++;
-							break;
-						  }
-						}
+						
 						// . wildcard
-						else if(FAKEHYOGEN==0 && *((unsigned char*)(&fileBuffer[0]+scounter))==0x2E){
+						if(FAKEHYOGEN==0 && *((unsigned char*)(&fileBuffer[0]+scounter))==0x2E){
 						scounter++;
 						}
 						// /. nowildcard
@@ -5716,6 +5361,17 @@ void menuInput(){
 						//scounter+=2;
 						//}
 						//}
+						 else if(tempLetter == (unsigned char)fileBuffer[scounter])
+						{
+						  scounter++;
+						  if(!fileBuffer[scounter])
+						  {
+							//Add it
+							searchAddress[searchResultCounter]=counter;
+							searchResultCounter++;
+							break;
+						  }
+						}
 						else
 						{
 						  //acounter=0;
@@ -5822,7 +5478,9 @@ void menuInput(){
 				}
 				else if(pad.Buttons & PSP_CTRL_RTRIGGER)
 				{
-				  if(extSelected[0]+22 < (searchResultCounter>searchResultMax? searchResultMax:searchResultCounter))
+				  if(extSelected[0]<2){
+				  }
+				  else if(extSelected[0]+22 < (searchResultCounter>searchResultMax? searchResultMax:searchResultCounter))
 				  {
 					extSelected[0]=extSelected[0]+21;
 				  }
@@ -5962,7 +5620,6 @@ void menuInput(){
 			break;
 				
 			case 5: //search range features
-		   remenu();
 				if(pad.Buttons & PSP_CTRL_TRIANGLE) { copyMenu=1; menuDraw(); sceKernelDelayThread(150000);}
 			  if(pad.Buttons & SWAPBUTTON)
 			  {
@@ -6123,10 +5780,11 @@ void menuInput(){
 			  }
 			 
 			 break;
-				
 		  }
+		remenu();
 		}
 		else{ //draw screens
+		remenu();
 		  //Overall button inputs
 		  if((pad.Buttons & PSP_CTRL_LTRIGGER) && (tabSelected != 0)){
 			pspDebugScreenInitEx(vram, 0, 0);
@@ -6169,14 +5827,22 @@ void menuInput(){
 				if(cheatPause && (pad.Buttons & PSP_CTRL_HOME))   cheatPause=!cheatPause;gameResume(thid);
 			  //Unregister the O key so that the user mode game doesn't pick it up
 				menuDrawn=0;
+				#ifdef _SWAPBUTTON_
+				if(tabSelected==2&&cheatSelected==6){
+				}
+				else{
+				#endif
 				return;
+				#ifdef _SWAPBUTTON_
+					}
+				#endif
+				
 			}
 		  }
 
 		  //Choose the appropriate action based on the tabSelected
 		  switch(tabSelected){
 			case 0: //INPUT CHEATER
-		   remenu();
 				//nofx's analog shit
 				if(pad.Ly < 50){
 					if(cheatSelected > 0){
@@ -6303,7 +5969,6 @@ void menuInput(){
 			break;
 			  
 			case 1: //INPUT SEARCHER
-		   remenu();
 			  if(pad.Buttons & PSP_CTRL_UP){
 				if(cheatSelected > 0)
 
@@ -6466,7 +6131,6 @@ void menuInput(){
 			break;
 			  
 			case 2: //INPUT PRX
-		   remenu();
 			  if(pad.Buttons & PSP_CTRL_UP){
 				if(cheatSelected > 0){
 					cheatSelected--;
@@ -6696,7 +6360,7 @@ void menuInput(){
 				
 				#ifdef _SWAPBUTTON_
 				  if(SWAPBUTTON == 0x2000)
-				  {
+				  { 
 					SWAPBUTTON=0x4000;
 					SWAPBUTTON2=0x2000;
 					SWAPBUTTON3=0x8000;
@@ -6707,8 +6371,8 @@ void menuInput(){
 					SWAPBUTTON2=0x4000;
 					SWAPBUTTON3=0x1000;
 				 }
-				 #endif
 				  menuDraw();
+				 #endif
 				}
 				else if(cheatSelected == 7){//switch realaddress
 				  if(decodeFormat == 0x48800000)
@@ -6764,8 +6428,10 @@ void menuInput(){
 					if(pad.Buttons & SWAPBUTTON3){
 					memcpy(&buffer[30],"ijiro.bin\x0",10);
 					setting=(cheatPause<<24)+(((browseLines&0x8)>>3)<<16)+((SWAPBUTTON2/0x4000)<<8)+((((decodeFormat&0x8800000)>>24)+1)&0x1);
+					memcpy(SAVETEMP,&setting,4);
+					memcpy(SAVETEMP+4,&cheatHz,4);
 					int fd=sceIoOpen(buffer, PSP_O_WRONLY | PSP_O_CREAT, 0777);
-					sceIoWrite(fd,(void*)(&setting),4);
+					sceIoWrite(fd,(void*)SAVETEMP,8);
 					sceIoClose(fd);
 					}
 					else{
@@ -6825,7 +6491,6 @@ void menuInput(){
 			break;
 			  
 			case 3: //INPUT BROWSER & DECODER
-		   remenu();
 			 if(flipme){//INPUT BROWSER
 			  if(pad.Buttons & PSP_CTRL_SELECT) {
 				  
@@ -7319,153 +6984,6 @@ void menuInput(){
 			break;
 			
 			case 4: //OPTIONS MENU
-				#ifdef _SOCOM_
-				if(socomftb2){
-					unsigned int IDpointer=(unsigned int*) ((unsigned int*) (*pPointer));
-					unsigned int ingamePlayer=(unsigned int*) ((unsigned int*) (*playerPointer));
-					if(pad.Buttons & PSP_CTRL_UP){
-						if(cheatSelected > 0){
-							cheatSelected--;
-						}
-						else if(cheatSelected == 0){
-							cheatSelected=19;
-						}
-						menuDraw();
-						if(cheatButtonAgeY < 12) cheatButtonAgeY++; sceKernelDelayThread(150000-(10000*cheatButtonAgeY));
-					}
-					else if(pad.Buttons & PSP_CTRL_DOWN){
-						if(cheatSelected < 19){
-							cheatSelected++;
-						}
-						else if(cheatSelected == 19){
-							cheatSelected=0;
-						}
-						menuDraw();
-						if(cheatButtonAgeY < 12) cheatButtonAgeY++; sceKernelDelayThread(150000-(10000*cheatButtonAgeY));
-					}
-					else{
-						cheatButtonAgeY=0;
-					}
-					if(pad.Buttons & SWAPBUTTON){
-						switch(cheatSelected){
-							case 0:
-								//turn on and off hijack mode
-								if(hijack==0)hijack=1;
-								else hijack=0;
-							break;
-							case 1:
-								//change to user name or clantag
-								if(NameSwap==0)NameSwap=1;
-								else NameSwap=0;
-							break;
-						    case 2: 
-								if(datatype < 7)datatype++;
-								else if(datatype == 7)datatype=0;
-								if(datatype > 0)NameSwap=1;
-							break;
-							case 3:
-								if(*socomLobbyData01 != 0xFFFFFFFF){
-									*((unsigned int*) ((unsigned int)IDpointer))=*socomLobbyData01;
-									if(*playerPointer){ *((unsigned int*) ((unsigned int)ingamePlayer))=*socomLobbyData01+0x00000002; }
-								}
-							break;
-							case 4:
-								if(*socomLobbyData02 != 0xFFFFFFFF){
-									*((unsigned int*) ((unsigned int)IDpointer))=*socomLobbyData02;
-									if(*playerPointer){ *((unsigned int*) ((unsigned int)ingamePlayer))=*socomLobbyData02+0x00000002; }
-								}
-							break;
-							case 5:
-								if(*socomLobbyData03 != 0xFFFFFFFF){
-									*((unsigned int*) ((unsigned int)IDpointer))=*socomLobbyData03;
-									if(*playerPointer){  *((unsigned int*) ((unsigned int)ingamePlayer))=*socomLobbyData03+0x00000002; }
-								}
-							break;
-							case 6:
-								if(*socomLobbyData04 != 0xFFFFFFFF){
-									*((unsigned int*) ((unsigned int)IDpointer))=*socomLobbyData04;
-									if(*playerPointer){  *((unsigned int*) ((unsigned int)ingamePlayer))=*socomLobbyData04+0x00000002; }
-								}
-							break;
-							case 7:
-								if(*socomLobbyData05 != 0xFFFFFFFF){
-									*((unsigned int*) ((unsigned int)IDpointer))=*socomLobbyData05;
-									if(*playerPointer){  *((unsigned int*) ((unsigned int)ingamePlayer))=*socomLobbyData05+0x00000002; }
-								}
-							break;
-							case 8:
-								if(*socomLobbyData06 != 0xFFFFFFFF){
-									*((unsigned int*) ((unsigned int)IDpointer))=*socomLobbyData06;
-									if(*playerPointer){  *((unsigned int*) ((unsigned int)ingamePlayer))=*socomLobbyData06+0x00000002; }
-								}
-							break;
-							case 9:
-								if(*socomLobbyData07 != 0xFFFFFFFF){
-									*((unsigned int*) ((unsigned int)IDpointer))=*socomLobbyData07;
-									if(*playerPointer){  *((unsigned int*) ((unsigned int)ingamePlayer))=*socomLobbyData07+0x00000002; }
-								}
-							break;
-							case 10:
-								if(*socomLobbyData08 != 0xFFFFFFFF){
-									*((unsigned int*) ((unsigned int)IDpointer))=*socomLobbyData08;
-									if(*playerPointer){  *((unsigned int*) ((unsigned int)ingamePlayer))=*socomLobbyData08+0x00000002; }
-								}
-							break;
-							case 11:
-								if(*socomLobbyData09 != 0xFFFFFFFF){
-									*((unsigned int*) ((unsigned int)IDpointer))=*socomLobbyData09;
-									if(*playerPointer){  *((unsigned int*) ((unsigned int)ingamePlayer))=*socomLobbyData09+0x00000002; }
-								}
-							break;
-							case 12:
-								if(*socomLobbyData10 != 0xFFFFFFFF){
-									*((unsigned int*) ((unsigned int)IDpointer))=*socomLobbyData10;
-									if(*playerPointer){  *((unsigned int*) ((unsigned int)ingamePlayer))=*socomLobbyData10+0x00000002; }
-								}
-							break;
-							case 13:
-								if(*socomLobbyData11 != 0xFFFFFFFF){
-									*((unsigned int*) ((unsigned int)IDpointer))=*socomLobbyData11;
-									if(*playerPointer){  *((unsigned int*) ((unsigned int)ingamePlayer))=*socomLobbyData11+0x00000002; }
-								}
-							break;
-							case 14:
-								if(*socomLobbyData12 != 0xFFFFFFFF){
-									*((unsigned int*) ((unsigned int)IDpointer))=*socomLobbyData12;
-									if(*playerPointer){  *((unsigned int*) ((unsigned int)ingamePlayer))=*socomLobbyData12+0x00000002; }
-								}
-							break;
-							case 15:
-								if(*socomLobbyData13 != 0xFFFFFFFF){
-									*((unsigned int*) ((unsigned int)IDpointer))=*socomLobbyData13;
-									if(*playerPointer){  *((unsigned int*) ((unsigned int)ingamePlayer))=*socomLobbyData13+0x00000002; }
-								}
-							break;
-							case 16:
-								if(*socomLobbyData14 != 0xFFFFFFFF){
-									*((unsigned int*) ((unsigned int)IDpointer))=*socomLobbyData14;
-									if(*playerPointer){  *((unsigned int*) ((unsigned int)ingamePlayer))=*socomLobbyData14+0x00000002; }
-								}
-							break;
-							case 17:
-								if(*socomLobbyData15 != 0xFFFFFFFF){
-									*((unsigned int*) ((unsigned int)IDpointer))=*socomLobbyData15;
-									if(*playerPointer){  *((unsigned int*) ((unsigned int)ingamePlayer))=*socomLobbyData15+0x00000002; }
-								}
-							break;
-							case 18:
-								if(*socomLobbyData16 != 0xFFFFFFFF){
-									*((unsigned int*) ((unsigned int)IDpointer))=*socomLobbyData16;
-									if(*playerPointer){  *((unsigned int*) ((unsigned int)ingamePlayer))=*socomLobbyData16+0x00000002; }
-								}
-							break;
-						}					
-						if((cheatSelected > 2) && (cheatSelected < 19)) pspDebugKbInit(MyImpostorBuffer); //if selected menu item is within this range draw the keyboard
-						menuDraw();
-						sceKernelDelayThread(150000);
-					}
-				}
-				#endif
 				#ifdef _SERVER_
 				server();
 				#endif
@@ -7476,9 +6994,7 @@ void menuInput(){
 		
 		//Stop the game from freezing up
 		if(!cheatPause) sceKernelDelayThread(15625);
-	
 	}
-	
 }
 
 #ifdef _PSID_
@@ -7644,14 +7160,6 @@ int mainThread(){
 	memcpy(&gameDir[32], buffer, 5);
 	cheatLoad();
 	#endif
-
-  	//Compare the gameID to see if the game is....
-  	#ifdef _SOCOM_
-		if(strncmp(gameId, "UCUS-98615", 10)){ socomftb1=0; } //Game isn't SOCOM FTB1 lets not load ftb1 modules
-		if(strncmp(gameId, "UCUS-98645", 10)){ socomftb2=0; } //Game isn't SOCOM FTB2 lets not load ftb2 modules
-		if(socomftb1){ ftb1modules(); }
-		if(socomftb2){ ftb2modules(); }
-	#endif
 	
 	//load the colors!
 	sprintf(buffer,"ms0:/seplugins/nitePR/MKIJIRO/color0.txt");
@@ -7714,14 +7222,6 @@ int mainThread(){
 	int doonce=0;
 	//Do the loop-de-loop
 	while(running){
-		
-		#ifdef _SOCOM_
-		if(socomftb2){
-			if(hijack){
-				applyname(); 
-			}
-		}
-		#endif
 
 		#ifdef _UMDMODE_
 		if(vram == NULL){

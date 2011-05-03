@@ -21,6 +21,13 @@ certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
 0x8838DBF0 moviezone,pspfat should freeze after search/save...slim user use extraram setting
 
+2011/5/3
+CHEATHZを保存し忘れてたので追加
+SWAPBUTTONを実行したときメニュー退出をできないように変更
+サーチ時の□押しメニューがへんだったので修正
+テキストサーチのコピーメニューが文字のところでも出てたので修正
+SOCOMをソースから削除
+
 2011/5/2
 結果ジャンプが最大結果+1でもできたので修正
 decoderでのCWCHEAT表示を廃止
