@@ -3193,14 +3193,14 @@ void menuDraw(){
 			case 4:
 				//int fmem=sceKernelTotalFreeMemSize();
 				//int maxmem=sceKernelMaxFreeMemSize();
-				pspDebugScreenSetXY(10, 16);pspDebugScreenPuts("MKIJRO is opensource MKULTRA personal modifycation\n");
+				/*pspDebugScreenSetXY(10, 16);pspDebugScreenPuts("MKIJRO is opensource MKULTRA personal modifycation\n");
 				pspDebugScreenSetXY(10, 17);pspDebugScreenPuts("visit http://code.google.com/p/mkijiro/ \n");
 				pspDebugScreenSetXY(10, 19);sprintf(buffer,"VRAM 0x%08X,SAVERAM 0x%08X,SEARCHRAM 0x%08X\n",vram,SAVETEMP,RAMTEMP);
 				pspDebugScreenPuts(buffer);
 				pspDebugScreenSetXY(10, 20);sprintf(buffer,"SearchMAX %D,FW 0x%08X\n",searchResultCounterMax,sceKernelDevkitVersion());
 				pspDebugScreenPuts(buffer);
 				pspDebugScreenSetXY(10, 21);sprintf(buffer,"SET 0x%08X,PAUSE %02X,BLINE %D,DFOMAT 0x%08X\n",setting,cheatPause,browseLines,decodeFormat);
-				pspDebugScreenPuts(buffer);
+				pspDebugScreenPuts(buffer);*/
 				//telazornDraw(logo, 40, 100);
 			break;
 		}
@@ -4435,15 +4435,20 @@ void menuInput(){
 				  {
 					extSelected[0]=extSelected[0]-20;
 				  }
+				  else if(extSelected[0] <3){
+				  }
 				  else{
-				  extSelected[0]=3;}
+				  extSelected[0]=3;
+				  }
 				  menuDraw();
 					if(cheatButtonAgeY < 12) cheatButtonAgeY++; sceKernelDelayThread(150000-(10000*cheatButtonAgeY));
 				
 				}
 				else if(pad.Buttons & PSP_CTRL_RTRIGGER)
 				{
-				  if(extSelected[0]+23 < (searchResultCounter>searchResultMax? searchResultMax:searchResultCounter))
+				  if(extSelected[0]<3){
+				  }
+				  else if(extSelected[0]+23 < (searchResultCounter>searchResultMax? searchResultMax:searchResultCounter))
 				  {
 					extSelected[0]=extSelected[0]+20;
 				  }
@@ -5165,7 +5170,9 @@ void menuInput(){
 				}
 				if(pad.Buttons & PSP_CTRL_LTRIGGER)
 				{
-				  if(extSelected[0] > 23)
+					if(extSelected[0]<3){
+					}
+				  else if(extSelected[0] > 23)
 				  {
 					extSelected[0]=extSelected[0]-20;
 				  }
@@ -5177,7 +5184,9 @@ void menuInput(){
 				}
 				else if(pad.Buttons & PSP_CTRL_RTRIGGER)
 				{
-				  if(extSelected[0]+23 < (searchResultCounter>searchResultMax? searchResultMax:searchResultCounter))
+					if(extSelected[0]<3){
+					}
+				  else if(extSelected[0]+23 < (searchResultCounter>searchResultMax? searchResultMax:searchResultCounter))
 				  {
 					extSelected[0]=extSelected[0]+20;
 				  }
@@ -5466,7 +5475,10 @@ void menuInput(){
 				}
 				if(pad.Buttons & PSP_CTRL_LTRIGGER)
 				{
-				  if(extSelected[0] > 22)
+					
+					if(extSelected[0]<2){
+					}
+				  else if(extSelected[0] > 22)
 				  {
 					extSelected[0]=extSelected[0]-21;
 				  }
