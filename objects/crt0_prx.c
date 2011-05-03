@@ -151,18 +151,19 @@ typedef struct Cheat{
 #define FLAG_SELECTED (1<<0) //If selected, will be disabled/enabled by music button
 #define FLAG_CONSTANT (1<<1) //If 1, cheat is constantly on regardless of music button
 #define FLAG_FRESH (1<<2) //Cheat was just recently enabled/disabled
-#define BLOCK_MAX 2048
+#define NAME_MAX 512 //チート名最大数
+#define BLOCK_MAX 1024 //チートコード最大数
 
 //Globals
 SceCtrlData pad;
-unsigned int blockTotal=0;
-unsigned int cheatTotal=0;
+unsigned short blockTotal=0;
+unsigned short cheatTotal=0;
 Block block[BLOCK_MAX];
-Cheat cheat[BLOCK_MAX];
+Cheat cheat[NAME_MAX];
 unsigned char buffer[64];
 unsigned char cheatStatus=0;
 unsigned char cheatSaved=0;
-unsigned int cheatSelected=0;
+unsigned short cheatSelected=0;
 unsigned char tabSelected=0;
 unsigned char menuDrawn=0;
 void *vram;
@@ -190,7 +191,6 @@ unsigned int browseC[5]={0,0,0,0,0};
 unsigned int browseX[5]={0,0,0,0,0};
 unsigned int browseLines=16;
 unsigned int decodeFormat=0x48800000;
-//unsigned int cheatFormat=0x08800000;
 unsigned int decodeAddress[5]={0x48800000,0x48800000,0x48800000,0x48800000,0x48800000};
 unsigned int decodeY[5]={0,0,0,0,0};
 unsigned int decodeC[5]={0,0,0,0,0};
@@ -362,7 +362,7 @@ void decToCheat(){
   unsigned int tempaddy2=copyEndFlag;
   unsigned int a_length=copyEndFlag - copyStartFlag;
   
-  if((cheatTotal + 1 < BLOCK_MAX) && (blockTotal + 1 < BLOCK_MAX)){
+  if((cheatTotal + 1 < NAME_MAX) && (blockTotal + 1 < BLOCK_MAX)){
     
     cheat[cheatTotal].block=blockTotal;
    	cheat[cheatTotal].flags=0;
@@ -434,7 +434,7 @@ void decToText(){
 
 unsigned int cheatNew(unsigned char a_size, unsigned int a_address, unsigned int a_value, unsigned int a_length, unsigned int mode){
   
-  if((cheatTotal + 1 < BLOCK_MAX) && (blockTotal + 1 < BLOCK_MAX)){
+  if((cheatTotal + 1 < NAME_MAX) && (blockTotal + 1 < BLOCK_MAX)){
     
     cheat[cheatTotal].block=blockTotal;
     cheat[cheatTotal].flags=0;
@@ -1276,7 +1276,7 @@ void cheatLoad(){
 			else if((buffer[0]==' ') && (!nameMode)){}
 			else if(buffer[0]==';'){commentMode=1; if(nameMode){cheatTotal++; nameMode=0;}} //Skip comments till next line
 			else if(buffer[0]=='#'){ //Read in the cheat name
-				if(cheatTotal >= BLOCK_MAX) { break;}
+				if(cheatTotal >= NAME_MAX) { break;}
 				cheat[cheatTotal].block=blockTotal;
 				cheat[cheatTotal].flags=0;
 				cheat[cheatTotal].len=0;
@@ -6429,7 +6429,9 @@ void menuInput(){
 				}
 				else if(cheatSelected == 11){
 					cheatRefresh=1;
+					#ifdef _CFW_
 					GETID();
+					#endif
 					cheatLoad();
 					lineClear(32); pspDebugScreenSetTextColor(color01); pspDebugScreenPuts("Cheats Refreshed");
 					menuDraw();
@@ -7461,6 +7463,7 @@ void remenu(){
 			}
 }
 
+#ifdef _CFW_
 void GETID(){
 	//GAMEID
 		int fd=sceIoOpen("disc0:/UMD_DATA.BIN", PSP_O_RDONLY, 0777);
@@ -7611,3 +7614,4 @@ else{
 	memcpy(&gameDir[32], buffer, 5);
 	}
 }
+#endif
