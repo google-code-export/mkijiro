@@ -100,7 +100,7 @@ PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 #endif
 
 //Globals
-unsigned char *MKVER="  MKIJIRO20110503";
+unsigned char *MKVER="  MKIJIRO20110504";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -151,8 +151,19 @@ typedef struct Cheat{
 #define FLAG_SELECTED (1<<0) //If selected, will be disabled/enabled by music button
 #define FLAG_CONSTANT (1<<1) //If 1, cheat is constantly on regardless of music button
 #define FLAG_FRESH (1<<2) //Cheat was just recently enabled/disabled
+#ifdef _100_
+//省メモリ版 FREECHEAT最低設定
+#define NAME_MAX 100
+#define BLOCK_MAX 100
+unsigned int searchAddress[100];
+#define searchResultMax 99
+#else
+//薄型＋最新CFWHEN+パッチ無しME/INFELNOドライバー推奨
+unsigned int searchAddress[500]; //サーチアドレス表示用
+#define searchResultMax 499  //サーチ表示最大数
 #define NAME_MAX 512 //チート名最大数
 #define BLOCK_MAX 1024 //チートコード最大数
+#endif
 
 //Globals
 SceCtrlData pad;
@@ -183,8 +194,6 @@ unsigned int searchMax=0;
 unsigned int searchHistoryCounter=0;
 Block searchHistory[16];
 unsigned int searchResultCounter=0;
-unsigned int searchAddress[500];
-#define searchResultMax 499
 unsigned int browseAddress[5]={0x48800000,0x48800000,0x48800000,0x48800000,0x48800000};
 unsigned int browseY[5]={0,0,0,0,0};
 unsigned int browseC[5]={0,0,0,0,0};
@@ -219,14 +228,13 @@ unsigned int copyStartFlag=0x48800000;
 unsigned int copyEndFlag=0x48800000;
 unsigned char copyToggle=0;
 unsigned char screenPath[64]={0};
-//unsigned int clipboard[27]={};
 unsigned int clipSelected=0;
 unsigned char logcounter=0;
 unsigned int backaddress[4];
 unsigned char backaddressY[4];
 unsigned int storedAddress[32];
 unsigned char *hbpath = NULL;
-unsigned int SAVETEMP=0x8838DBF0; //freekernelram
+unsigned int SAVETEMP=0x8838DBF0; //moviezone
 unsigned int RAMTEMP=0x8838DBF0;
 unsigned int searchResultCounterMax=0xE400;
 unsigned short searchjumpNo=0;
@@ -2391,7 +2399,7 @@ void menuDraw(){
 				//Print out results
 				convTotal=((searchResultCounter > searchResultMax)? searchResultMax:searchResultCounter);
 				pspDebugScreenSetTextColor(color02); pspDebugScreenPuts(line);
-				pspDebugScreenSetTextColor(color01); sprintf(buffer,"  [Search Results %d: Only showing first 499]",convTotal);
+				pspDebugScreenSetTextColor(color01); sprintf(buffer,"  [Search Results %d: Only showing first searchResultMax]",convTotal);
 				pspDebugScreenPuts(buffer);
 				pspDebugScreenPuts("\n"); pspDebugScreenSetTextColor(color02); pspDebugScreenPuts(line);
 				pspDebugScreenSetTextColor(color02); pspDebugScreenPuts("  Address     Text\n");
@@ -3348,12 +3356,6 @@ void menuInput(){
 					  copyData-=0x40000000;}
 					}
 				}
-				//else if(tabSelected == 4)
-				//{
-				//	if(cheatSelected == 0){
-				//		copyData=clipboard[clipSelected];
-				//	}
-				//}
 			  }
 			  copyData&=0xFFFFFFFC;
 
@@ -3501,8 +3503,8 @@ void menuInput(){
 						if(searchHistory[0].hakVal==0x03E00008 && searchResultCounter!=0){
 							int i=0;
 							int searchHookMax=0;
-							if(searchResultCounter>499){
-							searchHookMax=499;
+							if(searchResultCounter>searchResultMax){
+							searchHookMax=searchResultMax;
 							}
 							else{
 							searchHookMax=searchResultCounter;
@@ -6766,8 +6768,8 @@ void menuInput(){
 					menuDraw();
 					sceKernelDelayThread(150000);
 				}
-				if(searchResultCounter>499){
-					searchjumpNoMax=499;
+				if(searchResultCounter>searchResultMax){
+					searchjumpNoMax=searchResultMax;
 				}
 				else{
 					searchjumpNoMax=searchResultCounter;

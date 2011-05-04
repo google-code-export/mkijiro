@@ -21,6 +21,11 @@ certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
 0x8838DBF0 moviezone,pspfat should freeze after search/save...slim user use extraram setting
 
+2011/5/4
+2048だと使い過ぎのような気がしたので変更、そーすこーどに書いてあるので必要な分だけ足してください
+名前512、最大行数1024
+FREECHEATみたく最小100のやつも一応追加
+
 2011/5/3
 さーちしてないときのLRのはみだしがあったのを修正
 CHEATHZを保存し忘れてたので追加
