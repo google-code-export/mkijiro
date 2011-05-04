@@ -54,7 +54,7 @@ PSP_MODULE_INFO("nitePR", 0x3007, 1, 2); //0x3007
 PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 
 //Globals
-unsigned char *NPRVER="nitePRmod 20110316";
+unsigned char *NPRVER="nitePRmod 20110504";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -74,14 +74,14 @@ typedef struct Hook
 } Hook;
 
 typedef struct Block{
-	unsigned char flags;
-	unsigned int address;
+  unsigned char flags;
+  unsigned int address;
   unsigned int stdVal;
   unsigned int hakVal;
 }Block;
 
 typedef struct Cheat{
-	unsigned short block;
+  unsigned short block;
   unsigned short len;
   unsigned char flags;
   unsigned char name[32];
@@ -100,8 +100,14 @@ typedef struct Cheat{
 #define FLAG_SELECTED (1<<0)	//If selected, will be disabled/enabled by music button
 #define FLAG_CONSTANT	(1<<1)  //If 1, cheat is constantly on regardless of music button
 #define FLAG_FRESH    (1<<2)  //Cheat was just recently enabled/disabled
-
+#ifdef _100_
+#define BLOCK_MAX 100
+#else
 #define BLOCK_MAX 2048
+#endif
+
+#define RAMTEMP 0x8838DBF0
+#define SRMAX 0xE400
 
 //Globals
 SceCtrlData pad;
@@ -186,8 +192,6 @@ unsigned char screenPath[64]={0};
 unsigned char HBFLAG=0;
 unsigned char k=0;
 char *hbpath=NULL;
-#define RAMTEMP 0x8838DBF0
-#define SRMAX 0xE400
 #define fileBufferPeek(a_out, a_ahead) if((fileBufferOffset + a_ahead) >= 1024) { fileBufferBackup=sceIoLseek(fd, 0, SEEK_CUR); sceIoLseek(fd, a_ahead, SEEK_CUR); sceIoRead(fd, &a_out, 1); sceIoLseek(fd, fileBufferBackup, SEEK_SET); } else { a_out=fileBuffer[fileBufferOffset + a_ahead]; }
 #define fileBufferRead(a_out, a_size) if(fileBufferOffset == 1024) { fileBufferSize=sceIoRead(fd, fileBuffer, 1024); fileBufferOffset=0; } memcpy(a_out, &fileBuffer[fileBufferOffset], a_size); fileBufferOffset+=a_size; fileBufferFileOffset+=a_size;
 #define lineClear(a_line) pspDebugScreenSetXY(0, a_line); pspDebugScreenPuts("                                                                   "); pspDebugScreenSetXY(0, a_line);
