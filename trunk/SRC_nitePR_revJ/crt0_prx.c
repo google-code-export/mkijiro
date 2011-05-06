@@ -50,11 +50,11 @@ Rev 2206 - Blame - Compare with Previous - Last modification - View Log - RSS fe
 extern SceUID sceKernelSearchModuleByName(unsigned char *);
 
 //Defines
-PSP_MODULE_INFO("nitePR", 0x3007, 1, 2); //0x3007
+PSP_MODULE_INFO("nitePRmod", 0x3007, 1, 2); //0x3007
 PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 
 //Globals
-unsigned char *NPRVER="nitePRmod 20110504";
+unsigned char *NPRVER="nitePRmod 20110506";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -125,7 +125,7 @@ unsigned char menuDrawn=0;
 void *vram;
 unsigned int menuKey=PSP_CTRL_VOLUP | PSP_CTRL_VOLDOWN;
 unsigned int triggerKey=PSP_CTRL_NOTE;
-unsigned int screenKey=PSP_CTRL_LTRIGGER | PSP_CTRL_SQUARE;
+//unsigned int screenKey=PSP_CTRL_LTRIGGER | PSP_CTRL_SQUARE;
 unsigned int cheatHz=15625;
 unsigned char cheatFlash=0;
 unsigned char cheatPause=0;
@@ -148,8 +148,8 @@ unsigned int browseC=0;
 unsigned int browseX=0;
 unsigned int browseLines=16;
 unsigned int decodeFormat=0x48800000;
-unsigned int trackFormat=0x48800000;
-unsigned int browseFormat=0x48800000;
+//unsigned int trackFormat=0x48800000;
+//unsigned int decodeFormat=0x48800000;
 unsigned int decodeAddress=0x48800000;
 unsigned int decodeY=0;
 unsigned int decodeC=0;
@@ -180,15 +180,15 @@ unsigned int Addresstmp=0;
 unsigned char logcounter=0;
 unsigned char jumplog=0x20;
 unsigned char countermax=0;
-unsigned char cheatLength=0;
+unsigned char cheatLength=1;
 unsigned int logstart=0x8802800+4;
 unsigned char fileBuffer[1536];
 unsigned int fileBufferSize=0;
 unsigned int fileBufferBackup=0;
 unsigned int fileBufferFileOffset=0;
 unsigned int fileBufferOffset=1024;
-unsigned int screenNo=0;
-unsigned char screenPath[64]={0};
+//unsigned int screenNo=0;
+//unsigned char screenPath[64]={0};
 unsigned char HBFLAG=0;
 unsigned char k=0;
 char *hbpath=NULL;
@@ -1025,12 +1025,12 @@ void buttonCallback(int curr, int last, void *arg)
     if(cheatSelected >= cheatTotal) cheatSelected=0;
     tabSelected=0;
   }
-  else if(curr & PSP_CTRL_HOME){
+ /* else if(curr & PSP_CTRL_HOME){
    	menuDrawn=0;}
   else if(((curr & screenKey) == screenKey) && (!menuDrawn))
 	{
     screenTime=1;
-  }
+  }*/
   else if(((curr & triggerKey) == triggerKey) && (!menuDrawn))
   {
     //Backup all the cheat "blocks"
@@ -1221,7 +1221,72 @@ void menuDraw()
     return;
   }*/
   //Extended/sub menus?
-  if(extMenu)
+  
+  if(copyMenu)
+  {
+		unsigned char counter=1; //we start @ 1 this time because 0 is closed
+		//bgcolor=0xFF000000;
+		if(extMenu ==1){
+		countermax=6;}
+		else{
+		countermax=4;}
+		while(counter < countermax+1){
+			//lineClear(counter+2); 
+			pspDebugScreenSetXY(0, counter+2);
+			//pspDebugScreenSetBackColor(bgcolor);
+			if(copyMenu == counter){
+				//Highlight the selection
+				pspDebugScreenSetTextColor(0xFFFF0000);
+			}
+			else{
+				//Don't highlight the selection
+				pspDebugScreenSetTextColor(0xFF800000);
+			}
+			switch(counter){
+				case 1: pspDebugScreenPuts("  Copy address\n"); break;
+				case 2: pspDebugScreenPuts("  Paste address\n"); break;
+				case 3: pspDebugScreenPuts("  Copy value\n"); break;
+				case 4: pspDebugScreenPuts("  Paste value\n"); break;
+				case 5:
+				if(tabSelected > 3){/*
+				   if(pad.Buttons & PSP_CTRL_SQUARE){
+					pspDebugScreenPuts("  Clear Jump log\n");}
+				   else if(((decodeAddress[bdNo]+(decodeY[bdNo]*4)) >= (logstart-4)) && ((decodeAddress[bdNo]+(decodeY[bdNo]*4)) <= (logstart + 4*jumplog))){
+					pspDebugScreenPuts("  Back to Decoder\n");}
+				   else{
+					pspDebugScreenPuts("  View Jump log\n");}*/
+				    }
+				else{
+				pspDebugScreenPuts("  NORMAL cheat\n");}
+				break;
+				/*case 6: 				
+				if(tabSelected ==3){
+				   if(pad.Buttons & PSP_CTRL_SQUARE){
+				   		pspDebugScreenPuts("  SELECTED CODE BY NOTE to new cheat,\n");
+				   }
+				}  
+				else{   
+				sprintf(buffer ,"  JOKER cheat (0x%X default,0x0000 MASKED)\n",JOKERADDRESS);	
+				pspDebugScreenPuts(buffer);
+				}
+				break;
+
+				case 7:
+				if(tabSelected ==3){
+				   if(pad.Buttons & PSP_CTRL_SQUARE){
+					pspDebugScreenPuts("  SELECTED CODE BY NOTE to text file\n");
+					}
+				}*/
+				case 6:
+				pspDebugScreenPuts("  DMA cheat(BUGGY)\n");
+				break;
+					}
+			counter++;
+			//bgcolor+=0x00000008;
+		}
+		pspDebugScreenSetTextColor(0xFF808080);pspDebugScreenPuts(line);
+  }
+  else if(extMenu)
   {
     switch(extMenu)
     {
@@ -1622,7 +1687,7 @@ void menuDraw()
       	//Helper
         pspDebugScreenSetXY(0, 32);
         pspDebugScreenSetTextColor(0xFF808080);
-	pspDebugScreenPuts(line);
+		pspDebugScreenPuts(line);
         pspDebugScreenSetTextColor(0xFFFF8000);
         if(extSelected[0] == 0)
         {
@@ -2197,7 +2262,7 @@ void menuDraw()
 	    case 2: sprintf(buffer, "  Reset Codes? Slot #%d\n", dumpNo); pspDebugScreenPuts(buffer); break;
             case 3: sprintf(buffer, "  Dump RAM? Slot #%d\n", dumpNo); pspDebugScreenPuts(buffer); break;
             case 4: sprintf(buffer, "  Bytes per Line in Browser? %d\n", browseLines); pspDebugScreenPuts(buffer); break;
-            case 5: pspDebugScreenPuts("  Real Addressing in Browser? "); if(browseFormat==0x40000000) { pspDebugScreenPuts("True\n"); } else { pspDebugScreenPuts("False\n"); } break;
+            case 5: pspDebugScreenPuts("  Real Addressing in Browser? "); if(decodeFormat==0x40000000) { pspDebugScreenPuts("True\n"); } else { pspDebugScreenPuts("False\n"); } break;
             case 6: pspDebugScreenPuts("  Real Addressing in Decoder? "); if(decodeFormat==0x40000000) { pspDebugScreenPuts("True\n"); } else { pspDebugScreenPuts("False\n"); } break;
             case 8: pspDebugScreenPuts("  Reload cheats?\n"); break; 
             case 7: sprintf(buffer, "  Cheat Hz? %d/1000 seconds\n", (cheatHz/1000)); pspDebugScreenPuts(buffer); break;
@@ -2261,7 +2326,7 @@ void menuDraw()
           }
           
           //Print out the address
-          sprintf(buffer, "  0x%08lX  ", (browseAddress+(counter*browseLines)) - browseFormat);
+          sprintf(buffer, "  0x%08lX  ", (browseAddress+(counter*browseLines)) - decodeFormat);
           pspDebugScreenPuts(buffer);
           
           //Print out the bytes per line
@@ -2573,69 +2638,6 @@ void menuDraw()
     }
   }
   
-  if(copyMenu)
-  {
-		unsigned char counter=1; //we start @ 1 this time because 0 is closed
-		//bgcolor=0xFF000000;
-		if(extMenu ==1){
-		countermax=6;}
-		else{
-		countermax=4;}
-		while(counter < countermax+1){
-			//lineClear(counter+2); 
-			pspDebugScreenSetXY(0, counter+2);
-			//pspDebugScreenSetBackColor(bgcolor);
-			if(copyMenu == counter){
-				//Highlight the selection
-				pspDebugScreenSetTextColor(0xFFFF0000);
-			}
-			else{
-				//Don't highlight the selection
-				pspDebugScreenSetTextColor(0xFF800000);
-			}
-			switch(counter){
-				case 1: pspDebugScreenPuts("  Copy address\n"); break;
-				case 2: pspDebugScreenPuts("  Paste address\n"); break;
-				case 3: pspDebugScreenPuts("  Copy value\n"); break;
-				case 4: pspDebugScreenPuts("  Paste value\n"); break;
-				case 5:
-				if(tabSelected > 3){/*
-				   if(pad.Buttons & PSP_CTRL_SQUARE){
-					pspDebugScreenPuts("  Clear Jump log\n");}
-				   else if(((decodeAddress[bdNo]+(decodeY[bdNo]*4)) >= (logstart-4)) && ((decodeAddress[bdNo]+(decodeY[bdNo]*4)) <= (logstart + 4*jumplog))){
-					pspDebugScreenPuts("  Back to Decoder\n");}
-				   else{
-					pspDebugScreenPuts("  View Jump log\n");}*/
-				    }
-				else{
-				pspDebugScreenPuts("  NORMAL cheat\n");}
-				break;
-				/*case 6: 				
-				if(tabSelected ==3){
-				   if(pad.Buttons & PSP_CTRL_SQUARE){
-				   		pspDebugScreenPuts("  SELECTED CODE BY NOTE to new cheat,\n");
-				   }
-				}  
-				else{   
-				sprintf(buffer ,"  JOKER cheat (0x%X default,0x0000 MASKED)\n",JOKERADDRESS);	
-				pspDebugScreenPuts(buffer);
-				}
-				break;
-
-				case 7:
-				if(tabSelected ==3){
-				   if(pad.Buttons & PSP_CTRL_SQUARE){
-					pspDebugScreenPuts("  SELECTED CODE BY NOTE to text file\n");
-					}
-				}*/
-				case 6:
-				pspDebugScreenPuts("  DMA cheat(BUGGY)\n");
-				break;
-					}
-			counter++;
-			//bgcolor+=0x00000008;
-		}
-}
   
   //Take a picture!!!
   /*if(pad.Buttons & PSP_CTRL_START)
@@ -2783,6 +2785,7 @@ void menuInput()
             else if(tabSelected == 4)
             {
               decodeAddress=copyData|0x40000000; //+(decodeY*4);
+              decodeY=0;
               if(decodeAddress > 0x49FFFFA8)
             	{
              		decodeAddress=0x49FFFFA8;
@@ -5143,13 +5146,13 @@ void menuInput()
             }
             else if(cheatSelected == 5)
             {
-              if(browseFormat == 0x48800000)
+              if(decodeFormat == 0x48800000)
               {
-                browseFormat=0x40000000;
+                decodeFormat=0x40000000;
               }
               else
               {
-                browseFormat=0x48800000;
+                decodeFormat=0x48800000;
              	}
               menuDraw();
             }
@@ -5418,10 +5421,10 @@ void menuInput()
       	case 4: //INPUT DECODER
 
 				if((padButtons & PSP_CTRL_SQUARE) && (padButtons & PSP_CTRL_RIGHT)){
-					unsigned int foobar=*((unsigned int*)(decodeAddress+(decodeY*4)));
+					unsigned int foobar=(*((unsigned int*)(decodeAddress+(decodeY*4))) &0xFFFFFFFC);
 				  if(jumplog < logcounter){
 					logcounter=jumplog;}
-				  else{ 
+				  else{
 				 //pointer jump
 					if((foobar >= 0x08800000) && (foobar <= 0x09FFFF98)){ //handle pointers
 
@@ -5431,7 +5434,7 @@ void menuInput()
 						else{
 						storedAddress[logcounter]=decodeAddress+(decodeY*4); //store pointer address
 						foobar+=0x40000000;
-						*((unsigned int*)(logstart+4*logcounter))=storedAddress[logcounter] & 0xFFFFFFF;
+						*((unsigned int*)(logstart+4*logcounter))=storedAddress[logcounter] & 0xFFFFFFC;
 						logcounter++;
 						}
 						decodeAddress=foobar | 0x40000000 & 0xFFFFFFFC;
@@ -5462,7 +5465,7 @@ void menuInput()
 						decodeAddress=Addresstmp;
 						decodeY=0;
 						}
-						*((unsigned int*)(logstart+4*logcounter))=storedAddress[logcounter] & 0xFFFFFFF;
+						*((unsigned int*)(logstart+4*logcounter))=storedAddress[logcounter] & 0xFFFFFFC;
 						logcounter++;
 						decodeAddress;
 					}
@@ -5862,7 +5865,7 @@ static const unsigned char patchA[]={0x21, 0x88, 0x02, 0x3c, //lui v0, $8822
   //{ { 0, NULL }, "sceNetInet_Library", "sceNetInet", 0xc91142e4, NULL},
 };*/
 
-#include "screenshot.h"
+//#include "screenshot.h"
 int mainThread()
 {
   signed int fd;
@@ -5894,7 +5897,7 @@ int mainThread()
 		sceKernelDelayThread(100000);
 	sceKernelDelayThread(100000);
   
-  //Find which screen directory to use
+/* //Find which screen directory to use
   fd=sceIoDopen("ms0:/PICTURE/");
   if(fd > 0)
   {
@@ -5942,7 +5945,7 @@ int mainThread()
         break;
       }
     }
-  }
+  }*/
   
 //Function hunter
   /*while(1)
@@ -6048,7 +6051,7 @@ int mainThread()
 	sceCtrlSetSamplingMode(PSP_CTRL_MODE_ANALOG);
   
   //Register the button callbacks
-  sceCtrlRegisterButtonCallback(3, triggerKey | menuKey | screenKey, buttonCallback, NULL);
+  sceCtrlRegisterButtonCallback(3, 0xFFFFFFFF, buttonCallback, NULL);
   
   //Do the loop-de-loop
   while(running)
@@ -6069,11 +6072,11 @@ int mainThread()
       }
       else
       {
-        sceDisplayGetMode(&a_pixelFormat, &a_bufferWidth, &a_bufferWidth);
-        pspDebugScreenSetColorMode(a_pixelFormat);
-  			pspDebugScreenSetXY(0, 0);
-  			pspDebugScreenSetTextColor(0xFFFFFFFF);
-  			pspDebugScreenPuts("nitePR: Double tap the home button to initate nitePR\nWhen initiated: Vol+&- = cheat menu; Music Button = turn on/off cheats");
+        //sceDisplayGetMode(&a_pixelFormat, &a_bufferWidth, &a_bufferWidth);
+        //pspDebugScreenSetColorMode(a_pixelFormat);
+  			//pspDebugScreenSetXY(0, 0);
+  			//pspDebugScreenSetTextColor(0xFFFFFFFF);
+  			//pspDebugScreenPuts("nitePR: Double tap the home button to initate nitePR\nWhen initiated: Vol+&- = cheat menu; Music Button = turn on/off cheats");
       }
       
       sceKernelDelayThread(1500);
@@ -6111,7 +6114,7 @@ int mainThread()
     }
     
     //Handle screenshot
-    if((screenTime) && (screenPath[0]))
+/*  if((screenTime) && (screenPath[0]))
     {
       screenTime=0;
       void *block_addr;
@@ -6157,7 +6160,7 @@ int mainThread()
         
         screenNo++;
       }
-    }
+    }*/
     
     //Wait a certain amount of seconds before reapplying cheats again
     sceKernelDelayThread(!cheatHz ? 500000: cheatHz);
@@ -6182,7 +6185,7 @@ int _start(SceSize args, void *argp)
   }
   memcpy(&triggerKey, cfg+11, 4);
   memcpy(&menuKey, cfg+15, 4);
-  memcpy(&screenKey, cfg+20, 4);
+ // memcpy(&screenKey, cfg+20, 4);
   
 	//Create thread
   sceKernelGetThreadmanIdList(SCE_KERNEL_TMID_Thread, thread_buf_start, MAX_THREAD, &thread_count_start);
