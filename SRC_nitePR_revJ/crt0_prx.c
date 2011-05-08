@@ -54,7 +54,7 @@ PSP_MODULE_INFO("nitePRmod", 0x3007, 1, 2); //0x3007
 PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 
 //Globals
-unsigned char *NPRVER="nitePRmod 20110506";
+unsigned char *NPRVER="nitePRmod 20110508";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -93,8 +93,8 @@ typedef struct Cheat{
 #define FLAG_FREEZE (1<<5)
 #define FLAG_DWORD	(3<<6)
 #define FLAG_UWORD	(2<<6)
-#define FLAG_WORD		(1<<6)
-#define FLAG_BYTE		(0<<6)
+#define FLAG_WORD	(1<<6)
+#define FLAG_BYTE	(0<<6)
 
 //Cheat flags
 #define FLAG_SELECTED (1<<0)	//If selected, will be disabled/enabled by music button
@@ -105,63 +105,57 @@ typedef struct Cheat{
 #else
 #define BLOCK_MAX 2048
 #endif
-
-#define RAMTEMP 0x8838DBF0
+	
+#define RAMTEMP 0x8838DBF0 //moviezone
 #define SRMAX 0xE400
+
+#define CPYBUTTON 0x1000 // mkultra cpy button,nitepr 0x1 select
 
 //Globals
 SceCtrlData pad;
-unsigned int blockTotal=0;
-unsigned int cheatTotal=0;
-Block block[BLOCK_MAX];
-Cheat cheat[BLOCK_MAX];
+unsigned short blockTotal=0;
+unsigned short cheatTotal=0;
+Block block[BLOCK_MAX];  //consume RAM 16*BLOCKMAX!!
+Cheat cheat[BLOCK_MAX];  //consume RAM 38*BLOCKMAX!!
 unsigned char buffer[64];
 unsigned char cheatStatus=0;
 unsigned char cheatSaved=0;
-unsigned int cheatSelected=0;
+unsigned short cheatSelected=0;
 unsigned char tabSelected=0;
 unsigned char cheatRefresh=1;
 unsigned char menuDrawn=0;
 void *vram;
 unsigned int menuKey=PSP_CTRL_VOLUP | PSP_CTRL_VOLDOWN;
 unsigned int triggerKey=PSP_CTRL_NOTE;
-//unsigned int screenKey=PSP_CTRL_LTRIGGER | PSP_CTRL_SQUARE;
+#ifdef _SCREENSHOT_
+unsigned int screenKey=PSP_CTRL_LTRIGGER | PSP_CTRL_SQUARE;
+#endif
 unsigned int cheatHz=15625;
 unsigned char cheatFlash=0;
 unsigned char cheatPause=0;
 unsigned char cheatSearch=0;
 unsigned char extMenu=0;
-unsigned int extSelected[4]={0,0,0,0};
-unsigned char extOpt=0;
-unsigned int extOptArg=0;
-unsigned int dumpNo=0;
-unsigned int cheatNo=0;
-unsigned int searchNo=0;
-unsigned int searchMax=0;
-unsigned int searchHistoryCounter=0;
+unsigned char extSelected[4]={0,0,0,0};
+char extOpt=0;
+unsigned char extOptArg=0;
+unsigned char dumpNo=0;
+unsigned short cheatNo=0;
+unsigned char searchNo=0;
+unsigned short searchMax=0;
+unsigned char searchHistoryCounter=0;
 Block searchHistory[16];
-unsigned int searchResultCounter=0;
+unsigned short searchResultCounter=0;
 unsigned int searchAddress[100];
 unsigned int browseAddress=0x48800000;
-unsigned int browseY=0;
-unsigned int browseC=0;
-unsigned int browseX=0;
-unsigned int browseLines=16;
+unsigned char browseY=0;
+unsigned char browseC=0;
+char browseX=0;
+unsigned char browseLines=16;
 unsigned int decodeFormat=0x48800000;
-//unsigned int trackFormat=0x48800000;
-//unsigned int decodeFormat=0x48800000;
 unsigned int decodeAddress=0x48800000;
-unsigned int decodeY=0;
-unsigned int decodeC=0;
-unsigned int decodeX=0;
-unsigned int trackAddress=0x48800000;
-unsigned int trackY=0;
-unsigned int trackX=0;
-unsigned int trackC=0;
-unsigned int trackBackup=0;
-unsigned char trackMode=0;
-unsigned char trackStatus=0;
-unsigned char trackPause=0;
+unsigned char decodeY=0;
+unsigned char decodeC=0;
+char decodeX=0;
 unsigned int cheatDMA=0;
 unsigned char cheatButtonAgeX=0;
 unsigned char cheatButtonAgeY=0;
@@ -187,8 +181,10 @@ unsigned int fileBufferSize=0;
 unsigned int fileBufferBackup=0;
 unsigned int fileBufferFileOffset=0;
 unsigned int fileBufferOffset=1024;
-//unsigned int screenNo=0;
-//unsigned char screenPath[64]={0};
+#ifdef _SCREENSHOT_
+unsigned int screenNo=0;
+unsigned char screenPath[64]={0};
+#endif
 unsigned char HBFLAG=0;
 unsigned char k=0;
 char *hbpath=NULL;
@@ -207,7 +203,6 @@ unsigned char* searchModeName[]={
   "  5=Dec by    ",
   "  6=Equal to  "};
 
-//unsigned char* trackModeName[]={"  0=Instruction BP  ","  1=Data BP         "};
 
 //Functions
 int module_start(SceSize args, void *argp) __attribute__((alias("_start")));
@@ -394,6 +389,7 @@ void cheatEnable(unsigned int a_cheat)
 {
   unsigned int counter;
   unsigned char resetDMA=0;
+  unsigned int address;
   cheatDMA=0;
   
   counter=cheat[a_cheat].block;
@@ -401,7 +397,7 @@ void cheatEnable(unsigned int a_cheat)
 	{
     if(block[counter].flags & FLAG_DMA)
     {
-      if(block[counter].hakVal!=0xFFFFFFFF)
+      if(block[counter].address==0xFFFFFFFF)
       {
       	cheatDMA=*((unsigned int*)(0x08800000 + (block[counter].hakVal & 0x1FFFFFC))) - 0x08800000;
         
@@ -424,19 +420,20 @@ void cheatEnable(unsigned int a_cheat)
     else
     {
       //Backup data?
+      address=cheatDMA+block[counter].address;
       if(((cheatDMA) && (resetDMA)) || ((cheat[a_cheat].flags & FLAG_FRESH) && (block[counter].flags & FLAG_FREEZE)))
       {
-		if((cheatDMA+block[counter].address >= 0x08800000) && (cheatDMA+block[counter].address <= 0x0A000000)){
+		if((address>=0x08800000) && (address<0x0A000000)){
         switch(block[counter].flags & FLAG_DWORD)
       	{
       		case FLAG_DWORD:
-        		block[counter].stdVal=*((unsigned int*)(cheatDMA+block[counter].address& 0xFFFFFFC));
+        		block[counter].stdVal=*((unsigned int*)(address& 0xFFFFFFFC));
           	break;
         	case FLAG_WORD:
-        		block[counter].stdVal=*((unsigned short*)(cheatDMA+block[counter].address& 0xFFFFFFE));
+        		block[counter].stdVal=*((unsigned short*)(address& 0xFFFFFFFE));
         		break;
         	case FLAG_BYTE:
-        		block[counter].stdVal=*((unsigned char*)(cheatDMA+block[counter].address));
+        		block[counter].stdVal=*((unsigned char*)(address));
         		break;
         }
         if(block[counter].flags & FLAG_FREEZE)
@@ -445,31 +442,29 @@ void cheatEnable(unsigned int a_cheat)
         }
         }
       }
-      
       //Apply cheat!
-      
-	  if((cheatDMA+block[counter].address >= 0x08800000) && (cheatDMA+block[counter].address <= 0x0A000000)){
+	  if((address>=0x08800000) && (address<0x0A000000)){
       switch(block[counter].flags & FLAG_DWORD)
       {
         case FLAG_DWORD:
-  	  		*((unsigned int*)(cheatDMA+block[counter].address & 0xFFFFFFC))=block[counter].hakVal;
-  	  		sceKernelDcacheWritebackInvalidateRange(cheatDMA+block[counter].address,4);
- 		  		sceKernelIcacheInvalidateRange(cheatDMA+block[counter].address,4);
-		  		break;
+  	  		*((unsigned int*)(address & 0xFFFFFFFC))=block[counter].hakVal;
+  	  		sceKernelDcacheWritebackInvalidateRange(address& 0xFFFFFFFC,4);
+	  		sceKernelIcacheInvalidateRange(address& 0xFFFFFFFC,4);
+	  		break;
         case FLAG_WORD:
-        	*((unsigned short*)(cheatDMA+block[counter].address & 0xFFFFFFE))=(unsigned short)block[counter].hakVal;
-          sceKernelDcacheWritebackInvalidateRange(cheatDMA+block[counter].address,2);
- 		  		sceKernelIcacheInvalidateRange(cheatDMA+block[counter].address,2);
+        	*((unsigned short*)(address & 0xFFFFFFFE))=(unsigned short)block[counter].hakVal;
+			sceKernelDcacheWritebackInvalidateRange(address& 0xFFFFFFFE,2);
+	  		sceKernelIcacheInvalidateRange(address& 0xFFFFFFFE,2);
           break;
         case FLAG_BYTE:
-        	*((unsigned char*)(cheatDMA+block[counter].address))=(unsigned char)block[counter].hakVal;
-  	  		sceKernelDcacheWritebackInvalidateRange(cheatDMA+block[counter].address,1);
- 		  		sceKernelIcacheInvalidateRange(cheatDMA+block[counter].address,1);
+        	*((unsigned char*)(address))=(unsigned char)block[counter].hakVal;
+  	  		sceKernelDcacheWritebackInvalidateRange(address,1);
+ 		  	sceKernelIcacheInvalidateRange(address,1);
         	break;
       }
       }
     }
-		counter++;
+	counter++;
 	}
 }
 
@@ -477,6 +472,7 @@ void cheatDisable(unsigned int a_cheat)
 {
   unsigned int counter;
   unsigned char resetDMA=0;
+  unsigned int address;
   cheatDMA=0;
   
   counter=cheat[a_cheat].block;
@@ -484,7 +480,7 @@ void cheatDisable(unsigned int a_cheat)
 	{
     if(block[counter].flags & FLAG_DMA)
     {
-      if(block[counter].hakVal!=0xFFFFFFFF)
+      if(block[counter].address==0xFFFFFFFF)
       {
       	cheatDMA=*((unsigned int*)(0x08800000 + (block[counter].hakVal & 0x1FFFFFC))) - 0x08800000;
         if(block[counter].stdVal != cheatDMA)
@@ -505,23 +501,24 @@ void cheatDisable(unsigned int a_cheat)
     }
     else if(!resetDMA)
     {
-	  if((cheatDMA+block[counter].address >= 0x08800000) && (cheatDMA+block[counter].address < 0x0A000000)){
+    	address=cheatDMA+block[counter].address;
+	  if((address>=0x08800000) && (address<0x0A000000)){
       switch(block[counter].flags & FLAG_DWORD)
       {
         case FLAG_DWORD:
-  	  		*((unsigned int*)(cheatDMA+block[counter].address & 0xFFFFFFC))=block[counter].stdVal;
-  	  		sceKernelDcacheWritebackInvalidateRange(cheatDMA+block[counter].address,4);
- 		  		sceKernelIcacheInvalidateRange(cheatDMA+block[counter].address,4);
+  	  		*((unsigned int*)(address & 0xFFFFFFFC))=block[counter].stdVal;
+  	  		sceKernelDcacheWritebackInvalidateRange(address& 0xFFFFFFFC,4);
+	  		sceKernelIcacheInvalidateRange(address& 0xFFFFFFFC,4);
           break;
         case FLAG_WORD:
-        	*((unsigned short*)(cheatDMA+block[counter].address & 0xFFFFFFE))=(unsigned short)block[counter].stdVal;
-  	  		sceKernelDcacheWritebackInvalidateRange(cheatDMA+block[counter].address,2);
- 		  		sceKernelIcacheInvalidateRange(cheatDMA+block[counter].address,2);
+        	*((unsigned short*)(address & 0xFFFFFFFE))=(unsigned short)block[counter].stdVal;
+  	  		sceKernelDcacheWritebackInvalidateRange(address& 0xFFFFFFFE,2);
+	  		sceKernelIcacheInvalidateRange(address& 0xFFFFFFFE,2);
         	break;
         case FLAG_BYTE:
-        	*((unsigned char*)(cheatDMA+block[counter].address))=(unsigned char)block[counter].stdVal;
-  	  		sceKernelDcacheWritebackInvalidateRange(cheatDMA+block[counter].address,1);
- 		  		sceKernelIcacheInvalidateRange(cheatDMA+block[counter].address,1);
+        	*((unsigned char*)(address))=(unsigned char)block[counter].stdVal;
+  	  		sceKernelDcacheWritebackInvalidateRange(address,1);
+	  		sceKernelIcacheInvalidateRange(address,1);
         	break;
       }
 		  }
@@ -1025,12 +1022,15 @@ void buttonCallback(int curr, int last, void *arg)
     if(cheatSelected >= cheatTotal) cheatSelected=0;
     tabSelected=0;
   }
- /* else if(curr & PSP_CTRL_HOME){
+  
+#ifdef _SCREENSHOT_
+ else if(curr & PSP_CTRL_HOME){
    	menuDrawn=0;}
   else if(((curr & screenKey) == screenKey) && (!menuDrawn))
 	{
     screenTime=1;
-  }*/
+  }
+#endif
   else if(((curr & triggerKey) == triggerKey) && (!menuDrawn))
   {
     //Backup all the cheat "blocks"
@@ -1048,14 +1048,13 @@ void buttonCallback(int curr, int last, void *arg)
         
         if(block[counter].flags & FLAG_DMA)
         {
-          if(block[counter].hakVal!=0xFFFFFFFF)
+          if(block[counter].address==0xFFFFFFFF)
           {
-      			cheatDMA=*((unsigned int*)(0x08800000 + (block[counter].hakVal & 0x1FFFFFF))) - 0x08800000;
-          
-          	if(((cheatDMA >= 0x00004000) && (cheatDMA < 0x01800000)) || ((cheatDMA >= 0x40004000) && (cheatDMA < 0x41800000)))
+      		cheatDMA=*((unsigned int*)(0x08800000 + (block[counter].hakVal & 0x01FFFFFC))) - 0x08800000;
+          	if((cheatDMA >= 0x00000000) && (cheatDMA < 0x01800000))//|| ((cheatDMA >= 0x40004000) && (cheatDMA < 0x41800000)))
           	{
-            	block[counter].stdVal=cheatDMA;
-      			}
+            block[counter].stdVal=cheatDMA;
+      		}
           } 
           else
           {
@@ -1064,27 +1063,26 @@ void buttonCallback(int curr, int last, void *arg)
         }
         else
         {
-          address=cheatDMA+block[counter].address;
-          
-          if(((address >= 0x08800000) && (address < 0x0A000000)) || ((address >= 0x48800000) && (address < 0x4A000000)))
+       	  address=cheatDMA+block[counter].address;
+          if((address>=0x08800000) && (address<0x0A000000))// || ((address >= 0x48800000) && (address < 0x4A000000)) )
           {
         		switch(block[counter].flags & FLAG_DWORD)
     		   	{
     		   		case FLAG_DWORD:
               	if(address % 4 == 0)
                 {
-      	   				block[counter].stdVal=*((unsigned int*)(address));
-            	 	}
+                	block[counter].stdVal=*((unsigned int*)(address));
+            	}
                 break;
            		case FLAG_WORD:
               	if(address % 2 == 0)
                 {
-           				block[counter].stdVal=*((unsigned short*)(address));
-           			}
+           			block[counter].stdVal=*((unsigned short*)(address));
+           		}
                 break;
            		case FLAG_BYTE:
-           			block[counter].stdVal=*((unsigned char*)(address));
-           			break;
+           		block[counter].stdVal=*((unsigned char*)(address));
+           		break;
            	}
         	}
         }
@@ -1257,7 +1255,7 @@ void menuDraw()
 					pspDebugScreenPuts("  View Jump log\n");}*/
 				    }
 				else{
-				pspDebugScreenPuts("  NORMAL cheat\n");}
+				pspDebugScreenPuts("  NPR cheat\n");}
 				break;
 				/*case 6: 				
 				if(tabSelected ==3){
@@ -1278,7 +1276,7 @@ void menuDraw()
 					}
 				}*/
 				case 6:
-				pspDebugScreenPuts("  DMA cheat(BUGGY)\n");
+				pspDebugScreenPuts("  DMA cheat\n");
 				break;
 					}
 			counter++;
@@ -1299,7 +1297,7 @@ void menuDraw()
 
 				//draw some info 
 				if(editFormat==0){
-				pspDebugScreenPuts("  Address     Value.Hex   Value.Dec   Value.ASCII  Value.Float \n");
+				pspDebugScreenPuts("  Address     Value.Hex   Value.Dec   ASCII  Value.Float \n");
 				}
 				else{
 				pspDebugScreenPuts("  Address     Value.Hex   Opcode   Args\n");
@@ -1482,11 +1480,12 @@ void menuDraw()
     	  pspDebugScreenSetTextColor(0xFFFFFFFF); pspDebugScreenPuts("[Editing Search]\n");
     	  pspDebugScreenSetTextColor(0xFF808080);pspDebugScreenPuts(line);
 
+	    	  pspDebugScreenSetTextColor(0xFF808080);
+				pspDebugScreenPuts("  Value.Hex   ");
 				if(editFormat){
-    	  pspDebugScreenSetTextColor(0xFF808080); pspDebugScreenPuts("  Value.Hex   Value.Dec   Opcode\n");
+				pspDebugScreenPuts("Opcode\n");
 				}
-				else{
-    	  pspDebugScreenSetTextColor(0xFF808080); pspDebugScreenPuts("  Value.Hex   Value.Dec   Value.ASCII  Value.Float\n");
+				else{pspDebugScreenPuts("Value.Dec   Value.ASCII  Value.Float\n");
 				}
 			  
       
@@ -1515,6 +1514,7 @@ void menuDraw()
 	      }
         pspDebugScreenPuts(buffer);
           
+    if(editFormat==0){
         //Print out the decimal
         switch(searchHistory[0].flags & FLAG_DWORD)
         {
@@ -1530,7 +1530,6 @@ void menuDraw()
 	      }
         pspDebugScreenPuts(buffer);
           
-    if(editFormat==0){
         //Print out the ASCII
         buffer[0]=*((unsigned char*)(((unsigned int)&searchHistory[0].hakVal)+0)); if((buffer[0]<=0x20) || (buffer[0]==0xFF)) buffer[0]='.';
         buffer[1]=*((unsigned char*)(((unsigned int)&searchHistory[0].hakVal)+1)); if((buffer[1]<=0x20) || (buffer[1]==0xFF)) buffer[1]='.';
@@ -2259,7 +2258,7 @@ void menuDraw()
           {
             case 0: pspDebugScreenPuts("  Pause Game? "); if(cheatPause) { pspDebugScreenPuts("True\n"); } else { pspDebugScreenPuts("False\n"); } break;
             case 1: sprintf(buffer, "  Add new cheat #%d line(s) long.\n", cheatLength); pspDebugScreenPuts(buffer); break;
-	    case 2: sprintf(buffer, "  Reset Codes? Slot #%d\n", dumpNo); pspDebugScreenPuts(buffer); break;
+	    	case 2: sprintf(buffer, "  Reset Codes? Slot #%d(not support)\n", dumpNo); pspDebugScreenPuts(buffer); break;
             case 3: sprintf(buffer, "  Dump RAM? Slot #%d\n", dumpNo); pspDebugScreenPuts(buffer); break;
             case 4: sprintf(buffer, "  Bytes per Line in Browser? %d\n", browseLines); pspDebugScreenPuts(buffer); break;
             case 5: pspDebugScreenPuts("  Real Addressing in Browser? "); if(decodeFormat==0x40000000) { pspDebugScreenPuts("True\n"); } else { pspDebugScreenPuts("False\n"); } break;
@@ -2282,9 +2281,8 @@ void menuDraw()
           case 2: pspDebugScreenPuts("Uses the selected 'RAM dump' to regenerate OFF codes"); break;
           case 3: pspDebugScreenPuts("Saves the Game's RAM to MemoryStick"); break;
           case 4: pspDebugScreenPuts("Alters the number of bytes displayed in the Browser"); break;
-	  case 5: pspDebugScreenPuts("If enabled, REAL PSP hardware addresses will be used in Browser"); break;
+		  case 5: pspDebugScreenPuts("If enabled, REAL PSP hardware addresses will be used in Browser"); break;
           case 6: pspDebugScreenPuts("If enabled, REAL PSP hardware addresses will be used in Decoder"); break;
-          //case 7: pspDebugScreenPuts("If enabled, REAL PSP hardware addresses will be used in Logger"); break;
           case 7: pspDebugScreenPuts("nitePR's cheat lock interval"); break;
           case 8: pspDebugScreenPuts("Reload your cheats"); break;
 	  case 9: pspDebugScreenPuts("Save your cheats"); break;
@@ -2302,17 +2300,21 @@ void menuDraw()
         
     	case 3: //DRAW BROWSER
       	pspDebugScreenSetTextColor(0xFF808080);
+        pspDebugScreenPuts("  Address     ");
     	  if(browseLines==8)
         {
-          pspDebugScreenPuts("  Address     00  01  02  03  04  05  06  07    ASCII\n");
+          pspDebugScreenPuts("00  01  02  03  04  05  06  07  ");
         }
         else
         {
-          pspDebugScreenPuts("  Address     000102030405060708090A0B0C0D0E0F  ASCII\n");
+          pspDebugScreenPuts("000102030405060708090A0B0C0D0E0F");
 				}
+          pspDebugScreenPuts("  ASCII\n");
 
         //Write out the RAM
         counter=0;
+        unsigned char valueinfo=0;
+        int value=0;
         while(counter < 24)
 	      {
           //Apply the row color
@@ -2364,8 +2366,39 @@ void menuDraw()
           
           //Print out the ASCII
           buffer[3+browseLines]=0;
-          pspDebugScreenPuts("  ");
+          //pspDebugScreenPuts("  ");
           pspDebugScreenPuts(&buffer[3]);
+          
+         /*cmf
+         if( browseLines==8){
+          pspDebugScreenPuts("  ");
+          valueinfo++;
+          value=browseAddress+counter<<3+scounter;
+          switch(valueinfo){
+          	  case 1:
+          	  case 3:
+          	  case 5:
+	          sprintf(buffer,"%dbit:",8<<(valueinfo-1));
+          	  break;
+          	  case 2:
+  	  	 	 sprintf(buffer,"%d",*((unsigned char*)(value)));
+          	  break;
+          	  case 4:
+          	  sprintf(buffer,"%d",*((unsigned short*)(value&0xFFFFFFFE)));
+          	  break;
+          	  case 6:
+          	  sprintf(buffer,"%d",*((unsigned int*)(value&0xFFFFFFFC)));
+          	  break;
+          	  case 7:
+	          sprintf(buffer,"FLOAT:");
+          	  break;
+          	  case 8:
+          	  addresstmp=value&0xFFFFFFFC;
+          	  f_cvt(&addresstmp, buffer, sizeof(buffer), 4, MODE_GENERIC);
+          	  break;
+          }
+          if(valueinfo<9)  pspDebugScreenPuts(buffer);
+         }*/
           
           //Skip a line, draw the pointer =)
           if(counter == browseY)
@@ -2419,7 +2452,7 @@ void menuDraw()
         
         //Helper
         pspDebugScreenSetTextColor(0xFF808080);
-	pspDebugScreenPuts(line);
+		pspDebugScreenPuts(line);
         pspDebugScreenSetTextColor(0xFFFF8000);
         pspDebugScreenSetXY(0, 32); pspDebugScreenPuts("><=Edit On/Off; D-PAD=Cycle/Scroll; []=Teleport Cursor");
         pspDebugScreenSetXY(0, 33); pspDebugScreenPuts("[]+Analog/Digital=Scroll; ()=Cancel/Return to Game");
@@ -2523,118 +2556,14 @@ void menuDraw()
         
         //Helper
         pspDebugScreenSetTextColor(0xFF808080);
-	pspDebugScreenPuts(line);
+		pspDebugScreenPuts(line);
         pspDebugScreenSetTextColor(0xFFFF8000);
         pspDebugScreenSetXY(0, 32); pspDebugScreenPuts("><=Edit On/Off; D-PAD=Cycle/Scroll; []+<->=JUMP");
         pspDebugScreenSetXY(0, 33); pspDebugScreenPuts("[]+Analog/Digital=Scroll; ()=Cancel/Return to Game");
       	break;
         
-     /* case 5: //Draw tracker
-      	pspDebugScreenSetTextColor(0xFF808080); pspDebugScreenPuts("  Mode              Address\n");
-        
-        //Apply the row color
-        if(counter == trackY)
-        {
-          pspDebugScreenSetTextColor(0xFF8080BB);
-        }
-        else
-        {
-          pspDebugScreenSetTextColor(0xFFBBBBBB);
-        }
-        
-        //Print out the mode
-        pspDebugScreenPuts(trackModeName[trackMode]);
-        
-        //Print out the address
-        sprintf(buffer, "0x%08lX", trackAddress - trackFormat);
-        pspDebugScreenPuts(buffer);
-        
-        //Skip a line, draw the pointer =)
-        pspDebugScreenPuts("\n");
-        if(trackY == 0)
-        {
-          //Skip the desired amount?
-          pspDebugScreenPuts("    ");
-          if(trackC != 0)
-          {
-            //Skip mode?
-            pspDebugScreenPuts("                  ");
-          }
-          
-          //Skip the minimalist amount
-          unsigned char tempCounter=trackX;
-          while(tempCounter)
-          {
-            pspDebugScreenPuts(" "); 
-            tempCounter--;
-          }
-          
-          //Draw the symbol (Finally!!)
-          if(extSelected[3])
-          {
-          	pspDebugScreenSetTextColor(0xFF0000FF);
-          }
-          else
-          {
-            pspDebugScreenSetTextColor(0xFFFF0000);
-          }
-          pspDebugScreenPuts("^");
-        }
-        pspDebugScreenPuts("\n");
-        
-        //Draw misc menus
-        pspDebugScreenSetTextColor(trackY == 1? 0xFF0000FF: 0xFF808080); pspDebugScreenPuts("  Enabled? ");
-        if(trackStatus) { pspDebugScreenPuts("True\n"); } else { pspDebugScreenPuts("False\n"); }
-        pspDebugScreenSetTextColor(trackY == 2? 0xFF0000FF: 0xFF808080);pspDebugScreenPuts("  Halt? ");
-        if(trackPause) { pspDebugScreenPuts("True\n"); } else { pspDebugScreenPuts("False\n"); }
-        
-        if(trackMode==0)
-        {
-          //Print out log
-          pspDebugScreenSetTextColor(0xFFFFFFFF); pspDebugScreenPuts("\n[Register Log - UNIMPLEMENTED]");
-    	    pspDebugScreenSetTextColor(0xFF808080); pspDebugScreenPuts("\n--------------------------------------------------------------------");
-          
-          //Print out log
-          //pspDebugScreenSetTextColor(0xFFBBBBBB);sprintf(buffer, "  zr = 0x%08lX        s0 = 0x%08lX\n", g_psplinkContext[0].regs.r[0], g_psplinkContext[0].regs.r[16]); pspDebugScreenPuts(buffer);
-	        //pspDebugScreenSetTextColor(0xFF8080BB);sprintf(buffer, "  at = 0x%08lX        s1 = 0x%08lX\n", g_psplinkContext[0].regs.r[1], g_psplinkContext[0].regs.r[17]); pspDebugScreenPuts(buffer);
-	        //pspDebugScreenSetTextColor(0xFFBBBBBB);sprintf(buffer, "  v0 = 0x%08lX        s2 = 0x%08lX\n", g_psplinkContext[0].regs.r[2], g_psplinkContext[0].regs.r[18]); pspDebugScreenPuts(buffer);
-	        //pspDebugScreenSetTextColor(0xFF8080BB);sprintf(buffer, "  v1 = 0x%08lX        s3 = 0x%08lX\n", g_psplinkContext[0].regs.r[3], g_psplinkContext[0].regs.r[19]); pspDebugScreenPuts(buffer);
-					//pspDebugScreenSetTextColor(0xFFBBBBBB);sprintf(buffer, "  a0 = 0x%08lX        s4 = 0x%08lX\n", g_psplinkContext[0].regs.r[4], g_psplinkContext[0].regs.r[20]); pspDebugScreenPuts(buffer);
-					//pspDebugScreenSetTextColor(0xFF8080BB);sprintf(buffer, "  a1 = 0x%08lX        s5 = 0x%08lX\n", g_psplinkContext[0].regs.r[5], g_psplinkContext[0].regs.r[21]); pspDebugScreenPuts(buffer);
-					//pspDebugScreenSetTextColor(0xFFBBBBBB);sprintf(buffer, "  a2 = 0x%08lX        s6 = 0x%08lX\n", g_psplinkContext[0].regs.r[6], g_psplinkContext[0].regs.r[22]); pspDebugScreenPuts(buffer);
-					//pspDebugScreenSetTextColor(0xFF8080BB);sprintf(buffer, "  a3 = 0x%08lX        s7 = 0x%08lX\n", g_psplinkContext[0].regs.r[7], g_psplinkContext[0].regs.r[23]); pspDebugScreenPuts(buffer);
-					//pspDebugScreenSetTextColor(0xFFBBBBBB);sprintf(buffer, "  t0 = 0x%08lX        t8 = 0x%08lX\n", g_psplinkContext[0].regs.r[8], g_psplinkContext[0].regs.r[24]); pspDebugScreenPuts(buffer);
-	        //pspDebugScreenSetTextColor(0xFF8080BB);sprintf(buffer, "  t1 = 0x%08lX        t9 = 0x%08lX\n", g_psplinkContext[0].regs.r[9], g_psplinkContext[0].regs.r[25]); pspDebugScreenPuts(buffer);
-	        //pspDebugScreenSetTextColor(0xFFBBBBBB);sprintf(buffer, "  t2 = 0x%08lX        k0 = 0x%08lX\n", g_psplinkContext[0].regs.r[10], g_psplinkContext[0].regs.r[26]); pspDebugScreenPuts(buffer);
-          //pspDebugScreenSetTextColor(0xFF8080BB);sprintf(buffer, "  t3 = 0x%08lX        k1 = 0x%08lX\n", g_psplinkContext[0].regs.r[11], g_psplinkContext[0].regs.r[27]); pspDebugScreenPuts(buffer);
-          //pspDebugScreenSetTextColor(0xFFBBBBBB);sprintf(buffer, "  t4 = 0x%08lX        gp = 0x%08lX\n", g_psplinkContext[0].regs.r[12], g_psplinkContext[0].regs.r[28]); pspDebugScreenPuts(buffer);
-					//pspDebugScreenSetTextColor(0xFF8080BB);sprintf(buffer, "  t5 = 0x%08lX        sp = 0x%08lX\n", g_psplinkContext[0].regs.r[13], g_psplinkContext[0].regs.r[29]); pspDebugScreenPuts(buffer);
-					//pspDebugScreenSetTextColor(0xFFBBBBBB);sprintf(buffer, "  t6 = 0x%08lX        fp = 0x%08lX\n", g_psplinkContext[0].regs.r[14], g_psplinkContext[0].regs.r[30]); pspDebugScreenPuts(buffer);
-					//pspDebugScreenSetTextColor(0xFF8080BB);sprintf(buffer, "  t7 = 0x%08lX        ra = 0x%08lX\n", g_psplinkContext[0].regs.r[15], g_psplinkContext[0].regs.r[31]); pspDebugScreenPuts(buffer);
-        }
-        else
-        {
-          //Print out log
-          pspDebugScreenSetTextColor(0xFFFFFFFF); pspDebugScreenPuts("\n[Data Log - UNIMPLEMENTED]");
-    	    pspDebugScreenSetTextColor(0xFF808080); pspDebugScreenPuts(line);
-        }
-        
-      	//Helper
-        lineClear(33);
-        pspDebugScreenSetTextColor(0xFFFF8000);
-       	if(trackY == 0)
-        {
-        	pspDebugScreenPuts(">< = Edit On/Off; \\|/ /|\\ <- -> = Cycle; () = Cancel");
-        }
-        else if(trackY == 3)
-        {
-          pspDebugScreenPuts(">< = Select; () = Cancel"); 
-        }
-        else
-        {
-        	pspDebugScreenPuts(">< = Toggle; () = Cancel"); 
-        }
-      	break;*/
+     	case 5:
+     	break;
     }
   }
   
@@ -2719,27 +2648,36 @@ void menuInput()
           {
             if(extMenu == 1)
             {
+              if(block[extSelected[0]].flags & FLAG_DMA){
+              copyData=(block[extSelected[0]].hakVal&0x1FFFFFC)+0x8800000;
+              }
+              else{
               copyData=block[extSelected[0]].address;
+              }
             }
             else if(extMenu == 2)
           	{
             	if(extSelected[0] > 2)
               {
-              	copyData=searchAddress[extSelected[0]-3]-0x40000000;
+              	copyData=searchAddress[extSelected[0]-3];//-0x40000000;
             	}
+				else if(extSelected[0] < 1)
+					{
+						copyData=searchHistory[0].hakVal;
+					}
             }
             else if(extMenu == 3)
             {
               if(extSelected[0] > 2)
               {
-              	copyData=searchAddress[extSelected[0]-3]-0x40000000;
+              	copyData=searchAddress[extSelected[0]-3];//-0x40000000;
             	}
             }
             else if(extMenu == 4)
             {
               if(extSelected[0] > 1)
               {
-              	copyData=searchAddress[extSelected[0]-2]-0x40000000;
+              	copyData=searchAddress[extSelected[0]-2];//-0x40000000;
             	}
             }
           }
@@ -2748,15 +2686,15 @@ void menuInput()
             if(tabSelected == 3)
             {
               copyData=browseAddress+(browseY * browseLines);
-              copyData-=0x40000000;
+              //copyData-=0x40000000;
             }
             else if(tabSelected == 4)
             {
               copyData=decodeAddress+(decodeY*4);
-              copyData-=0x40000000;
+              //copyData-=0x40000000;
             }
           }
-          copyData&=0xFFFFFFFC;
+          copyData&=0x09FFFFFC;
           
           if(copyData < 0x08800000)
           {
@@ -2769,26 +2707,35 @@ void menuInput()
           {
             if(extMenu == 1)
             {
-              if(!(block[extSelected[0]].flags & FLAG_DMA)) block[extSelected[0]].address=copyData;
+              if(block[extSelected[0]].flags & FLAG_DMA){
+              block[extSelected[0]].hakVal=copyData-0x8800000;
+              }
+              else{
+              block[extSelected[0]].address=copyData;
+              }
             }
+			else if(extMenu==2 && extSelected[0] < 1)
+					{
+						searchHistory[0].hakVal=copyData;
+					}
           }
           else
           {
             if(tabSelected == 3)
             {
               browseAddress=copyData|0x40000000; //(browseY * browseLines)+
-              if(browseAddress > (0x4A000000-(22*browseLines)))
+              if(browseAddress > (0x4A000000-(24*browseLines)))
             	{
-             		browseAddress=(0x4A000000-(22*browseLines));
+             		browseAddress=(0x4A000000-(24*browseLines));
             	}
             }
             else if(tabSelected == 4)
             {
               decodeAddress=copyData|0x40000000; //+(decodeY*4);
               decodeY=0;
-              if(decodeAddress > 0x49FFFFA8)
+              if(decodeAddress > 0x49FFFFA0)
             	{
-             		decodeAddress=0x49FFFFA8;
+             		decodeAddress=0x49FFFFA0;
             	}
             }
           }
@@ -2865,7 +2812,7 @@ void menuInput()
 					}
 				   else{ //view log
 					if(flipme){ //memoryeditor
-						if(copyData < 0x49FFFFA8){
+						if(copyData < 0x49FFFFA0){
 							browseAddress[bdNo]=logstart+4*(logcounter-1); //(browseY[bdNo] * browseLines)+
 							if(browseAddress[bdNo] > (0x4A000000-(26*browseLines))){
 								browseAddress[bdNo]=(0x4A000000-(26*browseLines));
@@ -2878,10 +2825,10 @@ void menuInput()
 						}
 						else{//view log
 						  backaddress[bdNo]=decodeAddress[bdNo];backaddressY[bdNo]=decodeY[bdNo];decodeY[bdNo]=0;
-						 if(copyData < 0x49FFFFA8){
+						 if(copyData < 0x49FFFFA0){
 							decodeAddress[bdNo]=logstart+4*(logcounter-1); //+(decodeY[bdNo]*4);
-							if(decodeAddress[bdNo] > 0x49FFFFA8){
-								decodeAddress[bdNo]=0x49FFFFA8;
+							if(decodeAddress[bdNo] > 0x49FFFFA0){
+								decodeAddress[bdNo]=0x49FFFFA0;
 							}
 						 }
 					    }   }
@@ -2909,7 +2856,7 @@ void menuInput()
 				   block[extSelected[0]].address=0xFFFFFFFF;
 				   block[extSelected[0]].stdVal=0xFFFFFFFF;
 				   block[extSelected[0]].flags=FLAG_DMA | FLAG_DWORD;
-					}
+				}
 			}
         goto hideCopyMenu;
       }
@@ -2933,6 +2880,9 @@ void menuInput()
 				//change format
 				if(editFormat==0){
 					editFormat=1;
+				  if(extSelected[1] >1){
+				  extSelected[2]=7;
+				  extSelected[1]=1;}
 				}
 				else{
 					editFormat=0;
@@ -2941,7 +2891,7 @@ void menuInput()
 				sceKernelDelayThread(150000);
 			  }
 			  
-        	if(pad.Buttons & PSP_CTRL_SELECT) { copyMenu=1; menuDraw(); sceKernelDelayThread(150000);}
+        	if(pad.Buttons & CPYBUTTON) { copyMenu=1; menuDraw(); sceKernelDelayThread(150000);}
         	if(pad.Buttons & PSP_CTRL_CROSS)
           {
             extSelected[3]=!extSelected[3];
@@ -2996,25 +2946,37 @@ void menuInput()
             			{
              				block[extSelected[0]].address=0x09FFFFFC;
             			}
+		       	  unsigned int address=cheatDMA+block[extSelected[0]].address;
                   if(cheatSaved) //Re-Update the stdVal
                   {
-                  	switch(block[extSelected[0]].flags & FLAG_DWORD) 
+                  	switch(block[extSelected[0]].flags & FLAG_DWORD)
                   	{
-                    	case FLAG_BYTE:  block[extSelected[0]].stdVal=*((unsigned char*)(block[extSelected[0]].address)); break;
-                    	case FLAG_WORD:  block[extSelected[0]].stdVal=*((unsigned short*)(block[extSelected[0]].address)); break;
-                    	case FLAG_DWORD: block[extSelected[0]].stdVal=*((unsigned int*)(block[extSelected[0]].address)); break;
+                  	  if((address>=0x8800000)&&(address<0x0A000000)){
+                    	case FLAG_BYTE:  block[extSelected[0]].stdVal=*((unsigned char*)(address)); break;
+                    	case FLAG_WORD:  block[extSelected[0]].stdVal=*((unsigned short*)(address&0xFFFFFFFE)); break;
+                    	case FLAG_DWORD: block[extSelected[0]].stdVal=*((unsigned int*)(address&0xFFFFFFFC)); break;
                     	default:
-                    		block[blockTotal].flags|=FLAG_UWORD;
+                   		block[blockTotal].flags|=FLAG_UWORD;
                   	}
+                  	  }
                   }
                   break;
                 case 1:
-                	if(block[extSelected[0]].flags & FLAG_FREEZE)
-                  {
-                    //Do nothing =o
+                	if(block[extSelected[0]].flags & FLAG_FREEZE){
+                	}
+                  	else if(block[extSelected[0]].flags & FLAG_DMA){
+						if(extSelected[2]==7){
+						block[extSelected[0]].hakVal+=4;
+						}
+						else{
+						block[extSelected[0]].hakVal+=(1 << (4*(7-extSelected[2])));
+						}
+                  		if(block[extSelected[0]].hakVal>0x17FFFFC) block[extSelected[0]].hakVal=0x17FFFFC;
+                  	}
+                  	else{
+	                  block[extSelected[0]].hakVal+=(1 << (4*(7-extSelected[2])));
+                    }
                     break;
-                  }
-                  block[extSelected[0]].hakVal+=(1 << (4*(7-extSelected[2]))); break;
                 case 2: block[extSelected[0]].hakVal+=decDelta[extSelected[2]]; break;
                 case 3: block[extSelected[0]].hakVal+=(1 << (8*(extSelected[2]))); break;
               }
@@ -3045,31 +3007,43 @@ void menuInput()
                   }
                   if(block[extSelected[0]].address < 0x08800000)
             			{
-            				block[extSelected[0]].address=0x08800000;
+            			block[extSelected[0]].address=0x08800000;
             			}
               		if(block[extSelected[0]].address > 0x09FFFFFF)
             			{
-             				block[extSelected[0]].address=0x09FFFFFC;
+             			block[extSelected[0]].address=0x09FFFFFC;
             			}
+		       	  unsigned int address=cheatDMA+block[extSelected[0]].address;
                   if(cheatSaved) //Re-Update the stdVal
                   {
-                  	switch(block[extSelected[0]].flags & FLAG_DWORD) 
+                  	switch(block[extSelected[0]].flags & FLAG_DWORD)
                   	{
-                    	case FLAG_BYTE:  block[extSelected[0]].stdVal=*((unsigned char*)(block[extSelected[0]].address)); break;
-                    	case FLAG_WORD:  block[extSelected[0]].stdVal=*((unsigned short*)(block[extSelected[0]].address)); break;
-                    	case FLAG_DWORD: block[extSelected[0]].stdVal=*((unsigned int*)(block[extSelected[0]].address)); break;
+                  	  if((address>=0x8800000)&&(address<0x0A000000)){
+                    	case FLAG_BYTE:  block[extSelected[0]].stdVal=*((unsigned char*)(address)); break;
+                    	case FLAG_WORD:  block[extSelected[0]].stdVal=*((unsigned short*)(address&0xFFFFFFFE)); break;
+                    	case FLAG_DWORD: block[extSelected[0]].stdVal=*((unsigned int*)(address&0xFFFFFFFC)); break;
                     	default:
-                    		block[blockTotal].flags|=FLAG_UWORD;
+                   		block[blockTotal].flags|=FLAG_UWORD;
                   	}
+	                  }
                   }
                   break;
                 case 1: 
-                	if(block[extSelected[0]].flags & FLAG_FREEZE)
-                  {
-                    //Do nothing =o
-                    break;
-                  }
-                	block[extSelected[0]].hakVal-=(1 << (4*(7-extSelected[2]))); break;
+                	if(block[extSelected[0]].flags & FLAG_FREEZE){
+                	}
+                  	else if(block[extSelected[0]].flags & FLAG_DMA){
+						if(extSelected[2]==7){
+						block[extSelected[0]].hakVal-=4;
+						}
+						else{
+						block[extSelected[0]].hakVal-=(1 << (4*(7-extSelected[2])));
+						}
+                  		if(block[extSelected[0]].hakVal>0x17FFFFC) block[extSelected[0]].hakVal=0;
+                  	}
+                	else{
+                	block[extSelected[0]].hakVal-=(1 << (4*(7-extSelected[2])));
+                	}
+                	break;
                 case 2: block[extSelected[0]].hakVal-=decDelta[extSelected[2]]; break;
                 case 3: block[extSelected[0]].hakVal-=(1 << (8*(extSelected[2]))); break;
               }
@@ -3134,7 +3108,11 @@ void menuInput()
            	switch(extSelected[1])
             {
               case 0: if(extSelected[2] > 7) { extSelected[2]=0; extSelected[1]++; } break;
-              case 1: if(extSelected[2] > 7) { extSelected[2]=0; extSelected[1]++; } break;
+              case 1: if(extSelected[2] > 7) { 
+              if(editFormat==1){extSelected[2]=7;}
+					else{
+		              extSelected[2]=0; extSelected[1]++;}
+        		} break;
               case 2: if(extSelected[2] > 9) { extSelected[2]=0; extSelected[1]++; } break;
               case 3: if(extSelected[2] > 3) { extSelected[2]=3; } break;
             }
@@ -3159,7 +3137,11 @@ void menuInput()
             	pspDebugScreenInitEx(vram, 0, 0);
             	extSelected[0]=extSelected[1]=extSelected[2]=extSelected[3]=0;
         			extMenu=0;
-              if(extOpt)
+	        	if(extOpt==-1){
+	        	tabSelected=2;
+	        	cheatSelected=0;
+	   		  	}
+              else if(extOpt>0)
               {
                 extSelected[0]=extOptArg;
                 pspDebugScreenInitEx(vram, 0, 0);
@@ -3189,7 +3171,7 @@ void menuInput()
 			  }
 			  
 
-        	if(pad.Buttons & PSP_CTRL_SELECT) { copyMenu=1; menuDraw(); sceKernelDelayThread(150000);}
+        	if(pad.Buttons & CPYBUTTON) { copyMenu=1; menuDraw(); sceKernelDelayThread(150000);}
         	if(pad.Buttons & PSP_CTRL_SQUARE)
           {
             if(searchNo == 0) //Don't allow the user to change type later on!!!
@@ -3724,7 +3706,7 @@ void menuInput()
         	break;
           
         case 3: //INPUT EXT DIFF SEARCH
-        	if(pad.Buttons & PSP_CTRL_SELECT) { copyMenu=1; menuDraw(); sceKernelDelayThread(150000);}
+        	if(pad.Buttons & CPYBUTTON) { copyMenu=1; menuDraw(); sceKernelDelayThread(150000);}
           if(pad.Buttons & PSP_CTRL_CROSS)
           {
             if(extSelected[0] == 0)
@@ -4401,7 +4383,7 @@ void menuInput()
         	break;
           
       case 4: //INPUT EXT TEXT SEARCH
-        	if(pad.Buttons & PSP_CTRL_SELECT) { copyMenu=1; menuDraw(); sceKernelDelayThread(150000);}
+        	if(pad.Buttons & CPYBUTTON) { copyMenu=1; menuDraw(); sceKernelDelayThread(150000);}
         	
           if(pad.Buttons & PSP_CTRL_CROSS)
           {
@@ -4458,7 +4440,7 @@ void menuInput()
                   	if(tempLetter == (unsigned char)fileBuffer[scounter])
                     {
                       scounter++;
-                      if(!fileBuffer[scounter+1])
+                      if(!fileBuffer[scounter])
                       {
                         //Add it
                         searchAddress[searchResultCounter]=counter;
@@ -4959,7 +4941,7 @@ void menuInput()
           }
           if(pad.Buttons & PSP_CTRL_LEFT)
           {
-				if((cheatSelected==1) && (cheatLength >0) ){
+				if((cheatSelected==1) && (cheatLength >1) ){
 					cheatLength-=1;
 				}
             if((cheatSelected == 7) && (cheatHz > 0))
@@ -5019,7 +5001,7 @@ void menuInput()
             }
             else if(cheatSelected == 1)
             {
-               cheatNew(4, 0x4000, 0, cheatLength, 0);
+               cheatNew(4, 0x0000, 0, cheatLength, 0);
               
               //Switch to the cheat editor
               pspDebugScreenInitEx(vram, 0, 0);
@@ -5027,12 +5009,13 @@ void menuInput()
             	extSelected[0]=cheat[cheatTotal - 1].block;
               cheatSelected=cheatTotal - 1;
           		extMenu=1;
-              extOpt=1;
+              extOpt=-1;
             	menuDraw();
             	sceKernelDelayThread(150000);
             }
             else if(cheatSelected == 2)
             {
+            /*
               sprintf(buffer, "ms0:/dump%d.ram", dumpNo);
               
               fd=sceIoOpen(buffer, PSP_O_RDONLY, 0777);
@@ -5047,7 +5030,7 @@ void menuInput()
                   {
                     if(block[scounter].flags & FLAG_DMA)
                     {
-                      if(block[scounter].hakVal!=0xFFFFFFFF)
+                      if(block[scounter].address==0xFFFFFFFF)
                       {
                         sceIoLseek(fd, block[scounter].hakVal, SEEK_SET);
                     		sceIoRead(fd, &cheatDMA, sizeof(unsigned int));
@@ -5088,16 +5071,14 @@ void menuInput()
               else
               {
                 lineClear(33);
-        				pspDebugScreenSetTextColor(0xFF0000FF); pspDebugScreenPuts("ERROR: Selected RAM Dump # does not exist!"); 
+   				pspDebugScreenSetTextColor(0xFF0000FF); pspDebugScreenPuts("ERROR: Selected RAM Dump # does not exist!"); 
                 sceKernelDelayThread(3000000);
               }
-                
               menuDraw();
             }
             else if(cheatSelected == 3)
             {
-          		sprintf(buffer, "ms0:/dump%d.ram", dumpNo);
-              
+       		sprintf(buffer, "ms0:/dump%d.ram", dumpNo);
               fd=sceIoOpen(buffer, PSP_O_WRONLY | PSP_O_CREAT, 0777);
               if(fd>0)
               {
@@ -5119,7 +5100,7 @@ void menuInput()
                 }
               }
             	menuDraw();
-              sceKernelDelayThread(150000); //Delay twice
+              sceKernelDelayThread(150000);*/ //Delay twice
             }
             else if(cheatSelected == 4)
             {
@@ -5138,9 +5119,9 @@ void menuInput()
             	{
             		browseAddress=0x48800000;
             	}
-              if(browseAddress > (0x4A000000-(22*browseLines)))
+              if(browseAddress > (0x4A000000-(24*browseLines)))
             	{
-             		browseAddress=(0x4A000000-(22*browseLines));
+             	browseAddress=(0x4A000000-(24*browseLines));
             	}
               menuDraw();
             }
@@ -5187,7 +5168,7 @@ void menuInput()
         	break;
           
         case 3:	//INPUT BROWSER
-        	if(pad.Buttons & PSP_CTRL_SELECT) { copyMenu=1; menuDraw(); sceKernelDelayThread(150000);}
+        	if(pad.Buttons & CPYBUTTON) { copyMenu=1; menuDraw(); sceKernelDelayThread(150000);}
         	if(pad.Buttons & PSP_CTRL_CROSS)
           {
             extSelected[3]=!extSelected[3];
@@ -5200,9 +5181,9 @@ void menuInput()
             browseX--;
            	switch(browseC)
             {
-              case 0: if((signed)browseX == -1) { browseX=0; } break;
-              case 1: if((signed)browseX == -1) { browseX=7; browseC--; } break;
-              case 2: if((signed)browseX == -1) { browseX=(2*browseLines)-1; browseC--; } break;
+              case 0: if(browseX == -1) { browseX=0; } break;
+              case 1: if(browseX == -1) { browseX=7; browseC--; } break;
+              case 2: if(browseX == -1) { browseX=(2*browseLines)-1; browseC--; } break;
             }
             menuDraw();
             if(cheatButtonAgeX < 12) cheatButtonAgeX++; sceKernelDelayThread(150000-(10000*cheatButtonAgeX));
@@ -5251,22 +5232,22 @@ void menuInput()
             			{
             				browseAddress=0x48800000;
             			}
-              		if(browseAddress > (0x4A000000-(22*browseLines)))
+              		if(browseAddress > (0x4A000000-(24*browseLines)))
             			{
-             				browseAddress=(0x4A000000-(22*browseLines));
+             				browseAddress=(0x4A000000-(24*browseLines));
             			}
                   break;
                 case 1:
                 	if(browseX & 1)
                   {
-                		*((unsigned char*)((browseAddress+(browseY*browseLines))+(browseX/2)))+=0x01;
+                	*((unsigned char*)((browseAddress+(browseY*browseLines))+(browseX/2)))+=0x01;
                 	}
                   else
                   {
                     *((unsigned char*)((browseAddress+(browseY*browseLines))+(browseX/2)))+=0x10;
                   }
-                  sceKernelDcacheWritebackInvalidateRange(((unsigned char*)((browseAddress+(browseY*browseLines))+(browseX/2))),1);
- 									sceKernelIcacheInvalidateRange(((unsigned char*)((browseAddress+(browseY*browseLines))+(browseX/2))),1);
+                sceKernelDcacheWritebackInvalidateRange(((unsigned char*)((browseAddress+(browseY*browseLines))+(browseX/2))),1);
+				sceKernelIcacheInvalidateRange(((unsigned char*)((browseAddress+(browseY*browseLines))+(browseX/2))),1);
                   break;
                 case 2:
                 	*((unsigned char*)((browseAddress+(browseY*browseLines))+browseX))+=1;
@@ -5287,9 +5268,9 @@ void menuInput()
             			{
             				browseAddress=0x48800000;
             			}
-              		if(browseAddress > (0x4A000000-(22*browseLines)))
+              		if(browseAddress > (0x4A000000-(24*browseLines)))
             			{
-             				browseAddress=(0x4A000000-(22*browseLines));
+             				browseAddress=(0x4A000000-(24*browseLines));
             			}
                   break;
                 case 1:
@@ -5327,9 +5308,9 @@ void menuInput()
             	{
             		browseAddress=0x48800000;
             	}
-              if(browseAddress > (0x4A000000-(22*browseLines)))
-            	{
-             		browseAddress=(0x4A000000-(22*browseLines));
+              if(browseAddress > (0x4A000000-(24*browseLines)))
+	          	{
+             		browseAddress=(0x4A000000-(24*browseLines));
             	}
             	menuDraw();
             	if(cheatButtonAgeY < 12) cheatButtonAgeY++; sceKernelDelayThread(150000-(10000*cheatButtonAgeY));
@@ -5341,9 +5322,9 @@ void menuInput()
             	{
             		browseAddress=0x48800000;
             	}
-              if(browseAddress > (0x4A000000-(22*browseLines)))
+              if(browseAddress > (0x4A000000-(24*browseLines)))
             	{
-             		browseAddress=(0x4A000000-(22*browseLines));
+             		browseAddress=(0x4A000000-(24*browseLines));
             	}
             	menuDraw();
             	if(cheatButtonAgeY < 12) cheatButtonAgeY++; sceKernelDelayThread(150000-(10000*cheatButtonAgeY));
@@ -5359,9 +5340,9 @@ void menuInput()
             	{
             		browseAddress=0x48800000;
             	}
-              if(browseAddress > (0x4A000000-(22*browseLines)))
+              if(browseAddress > (0x4A000000-(24*browseLines)))
             	{
-             		browseAddress=(0x4A000000-(22*browseLines));
+             		browseAddress=(0x4A000000-(24*browseLines));
             	}
               menuDraw();
             	sceKernelDelayThread(18750);
@@ -5382,9 +5363,9 @@ void menuInput()
             	  {
             	  	browseAddress=0x48800000;
             	  }
-                if(browseAddress > (0x4A000000-(22*browseLines)))
+                if(browseAddress > (0x4A000000-(24*browseLines)))
             	  {
-             	  	browseAddress=(0x4A000000-(22*browseLines));
+             	  	browseAddress=(0x4A000000-(24*browseLines));
             	  }
               }
             	menuDraw();
@@ -5392,20 +5373,20 @@ void menuInput()
           	}
           	else if(pad.Buttons & PSP_CTRL_DOWN)
           	{
-            	if(browseY < 21)
+            	if(browseY < 23)
             	{
              		browseY++;
             	}
-              else if(browseY == 21)
+              else if(browseY == 23)
               {
                 browseAddress+=browseLines;
                 if(browseAddress < 0x48800000)
             	  {
             	  	browseAddress=0x48800000;
             	  }
-                if(browseAddress > (0x4A000000-(22*browseLines)))
+                if(browseAddress > (0x4A000000-(24*browseLines)))
             	  {
-             	  	browseAddress=(0x4A000000-(22*browseLines));
+             	  	browseAddress=(0x4A000000-(24*browseLines));
             	  }
               }
             	menuDraw();
@@ -5421,31 +5402,30 @@ void menuInput()
       	case 4: //INPUT DECODER
 
 				if((padButtons & PSP_CTRL_SQUARE) && (padButtons & PSP_CTRL_RIGHT)){
-					unsigned int foobar=(*((unsigned int*)(decodeAddress+(decodeY*4))) &0xFFFFFFFC);
+					unsigned int foobar=*((unsigned int*)(decodeAddress+(decodeY*4)));
 				  if(jumplog < logcounter){
 					logcounter=jumplog;}
 				  else{
 				 //pointer jump
-					if((foobar >= 0x08800000) && (foobar <= 0x09FFFF98)){ //handle pointers
-
+					if((foobar >= 0x08800000) && (foobar <= 0x09FFFF90)){ //handle pointers
 						if(((decodeAddress+(decodeY*4)) >= (logstart-4)) && ((decodeAddress+(decodeY*4)) <= (logstart + 4*jumplog))){
-						logcounter=((decodeAddress+(decodeY*4))-0x48800000)/4;
+						logcounter=((decodeAddress+(decodeY*4))-0x48800000)>>2;
 						}
 						else{
 						storedAddress[logcounter]=decodeAddress+(decodeY*4); //store pointer address
-						foobar+=0x40000000;
+						//foobar+=0x40000000;
 						*((unsigned int*)(logstart+4*logcounter))=storedAddress[logcounter] & 0xFFFFFFC;
 						logcounter++;
 						}
-						decodeAddress=foobar | 0x40000000 & 0xFFFFFFFC;
+						decodeAddress=(foobar | 0x40000000) & 0xFFFFFFFC;
 						decodeY=0;
 					}//jal.j
-					else if(((foobar >= 0x0A200000) && (foobar <= 0x0A7FFFE6)) || ((foobar >= 0x0E200000) && (foobar <= 0x0E7FFFE6))){ //handle hooks
+					else if(((foobar >= 0x0A200000) && (foobar <= 0x0A7FFFE4)) || ((foobar >= 0x0E200000) && (foobar <= 0x0E7FFFE6))){ //handle hooks
 						storedAddress[logcounter]=decodeAddress+(decodeY*4);
 						foobar&=0x3FFFFFF;
 						decodeAddress=(mipsNum, "%08X", ((foobar<<2)))-0xC0000000; //store pointer address
 						decodeY=0;
-						*((unsigned int*)(logstart+4*logcounter))=storedAddress[logcounter] & 0xFFFFFFF;
+						*((unsigned int*)(logstart+4*logcounter))=storedAddress[logcounter] & 0xFFFFFFC;
 						logcounter++;
 					}//branch jump
 					else if(((foobar >= 0x10000000) && (foobar <= 0x1FFFFFFF)) || ((foobar >= 0x50000000) && (foobar <= 0x5FFFFFFF))
@@ -5461,13 +5441,12 @@ void menuInput()
 						else{
 						Addresstmp=(mipsNum, "%04X", foobar*4)+decodeAddress+(decodeY*4)+4; //store pointer address
 						}
-						if((Addresstmp >= 0x48800000) && (Addresstmp < 0x49FFFF98)){
+						if((Addresstmp >= 0x48800000) && (Addresstmp < 0x49FFFF90)){
 						decodeAddress=Addresstmp;
 						decodeY=0;
-						}
 						*((unsigned int*)(logstart+4*logcounter))=storedAddress[logcounter] & 0xFFFFFFC;
 						logcounter++;
-						decodeAddress;
+						}
 					}
 				   }
 					menuDraw();
@@ -5477,12 +5456,14 @@ void menuInput()
 					//return to pointer;
 					decodeY=0;
 					if(logcounter >= 1){
-					decodeAddress=storedAddress[logcounter-1];
+						if(storedAddress[logcounter-1] > 0x49FFFF90){
+						decodeAddress= 0x49FFFF90;}
+						else{decodeAddress=storedAddress[logcounter-1];}						
 					logcounter--;}
 					menuDraw();
 					sceKernelDelayThread(150000);
 				}
-        	if(pad.Buttons & PSP_CTRL_SELECT) { copyMenu=1; menuDraw(); sceKernelDelayThread(150000);}
+        	if(pad.Buttons & CPYBUTTON) { copyMenu=1; menuDraw(); sceKernelDelayThread(150000);}
 					if(pad.Buttons & PSP_CTRL_CROSS)
           {
             extSelected[3]=!extSelected[3];
@@ -5495,8 +5476,8 @@ void menuInput()
             decodeX--;
            	switch(decodeC)
             {
-              case 0: if((signed)decodeX == -1) { decodeX=0; } break;
-              case 1: if((signed)decodeX == -1) { decodeX=7; decodeC--; } break;
+              case 0: if(decodeX == -1) { decodeX=0; } break;
+              case 1: if(decodeX == -1) { decodeX=7; decodeC--; } break;
             }
             menuDraw();
             if(cheatButtonAgeX < 12) cheatButtonAgeX++; sceKernelDelayThread(150000-(10000*cheatButtonAgeX));
@@ -5536,15 +5517,15 @@ void menuInput()
             			{
             				decodeAddress=0x48800000;
             			}
-              		if(decodeAddress > 0x49FFFFA8)
+              		if(decodeAddress > 0x49FFFFA0)
             			{
-             				decodeAddress=0x49FFFFA8;
+             				decodeAddress=0x49FFFFA0;
             			}
                   break;
                 case 1:
                 	*((unsigned int*)(decodeAddress+(decodeY*4)))+=(1 << (4*(7-decodeX)));
                   sceKernelDcacheWritebackInvalidateRange(((unsigned int*)(decodeAddress+(decodeY*4))),4);
- 									sceKernelIcacheInvalidateRange(((unsigned int*)(decodeAddress+(decodeY*4))),4);
+				sceKernelIcacheInvalidateRange(((unsigned int*)(decodeAddress+(decodeY*4))),4);
                   break;
               }
               menuDraw();
@@ -5567,15 +5548,15 @@ void menuInput()
             			{
             				decodeAddress=0x48800000;
             			}
-              		if(decodeAddress > 0x49FFFFA8)
+              		if(decodeAddress > 0x49FFFFA0)
             			{
-             				decodeAddress=0x49FFFFA8;
+             				decodeAddress=0x49FFFFA0;
             			}
                   break;
                 case 1:
-                	*((unsigned int*)(decodeAddress+(decodeY*4)))-=(1 << (4*(7-decodeX)));
-                  sceKernelDcacheWritebackInvalidateRange(((unsigned int*)(decodeAddress+(decodeY*4))),4);
- 									sceKernelIcacheInvalidateRange(((unsigned int*)(decodeAddress+(decodeY*4))),4);
+                *((unsigned int*)(decodeAddress+(decodeY*4)))-=(1 << (4*(7-decodeX)));
+                 sceKernelDcacheWritebackInvalidateRange(((unsigned int*)(decodeAddress+(decodeY*4))),4);
+ 				sceKernelIcacheInvalidateRange(((unsigned int*)(decodeAddress+(decodeY*4))),4);
                   break;
               }
               menuDraw();
@@ -5599,7 +5580,7 @@ void menuInput()
           	}
           	else if(pad.Buttons & PSP_CTRL_DOWN)
           	{
-            	if(decodeAddress < 0x49FFFFA8)
+            	if(decodeAddress < 0x49FFFFA0)
             	{
              		decodeAddress+=4;
             	}
@@ -5617,9 +5598,9 @@ void menuInput()
             	{
             		decodeAddress=0x48800000;
             	}
-              if(decodeAddress > 0x49FFFFA8)
+              if(decodeAddress > 0x49FFFFA0)
             	{
-             		decodeAddress=0x49FFFFA8;
+             		decodeAddress=0x49FFFFA0;
             	}
               menuDraw();
             	sceKernelDelayThread(18750);
@@ -5645,13 +5626,13 @@ void menuInput()
           	}
             else if(pad.Buttons & PSP_CTRL_DOWN)
           	{
-            	if(decodeY < 21)
+            	if(decodeY < 23)
             	{
              		decodeY++;
             	}
-              else if(decodeY == 21)
+              else if(decodeY == 23)
               {
-                if(decodeAddress < 0x49FFFFA8)
+                if(decodeAddress < 0x49FFFFA0)
             		{
              			decodeAddress+=4;
             		}
@@ -5666,168 +5647,7 @@ void menuInput()
           }
           break;
           
-        case 5: //INPUT TRACKER
-        	if((pad.Buttons & PSP_CTRL_SELECT) && (!trackStatus)) { copyMenu=1; menuDraw(); sceKernelDelayThread(150000);}
-					if(pad.Buttons & PSP_CTRL_CROSS)
-          {
-            if((trackY == 0) && (!trackStatus))
-            {
-            	extSelected[3]=!extSelected[3];
-            }
-            else if(trackY == 1)
-            {
-              trackStatus=!trackStatus;
-              
-              if(trackStatus)
-              {
-                if(trackMode==0)
-                {
-                	//Apply breakpoint
-                  //trackBackup=*((unsigned int*)(trackAddress));
-                  //*((unsigned int*)(trackAddress))=0x0000000D;
-                
-                  sceKernelDcacheWritebackInvalidateAll();
-									sceKernelIcacheInvalidateAll();
-              	}
-              }
-              else
-              {
-                if(trackMode==0)
-                {
-                	//Remove breakpoint
-                  //*((unsigned int*)(trackAddress))=trackBackup;
-                  
-                  sceKernelDcacheWritebackInvalidateAll();
-									sceKernelIcacheInvalidateAll();
-              	}
-              }
-            }
-            else if(trackY == 2)
-            {
-              trackPause=!trackPause;
-            }
-            menuDraw();
-            sceKernelDelayThread(150000);
-          }
-
-					if(trackY == 0)
-          {
-						if(pad.Buttons & PSP_CTRL_LEFT)
-          	{
-            	trackX--;
-              switch(trackC)
-              {
-                case 0: if((signed)trackX == -1) { trackX=0; } break;
-            		case 1: if((signed)trackX == -1) { trackX=0; trackC--; } break;
-              }
-              menuDraw();
-            	if(cheatButtonAgeX < 12) cheatButtonAgeX++; sceKernelDelayThread(150000-(10000*cheatButtonAgeX));
-          	}
-          	else if(pad.Buttons & PSP_CTRL_RIGHT)
-          	{
-            	trackX++;
-              switch(trackC)
-              {
-                case 0: if(trackX > 0) { trackX=0; trackC++; } break;
-            		case 1: if(trackX > 7) { trackX=7; } break;
-              }
-          		menuDraw();
-          		if(cheatButtonAgeX < 12) cheatButtonAgeX++; sceKernelDelayThread(150000-(10000*cheatButtonAgeX));
-          	}
-            else
-            {
-              cheatButtonAgeX=0;
-            }
-          }
-
-        	if(extSelected[3])
-          {
-            if(pad.Buttons & PSP_CTRL_UP)
-            {
-              if(trackC == 0)
-              {
-                if(trackMode < 1) trackMode++;
-              }
-              else
-              {
-                if(trackX!=7)
-                {
-                  trackAddress+=(1 << (4*(7-trackX)));
-                }	
-                else
-                {
-                  trackAddress+=4;
-              	}
-                if(trackAddress < 0x48800000)
-              	{
-              		trackAddress=0x48800000;
-              	}
-                if(trackAddress > 0x49FFFFFC)
-              	{
-               		trackAddress=0x49FFFFFC;
-              	}
-              }
-              menuDraw();
-            	if(cheatButtonAgeY < 12) cheatButtonAgeY++; sceKernelDelayThread(150000-(10000*cheatButtonAgeY));
-            }
-            else if(pad.Buttons & PSP_CTRL_DOWN)
-            {
-              if(trackC == 0)
-              {
-                if(trackMode > 0) trackMode--;
-              }
-              else
-              {
-                if(trackX!=7)
-                {
-                  trackAddress-=(1 << (4*(7-trackX)));
-                }
-                else
-                {
-                  trackAddress-=4;
-                }
-                if(trackAddress < 0x48800000)
-              	{
-              		trackAddress=0x48800000;
-              	}
-                if(trackAddress > 0x49FFFFFC)
-              	{
-               		trackAddress=0x49FFFFFC;
-              	}
-              }
-              menuDraw();
-            	if(cheatButtonAgeY < 12) cheatButtonAgeY++; sceKernelDelayThread(150000-(10000*cheatButtonAgeY));
-            }
-            else
-            {
-              cheatButtonAgeY=0;
-            }
-          }
-          else
-          {
-            if(pad.Buttons & PSP_CTRL_UP)
-          	{
-            	if(trackY > trackStatus)
-            	{
-            		trackY--;
-            	}
-            	menuDraw();
-            	if(cheatButtonAgeY < 12) cheatButtonAgeY++; sceKernelDelayThread(150000-(10000*cheatButtonAgeY));
-          	}
-            else if(pad.Buttons & PSP_CTRL_DOWN)
-          	{
-            	if(trackY < 2)
-            	{
-             		trackY++;
-            	}
-            	menuDraw();
-            	if(cheatButtonAgeY < 12) cheatButtonAgeY++; sceKernelDelayThread(150000-(10000*cheatButtonAgeY));
-          	}
-            else
-            {
-            	cheatButtonAgeY=0;
-            }
-          }
+          case 5:
           break;
       }
     }
@@ -5873,8 +5693,14 @@ int mainThread()
   unsigned int counter=0;
   
 	//Clear the search history to 0
-  memset(&searchHistory, 0, sizeof(Block) * 15);
-  searchHistory[0].flags|=FLAG_DWORD;
+	memset(&searchHistory, 0, sizeof(Block) * 15);
+	int i;
+	for(i=0; i<15; i++){
+		searchHistory[i].flags|=FLAG_DWORD;
+		sprintf(buffer, "ms0:/search%d.dat", i);
+		sceIoRemove(buffer);
+	}
+  /*searchHistory[0].flags|=FLAG_DWORD;
   searchHistory[1].flags|=FLAG_DWORD;
   searchHistory[2].flags|=FLAG_DWORD;
   searchHistory[3].flags|=FLAG_DWORD;
@@ -5889,7 +5715,7 @@ int mainThread()
   searchHistory[12].flags|=FLAG_DWORD;
   searchHistory[13].flags|=FLAG_DWORD;
   searchHistory[14].flags|=FLAG_DWORD;
-  searchHistory[15].flags|=FLAG_DWORD;
+  searchHistory[15].flags|=FLAG_DWORD;*/
 
   //Wait for the kernel to boot
   sceKernelDelayThread(100000);
@@ -5897,7 +5723,9 @@ int mainThread()
 		sceKernelDelayThread(100000);
 	sceKernelDelayThread(100000);
   
-/* //Find which screen directory to use
+  
+#ifdef _SCREENSHOT_
+  //Find which screen directory to use
   fd=sceIoDopen("ms0:/PICTURE/");
   if(fd > 0)
   {
@@ -5945,7 +5773,8 @@ int mainThread()
         break;
       }
     }
-  }*/
+  }
+  #endif
   
 //Function hunter
   /*while(1)
@@ -6048,7 +5877,7 @@ int mainThread()
   
   //Setup the controller
   sceCtrlSetSamplingCycle(0);
-	sceCtrlSetSamplingMode(PSP_CTRL_MODE_ANALOG);
+  sceCtrlSetSamplingMode(PSP_CTRL_MODE_ANALOG);
   
   //Register the button callbacks
   sceCtrlRegisterButtonCallback(3, 0xFFFFFFFF, buttonCallback, NULL);
@@ -6070,14 +5899,16 @@ int mainThread()
       {
         vram=(void*)(0xA0000000 | a_address);
       }
+      #ifdef _DOUBLETAP_
       else
       {
-        //sceDisplayGetMode(&a_pixelFormat, &a_bufferWidth, &a_bufferWidth);
-        //pspDebugScreenSetColorMode(a_pixelFormat);
-  			//pspDebugScreenSetXY(0, 0);
-  			//pspDebugScreenSetTextColor(0xFFFFFFFF);
-  			//pspDebugScreenPuts("nitePR: Double tap the home button to initate nitePR\nWhen initiated: Vol+&- = cheat menu; Music Button = turn on/off cheats");
+        sceDisplayGetMode(&a_pixelFormat, &a_bufferWidth, &a_bufferWidth);
+        pspDebugScreenSetColorMode(a_pixelFormat);
+  		pspDebugScreenSetXY(0, 0);
+  		pspDebugScreenSetTextColor(0xFFFFFFFF);
+  		pspDebugScreenPuts("nitePR: Double tap the home button to initate nitePR\nWhen initiated: Vol+&- = cheat menu; Music Button = turn on/off cheats");
       }
+      #endif
       
       sceKernelDelayThread(1500);
       continue;
@@ -6113,8 +5944,9 @@ int mainThread()
       if(cheatFlash > 0) cheatFlash--;
     }
     
+#ifdef _SCREENSHOT_
     //Handle screenshot
-/*  if((screenTime) && (screenPath[0]))
+  if((screenTime) && (screenPath[0]))
     {
       screenTime=0;
       void *block_addr;
@@ -6160,7 +5992,8 @@ int mainThread()
         
         screenNo++;
       }
-    }*/
+    }
+#endif
     
     //Wait a certain amount of seconds before reapplying cheats again
     sceKernelDelayThread(!cheatHz ? 500000: cheatHz);
@@ -6185,7 +6018,9 @@ int _start(SceSize args, void *argp)
   }
   memcpy(&triggerKey, cfg+11, 4);
   memcpy(&menuKey, cfg+15, 4);
- // memcpy(&screenKey, cfg+20, 4);
+#ifdef _SCREENSHOT_
+ memcpy(&screenKey, cfg+20, 4);
+#endif
   
 	//Create thread
   sceKernelGetThreadmanIdList(SCE_KERNEL_TMID_Thread, thread_buf_start, MAX_THREAD, &thread_count_start);

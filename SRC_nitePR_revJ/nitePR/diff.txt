@@ -1,3 +1,10 @@
+2011/5/8
+maxfree170で動くよう変数大幅劣化
+大量のばぐがあったので修正
+トラッカー、リセットコードを削除
+スクリーンショット、HOME2度押しをビルド別に変更
+DMAFLAGを動くようにした。
+
 ported PRXTOOL/PSPLINK decoder
 ported some mkultra function
 search speed up
