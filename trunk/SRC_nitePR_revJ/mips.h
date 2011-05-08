@@ -254,7 +254,7 @@ void mipsImm(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
   if(a_slot==1)
   {
     a_opcode&=0x3FFFFFF;
-    sprintf(mipsNum, "%08X", ((a_opcode<<2)));
+    sprintf(mipsNum, "%08X", ((a_opcode<<2))-decodeFormat+0x40000000);
   }
   else if(VFR==3){ //sv.q,lv.q,lv.s,sv.s
     a_opcode&=0xFFFC;
@@ -3300,20 +3300,23 @@ void mipsSpecial(unsigned int addresscode,unsigned int addresstmp,unsigned int c
 							||  (((addresscode & 0xFC1F0000) >= 0x04100000) && ((addresscode & 0xFC1F0000) <= 0x04130000)) )
 							{
 							addresstmp=addresscode & 0xFFFF;
-							addresscode=4*(addresstmp + 1);
+							addresscode=(addresstmp + 1)<<2;
 							if(addresstmp > 0x7FFF){
 							addresscode=(-0x40000+addresscode)+counteraddress;}
 							else{
-							addresscode=addresscode+counteraddress;}
-							sprintf(buffer, "$%X", addresscode);pspDebugScreenPuts(buffer);
-							if(extMenu==2){
-							pspDebugScreenPuts("+0FFSET");
+							addresscode=addresscode+counteraddress;
 							}
+							if(extMenu==2){
+							sprintf(buffer, "$%04X+0FFSET",addresscode);}
+							else{
+							sprintf(buffer, "$%X", addresscode-decodeFormat+0x40000000);
+							}
+							pspDebugScreenPuts(buffer);
 							if(addresstmp > 0x7FFF){
 							 sprintf(buffer, "(-%d)", (0x10000-(addresstmp+1)));}
 							else{
 							 sprintf(buffer, "(+%d)", (addresstmp+1));}
-							 pspDebugScreenPuts(buffer);
+							pspDebugScreenPuts(buffer);
 							}
 							else if( (addresscode>>24 == 0x3C) && (((addresscode & 0x7FFF) > 0x38D1) && ((addresscode & 0x7FFF) < 0x4B19) ||((addresscode & 0x7FFF) > 0x7F7F))){
 							addresscode=addresscode <<16;

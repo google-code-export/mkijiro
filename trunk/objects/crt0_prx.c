@@ -3892,12 +3892,11 @@ void menuInput(){
 				switch(extSelected[1])
 				{
 				  case 0: if(extSelected[2] > 7) { extSelected[2]=0; extSelected[1]++; } break;
-					
-				  case 1: if(editFormat==1){
-					if(extSelected[2] > 7) { extSelected[2]=7;}}
+				  case 1: if(extSelected[2] > 7) { 
+        		     if(editFormat==1){extSelected[2]=7;}
 					else{
-					  if(extSelected[2] > 7) { extSelected[2]=0; extSelected[1]++; }}
-					break;
+		              extSelected[2]=0; extSelected[1]++;}
+	        		} break;
 				  case 2: if(extSelected[2] > 9) { extSelected[2]=0; extSelected[1]++; } break;
 				  case 3: if(extSelected[2] > 3) { extSelected[2]=3; } break;
 				}
