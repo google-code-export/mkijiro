@@ -100,7 +100,7 @@ PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 #endif
 
 //Globals
-unsigned char *MKVER="  MKIJIRO20110504";
+unsigned char *MKVER="  MKIJIRO20110509";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -152,18 +152,19 @@ typedef struct Cheat{
 #define FLAG_CONSTANT (1<<1) //If 1, cheat is constantly on regardless of music button
 #define FLAG_FRESH (1<<2) //Cheat was just recently enabled/disabled
 #ifdef _100_
-//省メモリ版 FREECHEAT最低設定
+//省メモリ版 FREECHEAT最低設定,HEN+PIL使用時対策
 #define NAME_MAX 100
 #define BLOCK_MAX 100
 unsigned int searchAddress[100];
 #define searchResultMax 99
 #else
-//薄型＋最新CFWHEN+パッチ無しME/INFELNOドライバー推奨
+//薄型＋最新CFW+パッチ無しME/INFELNO/M33ドライバー推奨
 unsigned int searchAddress[500]; //サーチアドレス表示用
 #define searchResultMax 499  //サーチ表示最大数
 #define NAME_MAX 512 //チート名最大数
 #define BLOCK_MAX 1024 //チートコード最大数
 #endif
+#define LOCKINTERVAL 7812 //ロック間隔
 
 //Globals
 SceCtrlData pad;
@@ -178,13 +179,13 @@ unsigned short cheatSelected=0;
 unsigned char tabSelected=0;
 unsigned char menuDrawn=0;
 void *vram;
-unsigned int cheatHz=15625;//Cheat 15HZ
+unsigned int cheatHz=LOCKINTERVAL;//Cheat 15HZ
 unsigned char cheatFlash=0;
 unsigned char cheatPause=0;
 unsigned char cheatSearch=0;
 unsigned int cheatLength=1;
 unsigned char extMenu=0;
-unsigned int extSelected[4]={0,0,0,0};
+short extSelected[4]={0,0,0,0};
 char extOpt=0;
 unsigned int extOptArg=0;
 unsigned char dumpNo=0;
@@ -195,15 +196,15 @@ unsigned int searchHistoryCounter=0;
 Block searchHistory[16];
 unsigned int searchResultCounter=0;
 unsigned int browseAddress[5]={0x48800000,0x48800000,0x48800000,0x48800000,0x48800000};
-unsigned int browseY[5]={0,0,0,0,0};
-unsigned int browseC[5]={0,0,0,0,0};
-unsigned int browseX[5]={0,0,0,0,0};
-unsigned int browseLines=16;
+char browseY[5]={0,0,0,0,0};
+char browseC[5]={0,0,0,0,0};
+char browseX[5]={0,0,0,0,0};
+char browseLines=16;
 unsigned int decodeFormat=0x48800000;
 unsigned int decodeAddress[5]={0x48800000,0x48800000,0x48800000,0x48800000,0x48800000};
-unsigned int decodeY[5]={0,0,0,0,0};
-unsigned int decodeC[5]={0,0,0,0,0};
-unsigned int decodeX[5]={0,0,0,0,0};
+char decodeY[5]={0,0,0,0,0};
+char decodeC[5]={0,0,0,0,0};
+char decodeX[5]={0,0,0,0,0};
 unsigned int cheatDMA=0;
 unsigned char cheatButtonAgeX=0;
 unsigned char cheatButtonAgeY=0;
@@ -220,7 +221,6 @@ unsigned int fileBufferSize=0;
 unsigned int fileBufferBackup=0;
 unsigned int fileBufferFileOffset=0;
 unsigned int fileBufferOffset=1024;
-unsigned int screenNo=0;
 unsigned char editFormat=0;
 unsigned int searchStart=0x48800000;
 unsigned int searchStop=0x49FFFFFC;
@@ -240,7 +240,7 @@ unsigned int searchResultCounterMax=0xE400;
 unsigned short searchjumpNo=0;
 unsigned short searchjumpNoMax=0;
 #define logstart 0x48802804 //log start address
-#define jumplog 0x20 //number of jumplog ,default 32
+#define jumplog 31 //number of jumplog
 #define JOKERADDRESS 0x3FFC //out put JOKER ADDRES from kernel ram
 unsigned char offsetadd=0;
 unsigned char colorFile=0;
@@ -270,6 +270,7 @@ unsigned char usbonbitch=0;
 #endif
 #ifdef _SCREENSHOT_
 unsigned char screenshot_mode=0;
+unsigned int screenNo=0;
 unsigned char *screenshotstring[]={"NONE", "TOGGLE"};
 #endif
 unsigned char copyMenuX=25;
@@ -3551,7 +3552,7 @@ void menuInput(){
 				{
 				   if(pad.Buttons & SWAPBUTTON3){ //clear
 					unsigned char i=0;
-				        for(i=0;  i < jumplog ; i++){
+				        for(i=0;  i <= jumplog ; i++){
 					*(unsigned int *)(logstart + 4*i)=0;
 					storedAddress[i]=0;
 								}
@@ -6190,8 +6191,12 @@ void menuInput(){
 				if((cheatSelected == 3) && (dumpNo > 0)){
 				  dumpNo--;
 				}
-				if((cheatSelected == 9) && (cheatHz > 0)){
-				  cheatHz-=15625;
+				if((cheatSelected == 9)){
+					if(cheatHz<LOCKINTERVAL){
+						cheatHz=0;}
+					else{
+				  cheatHz-=LOCKINTERVAL;
+				  	}
 				}
 				if((cheatSelected == 12) && (colorFile > 0)){
 				  colorFile--;
@@ -6216,7 +6221,7 @@ void menuInput(){
 					dumpNo++;
 				}
 				if(cheatSelected==9){
-					cheatHz+=15625;
+					cheatHz+=LOCKINTERVAL;
 				}
 				if(cheatSelected==12){
 					colorFile++;
@@ -6695,12 +6700,11 @@ void menuInput(){
 			else{ //INPUT DECODER
 				if((padButtons & PSP_CTRL_SQUARE) && (padButtons & PSP_CTRL_RIGHT)){
 					unsigned int foobar=*((unsigned int*)(decodeAddress[bdNo]+(decodeY[bdNo]*4)));
-				  if(jumplog < logcounter){
-					logcounter=jumplog;}
-				  else{ 
+					int Addresstmp=0;
+				  if(logcounter>jumplog){logcounter=jumplog;}
+				  else{
 				 //pointer jump
 					if((foobar >= 0x08800000) && (foobar < 0x0A000000)){ //handle pointers
-
 						if(((decodeAddress[bdNo]+(decodeY[bdNo]*4)) >= (logstart-4)) && ((decodeAddress[bdNo]+(decodeY[bdNo]*4)) <= (logstart + 4*jumplog))){
 						logcounter=((decodeAddress[bdNo]+(decodeY[bdNo]*4))-0x48800000)>>2;
 						}
@@ -6729,18 +6733,17 @@ void menuInput(){
 						storedAddress[logcounter]=decodeAddress[bdNo]+(decodeY[bdNo]*4);
 						foobar&=0xFFFF;
 						if(foobar > 0x7FFF){
-						addresstmp=-(mipsNum, "%04X", 4*(0x10000 - foobar))+decodeAddress[bdNo]+(decodeY[bdNo]*4)+4; //store pointer address
+						Addresstmp=-(mipsNum, "%04X", 4*(0x10000 - foobar))+decodeAddress[bdNo]+(decodeY[bdNo]*4)+4; //store pointer address
 						}
 						else{
-						addresstmp=(mipsNum, "%04X", foobar*4)+decodeAddress[bdNo]+(decodeY[bdNo]*4)+4; //store pointer address
+						Addresstmp=(mipsNum, "%04X", foobar*4)+decodeAddress[bdNo]+(decodeY[bdNo]*4)+4; //store pointer address
 						}
-						if((addresstmp >= 0x48800000) && (addresstmp < 0x4A000000)){
-						decodeAddress[bdNo]=addresstmp;
+						if((Addresstmp >= 0x48800000) && (Addresstmp < 0x4A000000)){
+						decodeAddress[bdNo]=Addresstmp;
 						decodeY[bdNo]=0;
 						}
 						*((unsigned int*)(logstart+4*logcounter))=storedAddress[logcounter] & 0xFFFFFFF;
 						logcounter++;
-						decodeAddress[bdNo];
 					}
 					decodeMAX();
 				   }
@@ -7252,16 +7255,15 @@ int mainThread(){
 			if(a_address){
 				vram=(void*)(0xA0000000 | a_address);
 			}
+			#ifdef _LOGO_
 			else{
 				sceDisplayGetMode(&a_pixelFormat, &a_bufferWidth, &a_bufferHeight);
 				pspDebugScreenSetColorMode(a_pixelFormat);
 				pspDebugScreenSetXY(0, 0);
 				pspDebugScreenSetTextColor(color01);
 				pspDebugScreenPuts("Press home twice and then press volume + and - at the same time");
-		
 			}
-
-			
+			#endif
 			sceKernelDelayThread(1500);
 			continue;
 		}
