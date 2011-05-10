@@ -54,7 +54,7 @@ PSP_MODULE_INFO("nitePRmod", 0x3007, 1, 2); //0x3007
 PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 
 //Globals
-unsigned char *NPRVER="nitePRmod 20110508";
+unsigned char *NPRVER="nitePRmod 20110509";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -110,6 +110,10 @@ typedef struct Cheat{
 #define SRMAX 0xE400
 
 #define CPYBUTTON 0x1000 // mkultra cpy button,nitepr 0x1 select
+#define JOKERADRESS 0x3FFC
+#define logstart 0x8802804
+#define jumplog 31
+#define LOCKINTEVAL 7812 //15825
 
 //Globals
 SceCtrlData pad;
@@ -130,12 +134,12 @@ unsigned int triggerKey=PSP_CTRL_NOTE;
 #ifdef _SCREENSHOT_
 unsigned int screenKey=PSP_CTRL_LTRIGGER | PSP_CTRL_SQUARE;
 #endif
-unsigned int cheatHz=15625;
+unsigned int cheatHz=LOCKINTERVAL;
 unsigned char cheatFlash=0;
 unsigned char cheatPause=0;
 unsigned char cheatSearch=0;
 unsigned char extMenu=0;
-unsigned char extSelected[4]={0,0,0,0};
+short extSelected[4]={0,0,0,0};
 char extOpt=0;
 unsigned char extOptArg=0;
 unsigned char dumpNo=0;
@@ -163,25 +167,21 @@ unsigned char searchMode=0;
 unsigned char copyMenu=0; //0=Menu Off, 1=Menu On, Copy selected, 2=Menu On, Paste selected
 unsigned int copyData=0x08800000;
 unsigned int copyData2=0;
-unsigned char screenTime=0;
 unsigned int storedAddress[32];
-unsigned int JOKERADRESS=0x3FFC;
 unsigned char editFormat=0;
 unsigned int addresscode=0;
 unsigned int addresstmp=0;
 unsigned int counteraddress=0;
-unsigned int Addresstmp=0;
 unsigned char logcounter=0;
-unsigned char jumplog=0x20;
 unsigned char countermax=0;
 unsigned char cheatLength=1;
-unsigned int logstart=0x8802800+4;
 unsigned char fileBuffer[1536];
 unsigned int fileBufferSize=0;
 unsigned int fileBufferBackup=0;
 unsigned int fileBufferFileOffset=0;
 unsigned int fileBufferOffset=1024;
 #ifdef _SCREENSHOT_
+unsigned char screenTime=0;
 unsigned int screenNo=0;
 unsigned char screenPath[64]={0};
 #endif
@@ -2366,7 +2366,7 @@ void menuDraw()
           
           //Print out the ASCII
           buffer[3+browseLines]=0;
-          //pspDebugScreenPuts("  ");
+          pspDebugScreenPuts("  ");
           pspDebugScreenPuts(&buffer[3]);
           
          /*cmf
@@ -3094,10 +3094,10 @@ void menuInput()
             extSelected[2]--;
            	switch(extSelected[1])
             {
-              case 0: if((signed)extSelected[2] == -1) { extSelected[2]=0; } break;
-              case 1: if((signed)extSelected[2] == -1) { extSelected[2]=7; extSelected[1]--; } break;
-              case 2: if((signed)extSelected[2] == -1) { extSelected[2]=7; extSelected[1]--; } break;
-              case 3: if((signed)extSelected[2] == -1) { extSelected[2]=9; extSelected[1]--; } break;
+              case 0: if(extSelected[2] == -1) { extSelected[2]=0; } break;
+              case 1: if(extSelected[2] == -1) { extSelected[2]=7; extSelected[1]--; } break;
+              case 2: if(extSelected[2] == -1) { extSelected[2]=7; extSelected[1]--; } break;
+              case 3: if(extSelected[2] == -1) { extSelected[2]=9; extSelected[1]--; } break;
             }
             menuDraw();
             if(cheatButtonAgeX < 12) cheatButtonAgeX++; sceKernelDelayThread(150000-(10000*cheatButtonAgeX));
@@ -3651,9 +3651,9 @@ void menuInput()
               extSelected[2]--;
              	switch(extSelected[1])
               {
-                case 0: if((signed)extSelected[2] == -1) { extSelected[2]=0; } break;
-                case 1: if((signed)extSelected[2] == -1) { extSelected[2]=7; extSelected[1]--; } break;
-                case 2: if((signed)extSelected[2] == -1) { extSelected[2]=9; extSelected[1]--; } break;
+                case 0: if(extSelected[2] == -1) { extSelected[2]=0; } break;
+                case 1: if(extSelected[2] == -1) { extSelected[2]=7; extSelected[1]--; } break;
+                case 2: if(extSelected[2] == -1) { extSelected[2]=9; extSelected[1]--; } break;
               }
               menuDraw();
               if(cheatButtonAgeX < 12) cheatButtonAgeX++; sceKernelDelayThread(150000-(10000*cheatButtonAgeX));
@@ -4326,10 +4326,10 @@ void menuInput()
               extSelected[2]--;
              	switch(extSelected[1])
               {
-                case 0: if((signed)extSelected[2] == -1) { extSelected[2]=0; } break;
-                case 1: if((signed)extSelected[2] == -1) { extSelected[2]=0; extSelected[1]--; } break;
-                case 2: if((signed)extSelected[2] == -1) { extSelected[2]=7; extSelected[1]--; } break;
-                case 3: if((signed)extSelected[2] == -1) { extSelected[2]=9; extSelected[1]--; } break;
+                case 0: if(extSelected[2] == -1) { extSelected[2]=0; } break;
+                case 1: if(extSelected[2] == -1) { extSelected[2]=0; extSelected[1]--; } break;
+                case 2: if(extSelected[2] == -1) { extSelected[2]=7; extSelected[1]--; } break;
+                case 3: if(extSelected[2] == -1) { extSelected[2]=9; extSelected[1]--; } break;
               }
               menuDraw();
               if(cheatButtonAgeX < 12) cheatButtonAgeX++; sceKernelDelayThread(150000-(10000*cheatButtonAgeX));
@@ -4550,7 +4550,7 @@ void menuInput()
             if(pad.Buttons & PSP_CTRL_LEFT)
             {
               extSelected[2]--;
-             	if((signed)extSelected[2] == -1) { extSelected[2]=0; }
+             	if(extSelected[2] == -1) { extSelected[2]=0; }
               menuDraw();
               if(cheatButtonAgeX < 12) cheatButtonAgeX++; sceKernelDelayThread(150000-(10000*cheatButtonAgeX));
             }
@@ -4946,7 +4946,7 @@ void menuInput()
 				}
             if((cheatSelected == 7) && (cheatHz > 0))
             {
-              cheatHz-=15625;
+              cheatHz-=LOCKINTERVAL;
             }
             if((cheatSelected == 3) && (dumpNo > 0))
             {
@@ -4966,7 +4966,7 @@ void menuInput()
 				}
             if(cheatSelected==7)
             {
-            	cheatHz+=15625;
+            	cheatHz+=LOCKINTERVAL;
           	}
             if(cheatSelected==3)
             {
@@ -5436,13 +5436,13 @@ void menuInput()
 						storedAddress[logcounter]=decodeAddress+(decodeY*4);
 						foobar&=0xFFFF;
 						if(foobar > 0x7FFF){
-						Addresstmp=-(mipsNum, "%04X", 4*(0x10000 - foobar))+decodeAddress+(decodeY*4)+4; //store pointer address
+						addresstmp=-(mipsNum, "%04X", 4*(0x10000 - foobar))+decodeAddress+(decodeY*4)+4; //store pointer address
 						}
 						else{
-						Addresstmp=(mipsNum, "%04X", foobar*4)+decodeAddress+(decodeY*4)+4; //store pointer address
+						addresstmp=(mipsNum, "%04X", foobar*4)+decodeAddress+(decodeY*4)+4; //store pointer address
 						}
-						if((Addresstmp >= 0x48800000) && (Addresstmp < 0x49FFFF90)){
-						decodeAddress=Addresstmp;
+						if((addresstmp >= 0x48800000) && (addresstmp < 0x49FFFF90)){
+						decodeAddress=addresstmp;
 						decodeY=0;
 						*((unsigned int*)(logstart+4*logcounter))=storedAddress[logcounter] & 0xFFFFFFC;
 						logcounter++;
