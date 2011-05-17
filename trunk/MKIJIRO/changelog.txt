@@ -21,6 +21,10 @@ certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
 0x8838DBF0 moviezone,pspfat should freeze after search/save...slim user use extraram setting
 
+2011/5/18
+コードのダンプ形式をNPR以外も追加(cwc/ar/pmetan/ar 0xe)
+リセットコードを削除
+
 2011/5/9
 コード実行間隔の増減を半分にした
 _LOGO_なしビルドに変更,DOUBLETAB表示がなくなります

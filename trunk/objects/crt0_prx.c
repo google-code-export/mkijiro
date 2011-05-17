@@ -100,7 +100,7 @@ PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 #endif
 
 //Globals
-unsigned char *MKVER="  MKIJIRO20110509";
+unsigned char *MKVER="  MKIJIRO20110518";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -255,6 +255,7 @@ unsigned char k=0;
 char BIGSMALL=0;
 char FAKEHYOGEN=-1;
 unsigned int setting=0;
+unsigned char codedumpNo=0;
 #ifdef _SWAPBUTTON_
 unsigned short SWAPBUTTON=0x4000;
 unsigned short SWAPBUTTON2=0x2000;
@@ -409,21 +410,57 @@ void decToText(){
 	sprintf(buffer,"ms0:/MKIJIROfnc%d.txt",fnc);
 	int fd=sceIoOpen(buffer, PSP_O_CREAT | PSP_O_WRONLY | PSP_O_APPEND, 0777);
 	if(fd > 0){
+		if(codedumpNo==0){//npr
 		sprintf(buffer, "#FNC %d \n", fnc);
+		}
+		else if(codedumpNo==3){//pme
+		sprintf(buffer, "_CN0 FNC %d \n", fnc);
+		}
+		else{//cwc,ar
+		sprintf(buffer, "_C0 FNC %d \n", fnc);
+		}
+
 		memcpy(SAVETEMP+ramcounter,buffer,strlen(buffer));
 		ramcounter+=strlen(buffer);
-		//sceIoWrite(fd, buffer, strlen(buffer));
+		if(codedumpNo==4){
+		sprintf(buffer, "_M 0xE%07X 0x%08X\n", a_address- 0x40000000 ,a_length);
+		memcpy(SAVETEMP+ramcounter,buffer,strlen(buffer));
+		ramcounter+=strlen(buffer);
+		}
 		
 		unsigned int counter=0; 
 		while(counter < (a_length>>2)){
 			
+		if(codedumpNo==0){//npr
 			sprintf(buffer, "0x%08lX ", (a_address+(counter*4))- 0x48800000);
+		}
+		if(codedumpNo==1){//cwc
+			sprintf(buffer, "_L 0x%08lX ", (a_address+(counter*4))- 0x28800000);
+		}
+		if(codedumpNo==2){//ar
+			sprintf(buffer, "_M 0x%08lX ", (a_address+(counter*4))- 0x40000000);
+		}
+		if(codedumpNo==3){//pme
+			sprintf(buffer, "_NWR 0x80000000 0x%08lX ", (a_address+(counter*4))- 0x48800000);
+		}
+		if(codedumpNo==4){//ar 0xe
+			sprintf(buffer, "_M 0x%08lX ", *((unsigned int*)(a_address+(counter*4))));
+		}
 			memcpy(SAVETEMP+ramcounter,buffer,strlen(buffer));
 			ramcounter+=strlen(buffer);
-			//sceIoWrite(fd, buffer, strlen(buffer));
 			
+		if(codedumpNo==4){//ar 0xe
+			counter++;
+			if(a_length==counter<<2){
+			sprintf(buffer, "0x00000000\n");
+			}
+			else{
 			sprintf(buffer, "0x%08lX\n", *((unsigned int*)(a_address+(counter*4))));
-			//sceIoWrite(fd, buffer, strlen(buffer));
+			}
+		}
+		else{
+			sprintf(buffer, "0x%08lX\n", *((unsigned int*)(a_address+(counter*4))));
+		}
 			memcpy(SAVETEMP+ramcounter,buffer,strlen(buffer));
 			ramcounter+=strlen(buffer);
 			counter++;
@@ -2719,13 +2756,13 @@ void menuDraw(){
 				pspDebugScreenSetTextColor(color02);
 				pspDebugScreenPuts("Cheats:");
 				pspDebugScreenSetTextColor(color01);
-				sprintf(buffer, "%d ", cheatTotal); 
+				sprintf(buffer, "%d ", cheatTotal);
 				pspDebugScreenPuts(buffer);
 
 				//Helper
-				pspDebugScreenSetTextColor(color02); 
+				pspDebugScreenSetTextColor(color02);
 				pspDebugScreenSetXY(0, 30);
-				pspDebugScreenPuts(line); //draw spiffy line
+				pspDebugScreenPuts(line);//draw spiffy line
 				pspDebugScreenSetTextColor(color01);
 				pspDebugScreenSetXY(0, 31); pspDebugScreenPuts(">< = Select Cheat for On/Off mode; START = Rename;");
 				pspDebugScreenSetXY(0, 32); pspDebugScreenPuts("[] = Select Cheat for Always On mode; /\\ = Edit Cheat;");
@@ -2854,7 +2891,7 @@ void menuDraw(){
 					switch(counter){
 						case 0: pspDebugScreenPuts("  Pause game? "); if(cheatPause) { pspDebugScreenPuts("True\n"); } else { pspDebugScreenPuts("False\n"); } break;
 						case 1: sprintf(buffer, "  Add new cheat #%d line(s) long.\n", cheatLength); pspDebugScreenPuts(buffer); break;
-						case 2: sprintf(buffer, "  Reset codes? Slot #%d\n", dumpNo); pspDebugScreenPuts(buffer); break;
+						case 2: sprintf(buffer, "  Dump Codeformat #%d\n", codedumpNo); pspDebugScreenPuts(buffer); break;
 						case 3: sprintf(buffer, "  Dump RAM? Slot #%d\n", dumpNo); pspDebugScreenPuts(buffer); break;
 						case 4: pspDebugScreenPuts("  Dump Kmem\n"); break;
 						case 5: sprintf(buffer, "  Bytes per line in browser? %d\n", browseLines); pspDebugScreenPuts(buffer); break;
@@ -2910,7 +2947,7 @@ void menuDraw(){
 				switch(cheatSelected){
 					case 0: pspDebugScreenPuts("Pauses the game while MKIJIRO's menu is showing"); break;
 					case 1: pspDebugScreenPuts(">< To create new cheat;"); break;
-					case 2: pspDebugScreenPuts("Uses the selected 'RAM dump' to regenerate OFF codes"); break;
+					case 2: pspDebugScreenPuts("0:nitePR,1:CWCheat,2:ACTIONREPLAY,3:PMETAN,4:AR 0xE"); break;
 					case 3: pspDebugScreenPuts("Saves the Game's RAM to MemoryStick"); break;
 					case 4: pspDebugScreenPuts("Dump kernel memory and boot memory"); break;
 					case 5: pspDebugScreenPuts("Alters the number of bytes displayed in the Browser"); break;
@@ -6152,7 +6189,7 @@ void menuInput(){
 				else if(cheatSelected == 0){
 					#ifdef _SCREENSHOT_
 					cheatSelected=14;
-					#else					
+					#else
 					cheatSelected=13;
 					#endif
 				}
@@ -6185,8 +6222,8 @@ void menuInput(){
 				if((cheatSelected == 1) && (cheatLength > 1)){
 					cheatLength-=1;
 				}
-				if((cheatSelected == 2) && (dumpNo > 0)){
-				  dumpNo--;
+				if((cheatSelected == 2) && (codedumpNo > 0)){
+				  codedumpNo--;
 				}
 				if((cheatSelected == 3) && (dumpNo > 0)){
 				  dumpNo--;
@@ -6214,8 +6251,8 @@ void menuInput(){
 				if(cheatSelected==1){
 					cheatLength+=1;
 				}
-				if(cheatSelected==2){
-					dumpNo++;
+				if(cheatSelected==2 && codedumpNo<4){
+					codedumpNo++;
 				}
 				if(cheatSelected==3){
 					dumpNo++;
@@ -6265,69 +6302,7 @@ void menuInput(){
 				  menuDraw();
 				  sceKernelDelayThread(150000);
 				}
-				else if(cheatSelected == 2){
-				  sprintf(buffer, "ms0:/dump%d.ram", dumpNo);
-				  
-				  fd=sceIoOpen(buffer, PSP_O_RDONLY, 0777);
-				  if(fd>0)
-				  {
-					counter=0;
-					  while(counter < cheatTotal)
-					  {	
-						scounter=cheat[counter].block;
-					  cheatDMA=0;
-					  while(scounter < cheat[counter].block + cheat[counter].len)
-					  {
-						if(block[scounter].flags & FLAG_DMA)
-						{
-						  if(block[scounter].hakVal!=0xFFFFFFFF)
-
-						  {
-							sceIoLseek(fd, block[scounter].hakVal, SEEK_SET);
-							sceIoRead(fd, &cheatDMA, sizeof(unsigned int));
-							block[scounter].stdVal=cheatDMA;
-							}
-						  else
-						  {
-							cheatDMA=0;
-						  }
-						}
-						else
-						{
-						  sceIoLseek(fd, (cheatDMA+block[scounter].address)-0x08800000, SEEK_SET);
-						  switch(block[scounter].flags & FLAG_DWORD)
-							  {
-								case FLAG_DWORD:
-							  sceIoRead(fd, &block[scounter].stdVal, sizeof(unsigned int));
-								break;
-							case FLAG_WORD:
-								sceIoRead(fd, &block[scounter].stdVal, sizeof(unsigned short));
-								break;
-							case FLAG_BYTE:
-								sceIoRead(fd, &block[scounter].stdVal, sizeof(unsigned char));
-								break;
-						  }
-						}
-						
-						scounter++;
-					  }
-					  
-					  cheatDisable(counter);
-					  counter++;
-					}
-					sceIoClose(fd);
-					
-					cheatStatus=0;
-				  }
-				  else
-				  {
-					lineClear(33);
-							pspDebugScreenSetTextColor(color01); pspDebugScreenPuts("ERROR: Selected RAM Dump # does not exist!"); 
-					sceKernelDelayThread(3000000);
-				  }
-					
-				  menuDraw();
-				}
+				// delete reset code
 				else if(cheatSelected == 3){
 				  sprintf(buffer, "ms0:/dump%d.ram", dumpNo);
 				  fd=sceIoOpen(buffer, PSP_O_WRONLY | PSP_O_CREAT, 0777);
