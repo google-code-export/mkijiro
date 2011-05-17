@@ -101,9 +101,11 @@ typedef struct Cheat{
 #define FLAG_CONSTANT	(1<<1)  //If 1, cheat is constantly on regardless of music button
 #define FLAG_FRESH    (1<<2)  //Cheat was just recently enabled/disabled
 #ifdef _100_
-#define BLOCK_MAX 100
+#define NAME_MAX 100
+#define BLOCK_MAX 100 //for HEN+PROMETHEUSLOADER SETTING
 #else
-#define BLOCK_MAX 2048
+#define NAME_MAX 512
+#define BLOCK_MAX 1024  //nitepr default both 2048,but i think a lot...
 #endif
 	
 #define RAMTEMP 0x8838DBF0 //moviezone
@@ -119,8 +121,8 @@ typedef struct Cheat{
 SceCtrlData pad;
 unsigned short blockTotal=0;
 unsigned short cheatTotal=0;
-Block block[BLOCK_MAX];  //consume RAM 16*BLOCKMAX!!
-Cheat cheat[BLOCK_MAX];  //consume RAM 38*BLOCKMAX!!
+Block block[BLOCK_MAX];  //consume RAM 16*BLOCKMAX!!!!!!!!!
+Cheat cheat[NAME_MAX];  //consume RAM 38*NAMEMAX!!!!!!!!!!!
 unsigned char buffer[64];
 unsigned char cheatStatus=0;
 unsigned char cheatSaved=0;
@@ -277,7 +279,7 @@ unsigned int char2hex(unsigned char *a_data, unsigned int *a_type)
 
 unsigned int cheatNew(unsigned char a_size, unsigned int a_address, unsigned int a_value, unsigned int a_length, unsigned int mode){
   
-  if((cheatTotal + 1 < BLOCK_MAX) && (blockTotal + 1 < BLOCK_MAX)){
+  if((cheatTotal + 1 < NAME_MAX) && (blockTotal + 1 < BLOCK_MAX)){
     
     cheat[cheatTotal].block=blockTotal;
    	cheat[cheatTotal].flags=0;
@@ -953,7 +955,7 @@ void cheatLoad(){
      	else if(buffer[0]==';'){commentMode=1;if(nameMode){cheatTotal++; nameMode=0;}} //Skip comments till next line
       else if(buffer[0]=='#') //Read in the cheat name
       {
-        if(cheatTotal >= BLOCK_MAX) { break;}
+        if(cheatTotal >= NAME_MAX) { break;}
         cheat[cheatTotal].block=blockTotal;
         cheat[cheatTotal].flags=0;
         cheat[cheatTotal].len=0;
