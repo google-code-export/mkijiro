@@ -100,7 +100,7 @@ PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 #endif
 
 //Globals
-unsigned char *MKVER="  MKIJIRO20110518";
+unsigned char *MKVER="  MKIJIRO20110519";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -152,9 +152,9 @@ typedef struct Cheat{
 #define FLAG_CONSTANT (1<<1) //If 1, cheat is constantly on regardless of music button
 #define FLAG_FRESH (1<<2) //Cheat was just recently enabled/disabled
 #ifdef _100_
-//省メモリ版 FREECHEAT最低設定,HEN+PIL使用時対策
+//省メモリ版 HEN+PIL使用時対策
 #define NAME_MAX 100
-#define BLOCK_MAX 100
+#define BLOCK_MAX 300
 unsigned int searchAddress[100];
 #define searchResultMax 99
 #else
@@ -170,8 +170,8 @@ unsigned int searchAddress[500]; //サーチアドレス表示用
 SceCtrlData pad;
 unsigned short blockTotal=0;
 unsigned short cheatTotal=0;
-Block block[BLOCK_MAX];
-Cheat cheat[NAME_MAX];
+Block block[BLOCK_MAX]; //メモリ消費 16*BLCKMAX
+Cheat cheat[NAME_MAX];  //メモリ消費 38*NAMEMAX
 unsigned char buffer[64];
 unsigned char cheatStatus=0;
 unsigned char cheatSaved=0;
@@ -489,28 +489,6 @@ unsigned int cheatNew(unsigned char a_size, unsigned int a_address, unsigned int
     int i; 
 	for(i=0; i< a_length; i++){
     
-    	/* commented out for now i'll fix this later it's frusterating me today
-		if(mode == 1){
-			block[blockTotal].flags|=FLAG_DMA;
-			block[blockTotal].address&=0x0FFFFFFF;
-			block[blockTotal].address+=0x08800000;
-			mode=0;
-		}
-		if(mode == 2){
-			block[blockTotal].flags|=FLAG_JOKER;
-			block[blockTotal].address&=0x0FFFFFFF;
-			block[blockTotal].address+=0x08800000;
-			block[blockTotal].address+=0xFF000000;
-			mode=0;
-		}
-		else{
-			block[blockTotal].address=a_address;
-			block[blockTotal].address&=0x0FFFFFFF;
-			block[blockTotal].address+=0x08800000;
-			block[blockTotal].flags=0;
-		}
-		*/
-		
 		block[blockTotal].address=a_address;
 		block[blockTotal].address&=0x0FFFFFFF;
 		block[blockTotal].address+=0x08800000;
@@ -712,9 +690,6 @@ unsigned int colorAdd(unsigned char colorDir[]){
 			case 14:
 				searchResultCounterMax=char2hex(hex, &type);
 			break;
-			//case 15:
-			//	setting=char2hex(hex, &type);
-			//break;
 		}
 		
 		counter++;
@@ -1019,165 +994,6 @@ void cheatSave(){
 	char *codehead[]={"#!!","#!","#"};
 	char fileMode=0; //0=Unknown/Initial, 1=Comment, 2=Waiting for \n (ignoring)
 	int fd;
-	//int tempFd;
-
-	//1) Open the original cheat file
-	fd=sceIoOpen(gameDir, PSP_O_RDONLY, 0777);
-	if(fd>0){
-		//Find the file size
-		fileSize=sceIoLseek(fd, 0, SEEK_END);
-		sceIoLseek(fd, 0, SEEK_SET);
-		//Initiate the read buffer
-		fileBufferOffset=1024;
-		fileBufferFileOffset=0;
-		//2) Open up the temporary and get ready to regenerate it
-		//if(tempFd<=0) { sceIoClose(fd); return;}
-		//Add the codes that are already there
-		while(fileBufferFileOffset < fileSize){
-
-		fileBufferRead(&fileChar, 1);
-			if(fileBufferSize == 0) break;
-			//Interpret the byte based on the mode
-			
-			if(fileMode == 0){
-				//Pick a mode
-				switch(fileChar){
-					case ';': fileMode=1;
-					break;
-
-					case '#': fileMode=2;  counter++;
-						//Add a double line skip?
-						//if(counter != 0){
-						//memcpy(SAVETEMP+ramcounter,codehead[3],1);
-						//ramcounter++;
-						//}
-						//Is there an error...?
-						if(counter >= cheatTotal){
-							//sceIoClose(tempFd);
-							sceIoClose(fd);
-							return;
-						}
-
-						//Set up the subCounter
-						scounter=cheat[counter].block;
-
-						//Is it on by default...?
-						if(cheat[counter].flags & FLAG_CONSTANT) {
-						memcpy(SAVETEMP+ramcounter,codehead[0],3);
-						ramcounter+=3;
-						}
-						else if(cheat[counter].flags & FLAG_SELECTED){
-						memcpy(SAVETEMP+ramcounter,codehead[1],2);
-						ramcounter+=2;
-						}
-						else{
-						memcpy(SAVETEMP+ramcounter,codehead[2],1);
-						ramcounter++;
-						}
-						//Write out the name of the cheat
-						memcpy(SAVETEMP+ramcounter,cheat[counter].name,strlen(cheat[counter].name));
-						ramcounter+=strlen(cheat[counter].name);
-						*(unsigned char *)(SAVETEMP+ramcounter)=0xA;ramcounter++;
-					break;
-					
-					case '0':
-						if((fileBufferFileOffset) < fileSize){ 
-							fileBufferPeek(fileMisc[0], 0);
-							if(fileMisc[0] == 'x'){ //Is there an error...?
-								if(counter == (unsigned int)-1){
-									//sceIoClose(tempFd);
-									sceIoClose(fd);
-									return;
-								}
-								if(scounter >= (cheat[counter].block+cheat[counter].len)){
-									//sceIoClose(tempFd);
-									sceIoClose(fd);
-									return;
-								}
-								//Write out the address
-								if(block[scounter].flags & FLAG_DMA){
-								sprintf(buffer, "0x%08lX ", (block[scounter].address));
-								}
-								else if(block[scounter].flags & FLAG_CWC){
-								sprintf(buffer, "0x%08lX ", (block[scounter].address - 0x08800000 + 0x20000000));
-								}
-								else if(block[scounter].flags & FLAG_JOKER){
-								sprintf(buffer, "0x%08lX ", (block[scounter].address));
-								}
-								else{
-								sprintf(buffer, "0x%08lX ", (block[scounter].address - 0x08800000));
-								}
-								memcpy(SAVETEMP+ramcounter,buffer,11);
-								ramcounter+=11;
-								//Write out the value
-								if(block[scounter].flags & FLAG_FREEZE){
-
-									switch(block[scounter].flags & FLAG_DWORD){
-										case FLAG_DWORD:
-										sprintf(buffer, "0x________\n");
-										memcpy(SAVETEMP+ramcounter,buffer,11);
-										ramcounter+=11;
-										break;
-
-										case FLAG_WORD:
-										sprintf(buffer, "0x____\n");
-										memcpy(SAVETEMP+ramcounter,buffer,7);
-										ramcounter+=7;
-										break;
-
-										case FLAG_BYTE:
-										sprintf(buffer, "0x__\n");
-										memcpy(SAVETEMP+ramcounter,buffer,5);
-										ramcounter+=5;
-										break;										
-									}
-
-								}
-								else{
-									switch(block[scounter].flags & FLAG_DWORD){
-										case FLAG_DWORD:
-										sprintf(buffer, "0x%08lX\n", block[scounter].hakVal);
-										memcpy(SAVETEMP+ramcounter,buffer,11);
-										ramcounter+=11;
-										break;
-
-										case FLAG_WORD:
-										sprintf(buffer, "0x%04hX\n", (unsigned short)block[scounter].hakVal);
-										memcpy(SAVETEMP+ramcounter,buffer,7);
-										ramcounter+=7;
-										break;
-
-										case FLAG_BYTE:
-										sprintf(buffer, "0x%02hX\n", (unsigned char)block[scounter].hakVal);
-										memcpy(SAVETEMP+ramcounter,buffer,5);
-										ramcounter+=5;
-										break;
-									}
-								}
-								//Skip the rest
-								fileMode=2;
-								scounter++;
-							}
-						}
-					break;
-				}
-			}
-			else if(fileMode == 1){
-				//Just copy it out straight to the file
-				if((fileChar == '\r') || (fileChar == '\n')){
-					fileMode=0;
-				}
-			}
-			else if(fileMode == 2){
-				//Just wait for an '\r' or '\n'
-				if((fileChar == '\r') || (fileChar == '\n')){
-					fileMode=0;
-				}
-			}
-		}
-	}
-	//Close the file
-	sceIoClose(fd);
 
 	//Open the file for appending
 	fd=sceIoOpen(gameDir, PSP_O_CREAT | PSP_O_WRONLY | PSP_O_APPEND, 0777);
@@ -1187,15 +1003,15 @@ void cheatSave(){
 		//if(counter != 0) //memcpy(SAVETEMP+ramcounter,codehead[3],1);ramcounter++;
 		while(counter < cheatTotal){
 			//Write the cheat name
-			if(cheat[counter].flags & FLAG_CONSTANT){
+			if(cheat[counter].flags & FLAG_CONSTANT){//#!!
 			memcpy(SAVETEMP+ramcounter,codehead[0],3);
 			ramcounter+=3;
 			}
-			else if(cheat[counter].flags & FLAG_SELECTED){
+			else if(cheat[counter].flags & FLAG_SELECTED){//#!
 			memcpy(SAVETEMP+ramcounter,codehead[1],2);
 			ramcounter+=2;
 			}
-			else{
+			else{//#
 			memcpy(SAVETEMP+ramcounter,codehead[2],1);
 			ramcounter++;
 			}
