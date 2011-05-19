@@ -212,7 +212,6 @@ unsigned char searchMode=0;
 unsigned char copyMenu=0; //0=Menu Off, 1=Menu On, Copy selected, 2=Menu On, Paste selected
 unsigned int copyData=0x08800000;
 unsigned int copyData2=0x00000000;
-unsigned char screenTime=0;
 unsigned char cheatRefresh=0;
 unsigned char flipme=1;
 unsigned char decodeOptions=0;
@@ -227,7 +226,6 @@ unsigned int searchStop=0x49FFFFFC;
 unsigned int copyStartFlag=0x48800000;
 unsigned int copyEndFlag=0x48800000;
 unsigned char copyToggle=0;
-unsigned char screenPath[64]={0};
 unsigned int clipSelected=0;
 unsigned char logcounter=0;
 unsigned int backaddress[4];
@@ -270,9 +268,13 @@ unsigned char usbmod=0;
 unsigned char usbonbitch=0;
 #endif
 #ifdef _SCREENSHOT_
+	#include "headers/screenshot.h"
+unsigned int screenKey=0x00100000;//screenkey
+unsigned char screenPath[64]={0};
+unsigned char screenTime=0;
 unsigned char screenshot_mode=0;
-unsigned int screenNo=0;
-unsigned char *screenshotstring[]={"NONE", "TOGGLE"};
+unsigned short screenNo=0;
+unsigned char *screenshotstring[]={"NONE", "GAME","VRAM"};
 #endif
 unsigned char copyMenuX=25;
 unsigned char copyMenuY=0;
@@ -280,7 +282,6 @@ unsigned char copyMenuY=0;
 //gui shit
 unsigned int menuKey=PSP_CTRL_VOLUP | PSP_CTRL_VOLDOWN;
 unsigned int triggerKey=PSP_CTRL_NOTE;
-unsigned int screenKey=0xFFFFFFFF;
 #ifdef _UMDMODE_
 unsigned int color01=0xFFFFFF00; //bright Red
 unsigned int color01_to=0x00030300; //fade amount
@@ -1233,13 +1234,13 @@ void buttonCallback(int curr, int last, void *arg){
 	tabSelected=0;cheatSelected=0;}
   }
   #ifdef _SCREENSHOT_
-  else if(((curr & screenKey) == screenKey) && (!menuDrawn) && (screenshot_mode==1)){
+  else if(((curr & screenKey) == screenKey) && (!menuDrawn)   && (screenshot_mode==1)){
   screenTime=1;
-  #else
-  else if(((curr & screenKey) == screenKey) && (!menuDrawn)){
-  screenTime=1;
-  #endif
   }
+  else if(((curr & screenKey) == screenKey) && (menuDrawn==1) && (screenshot_mode==2)){
+  screenTime=2;
+  }
+  #endif
   else if(((curr & triggerKey) == triggerKey) && (!menuDrawn)){
 	//Backup all the cheat "blocks"
 	if(!cheatSaved){//unsaved cheat
@@ -1359,21 +1360,6 @@ static void gameResume(SceUID thid){
 	}
 }
 
-/*
-#include "headers/logo.h"
-//Telazorn functions
-void telazornDraw(unsigned char buffer[], int height, int width){
-  //110 x 31
-  unsigned int counterY=0;
-  unsigned int offset=70; //offset
-  while(counterY < height) //height
-  {
-  	memcpy(&vram[(2*512*(counterY+4))+(360*2)], &buffer[offset], width*2);
-    offset+=width*2; //16bpp <---double check this
-    counterY++;
-  }
-}
-*/
 
 #include "headers/mips.h"
 void menuDraw(){
@@ -2784,7 +2770,7 @@ void menuDraw(){
 					case 13: pspDebugScreenPuts("Corrupt PSID is not compiled in this version"); break;
 					#endif
 						#ifdef _SCREENSHOT_
-					case 14: pspDebugScreenPuts("Toggle Screenshot"); break;
+					case 14: pspDebugScreenPuts("Toggle Screenshot 0:NO,1:GAME,2:VRAM"); break;
 						#endif
 
 				}
@@ -3063,7 +3049,6 @@ void menuDraw(){
 				pspDebugScreenPuts(buffer);
 				pspDebugScreenSetXY(10, 21);sprintf(buffer,"SET 0x%08X,PAUSE %02X,BLINE %D,DFOMAT 0x%08X\n",setting,cheatPause,browseLines,decodeFormat);
 				pspDebugScreenPuts(buffer);*/
-				//telazornDraw(logo, 40, 100);
 			break;
 		}
 	
@@ -3092,18 +3077,23 @@ void menuInput(){
 		sceCtrlPeekBufferPositive(&pad, 1);
 
 		//Has the HOME button screwed up the VRAM blocks?
-		unsigned int a_address=0;
+		/*unsigned int a_address=0;
 		unsigned int a_bufferWidth=0;
 		unsigned int a_pixelFormat=0;
 		unsigned int a_sync;
 		
 		sceDisplayGetFrameBufferInternal(0, &a_address, &a_bufferWidth, &a_pixelFormat, &a_sync);
+		*/
 		
-		if(a_address == 0){
+		if(vram==NULL){//(a_address == 0){
 		  //Stop nitePR
 		  menuDrawn=0;
 		  return;
 		}
+
+        #ifdef _SCREENSHOT_
+		takescreenshot();
+		#endif
 
 		if(copyMenu){ //copy menu
 		   remenu();
@@ -6081,7 +6071,7 @@ void menuInput(){
 				}
 				#ifdef _SCREENSHOT_
 				if(cheatSelected==14){
-					if(screenshot_mode  < 1){
+					if(screenshot_mode  < 2){
 					screenshot_mode++;}
 				}
 				#endif
@@ -6824,9 +6814,6 @@ static const unsigned char patchA[]={
 }; 
 #endif
 
-#ifdef _SCREENSHOT_
-	#include "headers/screenshot.h"
-#endif
 
 int mainThread(){
 	int fd;
@@ -7046,7 +7033,7 @@ int mainThread(){
 			if(a_address){
 				vram=(void*)(0xA0000000 | a_address);
 			}
-			#ifdef _LOGO_
+			#ifdef _DOUBLETAP_
 			else{
 				sceDisplayGetMode(&a_pixelFormat, &a_bufferWidth, &a_bufferHeight);
 				pspDebugScreenSetColorMode(a_pixelFormat);
@@ -7095,8 +7082,20 @@ int mainThread(){
 		
 		//Handle screenshot
 		#ifdef _SCREENSHOT_
+		takescreenshot();
+		#endif
+
+		//Wait a certain amount of seconds before reapplying cheats again
+		sceKernelDelayThread(!cheatHz ? 500000: cheatHz);
+	
+	}
+	return 0;
+
+}
+
+#ifdef _SCREENSHOT_
+void takescreenshot(){
 		if((screenTime) && (screenPath[0])){
-		  screenTime=0;
 		  void *block_addr;
 		  void *frame_addr;
 		  int frame_width;
@@ -7106,7 +7105,7 @@ int mainThread(){
 		  
 		  while(1){
 			sprintf(buffer, screenPath, screenNo);
-			fd=sceIoOpen(buffer, PSP_O_RDONLY, 0777);
+			int fd=sceIoOpen(buffer, PSP_O_RDONLY, 0777);
 			if(fd > 0){
 			  sceIoClose(fd);
 				screenNo++;
@@ -7116,7 +7115,9 @@ int mainThread(){
 			}
 		  }
 		  
-		  if((sceDisplayGetFrameBufferInternal(2, &frame_addr, &frame_width, &pixel_format, &sync) < 0) || (frame_addr == NULL)){
+		  if(screenTime==1 &&((sceDisplayGetFrameBufferInternal(2, &frame_addr, &frame_width, &pixel_format, &sync) < 0) || (frame_addr == NULL))){
+		  }
+		  else if(screenTime==2 && vram==NULL){
 		  }
 		  else{
 			p = (u32) frame_addr;
@@ -7127,23 +7128,19 @@ int mainThread(){
 			else{
 				p |= 0x40000000;
 			}
-
+			
+			if(screenshot_mode==2){p=vram;pixel_format=PSP_DISPLAY_PIXEL_FORMAT_565;}
+			
 			gamePause(thid);
 			bitmapWrite((void *) p, NULL, pixel_format, buffer);
 			gameResume(thid);
 			
 			screenNo++;
 		  }
+		  screenTime=0;
 		}
-		#endif
-
-		//Wait a certain amount of seconds before reapplying cheats again
-		sceKernelDelayThread(!cheatHz ? 500000: cheatHz);
-	
-	}
-	return 0;
-
 }
+#endif
 
 int _start(SceSize args, void *argp){
   hbpath = sceKernelInitFileName();

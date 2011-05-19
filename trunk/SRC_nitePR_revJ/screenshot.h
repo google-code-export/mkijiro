@@ -163,7 +163,7 @@ int bitmapWrite(void *frame_addr, void *a_ignored, int format, const char *file)
   screenshotFd = sceIoOpen(file, PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
   if(screenshotFd < 0)
   {
-    printf("Could not open file '%s' for writing\n", file);
+    //printf("Could not open file '%s' for writing\n", file);
     return -1;
   }
 

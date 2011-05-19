@@ -134,9 +134,6 @@ unsigned char menuDrawn=0;
 void *vram;
 unsigned int menuKey=PSP_CTRL_VOLUP | PSP_CTRL_VOLDOWN;
 unsigned int triggerKey=PSP_CTRL_NOTE;
-#ifdef _SCREENSHOT_
-unsigned int screenKey=PSP_CTRL_LTRIGGER | PSP_CTRL_SQUARE;
-#endif
 unsigned int cheatHz=LOCKINTEVAL;
 unsigned char cheatFlash=0;
 unsigned char cheatPause=0;
@@ -184,9 +181,13 @@ unsigned int fileBufferBackup=0;
 unsigned int fileBufferFileOffset=0;
 unsigned int fileBufferOffset=1024;
 #ifdef _SCREENSHOT_
-unsigned char screenTime=0;
-unsigned int screenNo=0;
+	#include "screenshot.h"
+unsigned int screenKey=0x00100000;//screenkey
 unsigned char screenPath[64]={0};
+unsigned char screenTime=0;
+unsigned char screenshot_mode=0;
+unsigned short screenNo=0;
+unsigned char *screenshotstring[]={"NONE", "GAME","VRAM"};
 #endif
 unsigned char HBFLAG=0;
 unsigned char k=0;
@@ -776,15 +777,14 @@ void buttonCallback(int curr, int last, void *arg)
     if(cheatSelected >= cheatTotal) cheatSelected=0;
     tabSelected=0;
   }
-  
-#ifdef _SCREENSHOT_
- else if(curr & PSP_CTRL_HOME){
-   	menuDrawn=0;}
-  else if(((curr & screenKey) == screenKey) && (!menuDrawn))
-	{
-    screenTime=1;
+  #ifdef _SCREENSHOT_
+  else if(((curr & screenKey) == screenKey) && (!menuDrawn)   && (screenshot_mode==1)){
+  screenTime=1;
   }
-#endif
+  else if(((curr & screenKey) == screenKey) && (menuDrawn==1) && (screenshot_mode==2)){
+  screenTime=2;
+  }
+  #endif
   else if(((curr & triggerKey) == triggerKey) && (!menuDrawn))
   {
     //Backup all the cheat "blocks"
@@ -958,21 +958,6 @@ void menuDraw()
   pspDebugScreenSetTextColor(0xFFFFFFFF);
   pspDebugScreenPuts("\nNPR_SRC Sanik,MK_SRC demonchild,PRXTOOL TyRaNiD,MODDED (¡A¡)\n");
   pspDebugScreenSetTextColor(0xFF808080);pspDebugScreenPuts(line);
-  
-  //Draw the logo!
-  //telazornDraw();
-  
-  //User friendly note
-  /*if(lolInit)
-  {
-    pspDebugScreenSetTextColor(0xFFFFFFFF);pspDebugScreenPuts("[Initiation]");
-    pspDebugScreenSetTextColor(0xFF808080);pspDebugScreenPuts("\n--------------------------------------------------------------------");
-    pspDebugScreenSetTextColor(0xFF0000FF);pspDebugScreenPuts("Please tell nitePR when to generate OFF codes by pressing\nthe MUSICAL NOTE button while inside the game at least once\nand NOT when the cheat menu is showing!!!\n\n");
-    pspDebugScreenSetTextColor(0xFF00FF00);pspDebugScreenPuts("HINTs:\n - To take a screenshot, press DOWN + SQUARE\n\n - Use nitePRed.exe (it comes in the same zip as nitePR.prx) to\n   change the button assignments (such as the screenshot key combo)\n\n - Some cheats need the PRX->Cheat Hz option to be set to 15/1000\n   This is for cheats that overwrite a changing value\n\n - One can use CWCheat2NitePR.htm to convert CWCheat codes to\n   nitePR format without any issues. Look in the Doc folder\n   of the nitePR.zip file for it.\n\n");
-    pspDebugScreenSetTextColor(0xFFFFFFFF);pspDebugScreenPuts("                           [PRESS START]\n\n");
-    return;
-  }*/
-  //Extended/sub menus?
   
   if(copyMenu)
   {
@@ -1996,7 +1981,7 @@ void menuDraw()
         
       case 2: //DRAW PRX
 	  		counter=0;
-        while(counter < 10)
+        while(counter < 11)
         {
           if(cheatSelected == counter)
           {
@@ -2020,6 +2005,11 @@ void menuDraw()
             case 8: pspDebugScreenPuts("  Reload cheats?\n"); break; 
             case 7: sprintf(buffer, "  Cheat Hz? %d/1000 seconds\n", (cheatHz/1000)); pspDebugScreenPuts(buffer); break;
             case 9: pspDebugScreenPuts("  Save cheats?\n"); break;
+			#ifdef _SCREENSHOT_
+			case 10:
+					pspDebugScreenPuts("  SCREENSHOT_MODE:");	
+					pspDebugScreenPuts(screenshotstring[screenshot_mode]); break;
+			#endif
           }
           counter++;
         }
@@ -2039,7 +2029,10 @@ void menuDraw()
           case 6: pspDebugScreenPuts("If enabled, REAL PSP hardware addresses will be used in Decoder"); break;
           case 7: pspDebugScreenPuts("nitePR's cheat lock interval"); break;
           case 8: pspDebugScreenPuts("Reload your cheats"); break;
-	  case 9: pspDebugScreenPuts("Save your cheats"); break;
+	  	case 9: pspDebugScreenPuts("Save your cheats"); break;
+		#ifdef _SCREENSHOT_
+		case 10: pspDebugScreenPuts("Toggle Screenshot 0:NO,1:GAME,2:VRAM"); break;
+		#endif
         }
         lineClear(33);
         if((cheatSelected != 7) && (cheatSelected != 3) && (cheatSelected != 2))
@@ -2322,21 +2315,6 @@ void menuDraw()
   }
   
   
-  //Take a picture!!!
-  /*if(pad.Buttons & PSP_CTRL_START)
-  {
-    sprintf(buffer, "ms0:/vram%d.raw", dumpNo);
-              
-              int fd;
-              fd=sceIoOpen(buffer, PSP_O_WRONLY | PSP_O_CREAT, 0777);
-              if(fd>0)
-              {
-  	  					sceIoWrite(fd, vram, 512*272*2);
-  	  					sceIoClose(fd);
-              }
-              
-    dumpNo++;
-  }*/
 }
 
 void menuInput()
@@ -2358,21 +2336,26 @@ void menuInput()
     padButtons=pad.Buttons;
     sceCtrlPeekBufferPositive(&pad, 1);
 
-		//Has the HOME button screwed up the VRAM blocks?
-    unsigned int a_address=0;
+	//Has the HOME button screwed up the VRAM blocks?
+    /*unsigned int a_address=0;
     unsigned int a_bufferWidth=0;
     unsigned int a_pixelFormat=0;
     unsigned int a_sync;
     
    	sceDisplayGetFrameBufferInternal(0, &a_address, &a_bufferWidth, &a_pixelFormat, &a_sync);
+    */
     
-    if(a_address == 0)
+    if(vram==NULL)//if(a_address == 0)
     {
       //Stop nitePR
       menuDrawn=0;
       return;
     }
 
+        #ifdef _SCREENSHOT_
+		takescreenshot();
+		#endif
+			
 		//The 1st priority menu
 		if(copyMenu)
 		{
@@ -4671,21 +4654,32 @@ void menuInput()
             }
             else if(cheatSelected == 0)
             {
-            	cheatSelected=9;
+					#ifdef _SCREENSHOT_
+					cheatSelected=10;
+					#else
+					cheatSelected=9;
+					#endif
             }
             menuDraw();
             if(cheatButtonAgeY < 12) cheatButtonAgeY++; sceKernelDelayThread(150000-(10000*cheatButtonAgeY));
           }
           else if(pad.Buttons & PSP_CTRL_DOWN)
-          {
-            if(cheatSelected < 9)
-            {
-             	cheatSelected++;
-            }
-            else if(cheatSelected == 9)
-            {
-             	cheatSelected=0;
-            }
+          {	
+          	  #ifdef _SCREENSHOT_
+				if(cheatSelected < 10){
+					cheatSelected++;
+				}
+				else if(cheatSelected == 10){
+					cheatSelected=0;
+				}
+					#else					
+				if(cheatSelected < 9){
+					cheatSelected++;
+				}
+				else if(cheatSelected == 9){
+					cheatSelected=0;
+				}
+					#endif
             menuDraw();
             if(cheatButtonAgeY < 12) cheatButtonAgeY++; sceKernelDelayThread(150000-(10000*cheatButtonAgeY));
           }
@@ -4710,6 +4704,12 @@ void menuInput()
             {
               dumpNo--;
             }
+				#ifdef _SCREENSHOT_
+				if(cheatSelected==10){
+					if(screenshot_mode > 0){
+					screenshot_mode--;}
+				}
+				#endif
             menuDraw();
             if(cheatButtonAgeX < 12) cheatButtonAgeX++; sceKernelDelayThread(150000-(10000*cheatButtonAgeX));
           }
@@ -4730,6 +4730,12 @@ void menuInput()
             {
             	dumpNo++;
           	}
+				#ifdef _SCREENSHOT_
+				if(cheatSelected==10){
+					if(screenshot_mode < 2){
+					screenshot_mode++;}
+				}
+				#endif
             menuDraw();
             if(cheatButtonAgeX < 12) cheatButtonAgeX++; sceKernelDelayThread(150000-(10000*cheatButtonAgeX));
           }
@@ -5402,6 +5408,22 @@ void menuInput()
           break;
           
           case 5:
+          	  
+  //Take a picture!!!
+  /*if(pad.Buttons & 0x9)
+  {
+    sprintf(buffer, "ms0:/vram%d.raw", dumpNo);
+              
+              int fd;
+              fd=sceIoOpen(buffer, PSP_O_WRONLY | PSP_O_CREAT, 0777);
+              if(fd>0)
+              {
+  	  					sceIoWrite(fd, vram, 512*272*2);
+              }
+  	  					sceIoClose(fd);
+              
+    dumpNo++;
+  }*/
           break;
       }
     }
@@ -5439,7 +5461,6 @@ static const unsigned char patchA[]={0x21, 0x88, 0x02, 0x3c, //lui v0, $8822
   //{ { 0, NULL }, "sceNetInet_Library", "sceNetInet", 0xc91142e4, NULL},
 };*/
 
-//#include "screenshot.h"
 int mainThread()
 {
   signed int fd;
@@ -5698,62 +5719,66 @@ int mainThread()
       if(cheatFlash > 0) cheatFlash--;
     }
     
-#ifdef _SCREENSHOT_
-    //Handle screenshot
-  if((screenTime) && (screenPath[0]))
-    {
-      screenTime=0;
-      void *block_addr;
-      void *frame_addr;
-      int frame_width;
-      int pixel_format;
-      int sync = 1;
-      u32 p;
-      
-      while(1)
-      {
-        sprintf(buffer, screenPath, screenNo);
-        fd=sceIoOpen(buffer, PSP_O_RDONLY, 0777);
-        if(fd > 0)
-        {
-          sceIoClose(fd);
-        	screenNo++;
-      	}
-        else
-        {
-          break;
-        }
-      }
-      
-      if((sceDisplayGetFrameBufferInternal(2, &frame_addr, &frame_width, &pixel_format, &sync) < 0) || (frame_addr == NULL))
-      {
-      }
-      else
-      {
-        p = (u32) frame_addr;
-        if(p & 0x80000000)
-        {
-        	p |= 0xA0000000;
-        }
-        else
-        {
-        	p |= 0x40000000;
-        }
-      
-        gamePause(thid);
-      	bitmapWrite((void *) p, NULL, pixel_format, buffer);
-        gameResume(thid);
-        
-        screenNo++;
-      }
-    }
-#endif
+		//Handle screenshot
+	#ifdef _SCREENSHOT_
+	takescreenshot();
+	#endif
     
     //Wait a certain amount of seconds before reapplying cheats again
     sceKernelDelayThread(!cheatHz ? 500000: cheatHz);
   }
   return 0;
 }
+
+
+#ifdef _SCREENSHOT_
+void takescreenshot(){
+		if((screenTime) && (screenPath[0])){
+		  void *block_addr;
+		  void *frame_addr;
+		  int frame_width;
+		  int pixel_format;
+		  int sync = 1;
+		  u32 p;
+		  
+		  while(1){
+			sprintf(buffer, screenPath, screenNo);
+			int fd=sceIoOpen(buffer, PSP_O_RDONLY, 0777);
+			if(fd > 0){
+			  sceIoClose(fd);
+				screenNo++;
+			}
+			else{
+			  break;
+			}
+		  }
+		  
+		  if(screenTime==1 &&((sceDisplayGetFrameBufferInternal(2, &frame_addr, &frame_width, &pixel_format, &sync) < 0) || (frame_addr == NULL))){
+		  }
+		  else if(screenTime==2 && vram==NULL){
+		  }
+		  else{
+			p = (u32) frame_addr;
+
+			if(p & 0x80000000){
+				p |= 0xA0000000;
+			}
+			else{
+				p |= 0x40000000;
+			}
+			
+			if(screenshot_mode==2){p=vram;pixel_format=PSP_DISPLAY_PIXEL_FORMAT_565;}
+			
+			gamePause(thid);
+			bitmapWrite((void *) p, NULL, pixel_format, buffer);
+			gameResume(thid);
+			
+			screenNo++;
+		  }
+		  screenTime=0;
+		}
+}
+#endif
 
 int _start(SceSize args, void *argp)
 {
