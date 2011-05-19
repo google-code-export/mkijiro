@@ -1,6 +1,6 @@
 0x00300000 //mk menu key MKDEFAULT
 0x00800000 //cheat_toggle
-0x00008040 //screenshot
+0xFFFFFFFF //screenshot
 0xFF0000FF //bright Red
 0x00000006 //fade amount
 0xFFCCCCCC //grey
