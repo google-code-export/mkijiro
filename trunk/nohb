@@ -16,7 +16,7 @@ INCDIR =
 # CFLAGS = -O2 -G0 -w -msingle-float -g -D_POPSMODE_
 
 # umd build flags
-CFLAGS = -O2 -G0 -w -msingle-float -g -D_UMDMODE_ -D_JOKER_ -D_PSID_ -D_FONT_misaki_hira -D_NOHB_
+CFLAGS = -O2 -G0 -w -msingle-float -g -D_UMDMODE_ -D_JOKER_ -D_PSID_ -D_FONT_misaki_hira -D_NOHB_ -D_DOUBLETAP_
 #-D_CWCHASH_
 #-D_HBIJIRO_
 #-D_FONT_misaki_hira

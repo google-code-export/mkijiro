@@ -4912,7 +4912,10 @@ void menuInput()
             else if(cheatSelected == 8)
             {
 		cheatRefresh=1;
+			  #ifdef _NOHB_
+			  #else
 			  GETID();
+			  #endif
               cheatLoad();
               menuDraw();
             	sceKernelDelayThread(150000); //Delay twice
@@ -5674,16 +5677,19 @@ int mainThread()
       {
         vram=(void*)(0xA0000000 | a_address);
       }
-      #ifdef _DOUBLETAP_
-      else
-      {
-        sceDisplayGetMode(&a_pixelFormat, &a_bufferWidth, &a_bufferWidth);
-        pspDebugScreenSetColorMode(a_pixelFormat);
-  		pspDebugScreenSetXY(0, 0);
-  		pspDebugScreenSetTextColor(0xFFFFFFFF);
-  		pspDebugScreenPuts("nitePR: Double tap the home button to initate nitePR\nWhen initiated: Vol+&- = cheat menu; Music Button = turn on/off cheats");
-      }
-      #endif
+	#ifdef _DOUBLETAP_
+	else{
+		//cefive srcéQçl
+		unsigned int a_pixelFormat2=0;
+		//sceDisplayGetMode(&a_pixelFormat, &a_bufferWidth, &a_bufferHeight);
+		sceDisplayGetFrameBuf(&a_address, &a_bufferWidth, &a_pixelFormat2, &a_sync);
+		pspDebugScreenSetColorMode(a_pixelFormat2);
+		pspDebugScreenSetXY(0, 0);
+	    pspDebugScreenSetTextColor(0x00F0C060);
+		pspDebugScreenPuts("Press home twice and then press volume + and - at the same time");
+	    sceDisplayWaitVblank();
+	}
+	#endif
       
       sceKernelDelayThread(1500);
       continue;
@@ -5825,6 +5831,9 @@ void dump_memregion(const char* file, void *addr, int len){
 		sceIoClose(fd);
 }
 
+
+#ifdef _NOHB_
+#else
 void GETID(){
 	//GAMEID
 		int fd=sceIoOpen("disc0:/UMD_DATA.BIN", PSP_O_RDONLY, 0777);
@@ -5972,3 +5981,4 @@ else{
 	memcpy(&gameDir[32], buffer, 5);
 	}
 }
+#endif

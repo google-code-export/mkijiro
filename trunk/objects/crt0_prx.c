@@ -652,9 +652,11 @@ unsigned int colorAdd(unsigned char colorDir[]){
 			case 1:
 			triggerKey=char2hex(hex, &type);
 			break;
+			#ifdef _SCREENSHOT_
 			case 2:
 			screenKey=char2hex(hex, &type);
 			break;
+			#endif
 			case 3:
 				color01=char2hex(hex, &type);
 			break;
@@ -6984,7 +6986,6 @@ int mainThread(){
 	#endif
 	
 	//Register the button callbacks
-	//sceCtrlRegisterButtonCallback(3, triggerKey | menuKey | screenKey, buttonCallback, NULL);
 	sceCtrlRegisterButtonCallback(3, 0xFFFFFFFF, buttonCallback, NULL);
 
 	#ifdef _POPS_
@@ -7035,11 +7036,15 @@ int mainThread(){
 			}
 			#ifdef _DOUBLETAP_
 			else{
-				sceDisplayGetMode(&a_pixelFormat, &a_bufferWidth, &a_bufferHeight);
-				pspDebugScreenSetColorMode(a_pixelFormat);
+				//cefive srcéQçl
+			unsigned int a_pixelFormat2=0;
+				//sceDisplayGetMode(&a_pixelFormat, &a_bufferWidth, &a_bufferHeight);
+				sceDisplayGetFrameBuf(&a_address, &a_bufferWidth, &a_pixelFormat2, &a_sync);
+				pspDebugScreenSetColorMode(a_pixelFormat2);
 				pspDebugScreenSetXY(0, 0);
-				pspDebugScreenSetTextColor(color01);
+			    pspDebugScreenSetTextColor(0x00F0C060);
 				pspDebugScreenPuts("Press home twice and then press volume + and - at the same time");
+			    sceDisplayWaitVblank();
 			}
 			#endif
 			sceKernelDelayThread(1500);
@@ -7158,7 +7163,9 @@ int _start(SceSize args, void *argp){
   }
   memcpy(&triggerKey, cfg+11, 4);
   memcpy(&menuKey, cfg+15, 4);
+	#ifdef _SCREENSHOT_
   memcpy(&screenKey, cfg+20, 4);
+	#endif
   #endif
   
   //Create thread

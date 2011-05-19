@@ -10,7 +10,7 @@ USE_KERNEL_LIBS = 1
 USE_KERNEL_LIBC = 1
 
 INCDIR = 
-CFLAGS = -O2 -G0 -w -msingle-float -g -D_FONT_misaki_hira -D_NOHB_
+CFLAGS = -O2 -G0 -w -msingle-float -g -D_FONT_misaki_hira -D_NOHB_ -D_DOUBLETAP_
 #-D_FONT_misaki
 #-D_DOUBLETAP_
 CXXFLAGS = $(CFLAGS) -fno-exceptions -fno-rtti
