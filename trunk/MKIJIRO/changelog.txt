@@ -22,6 +22,12 @@ certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
 0x8838DBF0 moviezone,pspfat should freeze after search/save...slim user use extraram setting
 
+2011/5/20
+マージ機能があるのみやつだけ追加
+ダンプコードの改行をCRLFに変更
+cwc形式ダンプの際拡張子をcmfに変更
+pmeは追加フォルダに変更
+
 2011/5/19
 MKメニュー上ですくりーんしょっとを取れるように変更,VRAMもーど選択
 exit関数誤爆でMGSでメニューが出づらくなっていたので修正

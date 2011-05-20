@@ -409,22 +409,25 @@ void decToText(){
 	unsigned int a_length=copyEndFlag - copyStartFlag;
 	
 	sprintf(buffer,"ms0:/MKIJIROfnc%d.txt",fnc);
-	int fd=sceIoOpen(buffer, PSP_O_CREAT | PSP_O_WRONLY | PSP_O_APPEND, 0777);
+	if(codedumpNo==1) {memcpy(&buffer[17],"cmf",3);}
+	if(codedumpNo==3) {sprintf(buffer,"ms0:/seplugins/PMEtan/CODE/cwc_conv/%s.txt",gameId);}
+
+	int fd=sceIoOpen(buffer, PSP_O_CREAT | PSP_O_WRONLY, 0777);
 	if(fd > 0){
 		if(codedumpNo==0){//npr
-		sprintf(buffer, "#FNC %d \n", fnc);
+		sprintf(buffer, "#FNC %d\r\n", fnc);
 		}
 		else if(codedumpNo==3){//pme
-		sprintf(buffer, "_CN0 FNC %d \n", fnc);
+		sprintf(buffer, "_CN0 FNC %d\r\n", fnc);
 		}
 		else{//cwc,ar
-		sprintf(buffer, "_C0 FNC %d \n", fnc);
+		sprintf(buffer, "_S\n_G\n_C0 FNC %d\r\n", fnc);
 		}
 
 		memcpy(SAVETEMP+ramcounter,buffer,strlen(buffer));
 		ramcounter+=strlen(buffer);
 		if(codedumpNo==4){
-		sprintf(buffer, "_M 0xE%07X 0x%08X\n", a_address- 0x40000000 ,a_length);
+		sprintf(buffer, "_M 0xE%07X 0x%08X\r\n", a_address- 0x40000000 ,a_length);
 		memcpy(SAVETEMP+ramcounter,buffer,strlen(buffer));
 		ramcounter+=strlen(buffer);
 		}
@@ -453,14 +456,14 @@ void decToText(){
 		if(codedumpNo==4){//ar 0xe
 			counter++;
 			if(a_length==counter<<2){
-			sprintf(buffer, "0x00000000\n");
+			sprintf(buffer, "0x00000000\r\n");
 			}
 			else{
-			sprintf(buffer, "0x%08lX\n", *((unsigned int*)(a_address+(counter*4))));
+			sprintf(buffer, "0x%08lX\r\n", *((unsigned int*)(a_address+(counter*4))));
 			}
 		}
 		else{
-			sprintf(buffer, "0x%08lX\n", *((unsigned int*)(a_address+(counter*4))));
+			sprintf(buffer, "0x%08lX\r\n", *((unsigned int*)(a_address+(counter*4))));
 		}
 			memcpy(SAVETEMP+ramcounter,buffer,strlen(buffer));
 			ramcounter+=strlen(buffer);
@@ -469,6 +472,8 @@ void decToText(){
 		}
 		sceIoClose(fd);
 		sprintf(buffer,"ms0:/MKIJIROfnc%d.txt",fnc);
+	if(codedumpNo==1) {memcpy(&buffer[17],"cmf",3);}
+	if(codedumpNo==3) {sprintf(buffer,"ms0:/seplugins/PMEtan/CODE/cwc_conv/%s.txt",gameId);}
 		dump_memregion(buffer,(void*)SAVETEMP,ramcounter);
 		sceKernelDelayThread(1500);
 		int i=0;
