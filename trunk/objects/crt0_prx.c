@@ -100,7 +100,7 @@ PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 #endif
 
 //Globals
-unsigned char *MKVER="  MKIJIRO20110519";
+unsigned char *MKVER="  MKIJIRO20110523";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -5766,6 +5766,12 @@ void menuInput(){
 				//regular controls
 				if((pad.Buttons & PSP_CTRL_UP) || (pad.Buttons & PSP_CTRL_LEFT)){
 					if(cheatSelected > 0){
+						if(pad.Buttons & PSP_CTRL_LTRIGGER){//code swapper
+							memcpy(&buffer[0],&cheat[cheatSelected-1].block,38);
+							memcpy(&cheat[cheatSelected-1].block,&cheat[cheatSelected].block,38);
+							memcpy(&cheat[cheatSelected].block,&buffer[0],38);
+							sceKernelDelayThread(15000);
+						}
 						cheatSelected--;
 					}
 					else if(cheatSelected == 0){
@@ -5783,6 +5789,12 @@ void menuInput(){
 				}
 				else if((pad.Buttons & PSP_CTRL_DOWN) ||(pad.Buttons & PSP_CTRL_RIGHT) ){
 					if(cheatSelected < (cheatTotal-1)){
+						if(pad.Buttons & PSP_CTRL_LTRIGGER){//code swapper
+							memcpy(&buffer[0],&cheat[cheatSelected+1].block,38);
+							memcpy(&cheat[cheatSelected+1].block,&cheat[cheatSelected].block,38);
+							memcpy(&cheat[cheatSelected].block,&buffer[0],38);
+							sceKernelDelayThread(15000);
+						}
 						cheatSelected++;
 					}
 					else if(cheatSelected == (cheatTotal-1)){
