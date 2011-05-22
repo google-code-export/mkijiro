@@ -254,6 +254,7 @@ char BIGSMALL=0;
 char FAKEHYOGEN=-1;
 unsigned int setting=0;
 unsigned char codedumpNo=0;
+//unsigned char *dumptype[]={"nitePR","CWCheat","ACTIONREPLAY","PMETAN","AR 0xE"};
 #ifdef _SWAPBUTTON_
 unsigned short SWAPBUTTON=0x4000;
 unsigned short SWAPBUTTON2=0x2000;
@@ -371,22 +372,25 @@ void decToCheat(){
   unsigned int a_address=copyStartFlag; 
   unsigned int tempaddy1=copyStartFlag;
   unsigned int tempaddy2=copyEndFlag;
-  unsigned int a_length=copyEndFlag - copyStartFlag;
+  unsigned int a_length=(copyEndFlag - copyStartFlag)>>2;
   
+  if(blockTotal+a_length + 1 > BLOCK_MAX){
+  a_length=BLOCK_MAX-blockTotal;
+  }
+
   if((cheatTotal + 1 < NAME_MAX) && (blockTotal + 1 < BLOCK_MAX)){
-    
+
     cheat[cheatTotal].block=blockTotal;
    	cheat[cheatTotal].flags=0;
-    cheat[cheatTotal].len=a_length>>2;
-    
-    int i; 
+    cheat[cheatTotal].len=a_length;
+
+    int i=0;
 	for(i=0; i< a_length; i++){
-    
 		block[blockTotal].address=(a_address+(i*4))-0x48800000;
 		block[blockTotal].address&=0x0FFFFFFF;
 		block[blockTotal].flags=0;
 		block[blockTotal].address+=0x08800000;
-		
+
 		block[blockTotal].hakVal=*((unsigned int*)(a_address+(i*4)));
 
 		block[blockTotal].flags|=FLAG_DWORD; if(cheatSaved) block[blockTotal].stdVal=*((unsigned int*)(block[blockTotal].address));
@@ -1474,6 +1478,8 @@ void menuDraw(){
 				if(tabSelected ==3){
 				   if(pad.Buttons & SWAPBUTTON3){
 					pspDebugScreenPuts("  Selected Range by NOTE to text file\n");
+					//sprintf(buffer,"  Selected Range by NOTE to text file [%s]\n",dumptype[codedumpNo]);
+					//pspDebugScreenPuts(buffer);
 					}
 				}
 				else{
@@ -2497,6 +2503,8 @@ void menuDraw(){
 				pspDebugScreenPuts("POPS ");
 				#elif _NOHB_
 				pspDebugScreenPuts("NOHB ");
+				#elif _SCREENSHOT_
+				pspDebugScreenPuts("SC ");
 				#endif
 
 				//battery info
@@ -2568,6 +2576,12 @@ void menuDraw(){
 				sprintf(buffer, "%d ", cheatTotal);
 				pspDebugScreenPuts(buffer);
 
+				pspDebugScreenSetTextColor(color02);
+				pspDebugScreenPuts("Codes:");
+				pspDebugScreenSetTextColor(color01);
+				sprintf(buffer, "%d ",blockTotal);
+				pspDebugScreenPuts(buffer);
+					
 				//Helper
 				pspDebugScreenSetTextColor(color02);
 				pspDebugScreenSetXY(0, 30);
@@ -2753,10 +2767,17 @@ void menuDraw(){
 
 				pspDebugScreenSetTextColor(color01);
 				lineClear(32);
+				//char dumpC=0;
 				switch(cheatSelected){
 					case 0: pspDebugScreenPuts("Pauses the game while MKIJIRO's menu is showing"); break;
 					case 1: pspDebugScreenPuts(">< To create new cheat;"); break;
-					case 2: pspDebugScreenPuts("0:nitePR,1:CWCheat,2:ACTIONREPLAY,3:PMETAN,4:AR 0xE"); break;
+					case 2:
+						pspDebugScreenPuts("0:nitePR,1:CWCheat,2:ACTIONREPLAY,3:PMETAN,4:AR 0xE");
+					//while(dumpC<5){
+					//sprintf(buffer,"%d:%s ",dumpC,dumptype[dumpC]);
+					//pspDebugScreenPuts(buffer);dumpC++;
+					//}
+					break;
 					case 3: pspDebugScreenPuts("Saves the Game's RAM to MemoryStick"); break;
 					case 4: pspDebugScreenPuts("Dump kernel memory and boot memory"); break;
 					case 5: pspDebugScreenPuts("Alters the number of bytes displayed in the Browser"); break;
