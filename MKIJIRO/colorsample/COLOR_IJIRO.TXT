@@ -1,6 +1,6 @@
 0x00300000 ;menukey
 0x00800000 ;cheat toggle
-0x00100000 ;screenshotkey
+0x00400000 ;screenshotkey
 0xFFFFFF00 ;color1 1st color (yellow)
 0xFF030300 ;color1 fade amount
 0xFFCCCCCC ;color2 2nd color (grey)

@@ -16,7 +16,7 @@
 #define MODE_EXP 1
 #define MODE_FLOAT_ONLY 2
 
-static int is_nan(unsigned int val)
+/*static int is_nan(unsigned int val)
 {
   unsigned int conv;
   int sign;
@@ -34,7 +34,7 @@ static int is_nan(unsigned int val)
     return 1;
   }
   return 0;
-}
+}*/
 
 static int is_inf(unsigned int val)
 {
@@ -59,6 +59,14 @@ static int is_inf(unsigned int val)
     {
       return 1;
     }
+  }
+  if(exp == 255)
+  {
+    return 2;
+  }
+  if(exp > 176)
+  {
+    return 3;
   }
 
   return 0;
@@ -86,19 +94,20 @@ static char get_num(float *val, int *exp)
 
 void f_cvt(unsigned int addr, char *buf, int bufsize, int precision, int mode)
 {
-  if(addr % 4) 
+  /*if(addr % 4) 
   {
     strncpy(buf, "ERR", bufsize);
     buf[bufsize-1] = 0;
     return;
-  }
+  }*/
+  addr&=0xFFFFFFFC;
   char conv_buf[128];
   char *conv_p = conv_buf;
   float normval;
   int digits = 0;
   int exp = 0;
   int exp_pos = 0;
-  int inf;
+  int inf=0;
   int sign = 0;
   float round;
   int rndpos = 0;
@@ -108,22 +117,22 @@ void f_cvt(unsigned int addr, char *buf, int bufsize, int precision, int mode)
   inf = is_inf(addr);
   if(inf != 0)
   {
-    if(inf < 0)
+	if(inf < 0)
     {
-      strncpy(buf, "-INF", bufsize);
-      buf[bufsize-1] = 0;
+     strncpy(buf,"-INF", bufsize);
     }
-    else
+    if(inf==2)
     {
-      strncpy(buf, "INF", bufsize);
-      buf[bufsize-1] = 0;
-    }
-
-    return;
-  }
-  if(is_nan(addr))
-  {
     strncpy(buf, "NAN", bufsize);
+    }
+    if(inf==3)
+	{
+    strncpy(buf, "HUGE", bufsize);
+	}
+    if(inf==1)
+    {
+    strncpy(buf,"INF", bufsize);
+    }
     buf[bufsize-1] = 0;
     return;
   }
@@ -176,17 +185,17 @@ void f_cvt(unsigned int addr, char *buf, int bufsize, int precision, int mode)
     *conv_p++ = '-';
   }
 
-  if((mode != MODE_EXP) && (mode != MODE_FLOAT_ONLY))
+  /*if((mode != MODE_EXP) && (mode != MODE_FLOAT_ONLY))
   {
     if((exp < -4) || (exp > precision))
     {
       mode = MODE_EXP;
     }
-  }
+  }*/
 
   normval += round;
 
-  if(mode == MODE_EXP)
+  /*if(mode == MODE_EXP)
   {
     *conv_p++ = get_num(&normval, &exp_pos);
     *conv_p++ = '.';
@@ -225,9 +234,9 @@ void f_cvt(unsigned int addr, char *buf, int bufsize, int precision, int mode)
       exp %= 10;
     }
     *conv_p++ = exp + '0';
-  }
-  else
-  {
+  }*/
+  //else
+  //{
     if(exp >= 0)
     {
       for(; (exp >= 0); exp--)
@@ -256,7 +265,7 @@ void f_cvt(unsigned int addr, char *buf, int bufsize, int precision, int mode)
       *conv_p++ = get_num(&normval, &exp_pos);
       precision--;
     }
-  }
+  //}
 
   *conv_p = 0;
 

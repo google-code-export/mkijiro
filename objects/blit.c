@@ -14,6 +14,8 @@
 #include "../fonts/misaki.h"
 #elif _FONT_misaki_hira
 #include "../fonts/misaki_hira.h"
+#elif _FONT_misakisp
+#include "../fonts/misakisp.h"
 #elif _FONT_perl 
 #include "../fonts/perl.h"
 #elif _FONT_sparta 
@@ -39,7 +41,7 @@ extern int enable_blit;
 int blit_string(int sx,int sy,const char *msg,int fg_col,int bg_col){
 	int x,y,p;
 	int offset;
-	char code;
+	unsigned char code;
 	unsigned char font;
 	int pwidth, pheight, bufferwidth, pixelformat, unk;
 	unsigned int* vram;
