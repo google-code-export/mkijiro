@@ -6,3 +6,4 @@ move MKIJIRO_POPS.prx g:\seplugins\MKIJIRO_POPS.prx
 move MKIJIRO_POPS.prx f:\seplugins\MKIJIRO_POPS.prx
 move MKIJIRO_POPS.prx e:\seplugins\MKIJIRO_POPS.prx
 del *.prx
+pause

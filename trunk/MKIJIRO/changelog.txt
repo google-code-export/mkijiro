@@ -7,7 +7,7 @@ homekeyがマスクされて起動できない(NPR共通)
 一部のゲームでキーボードをだすとフリーズする(武装神姫のムービ時)
 比較サーチがおかしくなる(NPR共通)
 コード保存と読込を繰り返していると保存読込機能が反応しなくなる
-一部の浮動小数が表示されない 0.01(0x3C23D70A),0.001 (0x3A83126E)(NPR共通)
+一部の浮動小数が表示されない 0.1(0x3DCCCCCC),0.01(0x3C23D70A),0.001 (0x3A83126E)(NPR共通)
 8byte時メモリエディタのコピー箇所がおかしい
 ムービー中にサーチ/保存するとフリーズする(0x8838DBF0 むび領域っぽい？),GEN/M33で薄型本体なら拡張RAM定義でたぶん回避可能
 
@@ -20,6 +20,10 @@ if code is reloaded & saved many times,save&reload function doesnot work
 certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
 0x8838DBF0 moviezone,pspfat should freeze after search/save...slim user use extraram setting
+
+
+2011/5/30
+浮動小数の桁あふれを表示しないようにした(HUGEと表示される)
 
 2011/5/23
 コード整理機能、とりあえず名前の移動を実装
