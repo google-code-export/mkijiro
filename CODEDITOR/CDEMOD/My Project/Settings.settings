@@ -1,0 +1,30 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="My" GeneratedClassName="MySettings" UseMySettingsClassName="true">
+  <Profiles />
+  <Settings>
+    <Setting Name="MSCODEPAGE" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">932</Value>
+    </Setting>
+    <Setting Name="codetree" Type="System.Drawing.Font" Scope="User">
+      <Value Profile="(Default)">ＭＳ ゴシック, 9pt</Value>
+    </Setting>
+    <Setting Name="CT_tb" Type="System.Drawing.Font" Scope="User">
+      <Value Profile="(Default)">ＭＳ ゴシック, 9pt</Value>
+    </Setting>
+    <Setting Name="GID_tb" Type="System.Drawing.Font" Scope="User">
+      <Value Profile="(Default)">ＭＳ ゴシック, 9pt</Value>
+    </Setting>
+    <Setting Name="GT_tb" Type="System.Drawing.Font" Scope="User">
+      <Value Profile="(Default)">ＭＳ ゴシック, 9pt</Value>
+    </Setting>
+    <Setting Name="cmt_tb" Type="System.Drawing.Font" Scope="User">
+      <Value Profile="(Default)">ＭＳ ゴシック, 9pt</Value>
+    </Setting>
+    <Setting Name="cl_tb" Type="System.Drawing.Font" Scope="User">
+      <Value Profile="(Default)">ＭＳ ゴシック, 9pt</Value>
+    </Setting>
+    <Setting Name="progbar" Type="System.Drawing.Font" Scope="User">
+      <Value Profile="(Default)">ＭＳ ゴシック, 9pt</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

@@ -1,0 +1,292 @@
+<script language="JavaScript">
+	var hexDigits = new Array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'a', 'b', 'c', 'd', 'e', 'f');
+
+	function pad(text, len)
+	{
+		var textLen=text.length;
+		if(textLen  < len)
+		{
+			len-=textLen;
+			while(len > 0)
+			{
+				text='0'+text;
+				len--;
+			}
+		}
+		return text;
+	}
+
+	function decDigi(d, len)
+	{
+		var a=(d>>24) & 0xFF;
+		var b=(d>>16) & 0xFF;
+		var g=(d>>8) & 0xFF;
+		var r=d & 0xFF;
+		var text=pad(a.toString(16), 2) + pad(b.toString(16), 2) + pad(g.toString(16), 2) + pad(r.toString(16), 2);
+		text=text.toUpperCase();
+		text=text.substr(8-len, len);
+		text='0x'+text;
+		return text;
+	}
+
+	function charDigi(c)
+	{
+		var counter=0;
+		while(hexDigits[counter] != c) {
+			counter++;
+			if(counter > 21)
+			{
+				return 0;
+			}
+		}
+		if(counter > 15) {
+			counter-=6;
+		}
+		return counter.toString(16);
+	}
+
+	function doHex(text) {
+		text=text + '\n_X';
+		var counter = 0;
+		var size = text.length;
+		var commentMode=0;
+		var nameMode=0;
+		var addressMode=0;
+		var valueMode=0;
+		var funcOut="";
+		var funcOutSect="";
+		var address=0;
+		var value=0;
+		var bitField=0;
+		var bkAddress=0;
+		var bkValue=0;
+		var bkDecompress=0;
+		var idcounter=0;
+		var errorMode=0;
+		var tempaddress="";
+		var tempval="";
+
+		//Convert what's given
+		while (counter < size) {
+			letC = text.substr(counter,1);
+			letN = text.substr(counter+1,1);
+			letF = text.substr(counter+2,1);
+
+			if((letC == '_') && (letN == 'C') && (nameMode==0) && (commentMode==0) && (addressMode==0)  && (valueMode==0))
+			{
+				errorMode=0;
+			}
+			if((letC == '_') && (letN == 'X') && (counter == size-2))
+			{
+				funcOut=funcOut + funcOutSect;
+				counter++;
+			}
+
+			if((((letC == '\r') || (letC == '\n'))) && (valueMode==0))
+			{
+				if(nameMode == 1)
+				{
+					funcOut=funcOut + '\n';
+				}
+				commentMode=0;
+				nameMode=0;
+				addressMode=0;
+				valueMode=0;
+			}
+			else if((letC == '_') && (letN == 'C') && (nameMode==0) && (commentMode==0) && (addressMode==0)  && (valueMode==0))
+			{
+				errorMode=0;
+				nameMode=1;
+				if(letF == ' ')
+				{
+					counter+=2;
+				}
+				else
+				{
+					counter+=3;
+				}
+				if(funcOut != "")
+				{
+					funcOut=funcOut + funcOutSect + '_C0 ';
+				}
+				else
+				{
+					funcOut='_C0 ';
+				}
+				funcOutSect="";
+			}
+			else if((letC == '_') && (letN == 'S') && (nameMode==0) && (commentMode==0) && (addressMode==0)  && (valueMode==0))
+			{
+				errorMode=0;
+				nameMode=2;
+				if(letF == ' ')
+				{
+					counter+=2;
+				}
+				else
+				{
+					counter+=3;
+				}
+				if(funcOut != "")
+				{
+					funcOut=funcOut + funcOutSect + '_S ';
+				}
+				else
+				{
+					funcOut='_S ';
+				}
+				funcOutSect="";
+			}
+			else if((letC == '_') && (letN == 'G') && (nameMode==0) && (commentMode==0) && (addressMode==0)  && (valueMode==0))
+			{
+				errorMode=0;
+				nameMode=1;
+				idcounter=0;
+				if(letF == ' ')
+				{
+					counter+=2;
+				}
+				else
+				{
+					counter+=3;
+				}
+				if(funcOut != "")
+				{
+					funcOut=funcOut + funcOutSect + '_G ';
+				}
+				else
+				{
+					funcOut='_G ';
+				}
+				funcOutSect="";
+			}
+			else if(nameMode == 1)
+			{
+				funcOut=funcOut + letC;
+			}
+			else if(nameMode == 2 && idcounter<10)
+			{
+				funcOut=funcOut + letC;
+				if(idcounter==9){
+				funcOut=funcOut +"\n";
+				}
+				idcounter++;
+			}
+			else if((letC == '_') && (letN == 'L') && (nameMode==0) && (commentMode==0) && (addressMode==0)  && (valueMode==0))
+			{
+				addressMode=1;
+				address=0;
+				value=0;
+			}
+			else if(addressMode == 1)
+			{
+				if((letC == '0') && (letN == 'x'))
+				{
+					addressMode=2;
+					bitField=0;
+					counter++;
+				}
+				else if(letC == '0'){
+					addressMode=3;
+					bitField=0;
+					//counter++;
+				}
+			}
+			else if(addressMode == 2)
+			{
+				if(letC == ' ')
+				{
+					tempaddress='0x'+tempaddress;
+					address=tempaddress-0;
+					addressMode=0;
+					valueMode=1;
+					value=0;
+				}
+				else
+				{
+				tempaddress=tempaddress+charDigi(letC);
+				}
+			}
+			else if(addressMode == 3)
+			{
+				if(letC == ' ')
+				{
+					address=tempaddress-0;
+					addressMode=0;
+					valueMode=1;
+					value=0;
+				}
+				else
+				{
+				tempaddress=tempaddress+charDigi(letC);
+				}
+			}
+			else if(valueMode == 1)
+			{
+				if((letC == '0') && (letN == 'x'))
+				{
+					valueMode=2;
+					counter++;
+				}
+				else if(letC == '0')
+				{
+					valueMode=3;
+					//counter++;
+				}
+			}
+			else if(valueMode==2)
+			{
+				if((letC== '\r') || (letC == '\n') || (letC == ';') || (letC == '#') || (letC ==' '))
+				{
+					tempval='0x'+tempval;
+					value=tempval-0;
+					bkDecompress=1;
+				}
+				else
+				{
+				tempval=tempval+charDigi(letC);
+				}
+			}
+			else if(valueMode == 3){
+				if((letC== '\r') || (letC == '\n') || (letC == ';') || (letC == '#') || (letC ==' '))
+				{
+					value=tempval-0;
+					bkDecompress=1;
+				}
+				else
+				{
+				tempval=tempval+charDigi(letC);
+				}
+
+			}
+			if(bkDecompress == 1)
+			{
+				funcOutSect=funcOutSect+'_L '+decDigi(address, 8)+' '+decDigi(value, 8)+'\n';
+				valueMode=0;
+				bkDecompress=0;
+				tempaddress='';
+				tempval='';
+			}
+			counter++;
+		}
+
+		document.cvcode.elements[0].value = funcOut;
+
+		return false;
+	}
+</script>
+
+<center><font size="5" color="#C090F0"><b>
+invaid string+space remover for cwcheat code<br>
+20110525 modded by sanik nitePrCV <a href="cwc_removerold.html">old</a><br></b></font>
+<form name="asc2hex">
+CWCheat code:<br><textarea name="text" rows="10" cols="50"></textarea><br>
+<input type="Submit" value="Convert" Generate" onclick="doHex(document.asc2hex.text.value);return false">
+<input type="reset" value="Clear">
+</form>
+
+REGULAR CWC CODE:<br>
+<form name="cvcode">
+<textarea name="text" rows="10" cols="50"></textarea>
+</form>
+</center>
