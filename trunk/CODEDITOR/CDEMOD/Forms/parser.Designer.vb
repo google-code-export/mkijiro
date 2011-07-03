@@ -27,11 +27,14 @@ Partial Class parser
         Me.cancel = New System.Windows.Forms.Button()
         Me.clear = New System.Windows.Forms.Button()
         Me.Button1 = New System.Windows.Forms.Button()
+        Me.Button2 = New System.Windows.Forms.Button()
+        Me.Button3 = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'TX
         '
         Me.TX.Location = New System.Drawing.Point(12, 12)
+        Me.TX.MaxLength = 0
         Me.TX.Multiline = True
         Me.TX.Name = "TX"
         Me.TX.ScrollBars = System.Windows.Forms.ScrollBars.Both
@@ -71,14 +74,34 @@ Partial Class parser
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 4
-        Me.Button1.Text = "コメント加工"
+        Me.Button1.Text = "#補正"
         Me.Button1.UseVisualStyleBackColor = True
+        '
+        'Button2
+        '
+        Me.Button2.Location = New System.Drawing.Point(106, 232)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(75, 23)
+        Me.Button2.TabIndex = 5
+        Me.Button2.Text = "_L補正"
+        Me.Button2.UseVisualStyleBackColor = True
+        '
+        'Button3
+        '
+        Me.Button3.Location = New System.Drawing.Point(196, 232)
+        Me.Button3.Name = "Button3"
+        Me.Button3.Size = New System.Drawing.Size(75, 23)
+        Me.Button3.TabIndex = 6
+        Me.Button3.Text = "_C補正"
+        Me.Button3.UseVisualStyleBackColor = True
         '
         'parser
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(284, 311)
+        Me.Controls.Add(Me.Button3)
+        Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.clear)
         Me.Controls.Add(Me.cancel)
@@ -95,4 +118,6 @@ Partial Class parser
     Friend WithEvents cancel As System.Windows.Forms.Button
     Friend WithEvents clear As System.Windows.Forms.Button
     Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents Button3 As System.Windows.Forms.Button
 End Class
