@@ -1,0 +1,1 @@
+"C:\Program Files\Jane Style\jane2ch.exe"
