@@ -1,0 +1,270 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<META http-equiv="Content-STYLE-Type" content="text/javascript">
+<meta name="keywords" content="CWCHEAT ACTIONREPLAY MKIJIRO MKULTRA NITEPR DARKFROST CODERPR CODEFREAK CEFIVE MIPS R4000 VFPU PSP">
+<title>INVAID STRING/SPACE CWCheat CODE Remover</title>
+</head>
+<body bgcolor="#000000" text="#ffffff" alink="#c0f060" link="#60C0F0" vlink="#7fffff">
+<!--[if lt IE 7]> <div style='border: 1px solid #F7941D; background: #FEEFDA; text-align: center; clear: both; height: 75px; position: relative;'>    <div style='position: absolute; right: 3px; top: 3px; font-family: courier new; font-weight: bold;'><a href='#' onclick='javascript:this.parentNode.parentNode.style.display='none'; return false;'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-cornerx.jpg' style='border: none;' alt='Close this notice'/></a></div>    <div style='width: 750px; margin: 0 auto; text-align: left; padding: 0; overflow: hidden; color: black;'>      <div style='width: 75px; float: left;'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-warning.jpg' alt='Warning!'/></div>      <div style='width: 275px; float: left; font-family: Arial, sans-serif;'>        <div style='font-size: 14px; font-weight: bold; margin-top: 12px;'>あなたは旧式ブラウザをご利用中です</div>        <div style='font-size: 12px; margin-top: 6px; line-height: 12px;'>このウェブサイトを快適に閲覧するにはブラウザをアップグレードしてください。</div>      </div>      <div style='width: 75px; float: left;'><a href='http://www.mozilla.jp' target='_blank'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-firefox.jpg' style='border: none;' alt='Get Firefox 3.5'/></a></div>      <div style='width: 75px; float: left;'><a href='http://www.microsoft.com/downloads/details.aspx?FamilyID=341c2ad5-8c3d-4347-8c03-08cdecd8852b&DisplayLang=ja' target='_blank'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-ie8.jpg' style='border: none;' alt='Get Internet Explorer 8'/></a></div>      <div style='width: 73px; float: left;'><a href='http://www.apple.com/jp/safari/download/' target='_blank'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-safari.jpg' style='border: none;' alt='Get Safari 4'/></a></div>      <div style='float: left;'><a href='http://www.chromeplus.org/download.html' target='_blank'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-chrome.jpg' style='border: none;' alt='Get Google Chrome'/></a></div> <div style='width: 60px; float: left;'><a href='http://www.opera.com/' target='_blank'><img src='http://www.opera.com/bitmaps/icons/Opera_48x48.png' style='border: none;' alt='Get Opera'/></a></div> <div style='width: 60px; float: left;'><a href='http://www.fenrir.co.jp/sleipnir/' target='_blank'><img src='http://www.fenrir.co.jp/images/sleipnir/skin_icn.png' style='border: none;' alt='Get Sleipnir'/></a></div>  </div>  </div> <![endif]-->
+<script type="text/javascript" src="http://unzu127xp.pa.land.to/mogura/w_js.php"></script>
+<noscript><img src="http://unzu127xp.pa.land.to/mogura/writelog.php?mode=img&amp;guid=ON&amp;js=2" width="1" height="1" alt=""></noscript> 
+<!--shinobi1-->
+<script type="text/javascript" src="http://x3.yukishigure.com/ufo/02517120M"></script>
+<noscript><a href="http://x3.yukishigure.com/bin/gg?02517120M">
+<img src="http://x3.yukishigure.com/bin/ll?02517120M" alt="NINJATOOL"></a>
+</noscript>
+<div align="left">
+<a href="../index2.html">HP(ﾟ∀ﾟ)</a>
+</div><script language="JavaScript">
+	var hexDigits = new Array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'a', 'b', 'c', 'd', 'e', 'f');
+
+	function pad(text, len)
+	{
+		var textLen=text.length;
+		if(textLen  < len)
+		{
+			len-=textLen;
+			while(len > 0)
+			{
+				text='0'+text;
+				len--;
+			}
+		}
+		return text;
+	}
+
+	function decDigi(d, len)
+	{
+		var a=(d>>24) & 0xFF;
+		var b=(d>>16) & 0xFF;
+		var g=(d>>8) & 0xFF;
+		var r=d & 0xFF;
+		var text=pad(a.toString(16), 2) + pad(b.toString(16), 2) + pad(g.toString(16), 2) + pad(r.toString(16), 2);
+		text=text.toUpperCase();
+		text=text.substr(8-len, len);
+		text='0x'+text;
+		return text;
+	}
+
+	function charDigi(c)
+	{
+		var counter=0;
+		while(hexDigits[counter] != c) {
+			counter++;
+			if(counter > 21)
+			{
+				return 0;
+			}
+		}
+		if(counter > 15) {
+			counter-=6;
+		}
+		return counter;
+	}
+
+	function doHex(text) {
+		text=text + '\n_X';
+		var counter = 0;
+		var size = text.length;
+		var commentMode=0;
+		var nameMode=0;
+		var addressMode=0;
+		var valueMode=0;
+		var funcOut="";
+		var funcOutSect="";
+		var address=0;
+		var value=0;
+		var bitField=0;
+		var bkAddress=0;
+		var bkValue=0;
+		var bkDecompress=0;
+		var idcounter=0;
+		var errorMode=0;
+
+		//Convert what's given
+		while (counter < size) {
+			letC = text.substr(counter,1);
+			letN = text.substr(counter+1,1);
+			letF = text.substr(counter+2,1);
+
+			if((letC == '_') && (letN == 'C') && (nameMode==0) && (commentMode==0) && (addressMode==0)  && (valueMode==0))
+			{
+				errorMode=0;
+			}
+			if((letC == '_') && (letN == 'X') && (counter == size-2))
+			{
+				funcOut=funcOut + funcOutSect;
+				counter++;
+			}
+
+			if(((letC == '\r') || (letC == '\n')) || (errorMode==1))
+			{
+				if(nameMode == 1)
+				{
+					funcOut=funcOut + '\n';
+				}
+				commentMode=0;
+				nameMode=0;
+				addressMode=0;
+				valueMode=0;
+			}
+			else if((letC == '_') && (letN == 'C') && (nameMode==0) && (commentMode==0) && (addressMode==0)  && (valueMode==0))
+			{
+				errorMode=0;
+				nameMode=1;
+				if(letF == ' ')
+				{
+					counter+=2;
+				}
+				else
+				{
+					counter+=3;
+				}
+				if(funcOut != "")
+				{
+					funcOut=funcOut + funcOutSect + '_C0 ';
+				}
+				else
+				{
+					funcOut='_C0 ';
+				}
+				funcOutSect="";
+			}
+			else if((letC == '_') && (letN == 'S') && (nameMode==0) && (commentMode==0) && (addressMode==0)  && (valueMode==0))
+			{
+				errorMode=0;
+				nameMode=2;
+				if(letF == ' ')
+				{
+					counter+=2;
+				}
+				else
+				{
+					counter+=3;
+				}
+				if(funcOut != "")
+				{
+					funcOut=funcOut + funcOutSect + '_S ';
+				}
+				else
+				{
+					funcOut='_S ';
+				}
+				funcOutSect="";
+			}
+			else if((letC == '_') && (letN == 'G') && (nameMode==0) && (commentMode==0) && (addressMode==0)  && (valueMode==0))
+			{
+				errorMode=0;
+				nameMode=1;
+				idcounter=0;
+				if(letF == ' ')
+				{
+					counter+=2;
+				}
+				else
+				{
+					counter+=3;
+				}
+				if(funcOut != "")
+				{
+					funcOut=funcOut + funcOutSect + '_G ';
+				}
+				else
+				{
+					funcOut='_G ';
+				}
+				funcOutSect="";
+			}
+			else if(nameMode == 1)
+			{
+				funcOut=funcOut + letC;
+			}
+			else if(nameMode == 2 && idcounter<10)
+			{
+				funcOut=funcOut + letC;
+				if(idcounter==9){
+				funcOut=funcOut +"\n";
+				}
+				idcounter++;
+			}
+			else if((letC == '_') && (letN == 'L') && (nameMode==0) && (commentMode==0) && (addressMode==0)  && (valueMode==0))
+			{
+				addressMode=1;
+				address=0;
+				value=0;
+			}
+			else if(addressMode == 1)
+			{
+				if((letC == '0') && (letN == 'x'))
+				{
+					addressMode=2;
+					bitField=0;
+					counter++;
+				}
+			}
+			else if(addressMode == 2)
+			{
+				if(letC == ' ')
+				{
+					addressMode=0;
+					valueMode=1;
+					value=0;
+				}
+				else
+				{
+					address|=charDigi(letC) * (1 << (4*(7-bitField)));
+					bitField++;
+				}
+			}
+			else if(valueMode == 1)
+			{
+				if((letC == '0') && (letN == 'x'))
+				{
+					valueMode=2;
+					bitField=0;
+					counter++;
+				}
+			}
+			else if(valueMode == 2)
+			{
+				value|=charDigi(letC) * (1 << (4*(7-bitField)));
+				bitField++;
+				if(bitField == 8)
+				{
+					if((bkDecompress == 0))
+					{
+							funcOutSect=funcOutSect+'_L '+decDigi(address, 8)+' '+decDigi(value, 8)+'\n';
+							valueMode=0;
+					}
+				}
+			}
+			counter++;
+		}
+
+		document.cvcode.elements[0].value = funcOut;
+
+		return false;
+	}
+</script>
+
+<center><font size="5" color="#C090F0"><b>
+invaid string+space remover for cwcheat code<br>
+20110524 modded by sanik nitePrCV 8charaHEXDICIMAL ONLY<br></b></font>
+<form name="asc2hex">
+CWCheat code:<br><textarea name="text" rows="10" cols="50"></textarea><br>
+<input type="Submit" value="Convert" Generate" onclick="doHex(document.asc2hex.text.value);return false">
+<input type="reset" value="Clear">
+</form>
+
+REGULAR CWC CODE:<br>
+<form name="cvcode">
+<textarea name="text" rows="10" cols="50"></textarea>
+</form>
+</center>
+<a href="../index2.html">HP(ﾟ∀ﾟ)</a>
+</div>
+</body>
+</html>

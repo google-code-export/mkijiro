@@ -1,0 +1,678 @@
+<script language="JavaScript">
+	var hexDigits = new Array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'a', 'b', 'c', 'd', 'e', 'f');
+
+	function inputcheck() {
+	   var str = document.st.elements[0].value;
+   	if( str.match( /0x[^0-9A-Fa-f]/ ) ) {
+      alert("0x0から0xFの値を入力してください。");
+      return 1;
+   	}
+   	return 0;
+	}
+
+	function pad(text, len)
+	{
+		var textLen=text.length;
+		if(textLen  < len)
+		{
+			len-=textLen;
+			while(len > 0)
+			{
+				text='0'+text;
+				len--;
+			}
+		}
+		return text;
+	}
+
+	function decDigi(d, len)
+	{
+		var text=pad(d.toString(16), 8);
+		text=text.toUpperCase();
+		text='0x'+text;
+		return text;
+	}
+
+	function charDigi(c,RP)
+	{
+		var counter=0;
+		while(hexDigits[counter] != c) {
+			counter++;
+			if(counter > 21)
+			{
+				return RP;
+			}
+		}
+		if(counter > 15) {
+			counter-=6;
+		}
+		return counter.toString(16);
+	}
+
+	function doHex(text) {
+		text=text + '\n_X';
+		var counter = 0;
+		var size = text.length;
+		var commentMode=0;
+		var nameMode=0;
+		var addressMode=0;
+		var valueMode=0;
+		var funcOut="";
+		var funcOutSect="";
+		var address=0;
+		var bkAddress=0;
+		var bkAddress2=0;
+		var value=0;
+		var bkValue=0;
+		var bkValue2=0;
+		var bitField=0;
+		var bkDecompress=0;
+		var idcounter=0;
+		var errorMode=0;
+		var tempaddress="";
+		var tempval="";
+		var space="";
+		var line=0;
+		var nameback="";
+		var serial=0;
+		var CWCAR="";
+		var mode=0;
+		var chead=0;
+		var cheadold=0;
+		var cheadarold=0;
+		var cheadar=0;
+		var pointer=0;
+		var vhead=0;
+		var jline=0;
+		var jlineold=0;
+		var eline=0;
+		var skipline=0;
+		var nullcode=0;
+var FCJOKER=document.form1.elements[0].checked;
+var CWCLIMIT=document.form1.elements[1].checked;
+var CFFIX=document.form1.elements[2].checked;
+var DESERIAL=document.form1.elements[3].checked;
+var CMFFCSP=document.form1.elements[4].checked;
+var ARNULLFIX=document.form1.elements[5].checked;
+var RMD4DC=document.form1.elements[6].checked;
+var ARLIMIT=document.form1.elements[7].checked;
+var ADDNO=document.form1.elements[8].checked;
+var RMNO=document.form1.elements[9].checked;
+var HEXVALUE=document.form1.elements[10].checked;
+var REPST=eval(document.st.elements[0].value);
+var RP=REPST.toString(16);
+var tnum=0;
+var name=0;
+
+		//Convert what's given
+		while (counter < size) {
+			letC = text.substr(counter,1);
+			letN = text.substr(counter+1,1);
+			letF = text.substr(counter+2,1);
+
+			if((letC == '_') && (letN == 'C') && (nameMode==0) && (commentMode==0) && (addressMode==0)  && (valueMode==0))
+			{
+				errorMode=0;
+			}
+			if((letC == '_') && (letN == 'X') && (counter == size-2))
+			{
+				funcOut=funcOut + funcOutSect;
+				counter++;
+			}
+
+			if((((letC == '\r') || (letC == '\n'))) && (valueMode==0))
+			{
+				if(ADDNO!=0 && name==1){
+					funcOut=funcOut + '##' +tnum.toString(10);
+					tnum++;
+					name=0;
+				}
+				if(nameMode == 1)
+				{
+					funcOut=funcOut + '\n';
+				}
+				commentMode=0;
+				nameMode=0;
+				addressMode=0;
+				valueMode=0;
+			}
+			else if((letC == '_') && (letN == 'C') && (nameMode==0) && (commentMode==0) && (addressMode==0)  && (valueMode==0))
+			{
+				if(ARNULLFIX!=0 && nullcode>0 && mode==1){
+				funcOut=funcOut+"_M 0xCF000000 0x00000000\n";
+				}
+				skipline=0;
+				cheadold=0;
+				errorMode=0;
+				nameMode=1;
+				if(letF == ' ')
+				{
+					counter+=2;
+				}
+				else
+				{
+					counter+=3;
+				}
+				if(funcOut != "")
+				{
+					funcOut=funcOut + funcOutSect + '_C0 ';
+				}
+				else
+				{
+					funcOut='_C0 ';
+				}
+				funcOutSect="";
+				line=0;
+				nameback="";
+				nullcode=1;
+			}
+			else if((letC == '_') && (letN == 'S') && (nameMode==0) && (commentMode==0) && (addressMode==0)  && (valueMode==0))
+			{
+				if(ARNULLFIX!=0 && nullcode>0 && mode==1){
+				funcOut=funcOut+"_M 0xCF000000 0x00000000\n";
+				}
+				cheadold=0;
+				skipline=0;
+				nullcode=0;
+				errorMode=0;
+				nameMode=2;
+				if(letF == ' ')
+				{
+					counter+=2;
+				}
+				else
+				{
+					counter+=3;
+				}
+				if(funcOut != "")
+				{
+					funcOut=funcOut + funcOutSect + '_S ';
+				}
+				else
+				{
+					funcOut='_S ';
+				}
+				funcOutSect="";
+			}
+			else if((letC == '_') && (letN == 'G') && (nameMode==0) && (commentMode==0) && (addressMode==0)  && (valueMode==0))
+			{
+				skipline=0;
+				nullcode=0;
+				errorMode=0;
+				nameMode=1;
+				idcounter=0;
+				name=1;
+				if(letF == ' ')
+				{
+					counter+=2;
+				}
+				else
+				{
+					counter+=3;
+				}
+				if(funcOut != "")
+				{
+					funcOut=funcOut + funcOutSect + '_G ';
+				}
+				else
+				{
+					funcOut='_G ';
+				}
+				funcOutSect="";
+			}
+			else if(nameMode == 1)
+			{
+				funcOut=funcOut + letC;
+				nameback=nameback+letC;
+				if(RMNO !=0 && letN=="#" && letF=="#"){
+				funcOut=funcOut + '\n';
+				commentMode=0;
+				nameMode=0;
+				addressMode=0;
+				valueMode=0;
+				}
+			}
+			else if(nameMode == 2 && idcounter<10)
+			{
+				funcOut=funcOut + letC;
+				if(idcounter==9){
+				funcOut=funcOut +"\n";
+				}
+				idcounter++;
+			}
+			else if(nameMode == 3)
+			{
+				hokan=hokan +letC;
+			}
+			else if((letC == '_') && (letN == 'L') && (letF == ' ') && (nameMode==0) && (commentMode==0) && (addressMode==0)  && (valueMode==0))
+			{
+				nullcode=0;
+				CWCAR="_L ";
+				mode=0;
+				addressMode=1;
+				address=0;
+				value=0;
+				line++;
+			}
+			else if((letC == '_') && (letN == 'M') && (letF == ' ') && (nameMode==0) && (commentMode==0) && (addressMode==0)  && (valueMode==0))
+			{
+				skipline=0;
+				nullcode=0;
+				CWCAR="_M ";
+				mode=1;
+				addressMode=1;
+				address=0;
+				value=0;
+				line++;
+			}
+			else if(addressMode == 1)
+			{
+				if((letC == '0') && (letN == 'x'))
+				{
+					addressMode=2;
+					bitField=0;
+					counter++;
+				}
+				else if(((letC >= '0') && (letC <= '9')) || ((letC >= 'A') && (letC <= 'F')) || ((letC >= 'a') && (letC <= 'f')))
+				{
+					addressMode=3;
+					counter--;
+				}
+			}
+			else if(addressMode == 2)
+			{
+				if(letC == ' ')
+				{
+					tempaddress='0x'+tempaddress;
+					address=tempaddress-0;
+					addressMode=0;
+					valueMode=1;
+					value=0;
+				}
+				else
+				{
+				tempaddress=tempaddress+charDigi(letC,RP);
+				}
+			}
+			else if(addressMode == 3)
+			{
+				if(letC == ' ')
+				{
+					if(HEXVALUE!=0){
+					tempaddress='0x'+tempaddress;
+					}
+					address=tempaddress-0;
+					addressMode=0;
+					valueMode=1;
+					value=0;
+				}
+				else
+				{
+				tempaddress=tempaddress+charDigi(letC,RP);
+				}
+			}
+			else if(valueMode == 1)
+			{
+				if((letC == '0') && (letN == 'x'))
+				{
+					valueMode=2;
+					counter++;
+				}
+				else if(((letC >= '0') && (letC <= '9')) || ((letC >= 'A') && (letC <= 'Z')) || ((letC >= 'a') && (letC <= 'z')))
+				{
+					valueMode=3;
+					counter--;
+				}
+			}
+			else if(valueMode==2)
+			{
+				if((letC== '\r') || (letC == '\n') || ((letC >= '!') && (letC <= '/')) || ((letC >= ':') && (letC <= '@')) || ((letC >= '[') && (letC <= '`')) || ((letC >= '{') && (letC <= '~')) || (letC ==' ')|| (letC>='\u2000'))
+				{
+					tempval='0x'+tempval;
+					value=tempval-0;
+					bkDecompress=1;
+				}
+				else
+				{
+				tempval=tempval+charDigi(letC,RP);
+				}
+			}
+			else if(valueMode == 3){
+				if((letC== '\r') || (letC == '\n') || ((letC >= '!') && (letC <= '/')) || ((letC >= ':') && (letC <= '@')) || ((letC >= '[') && (letC <= '`')) || ((letC >= '{') && (letC <= '~')) || (letC ==' ')|| (letC>='\u2000'))
+				{
+					if(HEXVALUE!=0){
+					tempval='0x'+tempval;
+					}
+					value=tempval-0;
+					bkDecompress=1;
+				}
+				else
+				{
+				tempval=tempval+charDigi(letC,RP);
+				}
+
+			}
+			chead=address>>28;
+			vhead=value>>28;
+			jline=address&0xFF;
+			eline=(address>>16)&0xFF;
+			if(bkDecompress==1 && serial==0)
+			{
+				if(FCJOKER!=0 && chead==-3 && (vhead==1 || vhead==3) && mode==0)
+				{
+				address--;
+				}
+				if(CWCLIMIT!=0 && line==31 && mode==0){
+				funcOutSect=funcOutSect+'_C0 '+nameback+' 30limit\n';line=1;
+				}
+				if(CFFIX!=0 && mode==0 && line==101){
+				funcOutSect=funcOutSect+'_C0 '+nameback+' 100limit\n';line=1;
+				}
+				if(ARLIMIT!=0 && line>=118 && mode==1){
+				if(chead==3 || chead==4 || chead==5 ||chead==6 || chead==7 || chead==-8 || chead==-7){
+				funcOutSect=funcOutSect+'_C0 '+nameback+' 128limit\n';line=1;
+				}
+				}
+				if(ARLIMIT!=0 && line>=120 && mode==1){
+				cheadar=address>>24;
+          			if(cheadar==-43 && cheadarold!=-5){//0xd5,0x6-0xb
+				funcOutSect=funcOutSect+'_C0 '+nameback+' 128limit\n';line=1;
+				}
+          			else if(cheadar==-64 && cheadarold!=-43){//0xc0
+				funcOutSect=funcOutSect+'_C0 '+nameback+' 128limit\n';line=1;
+				}
+				else if(line==128){
+				funcOutSect=funcOutSect+'_C0 '+nameback+' 128limit\n';line=1;
+				}
+				cheadarold=cheadar;pointer=0;
+				}
+				if(CMFFCSP!=0 && (chead==-1 || jlineold==1 || chead==-4) && mode==0){
+					var chead2=address>>24;
+					if(chead2==-16 && mode==0 && cheadold!=4)//0xF
+					{
+						skipline=jline+1;
+						skipline&=0xFF;
+					}
+					if(chead==-7 && mode==0 && jlineold==1)
+					{
+						skipline=1;
+					}
+					if(chead==-4 && mode==0 && cheadold!=4)//0xC
+					{
+					   address&=0x0FFFFFFF;
+					   address|=0x20000000;
+					}
+				}
+				if(DESERIAL!=0){
+					if(chead==4 && mode==0)//0x4
+					{
+						bkAddress=address;
+						bkValue=value;
+						serial=4;
+					}
+					else if(chead==-8 && mode==0)//0x8
+					{
+						serial=8;
+						bkAddress=address;
+						bkValue=value;
+					}
+					else if(chead==6 && mode==0)//0x6
+					{
+						serial=6;
+						bkAddress2=address;
+						bkValue2=value;
+					}
+					else if(skipline>0 && CMFFCSP!=0 && mode==0){
+					skipline--;
+					line--;
+					}
+					else{
+					funcOutSect=funcOutSect+CWCAR+decDigi(address, 8)+' '+decDigi(value, 8)+'\n';
+					}
+				}
+				else if(CFFIX!=0 && chead==6 && mode==0)//0x6
+				{
+						serial=0x6CF;
+						bkAddress2=address;
+						bkValue2=value;
+				}
+				else if(RMD4DC!=0 && mode==1 && value==0 && ((address>>24)==-36 || (address>>24)==-44) ){
+				}
+				else if(skipline>0 && CMFFCSP!=0 && mode==0){
+				skipline--;
+				line--;
+				}
+				else{
+				funcOutSect=funcOutSect+CWCAR+decDigi(address, 8)+' '+decDigi(value, 8)+'\n';
+				}
+				jlineold=jline;
+				cheadold=chead;
+				valueMode=0;
+				tempaddress='';
+				tempval='';
+				bkDecompress=0;
+			}
+			else if(bkDecompress==1 && serial == 4)
+			{
+				var subCounter=(bkValue>>16)&0xFFFF;
+				bkAddress&=0x01FFFFFF;
+				bkValue&=0xFFFF;
+				bkValue*=4;
+				line-=2;
+				while(subCounter>0){
+					funcOutSect=funcOutSect+CWCAR+decDigi(bkAddress|0x20000000, 8)+' '+decDigi(address, 8)+'\n';
+					bkAddress+=bkValue;
+					address+=value;
+					subCounter--;
+					if(CWCLIMIT!=0 && line>=29){
+					funcOutSect=funcOutSect+'_C0 '+nameback+' 30limit\n';line=1;
+					}
+					if(CFFIX!=0 && line>=99){
+					funcOutSect=funcOutSect+'_C0 '+nameback+' 100limit\n';line=1;
+					}
+					line++;
+				}
+				valueMode=0;
+				bkDecompress=0;serial=0;
+ 				tempaddress='';
+ 				tempval='';
+			}
+			else if(bkDecompress==1 && serial ==8)
+			{
+				var subCounter2=(bkValue>>16)&0xFFFF;
+				bkAddress&=0x01FFFFFF;
+				bkValue&=0xFFFF;
+				line-=2;
+				while(subCounter2>0){
+					if(chead==1){
+					funcOutSect=funcOutSect+CWCAR+decDigi(bkAddress|0x10000000, 8)+' '+decDigi(address& 0xFFFF, 8)+'\n';
+					bkAddress+=bkValue;
+					bkAddress+=bkValue;
+					address+=value&0xFFFF;
+					}
+					else if(chead==0){
+					funcOutSect=funcOutSect+CWCAR+decDigi(bkAddress, 8)+' '+decDigi(address& 0xFF, 8)+'\n';
+					bkAddress+=bkValue;
+					address+=value&0xFF;
+					}
+					subCounter2--;
+					if(CWCLIMIT!=0 && line>=29){
+					funcOutSect=funcOutSect+'_C0 '+nameback+' 30limit\n';line=1;
+					}
+					if(CFFIX!=0 && line>=99){
+					funcOutSect=funcOutSect+'_C0 '+nameback+' 100limit\n';line=1;
+					}
+					line++;
+					}
+				valueMode=0;
+				bkDecompress=0;serial=0;
+				tempaddress='';
+				tempval='';
+			}
+			else if(bkDecompress==1 && serial ==6)
+			{
+				if(jline==1){
+				if(CFFIX!=0){
+				funcOutSect=funcOutSect+'_L 0xE0020880 '+decDigi(bkAddress2+2-0x30000000,8)+'\n';line++;
+				}
+				funcOutSect=funcOutSect+CWCAR+decDigi(bkAddress2, 8)+' '+decDigi(bkValue2, 8)+'\n';
+				funcOutSect=funcOutSect+CWCAR+decDigi(address, 8)+' '+decDigi(value, 8)+'\n';
+				serial=0;
+				jlineold=jline;
+				}
+				else{
+				bkAddress=address;
+				bkValue=value;
+				serial=9
+				}
+				valueMode=0;
+				bkDecompress=0;
+				tempaddress='';
+				tempval='';
+			}
+			else if(bkDecompress==1 && serial ==0x6CF)
+			{
+				if(jline==1){
+				if(CFFIX!=0 && mode==0 && line==101){
+				funcOutSect=funcOutSect+'_C0 '+nameback+' 100limit\n';line=3;
+				}
+				funcOutSect=funcOutSect+'_L 0xE0020880 '+decDigi(bkAddress2+2-0x30000000,8)+'\n';line++;
+				funcOutSect=funcOutSect+CWCAR+decDigi(bkAddress2, 8)+' '+decDigi(bkValue2, 8)+'\n';
+				funcOutSect=funcOutSect+CWCAR+decDigi(address, 8)+' '+decDigi(value, 8)+'\n';
+				serial=0;
+				jlineold=jline;
+				}
+				else{
+				bkAddress=address;
+				bkValue=value;
+				serial=0x6CF1;
+				}
+				valueMode=0;
+				bkDecompress=0;
+				tempaddress='';
+				tempval='';
+			}
+			else if(bkDecompress==1 && serial ==0x6CF1)
+			{
+				funcOutSect=funcOutSect+'#CODEFREAK未対応のため変換不可\n';
+				line-=3;
+				serial=0;
+				valueMode=0;
+				bkDecompress=0;
+				tempaddress='';
+				tempval='';
+			}
+			else if(bkDecompress==1 && serial ==9)
+			{
+				var subCounter3=bkAddress&0xFFFF;
+				var qqq=(bkAddress>>20)*4;
+				var bit=(bkAddress>>16)&0xF;
+				if(chead==-7 || chead==0){
+				address&=0x01FFFFFF;
+				if(bit==2||bit==5){
+				address=4*address;
+				}
+				if(bit==1||bit==4){
+				address=2*address;
+				bkValue2&=0xFFFF;
+				value&=0xFFFF;
+				}
+				if(bit==0||bit==3){
+				bkValue2&=0xFF;
+				value&=0xFF;
+				}
+				if(chead==0){
+				address=0;value=0;
+				}
+				line-=3;
+				while(subCounter3>0){
+					if(CFFIX!=0){
+					funcOutSect=funcOutSect+'_L 0xE0020880 '+decDigi(bkAddress2+2-0x30000000,8)+'\n';
+					}
+					funcOutSect=funcOutSect+CWCAR+decDigi(bkAddress2, 8)+' '+decDigi(bkValue2, 8)+'\n';
+					funcOutSect=funcOutSect+CWCAR+decDigi((bkAddress&0x000F0000)|0x1, 8)+' '+decDigi(bkValue, 8)+'\n';
+					bkAddress2+=qqq;
+					bkValue2+=value;
+					bkValue+=address;
+					subCounter3--;
+					if(CWCLIMIT!=0 && line>=27){
+					funcOutSect=funcOutSect+'_C0 '+nameback+' 30limit\n';line=1;
+					}
+					if(CFFIX!=0 && line>=95){
+					funcOutSect=funcOutSect+'_C0 '+nameback+' 100limit\n';line=1;
+					}
+					line+=2;
+					if(CFFIX!=0){
+					line++;
+					}
+				}
+				}
+				else if(CFFIX!=0){
+				funcOutSect=funcOutSect+'#CODEFREAK未対応のため変換不可\n';line-=3;
+				}
+				else if((chead==2 || chead==3) && qqq!=0){
+				line-=3;
+				while(subCounter3>0){
+					funcOutSect=funcOutSect+CWCAR+decDigi(bkAddress2, 8)+' '+decDigi(bkValue2, 8)+'\n';
+					funcOutSect=funcOutSect+CWCAR+decDigi(bkAddress&0xFFFFF, 8)+' '+decDigi(bkValue, 8)+'\n';
+					funcOutSect=funcOutSect+CWCAR+decDigi(address, 8)+' '+decDigi(value, 8)+'\n';
+					bkAddress2+=qqq;
+					subCounter3--;
+					line+=3;
+				}
+				}
+				else{
+				funcOutSect=funcOutSect+CWCAR+decDigi(bkAddress2, 8)+' '+decDigi(bkValue2, 8)+'\n';
+				funcOutSect=funcOutSect+CWCAR+decDigi(bkAddress, 8)+' '+decDigi(bkValue, 8)+'\n';
+				funcOutSect=funcOutSect+CWCAR+decDigi(address, 8)+' '+decDigi(value, 8)+'\n';
+				}
+				valueMode=0;
+				bkDecompress=0;
+				tempaddress='';
+				tempval='';
+				serial=0;
+			}
+			counter++;
+		}
+
+		document.cvcode.elements[0].value = funcOut;
+
+		return false;
+	}
+</script>
+
+<center><font size="5" color="#C090F0"><b>
+invaid string+space remover/decompresser/fixer for cwcheat code<br>
+20110623 modded by sanik nitePrCV,debugbrowser GoogelChome/MozzillaFirefox <a href="cwc_removerold.html">old</a><br></b></font>
+※IEはIE9でないとjava速度がいまいちなので1万行超える場合chromeかfirefox4推奨 <a href="http://memorva.jp/internet/pc/browser_benchmark.php">javabench</a><br>
+<form name="asc2hex">
+CWCheat/ActionReplay code:<br><textarea name="text" rows="10" cols="50"></textarea><br>
+<input type="Submit" value="Convert" Generate" onclick="doHex(document.asc2hex.text.value);return false">
+<input type="reset" value="Clear">
+</form>
+<form name="form1">
+<font color="#60C0F0">#CWC特殊オプション</font><br>
+<input type="checkbox" name="fcjoker" value="ok">FreeCheatJokerLine-1(フリーチートのパッドコード-1行)　　　　　　　　　　　　　<br>
+<input type="checkbox" name="30line" value="ok" >CWCheat30lineLimit(CWCの30行制限で分割,判定は未考慮)　　　　　　　　　　　<br>
+<input type="checkbox" name="cffix" value="ok"  >CODEFREAKFIX(CFの100行制限で分割,ポインタコードに判定を追加)　　　　　<br>
+<input type="checkbox" name="serial" value="ok" >DecompressSerialCodes(シリアルコードを分解,長くなるので注意)　　　　　　　　<br>
+<input type="checkbox" name="special" value="ok">RmCMF/FCSpCodes(CMF/FREECHEATの特殊コードを除去,0xCを0x2に変更)<br>
+<font color="#C0F060">#AR特殊オプション(フリーズ対策)</font><br>
+<input type="checkbox" name="null" value="ok"   >AVOIDNULLCODEBGUG(コード無しフリーズの修正,ダミーの0xCFを付加)<br>
+<input type="checkbox" name="d4_dc" value="ok"  >RemoveNull0xDC,0xD4(0xDC,0xD4の右コード0の場合除去)　　　　　　　　<br>
+<input type="checkbox" name="128line" value="ok">AR128lineLimit(ARの128行制限で長いシリアルのみ分割,判定は未考慮)<br>
+<input type="checkbox" name="addNO" value="ok">AddNameNo.(コードタイトル番号を付加)　　　　　　　　　　　　　　　　　　　　<br>
+<input type="checkbox" name="rmNO" value="ok">RmNameNo.(コードタイトル番号を除去)　　　　　　　　　　　　　　　　　　　　　<br>
+<br>
+<font color="#60C0F0">#CWCWIK特殊オプション</font><br>
+<input type="checkbox" name="128line" value="ok">ForceHEX(0xがないものでも強制16進数扱いににする)
+</form>
+<form name="st">
+ReplaceVal(0xghijklmnなど16進数でないもの置換文字)<br>
+<INPUT TYPE="text" NAME="text1" SIZE="40" VALUE="0xA" onblur="inputcheck();"><BR>
+</form>
+REGULAR CWC/AR CODE:<br>
+<form name="cvcode">
+<textarea name="text" rows="10" cols="50"></textarea>
+</form>
+</center>
