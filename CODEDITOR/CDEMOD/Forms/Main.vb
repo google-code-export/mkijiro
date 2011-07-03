@@ -116,7 +116,8 @@ Public Class Main
         If options_error.Checked = True Then
             error_window.Visible = True
         End If
-
+        ToolStripButton1.Enabled = False
+        ToolStripButton2.Enabled = False
 
     End Sub
 
@@ -132,6 +133,9 @@ Public Class Main
             error_window.Visible = True
         End If
 
+        ToolStripButton1.Enabled = False
+        ToolStripButton2.Enabled = False
+
     End Sub
 
     Private Sub Sort_CTitle_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Sort_CTitle.Click
@@ -145,6 +149,9 @@ Public Class Main
         If options_error.Checked = True Then
             error_window.Visible = True
         End If
+
+        ToolStripButton1.Enabled = False
+        ToolStripButton2.Enabled = False
 
     End Sub
 
@@ -347,7 +354,7 @@ Public Class Main
 
             If PSX = True Then
                 Dim r As New System.Text.RegularExpressions.Regex( _
-        "[0-9a-fA-F]{8} [0-9a-zA-Z]{4}", _
+        "[0-9a-fA-F]{8} [0-9a-zA-Z?]{4}", _
         System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 
                 Dim m As System.Text.RegularExpressions.Match = r.Match(b1)
@@ -1123,12 +1130,14 @@ Public Class Main
         Dim add As Integer = 0
         Dim nullcode As Integer = 0
         Dim i As Integer = 0
+        'Dim cwcar As String = Nothing
 
         For Each s As String In b2
 
             If s.Length >= 2 Then
                 If s.Substring(0, 2) = "_C" Then
                     nullcode = 1
+                    s = s.PadRight(3, "0"c)
                     If i = 0 Then
                         If s.Substring(2, 1) = "0" Then
                             code = "0" & vbCrLf
@@ -1139,7 +1148,7 @@ Public Class Main
                     Else
                         add = 1
                         If nullcode = 1 Then
-                            code &= "0" & vbCrLf
+                            code2 &= "0" & vbCrLf
                         End If
                         code = code & coment
                         If s.Substring(2, 1) = "0" Then
@@ -1152,11 +1161,22 @@ Public Class Main
                     i += 1
                 End If
 
-                If s.Substring(0, 2) = "_L" Then
+                If s.Substring(0, 2) = "_L" Or s.Substring(0, 2) = "_M" Then
                     nullcode = 0
-                    '_L 0x12345678 0x12345678
-                    If s.Substring(3, 2) = "0x" And s.Substring(14, 2) = "0x" Then
-                        code &= s.Substring(3, 21).Trim & vbCrLf
+                    s = s.Replace(vbCr, "")
+                    If PSX = True Then
+                        s = s.PadRight(17, "0"c)
+                        '_L 12345678 1234
+                        If s.Substring(2, 1) = " " And s.Substring(11, 1) = " " Then
+                            code &= s.Substring(3, 13).Trim & vbCrLf
+                        End If
+                    Else
+                        s = s.PadRight(24, "0"c)
+                        '_L 0x12345678 0x12345678
+                        If s.Substring(3, 2) = "0x" And s.Substring(14, 2) = "0x" Then
+                            code &= s.Substring(3, 21).Trim & vbCrLf
+                        End If
+
                     End If
                 End If
 

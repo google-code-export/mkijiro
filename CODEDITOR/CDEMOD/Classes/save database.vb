@@ -271,7 +271,7 @@ Public Class save_db
                             Else
                                 If System.Text.RegularExpressions.Regex.IsMatch( _
     s, _
-    "[0-9A-Fa-f]{8} [0-9A-Fa-f]{4}", _
+    "[0-9A-Fa-f]{8} [0-9A-Fa-f?]{4}", _
     System.Text.RegularExpressions.RegexOptions.ECMAScript) Then
 
                                     tw.Write("_L " & s.Trim & vbCrLf)

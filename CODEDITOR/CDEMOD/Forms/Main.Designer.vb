@@ -439,7 +439,7 @@ Partial Class Main
         Me.GT_tb.Enabled = False
         Me.GT_tb.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.GT_tb.Location = New System.Drawing.Point(322, 94)
-        Me.GT_tb.MaxLength = 120
+        Me.GT_tb.MaxLength = 64
         Me.GT_tb.Name = "GT_tb"
         Me.GT_tb.Size = New System.Drawing.Size(313, 19)
         Me.GT_tb.TabIndex = 2
@@ -478,7 +478,7 @@ Partial Class Main
         Me.CT_tb.Enabled = False
         Me.CT_tb.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.CT_tb.Location = New System.Drawing.Point(322, 169)
-        Me.CT_tb.MaxLength = 120
+        Me.CT_tb.MaxLength = 72
         Me.CT_tb.Name = "CT_tb"
         Me.CT_tb.Size = New System.Drawing.Size(313, 19)
         Me.CT_tb.TabIndex = 4
@@ -503,6 +503,7 @@ Partial Class Main
         Me.cl_tb.Enabled = False
         Me.cl_tb.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.cl_tb.Location = New System.Drawing.Point(320, 206)
+        Me.cl_tb.MaxLength = 0
         Me.cl_tb.Multiline = True
         Me.cl_tb.Name = "cl_tb"
         Me.cl_tb.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
@@ -550,6 +551,7 @@ Partial Class Main
         Me.cmt_tb.Enabled = False
         Me.cmt_tb.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.cmt_tb.Location = New System.Drawing.Point(317, 460)
+        Me.cmt_tb.MaxLength = 0
         Me.cmt_tb.Multiline = True
         Me.cmt_tb.Name = "cmt_tb"
         Me.cmt_tb.ScrollBars = System.Windows.Forms.ScrollBars.Both
@@ -666,7 +668,7 @@ Partial Class Main
         Me.ToolStripButton1.Name = "ToolStripButton1"
         Me.ToolStripButton1.Size = New System.Drawing.Size(44, 51)
         Me.ToolStripButton1.Text = "↑"
-        Me.ToolStripButton1.ToolTipText = "コードを１つ上に移動します"
+        Me.ToolStripButton1.ToolTipText = "選択しているタイトル/コードを1つ上に移動します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ソート後だと使えません"
         '
         'ToolStripButton2
         '
@@ -676,7 +678,7 @@ Partial Class Main
         Me.ToolStripButton2.Name = "ToolStripButton2"
         Me.ToolStripButton2.Size = New System.Drawing.Size(44, 51)
         Me.ToolStripButton2.Text = "↓"
-        Me.ToolStripButton2.ToolTipText = "コードを1つ下へ移動します"
+        Me.ToolStripButton2.ToolTipText = "選択しているタイトル/コードを1つ下へ移動します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ソート後だと使えません"
         '
         'progbar
         '
@@ -779,7 +781,7 @@ Partial Class Main
         Me.KeyPreview = True
         Me.MainMenuStrip = Me.treeopen
         Me.Name = "Main"
-        Me.Text = "CDEMOD20110630"
+        Me.Text = "CDEMOD20110702"
         Me.treeopen.ResumeLayout(False)
         Me.treeopen.PerformLayout()
         Me.tool_menu.ResumeLayout(False)
