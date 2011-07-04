@@ -85,7 +85,7 @@ Public Class parser
                             i += 1
 
                             '_L 0x12345678 0x12345678
-                        ElseIf s.Substring(0, 2) = "_L" Or s.Substring(0, 2) = "_M" Then
+                        ElseIf s.Substring(0, 2) = "_L" Or s.Substring(0, 2) = "_M" Or s.Substring(0, 2) = "_N" Then
                             cwcar = s.Substring(0, 3)
                             s = s.Replace(vbCr, "")
                             s = s.PadRight(24, "0"c)
@@ -98,6 +98,7 @@ Public Class parser
                                 s = s.Replace(" 0A", " 0x")
                                 b2 &= s.Substring(0, 24) & vbCrLf
                                 code = 1
+                                'popdb
                             ElseIf s.Substring(2, 1) = " " And s.Substring(11, 1) = " " Then
                                 s = System.Text.RegularExpressions.Regex.Replace( _
                         s, "[g-zG-Z]", "A")
@@ -136,6 +137,7 @@ Public Class parser
     Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
         Dim b1 As String() = TX.Text.Split(CChar(vbLf))
         Dim b2 As String = Nothing
+        Dim bc2 As String = Nothing
 
         For Each s As String In b1
             If s.Length > 12 Then
@@ -151,8 +153,10 @@ Public Class parser
     "0x[0-9A-Fa-f]{8} 0x[0-9A-Fa-f]{8}", _
     System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                 Dim ma As System.Text.RegularExpressions.Match = ar.Match(s)
+
+                bc2 = s.Substring(0, 2)
                 s = s.Trim
-                If mc.Success And s.Substring(0, 2) <> "_M" Then
+                If mc.Success And bc2 <> "_M" And bc2 <> "_N" Then
                     s = mc.Value
                     s = s.Replace("_L ", "")
                     s = s.Insert(0, "0x")
@@ -163,7 +167,7 @@ Public Class parser
                     s = s.Replace("?", "A")
                     s = s.Replace("_L ", "")
                     s = "_L " & s & vbCrLf
-                ElseIf ma.Success And s.Substring(0, 2) <> "_L" Then
+                ElseIf ma.Success And bc2 <> "_L" And bc2 <> "_N" Then
                     s = ma.Value
                     s = s.Replace("_M ", "")
                     s = "_M " & s & vbCrLf
@@ -180,6 +184,9 @@ Public Class parser
 
         Dim b1 As String() = TX.Text.Split(CChar(vbLf))
         Dim b2 As String = Nothing
+        Dim bc1 As String = Nothing
+        Dim bc2 As String = Nothing
+        Dim bc3 As String = Nothing
         Dim rmmode As Integer
 
         For Each s As String In b1
@@ -190,22 +197,29 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
             Dim m As System.Text.RegularExpressions.Match = r.Match(s)
             If s.Length >= 2 Then
                 s = s.PadRight(3)
-                If s.Substring(0, 3) = "_CR" Then
+                bc1 = s.Substring(0, 1)
+                bc2 = s.Substring(0, 2)
+                bc3 = s.Substring(0, 3)
+
+                If bc3 = "_CR" Then
                     rmmode = 1
-                ElseIf s.Substring(0, 3) = "_CM" Then
+                ElseIf bc3 = "_CM" Then
                     rmmode = 0
                 End If
 
-                If m.Success Or s.Substring(0, 1) = "#" Or s.Substring(0, 2) = "_L" Or s.Substring(0, 2) = "_M" Then
+
+                If m.Success Or bc1 = "#" Or bc2 = "_L" Or bc2 = "_M" Or bc2 = "_N" Then
                     s = s.Trim & vbCrLf
-                ElseIf s.Substring(0, 3) = "_CR" Or s.Substring(0, 3) = "_CM" Then
+                ElseIf bc3 = "_CR" Or bc3 = "_CM" Then
                     s = ""
-                ElseIf s.Substring(0, 3) = "_CJ" Or s.Substring(0, 3) = "_CW" Or s.Substring(0, 3) = "_CD" Or s.Substring(0, 3) = "_C#" Or s.Substring(0, 3) = "_C!" Then
+                ElseIf bc3 = "_CJ" Or bc3 = "_CW" Or bc3 = "_CD" Or bc3 = "_C#" Or bc3 = "_C!" Then
                 ElseIf rmmode = 1 Then
                     s = s.Replace("_C0 ", "")
                     s = s.Replace("_C1 ", "")
+                ElseIf bc3 = "_C0" Or bc3 = "_C1" Or bc2 = "_S" Or bc2 = "_G" Then
                 Else
                     s = s.Replace("_C0", "")
+                    s = s.Replace("_C1 ", "")
                     s = "_C0 " & s.Trim & vbCrLf
                 End If
                 b2 &= s.Trim & vbCrLf

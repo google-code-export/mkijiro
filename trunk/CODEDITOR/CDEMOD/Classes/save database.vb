@@ -13,6 +13,7 @@ Public Class save_db
                                    System.Text.Encoding.GetEncoding(enc1))
         Dim ew As error_window = error_window
         Dim errors As Boolean = False
+        Dim cwcar As String = "_L "
 
         reset_errors() ' Clear prior save errors if any
 
@@ -38,32 +39,65 @@ Public Class save_db
                         'write_errors(i, n.Text.Trim, n1.Text.Trim, "Error:  Code title contained no codes, not saved.")
                         'errors = True
 
-                    ElseIf n1.Tag.ToString.Trim = "0" Or n1.Tag.ToString.Trim = "1" Then
-                        
-                        If n1.Tag.ToString.Substring(0, 1) = "0" Then
-                            tw.Write("_C0 " & n1.Text.Trim & vbCrLf)
-                        Else
-                            tw.Write("_C1 " & n1.Text.Trim & vbCrLf)
-                        End If
-                        ' If the code title had no actual codes, don't save it
-                        'i += 1
-                        'write_errors(i, n.Text.Trim, n1.Text.Trim, "Error:  Code title contained no codes, not saved.")
-                        'errors = True
+                        'ElseIf n1.Tag.ToString.Trim >= "0" Or n1.Tag.ToString.Trim <= "5" Then
+
+                        '    If n1.Tag.ToString.Substring(0, 1) = "0" Then
+                        '        tw.Write("_C0 " & n1.Text.Trim & vbCrLf)
+                        '    Else
+                        '        tw.Write("_C1 " & n1.Text.Trim & vbCrLf)
+                        '    End If
+                        '    ' If the code title had no actual codes, don't save it
+                        '    'i += 1
+                        '    'write_errors(i, n.Text.Trim, n1.Text.Trim, "Error:  Code title contained no codes, not saved.")
+                        '    'errors = True
 
                     Else
-
-                        If n1.Tag.ToString.Substring(0, 1) = "0" Then
-                            tw.Write("_C0 " & n1.Text.Trim & vbCrLf)
-                        Else
-                            tw.Write("_C1 " & n1.Text.Trim & vbCrLf)
-                        End If
+                        'Dim w As String = n1.Tag.ToString.Trim
+                        'If w = "0" Or w = "2" Or w = "5" Then
+                        '    If w = "0" Then
+                        '        cwcar = "_L "
+                        '    ElseIf w = "2" Then
+                        '        cwcar = "_M "
+                        '    ElseIf w = "4" Then
+                        '        cwcar = "_N "
+                        '    End If
+                        '    tw.Write("_C0 " & n1.Text.Trim & vbCrLf)
+                        'ElseIf w = "1" Or w = "3" Or w = "5" Then
+                        '    If w = "1" Then
+                        '        cwcar = "_L "
+                        '    ElseIf w = "3" Then
+                        '        cwcar = "_M "
+                        '    ElseIf w = "5" Then
+                        '        cwcar = "_N "
+                        '    End If
+                        '    tw.Write("_C1 " & n1.Text.Trim & vbCrLf)
+                        'End If
 
 
                         buffer = n1.Tag.ToString.Split(CChar(vbCrLf))
 
                         For Each s As String In buffer
-
-                            If s.Length > 1 Then
+                            If s.Length = 1 Then
+                                If s = "0" Or s = "2" Or s = "4" Then
+                                    If s = "0" Then
+                                        cwcar = "_L "
+                                    ElseIf s = "2" Then
+                                        cwcar = "_M "
+                                    ElseIf s = "4" Then
+                                        cwcar = "_N "
+                                    End If
+                                    tw.Write("_C0 " & n1.Text.Trim & vbCrLf)
+                                ElseIf s = "1" Or s = "3" Or s = "5" Then
+                                    If s = "1" Then
+                                        cwcar = "_L "
+                                    ElseIf s = "3" Then
+                                        cwcar = "_M "
+                                    ElseIf s = "5" Then
+                                        cwcar = "_N "
+                                    End If
+                                    tw.Write("_C1 " & n1.Text.Trim & vbCrLf)
+                                End If
+                            ElseIf s.Length > 1 Then
 
                                 If s.Contains("#") Then
 
@@ -73,12 +107,12 @@ Public Class save_db
                                     '0x00000000 0x00000000
                                     If s.Contains("0x") Then
 
-                                        tw.Write("_L " & s.Trim & vbCrLf)
+                                        tw.Write(cwcar & s.Trim & vbCrLf)
 
                                     Else
                                         ' Error, code length was incorrect
                                         i += 1
-                                        write_errors(i, n.Text.Trim, n1.Text.Trim, "Incorrectly formatted code: " & s.Trim)
+                                        write_errors(i, n.Text.Trim, n1.Text.Trim, "不正なコード形式です: " & s.Trim)
                                         errors = True
                                     End If
 
@@ -88,7 +122,7 @@ Public Class save_db
 
                         Next
 
-                    End If
+                        End If
 
                 Next
 
@@ -102,106 +136,106 @@ Public Class save_db
 
     End Sub
 
-    Public Sub save_pspar(ByVal filename As String, ByVal enc1 As Integer
-                          )
+    'Public Sub save_pspar(ByVal filename As String, ByVal enc1 As Integer
+    '                      )
 
-        Dim m As Main = Main
-        Dim i As Integer = 0 ' Error count
-        Dim buffer As String()
+    '    Dim m As Main = Main
+    '    Dim i As Integer = 0 ' Error count
+    '    Dim buffer As String()
 
-        Dim tw As New StreamWriter(filename, False, _
-                                   System.Text.Encoding.GetEncoding(enc1))
-        Dim ew As error_window = error_window
-        Dim errors As Boolean = False
+    '    Dim tw As New StreamWriter(filename, False, _
+    '                               System.Text.Encoding.GetEncoding(enc1))
+    '    Dim ew As error_window = error_window
+    '    Dim errors As Boolean = False
 
-        reset_errors() ' Clear prior save errors if any
+    '    reset_errors() ' Clear prior save errors if any
 
-        Try
+    '    Try
 
-            For Each n As TreeNode In m.codetree.Nodes(0).Nodes
+    '        For Each n As TreeNode In m.codetree.Nodes(0).Nodes
 
-                tw.Write("_S " & n.Tag.ToString.Trim & vbCrLf)
-                tw.Write("_G " & n.Text.Trim & vbCrLf)
+    '            tw.Write("_S " & n.Tag.ToString.Trim & vbCrLf)
+    '            tw.Write("_G " & n.Text.Trim & vbCrLf)
 
-                For Each n1 As TreeNode In n.Nodes
+    '            For Each n1 As TreeNode In n.Nodes
 
-                    If n1.Tag Is Nothing Then
-
-
-                        If n1.Tag.ToString.Substring(0, 1) = "0" Then
-                            tw.Write("_C0 " & n1.Text.Trim & vbCrLf & "_M 0xCF000000 0x00000000" & vbCrLf)
-                        Else
-                            tw.Write("_C1 " & n1.Text.Trim & vbCrLf & "_M 0xCF000000 0x00000000" & vbCrLf)
-                        End If
-                        ' If the code title had no actual codes, don't save it
-                        'i += 1
-                        'write_errors(i, n.Text.Trim, n1.Text.Trim, "Error:  Code title contained no codes, not saved.")
-                        'errors = True
-
-                    ElseIf n1.Tag.ToString.Trim = "0" Or n1.Tag.ToString.Trim = "1" Then
+    '                If n1.Tag Is Nothing Then
 
 
-                        If n1.Tag.ToString.Substring(0, 1) = "0" Then
-                            tw.Write("_C0 " & n1.Text.Trim & vbCrLf & "_M 0xCF000000 0x00000000" & vbCrLf)
-                        Else
-                            tw.Write("_C1 " & n1.Text.Trim & vbCrLf & "_M 0xCF000000 0x00000000" & vbCrLf)
-                        End If
-                        ' If the code title had no actual codes, don't save it
-                        'i += 1
-                        'write_errors(i, n.Text.Trim, n1.Text.Trim, "Error:  Code title contained no codes, not saved.")
-                        'errors = True
+    '                    If n1.Tag.ToString.Substring(0, 1) = "0" Then
+    '                        tw.Write("_C0 " & n1.Text.Trim & vbCrLf & "_M 0xCF000000 0x00000000" & vbCrLf)
+    '                    Else
+    '                        tw.Write("_C1 " & n1.Text.Trim & vbCrLf & "_M 0xCF000000 0x00000000" & vbCrLf)
+    '                    End If
+    '                    ' If the code title had no actual codes, don't save it
+    '                    'i += 1
+    '                    'write_errors(i, n.Text.Trim, n1.Text.Trim, "Error:  Code title contained no codes, not saved.")
+    '                    'errors = True
 
-                    Else
-
-                        If n1.Tag.ToString.Substring(0, 1) = "0" Then
-                            tw.Write("_C0 " & n1.Text.Trim & vbCrLf)
-                        Else
-                            tw.Write("_C1 " & n1.Text.Trim & vbCrLf)
-                        End If
+    '                ElseIf n1.Tag.ToString.Trim = "0" Or n1.Tag.ToString.Trim = "1" Then
 
 
-                        buffer = n1.Tag.ToString.Split(CChar(vbCrLf))
+    '                    If n1.Tag.ToString.Substring(0, 1) = "0" Then
+    '                        tw.Write("_C0 " & n1.Text.Trim & vbCrLf & "_M 0xCF000000 0x00000000" & vbCrLf)
+    '                    Else
+    '                        tw.Write("_C1 " & n1.Text.Trim & vbCrLf & "_M 0xCF000000 0x00000000" & vbCrLf)
+    '                    End If
+    '                    ' If the code title had no actual codes, don't save it
+    '                    'i += 1
+    '                    'write_errors(i, n.Text.Trim, n1.Text.Trim, "Error:  Code title contained no codes, not saved.")
+    '                    'errors = True
 
-                        For Each s As String In buffer
+    '                Else
 
-                            If s.Length > 1 Then
+    '                    If n1.Tag.ToString.Substring(0, 1) = "0" Then
+    '                        tw.Write("_C0 " & n1.Text.Trim & vbCrLf)
+    '                    Else
+    '                        tw.Write("_C1 " & n1.Text.Trim & vbCrLf)
+    '                    End If
 
-                                If s.Contains("#") Then
 
-                                    tw.Write(s.Trim & vbCrLf)
+    '                    buffer = n1.Tag.ToString.Split(CChar(vbCrLf))
 
-                                Else
+    '                    For Each s As String In buffer
 
-                                    If s.Contains("0x") Then
+    '                        If s.Length > 1 Then
 
-                                        tw.Write("_M " & s.Trim & vbCrLf)
+    '                            If s.Contains("#") Then
 
-                                    Else
-                                        ' Error, code length was incorrect
-                                        i += 1
-                                        write_errors(i, n.Text.Trim, n1.Text.Trim, "Incorrectly formatted code: " & s.Trim)
-                                        errors = True
-                                    End If
+    '                                tw.Write(s.Trim & vbCrLf)
 
-                                End If
+    '                            Else
 
-                            End If
+    '                                If s.Contains("0x") Then
 
-                        Next
+    '                                    tw.Write("_M " & s.Trim & vbCrLf)
 
-                    End If
+    '                                Else
+    '                                    ' Error, code length was incorrect
+    '                                    i += 1
+    '                                    write_errors(i, n.Text.Trim, n1.Text.Trim, "Incorrectly formatted code: " & s.Trim)
+    '                                    errors = True
+    '                                End If
 
-                Next
+    '                            End If
 
-            Next
+    '                        End If
 
-        Catch ex As Exception
-            MessageBox.Show(ex.Message)
-        End Try
+    '                    Next
 
-        tw.Close()
+    '                End If
 
-    End Sub
+    '            Next
+
+    '        Next
+
+    '    Catch ex As Exception
+    '        MessageBox.Show(ex.Message)
+    '    End Try
+
+    '    tw.Close()
+
+    'End Sub
 
     Public Sub save_psx(ByVal filename As String, ByVal enc1 As Integer
                         )

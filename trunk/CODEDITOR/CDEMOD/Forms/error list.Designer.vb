@@ -59,27 +59,27 @@ Partial Class error_window
         '
         'col_error
         '
-        Me.col_error.Text = "Error #"
+        Me.col_error.Text = "エラー #"
         Me.col_error.Width = 63
         '
         'col_line
         '
-        Me.col_line.Text = "Line #"
+        Me.col_line.Text = "行数 #"
         Me.col_line.Width = 57
         '
         'col_game
         '
-        Me.col_game.Text = "Game"
+        Me.col_game.Text = "ゲーム名"
         Me.col_game.Width = 94
         '
         'col_title
         '
-        Me.col_title.Text = "Code Title"
+        Me.col_title.Text = "コード名"
         Me.col_title.Width = 178
         '
         'col_linetext
         '
-        Me.col_linetext.Text = "Line Text"
+        Me.col_linetext.Text = "テキスト内容"
         Me.col_linetext.Width = 252
         '
         'tab_error
@@ -101,7 +101,7 @@ Partial Class error_window
         Me.tab_load.Padding = New System.Windows.Forms.Padding(3)
         Me.tab_load.Size = New System.Drawing.Size(649, 110)
         Me.tab_load.TabIndex = 0
-        Me.tab_load.Text = "Loading Errors"
+        Me.tab_load.Text = "読み込み時エラー"
         Me.tab_load.UseVisualStyleBackColor = True
         '
         'tab_save
@@ -112,7 +112,7 @@ Partial Class error_window
         Me.tab_save.Padding = New System.Windows.Forms.Padding(3)
         Me.tab_save.Size = New System.Drawing.Size(649, 110)
         Me.tab_save.TabIndex = 1
-        Me.tab_save.Text = "Saving Errors"
+        Me.tab_save.Text = "保存時エラー"
         Me.tab_save.UseVisualStyleBackColor = True
         '
         'list_save_error

@@ -32,7 +32,6 @@ Partial Class Main
         Me.file_open = New System.Windows.Forms.ToolStripMenuItem()
         Me.file_saveas = New System.Windows.Forms.ToolStripMenuItem()
         Me.saveas_cwcheat = New System.Windows.Forms.ToolStripMenuItem()
-        Me.saveas_pspar = New System.Windows.Forms.ToolStripMenuItem()
         Me.saveas_psx = New System.Windows.Forms.ToolStripMenuItem()
         Me.file_exit = New System.Windows.Forms.ToolStripMenuItem()
         Me.menu_sort = New System.Windows.Forms.ToolStripMenuItem()
@@ -99,8 +98,17 @@ Partial Class Main
         Me.PSX_iconset = New System.Windows.Forms.ImageList(Me.components)
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
+        Me.コード形式 = New System.Windows.Forms.Label()
+        Me.RadioButton1 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton2 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton3 = New System.Windows.Forms.RadioButton()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.RadioButton6 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton5 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton4 = New System.Windows.Forms.RadioButton()
         Me.treeopen.SuspendLayout()
         Me.tool_menu.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'treeopen
@@ -150,7 +158,7 @@ Partial Class Main
         '
         'file_saveas
         '
-        Me.file_saveas.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.saveas_cwcheat, Me.saveas_pspar, Me.saveas_psx})
+        Me.file_saveas.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.saveas_cwcheat, Me.saveas_psx})
         Me.file_saveas.Enabled = False
         Me.file_saveas.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.save
         Me.file_saveas.Name = "file_saveas"
@@ -161,21 +169,14 @@ Partial Class Main
         '
         Me.saveas_cwcheat.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.psp_menu
         Me.saveas_cwcheat.Name = "saveas_cwcheat"
-        Me.saveas_cwcheat.Size = New System.Drawing.Size(115, 22)
-        Me.saveas_cwcheat.Text = "CWcheat"
-        '
-        'saveas_pspar
-        '
-        Me.saveas_pspar.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.psp_menu
-        Me.saveas_pspar.Name = "saveas_pspar"
-        Me.saveas_pspar.Size = New System.Drawing.Size(115, 22)
-        Me.saveas_pspar.Text = "PSPar"
+        Me.saveas_cwcheat.Size = New System.Drawing.Size(174, 22)
+        Me.saveas_cwcheat.Text = "CWC/PSPAR/TEMP"
         '
         'saveas_psx
         '
         Me.saveas_psx.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.sony_playstation1
         Me.saveas_psx.Name = "saveas_psx"
-        Me.saveas_psx.Size = New System.Drawing.Size(115, 22)
+        Me.saveas_psx.Size = New System.Drawing.Size(174, 22)
         Me.saveas_psx.Text = "PSX"
         '
         'file_exit
@@ -236,7 +237,7 @@ Partial Class Main
         '
         Me.options_ontop.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.alwaystop
         Me.options_ontop.Name = "options_ontop"
-        Me.options_ontop.Size = New System.Drawing.Size(154, 22)
+        Me.options_ontop.Size = New System.Drawing.Size(183, 22)
         Me.options_ontop.Text = "常に全面に表示"
         '
         'options_error
@@ -751,11 +752,101 @@ Partial Class Main
         Me.TextBox2.Size = New System.Drawing.Size(0, 19)
         Me.TextBox2.TabIndex = 19
         '
+        'コード形式
+        '
+        Me.コード形式.AutoSize = True
+        Me.コード形式.Location = New System.Drawing.Point(411, 117)
+        Me.コード形式.Name = "コード形式"
+        Me.コード形式.Size = New System.Drawing.Size(56, 12)
+        Me.コード形式.TabIndex = 21
+        Me.コード形式.Text = "コード形式"
+        '
+        'RadioButton1
+        '
+        Me.RadioButton1.AutoSize = True
+        Me.RadioButton1.Location = New System.Drawing.Point(414, 134)
+        Me.RadioButton1.Name = "RadioButton1"
+        Me.RadioButton1.Size = New System.Drawing.Size(48, 16)
+        Me.RadioButton1.TabIndex = 22
+        Me.RadioButton1.TabStop = True
+        Me.RadioButton1.Text = "CWC"
+        Me.RadioButton1.UseVisualStyleBackColor = True
+        '
+        'RadioButton2
+        '
+        Me.RadioButton2.AutoSize = True
+        Me.RadioButton2.Location = New System.Drawing.Point(468, 133)
+        Me.RadioButton2.Name = "RadioButton2"
+        Me.RadioButton2.Size = New System.Drawing.Size(60, 16)
+        Me.RadioButton2.TabIndex = 23
+        Me.RadioButton2.TabStop = True
+        Me.RadioButton2.Text = "PSPAR"
+        Me.RadioButton2.UseVisualStyleBackColor = True
+        '
+        'RadioButton3
+        '
+        Me.RadioButton3.AutoSize = True
+        Me.RadioButton3.Location = New System.Drawing.Point(534, 132)
+        Me.RadioButton3.Name = "RadioButton3"
+        Me.RadioButton3.Size = New System.Drawing.Size(69, 16)
+        Me.RadioButton3.TabIndex = 24
+        Me.RadioButton3.TabStop = True
+        Me.RadioButton3.Text = "TEMPAR"
+        Me.RadioButton3.UseVisualStyleBackColor = True
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.RadioButton6)
+        Me.Panel1.Controls.Add(Me.RadioButton5)
+        Me.Panel1.Controls.Add(Me.RadioButton4)
+        Me.Panel1.Location = New System.Drawing.Point(413, 130)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(200, 20)
+        Me.Panel1.TabIndex = 25
+        '
+        'RadioButton6
+        '
+        Me.RadioButton6.AutoSize = True
+        Me.RadioButton6.Location = New System.Drawing.Point(106, 3)
+        Me.RadioButton6.Name = "RadioButton6"
+        Me.RadioButton6.Size = New System.Drawing.Size(53, 16)
+        Me.RadioButton6.TabIndex = 2
+        Me.RadioButton6.TabStop = True
+        Me.RadioButton6.Text = "TEMP"
+        Me.RadioButton6.UseVisualStyleBackColor = True
+        '
+        'RadioButton5
+        '
+        Me.RadioButton5.AutoSize = True
+        Me.RadioButton5.Location = New System.Drawing.Point(48, 4)
+        Me.RadioButton5.Name = "RadioButton5"
+        Me.RadioButton5.Size = New System.Drawing.Size(60, 16)
+        Me.RadioButton5.TabIndex = 1
+        Me.RadioButton5.TabStop = True
+        Me.RadioButton5.Text = "PSPAR"
+        Me.RadioButton5.UseVisualStyleBackColor = True
+        '
+        'RadioButton4
+        '
+        Me.RadioButton4.AutoSize = True
+        Me.RadioButton4.Location = New System.Drawing.Point(4, 4)
+        Me.RadioButton4.Name = "RadioButton4"
+        Me.RadioButton4.Size = New System.Drawing.Size(48, 16)
+        Me.RadioButton4.TabIndex = 0
+        Me.RadioButton4.TabStop = True
+        Me.RadioButton4.Text = "CWC"
+        Me.RadioButton4.UseVisualStyleBackColor = True
+        '
         'Main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(640, 562)
+        Me.Controls.Add(Me.Panel1)
+        Me.Controls.Add(Me.RadioButton3)
+        Me.Controls.Add(Me.RadioButton2)
+        Me.Controls.Add(Me.RadioButton1)
+        Me.Controls.Add(Me.コード形式)
         Me.Controls.Add(Me.TextBox2)
         Me.Controls.Add(Me.TextBox1)
         Me.Controls.Add(Me.Joker_lbl)
@@ -781,11 +872,13 @@ Partial Class Main
         Me.KeyPreview = True
         Me.MainMenuStrip = Me.treeopen
         Me.Name = "Main"
-        Me.Text = "CDEMOD20110702"
+        Me.Text = "CDEMOD20110703"
         Me.treeopen.ResumeLayout(False)
         Me.treeopen.PerformLayout()
         Me.tool_menu.ResumeLayout(False)
         Me.tool_menu.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -837,7 +930,6 @@ Partial Class Main
     Friend WithEvents new_psx As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents options_ontop As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents saveas_cwcheat As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents saveas_pspar As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents saveas_psx As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents menu_font As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents EncodeToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
@@ -865,5 +957,13 @@ Partial Class Main
     Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
     Friend WithEvents TextBox2 As System.Windows.Forms.TextBox
     Friend WithEvents PSPへコードコピーToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents コード形式 As System.Windows.Forms.Label
+    Friend WithEvents RadioButton1 As System.Windows.Forms.RadioButton
+    Friend WithEvents RadioButton2 As System.Windows.Forms.RadioButton
+    Friend WithEvents RadioButton3 As System.Windows.Forms.RadioButton
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents RadioButton5 As System.Windows.Forms.RadioButton
+    Friend WithEvents RadioButton4 As System.Windows.Forms.RadioButton
+    Friend WithEvents RadioButton6 As System.Windows.Forms.RadioButton
 
 End Class
