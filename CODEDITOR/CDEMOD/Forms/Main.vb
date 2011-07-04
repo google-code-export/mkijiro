@@ -29,7 +29,6 @@ Public Class Main
         End If
         PSX = False
         saveas_cwcheat.Enabled = True
-        saveas_pspar.Enabled = True
         saveas_psx.Enabled = False
         file_saveas.Enabled = True
 
@@ -52,7 +51,6 @@ Public Class Main
         End If
         PSX = True
         saveas_cwcheat.Enabled = False
-        saveas_pspar.Enabled = False
         saveas_psx.Enabled = True
         file_saveas.Enabled = True
     End Sub
@@ -75,7 +73,6 @@ Public Class Main
                 Application.DoEvents()
                 open.read_PSP(database, enc1)
                 saveas_cwcheat.Enabled = True
-                saveas_pspar.Enabled = True
                 saveas_psx.Enabled = False
             Else
                 reset_PSX()
@@ -83,7 +80,6 @@ Public Class Main
                 open.read_PSX(database, enc1)
                 saveas_psx.Enabled = True
                 saveas_cwcheat.Enabled = False
-                saveas_pspar.Enabled = False
             End If
 
             codetree.EndUpdate()
@@ -347,103 +343,115 @@ Public Class Main
             cl_tb.Text = Nothing
             cmt_tb.Text = Nothing
             If off_rd.Checked = True Then
-                buffer = "0" & vbCrLf
+                If RadioButton5.Checked = True Then
+                    buffer = "2" & vbCrLf
+                ElseIf RadioButton6.Checked = True Then
+                    buffer = "4" & vbCrLf
+                Else
+                    buffer = "0" & vbCrLf
+                End If
             Else
-                buffer = "1" & vbCrLf
+                If RadioButton5.Checked = True Then
+                    buffer = "3" & vbCrLf
+                ElseIf RadioButton6.Checked = True Then
+                    buffer = "5" & vbCrLf
+                Else
+                    buffer = "1" & vbCrLf
+                End If
             End If
 
-            If PSX = True Then
-                Dim r As New System.Text.RegularExpressions.Regex( _
-        "[0-9a-fA-F]{8} [0-9a-zA-Z?]{4}", _
-        System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+                If PSX = True Then
+                    Dim r As New System.Text.RegularExpressions.Regex( _
+            "[0-9a-fA-F]{8} [0-9a-zA-Z?]{4}", _
+            System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 
-                Dim m As System.Text.RegularExpressions.Match = r.Match(b1)
+                    Dim m As System.Text.RegularExpressions.Match = r.Match(b1)
 
-                While m.Success
-                    buffer &= (m.Value) & vbCrLf
-                    cl_tb.Text &= (m.Value) & vbCrLf
-                    m = m.NextMatch()
-                End While
-            Else
-                b1 = b1.Replace("_L ", "")
-                Dim r As New System.Text.RegularExpressions.Regex( _
-        "0x........ 0x........", _
-        System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+                    While m.Success
+                        buffer &= (m.Value) & vbCrLf
+                        cl_tb.Text &= (m.Value) & vbCrLf
+                        m = m.NextMatch()
+                    End While
+                Else
+                    b1 = b1.Replace("_L ", "")
+                    Dim r As New System.Text.RegularExpressions.Regex( _
+            "0x........ 0x........", _
+            System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 
-                Dim m As System.Text.RegularExpressions.Match = r.Match(b1)
+                    Dim m As System.Text.RegularExpressions.Match = r.Match(b1)
 
-                While m.Success
-                    buffer &= (m.Value) & vbCrLf
-                    cl_tb.Text &= (m.Value) & vbCrLf
-                    m = m.NextMatch()
-                End While
+                    While m.Success
+                        buffer &= (m.Value) & vbCrLf
+                        cl_tb.Text &= (m.Value) & vbCrLf
+                        m = m.NextMatch()
+                    End While
 
-                '        b1 = cl_tb.Text.Replace("_L ", "")
-                '        b1 = System.Text.RegularExpressions.Regex.Replace( _
-                '            b1, "_C.+\n", vbCrLf)
-                '        b1 = System.Text.RegularExpressions.Regex.Replace( _
-                '        b1, "[!-/;-@\u005B-`\u007B-\uFFFF].+\n", vbCrLf)
-                buffer = System.Text.RegularExpressions.Regex.Replace( _
-        buffer, "[g-zG-Z]", "A")
-                buffer = buffer.ToUpper
-                buffer = System.Text.RegularExpressions.Regex.Replace( _
-        buffer, "^0A", "0x")
-                buffer = System.Text.RegularExpressions.Regex.Replace( _
-        buffer, "(\r|\n)0A", vbCrLf & "0x")
-                buffer = buffer.Replace(" 0A", " 0x")
-                '        b1 = System.Text.RegularExpressions.Regex.Replace( _
-                'b1, "[!-/;-@\u005B-`\u007B-\uFFFF].+[^0-9A-F]$", "")
-                '        Dim b2 As String() = b1.Split(CChar(vbCrLf))
-            End If
-
-            If codetree.SelectedNode.Level = 2 Then
-                codetree.SelectedNode.Name = CT_tb.Text.Replace("_C0 ", "")
-                codetree.SelectedNode.Text = CT_tb.Text.Replace("_C0 ", "")
-                codetree.SelectedNode.Name = codetree.SelectedNode.Name.Replace("_C1 ", "")
-                codetree.SelectedNode.Text = codetree.SelectedNode.Text.Replace("_C1 ", "")
-                CT_tb.Text = codetree.SelectedNode.Name
-                'For Each s As String In b2
-
-                '    If s <> vbCrLf Then
-                '        If i = 0 Then
-                '            If off_rd.Checked = True Then
-                '                buffer = "0" & vbCrLf
-                '            Else
-                '                buffer = "1" & vbCrLf
-                '            End If
-                '            i += 1
-                '        End If
-
-                '        If i > 0 And s.Length > 2 Then
-                '            buffer &= s.Trim & vbCrLf
-                '        End If
-                '    End If
-
-                'Next
-                If b5 <> Nothing Then
-                    Dim b3 As String() = b5.Split(CChar(vbLf))
-                    For Each s As String In b3
-                        s = s.Replace("#", "")
-                        If i = 0 Then
-                            If s.Substring(0, 1) >= "!" Then
-                                buffer &= "#" & s.Trim & vbCrLf
-                                cmt_tb.Text &= s.Trim & vbCrLf
-
-                            End If
-                        End If
-
-                        If i > 0 And s.Length > 1 Then
-                            buffer &= "#" & s.Trim & vbCrLf
-                            cmt_tb.Text &= s.Trim & vbCrLf
-                        End If
-                        i += 1
-                    Next
+                    '        b1 = cl_tb.Text.Replace("_L ", "")
+                    '        b1 = System.Text.RegularExpressions.Regex.Replace( _
+                    '            b1, "_C.+\n", vbCrLf)
+                    '        b1 = System.Text.RegularExpressions.Regex.Replace( _
+                    '        b1, "[!-/;-@\u005B-`\u007B-\uFFFF].+\n", vbCrLf)
+                    buffer = System.Text.RegularExpressions.Regex.Replace( _
+            buffer, "[g-zG-Z]", "A")
+                    buffer = buffer.ToUpper
+                    buffer = System.Text.RegularExpressions.Regex.Replace( _
+            buffer, "^0A", "0x")
+                    buffer = System.Text.RegularExpressions.Regex.Replace( _
+            buffer, "(\r|\n)0A", vbCrLf & "0x")
+                    buffer = buffer.Replace(" 0A", " 0x")
+                    '        b1 = System.Text.RegularExpressions.Regex.Replace( _
+                    'b1, "[!-/;-@\u005B-`\u007B-\uFFFF].+[^0-9A-F]$", "")
+                    '        Dim b2 As String() = b1.Split(CChar(vbCrLf))
                 End If
 
+                If codetree.SelectedNode.Level = 2 Then
+                    codetree.SelectedNode.Name = CT_tb.Text.Replace("_C0 ", "")
+                    codetree.SelectedNode.Text = CT_tb.Text.Replace("_C0 ", "")
+                    codetree.SelectedNode.Name = codetree.SelectedNode.Name.Replace("_C1 ", "")
+                    codetree.SelectedNode.Text = codetree.SelectedNode.Text.Replace("_C1 ", "")
+                    CT_tb.Text = codetree.SelectedNode.Name
+                    'For Each s As String In b2
 
-                codetree.SelectedNode.Tag = buffer
-                codetree.EndUpdate()
-            End If
+                    '    If s <> vbCrLf Then
+                    '        If i = 0 Then
+                    '            If off_rd.Checked = True Then
+                    '                buffer = "0" & vbCrLf
+                    '            Else
+                    '                buffer = "1" & vbCrLf
+                    '            End If
+                    '            i += 1
+                    '        End If
+
+                    '        If i > 0 And s.Length > 2 Then
+                    '            buffer &= s.Trim & vbCrLf
+                    '        End If
+                    '    End If
+
+                    'Next
+                    If b5 <> Nothing Then
+                        Dim b3 As String() = b5.Split(CChar(vbLf))
+                        For Each s As String In b3
+                            s = s.Replace("#", "")
+                            If i = 0 Then
+                                If s.Substring(0, 1) >= "!" Then
+                                    buffer &= "#" & s.Trim & vbCrLf
+                                    cmt_tb.Text &= s.Trim & vbCrLf
+
+                                End If
+                            End If
+
+                            If i > 0 And s.Length > 1 Then
+                                buffer &= "#" & s.Trim & vbCrLf
+                                cmt_tb.Text &= s.Trim & vbCrLf
+                            End If
+                            i += 1
+                        Next
+                    End If
+
+
+                    codetree.SelectedNode.Tag = buffer
+                    codetree.EndUpdate()
+                End If
 
 
         Catch ex As Exception
@@ -562,10 +570,18 @@ Public Class Main
 
                     If i = 0 Then ' If on the first line, check if the code is enabled by default
 
-                        If s = "1" Then
+                        If s = "1" Or s = "3" Or s = "5" Then
                             on_rd.Checked = True
                         Else
                             off_rd.Checked = True
+                        End If
+
+                        If s = "4" Or s = "5" Then
+                            RadioButton6.Checked = True
+                        ElseIf s = "2" Or s = "3" Then
+                            RadioButton5.Checked = True
+                        ElseIf s = "0" Or s = "1" Then
+                            RadioButton4.Checked = True
                         End If
 
                         skip = True
@@ -955,31 +971,31 @@ Public Class Main
         End If
     End Sub
 
-    Private Sub saveas_pspar_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles saveas_pspar.Click
-        Dim open As New load_db
-        Dim s As New save_db
+    'Private Sub saveas_pspar_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles saveas_pspar.Click
+    '    Dim open As New load_db
+    '    Dim s As New save_db
 
-        If save_file.ShowDialog = Windows.Forms.DialogResult.OK And save_file.FileName <> Nothing Then
-            database = save_file.FileName
+    '    If save_file.ShowDialog = Windows.Forms.DialogResult.OK And save_file.FileName <> Nothing Then
+    '        database = save_file.FileName
 
 
-            s.save_pspar(database, enc1)
+    '        s.save_pspar(database, enc1)
 
-            ' Reload the file
-            codetree.Nodes.Clear()
-            codetree.BeginUpdate()
-            error_window.list_load_error.BeginUpdate()
+    '        ' Reload the file
+    '        codetree.Nodes.Clear()
+    '        codetree.BeginUpdate()
+    '        error_window.list_load_error.BeginUpdate()
 
-            reset_PSP()
-            Application.DoEvents()
-            open.read_PSP(database, enc1)
+    '        reset_PSP()
+    '        Application.DoEvents()
+    '        open.read_PSP(database, enc1)
 
-            codetree.EndUpdate()
-            error_window.list_load_error.EndUpdate()
-            file_saveas.Enabled = True
+    '        codetree.EndUpdate()
+    '        error_window.list_load_error.EndUpdate()
+    '        file_saveas.Enabled = True
 
-        End If
-    End Sub
+    '    End If
+    'End Sub
 
     Private Sub progbar_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles progbar.Click
 
@@ -1161,7 +1177,7 @@ Public Class Main
                     i += 1
                 End If
 
-                If s.Substring(0, 2) = "_L" Or s.Substring(0, 2) = "_M" Then
+                If s.Substring(0, 2) = "_L" Or s.Substring(0, 2) = "_M" Or s.Substring(0, 2) = "_N" Then
                     nullcode = 0
                     s = s.Replace(vbCr, "")
                     If PSX = True Then
@@ -1174,6 +1190,17 @@ Public Class Main
                         s = s.PadRight(24, "0"c)
                         '_L 0x12345678 0x12345678
                         If s.Substring(3, 2) = "0x" And s.Substring(14, 2) = "0x" Then
+                            If s.Substring(0, 2) = "_M" Then
+                                Dim z As Integer = Integer.Parse(code.Substring(0, 1))
+                                code = code.Remove(0, 1)
+                                z = 2 Or z
+                                code = code.Insert(0, z.ToString())
+                            ElseIf s.Substring(0, 2) = "_N" Then
+                                Dim z As Integer = Integer.Parse(code.Substring(0, 1))
+                                code = code.Remove(0, 1)
+                                z = 4 Or z
+                                code = code.Insert(0, z.ToString())
+                            End If
                             code &= s.Substring(3, 21).Trim & vbCrLf
                         End If
 
@@ -1201,16 +1228,8 @@ Public Class Main
                     Select Case codetree.SelectedNode.Level
 
                         Case Is = 1
-                            off_rd.Checked = True
-                            CT_tb.Enabled = True
-                            cmt_tb.Enabled = True
-                            cl_tb.Enabled = True
                             codetree.SelectedNode.Nodes.Add(newcode)
                         Case Is = 2
-                            off_rd.Checked = True
-                            CT_tb.Enabled = True
-                            cmt_tb.Enabled = True
-                            cl_tb.Enabled = True
                             codetree.SelectedNode.Parent.Nodes.Add(newcode)
                     End Select
 
@@ -1277,5 +1296,21 @@ Public Class Main
 
     Private Sub PSPへコードコピーToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PSPへコードコピーToolStripMenuItem.Click
         Process.Start("APP\cp.bat")
+    End Sub
+
+    Private Sub ComboBox1_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
+    End Sub
+
+    Private Sub on_rd_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles on_rd.CheckedChanged
+
+    End Sub
+
+    Private Sub off_rd_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles off_rd.CheckedChanged
+
+    End Sub
+
+    Private Sub RadioButton1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton1.CheckedChanged
+
     End Sub
 End Class
