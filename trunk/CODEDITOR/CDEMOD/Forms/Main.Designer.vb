@@ -237,7 +237,7 @@ Partial Class Main
         '
         Me.options_ontop.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.alwaystop
         Me.options_ontop.Name = "options_ontop"
-        Me.options_ontop.Size = New System.Drawing.Size(183, 22)
+        Me.options_ontop.Size = New System.Drawing.Size(154, 22)
         Me.options_ontop.Text = "常に全面に表示"
         '
         'options_error
@@ -872,7 +872,7 @@ Partial Class Main
         Me.KeyPreview = True
         Me.MainMenuStrip = Me.treeopen
         Me.Name = "Main"
-        Me.Text = "CDEMOD20110703"
+        Me.Text = "CDEMOD20110706"
         Me.treeopen.ResumeLayout(False)
         Me.treeopen.PerformLayout()
         Me.tool_menu.ResumeLayout(False)
