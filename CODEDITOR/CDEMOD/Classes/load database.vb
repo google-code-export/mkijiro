@@ -19,7 +19,7 @@ Public Class load_db
         Dim gnode As New TreeNode ' Game name node for the TreeView control
         Dim cnode As New TreeNode ' Code name node for the TreeView control
         Dim skip As Boolean = False
-        Dim NULLCODE As Integer
+        Dim NULLCODE As Boolean = False
         Dim cwcar As String = "_L"
         Dim b4 As String = Nothing
 
@@ -60,7 +60,7 @@ Public Class load_db
                         End If
 
                         If buffer(0).Substring(0, 3) = "_L " Or buffer(0).Substring(0, 3) = "_M " Or buffer(0).Substring(0, 3) = "_N " Then
-                            NULLCODE = 0
+                            NULLCODE = False
                             cwcar = buffer(0).Substring(0, 2)
                             '_L 0x12345678 0x12345678 24文字
                             buffer(0) = System.Text.RegularExpressions.Regex.Replace( _
@@ -73,7 +73,7 @@ Public Class load_db
                             End If
                         End If
                         If buffer(0).Substring(0, 2) = "_C" Then
-                            If NULLCODE = 1 Then
+                            If NULLCODE = True Then
                                 buffer(3) &= "" & vbCrLf
                                 cnode.Tag = buffer(3) & b4
                             End If
@@ -90,18 +90,16 @@ Public Class load_db
                             cnode.Name = buffer(0).Substring(3, buffer(0).Length - 3).Trim
                             cnode.ImageIndex = 2
                             gnode.Nodes.Add(cnode)
-                            NULLCODE = 1
+                            NULLCODE = True
                         End If
                     End If
-                    If NULLCODE = 1 Then
+                    If NULLCODE = True Then
                         buffer(3) &= "" & vbCrLf
                     End If
                     If buffer(0).Length > 1 And buffer(0).Substring(0, 1) = "#" Then
                         b4 &= buffer(0) & vbCrLf
                     End If
                     cnode.Tag = buffer(3) & b4
-                    buffer(3) = Nothing
-                    b4 = Nothing
                     Exit Do
                 End If
 
@@ -112,10 +110,12 @@ Public Class load_db
                         Case Is = "_S "
                             skip = False
 
-                            If NULLCODE = 1 Then
+                            If NULLCODE = True Then
                                 buffer(3) &= "" & vbCrLf
                                 cnode.Tag = buffer(3) & b4
+                                NULLCODE = False
                             End If
+
                             buffer(3) = Nothing
                             b4 = Nothing
                             buffer(1) = buffer(0).Substring(3, buffer(0).Length - 3).Trim
@@ -135,7 +135,7 @@ Public Class load_db
 
                             skip = False
 
-                            If NULLCODE = 1 Then
+                            If NULLCODE = True Then
                                 buffer(3) &= "" & vbCrLf
                                 cnode.Tag = buffer(3) & b4
                             End If
@@ -152,10 +152,10 @@ Public Class load_db
                             cnode.Name = buffer(0).Substring(3, buffer(0).Length - 3).Trim
                             cnode.ImageIndex = 2
                             gnode.Nodes.Add(cnode)
-                            NULLCODE = 1
+                            NULLCODE = True
 
                         Case Is = "_L ", "_M ", "_N "
-                            NULLCODE = 0
+                            NULLCODE = False
                             skip = False
                             cwcar = buffer(0).Substring(0, 3)
                             If cwcar = "_M " Then

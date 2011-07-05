@@ -1313,4 +1313,132 @@ Public Class Main
     Private Sub RadioButton1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton1.CheckedChanged
 
     End Sub
+
+    Private Sub main_Load(ByVal sender As Object, _
+        ByVal e As EventArgs) Handles MyBase.Load
+        'http://dobon.net/vb/dotnet/control/tvdraganddrop.html
+        'TreeView1へのドラッグを受け入れる
+        codetree.AllowDrop = True
+
+
+        'イベントハンドラを追加する
+        AddHandler codetree.ItemDrag, AddressOf codetree_ItemDrag
+        AddHandler codetree.DragOver, AddressOf codetree_DragOver
+        AddHandler codetree.DragDrop, AddressOf codetree_DragDrop
+    End Sub
+
+    Private Sub codetree_ItemDrag(ByVal sender As Object, _
+        ByVal e As ItemDragEventArgs)
+        Dim tv As TreeView = CType(sender, TreeView)
+        tv.SelectedNode = CType(e.Item, TreeNode)
+        tv.Focus()
+
+        'ノードのドラッグを開始する
+        Dim dde As DragDropEffects = _
+            tv.DoDragDrop(e.Item, DragDropEffects.All)
+
+        ''移動した時は、ドラッグしたノードを削除する
+
+        'If (dde And DragDropEffects.Move) = DragDropEffects.Move Then
+        '    tv.Nodes.Remove(CType(e.Item, TreeNode))
+        'End If
+
+    End Sub
+
+    'ドラッグしている時
+    Private Sub codetree_DragOver(ByVal sender As Object, _
+            ByVal e As DragEventArgs)
+        'ドラッグされているデータがTreeNodeか調べる
+        If e.Data.GetDataPresent(GetType(TreeNode)) Then
+            If (e.KeyState And 8) = 8 And _
+                (e.AllowedEffect And DragDropEffects.Copy) = _
+                    DragDropEffects.Copy Then
+                'Ctrlキーが押されていればCopy
+                '"8"はCtrlキーを表す
+                e.Effect = DragDropEffects.Copy
+            ElseIf (e.AllowedEffect And DragDropEffects.Move) = _
+                DragDropEffects.Move Then
+                '何も押されていなければMove
+                e.Effect = DragDropEffects.Move
+            Else
+                e.Effect = DragDropEffects.None
+            End If
+        Else
+            'TreeNodeでなければ受け入れない
+            e.Effect = DragDropEffects.None
+        End If
+
+        'マウス下のNodeを選択する
+        If e.Effect <> DragDropEffects.None Then
+            Dim tv As TreeView = CType(sender, TreeView)
+            'マウスのあるNodeを取得する
+            Dim target As TreeNode = _
+                tv.GetNodeAt(tv.PointToClient(New Point(e.X, e.Y)))
+            'ドラッグされているNodeを取得する
+            Dim [source] As TreeNode = _
+                CType(e.Data.GetData(GetType(TreeNode)), TreeNode)
+            'マウス下のNodeがドロップ先として適切か調べる
+            If Not target Is Nothing AndAlso _
+                target.Level = [source].Level AndAlso _
+                Not target Is [source] AndAlso _
+                Not IsChildNode([source], target) Then
+                'Nodeを選択する
+                If target.IsSelected = False Then
+                    tv.SelectedNode = target
+                End If
+            Else
+                e.Effect = DragDropEffects.None
+            End If
+        End If
+    End Sub
+
+    'ドロップされたとき
+    Private Sub codetree_DragDrop(ByVal sender As Object, _
+            ByVal e As DragEventArgs)
+        'ドロップされたデータがTreeNodeか調べる
+        If e.Data.GetDataPresent(GetType(TreeNode)) Then
+            Dim tv As TreeView = CType(sender, TreeView)
+            'ドロップされたデータ(TreeNode)を取得
+            Dim [source] As TreeNode = _
+                CType(e.Data.GetData(GetType(TreeNode)), TreeNode)
+            'ドロップ先のTreeNodeを取得する
+            Dim target As TreeNode = _
+                tv.GetNodeAt(tv.PointToClient(New Point(e.X, e.Y)))
+            'マウス下のNodeがドロップ先として適切か調べる
+            If Not target Is Nothing AndAlso _
+                target.Level = [source].Level AndAlso _
+                Not target Is [source] AndAlso _
+                Not IsChildNode([source], target) Then
+                'ドロップされたNodeのコピーを作成
+                Dim cln As TreeNode = CType([source].Clone(), TreeNode)
+                'Nodeを追加
+                If target.Index < [source].Index Then
+                    target.Parent.Nodes.Insert(target.Index, cln)
+                Else
+                    target.Parent.Nodes.Insert(target.Index + 1, cln)
+                End If
+                If e.Effect = DragDropEffects.Move Then
+                    [source].Remove()
+                End If
+                '追加されたNodeを選択
+                tv.SelectedNode = cln
+            Else
+                e.Effect = DragDropEffects.None
+            End If
+        Else
+            e.Effect = DragDropEffects.None
+        End If
+    End Sub
+
+    Private Shared Function IsChildNode( _
+            ByVal parentNode As TreeNode, _
+            ByVal childNode As TreeNode) As Boolean
+        If Not childNode.Parent Is parentNode.Parent Then
+            Return True
+        ElseIf childNode.Parent Is parentNode Then
+            Return True 'IsChildNode(parentNode, childNode.Parent)
+        Else
+            Return False
+        End If
+    End Function
 End Class
