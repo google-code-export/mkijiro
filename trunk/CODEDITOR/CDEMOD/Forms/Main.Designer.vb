@@ -43,6 +43,12 @@ Partial Class Main
         Me.options_ontop = New System.Windows.Forms.ToolStripMenuItem()
         Me.options_error = New System.Windows.Forms.ToolStripMenuItem()
         Me.menu_font = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ツリービューToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ゲームタイトルToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ゲームIDToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.コード名ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.コード内容ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.コメントToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.EncodeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CP932ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GBKToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -106,6 +112,8 @@ Partial Class Main
         Me.RadioButton6 = New System.Windows.Forms.RadioButton()
         Me.RadioButton5 = New System.Windows.Forms.RadioButton()
         Me.RadioButton4 = New System.Windows.Forms.RadioButton()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.changed = New System.Windows.Forms.Label()
         Me.treeopen.SuspendLayout()
         Me.tool_menu.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -232,6 +240,7 @@ Partial Class Main
         Me.menu_options.Name = "menu_options"
         Me.menu_options.Size = New System.Drawing.Size(60, 20)
         Me.menu_options.Text = "オプション"
+        Me.menu_options.ToolTipText = "メニューが常にTOPに表示されます"
         '
         'options_ontop
         '
@@ -246,13 +255,51 @@ Partial Class Main
         Me.options_error.Name = "options_error"
         Me.options_error.Size = New System.Drawing.Size(154, 22)
         Me.options_error.Text = "エラー画面を表示"
+        Me.options_error.ToolTipText = "起動時のエラー画面の表示の設定"
         '
         'menu_font
         '
+        Me.menu_font.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ツリービューToolStripMenuItem, Me.ゲームタイトルToolStripMenuItem, Me.ゲームIDToolStripMenuItem, Me.コード名ToolStripMenuItem, Me.コード内容ToolStripMenuItem, Me.コメントToolStripMenuItem})
         Me.menu_font.Name = "menu_font"
         Me.menu_font.Size = New System.Drawing.Size(50, 20)
         Me.menu_font.Text = "フォント"
         Me.menu_font.ToolTipText = "メニューのフォントを指定します"
+        '
+        'ツリービューToolStripMenuItem
+        '
+        Me.ツリービューToolStripMenuItem.Name = "ツリービューToolStripMenuItem"
+        Me.ツリービューToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.ツリービューToolStripMenuItem.Text = "ツリービュー"
+        '
+        'ゲームタイトルToolStripMenuItem
+        '
+        Me.ゲームタイトルToolStripMenuItem.Name = "ゲームタイトルToolStripMenuItem"
+        Me.ゲームタイトルToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.ゲームタイトルToolStripMenuItem.Text = "ゲームタイトル"
+        '
+        'ゲームIDToolStripMenuItem
+        '
+        Me.ゲームIDToolStripMenuItem.Name = "ゲームIDToolStripMenuItem"
+        Me.ゲームIDToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.ゲームIDToolStripMenuItem.Text = "ゲームID"
+        '
+        'コード名ToolStripMenuItem
+        '
+        Me.コード名ToolStripMenuItem.Name = "コード名ToolStripMenuItem"
+        Me.コード名ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.コード名ToolStripMenuItem.Text = "コード名"
+        '
+        'コード内容ToolStripMenuItem
+        '
+        Me.コード内容ToolStripMenuItem.Name = "コード内容ToolStripMenuItem"
+        Me.コード内容ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.コード内容ToolStripMenuItem.Text = "コード内容"
+        '
+        'コメントToolStripMenuItem
+        '
+        Me.コメントToolStripMenuItem.Name = "コメントToolStripMenuItem"
+        Me.コメントToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.コメントToolStripMenuItem.Text = "コメント"
         '
         'EncodeToolStripMenuItem
         '
@@ -266,14 +313,16 @@ Partial Class Main
         'CP932ToolStripMenuItem
         '
         Me.CP932ToolStripMenuItem.Name = "CP932ToolStripMenuItem"
-        Me.CP932ToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
+        Me.CP932ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.CP932ToolStripMenuItem.Text = "SJIS(CP932)"
+        Me.CP932ToolStripMenuItem.ToolTipText = "日本語シフトJISのDBを編集します"
         '
         'GBKToolStripMenuItem
         '
         Me.GBKToolStripMenuItem.Name = "GBKToolStripMenuItem"
-        Me.GBKToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
+        Me.GBKToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.GBKToolStripMenuItem.Text = "GBK(CP936)"
+        Me.GBKToolStripMenuItem.ToolTipText = "中国語GBKのDBを編集します"
         '
         'ツリー開閉ToolStripMenuItem
         '
@@ -301,7 +350,7 @@ Partial Class Main
         Me.paserToolStripMenuItem.ShowShortcutKeys = False
         Me.paserToolStripMenuItem.Size = New System.Drawing.Size(57, 20)
         Me.paserToolStripMenuItem.Text = "パーサー"
-        Me.paserToolStripMenuItem.ToolTipText = "未実装"
+        Me.paserToolStripMenuItem.ToolTipText = "コードをまとめて追加します"
         '
         'CWCWIKIToolStripMenuItem
         '
@@ -367,30 +416,35 @@ Partial Class Main
         Me.PMETAN変換ToolStripMenuItem.Name = "PMETAN変換ToolStripMenuItem"
         Me.PMETAN変換ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.PMETAN変換ToolStripMenuItem.Text = "PMETAN変換"
+        Me.PMETAN変換ToolStripMenuItem.ToolTipText = "PMETANを起動してARコードに変換します"
         '
         'TEMPAR鶴ToolStripMenuItem
         '
         Me.TEMPAR鶴ToolStripMenuItem.Name = "TEMPAR鶴ToolStripMenuItem"
         Me.TEMPAR鶴ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.TEMPAR鶴ToolStripMenuItem.Text = "TEMPAR鶴"
+        Me.TEMPAR鶴ToolStripMenuItem.ToolTipText = "TEMARを起動してBINに変換します"
         '
         'WgetToolStripMenuItem
         '
         Me.WgetToolStripMenuItem.Name = "WgetToolStripMenuItem"
         Me.WgetToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.WgetToolStripMenuItem.Text = "WGETコード取得"
+        Me.WgetToolStripMenuItem.ToolTipText = "特定のサイトからコードをDLします"
         '
         'JaneStyleToolStripMenuItem
         '
         Me.JaneStyleToolStripMenuItem.Name = "JaneStyleToolStripMenuItem"
         Me.JaneStyleToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.JaneStyleToolStripMenuItem.Text = "JaneStyle"
+        Me.JaneStyleToolStripMenuItem.ToolTipText = "2CHブラウザを起動してコードを探します"
         '
         'PSPへコードコピーToolStripMenuItem
         '
         Me.PSPへコードコピーToolStripMenuItem.Name = "PSPへコードコピーToolStripMenuItem"
         Me.PSPへコードコピーToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.PSPへコードコピーToolStripMenuItem.Text = "PSPへコードコピー"
+        Me.PSPへコードコピーToolStripMenuItem.ToolTipText = "PSPへコードを転送します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "メモリースティックのパスの入力が必要です"
         '
         'codetree
         '
@@ -452,7 +506,7 @@ Partial Class Main
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.gtitle_lbl.AutoSize = True
         Me.gtitle_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.gtitle_lbl.Location = New System.Drawing.Point(319, 75)
+        Me.gtitle_lbl.Location = New System.Drawing.Point(319, 78)
         Me.gtitle_lbl.Name = "gtitle_lbl"
         Me.gtitle_lbl.Size = New System.Drawing.Size(72, 15)
         Me.gtitle_lbl.TabIndex = 4
@@ -465,7 +519,7 @@ Partial Class Main
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GID_lbl.AutoSize = True
         Me.GID_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GID_lbl.Location = New System.Drawing.Point(319, 114)
+        Me.GID_lbl.Location = New System.Drawing.Point(322, 114)
         Me.GID_lbl.Name = "GID_lbl"
         Me.GID_lbl.Size = New System.Drawing.Size(49, 15)
         Me.GID_lbl.TabIndex = 5
@@ -807,7 +861,7 @@ Partial Class Main
         'RadioButton6
         '
         Me.RadioButton6.AutoSize = True
-        Me.RadioButton6.Location = New System.Drawing.Point(106, 3)
+        Me.RadioButton6.Location = New System.Drawing.Point(106, 2)
         Me.RadioButton6.Name = "RadioButton6"
         Me.RadioButton6.Size = New System.Drawing.Size(53, 16)
         Me.RadioButton6.TabIndex = 2
@@ -818,7 +872,7 @@ Partial Class Main
         'RadioButton5
         '
         Me.RadioButton5.AutoSize = True
-        Me.RadioButton5.Location = New System.Drawing.Point(48, 4)
+        Me.RadioButton5.Location = New System.Drawing.Point(48, 2)
         Me.RadioButton5.Name = "RadioButton5"
         Me.RadioButton5.Size = New System.Drawing.Size(60, 16)
         Me.RadioButton5.TabIndex = 1
@@ -829,7 +883,7 @@ Partial Class Main
         'RadioButton4
         '
         Me.RadioButton4.AutoSize = True
-        Me.RadioButton4.Location = New System.Drawing.Point(4, 4)
+        Me.RadioButton4.Location = New System.Drawing.Point(3, 2)
         Me.RadioButton4.Name = "RadioButton4"
         Me.RadioButton4.Size = New System.Drawing.Size(48, 16)
         Me.RadioButton4.TabIndex = 0
@@ -837,11 +891,32 @@ Partial Class Main
         Me.RadioButton4.Text = "CWC"
         Me.RadioButton4.UseVisualStyleBackColor = True
         '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.ForeColor = System.Drawing.Color.Red
+        Me.Label1.Location = New System.Drawing.Point(368, 445)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(0, 12)
+        Me.Label1.TabIndex = 26
+        '
+        'changed
+        '
+        Me.changed.AutoSize = True
+        Me.changed.ForeColor = System.Drawing.Color.Red
+        Me.changed.Location = New System.Drawing.Point(399, 81)
+        Me.changed.Name = "changed"
+        Me.changed.Size = New System.Drawing.Size(213, 12)
+        Me.changed.TabIndex = 27
+        Me.changed.Text = "　　　　　　　　　　　　　　　　　　　　　　　　　　"
+        '
         'Main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(640, 562)
+        Me.Controls.Add(Me.changed)
+        Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.RadioButton3)
         Me.Controls.Add(Me.RadioButton2)
@@ -872,7 +947,7 @@ Partial Class Main
         Me.KeyPreview = True
         Me.MainMenuStrip = Me.treeopen
         Me.Name = "Main"
-        Me.Text = "CDEMOD20110706"
+        Me.Text = "CDEMOD20110709"
         Me.treeopen.ResumeLayout(False)
         Me.treeopen.PerformLayout()
         Me.tool_menu.ResumeLayout(False)
@@ -965,5 +1040,13 @@ Partial Class Main
     Friend WithEvents RadioButton5 As System.Windows.Forms.RadioButton
     Friend WithEvents RadioButton4 As System.Windows.Forms.RadioButton
     Friend WithEvents RadioButton6 As System.Windows.Forms.RadioButton
+    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents changed As System.Windows.Forms.Label
+    Friend WithEvents ツリービューToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ゲームタイトルToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ゲームIDToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents コード名ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents コード内容ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents コメントToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class

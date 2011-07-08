@@ -6,6 +6,8 @@ Public Class Main
     Friend loaded As Boolean = False
     Friend PSX As Boolean = False
     Dim enc1 As Integer = My.Settings.MSCODEPAGE
+    Friend maintop As Boolean = My.Settings.TOP
+    Friend showerror As Boolean = My.Settings.ERR
 
 #Region "Menubar procedures"
 
@@ -161,6 +163,7 @@ Public Class Main
             error_window.Show()
             options_error.Checked = True
             options_error.Text = "エラー画面を隠す"
+            My.Settings.ERR = True
             Me.Focus()
 
             If options_ontop.Checked = True Then
@@ -172,6 +175,7 @@ Public Class Main
             error_window.Hide()
             options_error.Checked = False
             options_error.Text = "エラー画面を表示"
+            My.Settings.ERR = False
         End If
 
     End Sub
@@ -182,10 +186,12 @@ Public Class Main
             Me.TopMost = True
             error_window.TopMost = True
             options_ontop.Checked = True
+            My.Settings.TOP = True
         Else
             Me.TopMost = False
             error_window.TopMost = False
             options_ontop.Checked = False
+            My.Settings.TOP = False
         End If
 
     End Sub
@@ -306,6 +312,7 @@ Public Class Main
 
     Private Sub save_gc_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles save_gc.Click
 
+        changed.Text = ""
         Try
 
             Select Case codetree.SelectedNode.Level
@@ -334,6 +341,7 @@ Public Class Main
 
     Private Sub save_cc_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles save_cc.Click
 
+        changed.Text = ""
         Try
 
             Dim b1 As String = cl_tb.Text
@@ -539,6 +547,8 @@ Public Class Main
 
     Private Sub codetree_AfterSelect(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles codetree.AfterSelect
         Dim j As New joker
+
+        changed.Text = ""
 
         Select Case codetree.SelectedNode.Level
 
@@ -971,84 +981,12 @@ Public Class Main
         End If
     End Sub
 
-    'Private Sub saveas_pspar_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles saveas_pspar.Click
-    '    Dim open As New load_db
-    '    Dim s As New save_db
-
-    '    If save_file.ShowDialog = Windows.Forms.DialogResult.OK And save_file.FileName <> Nothing Then
-    '        database = save_file.FileName
-
-
-    '        s.save_pspar(database, enc1)
-
-    '        ' Reload the file
-    '        codetree.Nodes.Clear()
-    '        codetree.BeginUpdate()
-    '        error_window.list_load_error.BeginUpdate()
-
-    '        reset_PSP()
-    '        Application.DoEvents()
-    '        open.read_PSP(database, enc1)
-
-    '        codetree.EndUpdate()
-    '        error_window.list_load_error.EndUpdate()
-    '        file_saveas.Enabled = True
-
-    '    End If
-    'End Sub
-
     Private Sub progbar_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles progbar.Click
 
     End Sub
 
     Private Sub menu_font_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menu_font.Click
-        Dim fd As New FontDialog()
 
-        fd.Font = CT_tb.Font
-
-        ' 初期選択する色を設定する
-        fd.Color = CT_tb.ForeColor
-
-        ' 選択可能なフォントサイズの最大値を設定する
-        fd.MaxSize = 24
-
-        ' 選択可能なフォントサイズの最小値を設定する
-        fd.MinSize = 9
-
-        ' 存在しないフォントやスタイルを選択すると警告を表示する (初期値 False)
-        fd.FontMustExist = True
-
-        ' 色を選択できるようにする (初期値 False)
-        fd.ShowColor = True
-
-        ' 取り消し線、下線、テキストの色などのオプションを指定可能にする (初期値 True)
-        fd.ShowEffects = True
-
-        ' [ヘルプ] ボタンを表示する (初期値 False)
-        fd.ShowHelp = True
-
-        ' [適用] ボタンを表示する (初期値 False)
-        fd.ShowApply = True
-
-        ' 非 OEM 文字セット、Symbol 文字セット、ANSI 文字セットを表示する (初期値 False)
-        fd.ScriptsOnly = True
-
-        ' 固定ピッチフォント (等幅フォント) だけを表示する (初期値 False)
-        fd.FixedPitchOnly = True
-
-
-        'ダイアログを表示する
-        If fd.ShowDialog() <> DialogResult.Cancel Then
-            'TextBox1のフォントと色を変える
-            CT_tb.Font = fd.Font
-            GID_tb.Font = fd.Font
-            GT_tb.Font = fd.Font
-            cmt_tb.Font = fd.Font
-            cl_tb.Font = fd.Font
-            codetree.Font = fd.Font
-            progbar.Font = fd.Font
-            My.Settings.codetree = fd.Font
-        End If
     End Sub
 
     Private Sub menu_options_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menu_options.Click
@@ -1061,10 +999,8 @@ Public Class Main
         'エンコードを指定する場合
         My.Settings.MSCODEPAGE = 932
         enc1 = 932
-        'If CP932ToolStripMenuItem.Checked = False Then
-        '    GBKToolStripMenuItem.Checked = False
-        '    CP932ToolStripMenuItem.Checked = True
-        'End If
+        GBKToolStripMenuItem.Checked = False
+        CP932ToolStripMenuItem.Checked = True
 
     End Sub
 
@@ -1073,10 +1009,8 @@ Public Class Main
         'エンコードを指定する場合
         My.Settings.MSCODEPAGE = 936
         enc1 = 936
-        'If GBKToolStripMenuItem.Checked = False Then
-        '    GBKToolStripMenuItem.Checked = True
-        '    CP932ToolStripMenuItem.Checked = False
-        'End If
+        GBKToolStripMenuItem.Checked = True
+        CP932ToolStripMenuItem.Checked = False
 
     End Sub
 
@@ -1089,14 +1023,6 @@ Public Class Main
             GBKToolStripMenuItem.Checked = True
             CP932ToolStripMenuItem.Checked = False
         End If
-    End Sub
-
-    Private Sub cl_tb_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cl_tb.TextChanged
-
-    End Sub
-
-    Private Sub GT_tb_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GT_tb.TextChanged
-
     End Sub
 
     Private Sub menu_sort_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menu_sort.Click
@@ -1116,9 +1042,6 @@ Public Class Main
 
     End Sub
 
-    Private Sub cmt_tb_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmt_tb.TextChanged
-
-    End Sub
 
     Private Sub Joker_lbl_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Joker_lbl.Click
 
@@ -1298,18 +1221,6 @@ Public Class Main
         Process.Start("APP\cp.bat")
     End Sub
 
-    Private Sub ComboBox1_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
-
-    End Sub
-
-    Private Sub on_rd_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles on_rd.CheckedChanged
-
-    End Sub
-
-    Private Sub off_rd_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles off_rd.CheckedChanged
-
-    End Sub
-
     Private Sub RadioButton1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton1.CheckedChanged
 
     End Sub
@@ -1320,11 +1231,44 @@ Public Class Main
         'TreeView1へのドラッグを受け入れる
         codetree.AllowDrop = True
 
-
         'イベントハンドラを追加する
         AddHandler codetree.ItemDrag, AddressOf codetree_ItemDrag
         AddHandler codetree.DragOver, AddressOf codetree_DragOver
         AddHandler codetree.DragDrop, AddressOf codetree_DragDrop
+
+        If showerror = True Then
+            error_window.Show()
+            options_error.Checked = True
+            options_error.Text = "エラー画面を隠す"
+
+            If maintop = True Then
+                error_window.TopMost = True
+            End If
+
+        Else
+            error_window.Hide()
+            options_error.Checked = False
+            options_error.Text = "エラー画面を表示"
+        End If
+
+        If maintop = True Then
+            Me.TopMost = True
+            error_window.TopMost = True
+            options_ontop.Checked = True
+        Else
+            error_window.TopMost = False
+            options_ontop.Checked = False
+        End If
+
+
+        CT_tb.Font = My.Settings.CT_tb
+        GID_tb.Font = My.Settings.GID_tb
+        GT_tb.Font = My.Settings.CT_tb
+        cmt_tb.Font = My.Settings.cmt_tb
+        cl_tb.Font = My.Settings.cl_tb
+        codetree.Font = My.Settings.codetree
+
+
     End Sub
 
     Private Sub codetree_ItemDrag(ByVal sender As Object, _
@@ -1336,12 +1280,6 @@ Public Class Main
         'ノードのドラッグを開始する
         Dim dde As DragDropEffects = _
             tv.DoDragDrop(e.Item, DragDropEffects.All)
-
-        ''移動した時は、ドラッグしたノードを削除する
-
-        'If (dde And DragDropEffects.Move) = DragDropEffects.Move Then
-        '    tv.Nodes.Remove(CType(e.Item, TreeNode))
-        'End If
 
     End Sub
 
@@ -1441,4 +1379,140 @@ Public Class Main
             Return False
         End If
     End Function
+
+    Private Sub RadioButton4_clicked(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton4.Click
+        changed.Text = "コードが変更されました。"
+    End Sub
+    Private Sub RadioButton5_clicked(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton5.Click
+        changed.Text = "コードが変更されました。"
+    End Sub
+
+    Private Sub RadioButton6_clicked(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton6.Click
+        changed.Text = "コードが変更されました。"
+    End Sub
+
+    Private Sub GT_tb_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GT_tb.KeyPress
+        changed.Text = "タイトル/IDが変更されました。"
+    End Sub
+
+    Private Sub GID_tb_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GID_tb.KeyPress
+        changed.Text = "タイトル/IDが変更されました。"
+    End Sub
+
+    Private Sub CT_tb_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CT_tb.KeyPress
+        changed.Text = "コードが変更されました。"
+    End Sub
+
+    Private Sub cl_tb_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cl_tb.KeyPress
+        changed.Text = "コードが変更されました。"
+    End Sub
+
+    Private Sub cmt_tb_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmt_tb.KeyPress
+        changed.Text = "コードが変更されました。"
+    End Sub
+
+    Private Sub on_rd_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles on_rd.Click
+        changed.Text = "コードが変更されました。"
+    End Sub
+
+    Private Sub off_rd_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles off_rd.Click
+        changed.Text = "コードが変更されました。"
+    End Sub
+
+    Private Sub ツリービューToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ツリービューToolStripMenuItem.Click
+
+        Dim fd As New FontDialog()
+
+        fd.Font = codetree.Font
+        fd.Color = codetree.ForeColor
+        fd.MaxSize = 24
+        fd.MinSize = 9
+        fd.FontMustExist = True
+        fd.ShowHelp = True
+        fd.ShowApply = True
+        If fd.ShowDialog() <> DialogResult.Cancel Then
+            codetree.Font = fd.Font
+            My.Settings.codetree = fd.Font
+        End If
+    End Sub
+
+    Private Sub ゲームタイトルToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ゲームタイトルToolStripMenuItem.Click
+        Dim fd As New FontDialog()
+        fd.Font = GT_tb.Font
+        fd.Color = GT_tb.ForeColor
+        fd.MaxSize = 24
+        fd.MinSize = 9
+        fd.FontMustExist = True
+        fd.ShowHelp = True
+        fd.ShowApply = True
+        If fd.ShowDialog() <> DialogResult.Cancel Then
+            GT_tb.Font = fd.Font
+            My.Settings.GT_tb = fd.Font
+        End If
+    End Sub
+
+    Private Sub ゲームIDToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ゲームIDToolStripMenuItem.Click
+        Dim fd As New FontDialog()
+        fd.Font = GID_tb.Font
+        fd.Color = GID_tb.ForeColor
+        fd.MaxSize = 24
+        fd.MinSize = 9
+        fd.FontMustExist = True
+        fd.ShowHelp = True
+        fd.ShowApply = True
+        fd.FixedPitchOnly = True
+        If fd.ShowDialog() <> DialogResult.Cancel Then
+            GID_tb.Font = fd.Font
+            My.Settings.GID_tb = fd.Font
+        End If
+    End Sub
+
+    Private Sub コード名ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles コード名ToolStripMenuItem.Click
+        Dim fd As New FontDialog()
+        fd.Font = CT_tb.Font
+        fd.Color = CT_tb.ForeColor
+        fd.MaxSize = 24
+        fd.MinSize = 9
+        fd.FontMustExist = True
+        fd.ShowHelp = True
+        fd.ShowApply = True
+        If fd.ShowDialog() <> DialogResult.Cancel Then
+            CT_tb.Font = fd.Font
+            My.Settings.CT_tb = fd.Font
+        End If
+    End Sub
+
+    Private Sub コード内容ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles コード内容ToolStripMenuItem.Click
+
+        Dim fd As New FontDialog()
+
+        fd.Font = cl_tb.Font
+        fd.Color = cl_tb.ForeColor
+        fd.MaxSize = 24
+        fd.MinSize = 9
+        fd.FontMustExist = True
+        fd.ShowHelp = True
+        fd.ShowApply = True
+        fd.FixedPitchOnly = True
+        If fd.ShowDialog() <> DialogResult.Cancel Then
+            cl_tb.Font = fd.Font
+            My.Settings.cl_tb = fd.Font
+        End If
+    End Sub
+
+    Private Sub コメントToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles コメントToolStripMenuItem.Click
+        Dim fd As New FontDialog()
+
+        fd.Font = cmt_tb.Font
+        fd.Color = cmt_tb.ForeColor
+        fd.MaxSize = 24
+        fd.MinSize = 9
+        fd.FontMustExist = True
+        fd.ShowHelp = True
+        fd.ShowApply = True
+        If fd.ShowDialog() <> DialogResult.Cancel Then
+            cmt_tb.Font = fd.Font
+            My.Settings.cmt_tb = fd.Font
+        End If
+    End Sub
 End Class

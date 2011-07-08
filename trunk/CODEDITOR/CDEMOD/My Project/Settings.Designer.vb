@@ -140,13 +140,25 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("ＭＳ ゴシック, 9pt")>  _
-        Public Property progbar() As Global.System.Drawing.Font
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property TOP() As Boolean
             Get
-                Return CType(Me("progbar"),Global.System.Drawing.Font)
+                Return CType(Me("TOP"),Boolean)
             End Get
             Set
-                Me("progbar") = value
+                Me("TOP") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property ERR() As Boolean
+            Get
+                Return CType(Me("ERR"),Boolean)
+            End Get
+            Set
+                Me("ERR") = value
             End Set
         End Property
     End Class

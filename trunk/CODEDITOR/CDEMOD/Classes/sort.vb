@@ -10,7 +10,7 @@
         If tx.Level = 1 Then ' If the treenode is level 1, aka a Game title
             Return String.Compare(tx.Tag.ToString, ty.Tag.ToString) ' Sort the nodes by the game node tags which contain the GID's
         Else
-            Return 0 ' If not, don't sort it.
+            Return 1 ' If not, don't sort it.
         End If
 
     End Function

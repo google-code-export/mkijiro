@@ -23,8 +23,11 @@
     <Setting Name="cl_tb" Type="System.Drawing.Font" Scope="User">
       <Value Profile="(Default)">ＭＳ ゴシック, 9pt</Value>
     </Setting>
-    <Setting Name="progbar" Type="System.Drawing.Font" Scope="User">
-      <Value Profile="(Default)">ＭＳ ゴシック, 9pt</Value>
+    <Setting Name="TOP" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ERR" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>
