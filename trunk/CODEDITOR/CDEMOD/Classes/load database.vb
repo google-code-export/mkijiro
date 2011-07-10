@@ -731,6 +731,152 @@ Public Class load_db
 
     End Sub
 
+    Public Sub read_cf(ByVal filename As String, ByVal enc1 As Integer)
+
+        Dim m As Main = Main
+        Dim ew As error_window = error_window
+        Dim memory As New MemoryManagement
+        Dim file As New FileStream(filename, FileMode.Open, FileAccess.Read)
+        Dim buffer(4) As String ' 0 = stream buffer, 1 = SLUS address, 2 = Game name, 3 = Codes, 4 = fixed codes
+        Dim counts(2) As Integer ' 0 = Line #, 1 = Progress bar counter, 2 = Total formatting errors, 3 = Error number
+        Dim percent As Double = 0
+        Dim gnode As New TreeNode ' Game name node for the TreeView control
+        Dim cnode As New TreeNode ' Code name node for the TreeView control
+        Dim skip As Boolean = False
+        Dim b4 As String = Nothing
+        Dim b5 As String = Nothing
+        Dim b6 As String = Nothing
+        m.codetree.Nodes.Add(Path.GetFileNameWithoutExtension(filename)).ImageIndex = 0 ' Add the root node and set its icon
+        m.progbar.Visible = True ' Show the progress bar and reset it's value
+        m.progbar.Value = 0 ' Reset the progress bar
+
+        reset_errors() ' Clear the error list before loading
+        'ファイルを読み込むバイト型配列を作成する
+        Dim bs(CInt(file.Length)) As Byte
+        'ファイルの内容をすべて読み込む
+        file.Read(bs, 0, bs.Length)
+
+        Dim i As Integer = 0
+        Dim n As Integer = -3
+        While i < bs.Length - 3
+
+            If bs(i) = &H47 And bs(i + 1) = &H20 Then 'G
+                If b6 <> Nothing Then
+                    cnode.Tag = b6
+                    b6 = Nothing
+                End If
+                Do Until bs(i) = 10 'linefeed
+                    n += 1
+                    i += 1
+                Loop
+                Dim name(n + 2) As Byte
+                file.Seek(i - n - 1, 0)
+                file.Read(name, 0, n + 1)
+                Dim str = System.Text.Encoding.GetEncoding(1201).GetString(name)
+                n = -3
+                gnode = New TreeNode(str.Trim)
+                With gnode
+                    .Name = str
+                    .Tag = Nothing
+                    .ImageIndex = 1
+                End With
+                m.codetree.Nodes(0).Nodes.Add(gnode)
+
+            ElseIf bs(i) = &H4D And bs(i + 1) = &H20 Then 'M
+                Do Until bs(i) = 10 'linefeed
+                    n += 1
+                    i += 1
+                Loop
+                Dim master(n + 2) As Byte
+                file.Seek(i - n - 1, 0)
+                file.Read(master, 0, n + 1)
+                Dim str = System.Text.Encoding.GetEncoding(1201).GetString(master)
+                n = -3
+                Dim s1 As Integer = Convert.ToInt32(str.Substring(0, 2), 16)
+                Dim s2 As Integer = Convert.ToInt32(str.Substring(2, 2), 16)
+                Dim s3 As Integer = Convert.ToInt32(str.Substring(4, 2), 16)
+                Dim s4 As Integer = Convert.ToInt32(str.Substring(6, 2), 16)
+                gnode.Tag = Chr(s1) & Chr(s2) & Chr(s3) & Chr(s4) & "-" & str.Substring(8, 5)
+
+            ElseIf bs(i) = &H44 And bs(i + 1) = &H20 Then 'D
+
+                If b6 <> Nothing Then
+                    cnode.Tag = b6
+                    b6 = Nothing
+                End If
+                Do Until bs(i) = 10 'linefeed
+                    n += 1
+                    i += 1
+                Loop
+                Dim cname(n + 2) As Byte
+                file.Seek(i - n - 1, 0)
+                file.Read(cname, 0, n + 1)
+                Dim str = System.Text.Encoding.GetEncoding(1201).GetString(cname)
+                n = -3
+                cnode = New TreeNode(str.Trim)
+                cnode.Name = str.Trim
+                cnode.ImageIndex = 2
+                gnode.Nodes.Add(cnode)
+                b6 = "0" & vbCrLf
+
+            ElseIf bs(i) = &H43 And bs(i + 1) = &H20 Then 'C
+                b5 = Nothing
+                Do Until bs(i) = 10 'linefeed
+                    n += 1
+                    i += 1
+                Loop
+                Dim code(n + 2) As Byte
+                file.Seek(i - n - 1, 0)
+                file.Read(code, 0, n + 1)
+                Dim str = System.Text.Encoding.GetEncoding(1201).GetString(code)
+                n = -3
+                Dim z As Integer = 0
+                Do Until z = str.Length - 1
+                    z += 1
+                    If (z Mod 16) = 0 Then
+                        b5 &= "0x" & str.Substring(z - 8, 8) & vbCrLf
+                    ElseIf (z Mod 8) = 0 Then
+                        b5 &= "0x" & str.Substring(z - 8, 8) & " "
+                    End If
+                Loop
+                b6 &= b5
+            End If
+
+
+            i += 1
+
+
+            'If counts(1) >= 20 Then
+
+            '    ' Update the progressbar every 20 repetitions otherwise the program 
+            '    ' will slow to a crawl from the constant re-draw of the progress bar
+            '    percent = (i * 100) / bs.Length
+            '    m.progbar.Value = Convert.ToInt32(percent)
+            '    m.progbar.PerformStep()
+            '    Application.DoEvents()
+            '    counts(1) = 0
+
+            'End If
+
+        End While
+
+        If b6 <> Nothing Then
+            cnode.Tag = b6
+        End If
+
+        If ew.list_load_error.Items.Count = 0 And ew.list_save_error.Items.Count > 0 Then
+            ew.Show()
+            ew.tab_error.SelectedIndex = 1
+            m.Focus()
+            reset_toolbar()
+        End If
+
+        m.progbar.Visible = False
+        file.Close()
+        memory.FlushMemory() ' Force a garbage collection after all the memory processing
+
+    End Sub
+
     Private Sub write_errors(ByVal line As Integer, ByVal error_n As Integer, ByVal error_t As String, _
                              ByVal game_t As String, ByVal code_t As String)
 
@@ -827,11 +973,11 @@ Public Class load_db
 
     End Function
 
-    Public Function check_db(ByVal filename As String, ByVal dbmode As Integer) As Boolean
+    Public Function check_db(ByVal filename As String, ByVal enc1 As Integer) As Boolean
 
         Dim file As New FileStream(filename, FileMode.Open, FileAccess.Read)
         Dim sr As New StreamReader(file, _
-                                   System.Text.Encoding.GetEncoding(932))
+                                   System.Text.Encoding.GetEncoding(enc1))
         Dim buffer As String = Nothing
 
 
@@ -848,7 +994,6 @@ Public Class load_db
                         If buffer.Length = 16 And buffer.Substring(11, 1) = " " Then ' Check if the length and space is correct for PSX
 
                             check_db = True ' It's a POPs file
-                            dbmode = 1
                             Exit Do
 
                         End If
@@ -868,6 +1013,21 @@ Public Class load_db
         Loop
 
         sr.Close()
+
+    End Function
+
+    Public Function check2_db(ByVal filename As String, ByVal enc1 As Integer) As Boolean
+
+        Dim file As New FileStream(filename, FileMode.Open, FileAccess.Read)
+
+            If file.ReadByte = &H47 Then ' If we're on a code line
+
+                check2_db = True
+            Else
+
+                check2_db = False
+
+            End If
 
     End Function
 

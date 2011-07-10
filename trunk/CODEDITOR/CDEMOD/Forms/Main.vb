@@ -5,6 +5,7 @@ Public Class Main
     Friend database As String = Nothing
     Friend loaded As Boolean = False
     Friend PSX As Boolean = False
+    Friend CODEFREAK As Boolean = False
     Dim enc1 As Integer = My.Settings.MSCODEPAGE
     Friend maintop As Boolean = My.Settings.TOP
     Friend showerror As Boolean = My.Settings.ERR
@@ -33,7 +34,7 @@ Public Class Main
         saveas_cwcheat.Enabled = True
         saveas_psx.Enabled = False
         file_saveas.Enabled = True
-
+        UTF16BECP1201ToolStripMenuItem.Enabled = False
     End Sub
 
     Private Sub new_psx_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles new_psx.Click
@@ -55,6 +56,7 @@ Public Class Main
         saveas_cwcheat.Enabled = False
         saveas_psx.Enabled = True
         file_saveas.Enabled = True
+        UTF16BECP1201ToolStripMenuItem.Enabled = False
     End Sub
 
     Private Sub file_open_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles file_open.Click
@@ -66,22 +68,35 @@ Public Class Main
 
             error_window.list_save_error.Items.Clear() 'Clear any save errors from a previous database
             PSX = open.check_db(database, enc1) ' Check the file's format
+            CODEFREAK = open.check2_db(database, 1201)
             codetree.Nodes.Clear()
             codetree.BeginUpdate()
             error_window.list_load_error.BeginUpdate()
 
-            If PSX = False Then
+            If CODEFREAK = True Then
+                reset_PSP()
+                Application.DoEvents()
+                enc1 = 1201
+                open.read_cf(database, 1201)
+                saveas_cwcheat.Enabled = True
+                saveas_psx.Enabled = False
+                UTF16BECP1201ToolStripMenuItem.Enabled = True
+            ElseIf PSX = False Then
+                enc1 = My.Settings.MSCODEPAGE
                 reset_PSP()
                 Application.DoEvents()
                 open.read_PSP(database, enc1)
                 saveas_cwcheat.Enabled = True
                 saveas_psx.Enabled = False
+                UTF16BECP1201ToolStripMenuItem.Enabled = False
             Else
+                enc1 = My.Settings.MSCODEPAGE
                 reset_PSX()
                 Application.DoEvents()
                 open.read_PSX(database, enc1)
                 saveas_psx.Enabled = True
                 saveas_cwcheat.Enabled = False
+                UTF16BECP1201ToolStripMenuItem.Enabled = False
             End If
 
             codetree.EndUpdate()
@@ -666,7 +681,7 @@ Public Class Main
         If proceed = True Then ' If a joker was selected, calculate the code
             j.add_joker()
         Else ' If not, remove any jokers if they exist
-            j.remove_joker()
+            'j.remove_joker()
         End If
 
     End Sub
@@ -691,7 +706,7 @@ Public Class Main
         If proceed = True Then ' If a joker was selected, calculate the code
             j.add_joker()
         Else ' If not, remove any jokers if they exist
-            j.remove_joker()
+            'j.remove_joker()
         End If
 
     End Sub
@@ -720,7 +735,7 @@ Public Class Main
         If proceed = True Then ' If a joker was selected, calculate the code
             j.add_joker()
         Else ' If not, remove any jokers if they exist
-            j.remove_joker()
+            'j.remove_joker()
         End If
 
     End Sub
@@ -744,7 +759,7 @@ Public Class Main
         If proceed = True Then ' If a joker was selected, calculate the code
             j.add_joker()
         Else ' If not, remove any jokers if they exist
-            j.remove_joker()
+            'j.remove_joker()
         End If
 
     End Sub
@@ -1001,6 +1016,7 @@ Public Class Main
         enc1 = 932
         GBKToolStripMenuItem.Checked = False
         CP932ToolStripMenuItem.Checked = True
+        UTF16BECP1201ToolStripMenuItem.Enabled = False
 
     End Sub
 
@@ -1011,18 +1027,33 @@ Public Class Main
         enc1 = 936
         GBKToolStripMenuItem.Checked = True
         CP932ToolStripMenuItem.Checked = False
-
+        UTF16BECP1201ToolStripMenuItem.Enabled = False
     End Sub
 
+
+    Private Sub UTF16BECP1201ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles UTF16BECP1201ToolStripMenuItem.Click
+        'エンコードを指定する場合
+        enc1 = 1201
+        GBKToolStripMenuItem.Checked = False
+        CP932ToolStripMenuItem.Checked = False
+        UTF16BECP1201ToolStripMenuItem.Checked = True
+    End Sub
     Private Sub EncodeToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EncodeToolStripMenuItem.Click
 
-        If My.Settings.MSCODEPAGE = 932 Then
+        If enc1 = 932 Then
             GBKToolStripMenuItem.Checked = False
             CP932ToolStripMenuItem.Checked = True
+            UTF16BECP1201ToolStripMenuItem.Checked = False
+        ElseIf enc1 = 1201 Then
+            GBKToolStripMenuItem.Checked = False
+            CP932ToolStripMenuItem.Checked = False
+            UTF16BECP1201ToolStripMenuItem.Checked = True
         Else
             GBKToolStripMenuItem.Checked = True
             CP932ToolStripMenuItem.Checked = False
+            UTF16BECP1201ToolStripMenuItem.Checked = False
         End If
+
     End Sub
 
     Private Sub menu_sort_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menu_sort.Click
@@ -1269,6 +1300,7 @@ Public Class Main
         codetree.Font = My.Settings.codetree
 
 
+        UTF16BECP1201ToolStripMenuItem.Enabled = False
     End Sub
 
     Private Sub codetree_ItemDrag(ByVal sender As Object, _
@@ -1515,4 +1547,5 @@ Public Class Main
             My.Settings.cmt_tb = fd.Font
         End If
     End Sub
+
 End Class
