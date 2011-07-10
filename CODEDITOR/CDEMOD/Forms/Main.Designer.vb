@@ -114,6 +114,7 @@ Partial Class Main
         Me.RadioButton4 = New System.Windows.Forms.RadioButton()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.changed = New System.Windows.Forms.Label()
+        Me.UTF16BECP1201ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.treeopen.SuspendLayout()
         Me.tool_menu.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -268,42 +269,42 @@ Partial Class Main
         'ツリービューToolStripMenuItem
         '
         Me.ツリービューToolStripMenuItem.Name = "ツリービューToolStripMenuItem"
-        Me.ツリービューToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.ツリービューToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
         Me.ツリービューToolStripMenuItem.Text = "ツリービュー"
         '
         'ゲームタイトルToolStripMenuItem
         '
         Me.ゲームタイトルToolStripMenuItem.Name = "ゲームタイトルToolStripMenuItem"
-        Me.ゲームタイトルToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.ゲームタイトルToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
         Me.ゲームタイトルToolStripMenuItem.Text = "ゲームタイトル"
         '
         'ゲームIDToolStripMenuItem
         '
         Me.ゲームIDToolStripMenuItem.Name = "ゲームIDToolStripMenuItem"
-        Me.ゲームIDToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.ゲームIDToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
         Me.ゲームIDToolStripMenuItem.Text = "ゲームID"
         '
         'コード名ToolStripMenuItem
         '
         Me.コード名ToolStripMenuItem.Name = "コード名ToolStripMenuItem"
-        Me.コード名ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.コード名ToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
         Me.コード名ToolStripMenuItem.Text = "コード名"
         '
         'コード内容ToolStripMenuItem
         '
         Me.コード内容ToolStripMenuItem.Name = "コード内容ToolStripMenuItem"
-        Me.コード内容ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.コード内容ToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
         Me.コード内容ToolStripMenuItem.Text = "コード内容"
         '
         'コメントToolStripMenuItem
         '
         Me.コメントToolStripMenuItem.Name = "コメントToolStripMenuItem"
-        Me.コメントToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.コメントToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
         Me.コメントToolStripMenuItem.Text = "コメント"
         '
         'EncodeToolStripMenuItem
         '
-        Me.EncodeToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CP932ToolStripMenuItem, Me.GBKToolStripMenuItem})
+        Me.EncodeToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CP932ToolStripMenuItem, Me.GBKToolStripMenuItem, Me.UTF16BECP1201ToolStripMenuItem})
         Me.EncodeToolStripMenuItem.Name = "EncodeToolStripMenuItem"
         Me.EncodeToolStripMenuItem.Size = New System.Drawing.Size(62, 20)
         Me.EncodeToolStripMenuItem.Text = "エンコード"
@@ -313,14 +314,14 @@ Partial Class Main
         'CP932ToolStripMenuItem
         '
         Me.CP932ToolStripMenuItem.Name = "CP932ToolStripMenuItem"
-        Me.CP932ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.CP932ToolStripMenuItem.Size = New System.Drawing.Size(166, 22)
         Me.CP932ToolStripMenuItem.Text = "SJIS(CP932)"
         Me.CP932ToolStripMenuItem.ToolTipText = "日本語シフトJISのDBを編集します"
         '
         'GBKToolStripMenuItem
         '
         Me.GBKToolStripMenuItem.Name = "GBKToolStripMenuItem"
-        Me.GBKToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.GBKToolStripMenuItem.Size = New System.Drawing.Size(166, 22)
         Me.GBKToolStripMenuItem.Text = "GBK(CP936)"
         Me.GBKToolStripMenuItem.ToolTipText = "中国語GBKのDBを編集します"
         '
@@ -470,8 +471,8 @@ Partial Class Main
         '
         'open_file
         '
-        Me.open_file.FileName = "*.db"
-        Me.open_file.Filter = "CWcheat データベース (*.db)|*.db|CMFUSION (*.cmf)|*.cmf|FreeCheat (*.txt)|*.txt|全てのファイル" & _
+        Me.open_file.FileName = "*.db;*.ar;*.cmf;*.txt;*.dat"
+        Me.open_file.Filter = "対応ファイル(*.db;*ar;*.cmf;*.txt;*.dat)|*.db;*.ar;*.cmf;*.txt;*.dat|CWcheat (*.db)|*.db|ACTIONREPLAY(*.ar)|*.ar|CMFUSION (*.cmf)|*.cmf|FreeCheat (*.txt)|*.txt|CodeFreak (*.dat)|*.dat|全てのファイル" & _
             " (*.*)|*.*"
         '
         'GID_tb
@@ -747,7 +748,7 @@ Partial Class Main
         '
         'save_file
         '
-        Me.save_file.Filter = "CWcheat データベース (*.db)|*.db|CMFUSION (*.cmf)|*.cmf|FreeCheat (*.txt)|*.txt"
+        Me.save_file.Filter = "CWcheat (*.db)|*.db|ACTIOPREPLAY (*.ar)|*.ar|CMFUSION (*.cmf)|*.cmf|FreeCheat (*.txt)|*.txt"
         '
         'button_list
         '
@@ -910,6 +911,13 @@ Partial Class Main
         Me.changed.TabIndex = 27
         Me.changed.Text = "　　　　　　　　　　　　　　　　　　　　　　　　　　"
         '
+        'UTF16BECP1201ToolStripMenuItem
+        '
+        Me.UTF16BECP1201ToolStripMenuItem.Name = "UTF16BECP1201ToolStripMenuItem"
+        Me.UTF16BECP1201ToolStripMenuItem.Size = New System.Drawing.Size(166, 22)
+        Me.UTF16BECP1201ToolStripMenuItem.Text = "UTF16BE(CP1201)"
+        Me.UTF16BECP1201ToolStripMenuItem.ToolTipText = "マルチバイトUTF16ビッグエンディアン" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "コードフリーク専用DBをTXTに戻します。"
+        '
         'Main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
@@ -947,7 +955,7 @@ Partial Class Main
         Me.KeyPreview = True
         Me.MainMenuStrip = Me.treeopen
         Me.Name = "Main"
-        Me.Text = "CDEMOD20110709"
+        Me.Text = "CDEMOD20110710"
         Me.treeopen.ResumeLayout(False)
         Me.treeopen.PerformLayout()
         Me.tool_menu.ResumeLayout(False)
@@ -1048,5 +1056,6 @@ Partial Class Main
     Friend WithEvents コード名ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents コード内容ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents コメントToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents UTF16BECP1201ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class
