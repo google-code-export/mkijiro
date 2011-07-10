@@ -770,8 +770,7 @@ Public Class load_db
                     i += 1
                 Loop
                 Dim name(n + 2) As Byte
-                file.Seek(i - n - 1, 0)
-                file.Read(name, 0, n + 1)
+                Array.ConstrainedCopy(bs, i - n - 1, name, 0, n + 1)
                 Dim str = System.Text.Encoding.GetEncoding(1201).GetString(name)
                 n = -3
                 gnode = New TreeNode(str.Trim)
@@ -788,8 +787,7 @@ Public Class load_db
                     i += 1
                 Loop
                 Dim master(n + 2) As Byte
-                file.Seek(i - n - 1, 0)
-                file.Read(master, 0, n + 1)
+                Array.ConstrainedCopy(bs, i - n - 1, master, 0, n + 1)
                 Dim str = System.Text.Encoding.GetEncoding(1201).GetString(master)
                 n = -3
                 Dim s1 As Integer = Convert.ToInt32(str.Substring(0, 2), 16)
@@ -809,8 +807,7 @@ Public Class load_db
                     i += 1
                 Loop
                 Dim cname(n + 2) As Byte
-                file.Seek(i - n - 1, 0)
-                file.Read(cname, 0, n + 1)
+                Array.ConstrainedCopy(bs, i - n - 1, cname, 0, n + 1)
                 Dim str = System.Text.Encoding.GetEncoding(1201).GetString(cname)
                 n = -3
                 cnode = New TreeNode(str.Trim)
@@ -826,19 +823,11 @@ Public Class load_db
                     i += 1
                 Loop
                 Dim code(n + 2) As Byte
-                file.Seek(i - n - 1, 0)
-                file.Read(code, 0, n + 1)
+                Array.ConstrainedCopy(bs, i - n - 1, code, 0, n + 1)
                 Dim str = System.Text.Encoding.GetEncoding(1201).GetString(code)
                 n = -3
-                Dim z As Integer = 0
-                Do Until z = str.Length - 1
-                    z += 1
-                    If (z Mod 16) = 0 Then
-                        b5 &= "0x" & str.Substring(z - 8, 8) & vbCrLf
-                    ElseIf (z Mod 8) = 0 Then
-                        b5 &= "0x" & str.Substring(z - 8, 8) & " "
-                    End If
-                Loop
+                b5 &= "0x" & str.Substring(0, 8) & " "
+                b5 &= "0x" & str.Substring(8, 8) & vbCrLf
                 b6 &= b5
             End If
 
