@@ -42,6 +42,7 @@ Partial Class Main
         Me.menu_options = New System.Windows.Forms.ToolStripMenuItem()
         Me.options_ontop = New System.Windows.Forms.ToolStripMenuItem()
         Me.options_error = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ブラウザ変更ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.menu_font = New System.Windows.Forms.ToolStripMenuItem()
         Me.ツリービューToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ゲームタイトルToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -115,7 +116,6 @@ Partial Class Main
         Me.RadioButton4 = New System.Windows.Forms.RadioButton()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.changed = New System.Windows.Forms.Label()
-        Me.ブラウザ変更ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.treeopen.SuspendLayout()
         Me.tool_menu.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -134,16 +134,16 @@ Partial Class Main
         '
         Me.menu_file.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.file_new, Me.file_open, Me.file_saveas, Me.file_exit})
         Me.menu_file.Name = "menu_file"
-        Me.menu_file.Size = New System.Drawing.Size(51, 20)
-        Me.menu_file.Text = "ファイル"
+        Me.menu_file.Size = New System.Drawing.Size(66, 20)
+        Me.menu_file.Text = "ファイル(&F)"
         '
         'file_new
         '
         Me.file_new.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.new_psp, Me.new_psx})
         Me.file_new.Image = Global.CWcheat_Database_Editor.My.Resources.Resources._new
         Me.file_new.Name = "file_new"
-        Me.file_new.Size = New System.Drawing.Size(126, 22)
-        Me.file_new.Text = "新規"
+        Me.file_new.Size = New System.Drawing.Size(141, 22)
+        Me.file_new.Text = "新規(&N)"
         '
         'new_psp
         '
@@ -163,8 +163,8 @@ Partial Class Main
         '
         Me.file_open.Image = CType(resources.GetObject("file_open.Image"), System.Drawing.Image)
         Me.file_open.Name = "file_open"
-        Me.file_open.Size = New System.Drawing.Size(126, 22)
-        Me.file_open.Text = "開く"
+        Me.file_open.Size = New System.Drawing.Size(141, 22)
+        Me.file_open.Text = "開く(&O)"
         '
         'file_saveas
         '
@@ -172,8 +172,8 @@ Partial Class Main
         Me.file_saveas.Enabled = False
         Me.file_saveas.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.save
         Me.file_saveas.Name = "file_saveas"
-        Me.file_saveas.Size = New System.Drawing.Size(126, 22)
-        Me.file_saveas.Text = "...として保存"
+        Me.file_saveas.Size = New System.Drawing.Size(141, 22)
+        Me.file_saveas.Text = "...として保存(&S)"
         '
         'saveas_cwcheat
         '
@@ -193,15 +193,15 @@ Partial Class Main
         '
         Me.file_exit.Image = CType(resources.GetObject("file_exit.Image"), System.Drawing.Image)
         Me.file_exit.Name = "file_exit"
-        Me.file_exit.Size = New System.Drawing.Size(126, 22)
-        Me.file_exit.Text = "閉じる"
+        Me.file_exit.Size = New System.Drawing.Size(141, 22)
+        Me.file_exit.Text = "閉じる(&C)"
         '
         'menu_sort
         '
         Me.menu_sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.sort_GID, Me.sort_name})
         Me.menu_sort.Name = "menu_sort"
-        Me.menu_sort.Size = New System.Drawing.Size(98, 20)
-        Me.menu_sort.Text = "データベース整列"
+        Me.menu_sort.Size = New System.Drawing.Size(56, 20)
+        Me.menu_sort.Text = "整列(&S)"
         Me.menu_sort.ToolTipText = "データベースの整列を実行します"
         '
         'sort_GID
@@ -240,8 +240,8 @@ Partial Class Main
         '
         Me.menu_options.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.options_ontop, Me.options_error, Me.ブラウザ変更ToolStripMenuItem})
         Me.menu_options.Name = "menu_options"
-        Me.menu_options.Size = New System.Drawing.Size(60, 20)
-        Me.menu_options.Text = "オプション"
+        Me.menu_options.Size = New System.Drawing.Size(76, 20)
+        Me.menu_options.Text = "オプション(&O)"
         Me.menu_options.ToolTipText = "メニューが常にTOPに表示されます"
         '
         'options_ontop
@@ -259,12 +259,19 @@ Partial Class Main
         Me.options_error.Text = "エラー画面を表示"
         Me.options_error.ToolTipText = "起動時のエラー画面の表示の設定"
         '
+        'ブラウザ変更ToolStripMenuItem
+        '
+        Me.ブラウザ変更ToolStripMenuItem.Name = "ブラウザ変更ToolStripMenuItem"
+        Me.ブラウザ変更ToolStripMenuItem.Size = New System.Drawing.Size(154, 22)
+        Me.ブラウザ変更ToolStripMenuItem.Text = "ブラウザ変更"
+        Me.ブラウザ変更ToolStripMenuItem.ToolTipText = "コードサイトを表示するブラウザの変更をします。"
+        '
         'menu_font
         '
         Me.menu_font.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ツリービューToolStripMenuItem, Me.ゲームタイトルToolStripMenuItem, Me.ゲームIDToolStripMenuItem, Me.コード名ToolStripMenuItem, Me.コード内容ToolStripMenuItem, Me.コメントToolStripMenuItem})
         Me.menu_font.Name = "menu_font"
-        Me.menu_font.Size = New System.Drawing.Size(50, 20)
-        Me.menu_font.Text = "フォント"
+        Me.menu_font.Size = New System.Drawing.Size(66, 20)
+        Me.menu_font.Text = "フォント(&N)"
         Me.menu_font.ToolTipText = "メニューのフォントを指定します"
         '
         'ツリービューToolStripMenuItem
@@ -307,8 +314,8 @@ Partial Class Main
         '
         Me.EncodeToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CP932ToolStripMenuItem, Me.GBKToolStripMenuItem, Me.UTF16BECP1201ToolStripMenuItem})
         Me.EncodeToolStripMenuItem.Name = "EncodeToolStripMenuItem"
-        Me.EncodeToolStripMenuItem.Size = New System.Drawing.Size(62, 20)
-        Me.EncodeToolStripMenuItem.Text = "エンコード"
+        Me.EncodeToolStripMenuItem.Size = New System.Drawing.Size(78, 20)
+        Me.EncodeToolStripMenuItem.Text = "エンコード(&D)"
         Me.EncodeToolStripMenuItem.ToolTipText = "コードデータベースの読み込み保存エンコードを指定します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "CP932≒日本語SJIS Cwcijiro/Tempar/Jpcheat用" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "CP936=中国語GBK" & _
             " CheatmasterやFreecheat用"
         '
@@ -337,8 +344,8 @@ Partial Class Main
         '
         Me.ツリー開閉ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.すべて閉じるToolStripMenuItem, Me.全て展開するToolStripMenuItem})
         Me.ツリー開閉ToolStripMenuItem.Name = "ツリー開閉ToolStripMenuItem"
-        Me.ツリー開閉ToolStripMenuItem.Size = New System.Drawing.Size(67, 20)
-        Me.ツリー開閉ToolStripMenuItem.Text = "ツリー操作"
+        Me.ツリー開閉ToolStripMenuItem.Size = New System.Drawing.Size(58, 20)
+        Me.ツリー開閉ToolStripMenuItem.Text = "ツリー(&T)"
         Me.ツリー開閉ToolStripMenuItem.ToolTipText = "ツリーノードの全展開、折りたたみを実行"
         '
         'すべて閉じるToolStripMenuItem
@@ -357,16 +364,16 @@ Partial Class Main
         '
         Me.paserToolStripMenuItem.Name = "paserToolStripMenuItem"
         Me.paserToolStripMenuItem.ShowShortcutKeys = False
-        Me.paserToolStripMenuItem.Size = New System.Drawing.Size(57, 20)
-        Me.paserToolStripMenuItem.Text = "パーサー"
+        Me.paserToolStripMenuItem.Size = New System.Drawing.Size(72, 20)
+        Me.paserToolStripMenuItem.Text = "パーサー(&P)"
         Me.paserToolStripMenuItem.ToolTipText = "コードをまとめて追加します"
         '
         'CWCWIKIToolStripMenuItem
         '
         Me.CWCWIKIToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.wikiToolStripMenuItem1, Me.OHGToolStripMenuItem, Me.HAXToolStripMenuItem, Me.CNGBAToolStripMenuItem, Me.GOOGLEToolStripMenuItem})
         Me.CWCWIKIToolStripMenuItem.Name = "CWCWIKIToolStripMenuItem"
-        Me.CWCWIKIToolStripMenuItem.Size = New System.Drawing.Size(77, 20)
-        Me.CWCWIKIToolStripMenuItem.Text = "ブラウザ起動"
+        Me.CWCWIKIToolStripMenuItem.Size = New System.Drawing.Size(69, 20)
+        Me.CWCWIKIToolStripMenuItem.Text = "ブラウザ(&B)"
         Me.CWCWIKIToolStripMenuItem.ToolTipText = "ブラウザでCWCheatwikiにアクセス"
         '
         'wikiToolStripMenuItem1
@@ -403,8 +410,8 @@ Partial Class Main
         '
         Me.EXE起動ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem1, Me.KAKASI変換ToolStripMenuItem, Me.PMETAN変換ToolStripMenuItem, Me.TEMPAR鶴ToolStripMenuItem, Me.WgetToolStripMenuItem, Me.JaneStyleToolStripMenuItem, Me.PSPへコードコピーToolStripMenuItem})
         Me.EXE起動ToolStripMenuItem.Name = "EXE起動ToolStripMenuItem"
-        Me.EXE起動ToolStripMenuItem.Size = New System.Drawing.Size(62, 20)
-        Me.EXE起動ToolStripMenuItem.Text = "EXE起動"
+        Me.EXE起動ToolStripMenuItem.Size = New System.Drawing.Size(77, 20)
+        Me.EXE起動ToolStripMenuItem.Text = "EXE起動(&E)"
         '
         'ToolStripMenuItem1
         '
@@ -453,7 +460,7 @@ Partial Class Main
         Me.PSPへコードコピーToolStripMenuItem.Name = "PSPへコードコピーToolStripMenuItem"
         Me.PSPへコードコピーToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.PSPへコードコピーToolStripMenuItem.Text = "PSPへコードコピー"
-        Me.PSPへコードコピーToolStripMenuItem.ToolTipText = "PSPへコードを転送します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "メモリースティックのパスの入力が必要です"
+        Me.PSPへコードコピーToolStripMenuItem.ToolTipText = "PSPへコードを転送します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "メモリースティックのパスの入力が必要です" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "例；パスがE場合　E:"
         '
         'codetree
         '
@@ -920,13 +927,6 @@ Partial Class Main
         Me.changed.Size = New System.Drawing.Size(213, 12)
         Me.changed.TabIndex = 27
         Me.changed.Text = "　　　　　　　　　　　　　　　　　　　　　　　　　　"
-        '
-        'ブラウザ変更ToolStripMenuItem
-        '
-        Me.ブラウザ変更ToolStripMenuItem.Name = "ブラウザ変更ToolStripMenuItem"
-        Me.ブラウザ変更ToolStripMenuItem.Size = New System.Drawing.Size(154, 22)
-        Me.ブラウザ変更ToolStripMenuItem.Text = "ブラウザ変更"
-        Me.ブラウザ変更ToolStripMenuItem.ToolTipText = "コードサイトを表示するブラウザの変更をします。"
         '
         'Main
         '
