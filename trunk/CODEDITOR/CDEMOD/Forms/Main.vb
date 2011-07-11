@@ -1,5 +1,6 @@
 ﻿Imports System.IO       'Stream、StreamWriter、StreamReader、FileStream用
 Imports System.Text     'Encoding用
+Imports System.Diagnostics
 
 Public Class Main
     Friend database As String = Nothing
@@ -9,7 +10,7 @@ Public Class Main
     Dim enc1 As Integer = My.Settings.MSCODEPAGE
     Friend maintop As Boolean = My.Settings.TOP
     Friend showerror As Boolean = My.Settings.ERR
-
+    Friend browser As String = My.Settings.browser
 #Region "Menubar procedures"
 
 
@@ -1205,15 +1206,23 @@ Public Class Main
     End Sub
 
     Private Sub wikiToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles wikiToolStripMenuItem1.Click
-        Process.Start("http://www21.atwiki.jp/cwcwiki/")
+        System.Diagnostics.Process.Start(browser, "http://www21.atwiki.jp/cwcwiki/")
     End Sub
 
     Private Sub OHGToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OHGToolStripMenuItem.Click
-        Process.Start("http://www.onehitgamer.com/forum/")
+        System.Diagnostics.Process.Start(browser, "http://www.onehitgamer.com/forum/")
     End Sub
 
     Private Sub HAXToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HAXToolStripMenuItem.Click
-        Process.Start("http://haxcommunity.org/")
+        System.Diagnostics.Process.Start(browser, "http://haxcommunity.org/")
+    End Sub
+
+    Private Sub CNGBAToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CNGBAToolStripMenuItem.Click
+        System.Diagnostics.Process.Start(Browser, "http://www.cngba.com/forum-988-1.html")
+    End Sub
+
+    Private Sub GOOGLEToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GOOGLEToolStripMenuItem.Click
+        System.Diagnostics.Process.Start(Browser, "http://www.google.co.jp/")
     End Sub
 
     Private Sub KAKASI変換ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles KAKASI変換ToolStripMenuItem.Click
@@ -1234,14 +1243,6 @@ Public Class Main
 
     Private Sub JaneStyleToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles JaneStyleToolStripMenuItem.Click
         Process.Start("APP\jane.bat")
-    End Sub
-
-    Private Sub CNGBAToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CNGBAToolStripMenuItem.Click
-        Process.Start("http://www.cngba.com/forum-988-1.html")
-    End Sub
-
-    Private Sub GOOGLEToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GOOGLEToolStripMenuItem.Click
-        Process.Start("http://www.google.co.jp/")
     End Sub
 
     Private Sub ToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem1.Click
@@ -1548,4 +1549,17 @@ Public Class Main
         End If
     End Sub
 
+    Private Sub ブラウザ変更ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ブラウザ変更ToolStripMenuItem.Click
+        Dim ofd As New OpenFileDialog()
+        ofd.InitialDirectory = "C:\Program Files"
+        ofd.Filter = _
+    "EXEファイル(*.exe)|*.exe"
+        ofd.Title = "ブラウザのEXEを選んでください"
+        If ofd.ShowDialog() = DialogResult.OK Then
+            'OKボタンがクリックされたとき
+            '選択されたファイル名を表示する
+            My.Settings.browser = ofd.FileName
+            browser = ofd.FileName
+        End If
+    End Sub
 End Class

@@ -161,6 +161,18 @@ Namespace My
                 Me("ERR") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("IExplore.exe")>  _
+        Public Property browser() As String
+            Get
+                Return CType(Me("browser"),String)
+            End Get
+            Set
+                Me("browser") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

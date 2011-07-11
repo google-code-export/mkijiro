@@ -115,6 +115,7 @@ Partial Class Main
         Me.RadioButton4 = New System.Windows.Forms.RadioButton()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.changed = New System.Windows.Forms.Label()
+        Me.ブラウザ変更ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.treeopen.SuspendLayout()
         Me.tool_menu.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -237,7 +238,7 @@ Partial Class Main
         '
         'menu_options
         '
-        Me.menu_options.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.options_ontop, Me.options_error})
+        Me.menu_options.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.options_ontop, Me.options_error, Me.ブラウザ変更ToolStripMenuItem})
         Me.menu_options.Name = "menu_options"
         Me.menu_options.Size = New System.Drawing.Size(60, 20)
         Me.menu_options.Text = "オプション"
@@ -920,6 +921,13 @@ Partial Class Main
         Me.changed.TabIndex = 27
         Me.changed.Text = "　　　　　　　　　　　　　　　　　　　　　　　　　　"
         '
+        'ブラウザ変更ToolStripMenuItem
+        '
+        Me.ブラウザ変更ToolStripMenuItem.Name = "ブラウザ変更ToolStripMenuItem"
+        Me.ブラウザ変更ToolStripMenuItem.Size = New System.Drawing.Size(154, 22)
+        Me.ブラウザ変更ToolStripMenuItem.Text = "ブラウザ変更"
+        Me.ブラウザ変更ToolStripMenuItem.ToolTipText = "コードサイトを表示するブラウザの変更をします。"
+        '
         'Main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
@@ -1059,5 +1067,6 @@ Partial Class Main
     Friend WithEvents コード内容ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents コメントToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents UTF16BECP1201ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ブラウザ変更ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class
