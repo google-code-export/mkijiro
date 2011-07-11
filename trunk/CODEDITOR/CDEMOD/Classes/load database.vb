@@ -743,6 +743,7 @@ Public Class load_db
         Dim gnode As New TreeNode ' Game name node for the TreeView control
         Dim cnode As New TreeNode ' Code name node for the TreeView control
         Dim skip As Boolean = False
+        Dim b3 As String = Nothing
         Dim b4 As String = Nothing
         Dim b5 As String = Nothing
         Dim b6 As String = Nothing
@@ -794,7 +795,9 @@ Public Class load_db
                 Dim s2 As Integer = Convert.ToInt32(str.Substring(2, 2), 16)
                 Dim s3 As Integer = Convert.ToInt32(str.Substring(4, 2), 16)
                 Dim s4 As Integer = Convert.ToInt32(str.Substring(6, 2), 16)
-                gnode.Tag = Chr(s1) & Chr(s2) & Chr(s3) & Chr(s4) & "-" & str.Substring(8, 5)
+                b3 = Chr(s1) & Chr(s2) & Chr(s3)
+                b3 &= Chr(s4) & "-" & str.Substring(8, 5)
+                gnode.Tag = b3
 
             ElseIf bs(i) = &H44 And bs(i + 1) = &H20 Then 'D
 
@@ -835,17 +838,16 @@ Public Class load_db
             i += 1
 
 
-            'If counts(1) >= 20 Then
+            If i Mod 20 = 0 Then
 
-            '    ' Update the progressbar every 20 repetitions otherwise the program 
-            '    ' will slow to a crawl from the constant re-draw of the progress bar
-            '    percent = (i * 100) / bs.Length
-            '    m.progbar.Value = Convert.ToInt32(percent)
-            '    m.progbar.PerformStep()
-            '    Application.DoEvents()
-            '    counts(1) = 0
+                ' Update the progressbar every 20 repetitions otherwise the program 
+                ' will slow to a crawl from the constant re-draw of the progress bar
+                percent = (i * 100) / bs.Length
+                m.progbar.Value = Convert.ToInt32(percent)
+                m.progbar.PerformStep()
+                Application.DoEvents()
 
-            'End If
+            End If
 
         End While
 
@@ -968,12 +970,12 @@ Public Class load_db
         Dim sr As New StreamReader(file, _
                                    System.Text.Encoding.GetEncoding(enc1))
         Dim buffer As String = Nothing
-
+        Dim cwcpop As Boolean = False
 
         Do Until sr.EndOfStream = True
 
             buffer = sr.ReadLine
-
+            buffer = buffer.PadRight(2)
             Try
 
                 If buffer.Substring(0, 2) = "_L" Then ' If we're on a code line
@@ -982,14 +984,13 @@ Public Class load_db
 
                         If buffer.Length = 16 And buffer.Substring(11, 1) = " " Then ' Check if the length and space is correct for PSX
 
-                            check_db = True ' It's a POPs file
+                            cwcpop = True ' It's a POPs file
                             Exit Do
-
                         End If
 
                     Else
 
-                        check_db = False ' Not a POPs file
+                        cwcpop = False ' Not a POPs file
                         Exit Do
 
                     End If
@@ -1000,24 +1001,26 @@ Public Class load_db
                 Console.WriteLine(ex.Message)
             End Try
         Loop
-
+        file.Close()
         sr.Close()
-
+        Return cwcpop
     End Function
 
     Public Function check2_db(ByVal filename As String, ByVal enc1 As Integer) As Boolean
 
         Dim file As New FileStream(filename, FileMode.Open, FileAccess.Read)
-
+        Dim cf As Boolean = False
             If file.ReadByte = &H47 Then ' If we're on a code line
 
-                check2_db = True
+            cf = True
             Else
 
-                check2_db = False
+            cf = False
 
-            End If
+        End If
 
+        file.Close()
+        Return cf
     End Function
 
 End Class
