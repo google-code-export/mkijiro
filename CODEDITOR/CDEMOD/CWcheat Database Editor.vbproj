@@ -51,8 +51,7 @@
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Release\</OutputPath>
     <DocumentationFile>CDE_CP932.xml</DocumentationFile>
-    <NoWarn>
-    </NoWarn>
+    <NoWarn>42105,42106,42107</NoWarn>
     <WarningsAsErrors>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</WarningsAsErrors>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <Optimize>true</Optimize>
@@ -64,8 +63,7 @@
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DocumentationFile>CDE_CP932.xml</DocumentationFile>
-    <NoWarn>
-    </NoWarn>
+    <NoWarn>42105,42106,42107</NoWarn>
     <WarningsAsErrors>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</WarningsAsErrors>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
