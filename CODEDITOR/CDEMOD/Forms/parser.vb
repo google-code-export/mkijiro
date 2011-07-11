@@ -44,88 +44,99 @@ Public Class parser
                 End If
 
                 If s.Length >= 7 Then
-                    If s.Substring(0, 7) = "トラックバック" Then
+                    Dim t As New System.Text.RegularExpressions.Regex( _
+            "トラックバック.[0-9]+.+リンク元.[0-9]+", _
+            System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+                    Dim w As System.Text.RegularExpressions.Match = t.Match(s)
+                    If w.Success Then
                         b2 &= "_CW cwcwiki用,最後にある場合は消さないでください" & vbCrLf
+                        s = ""
                         'g = 0
                         wikiend = 1
-                    End If
-                    If s.Substring(0, 6) = "抽出レス数：" Then
+                    ElseIf s.Substring(0, 6) = "抽出レス数：" Then
                         b2 &= "_CJ JANE2CH用,最後にある場合は消さないでください" & vbCrLf
                         jane2ch = 1
                     End If
                 End If
-                    If g = 1 Then
-                    If s.Length >= 2 Then
-                        If s.Substring(0, 2) = "_C" Then
-                            s = s.PadRight(3)
-                            If i = 0 Then
-                                If s.Substring(2, 1) = "!" Then
-                                    rmmode = 1
-                                End If
-                                b2 &= s.Trim & vbCrLf
-                                code = 0
-                            ElseIf s.Substring(2, 1) = "D" Then
-                                code = 0
-                            ElseIf s.Substring(2, 1) = "J" Then
-                                b2 &= s.Trim & vbCrLf
-                                jane2ch = 1
-                                code = 0
-                            ElseIf s.Substring(2, 1) = "W" Then
-                                b2 &= s.Trim & vbCrLf
-                                wikiend = 1
-                                code = 0
-                            ElseIf s.Substring(2, 1) = "!" Then
+            If g = 1 Then
+                If s.Length >= 2 Then
+                    If s.Substring(0, 2) = "_C" Then
+                        s = s.PadRight(3)
+                        If i = 0 Then
+                            If s.Substring(2, 1) = "!" Then
                                 rmmode = 1
-                            ElseIf s.Substring(2, 1) = "#" Then
-                                rmmode = 0
-                            Else
-                                b2 &= s.Trim & vbCrLf
-                                code = 0
                             End If
-                            i += 1
-
-                            '_L 0x12345678 0x12345678
-                        ElseIf s.Substring(0, 2) = "_L" Or s.Substring(0, 2) = "_M" Or s.Substring(0, 2) = "_N" Then
-                            cwcar = s.Substring(0, 3)
-                            s = s.Replace(vbCr, "")
-                            s = s.PadRight(24, "0"c)
-                            If s.Substring(3, 2) = "0x" And s.Substring(14, 2) = "0x" Then
-
-                                s = System.Text.RegularExpressions.Regex.Replace( _
-                        s, "[g-zG-Z]", "A")
-                                s = s.ToUpper
-                                s = s.Replace("_A ", cwcar)
-                                s = s.Replace(" 0A", " 0x")
-                                b2 &= s.Substring(0, 24) & vbCrLf
-                                code = 1
-                                'popdb
-                            ElseIf s.Substring(2, 1) = " " And s.Substring(11, 1) = " " Then
-                                s = System.Text.RegularExpressions.Regex.Replace( _
-                        s, "[g-zG-Z]", "A")
-                                s = s.ToUpper
-                                s = s.Replace("_A ", "_L ")
-                                b2 &= s.Substring(0, 16) & vbCrLf
-                                code = 1
-                            End If
-                        ElseIf rmmode = 1 Then
-                            s = s.Replace("#", "")
                             b2 &= s.Trim & vbCrLf
-                        ElseIf code = 1 Then
-                            '661 名前：名無しさん＠お腹いっぱい。[sage] 投稿日：2011/06/28(火) 19:45:22.31 ID:Nl1EJEAd
-                            Dim r As New System.Text.RegularExpressions.Regex( _
-                    "[0-9]+ 名前.+投稿日.+ID.+", _
-                    System.Text.RegularExpressions.RegexOptions.IgnoreCase)
-                            Dim m As System.Text.RegularExpressions.Match = r.Match(s)
-                            If m.Success Then
-                                b2 &= s.Trim & vbCrLf
-                            Else
-                                s = s.Replace("#", "")
-                                b2 &= "#" & s.Trim & vbCrLf
-                            End If
-
+                            code = 0
+                        ElseIf s.Substring(2, 1) = "D" Then
+                            code = 0
+                        ElseIf s.Substring(2, 1) = "J" Then
+                            b2 &= s.Trim & vbCrLf
+                            jane2ch = 1
+                            code = 0
+                        ElseIf s.Substring(2, 1) = "W" Then
+                            b2 &= s.Trim & vbCrLf
+                            wikiend = 1
+                            code = 0
+                        ElseIf s.Substring(2, 1) = "!" Then
+                            rmmode = 1
+                        ElseIf s.Substring(2, 1) = "#" Then
+                            rmmode = 0
+                        Else
+                            b2 &= s.Trim & vbCrLf
+                            code = 0
                         End If
+                        i += 1
+
+                        '_L 0x12345678 0x12345678
+                    ElseIf s.Substring(0, 2) = "_L" Or s.Substring(0, 2) = "_M" Or s.Substring(0, 2) = "_N" Then
+                        cwcar = s.Substring(0, 3)
+                        s = s.Replace(vbCr, "")
+                        s = s.PadRight(24, "0"c)
+                        If s.Substring(3, 2) = "0x" And s.Substring(14, 2) = "0x" Then
+
+                            s = System.Text.RegularExpressions.Regex.Replace( _
+                    s, "[g-zG-Z]", "A")
+                            s = s.ToUpper
+                            s = s.Replace("_A ", cwcar)
+                            s = s.Replace(" 0A", " 0x")
+                            b2 &= s.Substring(0, 24) & vbCrLf
+                            code = 1
+                            'popdb
+                        ElseIf s.Substring(2, 1) = " " And s.Substring(11, 1) = " " Then
+                            s = System.Text.RegularExpressions.Regex.Replace( _
+                    s, "[g-zG-Z]", "A")
+                            s = s.ToUpper
+                            s = s.Replace("_A ", "_L ")
+                            b2 &= s.Substring(0, 16) & vbCrLf
+                            code = 1
+                        End If
+                    ElseIf rmmode = 1 Then
+                        s = s.Replace("#", "")
+                        b2 &= s.Trim & vbCrLf
+                    ElseIf code = 1 Then
+                        '661 名前：名無しさん＠お腹いっぱい。[sage] 投稿日：2011/06/28(火) 19:45:22.31 ID:Nl1EJEAd
+                        Dim r As New System.Text.RegularExpressions.Regex( _
+                "[0-9]+ 名前.+投稿日.+ID.+", _
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+                        Dim m As System.Text.RegularExpressions.Match = r.Match(s)
+
+                        Dim p As New System.Text.RegularExpressions.Regex( _
+                "-{60}", _
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+                        Dim l As System.Text.RegularExpressions.Match = p.Match(s)
+                        If m.Success Then
+                            b2 &= s.Trim & vbCrLf
+                        ElseIf l.Success Then
+
+                        Else
+                            s = s.Replace("#", "")
+                            b2 &= "#" & s.Trim & vbCrLf
+                        End If
+
                     End If
                 End If
+            End If
             End If
         Next
         If jane2ch = 0 And wikiend = 0 Then
@@ -190,11 +201,6 @@ Public Class parser
         Dim rmmode As Integer
 
         For Each s As String In b1
-        '661 名前：名無しさん＠お腹いっぱい。[sage] 投稿日：2011/06/28(火) 19:45:22.31 ID:Nl1EJEAd
-        Dim r As New System.Text.RegularExpressions.Regex( _
-"[0-9]+ 名前.+投稿日.+ID.+", _
-System.Text.RegularExpressions.RegexOptions.IgnoreCase)
-            Dim m As System.Text.RegularExpressions.Match = r.Match(s)
             If s.Length >= 2 Then
                 s = s.PadRight(3)
                 bc1 = s.Substring(0, 1)
@@ -207,12 +213,22 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                     rmmode = 0
                 End If
 
+                '661 名前：名無しさん＠お腹いっぱい。[sage] 投稿日：2011/06/28(火) 19:45:22.31 ID:Nl1EJEAd
+                Dim r As New System.Text.RegularExpressions.Regex( _
+        "[0-9]+ 名前.+投稿日.+ID.+", _
+        System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+                Dim m As System.Text.RegularExpressions.Match = r.Match(s)
+                Dim p As New System.Text.RegularExpressions.Regex( _
+        "-{60}", _
+        System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+                Dim l As System.Text.RegularExpressions.Match = p.Match(s)
 
                 If m.Success Or bc1 = "#" Or bc2 = "_L" Or bc2 = "_M" Or bc2 = "_N" Then
                     s = s.Trim & vbCrLf
-                ElseIf bc3 = "_CR" Or bc3 = "_CM" Then
+                ElseIf bc3 = "_CR" Or bc3 = "_CM" Or l.Success Then
                     s = ""
                 ElseIf bc3 = "_CJ" Or bc3 = "_CW" Or bc3 = "_CD" Or bc3 = "_C#" Or bc3 = "_C!" Then
+
                 ElseIf rmmode = 1 Then
                     s = s.Replace("_C0 ", "")
                     s = s.Replace("_C1 ", "")

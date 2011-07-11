@@ -10,11 +10,11 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("CWcheat Database Editor 0.99")> 
-<Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("Microsoft")> 
-<Assembly: AssemblyProduct("CWcheat Database Editor 0.99")> 
-<Assembly: AssemblyCopyright("")> 
+<Assembly: AssemblyTitle("CDEMOD")> 
+<Assembly: AssemblyDescription("CWCデータベース編集")> 
+<Assembly: AssemblyCompany("")> 
+<Assembly: AssemblyProduct("CDEMOD")> 
+<Assembly: AssemblyCopyright("orig;pasky,mod by (ﾟ∀ﾟ)")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)> 
@@ -36,4 +36,4 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyVersion("1.0.0.0")> 
 <Assembly: AssemblyFileVersion("0.9.9.0")> 
 
-<Assembly: NeutralResourcesLanguageAttribute("en")> 
+<Assembly: NeutralResourcesLanguageAttribute("ja-JP")> 

@@ -52,6 +52,7 @@ Partial Class Main
         Me.EncodeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CP932ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GBKToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.UTF16BECP1201ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ツリー開閉ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.すべて閉じるToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.全て展開するToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -114,7 +115,6 @@ Partial Class Main
         Me.RadioButton4 = New System.Windows.Forms.RadioButton()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.changed = New System.Windows.Forms.Label()
-        Me.UTF16BECP1201ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.treeopen.SuspendLayout()
         Me.tool_menu.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -325,6 +325,13 @@ Partial Class Main
         Me.GBKToolStripMenuItem.Text = "GBK(CP936)"
         Me.GBKToolStripMenuItem.ToolTipText = "中国語GBKのDBを編集します"
         '
+        'UTF16BECP1201ToolStripMenuItem
+        '
+        Me.UTF16BECP1201ToolStripMenuItem.Name = "UTF16BECP1201ToolStripMenuItem"
+        Me.UTF16BECP1201ToolStripMenuItem.Size = New System.Drawing.Size(166, 22)
+        Me.UTF16BECP1201ToolStripMenuItem.Text = "UTF16BE(CP1201)"
+        Me.UTF16BECP1201ToolStripMenuItem.ToolTipText = "マルチバイトUTF16ビッグエンディアン" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "コードフリーク専用DBをTXTに戻します。"
+        '
         'ツリー開閉ToolStripMenuItem
         '
         Me.ツリー開閉ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.すべて閉じるToolStripMenuItem, Me.全て展開するToolStripMenuItem})
@@ -472,8 +479,9 @@ Partial Class Main
         'open_file
         '
         Me.open_file.FileName = "*.db;*.ar;*.cmf;*.txt;*.dat"
-        Me.open_file.Filter = "対応ファイル(*.db;*ar;*.cmf;*.txt;*.dat)|*.db;*.ar;*.cmf;*.txt;*.dat|CWcheat (*.db)|*.db|ACTIONREPLAY(*.ar)|*.ar|CMFUSION (*.cmf)|*.cmf|FreeCheat (*.txt)|*.txt|CodeFreak (*.dat)|*.dat|全てのファイル" & _
-            " (*.*)|*.*"
+        Me.open_file.Filter = "対応ファイル(*.db;*ar;*.cmf;*.txt;*.dat)|*.db;*.ar;*.cmf;*.txt;*.dat|CWcheat (*.db)|*.d" & _
+            "b|ACTIONREPLAY(*.ar)|*.ar|CMFUSION (*.cmf)|*.cmf|FreeCheat (*.txt)|*.txt|CodeFre" & _
+            "ak (*.dat)|*.dat|全てのファイル (*.*)|*.*"
         '
         'GID_tb
         '
@@ -748,7 +756,8 @@ Partial Class Main
         '
         'save_file
         '
-        Me.save_file.Filter = "CWcheat (*.db)|*.db|ACTIOPREPLAY (*.ar)|*.ar|CMFUSION (*.cmf)|*.cmf|FreeCheat (*.txt)|*.txt"
+        Me.save_file.Filter = "CWcheat (*.db)|*.db|ACTIOPREPLAY (*.ar)|*.ar|CMFUSION (*.cmf)|*.cmf|FreeCheat (*." & _
+            "txt)|*.txt"
         '
         'button_list
         '
@@ -911,13 +920,6 @@ Partial Class Main
         Me.changed.TabIndex = 27
         Me.changed.Text = "　　　　　　　　　　　　　　　　　　　　　　　　　　"
         '
-        'UTF16BECP1201ToolStripMenuItem
-        '
-        Me.UTF16BECP1201ToolStripMenuItem.Name = "UTF16BECP1201ToolStripMenuItem"
-        Me.UTF16BECP1201ToolStripMenuItem.Size = New System.Drawing.Size(166, 22)
-        Me.UTF16BECP1201ToolStripMenuItem.Text = "UTF16BE(CP1201)"
-        Me.UTF16BECP1201ToolStripMenuItem.ToolTipText = "マルチバイトUTF16ビッグエンディアン" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "コードフリーク専用DBをTXTに戻します。"
-        '
         'Main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
@@ -955,7 +957,7 @@ Partial Class Main
         Me.KeyPreview = True
         Me.MainMenuStrip = Me.treeopen
         Me.Name = "Main"
-        Me.Text = "CDEMOD20110710"
+        Me.Text = "CDEMOD20110711"
         Me.treeopen.ResumeLayout(False)
         Me.treeopen.PerformLayout()
         Me.tool_menu.ResumeLayout(False)

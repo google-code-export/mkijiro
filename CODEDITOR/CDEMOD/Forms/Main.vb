@@ -67,7 +67,7 @@ Public Class Main
             database = open_file.FileName
 
             error_window.list_save_error.Items.Clear() 'Clear any save errors from a previous database
-            PSX = open.check_db(database, enc1) ' Check the file's format
+            PSX = open.check_db(database, 932) ' Check the file's format
             CODEFREAK = open.check2_db(database, 1201)
             codetree.Nodes.Clear()
             codetree.BeginUpdate()
@@ -81,21 +81,21 @@ Public Class Main
                 saveas_cwcheat.Enabled = True
                 saveas_psx.Enabled = False
                 UTF16BECP1201ToolStripMenuItem.Enabled = True
-            ElseIf PSX = False Then
-                enc1 = My.Settings.MSCODEPAGE
-                reset_PSP()
-                Application.DoEvents()
-                open.read_PSP(database, enc1)
-                saveas_cwcheat.Enabled = True
-                saveas_psx.Enabled = False
-                UTF16BECP1201ToolStripMenuItem.Enabled = False
-            Else
+            ElseIf PSX = True Then
                 enc1 = My.Settings.MSCODEPAGE
                 reset_PSX()
                 Application.DoEvents()
                 open.read_PSX(database, enc1)
                 saveas_psx.Enabled = True
                 saveas_cwcheat.Enabled = False
+                UTF16BECP1201ToolStripMenuItem.Enabled = False
+            Else
+                enc1 = My.Settings.MSCODEPAGE
+                reset_PSP()
+                Application.DoEvents()
+                open.read_PSP(database, enc1)
+                saveas_cwcheat.Enabled = True
+                saveas_psx.Enabled = False
                 UTF16BECP1201ToolStripMenuItem.Enabled = False
             End If
 
