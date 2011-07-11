@@ -34,12 +34,14 @@ Public Class parser
         Dim wikiend As Integer = 0
         Dim jane2ch As Integer = 0
         Dim b2 As String = Nothing
+        Dim b3 As String = Nothing
         Dim cwcar As String = Nothing
         Dim rmmode As Integer = 0
 
         For Each s As String In b1
             If s.Length >= 2 Then
-                If s.Substring(0, 2) = "_S" Or s.Substring(0, 2) = "_C" Then
+                b3 = s.Substring(0, 2)
+                If b3 = "_S" Or b3 = "_C" Then
                     g = 1
                 End If
 
@@ -58,85 +60,87 @@ Public Class parser
                         jane2ch = 1
                     End If
                 End If
-            If g = 1 Then
-                If s.Length >= 2 Then
-                    If s.Substring(0, 2) = "_C" Then
-                        s = s.PadRight(3)
-                        If i = 0 Then
-                            If s.Substring(2, 1) = "!" Then
+                If g = 1 Then
+                    If s.Length >= 2 Then
+
+                        If b3 = "_C" Then
+                            s = s.PadRight(3)
+                            Dim b4 = s.Substring(2, 1)
+                            If i = 0 Then
+                                If b4 = "!" Then
+                                    rmmode = 1
+                                End If
+                                b2 &= s.Trim & vbCrLf
+                                code = 0
+                            ElseIf b4 = "D" Then
+                                code = 0
+                            ElseIf b4 = "J" Then
+                                b2 &= s.Trim & vbCrLf
+                                jane2ch = 1
+                                code = 0
+                            ElseIf b4 = "W" Then
+                                b2 &= s.Trim & vbCrLf
+                                wikiend = 1
+                                code = 0
+                            ElseIf b4 = "!" Then
                                 rmmode = 1
+                            ElseIf b4 = "#" Then
+                                rmmode = 0
+                            Else
+                                b2 &= s.Trim & vbCrLf
+                                code = 0
                             End If
-                            b2 &= s.Trim & vbCrLf
-                            code = 0
-                        ElseIf s.Substring(2, 1) = "D" Then
-                            code = 0
-                        ElseIf s.Substring(2, 1) = "J" Then
-                            b2 &= s.Trim & vbCrLf
-                            jane2ch = 1
-                            code = 0
-                        ElseIf s.Substring(2, 1) = "W" Then
-                            b2 &= s.Trim & vbCrLf
-                            wikiend = 1
-                            code = 0
-                        ElseIf s.Substring(2, 1) = "!" Then
-                            rmmode = 1
-                        ElseIf s.Substring(2, 1) = "#" Then
-                            rmmode = 0
-                        Else
-                            b2 &= s.Trim & vbCrLf
-                            code = 0
-                        End If
-                        i += 1
+                            i += 1
 
-                        '_L 0x12345678 0x12345678
-                    ElseIf s.Substring(0, 2) = "_L" Or s.Substring(0, 2) = "_M" Or s.Substring(0, 2) = "_N" Then
-                        cwcar = s.Substring(0, 3)
-                        s = s.Replace(vbCr, "")
-                        s = s.PadRight(24, "0"c)
-                        If s.Substring(3, 2) = "0x" And s.Substring(14, 2) = "0x" Then
+                            '_L 0x12345678 0x12345678
+                        ElseIf b3 = "_L" Or b3 = "_M" Or b3 = "_N" Then
+                            cwcar = s.Substring(0, 3)
+                            s = s.Replace(vbCr, "")
+                            s = s.PadRight(24, "0"c)
+                            If s.Substring(3, 2) = "0x" And s.Substring(14, 2) = "0x" Then
 
-                            s = System.Text.RegularExpressions.Regex.Replace( _
-                    s, "[g-zG-Z]", "A")
-                            s = s.ToUpper
-                            s = s.Replace("_A ", cwcar)
-                            s = s.Replace(" 0A", " 0x")
-                            b2 &= s.Substring(0, 24) & vbCrLf
-                            code = 1
-                            'popdb
-                        ElseIf s.Substring(2, 1) = " " And s.Substring(11, 1) = " " Then
-                            s = System.Text.RegularExpressions.Regex.Replace( _
-                    s, "[g-zG-Z]", "A")
-                            s = s.ToUpper
-                            s = s.Replace("_A ", "_L ")
-                            b2 &= s.Substring(0, 16) & vbCrLf
-                            code = 1
-                        End If
-                    ElseIf rmmode = 1 Then
-                        s = s.Replace("#", "")
-                        b2 &= s.Trim & vbCrLf
-                    ElseIf code = 1 Then
-                        '661 名前：名無しさん＠お腹いっぱい。[sage] 投稿日：2011/06/28(火) 19:45:22.31 ID:Nl1EJEAd
-                        Dim r As New System.Text.RegularExpressions.Regex( _
-                "[0-9]+ 名前.+投稿日.+ID.+", _
-                System.Text.RegularExpressions.RegexOptions.IgnoreCase)
-                        Dim m As System.Text.RegularExpressions.Match = r.Match(s)
-
-                        Dim p As New System.Text.RegularExpressions.Regex( _
-                "-{60}", _
-                System.Text.RegularExpressions.RegexOptions.IgnoreCase)
-                        Dim l As System.Text.RegularExpressions.Match = p.Match(s)
-                        If m.Success Then
-                            b2 &= s.Trim & vbCrLf
-                        ElseIf l.Success Then
-
-                        Else
+                                s = System.Text.RegularExpressions.Regex.Replace( _
+                        s, "[g-zG-Z]", "A")
+                                s = s.ToUpper
+                                s = s.Replace("_A ", cwcar)
+                                s = s.Replace(" 0A", " 0x")
+                                b2 &= s.Substring(0, 24) & vbCrLf
+                                code = 1
+                                'popdb
+                            ElseIf s.Substring(2, 1) = " " And s.Substring(11, 1) = " " Then
+                                s = System.Text.RegularExpressions.Regex.Replace( _
+                        s, "[g-zG-Z]", "A")
+                                s = s.ToUpper
+                                s = s.Replace("_A ", "_L ")
+                                b2 &= s.Substring(0, 16) & vbCrLf
+                                code = 1
+                            End If
+                        ElseIf rmmode = 1 Or b3 = "_S" Or b3 = "_G" Then
                             s = s.Replace("#", "")
-                            b2 &= "#" & s.Trim & vbCrLf
-                        End If
+                            b2 &= s.Trim & vbCrLf
+                        ElseIf code = 1 Then
+                            '661 名前：名無しさん＠お腹いっぱい。[sage] 投稿日：2011/06/28(火) 19:45:22.31 ID:Nl1EJEAd
+                            Dim r As New System.Text.RegularExpressions.Regex( _
+                    "[0-9]+ 名前.+投稿日.+ID.+", _
+                    System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+                            Dim m As System.Text.RegularExpressions.Match = r.Match(s)
 
+                            Dim p As New System.Text.RegularExpressions.Regex( _
+                    "-{60}", _
+                    System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+                            Dim l As System.Text.RegularExpressions.Match = p.Match(s)
+                            If m.Success Then
+                                b2 &= s.Trim & vbCrLf
+                            ElseIf l.Success Then
+
+                            Else
+                                s = s.Replace("#", "")
+                                b2 &= "#" & s.Trim & vbCrLf
+                            End If
+
+                        End If
                     End If
                 End If
-            End If
             End If
         Next
         If jane2ch = 0 And wikiend = 0 Then

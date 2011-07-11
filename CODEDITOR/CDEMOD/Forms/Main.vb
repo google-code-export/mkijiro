@@ -561,6 +561,28 @@ Public Class Main
 
 #Region "Code tree procedures"
 
+    Private Sub codetree_KeyUp(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles codetree.KeyUp
+        If e.KeyCode = Keys.Delete Then
+            Try
+                If codetree.SelectedNode.Level = 1 Then
+                    If MessageBox.Show("選択しているゲームとコードをすべて削除しますか？", "削除の確認", _
+                       MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
+                        codetree.SelectedNode.Remove()
+                    End If
+                ElseIf codetree.SelectedNode.Level = 2 Then
+
+                    If MessageBox.Show("選択されたコードを削除しますか?", "削除の確認", MessageBoxButtons.OKCancel, _
+                       MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
+                        codetree.SelectedNode.Remove()
+                    End If
+                End If
+
+            Catch ex As Exception
+
+            End Try
+        End If
+    End Sub
+
     Private Sub codetree_AfterSelect(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles codetree.AfterSelect
         Dim j As New joker
 
@@ -1093,6 +1115,8 @@ Public Class Main
         f.ShowDialog(Me)
         Dim b1 As String = cmt_tb.Text
         Dim b2 As String() = b1.Split(CChar(vbLf))
+        Dim gid As String = Nothing
+        Dim gname As String = Nothing
         Dim cname As String = Nothing
         Dim code As String = Nothing
         Dim cname2 As String = Nothing
@@ -1106,6 +1130,22 @@ Public Class Main
         For Each s As String In b2
 
             If s.Length >= 2 Then
+                If codetree.SelectedNode.Level = 0 Then
+                    If s.Substring(0, 2) = "_S" Then
+                        gid = s.Substring(3, s.Length - 3).Trim
+                    ElseIf s.Substring(0, 2) = "_G" Then
+                        gname = s.Substring(3, s.Length - 3).Trim
+                        Dim gnode = New TreeNode(gname)
+                        With gnode
+                            .Name = gname
+                            .Tag = gid
+                            .ImageIndex = 1
+                        End With
+                        codetree.Nodes(0).Nodes.Insert(0, gnode)
+                        codetree.SelectedNode = gnode
+                    End If
+                End If
+
                 If s.Substring(0, 2) = "_C" Then
                     nullcode = 1
                     s = s.PadRight(3, "0"c)
