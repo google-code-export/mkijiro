@@ -99,12 +99,14 @@ Public Class Main
                 saveas_psx.Enabled = False
                 UTF16BECP1201ToolStripMenuItem.Enabled = False
             End If
-
+            If codetree.Nodes.Count >= 1 Then
+                codetree.Nodes(0).Expand()
+            End If
             codetree.EndUpdate()
             error_window.list_load_error.EndUpdate()
             loaded = True
             file_saveas.Enabled = True
-
+            paserToolStripMenuItem.Enabled = True
         End If
 
     End Sub
@@ -1112,6 +1114,7 @@ Public Class Main
     Private Sub paserToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles paserToolStripMenuItem.Click
         Dim backup As String = cmt_tb.Text
         Dim f As New parser
+        cmt_tb.Text = Nothing
         f.ShowDialog(Me)
         Dim b1 As String = cmt_tb.Text
         Dim b2 As String() = b1.Split(CChar(vbLf))
@@ -1122,18 +1125,28 @@ Public Class Main
         Dim cname2 As String = Nothing
         Dim code2 As String = Nothing
         Dim coment As String = Nothing
-        Dim add As Integer = 0
-        Dim nullcode As Integer = 0
+        Dim add As Boolean = False
+        Dim havegame As Boolean = False
+        Dim nullcode As Boolean = False
         Dim i As Integer = 0
-        'Dim cwcar As String = Nothing
+        If codetree.Nodes.Count >= 1 And b1 <> Nothing Then
+            If codetree.SelectedNode Is Nothing Then
+                codetree.SelectedNode = codetree.TopNode
+            End If
+        Dim selnode1stlv As Integer = codetree.SelectedNode.Level
 
         For Each s As String In b2
 
             If s.Length >= 2 Then
-                If codetree.SelectedNode.Level = 0 Then
+                If selnode1stlv = 0 Then
                     If s.Substring(0, 2) = "_S" Then
+                        If havegame = True Then
+                            add = True
+                        End If
+                        s = s.PadRight(4)
                         gid = s.Substring(3, s.Length - 3).Trim
                     ElseIf s.Substring(0, 2) = "_G" Then
+                        s = s.PadRight(4)
                         gname = s.Substring(3, s.Length - 3).Trim
                         Dim gnode = New TreeNode(gname)
                         With gnode
@@ -1143,11 +1156,12 @@ Public Class Main
                         End With
                         codetree.Nodes(0).Nodes.Insert(0, gnode)
                         codetree.SelectedNode = gnode
+                        havegame = True
                     End If
                 End If
 
                 If s.Substring(0, 2) = "_C" Then
-                    nullcode = 1
+                    nullcode = True
                     s = s.PadRight(3, "0"c)
                     If i = 0 Then
                         If s.Substring(2, 1) = "0" Then
@@ -1157,8 +1171,8 @@ Public Class Main
                         End If
                         cname = s.Substring(3, s.Length - 3).Trim
                     Else
-                        add = 1
-                        If nullcode = 1 Then
+                        add = True
+                        If nullcode = True Then
                             code2 &= "0" & vbCrLf
                         End If
                         code = code & coment
@@ -1173,7 +1187,7 @@ Public Class Main
                 End If
 
                 If s.Substring(0, 2) = "_L" Or s.Substring(0, 2) = "_M" Or s.Substring(0, 2) = "_N" Then
-                    nullcode = 0
+                    nullcode = False
                     s = s.Replace(vbCr, "")
                     If PSX = True Then
                         s = s.PadRight(17, "0"c)
@@ -1208,7 +1222,7 @@ Public Class Main
                 End If
             End If
 
-            If add = 1 Then
+            If add = True Then
                 Try
                     Dim newcode As New TreeNode
 
@@ -1235,9 +1249,11 @@ Public Class Main
                 code = code2
                 cname = cname2
                 coment = Nothing
-                add = 0
+                add = False
             End If
         Next
+        End If
+        f.Dispose()
         cmt_tb.Text = backup
     End Sub
 
