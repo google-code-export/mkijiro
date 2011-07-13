@@ -3,8 +3,6 @@ Imports System.Text     'Encoding用
 
 Public Class load_db
 
-    Public Sub addparser(ByVal sr As String)
-    End Sub
     Public Sub read_PSP(ByVal filename As String, ByVal enc1 As Integer)
 
         Dim m As Main = Main
@@ -13,7 +11,7 @@ Public Class load_db
         Dim file As New FileStream(filename, FileMode.Open, FileAccess.Read)
         Dim sr As New StreamReader(file, _
                                    System.Text.Encoding.GetEncoding(enc1))
-        Dim buffer(3) As String ' 0 = stream buffer, 1 = Game ID address, 2 = Game name, 3 = Codes 4= comment
+        Dim buffer(4) As String ' 0 = stream buffer, 1 = Game ID address, 2 = Game name, 3 = Codes 4= comment
         Dim counts(2) As Integer ' 0 = Line #, 1 = Progress bar counter, 2 = Total formatting errors
         Dim percent As Double = 0
         Dim gnode As New TreeNode ' Game name node for the TreeView control
@@ -89,7 +87,7 @@ Public Class load_db
                             cnode = New TreeNode(buffer(0).Substring(3, buffer(0).Length - 3).Trim)
                             cnode.Name = buffer(0).Substring(3, buffer(0).Length - 3).Trim
                             cnode.ImageIndex = 2
-                            gnode.Nodes.Add(cnode)
+                                gnode.Nodes.Add(cnode)
                             NULLCODE = True
                         End If
                     End If
@@ -129,9 +127,9 @@ Public Class load_db
                                 .Tag = buffer(1)
                                 .ImageIndex = 1
                             End With
-                            m.codetree.Nodes(0).Nodes.Add(gnode)
+                                m.codetree.Nodes(0).Nodes.Add(gnode)
 
-                        Case Is = "_C0", "_C1", "_C2"
+                        Case Is = "_C0", "_C1", "_C2", "_CO"
 
                             skip = False
 
@@ -171,7 +169,6 @@ Public Class load_db
                                 z = 4 Or z
                                 buffer(3) = buffer(3).Insert(0, z.ToString())
                             Else  ' cwc
-                                '   cwcar = "_L "
                             End If
 
                             '_L 0x12345678 0x12345678 24文字
@@ -187,11 +184,11 @@ Public Class load_db
                             Else ' If it is incorrectly formed, ignore it.
 
                                 counts(2) += 1
-                                If buffer(0).Trim = Nothing Then 'If the line is blank
-                                    write_errors(counts(0), counts(2), "<!!空白しかない行です>", gnode.Text, cnode.Text)
-                                Else
-                                    write_errors(counts(0), counts(2), buffer(0) & " <!!対応してないコード形式です>", gnode.Text, cnode.Text) ' Write the ignored line to the error list
-                                End If
+                                    If buffer(0).Trim = Nothing Then 'If the line is blank
+                                        write_errors(counts(0), counts(2), "<!!空白しかない行です>", gnode.Text, cnode.Text)
+                                    Else
+                                        write_errors(counts(0), counts(2), buffer(0) & " <!!対応してないコード形式です>", gnode.Text, cnode.Text) ' Write the ignored line to the error list
+                                    End If
 
                                 If ew.Visible = False Then
 
@@ -202,180 +199,85 @@ Public Class load_db
 
                                 End If
 
-                            End If
-
-                            Do Until skip = True
-
-                                buffer(0) = sr.ReadLine
-                                counts(0) += 1 ' Keep track of the line #
-                                percent = (sr.BaseStream.Position * 100) / sr.BaseStream.Length
-                                counts(1) += 1
-
-                                If buffer(0) = Nothing Then ' If we've reached the end of the file or a blank line
-
-                                    If sr.EndOfStream = True Then 'Check if we are at the end of the file
-                                        cnode.Tag = buffer(3) & b4
-                                        buffer(3) = Nothing
-                                        b4 = Nothing
-                                        Exit Do
-                                    End If
                                 End If
 
-                                If buffer(0).Length >= 2 Then
-                                    buffer(0) = buffer(0).PadRight(24)
-                                    If buffer(0).Substring(0, 3) = cwcar Then
-                                        If buffer(0).Substring(3, 2) = "0x" And buffer(0).Substring(14, 2) = "0x" Then 'If it is a correctly formed code record it
-                                            buffer(0) = System.Text.RegularExpressions.Regex.Replace( _
-                                    buffer(0), "[g-zG-Z]", "A")
-                                            buffer(0) = buffer(0).ToUpper
-                                            buffer(0) = buffer(0).Replace(" 0A", " 0x")
-                                            buffer(3) &= buffer(0).Substring(3, 21).Trim & vbCrLf
-                                        Else ' If it is incorrectly formed, add it to the error list and ignore it
-                                            buffer(0) = buffer(0).Replace("0", "")
-                                            counts(2) += 1
+                                Do Until skip = True
+
+                                    buffer(0) = sr.ReadLine
+                                    counts(0) += 1 ' Keep track of the line #
+                                    percent = (sr.BaseStream.Position * 100) / sr.BaseStream.Length
+                                    counts(1) += 1
+
+                                    If buffer(0) = Nothing Then ' If we've reached the end of the file or a blank line
+
+                                        If sr.EndOfStream = True Then 'Check if we are at the end of the file
+                                            cnode.Tag = buffer(3) & b4
+                                            buffer(3) = Nothing
+                                            b4 = Nothing
+                                            Exit Do
+                                        End If
+                                    End If
+
+                                    If buffer(0).Length >= 2 Then
+                                        buffer(0) = buffer(0).PadRight(24)
+                                        If buffer(0).Substring(0, 3) = cwcar Then
+                                            If buffer(0).Substring(3, 2) = "0x" And buffer(0).Substring(14, 2) = "0x" Then 'If it is a correctly formed code record it
+                                                buffer(0) = System.Text.RegularExpressions.Regex.Replace( _
+                                        buffer(0), "[g-zG-Z]", "A")
+                                                buffer(0) = buffer(0).ToUpper
+                                                buffer(0) = buffer(0).Replace(" 0A", " 0x")
+                                                buffer(3) &= buffer(0).Substring(3, 21).Trim & vbCrLf
+                                            Else ' If it is incorrectly formed, add it to the error list and ignore it
+                                                counts(2) += 1
+
                                             If buffer(0).Trim = Nothing Then 'If the line is blank
                                                 write_errors(counts(0), counts(2), "<!空白しかない行です>", gnode.Text, cnode.Text)
                                             Else
                                                 write_errors(counts(0), counts(2), buffer(0) & " <!対応してないコード形式です。>", gnode.Text, cnode.Text) ' Write the ignored line to the error list
                                             End If
 
-                                            If ew.Visible = False Then
+                                        If ew.Visible = False Then
 
-                                                ew.Show()
-                                                ew.tab_error.SelectedIndex = 0 ' Give focus to the "Load Error" tab
-                                                m.Focus()
-                                                reset_toolbar()
-
-                                            End If
+                                            ew.Show()
+                                            ew.tab_error.SelectedIndex = 0 ' Give focus to the "Load Error" tab
+                                            m.Focus()
+                                            reset_toolbar()
 
                                         End If
 
-                                    ElseIf buffer(0).Substring(0, 1) = "#" Then
-                                        b4 &= buffer(0) & vbCrLf
+                                            End If
 
-                                    ElseIf buffer(0).Substring(0, 2) = "_C" Or buffer(0).Substring(0, 2) = "_S" Then
-                                        cnode.Tag = buffer(3) & b4 ' Store all collected codes in the nodes 'tag'
-                                        buffer(3) = Nothing
-                                        b4 = Nothing
-                                        skip = True ' If a new game or code is found, skip the initial read so it is processed
+                                        ElseIf buffer(0).Substring(0, 1) = "#" Then
+                                            b4 &= buffer(0) & vbCrLf
 
+                                        ElseIf buffer(0).Substring(0, 2) = "_C" Or buffer(0).Substring(0, 2) = "_S" Then
+                                            cnode.Tag = buffer(3) & b4 ' Store all collected codes in the nodes 'tag'
+                                            buffer(3) = Nothing
+                                            b4 = Nothing
+                                            skip = True ' If a new game or code is found, skip the initial read so it is processed
+
+                                        End If
+
+                                        If counts(1) >= 20 Then
+                                            ' Update the progressbar every 20 repetitions otherwise the program 
+                                            ' will slow to a crawl from the constant re-draw of the progress bar
+                                            m.progbar.Value = Convert.ToInt32(percent)
+                                            m.progbar.PerformStep()
+                                            Application.DoEvents()
+                                            counts(1) = 0
+                                        End If
                                     End If
+                                Loop
 
-                                    If counts(1) >= 20 Then
-                                        ' Update the progressbar every 20 repetitions otherwise the program 
-                                        ' will slow to a crawl from the constant re-draw of the progress bar
-                                        m.progbar.Value = Convert.ToInt32(percent)
-                                        m.progbar.PerformStep()
-                                        Application.DoEvents()
-                                        counts(1) = 0
-                                    End If
-                                End If
-                            Loop
-
-                            'Case Is = "_M" ' Used for PSPar codes, exactly the same as _L
-
-                            '    NULLCODE = 0
-                            '    skip = False
-                            '    buffer(0) = buffer(0).Trim
-
-                            '    If buffer(0).Substring(3, 2) = "0x" And buffer(0).Substring(14, 2) = "0x" Then 'If it is a correctly formed code record it
-                            '        buffer(3) &= buffer(0).Substring(3, 21) & vbCrLf
-                            '    Else ' If it is incorrectly formed, ignore it.
-
-                            '        counts(2) += 1
-                            '        If buffer(0).Replace(" ", "") = Nothing Then 'If the line is blank
-                            '            write_errors(counts(0), counts(2), "<Line is blank>", gnode.Text, cnode.Text)
-                            '        Else
-                            '            write_errors(counts(0), counts(2), buffer(0) & " <not added>", gnode.Text, cnode.Text) ' Write the ignored line to the error list
-                            '        End If
-
-                            '        If ew.Visible = False Then
-
-                            '            ew.Show()
-                            '            ew.tab_error.SelectedIndex = 0 ' Give focus to the "Load Error" tab
-                            '            m.Focus()
-                            '            reset_toolbar()
-
-                            '        End If
-
-                            '    End If
-
-                            '    Do Until skip = True
-
-                            '        buffer(0) = sr.ReadLine
-                            '        counts(0) += 1 ' Keep track of the line #
-                            '        percent = (sr.BaseStream.Position * 100) / sr.BaseStream.Length
-                            '        counts(1) += 1
-
-                            '        If buffer(0) = Nothing Then ' If we've reached the end of the file
-
-                            '            If sr.EndOfStream = True Then
-                            '                cnode.Tag = buffer(3)
-                            '                buffer(3) = Nothing
-                            '                b4 = Nothing
-                            '            End If
-
-                            '            Exit Do
-                            '        End If
-
-                            '        buffer(0) = buffer(0).Trim
-                            '        If buffer(0).Length >= 2 Or buffer(0).Substring(0) = "#" Then
-                            '            If buffer(0).Substring(0, 2) = "_M" Then
-
-                            '                If buffer(0).Substring(3, 2) = "0x" And buffer(0).Substring(14, 2) = "0x" Then 'If it is a correctly formed code record it
-                            '                    buffer(3) &= buffer(0).Substring(3, 21) & vbCrLf
-                            '                Else ' If it is incorrectly formed, add it to the error list and ignore it
-
-                            '                    counts(2) += 1
-
-                            '                    If buffer(0).Replace(" ", "") = Nothing Then 'If the line is blank
-                            '                        write_errors(counts(0), counts(2), "<Line is blank>", gnode.Text, cnode.Text)
-                            '                    Else
-                            '                        write_errors(counts(0), counts(2), buffer(0) & " <not added>", gnode.Text, cnode.Text) ' Write the ignored line to the error list
-                            '                    End If
-
-                            '                    If ew.Visible = False Then
-
-                            '                        ew.Show()
-                            '                        ew.tab_error.SelectedIndex = 0 ' Give focus to the "Load Error" tab
-                            '                        m.Focus()
-                            '                        reset_toolbar()
-
-                            '                    End If
-
-                            '                End If
-
-                            '            ElseIf buffer(0).Substring(0, 1) = "#" Then
-                            '                b4 &= buffer(0) & vbCrLf
-
-                            '            ElseIf buffer(0).Substring(0, 2) = "_C" Or buffer(0).Substring(0, 2) = "_S" Then
-                            '                cnode.Tag = buffer(3) & b4 ' Store all collected codes in the nodes 'tag'
-                            '                buffer(3) = Nothing
-                            '                b4 = Nothing
-                            '                skip = True ' If a new game or code is found, skip the initial read so it is processed
-
-                            '            End If
-
-                            '            If counts(1) >= 20 Then
-                            '                ' Update the progressbar every 20 repetitions otherwise the program 
-                            '                ' will slow to a crawl from the constant re-draw of the progress bar
-                            '                m.progbar.Value = Convert.ToInt32(percent)
-                            '                m.progbar.PerformStep()
-                            '                Application.DoEvents()
-                            '                counts(1) = 0
-                            '            End If
-
-                            '        End If
-                            '    Loop
 
                         Case Else ' This will catch anything that is out of place
 
-                            If buffer(0).Substring(0, 1) = "#" Then
-                                b4 &= buffer(0) & vbCrLf
+                                If buffer(0).Substring(0, 1) = "#" Then
+                                    b4 &= buffer(0) & vbCrLf
 
-                            Else ' If what we found isn't a comment, ignore it
+                                Else ' If what we found isn't a comment, ignore it
 
-                                counts(2) += 1
+                                    counts(2) += 1
 
                                 If buffer(0).Trim = Nothing Then 'If the line is blank
                                     write_errors(counts(0), counts(2), "<空白しかない行です。>", gnode.Text, cnode.Text)
@@ -383,26 +285,26 @@ Public Class load_db
                                     write_errors(counts(0), counts(2), buffer(0) & " <不正なコードなため追加されませんでした。>", gnode.Text, cnode.Text) ' Write the ignored line to the error list
                                 End If
 
-                                If ew.Visible = False Then
+                            If ew.Visible = False Then
 
-                                    ew.Show()
-                                    ew.tab_error.SelectedIndex = 0 ' Give focus to the "Load Error" tab
-                                    m.Focus()
-                                    reset_toolbar()
+                                ew.Show()
+                                ew.tab_error.SelectedIndex = 0 ' Give focus to the "Load Error" tab
+                                m.Focus()
+                                reset_toolbar()
 
-                                End If
-
-                                buffer(0) = sr.ReadLine ' Read the next line after the error
-                                counts(0) += 1
-                                counts(1) += 1
-                                skip = True ' Skip the intial read
                             End If
+
+                            buffer(0) = sr.ReadLine ' Read the next line after the error
+                            counts(0) += 1
+                            counts(1) += 1
+                            skip = True ' Skip the intial read
+                                End If
 
                     End Select
 
                 Else
-                    buffer(0) = buffer(0).PadRight(2)
-                    If buffer(0).Substring(0, 1) = "#" Then
+                buffer(0) = buffer(0).PadRight(2)
+                If buffer(0).Substring(0, 1) = "#" Then
                         b4 &= buffer(0).Trim & vbCrLf
                     Else
                         ' This is set if there is a garbage line in the database and
@@ -414,9 +316,8 @@ Public Class load_db
                         Else
                             write_errors(counts(0), counts(2), buffer(0) & " <追加されませんでした>", gnode.Text, cnode.Text)
                         End If
-                    End If
-
-                    skip = False
+                End If
+                skip = False
                 End If
 
                 If counts(1) >= 20 Then
@@ -467,11 +368,13 @@ Public Class load_db
         Dim cnode As New TreeNode ' Code name node for the TreeView control
         Dim skip As Boolean = False
         Dim b4 As String = Nothing
-        Dim nullcode As Integer = 0
+        Dim nullcode As Boolean = False
+        buffer(0) = Nothing
+        gnode.Text = Nothing
+        cnode.Text = Nothing
         m.codetree.Nodes.Add(Path.GetFileNameWithoutExtension(filename)).ImageIndex = 0 ' Add the root node and set its icon
         m.progbar.Visible = True ' Show the progress bar and reset it's value
         m.progbar.Value = 0 ' Reset the progress bar
-
         reset_errors() ' Clear the error list before loading
 
         Try
@@ -494,7 +397,7 @@ Public Class load_db
                         Case Is = "_S"
                             skip = False
 
-                            If nullcode = 1 Then
+                            If nullcode = True Then
                                 buffer(3) &= "" & vbCrLf
                                 cnode.Tag = buffer(3) & b4
                             End If
@@ -515,7 +418,7 @@ Public Class load_db
 
                         Case Is = "_C"
                             skip = False
-                            If nullcode = 1 Then
+                            If nullcode = True Then
                                 buffer(3) &= "" & vbCrLf
                                 cnode.Tag = buffer(3) & b4
                             End If
@@ -532,16 +435,16 @@ Public Class load_db
                             cnode.Name = buffer(0).Substring(3, buffer(0).Length - 3).Trim
                             cnode.ImageIndex = 2
                             gnode.Nodes.Add(cnode)
-                            nullcode = 1
+                            nullcode = True
 
                         Case Is = "_L"
 
                             skip = False
-                            nullcode = 0
-                            buffer(0) = buffer(0).Replace("?", "A")
+                            nullcode = False
                             buffer(0) = buffer(0).Trim
-
-                            If buffer(0).Length = 16 Then 'If it is a correctly formed code record it
+                            '_L 12345678 1234
+                            If buffer(0).Length = 16 And buffer(0).Substring(11, 1) = " " Then 'If it is a correctly formed code record it
+                                buffer(0) = buffer(0).Replace("?", "A")
                                 buffer(3) &= buffer(0).Substring(3, 13) & vbCrLf
                             Else
 
@@ -553,14 +456,14 @@ Public Class load_db
                                 Else ' If it is incorrectly formed, ignore it.
 
                                     counts(2) += 1
-                                    If buffer(0).Replace(" ", "") = Nothing Then 'If the line is blank
+                                    If buffer(0).Trim = Nothing Then 'If the line is blank
                                         write_errors(counts(0), counts(2), "<空白しかない行です>", gnode.Text, cnode.Text)
                                     Else
                                         write_errors(counts(0), counts(2), buffer(0) & " <追加されませんでした。>", gnode.Text, cnode.Text) ' Write the ignored line to the error list
                                     End If
 
                                     If ew.Visible = False Then
-
+                                        ew.Visible = True
                                         ew.Show()
                                         ew.tab_error.SelectedIndex = 0 ' Give focus to the "Load Error" tab
                                         m.Focus()
@@ -589,18 +492,19 @@ Public Class load_db
 
                                     Exit Do
 
-                                ElseIf buffer(0).Substring(0, 2) = "_L" Then
+                                ElseIf buffer.Length = 1 Then
 
-                                    buffer(0) = buffer(0).Replace("?", "A")
+                                ElseIf buffer(0).Substring(0, 2) = "_L" Then
                                     buffer(0) = buffer(0).Trim
 
-                                    If buffer(0).Length = 16 Then 'If it is a correctly formed code record it
+                                    If buffer(0).Length = 16 And buffer(0).Substring(11, 1) = " " Then
+                                        buffer(0) = buffer(0).Replace("?", "A")
                                         buffer(3) &= buffer(0).Substring(3, 13) & vbCrLf
                                     Else
 
                                         buffer(4) = clean_PSX(buffer(0).Trim)
 
-                                        If buffer(4).Length = 16 Then 'Attempt to remove white spaces and re-check
+                                        If buffer(4).Length = 16 And buffer(0).Substring(11, 1) = " " Then 'Attempt to remove white spaces and re-check
                                             buffer(3) &= buffer(4).Substring(3, 13) & vbCrLf
 
                                         Else ' If it is incorrectly formed, ignore it.
@@ -613,7 +517,7 @@ Public Class load_db
                                             End If
 
                                             If ew.Visible = False Then
-
+                                                ew.Visible = True
                                                 ew.Show()
                                                 ew.tab_error.SelectedIndex = 0 ' Give focus to the "Load Error" tab
                                                 m.Focus()
@@ -624,11 +528,9 @@ Public Class load_db
                                         End If
 
                                     End If
-
                                 ElseIf buffer(0).Substring(0, 1) = "#" Then
                                     b4 &= buffer(0) & vbCrLf
 
-                                ElseIf buffer.Length = 1 Then
                                 ElseIf buffer(0).Substring(0, 2) = "_S" Or buffer(0).Substring(0, 2) = "_C" Then
                                     cnode.Tag = buffer(3) & b4 ' Store all collected codes in the nodes 'tag'
                                     buffer(3) = Nothing
@@ -652,14 +554,14 @@ Public Class load_db
                             If buffer(0).Substring(0, 1) = "#" Then
                                 b4 &= buffer(0).Trim & vbCrLf
 
-                            ElseIf buffer(0).Substring(0, 1) <> "#" Then ' If what we found isn't a comment, ignore it
+                            Else ' what we found isn't a comment, ignore it
 
                                 counts(2) += 1
-                                If buffer(0).Replace(" ", "") = Nothing Then 'If the line is blank
-                                    write_errors(counts(0), counts(2), "<空白しかない行です>", gnode.Text, cnode.Text)
-                                Else
-                                    write_errors(counts(0), counts(2), buffer(0) & " <追加されませんでした>", gnode.Text, cnode.Text) ' Write the ignored line to the error list
-                                End If
+                                    If buffer(0).Trim = Nothing Then 'If the line is blank
+                                        write_errors(counts(0), counts(2), "<空白しかない行です>", gnode.Text, cnode.Text)
+                                    Else
+                                        write_errors(counts(0), counts(2), buffer(0) & " <追加されませんでした>", gnode.Text, cnode.Text) ' Write the ignored line to the error list
+                                    End If
 
                                 If ew.Visible = False Then
 
@@ -675,7 +577,7 @@ Public Class load_db
                                 counts(1) += 1
                                 skip = True
 
-                            End If
+                                End If
 
                     End Select
 
@@ -688,7 +590,8 @@ Public Class load_db
                         ' will write the line to the error window and try to continue loading
                         counts(2) += 1
                         'Determine if it's a blank line
-                        If buffer(0).Replace(" ", "") = Nothing Then
+
+                        If buffer(0).Trim = Nothing Then
                             write_errors(counts(0), counts(2), "<!空白しかない行です>", gnode.Text, cnode.Text)
                         Else
                             write_errors(counts(0), counts(2), buffer(0) & " <!追加されませんでした>", gnode.Text, cnode.Text)
@@ -781,6 +684,7 @@ Public Class load_db
                     .ImageIndex = 1
                 End With
                 m.codetree.Nodes(0).Nodes.Add(gnode)
+                counts(1) += 1
 
             ElseIf bs(i) = &H4D And bs(i + 1) = &H20 Then 'M
                 Do Until bs(i) = 10 'linefeed
@@ -798,6 +702,7 @@ Public Class load_db
                 b3 = Chr(s1) & Chr(s2) & Chr(s3)
                 b3 &= Chr(s4) & "-" & str.Substring(8, 5)
                 gnode.Tag = b3
+                counts(1) += 1
 
             ElseIf bs(i) = &H44 And bs(i + 1) = &H20 Then 'D
 
@@ -818,6 +723,7 @@ Public Class load_db
                 cnode.ImageIndex = 2
                 gnode.Nodes.Add(cnode)
                 b6 = "0" & vbCrLf
+                counts(1) += 1
 
             ElseIf bs(i) = &H43 And bs(i + 1) = &H20 Then 'C
                 b5 = Nothing
@@ -832,13 +738,14 @@ Public Class load_db
                 b5 &= "0x" & str.Substring(0, 8) & " "
                 b5 &= "0x" & str.Substring(8, 8) & vbCrLf
                 b6 &= b5
+                counts(1) += 1
             End If
 
 
             i += 1
 
 
-            If i Mod 20 = 0 Then
+            If counts(1) = 20 Then
 
                 ' Update the progressbar every 20 repetitions otherwise the program 
                 ' will slow to a crawl from the constant re-draw of the progress bar
@@ -846,7 +753,7 @@ Public Class load_db
                 m.progbar.Value = Convert.ToInt32(percent)
                 m.progbar.PerformStep()
                 Application.DoEvents()
-
+                counts(1) = 0
             End If
 
         End While
