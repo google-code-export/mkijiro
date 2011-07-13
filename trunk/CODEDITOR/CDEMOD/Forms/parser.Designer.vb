@@ -29,6 +29,8 @@ Partial Class parser
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
+        Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
+        Me.MenuStrip2 = New System.Windows.Forms.MenuStrip()
         Me.SuspendLayout()
         '
         'TX
@@ -95,11 +97,27 @@ Partial Class parser
         Me.Button3.Text = "_C補正"
         Me.Button3.UseVisualStyleBackColor = True
         '
+        'MenuStrip1
+        '
+        Me.MenuStrip1.Location = New System.Drawing.Point(0, 24)
+        Me.MenuStrip1.Name = "MenuStrip1"
+        Me.MenuStrip1.Size = New System.Drawing.Size(284, 24)
+        Me.MenuStrip1.TabIndex = 7
+        Me.MenuStrip1.Text = "MenuStrip1"
+        '
+        'MenuStrip2
+        '
+        Me.MenuStrip2.Location = New System.Drawing.Point(0, 0)
+        Me.MenuStrip2.Name = "MenuStrip2"
+        Me.MenuStrip2.Size = New System.Drawing.Size(284, 24)
+        Me.MenuStrip2.TabIndex = 8
+        Me.MenuStrip2.Text = "MenuStrip2"
+        '
         'parser
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(284, 311)
+        Me.ClientSize = New System.Drawing.Size(284, 303)
         Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Button1)
@@ -107,6 +125,9 @@ Partial Class parser
         Me.Controls.Add(Me.cancel)
         Me.Controls.Add(Me.OK)
         Me.Controls.Add(Me.TX)
+        Me.Controls.Add(Me.MenuStrip1)
+        Me.Controls.Add(Me.MenuStrip2)
+        Me.MainMenuStrip = Me.MenuStrip1
         Me.Name = "parser"
         Me.Text = "一括パーサー"
         Me.ResumeLayout(False)
@@ -120,4 +141,6 @@ Partial Class parser
     Friend WithEvents Button1 As System.Windows.Forms.Button
     Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents Button3 As System.Windows.Forms.Button
+    Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
+    Friend WithEvents MenuStrip2 As System.Windows.Forms.MenuStrip
 End Class

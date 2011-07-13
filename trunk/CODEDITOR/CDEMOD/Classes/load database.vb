@@ -660,6 +660,8 @@ Public Class load_db
         'ファイルの内容をすべて読み込む
         file.Read(bs, 0, bs.Length)
 
+        Dim cf_utf16(33) As Byte
+        Dim str As String = Nothing
         Dim i As Integer = 0
         Dim n As Integer = -3
         While i < bs.Length - 3
@@ -675,11 +677,11 @@ Public Class load_db
                 Loop
                 Dim name(n + 2) As Byte
                 Array.ConstrainedCopy(bs, i - n - 1, name, 0, n + 1)
-                Dim str = System.Text.Encoding.GetEncoding(1201).GetString(name)
+                str = System.Text.Encoding.GetEncoding(1201).GetString(name)
                 n = -3
                 gnode = New TreeNode(str.Trim)
                 With gnode
-                    .Name = str
+                    .Name = str.Trim
                     .Tag = Nothing
                     .ImageIndex = 1
                 End With
@@ -687,14 +689,9 @@ Public Class load_db
                 counts(1) += 1
 
             ElseIf bs(i) = &H4D And bs(i + 1) = &H20 Then 'M
-                Do Until bs(i) = 10 'linefeed
-                    n += 1
-                    i += 1
-                Loop
-                Dim master(n + 2) As Byte
-                Array.ConstrainedCopy(bs, i - n - 1, master, 0, n + 1)
-                Dim str = System.Text.Encoding.GetEncoding(1201).GetString(master)
-                n = -3
+                i += 34
+                Array.ConstrainedCopy(bs, i - 32, cf_utf16, 0, 32)
+                str = System.Text.Encoding.GetEncoding(1201).GetString(cf_utf16)
                 Dim s1 As Integer = Convert.ToInt32(str.Substring(0, 2), 16)
                 Dim s2 As Integer = Convert.ToInt32(str.Substring(2, 2), 16)
                 Dim s3 As Integer = Convert.ToInt32(str.Substring(4, 2), 16)
@@ -716,7 +713,7 @@ Public Class load_db
                 Loop
                 Dim cname(n + 2) As Byte
                 Array.ConstrainedCopy(bs, i - n - 1, cname, 0, n + 1)
-                Dim str = System.Text.Encoding.GetEncoding(1201).GetString(cname)
+                str = System.Text.Encoding.GetEncoding(1201).GetString(cname)
                 n = -3
                 cnode = New TreeNode(str.Trim)
                 cnode.Name = str.Trim
@@ -727,23 +724,16 @@ Public Class load_db
 
             ElseIf bs(i) = &H43 And bs(i + 1) = &H20 Then 'C
                 b5 = Nothing
-                Do Until bs(i) = 10 'linefeed
-                    n += 1
-                    i += 1
-                Loop
-                Dim code(n + 2) As Byte
-                Array.ConstrainedCopy(bs, i - n - 1, code, 0, n + 1)
-                Dim str = System.Text.Encoding.GetEncoding(1201).GetString(code)
-                n = -3
+                i += 34
+                Array.ConstrainedCopy(bs, i - 32, cf_utf16, 0, 32)
+                str = System.Text.Encoding.GetEncoding(1201).GetString(cf_utf16)
                 b5 &= "0x" & str.Substring(0, 8) & " "
                 b5 &= "0x" & str.Substring(8, 8) & vbCrLf
                 b6 &= b5
                 counts(1) += 1
             End If
 
-
             i += 1
-
 
             If counts(1) = 20 Then
 

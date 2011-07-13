@@ -1130,128 +1130,129 @@ Public Class Main
         Dim nullcode As Boolean = False
         Dim i As Integer = 0
         If codetree.Nodes.Count >= 1 And b1 <> Nothing Then
-            If codetree.SelectedNode Is Nothing Then
-                codetree.SelectedNode = codetree.TopNode
-            End If
-        Dim selnode1stlv As Integer = codetree.SelectedNode.Level
+            'If codetree.SelectedNode Is Nothing Then
+            '    codetree.SelectedNode = codetree.TopNode
+            'End If
+            Dim selnode1stlv As Integer = codetree.SelectedNode.Level
 
-        For Each s As String In b2
+            For Each s As String In b2
 
-            If s.Length >= 2 Then
-                If selnode1stlv = 0 Then
-                    If s.Substring(0, 2) = "_S" Then
-                        If havegame = True Then
-                            add = True
-                        End If
-                        s = s.PadRight(4)
-                        gid = s.Substring(3, s.Length - 3).Trim
-                    ElseIf s.Substring(0, 2) = "_G" Then
-                        s = s.PadRight(4)
-                        gname = s.Substring(3, s.Length - 3).Trim
-                        Dim gnode = New TreeNode(gname)
-                        With gnode
-                            .Name = gname
-                            .Tag = gid
-                            .ImageIndex = 1
-                        End With
-                        codetree.Nodes(0).Nodes.Insert(0, gnode)
-                        codetree.SelectedNode = gnode
-                        havegame = True
-                    End If
-                End If
-
-                If s.Substring(0, 2) = "_C" Then
-                    nullcode = True
-                    s = s.PadRight(3, "0"c)
-                    If i = 0 Then
-                        If s.Substring(2, 1) = "0" Then
-                            code = "0" & vbCrLf
-                        Else
-                            code = "1" & vbCrLf
-                        End If
-                        cname = s.Substring(3, s.Length - 3).Trim
-                    Else
-                        add = True
-                        If nullcode = True Then
-                            code2 &= "0" & vbCrLf
-                        End If
-                        code = code & coment
-                        If s.Substring(2, 1) = "0" Then
-                            code2 = "0" & vbCrLf
-                        Else
-                            code2 = "1" & vbCrLf
-                        End If
-                        cname2 = s.Substring(3, s.Length - 3).Trim
-                    End If
-                    i += 1
-                End If
-
-                If s.Substring(0, 2) = "_L" Or s.Substring(0, 2) = "_M" Or s.Substring(0, 2) = "_N" Then
-                    nullcode = False
-                    s = s.Replace(vbCr, "")
-                    If PSX = True Then
-                        s = s.PadRight(17, "0"c)
-                        '_L 12345678 1234
-                        If s.Substring(2, 1) = " " And s.Substring(11, 1) = " " Then
-                            code &= s.Substring(3, 13).Trim & vbCrLf
-                        End If
-                    Else
-                        s = s.PadRight(24, "0"c)
-                        '_L 0x12345678 0x12345678
-                        If s.Substring(3, 2) = "0x" And s.Substring(14, 2) = "0x" Then
-                            If s.Substring(0, 2) = "_M" Then
-                                Dim z As Integer = Integer.Parse(code.Substring(0, 1))
-                                code = code.Remove(0, 1)
-                                z = 2 Or z
-                                code = code.Insert(0, z.ToString())
-                            ElseIf s.Substring(0, 2) = "_N" Then
-                                Dim z As Integer = Integer.Parse(code.Substring(0, 1))
-                                code = code.Remove(0, 1)
-                                z = 4 Or z
-                                code = code.Insert(0, z.ToString())
+                If s.Length >= 2 Then
+                    If selnode1stlv = 0 Then
+                        If s.Substring(0, 2) = "_S" Then
+                            If havegame = True Then
+                                add = True
+                                i = 0
                             End If
-                            code &= s.Substring(3, 21).Trim & vbCrLf
+                            s = s.PadRight(4)
+                            gid = s.Substring(3, s.Length - 3).Trim
+                        ElseIf s.Substring(0, 2) = "_G" Then
+                            s = s.PadRight(4)
+                            gname = s.Substring(3, s.Length - 3).Trim
+                            Dim gnode = New TreeNode(gname)
+                            With gnode
+                                .Name = gname
+                                .Tag = gid
+                                .ImageIndex = 1
+                            End With
+                            codetree.Nodes(0).Nodes.Insert(0, gnode)
+                            codetree.SelectedNode = gnode
+                            havegame = True
                         End If
+                    End If
 
+                    If s.Substring(0, 2) = "_C" Then
+                        nullcode = True
+                        s = s.PadRight(3, "0"c)
+                        If i = 0 Then
+                            If s.Substring(2, 1) = "0" Then
+                                code = "0" & vbCrLf
+                            Else
+                                code = "1" & vbCrLf
+                            End If
+                            cname = s.Substring(3, s.Length - 3).Trim
+                        Else
+                            add = True
+                            If nullcode = True Then
+                                code2 &= "0" & vbCrLf
+                            End If
+                            code = code & coment
+                            If s.Substring(2, 1) = "0" Then
+                                code2 = "0" & vbCrLf
+                            Else
+                                code2 = "1" & vbCrLf
+                            End If
+                            cname2 = s.Substring(3, s.Length - 3).Trim
+                        End If
+                        i += 1
+                    End If
+
+                    If s.Substring(0, 2) = "_L" Or s.Substring(0, 2) = "_M" Or s.Substring(0, 2) = "_N" Then
+                        nullcode = False
+                        s = s.Replace(vbCr, "")
+                        If PSX = True Then
+                            s = s.PadRight(17, "0"c)
+                            '_L 12345678 1234
+                            If s.Substring(2, 1) = " " And s.Substring(11, 1) = " " Then
+                                code &= s.Substring(3, 13).Trim & vbCrLf
+                            End If
+                        Else
+                            s = s.PadRight(24, "0"c)
+                            '_L 0x12345678 0x12345678
+                            If s.Substring(3, 2) = "0x" And s.Substring(14, 2) = "0x" Then
+                                If s.Substring(0, 2) = "_M" Then
+                                    Dim z As Integer = Integer.Parse(code.Substring(0, 1))
+                                    code = code.Remove(0, 1)
+                                    z = 2 Or z
+                                    code = code.Insert(0, z.ToString())
+                                ElseIf s.Substring(0, 2) = "_N" Then
+                                    Dim z As Integer = Integer.Parse(code.Substring(0, 1))
+                                    code = code.Remove(0, 1)
+                                    z = 4 Or z
+                                    code = code.Insert(0, z.ToString())
+                                End If
+                                code &= s.Substring(3, 21).Trim & vbCrLf
+                            End If
+
+                        End If
+                    End If
+
+                    If s.Substring(0, 1) = "#" Then
+                        s = s.Replace("#", "")
+                        coment &= "#" & s.Trim & vbCrLf
                     End If
                 End If
 
-                If s.Substring(0, 1) = "#" Then
-                    s = s.Replace("#", "")
-                    coment &= "#" & s.Trim & vbCrLf
+                If add = True Then
+                    Try
+                        Dim newcode As New TreeNode
+
+                        With newcode
+                            .ImageIndex = 2
+                            .SelectedImageIndex = 3
+                            .Name = cname
+                            .Text = cname
+                            .Tag = code
+                        End With
+
+                        Select Case codetree.SelectedNode.Level
+
+                            Case Is = 1
+                                codetree.SelectedNode.Nodes.Add(newcode)
+                            Case Is = 2
+                                codetree.SelectedNode.Parent.Nodes.Add(newcode)
+                        End Select
+
+                    Catch ex As Exception
+
+                    End Try
+
+                    code = code2
+                    cname = cname2
+                    coment = Nothing
+                    add = False
                 End If
-            End If
-
-            If add = True Then
-                Try
-                    Dim newcode As New TreeNode
-
-                    With newcode
-                        .ImageIndex = 2
-                        .SelectedImageIndex = 3
-                        .Name = cname
-                        .Text = cname
-                        .Tag = code
-                    End With
-
-                    Select Case codetree.SelectedNode.Level
-
-                        Case Is = 1
-                            codetree.SelectedNode.Nodes.Add(newcode)
-                        Case Is = 2
-                            codetree.SelectedNode.Parent.Nodes.Add(newcode)
-                    End Select
-
-                Catch ex As Exception
-
-                End Try
-
-                code = code2
-                cname = cname2
-                coment = Nothing
-                add = False
-            End If
-        Next
+            Next
         End If
         f.Dispose()
         cmt_tb.Text = backup
