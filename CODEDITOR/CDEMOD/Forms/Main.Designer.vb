@@ -163,7 +163,7 @@ Partial Class Main
         '
         Me.file_open.Image = CType(resources.GetObject("file_open.Image"), System.Drawing.Image)
         Me.file_open.Name = "file_open"
-        Me.file_open.Size = New System.Drawing.Size(141, 22)
+        Me.file_open.Size = New System.Drawing.Size(152, 22)
         Me.file_open.Text = "開く(&O)"
         '
         'file_saveas
@@ -208,33 +208,33 @@ Partial Class Main
         '
         Me.sort_GID.Image = CType(resources.GetObject("sort_GID.Image"), System.Drawing.Image)
         Me.sort_GID.Name = "sort_GID"
-        Me.sort_GID.Size = New System.Drawing.Size(111, 22)
+        Me.sort_GID.Size = New System.Drawing.Size(152, 22)
         Me.sort_GID.Text = "ゲームID"
-        Me.sort_GID.ToolTipText = "ゲームID降順"
+        Me.sort_GID.ToolTipText = "ゲームID昇順"
         '
         'sort_name
         '
         Me.sort_name.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Sort_GTitle, Me.Sort_CTitle})
         Me.sort_name.Image = CType(resources.GetObject("sort_name.Image"), System.Drawing.Image)
         Me.sort_name.Name = "sort_name"
-        Me.sort_name.Size = New System.Drawing.Size(111, 22)
+        Me.sort_name.Size = New System.Drawing.Size(152, 22)
         Me.sort_name.Text = "名前"
         '
         'Sort_GTitle
         '
         Me.Sort_GTitle.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.sony_psp
         Me.Sort_GTitle.Name = "Sort_GTitle"
-        Me.Sort_GTitle.Size = New System.Drawing.Size(112, 22)
+        Me.Sort_GTitle.Size = New System.Drawing.Size(152, 22)
         Me.Sort_GTitle.Text = "ゲーム名"
-        Me.Sort_GTitle.ToolTipText = "ゲーム名降順"
+        Me.Sort_GTitle.ToolTipText = "ゲーム名昇順"
         '
         'Sort_CTitle
         '
         Me.Sort_CTitle.Image = CType(resources.GetObject("Sort_CTitle.Image"), System.Drawing.Image)
         Me.Sort_CTitle.Name = "Sort_CTitle"
-        Me.Sort_CTitle.Size = New System.Drawing.Size(112, 22)
+        Me.Sort_CTitle.Size = New System.Drawing.Size(152, 22)
         Me.Sort_CTitle.Text = "コード名"
-        Me.Sort_CTitle.ToolTipText = "コード名降順(非推奨)"
+        Me.Sort_CTitle.ToolTipText = "コード名昇順(非推奨)"
         '
         'menu_options
         '

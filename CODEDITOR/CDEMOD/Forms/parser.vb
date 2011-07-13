@@ -3,7 +3,24 @@ Public Class parser
 
     Public Opener As Form
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        Dim f As Main
+        f = CType(Me.Owner, Main)
+        Dim mode As String = Nothing
 
+        If f.codetree.Nodes.Count >= 1 Then
+            If f.codetree.SelectedNode Is Nothing Then
+                f.codetree.SelectedNode = f.codetree.TopNode
+            End If
+            If f.codetree.SelectedNode.Level = 0 Then
+                mode = "(Lv0,新規追加)"
+            ElseIf f.codetree.SelectedNode.Level > 0 Then
+                mode = "(Lv" & f.codetree.SelectedNode.Level.ToString & ",継ぎ足し)"
+            End If
+        Else
+            mode = "(NONE,コードなし)"
+        End If
+
+        Me.Text &= mode
     End Sub
 
     Private Sub TX_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TX.TextChanged
