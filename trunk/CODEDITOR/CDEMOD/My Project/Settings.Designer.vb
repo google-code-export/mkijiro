@@ -173,6 +173,18 @@ Namespace My
                 Me("browser") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property gridview() As Boolean
+            Get
+                Return CType(Me("gridview"),Boolean)
+            End Get
+            Set
+                Me("gridview") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

@@ -116,6 +116,8 @@ Partial Class Main
         Me.RadioButton4 = New System.Windows.Forms.RadioButton()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.changed = New System.Windows.Forms.Label()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.Button2 = New System.Windows.Forms.Button()
         Me.treeopen.SuspendLayout()
         Me.tool_menu.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -163,7 +165,7 @@ Partial Class Main
         '
         Me.file_open.Image = CType(resources.GetObject("file_open.Image"), System.Drawing.Image)
         Me.file_open.Name = "file_open"
-        Me.file_open.Size = New System.Drawing.Size(152, 22)
+        Me.file_open.Size = New System.Drawing.Size(141, 22)
         Me.file_open.Text = "開く(&O)"
         '
         'file_saveas
@@ -208,7 +210,7 @@ Partial Class Main
         '
         Me.sort_GID.Image = CType(resources.GetObject("sort_GID.Image"), System.Drawing.Image)
         Me.sort_GID.Name = "sort_GID"
-        Me.sort_GID.Size = New System.Drawing.Size(152, 22)
+        Me.sort_GID.Size = New System.Drawing.Size(111, 22)
         Me.sort_GID.Text = "ゲームID"
         Me.sort_GID.ToolTipText = "ゲームID昇順"
         '
@@ -217,14 +219,14 @@ Partial Class Main
         Me.sort_name.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Sort_GTitle, Me.Sort_CTitle})
         Me.sort_name.Image = CType(resources.GetObject("sort_name.Image"), System.Drawing.Image)
         Me.sort_name.Name = "sort_name"
-        Me.sort_name.Size = New System.Drawing.Size(152, 22)
+        Me.sort_name.Size = New System.Drawing.Size(111, 22)
         Me.sort_name.Text = "名前"
         '
         'Sort_GTitle
         '
         Me.Sort_GTitle.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.sony_psp
         Me.Sort_GTitle.Name = "Sort_GTitle"
-        Me.Sort_GTitle.Size = New System.Drawing.Size(152, 22)
+        Me.Sort_GTitle.Size = New System.Drawing.Size(112, 22)
         Me.Sort_GTitle.Text = "ゲーム名"
         Me.Sort_GTitle.ToolTipText = "ゲーム名昇順"
         '
@@ -232,7 +234,7 @@ Partial Class Main
         '
         Me.Sort_CTitle.Image = CType(resources.GetObject("Sort_CTitle.Image"), System.Drawing.Image)
         Me.Sort_CTitle.Name = "Sort_CTitle"
-        Me.Sort_CTitle.Size = New System.Drawing.Size(152, 22)
+        Me.Sort_CTitle.Size = New System.Drawing.Size(112, 22)
         Me.Sort_CTitle.Text = "コード名"
         Me.Sort_CTitle.ToolTipText = "コード名昇順(非推奨)"
         '
@@ -579,7 +581,7 @@ Partial Class Main
         Me.cl_tb.Multiline = True
         Me.cl_tb.Name = "cl_tb"
         Me.cl_tb.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.cl_tb.Size = New System.Drawing.Size(193, 235)
+        Me.cl_tb.Size = New System.Drawing.Size(193, 234)
         Me.cl_tb.TabIndex = 8
         '
         'cl_lbl
@@ -778,7 +780,7 @@ Partial Class Main
         Me.button_list.Items.AddRange(New Object() {"セレクト", "スタート", "↑", "→", "↓", "←", "Lトリガー", "Rトリガー", "△", "○", "Ｘ", "□", "HOME", "HOLD", "ミュート", "スクリーン", "音量+", "音量-", "WLAN UP", "REMOTE HOLD"})
         Me.button_list.Location = New System.Drawing.Point(519, 206)
         Me.button_list.Name = "button_list"
-        Me.button_list.Size = New System.Drawing.Size(109, 242)
+        Me.button_list.Size = New System.Drawing.Size(109, 228)
         Me.button_list.TabIndex = 9
         '
         'inverse_chk
@@ -928,11 +930,31 @@ Partial Class Main
         Me.changed.TabIndex = 27
         Me.changed.Text = "　　　　　　　　　　　　　　　　　　　　　　　　　　"
         '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(603, 440)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(25, 17)
+        Me.Button1.TabIndex = 28
+        Me.Button1.Text = "・・"
+        Me.Button1.UseVisualStyleBackColor = True
+        '
+        'Button2
+        '
+        Me.Button2.Location = New System.Drawing.Point(566, 440)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(31, 17)
+        Me.Button2.TabIndex = 29
+        Me.Button2.Text = "<<"
+        Me.Button2.UseVisualStyleBackColor = True
+        '
         'Main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(640, 562)
+        Me.Controls.Add(Me.Button2)
+        Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.changed)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.Panel1)
@@ -965,7 +987,7 @@ Partial Class Main
         Me.KeyPreview = True
         Me.MainMenuStrip = Me.treeopen
         Me.Name = "Main"
-        Me.Text = "CDEMOD20110713"
+        Me.Text = "CDEMOD20110715"
         Me.treeopen.ResumeLayout(False)
         Me.treeopen.PerformLayout()
         Me.tool_menu.ResumeLayout(False)
@@ -1068,5 +1090,7 @@ Partial Class Main
     Friend WithEvents コメントToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents UTF16BECP1201ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ブラウザ変更ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents Button2 As System.Windows.Forms.Button
 
 End Class

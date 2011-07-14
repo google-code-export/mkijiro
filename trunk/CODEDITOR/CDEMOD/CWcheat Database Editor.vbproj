@@ -121,6 +121,12 @@
     <Compile Include="Forms\error list.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\list.Designer.vb">
+      <DependentUpon>list.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\list.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\parser.Designer.vb">
       <DependentUpon>parser.vb</DependentUpon>
     </Compile>
@@ -153,6 +159,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Forms\error list.resx">
       <DependentUpon>error list.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\list.resx">
+      <DependentUpon>list.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\parser.resx">
       <DependentUpon>parser.vb</DependentUpon>

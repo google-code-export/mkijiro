@@ -11,6 +11,7 @@ Public Class Main
     Friend maintop As Boolean = My.Settings.TOP
     Friend showerror As Boolean = My.Settings.ERR
     Friend browser As String = My.Settings.browser
+
 #Region "Menubar procedures"
 
 
@@ -682,59 +683,34 @@ Public Class Main
 
 #Region "Joker code procedures"
 
-    Private Sub button_list_keypress(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles button_list.KeyPress
+    'Private Sub button_list_keypress(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles button_list.KeyPress
 
-        ' Used if a user checks the options using spacebar since
-        ' for some reason, IndexChanged doesn't work when the
-        ' spacebar is used
+    '    ' Used if a user checks the options using spacebar since
+    '    ' for some reason, IndexChanged doesn't work when the
+    '    ' spacebar is used
 
-        Dim j As New joker
-        Dim x As Integer = 0
-        Dim proceed As Boolean = False
+    '    Dim j As New joker
+    '    Dim x As Integer = 0
+    '    Dim proceed As Boolean = False
 
-        If cl_tb.Text.Trim.Length >= 21 Then ' If the code text box contains at least one code or more
+    '    If cl_tb.Text.Trim.Length >= 21 Then ' If the code text box contains at least one code or more
 
-            For x = 0 To 19  ' Check if any joker buttons were selected
-                If button_list.GetItemChecked(x) = True Then
-                    proceed = True
-                    Exit For ' No need to continue since we know something is checked
-                End If
-            Next
+    '        For x = 0 To 19  ' Check if any joker buttons were selected
+    '            If button_list.GetItemChecked(x) = True Then
+    '                proceed = True
+    '                Exit For ' No need to continue since we know something is checked
+    '            End If
+    '        Next
 
-        End If
+    '    End If
 
-        If proceed = True Then ' If a joker was selected, calculate the code
-            j.add_joker()
-        Else ' If not, remove any jokers if they exist
-            'j.remove_joker()
-        End If
+    '    If proceed = True Then ' If a joker was selected, calculate the code
+    '        j.add_joker()
+    '    Else ' If not, remove any jokers if they exist
+    '        'j.remove_joker()
+    '    End If
 
-    End Sub
-
-    Private Sub button_list_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles button_list.SelectedIndexChanged
-
-        Dim j As New joker
-        Dim x As Integer = 0
-        Dim proceed As Boolean = False
-
-        If cl_tb.Text.Trim.Length >= 21 Then ' If the code text box contains at least one code or more
-
-            For x = 0 To 19  ' Check if any joker buttons were selected
-                If button_list.GetItemChecked(x) = True Then
-                    proceed = True
-                    Exit For ' No need to continue since we know something is checked
-                End If
-            Next
-
-        End If
-
-        If proceed = True Then ' If a joker was selected, calculate the code
-            j.add_joker()
-        Else ' If not, remove any jokers if they exist
-            'j.remove_joker()
-        End If
-
-    End Sub
+    'End Sub
 
     Private Sub button_list_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles button_list.DoubleClick
 
@@ -745,6 +721,8 @@ Public Class Main
         Dim x As Integer = 0
         Dim proceed As Boolean = False
         Dim j As New joker
+
+        changed.Text = "パッドボタン追加"
 
         If cl_tb.Text.Trim.Length >= 21 Then ' If the code text box contains at least one code or more
 
@@ -1063,6 +1041,7 @@ Public Class Main
         CP932ToolStripMenuItem.Checked = False
         UTF16BECP1201ToolStripMenuItem.Checked = True
     End Sub
+
     Private Sub EncodeToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EncodeToolStripMenuItem.Click
 
         If enc1 = 932 Then
@@ -1283,26 +1262,58 @@ Public Class Main
     End Sub
 
     Private Sub KAKASI変換ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles KAKASI変換ToolStripMenuItem.Click
-        Process.Start("APP\kanahenkan.bat")
+
+        Dim b1 = My.Application.Info.DirectoryPath.ToString() & "\APP\kanahenkan.bat"
+        If System.IO.File.Exists(b1) Then
+            Process.Start("APP\kanahenkan.bat")
+        Else
+            MessageBox.Show("'" + b1 + "'が見つかりませんでした。")
+        End If
     End Sub
 
     Private Sub PMETAN変換ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PMETAN変換ToolStripMenuItem.Click
-        Process.Start("APP\pme.bat")
+
+        Dim b1 = My.Application.Info.DirectoryPath.ToString() & "\APP\pme.bat"
+        If System.IO.File.Exists(b1) Then
+            Process.Start("APP\pme.bat")
+        Else
+            MessageBox.Show("'" + b1 + "'が見つかりませんでした。")
+        End If
     End Sub
 
     Private Sub TEMPAR鶴ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TEMPAR鶴ToolStripMenuItem.Click
-        Process.Start("APP\temp.bat")
+
+        Dim b1 = My.Application.Info.DirectoryPath.ToString() & "\APP\temp.bat"
+        If System.IO.File.Exists(b1) Then
+            Process.Start("APP\temp.bat")
+        Else
+            MessageBox.Show("'" + b1 + "'が見つかりませんでした。")
+        End If
     End Sub
 
     Private Sub WgetToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles WgetToolStripMenuItem.Click
-        Process.Start("APP\wget.bat")
+
+        Dim b1 = My.Application.Info.DirectoryPath.ToString() & "\APP\wget.bat"
+        If System.IO.File.Exists(b1) Then
+            Process.Start("APP\wget.bat")
+        Else
+            MessageBox.Show("'" + b1 + "'が見つかりませんでした。")
+        End If
     End Sub
 
     Private Sub JaneStyleToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles JaneStyleToolStripMenuItem.Click
-        Process.Start("APP\jane.bat")
+
+        Dim b1 = My.Application.Info.DirectoryPath.ToString() & "\APP\jane.bat"
+        If System.IO.File.Exists(b1) Then
+            Process.Start("APP\jane.bat")
+        Else
+            MessageBox.Show("'" + b1 + "'が見つかりませんでした。")
+        End If
     End Sub
 
     Private Sub ToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem1.Click
+
+        Process.Start("APP\pme.bat")
         Process.Start("APP\kakasi.bat")
     End Sub
 
@@ -1320,6 +1331,11 @@ Public Class Main
         'TreeView1へのドラッグを受け入れる
         codetree.AllowDrop = True
 
+
+        If System.IO.File.Exists(browser) Then
+        Else
+            browser = "IExplore.exe"
+        End If
         'イベントハンドラを追加する
         AddHandler codetree.ItemDrag, AddressOf codetree_ItemDrag
         AddHandler codetree.DragOver, AddressOf codetree_DragOver
@@ -1471,14 +1487,14 @@ Public Class Main
     End Function
 
     Private Sub RadioButton4_clicked(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton4.Click
-        changed.Text = "コードが変更されました。"
+        changed.Text = "コード形式が変更されました。"
     End Sub
     Private Sub RadioButton5_clicked(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton5.Click
-        changed.Text = "コードが変更されました。"
+        changed.Text = "コード形式が変更されました。"
     End Sub
 
     Private Sub RadioButton6_clicked(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton6.Click
-        changed.Text = "コードが変更されました。"
+        changed.Text = "コード形式が変更されました。"
     End Sub
 
     Private Sub GT_tb_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GT_tb.KeyPress
@@ -1490,23 +1506,23 @@ Public Class Main
     End Sub
 
     Private Sub CT_tb_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CT_tb.KeyPress
-        changed.Text = "コードが変更されました。"
+        changed.Text = "コード名が変更されました。"
     End Sub
 
     Private Sub cl_tb_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cl_tb.KeyPress
-        changed.Text = "コードが変更されました。"
+        changed.Text = "コード内容が変更されました。"
     End Sub
 
     Private Sub cmt_tb_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmt_tb.KeyPress
-        changed.Text = "コードが変更されました。"
+        changed.Text = "コードコメントが変更されました。"
     End Sub
 
     Private Sub on_rd_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles on_rd.Click
-        changed.Text = "コードが変更されました。"
+        changed.Text = "コード実行状態が変更されました。"
     End Sub
 
     Private Sub off_rd_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles off_rd.Click
-        changed.Text = "コードが変更されました。"
+        changed.Text = "コード実行状態が変更されました。"
     End Sub
 
     Private Sub ツリービューToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ツリービューToolStripMenuItem.Click
@@ -1618,5 +1634,79 @@ Public Class Main
             My.Settings.browser = ofd.FileName
             browser = ofd.FileName
         End If
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        Dim f As New List
+        Dim backup As String = cmt_tb.Text
+        Dim line As Integer = 1
+        Dim type As String = Nothing
+        Dim bit As Integer = 1
+        Dim lslen As Integer = 23
+        Dim rmlen As Integer = 0
+        Dim i As Integer = 0
+        Dim truelist As Boolean = True
+        Dim b3 As String = cl_tb.Text
+        Dim r As New System.Text.RegularExpressions.Regex( _
+"LIST/.+\((A|V|B),([1-9]|[1-9][0-9]),[1-8],[1-8]\)", _
+System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+        Dim m As System.Text.RegularExpressions.Match = r.Match(backup)
+        While m.Success
+            Dim b1 As String = m.Value
+            b1 = b1.Substring(b1.Length - 9, 9)
+            If b1.Substring(0, 1) = "," Then
+                b1 = b1.Remove(0, 1)
+            End If
+            i = 0
+            Dim b2 As String() = b1.Split(CChar(","c))
+            For Each s In b2
+                Select Case i
+                    Case 0
+                        type = s.Substring(s.Length - 1, 1)
+                    Case 1
+                        s = s.Substring(0, 1)
+                        line = CType(s, Integer)
+                    Case 2
+                        s = s.Substring(0, 1)
+                        bit = CType(s, Integer)
+                    Case 3
+                        s = s.Substring(0, 1)
+                        rmlen = CType(s, Integer)
+                End Select
+                i += 1
+            Next
+            If type = "V" Or type = "B" Then
+                i = 11
+            Else
+                i = 0
+            End If
+            m = m.NextMatch()
+
+            i += (line - 1) * lslen + bit + 1
+            If truelist = True And i + rmlen < b3.Length And rmlen + bit <= 9 Then
+                truelist = True
+            Else
+                truelist = False
+            End If
+        End While
+
+
+        If truelist = True And changed.Text <> "コード内容が変更されました。" And backup <> Nothing Then
+            f.ShowDialog(Me)
+            f.Dispose()
+            changed.Text = "リストデータが反映されました。"
+        Else
+            changed.Text = "リスト定義がないか,範囲が異常です。"
+        End If
+        cmt_tb.Text = backup
+    End Sub
+
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+        changed.Text = "簡易シフトが追加されました,行を合わせて下さい。"
+        Dim z As String = "0"
+        If cmt_tb.Text.Contains("840") Then
+            z = "1"
+        End If
+        cmt_tb.Text = "LIST/SHIFT" & z & "(V,1,6,3)" & vbCrLf & cmt_tb.Text
     End Sub
 End Class
