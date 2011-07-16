@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class Main
+Partial Class MERGE
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -23,7 +23,7 @@ Partial Class Main
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Main))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MERGE))
         Me.treeopen = New System.Windows.Forms.MenuStrip()
         Me.menu_file = New System.Windows.Forms.ToolStripMenuItem()
         Me.file_new = New System.Windows.Forms.ToolStripMenuItem()
@@ -39,6 +39,7 @@ Partial Class Main
         Me.sort_name = New System.Windows.Forms.ToolStripMenuItem()
         Me.Sort_GTitle = New System.Windows.Forms.ToolStripMenuItem()
         Me.Sort_CTitle = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Sort_code = New System.Windows.Forms.ToolStripMenuItem()
         Me.menu_options = New System.Windows.Forms.ToolStripMenuItem()
         Me.options_ontop = New System.Windows.Forms.ToolStripMenuItem()
         Me.options_error = New System.Windows.Forms.ToolStripMenuItem()
@@ -64,9 +65,10 @@ Partial Class Main
         Me.HAXToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CNGBAToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GOOGLEToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CMF暗号復元ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.EXE起動ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.KAKASI変換ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.KAKASI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MECAB = New System.Windows.Forms.ToolStripMenuItem()
         Me.PMETAN変換ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TEMPAR鶴ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.WgetToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -118,6 +120,8 @@ Partial Class Main
         Me.changed = New System.Windows.Forms.Label()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
+        Me.Button3 = New System.Windows.Forms.Button()
+        Me.ToolStripButton3 = New System.Windows.Forms.ToolStripButton()
         Me.treeopen.SuspendLayout()
         Me.tool_menu.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -128,7 +132,7 @@ Partial Class Main
         Me.treeopen.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menu_file, Me.menu_sort, Me.menu_options, Me.menu_font, Me.EncodeToolStripMenuItem, Me.ツリー開閉ToolStripMenuItem, Me.paserToolStripMenuItem, Me.CWCWIKIToolStripMenuItem, Me.EXE起動ToolStripMenuItem})
         Me.treeopen.Location = New System.Drawing.Point(0, 0)
         Me.treeopen.Name = "treeopen"
-        Me.treeopen.Size = New System.Drawing.Size(640, 24)
+        Me.treeopen.Size = New System.Drawing.Size(643, 24)
         Me.treeopen.TabIndex = 0
         Me.treeopen.Text = "MenuStrip1"
         '
@@ -144,7 +148,7 @@ Partial Class Main
         Me.file_new.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.new_psp, Me.new_psx})
         Me.file_new.Image = Global.CWcheat_Database_Editor.My.Resources.Resources._new
         Me.file_new.Name = "file_new"
-        Me.file_new.Size = New System.Drawing.Size(141, 22)
+        Me.file_new.Size = New System.Drawing.Size(152, 22)
         Me.file_new.Text = "新規(&N)"
         '
         'new_psp
@@ -165,7 +169,7 @@ Partial Class Main
         '
         Me.file_open.Image = CType(resources.GetObject("file_open.Image"), System.Drawing.Image)
         Me.file_open.Name = "file_open"
-        Me.file_open.Size = New System.Drawing.Size(141, 22)
+        Me.file_open.Size = New System.Drawing.Size(152, 22)
         Me.file_open.Text = "開く(&O)"
         '
         'file_saveas
@@ -174,7 +178,7 @@ Partial Class Main
         Me.file_saveas.Enabled = False
         Me.file_saveas.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.save
         Me.file_saveas.Name = "file_saveas"
-        Me.file_saveas.Size = New System.Drawing.Size(141, 22)
+        Me.file_saveas.Size = New System.Drawing.Size(152, 22)
         Me.file_saveas.Text = "...として保存(&S)"
         '
         'saveas_cwcheat
@@ -195,12 +199,12 @@ Partial Class Main
         '
         Me.file_exit.Image = CType(resources.GetObject("file_exit.Image"), System.Drawing.Image)
         Me.file_exit.Name = "file_exit"
-        Me.file_exit.Size = New System.Drawing.Size(141, 22)
+        Me.file_exit.Size = New System.Drawing.Size(152, 22)
         Me.file_exit.Text = "閉じる(&C)"
         '
         'menu_sort
         '
-        Me.menu_sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.sort_GID, Me.sort_name})
+        Me.menu_sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.sort_GID, Me.sort_name, Me.Sort_code})
         Me.menu_sort.Name = "menu_sort"
         Me.menu_sort.Size = New System.Drawing.Size(56, 20)
         Me.menu_sort.Text = "整列(&S)"
@@ -210,33 +214,41 @@ Partial Class Main
         '
         Me.sort_GID.Image = CType(resources.GetObject("sort_GID.Image"), System.Drawing.Image)
         Me.sort_GID.Name = "sort_GID"
-        Me.sort_GID.Size = New System.Drawing.Size(111, 22)
+        Me.sort_GID.Size = New System.Drawing.Size(152, 22)
         Me.sort_GID.Text = "ゲームID"
-        Me.sort_GID.ToolTipText = "ゲームID昇順"
+        Me.sort_GID.ToolTipText = "ゲームID昇順" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ソート後はインデックスが破壊されます。一切の移動ができません"
         '
         'sort_name
         '
         Me.sort_name.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Sort_GTitle, Me.Sort_CTitle})
         Me.sort_name.Image = CType(resources.GetObject("sort_name.Image"), System.Drawing.Image)
         Me.sort_name.Name = "sort_name"
-        Me.sort_name.Size = New System.Drawing.Size(111, 22)
+        Me.sort_name.Size = New System.Drawing.Size(152, 22)
         Me.sort_name.Text = "名前"
         '
         'Sort_GTitle
         '
         Me.Sort_GTitle.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.sony_psp
         Me.Sort_GTitle.Name = "Sort_GTitle"
-        Me.Sort_GTitle.Size = New System.Drawing.Size(112, 22)
+        Me.Sort_GTitle.Size = New System.Drawing.Size(152, 22)
         Me.Sort_GTitle.Text = "ゲーム名"
-        Me.Sort_GTitle.ToolTipText = "ゲーム名昇順"
+        Me.Sort_GTitle.ToolTipText = "ゲーム名昇順" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ソート後はインデックスが破壊されます。一切の移動ができません"
         '
         'Sort_CTitle
         '
         Me.Sort_CTitle.Image = CType(resources.GetObject("Sort_CTitle.Image"), System.Drawing.Image)
         Me.Sort_CTitle.Name = "Sort_CTitle"
-        Me.Sort_CTitle.Size = New System.Drawing.Size(112, 22)
+        Me.Sort_CTitle.Size = New System.Drawing.Size(152, 22)
         Me.Sort_CTitle.Text = "コード名"
-        Me.Sort_CTitle.ToolTipText = "コード名昇順(非推奨)"
+        Me.Sort_CTitle.ToolTipText = "コード名昇順(非推奨)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ソート後はインデックスが破壊されます。一切の移動ができません"
+        '
+        'Sort_code
+        '
+        Me.Sort_code.Enabled = False
+        Me.Sort_code.Name = "Sort_code"
+        Me.Sort_code.Size = New System.Drawing.Size(152, 22)
+        Me.Sort_code.Text = "コード内容"
+        Me.Sort_code.ToolTipText = "コード内容(昇順)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ソート後はインデックスが破壊されます。一切の移動ができません"
         '
         'menu_options
         '
@@ -337,6 +349,7 @@ Partial Class Main
         '
         'UTF16BECP1201ToolStripMenuItem
         '
+        Me.UTF16BECP1201ToolStripMenuItem.Enabled = False
         Me.UTF16BECP1201ToolStripMenuItem.Name = "UTF16BECP1201ToolStripMenuItem"
         Me.UTF16BECP1201ToolStripMenuItem.Size = New System.Drawing.Size(166, 22)
         Me.UTF16BECP1201ToolStripMenuItem.Text = "UTF16BE(CP1201)"
@@ -353,13 +366,13 @@ Partial Class Main
         'すべて閉じるToolStripMenuItem
         '
         Me.すべて閉じるToolStripMenuItem.Name = "すべて閉じるToolStripMenuItem"
-        Me.すべて閉じるToolStripMenuItem.Size = New System.Drawing.Size(139, 22)
+        Me.すべて閉じるToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.すべて閉じるToolStripMenuItem.Text = "全て折りたたむ"
         '
         '全て展開するToolStripMenuItem
         '
         Me.全て展開するToolStripMenuItem.Name = "全て展開するToolStripMenuItem"
-        Me.全て展開するToolStripMenuItem.Size = New System.Drawing.Size(139, 22)
+        Me.全て展開するToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.全て展開するToolStripMenuItem.Text = "全て展開する"
         '
         'paserToolStripMenuItem
@@ -372,7 +385,7 @@ Partial Class Main
         '
         'CWCWIKIToolStripMenuItem
         '
-        Me.CWCWIKIToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.wikiToolStripMenuItem1, Me.OHGToolStripMenuItem, Me.HAXToolStripMenuItem, Me.CNGBAToolStripMenuItem, Me.GOOGLEToolStripMenuItem})
+        Me.CWCWIKIToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.wikiToolStripMenuItem1, Me.OHGToolStripMenuItem, Me.HAXToolStripMenuItem, Me.CNGBAToolStripMenuItem, Me.GOOGLEToolStripMenuItem, Me.CMF暗号復元ToolStripMenuItem})
         Me.CWCWIKIToolStripMenuItem.Name = "CWCWIKIToolStripMenuItem"
         Me.CWCWIKIToolStripMenuItem.Size = New System.Drawing.Size(69, 20)
         Me.CWCWIKIToolStripMenuItem.Text = "ブラウザ(&B)"
@@ -381,53 +394,60 @@ Partial Class Main
         'wikiToolStripMenuItem1
         '
         Me.wikiToolStripMenuItem1.Name = "wikiToolStripMenuItem1"
-        Me.wikiToolStripMenuItem1.Size = New System.Drawing.Size(117, 22)
+        Me.wikiToolStripMenuItem1.Size = New System.Drawing.Size(169, 22)
         Me.wikiToolStripMenuItem1.Text = "CWCWIKI"
         '
         'OHGToolStripMenuItem
         '
         Me.OHGToolStripMenuItem.Name = "OHGToolStripMenuItem"
-        Me.OHGToolStripMenuItem.Size = New System.Drawing.Size(117, 22)
+        Me.OHGToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
         Me.OHGToolStripMenuItem.Text = "OHG"
         '
         'HAXToolStripMenuItem
         '
         Me.HAXToolStripMenuItem.Name = "HAXToolStripMenuItem"
-        Me.HAXToolStripMenuItem.Size = New System.Drawing.Size(117, 22)
+        Me.HAXToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
         Me.HAXToolStripMenuItem.Text = "HAX"
         '
         'CNGBAToolStripMenuItem
         '
         Me.CNGBAToolStripMenuItem.Name = "CNGBAToolStripMenuItem"
-        Me.CNGBAToolStripMenuItem.Size = New System.Drawing.Size(117, 22)
+        Me.CNGBAToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
         Me.CNGBAToolStripMenuItem.Text = "CNGBA"
         '
         'GOOGLEToolStripMenuItem
         '
         Me.GOOGLEToolStripMenuItem.Name = "GOOGLEToolStripMenuItem"
-        Me.GOOGLEToolStripMenuItem.Size = New System.Drawing.Size(117, 22)
+        Me.GOOGLEToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
         Me.GOOGLEToolStripMenuItem.Text = "GOOGLE"
+        '
+        'CMF暗号復元ToolStripMenuItem
+        '
+        Me.CMF暗号復元ToolStripMenuItem.Name = "CMF暗号復元ToolStripMenuItem"
+        Me.CMF暗号復元ToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
+        Me.CMF暗号復元ToolStripMenuItem.Text = "CMF暗号コード復元"
+        Me.CMF暗号復元ToolStripMenuItem.ToolTipText = "CMFUSION専用暗号コードをTEMAR専用サブルーチンコードに復号する"
         '
         'EXE起動ToolStripMenuItem
         '
-        Me.EXE起動ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem1, Me.KAKASI変換ToolStripMenuItem, Me.PMETAN変換ToolStripMenuItem, Me.TEMPAR鶴ToolStripMenuItem, Me.WgetToolStripMenuItem, Me.JaneStyleToolStripMenuItem, Me.PSPへコードコピーToolStripMenuItem})
+        Me.EXE起動ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.KAKASI, Me.MECAB, Me.PMETAN変換ToolStripMenuItem, Me.TEMPAR鶴ToolStripMenuItem, Me.WgetToolStripMenuItem, Me.JaneStyleToolStripMenuItem, Me.PSPへコードコピーToolStripMenuItem})
         Me.EXE起動ToolStripMenuItem.Name = "EXE起動ToolStripMenuItem"
         Me.EXE起動ToolStripMenuItem.Size = New System.Drawing.Size(77, 20)
         Me.EXE起動ToolStripMenuItem.Text = "EXE起動(&E)"
         '
-        'ToolStripMenuItem1
+        'KAKASI
         '
-        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(180, 22)
-        Me.ToolStripMenuItem1.Text = "KAKASI変換"
-        Me.ToolStripMenuItem1.ToolTipText = "kakasiエンジンで全角文字を半角カナに変換する" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "対象cheat.sjis.db"
+        Me.KAKASI.Name = "KAKASI"
+        Me.KAKASI.Size = New System.Drawing.Size(180, 22)
+        Me.KAKASI.Text = "KAKASI変換"
+        Me.KAKASI.ToolTipText = "kakasiエンジンで全角文字を半角カナに変換する" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "対象cheat.sjis.db"
         '
-        'KAKASI変換ToolStripMenuItem
+        'MECAB
         '
-        Me.KAKASI変換ToolStripMenuItem.Name = "KAKASI変換ToolStripMenuItem"
-        Me.KAKASI変換ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.KAKASI変換ToolStripMenuItem.Text = "MECAB+KAKASI変換"
-        Me.KAKASI変換ToolStripMenuItem.ToolTipText = "MECABエンジンで全角文字をカナカナにしたあとkakasiで半角カナに変更する" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "対象cheatsjis.db"
+        Me.MECAB.Name = "MECAB"
+        Me.MECAB.Size = New System.Drawing.Size(180, 22)
+        Me.MECAB.Text = "MECAB+KAKASI変換"
+        Me.MECAB.ToolTipText = "MECABエンジンで全角文字をカナカナにしたあとkakasiで半角カナに変更する" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "対象cheatsjis.db"
         '
         'PMETAN変換ToolStripMenuItem
         '
@@ -499,7 +519,7 @@ Partial Class Main
                     Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.GID_tb.Enabled = False
         Me.GID_tb.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.GID_tb.Location = New System.Drawing.Point(322, 131)
+        Me.GID_tb.Location = New System.Drawing.Point(320, 131)
         Me.GID_tb.MaxLength = 10
         Me.GID_tb.Name = "GID_tb"
         Me.GID_tb.Size = New System.Drawing.Size(74, 19)
@@ -512,10 +532,10 @@ Partial Class Main
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GT_tb.Enabled = False
         Me.GT_tb.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.GT_tb.Location = New System.Drawing.Point(322, 94)
+        Me.GT_tb.Location = New System.Drawing.Point(320, 95)
         Me.GT_tb.MaxLength = 64
         Me.GT_tb.Name = "GT_tb"
-        Me.GT_tb.Size = New System.Drawing.Size(313, 19)
+        Me.GT_tb.Size = New System.Drawing.Size(316, 19)
         Me.GT_tb.TabIndex = 2
         '
         'gtitle_lbl
@@ -551,10 +571,10 @@ Partial Class Main
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.CT_tb.Enabled = False
         Me.CT_tb.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.CT_tb.Location = New System.Drawing.Point(322, 169)
+        Me.CT_tb.Location = New System.Drawing.Point(320, 169)
         Me.CT_tb.MaxLength = 72
         Me.CT_tb.Name = "CT_tb"
-        Me.CT_tb.Size = New System.Drawing.Size(313, 19)
+        Me.CT_tb.Size = New System.Drawing.Size(316, 19)
         Me.CT_tb.TabIndex = 4
         '
         'codetitle_lbl
@@ -628,15 +648,15 @@ Partial Class Main
         Me.cmt_tb.MaxLength = 0
         Me.cmt_tb.Multiline = True
         Me.cmt_tb.Name = "cmt_tb"
-        Me.cmt_tb.ScrollBars = System.Windows.Forms.ScrollBars.Both
-        Me.cmt_tb.Size = New System.Drawing.Size(318, 102)
+        Me.cmt_tb.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.cmt_tb.Size = New System.Drawing.Size(321, 102)
         Me.cmt_tb.TabIndex = 5
         '
         'cm_lbl
         '
         Me.cm_lbl.AutoSize = True
         Me.cm_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cm_lbl.Location = New System.Drawing.Point(322, 444)
+        Me.cm_lbl.Location = New System.Drawing.Point(322, 442)
         Me.cm_lbl.Name = "cm_lbl"
         Me.cm_lbl.Size = New System.Drawing.Size(40, 15)
         Me.cm_lbl.TabIndex = 13
@@ -644,10 +664,10 @@ Partial Class Main
         '
         'tool_menu
         '
-        Me.tool_menu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.add_game, Me.rem_game, Me.ToolStripSeparator2, Me.Add_cd, Me.rem_cd, Me.ToolStripSeparator1, Me.save_gc, Me.save_cc, Me.ToolStripButton1, Me.ToolStripButton2})
+        Me.tool_menu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.add_game, Me.rem_game, Me.ToolStripSeparator2, Me.Add_cd, Me.rem_cd, Me.ToolStripSeparator1, Me.save_gc, Me.save_cc, Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripButton3})
         Me.tool_menu.Location = New System.Drawing.Point(0, 24)
         Me.tool_menu.Name = "tool_menu"
-        Me.tool_menu.Size = New System.Drawing.Size(640, 54)
+        Me.tool_menu.Size = New System.Drawing.Size(643, 54)
         Me.tool_menu.TabIndex = 14
         Me.tool_menu.Text = "ToolStrip1"
         '
@@ -736,22 +756,26 @@ Partial Class Main
         '
         'ToolStripButton1
         '
-        Me.ToolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
-        Me.ToolStripButton1.Font = New System.Drawing.Font("MS UI Gothic", 20.0!, System.Drawing.FontStyle.Bold)
+        Me.ToolStripButton1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ToolStripButton1.Image = CType(resources.GetObject("ToolStripButton1.Image"), System.Drawing.Image)
+        Me.ToolStripButton1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton1.Name = "ToolStripButton1"
-        Me.ToolStripButton1.Size = New System.Drawing.Size(44, 51)
-        Me.ToolStripButton1.Text = "↑"
+        Me.ToolStripButton1.Size = New System.Drawing.Size(60, 51)
+        Me.ToolStripButton1.Text = "上に移動"
+        Me.ToolStripButton1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.ToolStripButton1.ToolTipText = "選択しているタイトル/コードを1つ上に移動します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ソート後だと使えません"
         '
         'ToolStripButton2
         '
-        Me.ToolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
-        Me.ToolStripButton2.Font = New System.Drawing.Font("MS UI Gothic", 20.0!, System.Drawing.FontStyle.Bold)
+        Me.ToolStripButton2.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ToolStripButton2.Image = CType(resources.GetObject("ToolStripButton2.Image"), System.Drawing.Image)
+        Me.ToolStripButton2.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.ToolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton2.Name = "ToolStripButton2"
-        Me.ToolStripButton2.Size = New System.Drawing.Size(44, 51)
-        Me.ToolStripButton2.Text = "↓"
+        Me.ToolStripButton2.Size = New System.Drawing.Size(60, 51)
+        Me.ToolStripButton2.Text = "下に移動"
+        Me.ToolStripButton2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.ToolStripButton2.ToolTipText = "選択しているタイトル/コードを1つ下へ移動します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ソート後だと使えません"
         '
         'progbar
@@ -780,7 +804,7 @@ Partial Class Main
         Me.button_list.Items.AddRange(New Object() {"セレクト", "スタート", "↑", "→", "↓", "←", "Lトリガー", "Rトリガー", "△", "○", "Ｘ", "□", "HOME", "HOLD", "ミュート", "スクリーン", "音量+", "音量-", "WLAN UP", "REMOTE HOLD"})
         Me.button_list.Location = New System.Drawing.Point(519, 206)
         Me.button_list.Name = "button_list"
-        Me.button_list.Size = New System.Drawing.Size(109, 228)
+        Me.button_list.Size = New System.Drawing.Size(116, 228)
         Me.button_list.TabIndex = 9
         '
         'inverse_chk
@@ -873,6 +897,7 @@ Partial Class Main
         Me.Panel1.Controls.Add(Me.RadioButton6)
         Me.Panel1.Controls.Add(Me.RadioButton5)
         Me.Panel1.Controls.Add(Me.RadioButton4)
+        Me.Panel1.Enabled = False
         Me.Panel1.Location = New System.Drawing.Point(413, 130)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(200, 20)
@@ -932,27 +957,56 @@ Partial Class Main
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(603, 440)
+        Me.Button1.Enabled = False
+        Me.Button1.Font = New System.Drawing.Font("MS UI Gothic", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Button1.Location = New System.Drawing.Point(594, 439)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(25, 17)
+        Me.Button1.Size = New System.Drawing.Size(41, 18)
         Me.Button1.TabIndex = 28
-        Me.Button1.Text = "・・"
+        Me.Button1.Text = "リスト"
         Me.Button1.UseVisualStyleBackColor = True
         '
         'Button2
         '
-        Me.Button2.Location = New System.Drawing.Point(566, 440)
+        Me.Button2.Enabled = False
+        Me.Button2.Location = New System.Drawing.Point(555, 440)
         Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(31, 17)
+        Me.Button2.Size = New System.Drawing.Size(30, 17)
         Me.Button2.TabIndex = 29
         Me.Button2.Text = "<<"
         Me.Button2.UseVisualStyleBackColor = True
         '
-        'Main
+        'Button3
+        '
+        Me.Button3.Enabled = False
+        Me.Button3.Font = New System.Drawing.Font("MS UI Gothic", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Button3.Location = New System.Drawing.Point(519, 439)
+        Me.Button3.Name = "Button3"
+        Me.Button3.Size = New System.Drawing.Size(25, 18)
+        Me.Button3.TabIndex = 30
+        Me.Button3.Text = "・・"
+        Me.Button3.UseVisualStyleBackColor = True
+        '
+        'ToolStripButton3
+        '
+        Me.ToolStripButton3.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ToolStripButton3.Image = CType(resources.GetObject("ToolStripButton3.Image"), System.Drawing.Image)
+        Me.ToolStripButton3.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.ToolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton3.Name = "ToolStripButton3"
+        Me.ToolStripButton3.Size = New System.Drawing.Size(67, 51)
+        Me.ToolStripButton3.Text = "コード合成"
+        Me.ToolStripButton3.TextDirection = System.Windows.Forms.ToolStripTextDirection.Horizontal
+        Me.ToolStripButton3.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.ToolStripButton3.ToolTipText = "選択コードと上にあるコードを合成します。" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "選択コードが各レベル一番上にある場合何も起きません。" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ソート後は使えません。" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        '
+        'MERGE
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(640, 562)
+        Me.AutoScroll = True
+        Me.ClientSize = New System.Drawing.Size(643, 562)
+        Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.changed)
@@ -986,8 +1040,8 @@ Partial Class Main
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.KeyPreview = True
         Me.MainMenuStrip = Me.treeopen
-        Me.Name = "Main"
-        Me.Text = "CDEMOD20110715"
+        Me.Name = "MERGE"
+        Me.Text = "CDEMOD20110716"
         Me.treeopen.ResumeLayout(False)
         Me.treeopen.PerformLayout()
         Me.tool_menu.ResumeLayout(False)
@@ -1061,14 +1115,14 @@ Partial Class Main
     Friend WithEvents OHGToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents HAXToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents EXE起動ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents KAKASI変換ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MECAB As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents PMETAN変換ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents TEMPAR鶴ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents WgetToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents JaneStyleToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents CNGBAToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents GOOGLEToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents KAKASI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
     Friend WithEvents TextBox2 As System.Windows.Forms.TextBox
     Friend WithEvents PSPへコードコピーToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
@@ -1092,5 +1146,9 @@ Partial Class Main
     Friend WithEvents ブラウザ変更ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Button1 As System.Windows.Forms.Button
     Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents Sort_code As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents Button3 As System.Windows.Forms.Button
+    Friend WithEvents CMF暗号復元ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripButton3 As System.Windows.Forms.ToolStripButton
 
 End Class

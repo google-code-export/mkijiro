@@ -32,7 +32,7 @@ Namespace My
         
         <Global.System.Diagnostics.DebuggerStepThroughAttribute()>  _
         Protected Overrides Sub OnCreateMainForm()
-            Me.MainForm = Global.CWcheat_Database_Editor.Main
+            Me.MainForm = Global.CWcheat_Database_Editor.MERGE
         End Sub
     End Class
 End Namespace

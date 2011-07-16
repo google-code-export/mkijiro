@@ -2,7 +2,7 @@
 Imports System.Text     'Encoding用
 Imports System.Diagnostics
 
-Public Class Main
+Public Class MERGE
     Friend database As String = Nothing
     Friend loaded As Boolean = False
     Friend PSX As Boolean = False
@@ -14,10 +14,12 @@ Public Class Main
 
 #Region "Menubar procedures"
 
-
 #Region "Open Database/Save Database"
 
     Private Sub new_psp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles new_psp.Click
+
+        resets_level1()
+
         If loaded = False Then
             codetree.BeginUpdate()
             reset_PSP()
@@ -32,14 +34,17 @@ Public Class Main
             codetree.Nodes.Add("新規データベース").ImageIndex = 0 ' Add the root node and set its icon
             codetree.EndUpdate()
         End If
+        file_saveas.Enabled = True
+        UTF16BECP1201ToolStripMenuItem.Enabled = False
+
         PSX = False
         saveas_cwcheat.Enabled = True
         saveas_psx.Enabled = False
-        file_saveas.Enabled = True
-        UTF16BECP1201ToolStripMenuItem.Enabled = False
     End Sub
 
     Private Sub new_psx_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles new_psx.Click
+
+        resets_level1()
         If loaded = False Then
             codetree.BeginUpdate()
             reset_PSX()
@@ -54,11 +59,12 @@ Public Class Main
             codetree.Nodes.Add("新規データベース").ImageIndex = 0 ' Add the root node and set its icon
             codetree.EndUpdate()
         End If
+        file_saveas.Enabled = True
+        UTF16BECP1201ToolStripMenuItem.Enabled = False
+
         PSX = True
         saveas_cwcheat.Enabled = False
         saveas_psx.Enabled = True
-        file_saveas.Enabled = True
-        UTF16BECP1201ToolStripMenuItem.Enabled = False
     End Sub
 
     Private Sub file_open_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles file_open.Click
@@ -107,20 +113,75 @@ Public Class Main
             error_window.list_load_error.EndUpdate()
             loaded = True
             file_saveas.Enabled = True
-            paserToolStripMenuItem.Enabled = True
         End If
 
     End Sub
 
+    Private Sub saveas_cwcheat_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles saveas_cwcheat.Click
+        Dim open As New load_db
+        Dim s As New save_db
+
+        If save_file.ShowDialog = Windows.Forms.DialogResult.OK And save_file.FileName <> Nothing Then
+            database = save_file.FileName
+
+
+            s.save_cwcheat(database, enc1)
+
+            ' Reload the file
+            codetree.Nodes.Clear()
+            codetree.BeginUpdate()
+            error_window.list_load_error.BeginUpdate()
+
+            reset_PSP()
+            Application.DoEvents()
+            open.read_PSP(database, enc1)
+
+            If codetree.Nodes.Count >= 1 Then
+                codetree.Nodes(0).Expand()
+            End If
+
+            codetree.EndUpdate()
+            error_window.list_load_error.EndUpdate()
+            file_saveas.Enabled = True
+
+        End If
+    End Sub
+
+    Private Sub saveas_psx_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles saveas_psx.Click
+        Dim open As New load_db
+        Dim s As New save_db
+
+        If save_file.ShowDialog = Windows.Forms.DialogResult.OK And save_file.FileName <> Nothing Then
+            database = save_file.FileName
+
+            s.save_psx(database, enc1)
+
+            ' Reload the file
+            codetree.Nodes.Clear()
+            codetree.BeginUpdate()
+            error_window.list_load_error.BeginUpdate()
+
+            reset_PSX()
+            Application.DoEvents()
+            open.read_PSX(database, enc1)
+
+            If codetree.Nodes.Count >= 1 Then
+                codetree.Nodes(0).Expand()
+            End If
+
+            codetree.EndUpdate()
+            error_window.list_load_error.EndUpdate()
+            file_saveas.Enabled = True
+
+        End If
+    End Sub
 
     Private Sub file_exit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles file_exit.Click
-
         Close()
-
     End Sub
 
 #End Region
-
+    'ICOMPAREはインデックスを破壊？
 #Region "Sort procedures"
 
     Private Sub sort_GID_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles sort_GID.Click
@@ -135,6 +196,7 @@ Public Class Main
         End If
         ToolStripButton1.Enabled = False
         ToolStripButton2.Enabled = False
+        ToolStripButton3.Enabled = False
 
     End Sub
 
@@ -152,6 +214,7 @@ Public Class Main
 
         ToolStripButton1.Enabled = False
         ToolStripButton2.Enabled = False
+        ToolStripButton3.Enabled = False
 
     End Sub
 
@@ -169,9 +232,27 @@ Public Class Main
 
         ToolStripButton1.Enabled = False
         ToolStripButton2.Enabled = False
+        ToolStripButton3.Enabled = False
 
     End Sub
 
+    Private Sub Sort_code_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Sort_code.Click
+
+        error_window.Visible = False
+        codetree.BeginUpdate() ' This will stop the tree view from constantly drawing the changes while we sort the nodes
+        codetree.TreeViewNodeSorter = New C_code_sort
+        codetree.TreeViewNodeSorter = New C_code_sort
+        codetree.EndUpdate() ' Update the changes made to the tree view.
+
+        If options_error.Checked = True Then
+            error_window.Visible = True
+        End If
+
+        ToolStripButton1.Enabled = False
+        ToolStripButton2.Enabled = False
+        ToolStripButton3.Enabled = False
+
+    End Sub
 #End Region
 
 #Region "Options"
@@ -215,7 +296,397 @@ Public Class Main
 
     End Sub
 
+    Private Sub ブラウザ変更ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ブラウザ変更ToolStripMenuItem.Click
+        Dim ofd As New OpenFileDialog()
+        ofd.InitialDirectory = "C:\Program Files"
+        ofd.Filter = _
+    "EXEファイル(*.exe)|*.exe"
+        ofd.Title = "ブラウザのEXEを選んでください"
+        If ofd.ShowDialog() = DialogResult.OK Then
+            'OKボタンがクリックされたとき
+            '選択されたファイル名を表示する
+            My.Settings.browser = ofd.FileName
+            browser = ofd.FileName
+        End If
+    End Sub
+
 #End Region
+
+#Region "MSCODEPAGE"
+
+    Private Sub CP932ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CP932ToolStripMenuItem.Click
+
+        'エンコードを指定する場合
+        My.Settings.MSCODEPAGE = 932
+        enc1 = 932
+        GBKToolStripMenuItem.Checked = False
+        CP932ToolStripMenuItem.Checked = True
+        UTF16BECP1201ToolStripMenuItem.Enabled = False
+
+    End Sub
+
+    Private Sub GBKToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GBKToolStripMenuItem.Click
+
+        'エンコードを指定する場合
+        My.Settings.MSCODEPAGE = 936
+        enc1 = 936
+        GBKToolStripMenuItem.Checked = True
+        CP932ToolStripMenuItem.Checked = False
+        UTF16BECP1201ToolStripMenuItem.Enabled = False
+    End Sub
+
+
+    Private Sub UTF16BECP1201ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles UTF16BECP1201ToolStripMenuItem.Click
+        'エンコードを指定する場合
+        enc1 = 1201
+        GBKToolStripMenuItem.Checked = False
+        CP932ToolStripMenuItem.Checked = False
+        UTF16BECP1201ToolStripMenuItem.Checked = True
+    End Sub
+
+    Private Sub EncodeToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EncodeToolStripMenuItem.Click
+
+        If enc1 = 932 Then
+            GBKToolStripMenuItem.Checked = False
+            CP932ToolStripMenuItem.Checked = True
+            UTF16BECP1201ToolStripMenuItem.Checked = False
+        ElseIf enc1 = 1201 Then
+            GBKToolStripMenuItem.Checked = False
+            CP932ToolStripMenuItem.Checked = False
+            UTF16BECP1201ToolStripMenuItem.Checked = True
+        Else
+            GBKToolStripMenuItem.Checked = True
+            CP932ToolStripMenuItem.Checked = False
+            UTF16BECP1201ToolStripMenuItem.Checked = False
+        End If
+
+    End Sub
+
+#End Region
+
+#Region "FONT"
+    Private Sub ツリービューToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ツリービューToolStripMenuItem.Click
+
+        Dim fd As New FontDialog()
+
+        fd.Font = codetree.Font
+        fd.Color = codetree.ForeColor
+        fd.MaxSize = 24
+        fd.MinSize = 9
+        fd.FontMustExist = True
+        fd.ShowHelp = True
+        fd.ShowApply = True
+        If fd.ShowDialog() <> DialogResult.Cancel Then
+            codetree.Font = fd.Font
+            My.Settings.codetree = fd.Font
+        End If
+    End Sub
+
+    Private Sub ゲームタイトルToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ゲームタイトルToolStripMenuItem.Click
+        Dim fd As New FontDialog()
+        fd.Font = GT_tb.Font
+        fd.Color = GT_tb.ForeColor
+        fd.MaxSize = 24
+        fd.MinSize = 9
+        fd.FontMustExist = True
+        fd.ShowHelp = True
+        fd.ShowApply = True
+        If fd.ShowDialog() <> DialogResult.Cancel Then
+            GT_tb.Font = fd.Font
+            My.Settings.GT_tb = fd.Font
+        End If
+    End Sub
+
+    Private Sub ゲームIDToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ゲームIDToolStripMenuItem.Click
+        Dim fd As New FontDialog()
+        fd.Font = GID_tb.Font
+        fd.Color = GID_tb.ForeColor
+        fd.MaxSize = 24
+        fd.MinSize = 9
+        fd.FontMustExist = True
+        fd.ShowHelp = True
+        fd.ShowApply = True
+        fd.FixedPitchOnly = True
+        If fd.ShowDialog() <> DialogResult.Cancel Then
+            GID_tb.Font = fd.Font
+            My.Settings.GID_tb = fd.Font
+        End If
+    End Sub
+
+    Private Sub コード名ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles コード名ToolStripMenuItem.Click
+        Dim fd As New FontDialog()
+        fd.Font = CT_tb.Font
+        fd.Color = CT_tb.ForeColor
+        fd.MaxSize = 24
+        fd.MinSize = 9
+        fd.FontMustExist = True
+        fd.ShowHelp = True
+        fd.ShowApply = True
+        If fd.ShowDialog() <> DialogResult.Cancel Then
+            CT_tb.Font = fd.Font
+            My.Settings.CT_tb = fd.Font
+        End If
+    End Sub
+
+    Private Sub コード内容ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles コード内容ToolStripMenuItem.Click
+
+        Dim fd As New FontDialog()
+
+        fd.Font = cl_tb.Font
+        fd.Color = cl_tb.ForeColor
+        fd.MaxSize = 24
+        fd.MinSize = 9
+        fd.FontMustExist = True
+        fd.ShowHelp = True
+        fd.ShowApply = True
+        fd.FixedPitchOnly = True
+        If fd.ShowDialog() <> DialogResult.Cancel Then
+            cl_tb.Font = fd.Font
+            My.Settings.cl_tb = fd.Font
+        End If
+    End Sub
+
+    Private Sub コメントToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles コメントToolStripMenuItem.Click
+        Dim fd As New FontDialog()
+
+        fd.Font = cmt_tb.Font
+        fd.Color = cmt_tb.ForeColor
+        fd.MaxSize = 24
+        fd.MinSize = 9
+        fd.FontMustExist = True
+        fd.ShowHelp = True
+        fd.ShowApply = True
+        If fd.ShowDialog() <> DialogResult.Cancel Then
+            cmt_tb.Font = fd.Font
+            My.Settings.cmt_tb = fd.Font
+        End If
+    End Sub
+#End Region
+
+#Region "tree expand"
+    Private Sub すべて閉じるToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles すべて閉じるToolStripMenuItem.Click
+        codetree.CollapseAll()
+    End Sub
+
+    Private Sub 全て展開するToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles 全て展開するToolStripMenuItem.Click
+        codetree.ExpandAll()
+    End Sub
+#End Region
+
+#Region "BROWSER"
+    Private Sub wikiToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles wikiToolStripMenuItem1.Click
+        System.Diagnostics.Process.Start(browser, "http://www21.atwiki.jp/cwcwiki/")
+    End Sub
+
+    Private Sub OHGToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OHGToolStripMenuItem.Click
+        System.Diagnostics.Process.Start(browser, "http://www.onehitgamer.com/forum/")
+    End Sub
+
+    Private Sub HAXToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HAXToolStripMenuItem.Click
+        System.Diagnostics.Process.Start(browser, "http://haxcommunity.org/")
+    End Sub
+
+    Private Sub CNGBAToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CNGBAToolStripMenuItem.Click
+        System.Diagnostics.Process.Start(browser, "http://www.cngba.com/forum-988-1.html")
+    End Sub
+
+    Private Sub GOOGLEToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GOOGLEToolStripMenuItem.Click
+        System.Diagnostics.Process.Start(browser, "http://www.google.co.jp/")
+    End Sub
+
+    Private Sub CMF暗号復元ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CMF暗号復元ToolStripMenuItem.Click
+        System.Diagnostics.Process.Start(browser, "http://raing3.gshi.org/psp-utilities/#index.php?action=cmf-decrypter")
+    End Sub
+#End Region
+
+#Region "EXECUTE"
+    Private Sub KAKASI_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles KAKASI.Click
+        boot("APP\kakasi.bat")
+    End Sub
+
+    Private Sub MECAB_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MECAB.Click
+        boot("APP\kanahenkan.bat")
+    End Sub
+
+    Private Sub PMETAN変換ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PMETAN変換ToolStripMenuItem.Click
+        boot("APP\pme.bat")
+    End Sub
+
+    Private Sub TEMPAR鶴ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TEMPAR鶴ToolStripMenuItem.Click
+        boot("APP\temp.bat")
+    End Sub
+
+    Private Sub WgetToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles WgetToolStripMenuItem.Click
+        boot("APP\wget.bat")
+    End Sub
+
+    Private Sub JaneStyleToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles JaneStyleToolStripMenuItem.Click
+        boot("APP\jane.bat")
+    End Sub
+
+    Private Sub PSPへコードコピーToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PSPへコードコピーToolStripMenuItem.Click
+        boot("APP\cp.bat")
+    End Sub
+
+    Function boot(ByVal exe As String) As Boolean
+        Dim b1 = My.Application.Info.DirectoryPath.ToString() & "\" & exe
+        If System.IO.File.Exists(b1) Then
+            Process.Start(exe)
+        Else
+            MessageBox.Show("'" + b1 + "'が見つかりませんでした。")
+        End If
+        Return True
+    End Function
+
+#End Region
+
+    'コードパーサー
+    Private Sub paserToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles paserToolStripMenuItem.Click
+        Dim backup As String = cmt_tb.Text
+        Dim f As New parser
+        cmt_tb.Text = Nothing
+        f.ShowDialog(Me)
+        Dim b1 As String = cmt_tb.Text
+        Dim b2 As String() = b1.Split(CChar(vbLf))
+        Dim gid As String = Nothing
+        Dim gname As String = Nothing
+        Dim cname As String = Nothing
+        Dim code As String = Nothing
+        Dim cname2 As String = Nothing
+        Dim code2 As String = Nothing
+        Dim coment As String = Nothing
+        Dim add As Boolean = False
+        Dim havegame As Boolean = False
+        Dim nullcode As Boolean = False
+        Dim i As Integer = 0
+        If codetree.Nodes.Count >= 1 And b1 <> Nothing Then
+            'If codetree.SelectedNode Is Nothing Then
+            '    codetree.SelectedNode = codetree.TopNode
+            'End If
+            Dim selnode1stlv As Integer = codetree.SelectedNode.Level
+
+            For Each s As String In b2
+
+                If s.Length >= 2 Then
+                    If selnode1stlv = 0 Then
+                        If s.Substring(0, 2) = "_S" Then
+                            If havegame = True Then
+                                add = True
+                                i = 0
+                            End If
+                            s = s.PadRight(4)
+                            gid = s.Substring(3, s.Length - 3).Trim
+                        ElseIf s.Substring(0, 2) = "_G" Then
+                            s = s.PadRight(4)
+                            gname = s.Substring(3, s.Length - 3).Trim
+                            Dim gnode = New TreeNode(gname)
+                            With gnode
+                                .Name = gname
+                                .Tag = gid
+                                .ImageIndex = 1
+                            End With
+                            codetree.Nodes(0).Nodes.Insert(0, gnode)
+                            codetree.SelectedNode = gnode
+                            havegame = True
+                        End If
+                    End If
+
+                    If s.Substring(0, 2) = "_C" Then
+                        nullcode = True
+                        s = s.PadRight(3, "0"c)
+                        If i = 0 Then
+                            If s.Substring(2, 1) = "0" Then
+                                code = "0" & vbCrLf
+                            Else
+                                code = "1" & vbCrLf
+                            End If
+                            cname = s.Substring(3, s.Length - 3).Trim
+                        Else
+                            add = True
+                            If nullcode = True Then
+                                code2 &= "0" & vbCrLf
+                            End If
+                            code = code & coment
+                            If s.Substring(2, 1) = "0" Then
+                                code2 = "0" & vbCrLf
+                            Else
+                                code2 = "1" & vbCrLf
+                            End If
+                            cname2 = s.Substring(3, s.Length - 3).Trim
+                        End If
+                        i += 1
+                    End If
+
+                    If s.Substring(0, 2) = "_L" Or s.Substring(0, 2) = "_M" Or s.Substring(0, 2) = "_N" Then
+                        nullcode = False
+                        s = s.Replace(vbCr, "")
+                        If PSX = True Then
+                            s = s.PadRight(17, "0"c)
+                            '_L 12345678 1234
+                            If s.Substring(2, 1) = " " And s.Substring(11, 1) = " " Then
+                                code &= s.Substring(3, 13).Trim & vbCrLf
+                            End If
+                        Else
+                            s = s.PadRight(24, "0"c)
+                            '_L 0x12345678 0x12345678
+                            If s.Substring(3, 2) = "0x" And s.Substring(14, 2) = "0x" Then
+                                If s.Substring(0, 2) = "_M" Then
+                                    Dim z As Integer = Integer.Parse(code.Substring(0, 1))
+                                    code = code.Remove(0, 1)
+                                    z = 2 Or z
+                                    code = code.Insert(0, z.ToString())
+                                ElseIf s.Substring(0, 2) = "_N" Then
+                                    Dim z As Integer = Integer.Parse(code.Substring(0, 1))
+                                    code = code.Remove(0, 1)
+                                    z = 4 Or z
+                                    code = code.Insert(0, z.ToString())
+                                End If
+                                code &= s.Substring(3, 21).Trim & vbCrLf
+                            End If
+
+                        End If
+                    End If
+
+                    If s.Substring(0, 1) = "#" Then
+                        s = s.Replace("#", "")
+                        coment &= "#" & s.Trim & vbCrLf
+                    End If
+                End If
+
+                If add = True Then
+                    Try
+                        Dim newcode As New TreeNode
+
+                        With newcode
+                            .ImageIndex = 2
+                            .SelectedImageIndex = 3
+                            .Name = cname
+                            .Text = cname
+                            .Tag = code
+                        End With
+
+                        Select Case codetree.SelectedNode.Level
+
+                            Case Is = 1
+                                codetree.SelectedNode.Nodes.Add(newcode)
+                            Case Is = 2
+                                codetree.SelectedNode.Parent.Nodes.Add(newcode)
+                        End Select
+
+                    Catch ex As Exception
+
+                    End Try
+
+                    code = code2
+                    cname = cname2
+                    coment = Nothing
+                    add = False
+                End If
+            Next
+        End If
+        f.Dispose()
+        cmt_tb.Text = backup
+    End Sub
 
 #End Region
 
@@ -387,98 +858,98 @@ Public Class Main
                 End If
             End If
 
-                If PSX = True Then
-                    Dim r As New System.Text.RegularExpressions.Regex( _
-            "[0-9a-fA-F]{8} [0-9a-zA-Z?]{4}", _
-            System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+            If PSX = True Then
+                Dim r As New System.Text.RegularExpressions.Regex( _
+        "[0-9a-fA-F]{8} [0-9a-zA-Z?]{4}", _
+        System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 
-                    Dim m As System.Text.RegularExpressions.Match = r.Match(b1)
+                Dim m As System.Text.RegularExpressions.Match = r.Match(b1)
 
-                    While m.Success
-                        buffer &= (m.Value) & vbCrLf
-                        cl_tb.Text &= (m.Value) & vbCrLf
-                        m = m.NextMatch()
-                    End While
-                Else
-                    b1 = b1.Replace("_L ", "")
-                    Dim r As New System.Text.RegularExpressions.Regex( _
-            "0x........ 0x........", _
-            System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+                While m.Success
+                    buffer &= (m.Value) & vbCrLf
+                    cl_tb.Text &= (m.Value) & vbCrLf
+                    m = m.NextMatch()
+                End While
+            Else
+                b1 = b1.Replace("_L ", "")
+                Dim r As New System.Text.RegularExpressions.Regex( _
+        "0x........ 0x........", _
+        System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 
-                    Dim m As System.Text.RegularExpressions.Match = r.Match(b1)
+                Dim m As System.Text.RegularExpressions.Match = r.Match(b1)
 
-                    While m.Success
-                        buffer &= (m.Value) & vbCrLf
-                        cl_tb.Text &= (m.Value) & vbCrLf
-                        m = m.NextMatch()
-                    End While
+                While m.Success
+                    buffer &= (m.Value) & vbCrLf
+                    cl_tb.Text &= (m.Value) & vbCrLf
+                    m = m.NextMatch()
+                End While
 
-                    '        b1 = cl_tb.Text.Replace("_L ", "")
-                    '        b1 = System.Text.RegularExpressions.Regex.Replace( _
-                    '            b1, "_C.+\n", vbCrLf)
-                    '        b1 = System.Text.RegularExpressions.Regex.Replace( _
-                    '        b1, "[!-/;-@\u005B-`\u007B-\uFFFF].+\n", vbCrLf)
-                    buffer = System.Text.RegularExpressions.Regex.Replace( _
-            buffer, "[g-zG-Z]", "A")
-                    buffer = buffer.ToUpper
-                    buffer = System.Text.RegularExpressions.Regex.Replace( _
-            buffer, "^0A", "0x")
-                    buffer = System.Text.RegularExpressions.Regex.Replace( _
-            buffer, "(\r|\n)0A", vbCrLf & "0x")
-                    buffer = buffer.Replace(" 0A", " 0x")
-                    '        b1 = System.Text.RegularExpressions.Regex.Replace( _
-                    'b1, "[!-/;-@\u005B-`\u007B-\uFFFF].+[^0-9A-F]$", "")
-                    '        Dim b2 As String() = b1.Split(CChar(vbCrLf))
-                End If
+                '        b1 = cl_tb.Text.Replace("_L ", "")
+                '        b1 = System.Text.RegularExpressions.Regex.Replace( _
+                '            b1, "_C.+\n", vbCrLf)
+                '        b1 = System.Text.RegularExpressions.Regex.Replace( _
+                '        b1, "[!-/;-@\u005B-`\u007B-\uFFFF].+\n", vbCrLf)
+                buffer = System.Text.RegularExpressions.Regex.Replace( _
+        buffer, "[g-zG-Z]", "A")
+                buffer = buffer.ToUpper
+                buffer = System.Text.RegularExpressions.Regex.Replace( _
+        buffer, "^0A", "0x")
+                buffer = System.Text.RegularExpressions.Regex.Replace( _
+        buffer, "(\r|\n)0A", vbCrLf & "0x")
+                buffer = buffer.Replace(" 0A", " 0x")
+                '        b1 = System.Text.RegularExpressions.Regex.Replace( _
+                'b1, "[!-/;-@\u005B-`\u007B-\uFFFF].+[^0-9A-F]$", "")
+                '        Dim b2 As String() = b1.Split(CChar(vbCrLf))
+            End If
 
-                If codetree.SelectedNode.Level = 2 Then
-                    codetree.SelectedNode.Name = CT_tb.Text.Replace("_C0 ", "")
-                    codetree.SelectedNode.Text = CT_tb.Text.Replace("_C0 ", "")
-                    codetree.SelectedNode.Name = codetree.SelectedNode.Name.Replace("_C1 ", "")
-                    codetree.SelectedNode.Text = codetree.SelectedNode.Text.Replace("_C1 ", "")
-                    CT_tb.Text = codetree.SelectedNode.Name
-                    'For Each s As String In b2
+            If codetree.SelectedNode.Level = 2 Then
+                codetree.SelectedNode.Name = CT_tb.Text.Replace("_C0 ", "")
+                codetree.SelectedNode.Text = CT_tb.Text.Replace("_C0 ", "")
+                codetree.SelectedNode.Name = codetree.SelectedNode.Name.Replace("_C1 ", "")
+                codetree.SelectedNode.Text = codetree.SelectedNode.Text.Replace("_C1 ", "")
+                CT_tb.Text = codetree.SelectedNode.Name
+                'For Each s As String In b2
 
-                    '    If s <> vbCrLf Then
-                    '        If i = 0 Then
-                    '            If off_rd.Checked = True Then
-                    '                buffer = "0" & vbCrLf
-                    '            Else
-                    '                buffer = "1" & vbCrLf
-                    '            End If
-                    '            i += 1
-                    '        End If
+                '    If s <> vbCrLf Then
+                '        If i = 0 Then
+                '            If off_rd.Checked = True Then
+                '                buffer = "0" & vbCrLf
+                '            Else
+                '                buffer = "1" & vbCrLf
+                '            End If
+                '            i += 1
+                '        End If
 
-                    '        If i > 0 And s.Length > 2 Then
-                    '            buffer &= s.Trim & vbCrLf
-                    '        End If
-                    '    End If
+                '        If i > 0 And s.Length > 2 Then
+                '            buffer &= s.Trim & vbCrLf
+                '        End If
+                '    End If
 
-                    'Next
-                    If b5 <> Nothing Then
-                        Dim b3 As String() = b5.Split(CChar(vbLf))
-                        For Each s As String In b3
-                            s = s.Replace("#", "")
-                            If i = 0 Then
-                                If s.Substring(0, 1) >= "!" Then
-                                    buffer &= "#" & s.Trim & vbCrLf
-                                    cmt_tb.Text &= s.Trim & vbCrLf
-
-                                End If
-                            End If
-
-                            If i > 0 And s.Length > 1 Then
+                'Next
+                If b5 <> Nothing Then
+                    Dim b3 As String() = b5.Split(CChar(vbLf))
+                    For Each s As String In b3
+                        s = s.Replace("#", "")
+                        If i = 0 Then
+                            If s.Substring(0, 1) >= "!" Then
                                 buffer &= "#" & s.Trim & vbCrLf
                                 cmt_tb.Text &= s.Trim & vbCrLf
+
                             End If
-                            i += 1
-                        Next
-                    End If
+                        End If
 
-
-                    codetree.SelectedNode.Tag = buffer
-                    codetree.EndUpdate()
+                        If i > 0 And s.Length > 1 Then
+                            buffer &= "#" & s.Trim & vbCrLf
+                            cmt_tb.Text &= s.Trim & vbCrLf
+                        End If
+                        i += 1
+                    Next
                 End If
+
+
+                codetree.SelectedNode.Tag = buffer
+                codetree.EndUpdate()
+            End If
 
 
         Catch ex As Exception
@@ -560,6 +1031,98 @@ Public Class Main
 
         End Try
     End Sub
+
+    Private Sub ToolStripButton3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton3.Click
+
+        Try
+            Dim newcode As New TreeNode
+            Dim newcode2 As New TreeNode
+
+            If codetree.SelectedNode.Level = 1 Then
+                codetree.BeginUpdate()
+
+                Dim i As Integer = 0
+                Dim z As Integer = codetree.SelectedNode.Index
+                Dim x As Integer = codetree.SelectedNode.Parent.Index
+                Dim rr As TreeNode = codetree.SelectedNode
+                Dim kk As Integer = rr.Nodes.Count
+
+                If z > 0 Then
+                    While kk > 0
+                        merge_prevtreeview(z)
+                        kk -= 1
+                    End While
+                End If
+
+                codetree.EndUpdate()
+            End If
+
+            If codetree.SelectedNode.Level = 2 Then
+
+                With newcode
+                    .ImageIndex = 2
+                    .SelectedImageIndex = 3
+                    .Name = codetree.SelectedNode.Name
+                    .Text = codetree.SelectedNode.Text
+                    .Tag = codetree.SelectedNode.Tag
+                End With
+                Dim z As Integer = codetree.SelectedNode.Index
+                Dim x As Integer = codetree.SelectedNode.Parent.Index
+                With newcode2
+                    .ImageIndex = 2
+                    .SelectedImageIndex = 3
+                    .Name = codetree.Nodes(0).Nodes(x).Nodes(z - 1).Name
+                    .Text = codetree.Nodes(0).Nodes(x).Nodes(z - 1).Text
+                    .Tag = codetree.Nodes(0).Nodes(x).Nodes(z - 1).Tag
+                End With
+
+                codetree.BeginUpdate()
+                Dim b1 As String = newcode.Tag.ToString
+                Dim b2 As String = newcode2.Tag.ToString
+                b2 &= b1.Remove(0, 1) & vbCrLf
+                newcode.Name &= "'"
+                newcode.Text &= "'"
+                newcode.Tag = b2
+                Dim a As Integer = CInt(b1.Substring(0, 1))
+                Dim b As Integer = CInt(b2.Substring(0, 1))
+
+                If z = 0 Then
+
+                ElseIf (b And &HE) = (a And &HE) Then
+                    codetree.Nodes(0).Nodes(x).Nodes(z - 1).Remove()
+                    codetree.SelectedNode.Parent.Nodes.Insert(codetree.SelectedNode.Index, newcode)
+                    codetree.SelectedNode.Remove()
+                    codetree.SelectedNode = newcode
+
+                ElseIf MessageBox.Show("コード形式が一致してません。このまま合成しますか？", "コード合成の確認", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) = Windows.Forms.DialogResult.OK Then
+                    codetree.Nodes(0).Nodes(x).Nodes(z - 1).Remove()
+                    codetree.SelectedNode.Parent.Nodes.Insert(codetree.SelectedNode.Index, newcode)
+                    codetree.SelectedNode.Remove()
+                    codetree.SelectedNode = newcode
+                End If
+                codetree.EndUpdate()
+            End If
+
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Function merge_prevtreeview(ByVal z As Integer) As Boolean
+
+        Dim newcode As New TreeNode
+
+        With newcode
+            .ImageIndex = 2
+            .SelectedImageIndex = 3
+            .Name = codetree.Nodes(0).Nodes(z).Nodes(0).Name
+            .Text = codetree.Nodes(0).Nodes(z).Nodes(0).Text
+            .Tag = codetree.Nodes(0).Nodes(z).Nodes(0).Tag
+        End With
+        codetree.Nodes(0).Nodes(z - 1).Nodes.Add(newcode)
+        codetree.Nodes(0).Nodes(z).Nodes(0).Remove()
+        Return True
+    End Function
 #End Region
 
 #Region "Code tree procedures"
@@ -586,6 +1149,7 @@ Public Class Main
         End If
     End Sub
 
+    'ツリー選択時
     Private Sub codetree_AfterSelect(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles codetree.AfterSelect
         Dim j As New joker
 
@@ -679,38 +1243,172 @@ Public Class Main
 
     End Sub
 
+    Private Sub main_Load(ByVal sender As Object, _
+        ByVal e As EventArgs) Handles MyBase.Load
+        'http://dobon.net/vb/dotnet/control/tvdraganddrop.html
+        'TreeView1へのドラッグを受け入れる
+        codetree.AllowDrop = True
+
+
+        If System.IO.File.Exists(browser) Then
+        Else
+            browser = "IExplore.exe"
+        End If
+        'イベントハンドラを追加する
+        AddHandler codetree.ItemDrag, AddressOf codetree_ItemDrag
+        AddHandler codetree.DragOver, AddressOf codetree_DragOver
+        AddHandler codetree.DragDrop, AddressOf codetree_DragDrop
+
+        If showerror = True Then
+            error_window.Show()
+            options_error.Checked = True
+            options_error.Text = "エラー画面を隠す"
+
+            If maintop = True Then
+                error_window.TopMost = True
+            End If
+
+        Else
+            error_window.Hide()
+            options_error.Checked = False
+            options_error.Text = "エラー画面を表示"
+        End If
+
+        If maintop = True Then
+            Me.TopMost = True
+            error_window.TopMost = True
+            options_ontop.Checked = True
+        Else
+            error_window.TopMost = False
+            options_ontop.Checked = False
+        End If
+
+
+        CT_tb.Font = My.Settings.CT_tb
+        GID_tb.Font = My.Settings.GID_tb
+        GT_tb.Font = My.Settings.CT_tb
+        cmt_tb.Font = My.Settings.cmt_tb
+        cl_tb.Font = My.Settings.cl_tb
+        codetree.Font = My.Settings.codetree
+
+    End Sub
+
+    Private Sub codetree_ItemDrag(ByVal sender As Object, _
+        ByVal e As ItemDragEventArgs)
+        Dim tv As TreeView = CType(sender, TreeView)
+        tv.SelectedNode = CType(e.Item, TreeNode)
+        tv.Focus()
+
+        'ノードのドラッグを開始する
+        Dim dde As DragDropEffects = _
+            tv.DoDragDrop(e.Item, DragDropEffects.All)
+
+    End Sub
+
+    'ドラッグしている時
+    Private Sub codetree_DragOver(ByVal sender As Object, _
+            ByVal e As DragEventArgs)
+        'ドラッグされているデータがTreeNodeか調べる
+        If e.Data.GetDataPresent(GetType(TreeNode)) Then
+            If (e.KeyState And 8) = 8 And _
+                (e.AllowedEffect And DragDropEffects.Copy) = _
+                    DragDropEffects.Copy Then
+                'Ctrlキーが押されていればCopy
+                '"8"はCtrlキーを表す
+                e.Effect = DragDropEffects.Copy
+            ElseIf (e.AllowedEffect And DragDropEffects.Move) = _
+                DragDropEffects.Move Then
+                '何も押されていなければMove
+                e.Effect = DragDropEffects.Move
+            Else
+                e.Effect = DragDropEffects.None
+            End If
+        Else
+            'TreeNodeでなければ受け入れない
+            e.Effect = DragDropEffects.None
+        End If
+
+        'マウス下のNodeを選択する
+        If e.Effect <> DragDropEffects.None Then
+            Dim tv As TreeView = CType(sender, TreeView)
+            'マウスのあるNodeを取得する
+            Dim target As TreeNode = _
+                tv.GetNodeAt(tv.PointToClient(New Point(e.X, e.Y)))
+            'ドラッグされているNodeを取得する
+            Dim [source] As TreeNode = _
+                CType(e.Data.GetData(GetType(TreeNode)), TreeNode)
+            'マウス下のNodeがドロップ先として適切か調べる
+            If Not target Is Nothing AndAlso _
+                target.Level = [source].Level AndAlso _
+                Not target Is [source] AndAlso _
+                Not IsChildNode([source], target) andalso _
+        ToolStripButton1.Enabled = True Then
+                'Nodeを選択する
+                If target.IsSelected = False Then
+                    tv.SelectedNode = target
+                End If
+            Else
+                e.Effect = DragDropEffects.None
+            End If
+        End If
+    End Sub
+
+    'ドロップされたとき
+    Private Sub codetree_DragDrop(ByVal sender As Object, _
+            ByVal e As DragEventArgs)
+        'ドロップされたデータがTreeNodeか調べる
+        If e.Data.GetDataPresent(GetType(TreeNode)) Then
+            Dim tv As TreeView = CType(sender, TreeView)
+            'ドロップされたデータ(TreeNode)を取得
+            Dim [source] As TreeNode = _
+                CType(e.Data.GetData(GetType(TreeNode)), TreeNode)
+            'ドロップ先のTreeNodeを取得する
+            Dim target As TreeNode = _
+                tv.GetNodeAt(tv.PointToClient(New Point(e.X, e.Y)))
+            'マウス下のNodeがドロップ先として適切か調べる
+            If Not target Is Nothing AndAlso _
+                target.Level = [source].Level AndAlso _
+                Not target Is [source] AndAlso _
+                Not IsChildNode([source], target) And
+        ToolStripButton1.Enabled = True Then
+                'ドロップされたNodeのコピーを作成
+                Dim cln As TreeNode = CType([source].Clone(), TreeNode)
+                'Nodeを追加
+                If target.Index < [source].Index Then
+                    target.Parent.Nodes.Insert(target.Index, cln)
+                Else
+                    target.Parent.Nodes.Insert(target.Index + 1, cln)
+                End If
+                If e.Effect = DragDropEffects.Move Then
+                    [source].Remove()
+                End If
+                '追加されたNodeを選択
+                tv.SelectedNode = cln
+            Else
+                e.Effect = DragDropEffects.None
+            End If
+        Else
+            e.Effect = DragDropEffects.None
+        End If
+    End Sub
+
+    '禁止状態
+    Private Shared Function IsChildNode( _
+            ByVal parentNode As TreeNode, _
+            ByVal childNode As TreeNode) As Boolean
+        If Not childNode.Parent Is parentNode.Parent Then
+            Return True
+        ElseIf childNode.Parent Is parentNode Then
+            Return True 'IsChildNode(parentNode, childNode.Parent)
+        Else
+            Return False
+        End If
+    End Function
+
 #End Region
 
+    'パッドボタン
 #Region "Joker code procedures"
-
-    'Private Sub button_list_keypress(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles button_list.KeyPress
-
-    '    ' Used if a user checks the options using spacebar since
-    '    ' for some reason, IndexChanged doesn't work when the
-    '    ' spacebar is used
-
-    '    Dim j As New joker
-    '    Dim x As Integer = 0
-    '    Dim proceed As Boolean = False
-
-    '    If cl_tb.Text.Trim.Length >= 21 Then ' If the code text box contains at least one code or more
-
-    '        For x = 0 To 19  ' Check if any joker buttons were selected
-    '            If button_list.GetItemChecked(x) = True Then
-    '                proceed = True
-    '                Exit For ' No need to continue since we know something is checked
-    '            End If
-    '        Next
-
-    '    End If
-
-    '    If proceed = True Then ' If a joker was selected, calculate the code
-    '        j.add_joker()
-    '    Else ' If not, remove any jokers if they exist
-    '        'j.remove_joker()
-    '    End If
-
-    'End Sub
 
     Private Sub button_list_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles button_list.DoubleClick
 
@@ -721,8 +1419,6 @@ Public Class Main
         Dim x As Integer = 0
         Dim proceed As Boolean = False
         Dim j As New joker
-
-        changed.Text = "パッドボタン追加"
 
         If cl_tb.Text.Trim.Length >= 21 Then ' If the code text box contains at least one code or more
 
@@ -782,7 +1478,7 @@ Public Class Main
     End Sub
 
 #End Region
-
+    '初期化
 #Region "Control resets"
 
     Private Sub resets_level1()
@@ -800,14 +1496,15 @@ Public Class Main
         CT_tb.Text = Nothing
         off_rd.Enabled = False
         on_rd.Enabled = False
+        Panel1.Enabled = False
 
-        If PSX = False Then
+        Button1.Enabled = False
+        Button2.Enabled = False
+        Button3.Enabled = False
 
-            button_list.Enabled = False
-            inverse_chk.Enabled = False
-            inverse_chk.Checked = False
-
-        End If
+        button_list.Enabled = False
+        inverse_chk.Enabled = False
+        inverse_chk.Checked = False
 
         For i = 0 To 19 ' Reset the checked list box state
             button_list.SetItemChecked(i, False)
@@ -828,14 +1525,15 @@ Public Class Main
         CT_tb.Text = Nothing
         off_rd.Enabled = False
         on_rd.Enabled = False
+        Panel1.Enabled = False
 
-        If PSX = False Then
+        Button1.Enabled = False
+        Button2.Enabled = False
+        Button3.Enabled = False
 
-            button_list.Enabled = False
-            inverse_chk.Enabled = False
-            inverse_chk.Checked = False
-
-        End If
+        button_list.Enabled = False
+        inverse_chk.Enabled = False
+        inverse_chk.Checked = False
 
         For i = 0 To 19 ' Reset the checked list box state
             button_list.SetItemChecked(i, False)
@@ -853,6 +1551,10 @@ Public Class Main
         CT_tb.Enabled = True
         off_rd.Enabled = True
         on_rd.Enabled = True
+        Panel1.Enabled = True
+        Button1.Enabled = True
+        Button2.Enabled = True
+        Button3.Enabled = True
 
         If PSX = False Then
 
@@ -869,8 +1571,6 @@ Public Class Main
 
     Private Sub reset_PSX()
 
-        button_list.Enabled = False
-        inverse_chk.Enabled = False
         codetree.ImageList = PSX_iconset
         Sort_GTitle.Image = My.Resources.sony_playstation
         With tool_menu
@@ -883,8 +1583,6 @@ Public Class Main
 
     Private Sub reset_PSP()
 
-        button_list.Enabled = True
-        inverse_chk.Enabled = True
         codetree.ImageList = iconset
         Sort_GTitle.Image = My.Resources.sony_psp
         With tool_menu
@@ -947,545 +1645,112 @@ Public Class Main
 
 #End Region
 
-
-    Private Sub saveas_cwcheat_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles saveas_cwcheat.Click
-        Dim open As New load_db
-        Dim s As New save_db
-
-        If save_file.ShowDialog = Windows.Forms.DialogResult.OK And save_file.FileName <> Nothing Then
-            database = save_file.FileName
-
-
-            s.save_cwcheat(database, enc1)
-
-            ' Reload the file
-            codetree.Nodes.Clear()
-            codetree.BeginUpdate()
-            error_window.list_load_error.BeginUpdate()
-
-            reset_PSP()
-            Application.DoEvents()
-            open.read_PSP(database, enc1)
-
-            codetree.EndUpdate()
-            error_window.list_load_error.EndUpdate()
-            file_saveas.Enabled = True
-
-        End If
-    End Sub
-
-    Private Sub saveas_psx_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles saveas_psx.Click
-        Dim open As New load_db
-        Dim s As New save_db
-
-        If save_file.ShowDialog = Windows.Forms.DialogResult.OK And save_file.FileName <> Nothing Then
-            database = save_file.FileName
-
-            s.save_psx(database, enc1)
-
-            ' Reload the file
-            codetree.Nodes.Clear()
-            codetree.BeginUpdate()
-            error_window.list_load_error.BeginUpdate()
-
-            reset_PSX()
-            Application.DoEvents()
-            open.read_PSX(database, enc1)
-
-            codetree.EndUpdate()
-            error_window.list_load_error.EndUpdate()
-            file_saveas.Enabled = True
-
-        End If
-    End Sub
-
-    Private Sub progbar_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles progbar.Click
-
-    End Sub
-
-    Private Sub menu_font_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menu_font.Click
-
-    End Sub
-
-    Private Sub menu_options_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menu_options.Click
-
-    End Sub
-
-
-    Private Sub CP932ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CP932ToolStripMenuItem.Click
-
-        'エンコードを指定する場合
-        My.Settings.MSCODEPAGE = 932
-        enc1 = 932
-        GBKToolStripMenuItem.Checked = False
-        CP932ToolStripMenuItem.Checked = True
-        UTF16BECP1201ToolStripMenuItem.Enabled = False
-
-    End Sub
-
-    Private Sub GBKToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GBKToolStripMenuItem.Click
-
-        'エンコードを指定する場合
-        My.Settings.MSCODEPAGE = 936
-        enc1 = 936
-        GBKToolStripMenuItem.Checked = True
-        CP932ToolStripMenuItem.Checked = False
-        UTF16BECP1201ToolStripMenuItem.Enabled = False
-    End Sub
-
-
-    Private Sub UTF16BECP1201ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles UTF16BECP1201ToolStripMenuItem.Click
-        'エンコードを指定する場合
-        enc1 = 1201
-        GBKToolStripMenuItem.Checked = False
-        CP932ToolStripMenuItem.Checked = False
-        UTF16BECP1201ToolStripMenuItem.Checked = True
-    End Sub
-
-    Private Sub EncodeToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EncodeToolStripMenuItem.Click
-
-        If enc1 = 932 Then
-            GBKToolStripMenuItem.Checked = False
-            CP932ToolStripMenuItem.Checked = True
-            UTF16BECP1201ToolStripMenuItem.Checked = False
-        ElseIf enc1 = 1201 Then
-            GBKToolStripMenuItem.Checked = False
-            CP932ToolStripMenuItem.Checked = False
-            UTF16BECP1201ToolStripMenuItem.Checked = True
-        Else
-            GBKToolStripMenuItem.Checked = True
-            CP932ToolStripMenuItem.Checked = False
-            UTF16BECP1201ToolStripMenuItem.Checked = False
-        End If
-
-    End Sub
-
-    Private Sub menu_sort_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menu_sort.Click
-
-    End Sub
-
-    Private Sub sort_name_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles sort_name.Click
-
-    End Sub
-
-
-    Private Sub file_new_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles file_new.Click
-
-    End Sub
-
-    Private Sub file_saveas_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles file_saveas.Click
-
-    End Sub
-
-
-    Private Sub Joker_lbl_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Joker_lbl.Click
-
-    End Sub
-
-    Private Sub すべて閉じるToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles すべて閉じるToolStripMenuItem.Click
-        codetree.CollapseAll()
-    End Sub
-
-    Private Sub 全て展開するToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles 全て展開するToolStripMenuItem.Click
-        codetree.ExpandAll()
-    End Sub
-
-    Private Sub paserToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles paserToolStripMenuItem.Click
+    'リスト連携
+#Region "LISTVIEW"
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        Dim f As New list
         Dim backup As String = cmt_tb.Text
-        Dim f As New parser
-        cmt_tb.Text = Nothing
-        f.ShowDialog(Me)
-        Dim b1 As String = cmt_tb.Text
-        Dim b2 As String() = b1.Split(CChar(vbLf))
-        Dim gid As String = Nothing
-        Dim gname As String = Nothing
-        Dim cname As String = Nothing
-        Dim code As String = Nothing
-        Dim cname2 As String = Nothing
-        Dim code2 As String = Nothing
-        Dim coment As String = Nothing
-        Dim add As Boolean = False
-        Dim havegame As Boolean = False
-        Dim nullcode As Boolean = False
+        Dim line As Integer = 1
+        Dim type As String = Nothing
+        Dim bit As Integer = 1
+        Dim lslen As Integer = 23
+        Dim rmlen As Integer = 0
         Dim i As Integer = 0
-        If codetree.Nodes.Count >= 1 And b1 <> Nothing Then
-            'If codetree.SelectedNode Is Nothing Then
-            '    codetree.SelectedNode = codetree.TopNode
-            'End If
-            Dim selnode1stlv As Integer = codetree.SelectedNode.Level
-
-            For Each s As String In b2
-
-                If s.Length >= 2 Then
-                    If selnode1stlv = 0 Then
-                        If s.Substring(0, 2) = "_S" Then
-                            If havegame = True Then
-                                add = True
-                                i = 0
-                            End If
-                            s = s.PadRight(4)
-                            gid = s.Substring(3, s.Length - 3).Trim
-                        ElseIf s.Substring(0, 2) = "_G" Then
-                            s = s.PadRight(4)
-                            gname = s.Substring(3, s.Length - 3).Trim
-                            Dim gnode = New TreeNode(gname)
-                            With gnode
-                                .Name = gname
-                                .Tag = gid
-                                .ImageIndex = 1
-                            End With
-                            codetree.Nodes(0).Nodes.Insert(0, gnode)
-                            codetree.SelectedNode = gnode
-                            havegame = True
-                        End If
-                    End If
-
-                    If s.Substring(0, 2) = "_C" Then
-                        nullcode = True
-                        s = s.PadRight(3, "0"c)
-                        If i = 0 Then
-                            If s.Substring(2, 1) = "0" Then
-                                code = "0" & vbCrLf
-                            Else
-                                code = "1" & vbCrLf
-                            End If
-                            cname = s.Substring(3, s.Length - 3).Trim
-                        Else
-                            add = True
-                            If nullcode = True Then
-                                code2 &= "0" & vbCrLf
-                            End If
-                            code = code & coment
-                            If s.Substring(2, 1) = "0" Then
-                                code2 = "0" & vbCrLf
-                            Else
-                                code2 = "1" & vbCrLf
-                            End If
-                            cname2 = s.Substring(3, s.Length - 3).Trim
-                        End If
-                        i += 1
-                    End If
-
-                    If s.Substring(0, 2) = "_L" Or s.Substring(0, 2) = "_M" Or s.Substring(0, 2) = "_N" Then
-                        nullcode = False
-                        s = s.Replace(vbCr, "")
-                        If PSX = True Then
-                            s = s.PadRight(17, "0"c)
-                            '_L 12345678 1234
-                            If s.Substring(2, 1) = " " And s.Substring(11, 1) = " " Then
-                                code &= s.Substring(3, 13).Trim & vbCrLf
-                            End If
-                        Else
-                            s = s.PadRight(24, "0"c)
-                            '_L 0x12345678 0x12345678
-                            If s.Substring(3, 2) = "0x" And s.Substring(14, 2) = "0x" Then
-                                If s.Substring(0, 2) = "_M" Then
-                                    Dim z As Integer = Integer.Parse(code.Substring(0, 1))
-                                    code = code.Remove(0, 1)
-                                    z = 2 Or z
-                                    code = code.Insert(0, z.ToString())
-                                ElseIf s.Substring(0, 2) = "_N" Then
-                                    Dim z As Integer = Integer.Parse(code.Substring(0, 1))
-                                    code = code.Remove(0, 1)
-                                    z = 4 Or z
-                                    code = code.Insert(0, z.ToString())
-                                End If
-                                code &= s.Substring(3, 21).Trim & vbCrLf
-                            End If
-
-                        End If
-                    End If
-
-                    If s.Substring(0, 1) = "#" Then
-                        s = s.Replace("#", "")
-                        coment &= "#" & s.Trim & vbCrLf
-                    End If
-                End If
-
-                If add = True Then
-                    Try
-                        Dim newcode As New TreeNode
-
-                        With newcode
-                            .ImageIndex = 2
-                            .SelectedImageIndex = 3
-                            .Name = cname
-                            .Text = cname
-                            .Tag = code
-                        End With
-
-                        Select Case codetree.SelectedNode.Level
-
-                            Case Is = 1
-                                codetree.SelectedNode.Nodes.Add(newcode)
-                            Case Is = 2
-                                codetree.SelectedNode.Parent.Nodes.Add(newcode)
-                        End Select
-
-                    Catch ex As Exception
-
-                    End Try
-
-                    code = code2
-                    cname = cname2
-                    coment = Nothing
-                    add = False
-                End If
+        Dim z As Integer = 0
+        Dim truelist As Boolean = True
+        Dim b3 As String = cl_tb.Text
+        Dim r As New System.Text.RegularExpressions.Regex( _
+"LIST/.+\.txt\((A|V|B),([1-9]|[1-9][0-9]),[1-8],[1-8]\)", _
+System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+        Dim m As System.Text.RegularExpressions.Match = r.Match(backup)
+        While m.Success
+            Dim b1 As String = m.Value
+            b1 = b1.Substring(b1.Length - 9, 9)
+            If b1.Substring(0, 1) = "," Then
+                b1 = b1.Remove(0, 1)
+            End If
+            i = 0
+            Dim b2 As String() = b1.Split(CChar(","c))
+            For Each s In b2
+                Select Case i
+                    Case 0
+                        type = s.Substring(s.Length - 1, 1)
+                    Case 1
+                        s = s.Replace(",", "")
+                        line = CType(s, Integer)
+                    Case 2
+                        s = s.Substring(0, 1)
+                        bit = CType(s, Integer)
+                    Case 3
+                        s = s.Substring(0, 1)
+                        rmlen = CType(s, Integer)
+                End Select
+                i += 1
             Next
+            If type = "V" Or type = "B" Then
+                i = 11
+            Else
+                i = 0
+            End If
+
+            m = m.NextMatch()
+            z += 1
+            i += (line - 1) * lslen + bit + 1
+            If truelist = True And i + rmlen < b3.Length And rmlen + bit <= 9 Then
+                truelist = True
+            Else
+                truelist = False
+            End If
+        End While
+
+        If truelist = True And changed.Text <> "コード内容が変更されました。" And backup <> Nothing And z > 0 Then
+            f.ShowDialog(Me)
+            f.Dispose()
+        ElseIf cl_tb.Text.Length < 20 Then
+            changed.Text = "コード内容が空か文字数が足りません。"
+        Else
+            changed.Text = "リスト定義がないか,範囲が異常です。"
         End If
-        f.Dispose()
         cmt_tb.Text = backup
     End Sub
 
-    Private Sub CWCWIKIToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CWCWIKIToolStripMenuItem.Click
-
-    End Sub
-
-    Private Sub wikiToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles wikiToolStripMenuItem1.Click
-        System.Diagnostics.Process.Start(browser, "http://www21.atwiki.jp/cwcwiki/")
-    End Sub
-
-    Private Sub OHGToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OHGToolStripMenuItem.Click
-        System.Diagnostics.Process.Start(browser, "http://www.onehitgamer.com/forum/")
-    End Sub
-
-    Private Sub HAXToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HAXToolStripMenuItem.Click
-        System.Diagnostics.Process.Start(browser, "http://haxcommunity.org/")
-    End Sub
-
-    Private Sub CNGBAToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CNGBAToolStripMenuItem.Click
-        System.Diagnostics.Process.Start(Browser, "http://www.cngba.com/forum-988-1.html")
-    End Sub
-
-    Private Sub GOOGLEToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GOOGLEToolStripMenuItem.Click
-        System.Diagnostics.Process.Start(Browser, "http://www.google.co.jp/")
-    End Sub
-
-    Private Sub KAKASI変換ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles KAKASI変換ToolStripMenuItem.Click
-
-        Dim b1 = My.Application.Info.DirectoryPath.ToString() & "\APP\kanahenkan.bat"
-        If System.IO.File.Exists(b1) Then
-            Process.Start("APP\kanahenkan.bat")
-        Else
-            MessageBox.Show("'" + b1 + "'が見つかりませんでした。")
-        End If
-    End Sub
-
-    Private Sub PMETAN変換ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PMETAN変換ToolStripMenuItem.Click
-
-        Dim b1 = My.Application.Info.DirectoryPath.ToString() & "\APP\pme.bat"
-        If System.IO.File.Exists(b1) Then
-            Process.Start("APP\pme.bat")
-        Else
-            MessageBox.Show("'" + b1 + "'が見つかりませんでした。")
-        End If
-    End Sub
-
-    Private Sub TEMPAR鶴ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TEMPAR鶴ToolStripMenuItem.Click
-
-        Dim b1 = My.Application.Info.DirectoryPath.ToString() & "\APP\temp.bat"
-        If System.IO.File.Exists(b1) Then
-            Process.Start("APP\temp.bat")
-        Else
-            MessageBox.Show("'" + b1 + "'が見つかりませんでした。")
-        End If
-    End Sub
-
-    Private Sub WgetToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles WgetToolStripMenuItem.Click
-
-        Dim b1 = My.Application.Info.DirectoryPath.ToString() & "\APP\wget.bat"
-        If System.IO.File.Exists(b1) Then
-            Process.Start("APP\wget.bat")
-        Else
-            MessageBox.Show("'" + b1 + "'が見つかりませんでした。")
-        End If
-    End Sub
-
-    Private Sub JaneStyleToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles JaneStyleToolStripMenuItem.Click
-
-        Dim b1 = My.Application.Info.DirectoryPath.ToString() & "\APP\jane.bat"
-        If System.IO.File.Exists(b1) Then
-            Process.Start("APP\jane.bat")
-        Else
-            MessageBox.Show("'" + b1 + "'が見つかりませんでした。")
-        End If
-    End Sub
-
-    Private Sub ToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem1.Click
-
-        Process.Start("APP\pme.bat")
-        Process.Start("APP\kakasi.bat")
-    End Sub
-
-    Private Sub PSPへコードコピーToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PSPへコードコピーToolStripMenuItem.Click
-        Process.Start("APP\cp.bat")
-    End Sub
-
-    Private Sub RadioButton1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton1.CheckedChanged
-
-    End Sub
-
-    Private Sub main_Load(ByVal sender As Object, _
-        ByVal e As EventArgs) Handles MyBase.Load
-        'http://dobon.net/vb/dotnet/control/tvdraganddrop.html
-        'TreeView1へのドラッグを受け入れる
-        codetree.AllowDrop = True
-
-
-        If System.IO.File.Exists(browser) Then
-        Else
-            browser = "IExplore.exe"
-        End If
-        'イベントハンドラを追加する
-        AddHandler codetree.ItemDrag, AddressOf codetree_ItemDrag
-        AddHandler codetree.DragOver, AddressOf codetree_DragOver
-        AddHandler codetree.DragDrop, AddressOf codetree_DragDrop
-
-        If showerror = True Then
-            error_window.Show()
-            options_error.Checked = True
-            options_error.Text = "エラー画面を隠す"
-
-            If maintop = True Then
-                error_window.TopMost = True
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+        If cl_tb.Text.Length > 20 Then
+            changed.Text = "簡易シフトが追加されました,行を合わせて下さい。"
+            Dim z As String = "0"
+            If cmt_tb.Text.Contains("840") Then
+                z = "8"
             End If
-
+            cmt_tb.Text = "LIST/shift" & z & ".txt" & "(V,1,6,3)シフト倍" & vbCrLf & cmt_tb.Text
         Else
-            error_window.Hide()
-            options_error.Checked = False
-            options_error.Text = "エラー画面を表示"
+            changed.Text = "コード内容が空か文字数が足りません。"
         End If
-
-        If maintop = True Then
-            Me.TopMost = True
-            error_window.TopMost = True
-            options_ontop.Checked = True
-        Else
-            error_window.TopMost = False
-            options_ontop.Checked = False
-        End If
-
-
-        CT_tb.Font = My.Settings.CT_tb
-        GID_tb.Font = My.Settings.GID_tb
-        GT_tb.Font = My.Settings.CT_tb
-        cmt_tb.Font = My.Settings.cmt_tb
-        cl_tb.Font = My.Settings.cl_tb
-        codetree.Font = My.Settings.codetree
-
-
-        UTF16BECP1201ToolStripMenuItem.Enabled = False
     End Sub
 
-    Private Sub codetree_ItemDrag(ByVal sender As Object, _
-        ByVal e As ItemDragEventArgs)
-        Dim tv As TreeView = CType(sender, TreeView)
-        tv.SelectedNode = CType(e.Item, TreeNode)
-        tv.Focus()
-
-        'ノードのドラッグを開始する
-        Dim dde As DragDropEffects = _
-            tv.DoDragDrop(e.Item, DragDropEffects.All)
-
-    End Sub
-
-    'ドラッグしている時
-    Private Sub codetree_DragOver(ByVal sender As Object, _
-            ByVal e As DragEventArgs)
-        'ドラッグされているデータがTreeNodeか調べる
-        If e.Data.GetDataPresent(GetType(TreeNode)) Then
-            If (e.KeyState And 8) = 8 And _
-                (e.AllowedEffect And DragDropEffects.Copy) = _
-                    DragDropEffects.Copy Then
-                'Ctrlキーが押されていればCopy
-                '"8"はCtrlキーを表す
-                e.Effect = DragDropEffects.Copy
-            ElseIf (e.AllowedEffect And DragDropEffects.Move) = _
-                DragDropEffects.Move Then
-                '何も押されていなければMove
-                e.Effect = DragDropEffects.Move
-            Else
-                e.Effect = DragDropEffects.None
+    Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
+        Dim ofd As New OpenFileDialog()
+        Dim lspath As String = Nothing
+        ofd.InitialDirectory = My.Application.Info.DirectoryPath.ToString() & "\LIST\"
+        ofd.Filter = _
+    "txtファイル(*.txt)|*.txt"
+        ofd.Title = "追加するリストのTXTを選んでください"
+        If cl_tb.Text.Length > 20 Then
+            If ofd.ShowDialog() = DialogResult.OK Then
+                changed.Text = "リストが追加されました,行を合わせて下さい。"
+                lspath = ofd.FileName
+                lspath = lspath.Replace(My.Application.Info.DirectoryPath.ToString(), "")
+                lspath = lspath.Replace("\", "/")
+                lspath = lspath.Remove(0, 1)
+                cmt_tb.Text = lspath & "(V,1,1,8)" & vbCrLf & cmt_tb.Text
             End If
         Else
-            'TreeNodeでなければ受け入れない
-            e.Effect = DragDropEffects.None
-        End If
-
-        'マウス下のNodeを選択する
-        If e.Effect <> DragDropEffects.None Then
-            Dim tv As TreeView = CType(sender, TreeView)
-            'マウスのあるNodeを取得する
-            Dim target As TreeNode = _
-                tv.GetNodeAt(tv.PointToClient(New Point(e.X, e.Y)))
-            'ドラッグされているNodeを取得する
-            Dim [source] As TreeNode = _
-                CType(e.Data.GetData(GetType(TreeNode)), TreeNode)
-            'マウス下のNodeがドロップ先として適切か調べる
-            If Not target Is Nothing AndAlso _
-                target.Level = [source].Level AndAlso _
-                Not target Is [source] AndAlso _
-                Not IsChildNode([source], target) Then
-                'Nodeを選択する
-                If target.IsSelected = False Then
-                    tv.SelectedNode = target
-                End If
-            Else
-                e.Effect = DragDropEffects.None
-            End If
+            changed.Text = "コード内容が空か文字数が足りません。"
         End If
     End Sub
+#End Region
 
-    'ドロップされたとき
-    Private Sub codetree_DragDrop(ByVal sender As Object, _
-            ByVal e As DragEventArgs)
-        'ドロップされたデータがTreeNodeか調べる
-        If e.Data.GetDataPresent(GetType(TreeNode)) Then
-            Dim tv As TreeView = CType(sender, TreeView)
-            'ドロップされたデータ(TreeNode)を取得
-            Dim [source] As TreeNode = _
-                CType(e.Data.GetData(GetType(TreeNode)), TreeNode)
-            'ドロップ先のTreeNodeを取得する
-            Dim target As TreeNode = _
-                tv.GetNodeAt(tv.PointToClient(New Point(e.X, e.Y)))
-            'マウス下のNodeがドロップ先として適切か調べる
-            If Not target Is Nothing AndAlso _
-                target.Level = [source].Level AndAlso _
-                Not target Is [source] AndAlso _
-                Not IsChildNode([source], target) Then
-                'ドロップされたNodeのコピーを作成
-                Dim cln As TreeNode = CType([source].Clone(), TreeNode)
-                'Nodeを追加
-                If target.Index < [source].Index Then
-                    target.Parent.Nodes.Insert(target.Index, cln)
-                Else
-                    target.Parent.Nodes.Insert(target.Index + 1, cln)
-                End If
-                If e.Effect = DragDropEffects.Move Then
-                    [source].Remove()
-                End If
-                '追加されたNodeを選択
-                tv.SelectedNode = cln
-            Else
-                e.Effect = DragDropEffects.None
-            End If
-        Else
-            e.Effect = DragDropEffects.None
-        End If
-    End Sub
-
-    Private Shared Function IsChildNode( _
-            ByVal parentNode As TreeNode, _
-            ByVal childNode As TreeNode) As Boolean
-        If Not childNode.Parent Is parentNode.Parent Then
-            Return True
-        ElseIf childNode.Parent Is parentNode Then
-            Return True 'IsChildNode(parentNode, childNode.Parent)
-        Else
-            Return False
-        End If
-    End Function
-
+    '保存警告
+#Region "ALERTTXT"
     Private Sub RadioButton4_clicked(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton4.Click
         changed.Text = "コード形式が変更されました。"
     End Sub
@@ -1524,189 +1789,9 @@ Public Class Main
     Private Sub off_rd_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles off_rd.Click
         changed.Text = "コード実行状態が変更されました。"
     End Sub
+#End Region
 
-    Private Sub ツリービューToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ツリービューToolStripMenuItem.Click
+    Private Sub ソート後はインデックスが破壊されますToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
-        Dim fd As New FontDialog()
-
-        fd.Font = codetree.Font
-        fd.Color = codetree.ForeColor
-        fd.MaxSize = 24
-        fd.MinSize = 9
-        fd.FontMustExist = True
-        fd.ShowHelp = True
-        fd.ShowApply = True
-        If fd.ShowDialog() <> DialogResult.Cancel Then
-            codetree.Font = fd.Font
-            My.Settings.codetree = fd.Font
-        End If
-    End Sub
-
-    Private Sub ゲームタイトルToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ゲームタイトルToolStripMenuItem.Click
-        Dim fd As New FontDialog()
-        fd.Font = GT_tb.Font
-        fd.Color = GT_tb.ForeColor
-        fd.MaxSize = 24
-        fd.MinSize = 9
-        fd.FontMustExist = True
-        fd.ShowHelp = True
-        fd.ShowApply = True
-        If fd.ShowDialog() <> DialogResult.Cancel Then
-            GT_tb.Font = fd.Font
-            My.Settings.GT_tb = fd.Font
-        End If
-    End Sub
-
-    Private Sub ゲームIDToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ゲームIDToolStripMenuItem.Click
-        Dim fd As New FontDialog()
-        fd.Font = GID_tb.Font
-        fd.Color = GID_tb.ForeColor
-        fd.MaxSize = 24
-        fd.MinSize = 9
-        fd.FontMustExist = True
-        fd.ShowHelp = True
-        fd.ShowApply = True
-        fd.FixedPitchOnly = True
-        If fd.ShowDialog() <> DialogResult.Cancel Then
-            GID_tb.Font = fd.Font
-            My.Settings.GID_tb = fd.Font
-        End If
-    End Sub
-
-    Private Sub コード名ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles コード名ToolStripMenuItem.Click
-        Dim fd As New FontDialog()
-        fd.Font = CT_tb.Font
-        fd.Color = CT_tb.ForeColor
-        fd.MaxSize = 24
-        fd.MinSize = 9
-        fd.FontMustExist = True
-        fd.ShowHelp = True
-        fd.ShowApply = True
-        If fd.ShowDialog() <> DialogResult.Cancel Then
-            CT_tb.Font = fd.Font
-            My.Settings.CT_tb = fd.Font
-        End If
-    End Sub
-
-    Private Sub コード内容ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles コード内容ToolStripMenuItem.Click
-
-        Dim fd As New FontDialog()
-
-        fd.Font = cl_tb.Font
-        fd.Color = cl_tb.ForeColor
-        fd.MaxSize = 24
-        fd.MinSize = 9
-        fd.FontMustExist = True
-        fd.ShowHelp = True
-        fd.ShowApply = True
-        fd.FixedPitchOnly = True
-        If fd.ShowDialog() <> DialogResult.Cancel Then
-            cl_tb.Font = fd.Font
-            My.Settings.cl_tb = fd.Font
-        End If
-    End Sub
-
-    Private Sub コメントToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles コメントToolStripMenuItem.Click
-        Dim fd As New FontDialog()
-
-        fd.Font = cmt_tb.Font
-        fd.Color = cmt_tb.ForeColor
-        fd.MaxSize = 24
-        fd.MinSize = 9
-        fd.FontMustExist = True
-        fd.ShowHelp = True
-        fd.ShowApply = True
-        If fd.ShowDialog() <> DialogResult.Cancel Then
-            cmt_tb.Font = fd.Font
-            My.Settings.cmt_tb = fd.Font
-        End If
-    End Sub
-
-    Private Sub ブラウザ変更ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ブラウザ変更ToolStripMenuItem.Click
-        Dim ofd As New OpenFileDialog()
-        ofd.InitialDirectory = "C:\Program Files"
-        ofd.Filter = _
-    "EXEファイル(*.exe)|*.exe"
-        ofd.Title = "ブラウザのEXEを選んでください"
-        If ofd.ShowDialog() = DialogResult.OK Then
-            'OKボタンがクリックされたとき
-            '選択されたファイル名を表示する
-            My.Settings.browser = ofd.FileName
-            browser = ofd.FileName
-        End If
-    End Sub
-
-    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
-        Dim f As New List
-        Dim backup As String = cmt_tb.Text
-        Dim line As Integer = 1
-        Dim type As String = Nothing
-        Dim bit As Integer = 1
-        Dim lslen As Integer = 23
-        Dim rmlen As Integer = 0
-        Dim i As Integer = 0
-        Dim truelist As Boolean = True
-        Dim b3 As String = cl_tb.Text
-        Dim r As New System.Text.RegularExpressions.Regex( _
-"LIST/.+\((A|V|B),([1-9]|[1-9][0-9]),[1-8],[1-8]\)", _
-System.Text.RegularExpressions.RegexOptions.IgnoreCase)
-        Dim m As System.Text.RegularExpressions.Match = r.Match(backup)
-        While m.Success
-            Dim b1 As String = m.Value
-            b1 = b1.Substring(b1.Length - 9, 9)
-            If b1.Substring(0, 1) = "," Then
-                b1 = b1.Remove(0, 1)
-            End If
-            i = 0
-            Dim b2 As String() = b1.Split(CChar(","c))
-            For Each s In b2
-                Select Case i
-                    Case 0
-                        type = s.Substring(s.Length - 1, 1)
-                    Case 1
-                        s = s.Substring(0, 1)
-                        line = CType(s, Integer)
-                    Case 2
-                        s = s.Substring(0, 1)
-                        bit = CType(s, Integer)
-                    Case 3
-                        s = s.Substring(0, 1)
-                        rmlen = CType(s, Integer)
-                End Select
-                i += 1
-            Next
-            If type = "V" Or type = "B" Then
-                i = 11
-            Else
-                i = 0
-            End If
-            m = m.NextMatch()
-
-            i += (line - 1) * lslen + bit + 1
-            If truelist = True And i + rmlen < b3.Length And rmlen + bit <= 9 Then
-                truelist = True
-            Else
-                truelist = False
-            End If
-        End While
-
-
-        If truelist = True And changed.Text <> "コード内容が変更されました。" And backup <> Nothing Then
-            f.ShowDialog(Me)
-            f.Dispose()
-            changed.Text = "リストデータが反映されました。"
-        Else
-            changed.Text = "リスト定義がないか,範囲が異常です。"
-        End If
-        cmt_tb.Text = backup
-    End Sub
-
-    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
-        changed.Text = "簡易シフトが追加されました,行を合わせて下さい。"
-        Dim z As String = "0"
-        If cmt_tb.Text.Contains("840") Then
-            z = "1"
-        End If
-        cmt_tb.Text = "LIST/SHIFT" & z & "(V,1,6,3)" & vbCrLf & cmt_tb.Text
     End Sub
 End Class

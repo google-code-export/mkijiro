@@ -129,6 +129,7 @@ Partial Class parser
         Me.Controls.Add(Me.MenuStrip2)
         Me.MainMenuStrip = Me.MenuStrip1
         Me.Name = "parser"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "一括パーサー"
         Me.ResumeLayout(False)
         Me.PerformLayout()
