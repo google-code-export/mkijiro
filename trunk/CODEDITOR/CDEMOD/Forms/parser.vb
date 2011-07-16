@@ -3,8 +3,8 @@ Public Class parser
 
     Public Opener As Form
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        Dim f As Main
-        f = CType(Me.Owner, Main)
+        Dim f As MERGE
+        f = CType(Me.Owner, MERGE)
         Dim mode As String = Nothing
 
         If f.codetree.Nodes.Count >= 1 Then
@@ -32,8 +32,8 @@ Public Class parser
     End Sub
 
     Private Sub OK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK.Click
-        Dim f As Main
-        f = CType(Me.Owner, Main)
+        Dim f As MERGE
+        f = CType(Me.Owner, MERGE)
         f.cmt_tb.Text = TX.Text
         Me.Close()
     End Sub

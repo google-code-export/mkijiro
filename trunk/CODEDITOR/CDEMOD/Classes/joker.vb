@@ -2,7 +2,7 @@
 
     Public Sub add_joker()
 
-        Dim m As Main = Main
+        Dim m As MERGE = MERGE
         Dim i As Integer = 0
         Dim buffer As String() = m.cl_tb.Text.Split(CChar(vbCrLf)) ' Seperate the codes in our string array
         Dim tmp(1) As String
@@ -13,18 +13,14 @@
 
             If s.Length = 21 Then
 
-                If s.Substring(2, 1).ToUpper <> "D" And s.Substring(13, 1) <> "1" Then ' If it's not an existing joker
-
+                If s.Contains("A000000 0x") Then
+                ElseIf s.Substring(2, 1).ToUpper <> "D" And s.Substring(13, 1) <> "1" Then ' If it's not an existing joker
                     tmp(0) &= s & vbCrLf ' Add the code to our buffer
                     i += 1 ' Keep track of how many codes are in the array
-
                 ElseIf s.Substring(2, 1).ToUpper <> "D" And s.Substring(13, 1) <> "3" Then ' If it's not an existing inverse joker
-
                     tmp(0) &= s & vbCrLf ' Add the code to our buffer
                     i += 1 ' Keep track of how many codes are in the array
-
                 End If
-
 
             End If
 
@@ -45,14 +41,32 @@
             tmp(1) = tmp(1) & calc_button(0) & vbCrLf ' Get the values of the checkboxes checked
         End If
 
-        m.cl_tb.Text = tmp(1) & tmp(0) ' Write the joker + codes back into the code list
-
-
+        Dim b4 = m.codetree.SelectedNode.Tag.ToString
+        If b4.Substring(0, 1) < "2" Then
+            m.changed.Text = "CWCパッドボタン追加"
+            m.cl_tb.Text = tmp(1) & tmp(0) ' Write the joker + codes back into the code list
+        ElseIf b4.Substring(0, 1) > "1" Then
+            m.changed.Text = "TEMPAR専用パッドボタン追加"
+            Dim b1 = tmp(1).Substring(13, 8)
+            Dim b2 = b1.Substring(0, 1).ToUpper
+            Dim b3 = b1.Substring(4, 4).ToUpper
+            Dim mask As Integer = Convert.ToInt32(b3, 16)
+            mask = &H10000 - mask
+            If b2 = "1" Then
+                tmp(1) = "0x9A000000 0x" & Convert.ToString(mask, 16).ToUpper & b3 & vbCrLf
+            Else
+                tmp(1) = "0xAA000000 0x" & Convert.ToString(mask, 16).ToUpper & b3 & vbCrLf
+            End If
+            m.cl_tb.Text = tmp(1) & tmp(0)
+            If Not tmp(0).Contains("0xD0000000 0x00000000") And Not tmp(0).Contains("0xD20000 0x00000000") Then
+                m.cl_tb.Text &= "0xD0000000 0x00000000"
+            End If
+        End If
     End Sub
 
     Public Sub remove_joker()
 
-        Dim m As Main = Main
+        Dim m As MERGE = MERGE
         Dim buffer As String() = m.cl_tb.Text.Split(CChar(vbCrLf))
         Dim tmp As String = Nothing
 
@@ -78,7 +92,7 @@
 
     Private Function calc_button(ByVal y As Integer) As String
 
-        Dim m As Main = Main
+        Dim m As MERGE = MERGE
         Dim i As Integer = 0
         Dim x As Long = 0
 
@@ -185,7 +199,7 @@
 
         ' Until I optimize this, I'm going to determine it the long way.
 
-        Dim m As Main = Main
+        Dim m As MERGE = MERGE
         Dim i As Integer = 0
 
         For i = 0 To 19 ' Reset the checked list box state

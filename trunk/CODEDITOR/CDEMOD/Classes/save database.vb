@@ -6,7 +6,7 @@ Public Class save_db
     Public Sub save_cwcheat(ByVal filename As String, ByVal enc1 As Integer
                             )
 
-        Dim m As Main = Main
+        Dim m As MERGE = MERGE
         Dim i As Integer = 0 ' Error count
         Dim buffer As String()
         Dim tw As New StreamWriter(filename, False, _
@@ -28,7 +28,7 @@ Public Class save_db
                 For Each n1 As TreeNode In n.Nodes
 
                     If n1.Tag Is Nothing Then
-                        
+
                         If n1.Tag.ToString.Substring(0, 1) = "0" Then
                             tw.Write("_C0 " & n1.Text.Trim & vbCrLf)
                         Else
@@ -122,7 +122,7 @@ Public Class save_db
 
                         Next
 
-                        End If
+                    End If
 
                 Next
 
@@ -139,7 +139,7 @@ Public Class save_db
     Public Sub save_psx(ByVal filename As String, ByVal enc1 As Integer
                         )
 
-        Dim m As Main = Main
+        Dim m As MERGE = MERGE
         Dim i As Integer = 0 ' Error count
         Dim buffer As String()
         Dim tw As New StreamWriter(filename, False, _
@@ -151,7 +151,7 @@ Public Class save_db
         reset_errors() ' Clear prior save errors if any
 
         For Each n As TreeNode In m.codetree.Nodes(0).Nodes
-            
+
             tw.Write("_S " & n.Tag.ToString.Trim & vbCrLf)
             tw.Write("_G " & n.Text.Trim & vbCrLf)
 
@@ -235,7 +235,7 @@ Public Class save_db
     Private Sub reset_errors()
 
         Dim ew As error_window = error_window
-        Dim m As Main = Main
+        Dim m As MERGE = MERGE
 
         ew.Hide()
         m.options_error.Text = "Show Error Log"
