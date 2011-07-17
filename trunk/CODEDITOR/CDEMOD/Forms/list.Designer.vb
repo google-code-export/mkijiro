@@ -37,7 +37,9 @@ Partial Class list
         Me.RadioButton2 = New System.Windows.Forms.RadioButton()
         Me.RadioButton1 = New System.Windows.Forms.RadioButton()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.NumericUpDown1 = New System.Windows.Forms.NumericUpDown()
         Me.GroupBox1.SuspendLayout()
+        CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'ListView1
@@ -188,18 +190,27 @@ Partial Class list
         'CheckBox1
         '
         Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(241, 243)
+        Me.CheckBox1.Location = New System.Drawing.Point(230, 244)
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(57, 16)
         Me.CheckBox1.TabIndex = 10
         Me.CheckBox1.Text = "ぐりっど"
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
+        'NumericUpDown1
+        '
+        Me.NumericUpDown1.Location = New System.Drawing.Point(294, 244)
+        Me.NumericUpDown1.Maximum = New Decimal(New Integer() {9, 0, 0, 0})
+        Me.NumericUpDown1.Name = "NumericUpDown1"
+        Me.NumericUpDown1.Size = New System.Drawing.Size(31, 19)
+        Me.NumericUpDown1.TabIndex = 11
+        '
         'list
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(332, 269)
+        Me.Controls.Add(Me.NumericUpDown1)
         Me.Controls.Add(Me.CheckBox1)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.lsclose)
@@ -211,6 +222,7 @@ Partial Class list
         Me.Text = "リスト"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -230,4 +242,5 @@ Partial Class list
     Friend WithEvents RadioButton2 As System.Windows.Forms.RadioButton
     Friend WithEvents RadioButton1 As System.Windows.Forms.RadioButton
     Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
+    Friend WithEvents NumericUpDown1 As System.Windows.Forms.NumericUpDown
 End Class

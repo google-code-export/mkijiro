@@ -10,17 +10,6 @@
         m = CType(Me.Owner, MERGE)
         Me.Location = New Point(m.Location.X + 460, m.Location.Y + 190)
 
-        RadioButton1.Enabled = False
-        RadioButton2.Enabled = False
-        RadioButton3.Enabled = False
-        RadioButton4.Enabled = False
-        RadioButton5.Enabled = False
-        RadioButton6.Enabled = False
-        RadioButton7.Enabled = False
-        RadioButton8.Enabled = False
-        RadioButton9.Enabled = False
-        RadioButton10.Enabled = False
-
         ListView1.View = View.Details
 
         'ヘッダーを追加する（ヘッダー名、幅、アライメント）
@@ -33,79 +22,7 @@
 
         Button(1)
 
-
-        Dim text As Integer = 0
-        Dim w As Integer = 1
-        Dim b1 As String = m.cmt_tb.Text
-        Dim b2 As String = Nothing
-        Dim r As New System.Text.RegularExpressions.Regex( _
-"LIST/.+\.txt\((A|V|B),([0-9]|[1-9][0-9]),[1-8],[1-8]\)", _
-System.Text.RegularExpressions.RegexOptions.IgnoreCase)
-        Dim max As System.Text.RegularExpressions.Match = r.Match(b1)
-        While max.Success
-            Dim b3 = b1.Substring(text, max.Index - text)
-            Select Case w
-                Case 1
-                    RadioButton1.Enabled = True
-                Case 2
-                    RadioButton2.Enabled = True
-                    RadioButton1.Text &= b3
-                Case 3
-                    RadioButton3.Enabled = True
-                    RadioButton2.Text &= b3
-                Case 4
-                    RadioButton4.Enabled = True
-                    RadioButton3.Text &= b3
-                Case 5
-                    RadioButton5.Enabled = True
-                    RadioButton4.Text &= b3
-                Case 6
-                    RadioButton6.Enabled = True
-                    RadioButton5.Text &= b3
-                Case 7
-                    RadioButton7.Enabled = True
-                    RadioButton6.Text &= b3
-                Case 8
-                    RadioButton8.Enabled = True
-                    RadioButton7.Text &= b3
-                Case 9
-                    RadioButton9.Enabled = True
-                    RadioButton8.Text &= b3
-                Case 10
-                    RadioButton10.Enabled = True
-                    RadioButton9.Text &= b3
-            End Select
-            w += 1
-            text = max.Index + max.Length
-            max = max.NextMatch
-        End While
-        Dim b4 = b1.Substring(text, b1.Length - text)
-        Dim linefeed As Integer = b4.IndexOf(vbLf)
-        If linefeed > 0 Then
-            b4 = b4.Substring(0, linefeed)
-        End If
-        Select Case w
-            Case 2
-                RadioButton1.Text &= b4
-            Case 3
-                RadioButton2.Text &= b4
-            Case 4
-                RadioButton3.Text &= b4
-            Case 5
-                RadioButton4.Text &= b4
-            Case 6
-                RadioButton5.Text &= b4
-            Case 7
-                RadioButton6.Text &= b4
-            Case 8
-                RadioButton7.Text &= b4
-            Case 9
-                RadioButton8.Text &= b4
-            Case 10
-                RadioButton9.Text &= b4
-            Case 11
-                RadioButton10.Text &= b4
-        End Select
+        getlisttext(m.cmt_tb.Text)
 
         RadioButton1.Checked = True
         matchno = 1
@@ -196,36 +113,42 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 
 #Region "radio"
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton1.CheckedChanged
-        Button(1)
+        buttonfunc(1)
     End Sub
-    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton2.CheckedChanged
-        Button(2)
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton2.CheckedChanged        
+        buttonfunc(2)
     End Sub
     Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton3.CheckedChanged
-        Button(3)
+        buttonfunc(3)
     End Sub
     Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton4.CheckedChanged
-        Button(4)
+        buttonfunc(4)
     End Sub
     Private Sub Button5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton5.CheckedChanged
-        Button(5)
+        buttonfunc(5)
     End Sub
     Private Sub Button6_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton6.CheckedChanged
-        Button(6)
+        buttonfunc(6)
     End Sub
     Private Sub Button7_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton7.CheckedChanged
-        Button(7)
+        buttonfunc(7)
     End Sub
     Private Sub Button8_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton8.CheckedChanged
-        Button(8)
+        buttonfunc(8)
     End Sub
     Private Sub Button9_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton9.CheckedChanged
-        Button(9)
+        buttonfunc(9)
     End Sub
     Private Sub Button10_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton10.CheckedChanged
-        Button(10)
+        buttonfunc(10)
     End Sub
-
+    Function buttonfunc(ByVal t As Integer) As Boolean
+        Dim z As Integer = CInt(NumericUpDown1.Value) * 10 + t
+        Dim m As MERGE
+        m = CType(Me.Owner, MERGE)
+        Button(z)
+        Return True
+    End Function
     'ラジオでリスト読み込み
     Function Button(ByVal z As Integer) As Boolean
         Dim m As MERGE
@@ -243,7 +166,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                 b1 = b1.Replace("/", "\")
                 b1 = My.Application.Info.DirectoryPath.ToString() & "\" & b1
                 If System.IO.File.Exists(b1) Then
-                    listtextadd(b1)
+                    listtextadd(b1, z)
                 Else
                     MessageBox.Show("'" + b1 + "'が見つかりませんでした。")
                 End If
@@ -255,54 +178,49 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         matchno = z
         Return True
     End Function
-
+#End Region
     'リスト配列作成
-    Function listtextadd(ByVal lsfile As String) As Boolean
+    Function listtextadd(ByVal lsfile As String, ByVal z As Integer) As Boolean
         'リストボックスに追加する文字列配列を作成
         Dim sr As New System.IO.StreamReader(lsfile, _
     System.Text.Encoding.GetEncoding(932))
         Dim n As Integer = 0
         Dim l As Integer = 0
+        Dim i As Integer = 0
         Dim b1 As String = Nothing
-        Dim b2 As String()
+        Dim b2 As String = Nothing
         Dim blen As Integer = 0
         Dim p As Integer = 0
         Dim s1(8000) As String
         Dim s2(8000) As String
-        Dim odd As Boolean = False
+        getpositions(z)
         While sr.Peek() > -1
             b1 = sr.ReadLine()
+            b1 = b1.Replace("0x", "").Trim
+            Dim r As New System.Text.RegularExpressions.Regex( _
+    "[0-9A-Fa-f]+", _
+    System.Text.RegularExpressions.RegexOptions.IgnoreCase Or _
+    System.Text.RegularExpressions.RegexOptions.Singleline)
+            Dim m As System.Text.RegularExpressions.Match = r.Match(b1)
+            Dim mleft As String = Nothing
+            If m.Success Then
+                mleft = b1.Substring(m.Index + m.Length, b1.Length - (m.Index + m.Length))
+            End If
             blen = b1.Length
-            If b1.Contains("_LST 0x") Then
-                b1 = b1.Replace("_LST 0x", "")
-                b1 = b1.PadRight(9, "　"c)
-                blen = b1.Length
-                If b1.Substring(9, blen - 9).Contains(" ") Then
-                    b1 = b1.Remove(8, 1)
-                    b1 = b1.Replace(" ", "　")
-                    b1 = b1.Insert(8, " ")
-                ElseIf Not b1.Contains(" ") Then
-                    b1 = b1.Remove(8, 1)
-                    b1 = b1.Insert(8, " 　")
-                End If
-            ElseIf b1.Contains("_END") Then
+            'PME end
+            If b1.Contains("_END") Then
                 Exit While
             End If
-            If blen > 1 Then
-                b2 = b1.Split(CChar(" "))
-                For Each s In b2
-                    If n = 7999 Then
-                        Exit While
-                    ElseIf odd = False Then
-                        s1(n) = s
-                        odd = True
-                        n += 1
-                    Else
-                        s2(l) = s
-                        odd = False
-                        l += 1
-                    End If
-                Next
+            If blen > 1 And m.Success Then
+                If n = 7999 Then
+                    Exit While
+                End If
+                b2 = m.Value.ToUpper.Trim
+                b2 = b2.PadLeft(rmlen, "0"c)
+                s1(n) = b2
+                n += 1
+                s2(l) = mleft.Trim
+                l += 1
             End If
         End While
         sr.Close()
@@ -322,7 +240,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 
         Return True
     End Function
-
+    'ぐりっどまん消滅
     Private Sub CheckBox1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox1.CheckedChanged
         If CheckBox1.Checked = True Then
             ListView1.GridLines = True
@@ -333,6 +251,124 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         End If
 
     End Sub
-#End Region
+    'ページ変更
+    Private Sub NumericUpDown1_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NumericUpDown1.ValueChanged
 
+        Dim m As MERGE
+        m = CType(Me.Owner, MERGE)
+        getlisttext(m.cmt_tb.Text)
+        RadioButton1.Checked = True
+        Dim r As Integer = CInt(NumericUpDown1.Value * 10) + 1
+        Button(r)
+    End Sub
+    'テキスト取得
+    Function getlisttext(ByVal buf As String) As Boolean
+
+
+        Dim i As Integer = CInt(NumericUpDown1.Value) * 10
+        Dim v As Integer = 0
+        Dim num As String = NumericUpDown1.Value.ToString
+        num = num.Replace("0", "")
+        RadioButton1.Text = num & "1:"
+        RadioButton2.Text = num & "2:"
+        RadioButton3.Text = num & "3:"
+        RadioButton4.Text = num & "4:"
+        RadioButton5.Text = num & "5:"
+        RadioButton6.Text = num & "6:"
+        RadioButton7.Text = num & "7:"
+        RadioButton8.Text = num & "8:"
+        RadioButton9.Text = num & "9:"
+        v = i + 10
+        RadioButton10.Text = v.ToString & ":"
+
+        RadioButton1.Enabled = False
+        RadioButton2.Enabled = False
+        RadioButton3.Enabled = False
+        RadioButton4.Enabled = False
+        RadioButton5.Enabled = False
+        RadioButton6.Enabled = False
+        RadioButton7.Enabled = False
+        RadioButton8.Enabled = False
+        RadioButton9.Enabled = False
+        RadioButton10.Enabled = False
+
+        Dim text As Integer = 0
+        Dim w As Integer = 1
+        Dim b1 As String = buf
+        Dim b2 As String = Nothing
+        Dim r As New System.Text.RegularExpressions.Regex( _
+"LIST/.+\.txt\((A|V|B),([0-9]|[1-9][0-9]),[1-8],[1-8]\)", _
+System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+        Dim max As System.Text.RegularExpressions.Match = r.Match(b1)
+        While max.Success
+            Dim b3 = b1.Substring(text, max.Index - text)
+            Select Case w
+                Case 1 + i
+                    RadioButton1.Enabled = True
+                Case 2 + i
+                    RadioButton2.Enabled = True
+                    RadioButton1.Text &= b3
+                Case 3 + i
+                    RadioButton3.Enabled = True
+                    RadioButton2.Text &= b3
+                Case 4 + i
+                    RadioButton4.Enabled = True
+                    RadioButton3.Text &= b3
+                Case 5 + i
+                    RadioButton5.Enabled = True
+                    RadioButton4.Text &= b3
+                Case 6 + i
+                    RadioButton6.Enabled = True
+                    RadioButton5.Text &= b3
+                Case 7 + i
+                    RadioButton7.Enabled = True
+                    RadioButton6.Text &= b3
+                Case 8 + i
+                    RadioButton8.Enabled = True
+                    RadioButton7.Text &= b3
+                Case 9 + i
+                    RadioButton9.Enabled = True
+                    RadioButton8.Text &= b3
+                Case 10 + i
+                    RadioButton10.Enabled = True
+                    RadioButton9.Text &= b3
+                Case 11 + i
+                    RadioButton10.Text &= b3
+            End Select
+            w += 1
+            text = max.Index + max.Length
+            max = max.NextMatch
+        End While
+        Dim b4 = b1.Substring(text, b1.Length - text)
+        Dim linefeed As Integer = b4.IndexOf(vbLf)
+        If linefeed > 0 Then
+            b4 = b4.Substring(0, linefeed)
+        End If
+        Select w
+            Case 2 + i
+                RadioButton1.Text &= b4
+            Case 3 + i
+                RadioButton2.Text &= b4
+            Case 4 + i
+                RadioButton3.Text &= b4
+            Case 5 + i
+                RadioButton4.Text &= b4
+            Case 6 + i
+                RadioButton5.Text &= b4
+            Case 7 + i
+                RadioButton6.Text &= b4
+            Case 8 + i
+                RadioButton7.Text &= b4
+            Case 9 + i
+                RadioButton8.Text &= b4
+            Case 10 + i
+                RadioButton9.Text &= b4
+            Case 11 + i
+                v = i + 10
+                RadioButton10.Text &= b4
+        End Select
+        Dim k As Integer = Convert.ToInt32((w - 2) \ 10)
+        NumericUpDown1.Maximum = Convert.ToDecimal(k)
+        Return True
+    End Function
 End Class
