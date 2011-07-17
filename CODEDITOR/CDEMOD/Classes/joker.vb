@@ -51,7 +51,7 @@
             Dim b2 = b1.Substring(0, 1).ToUpper
             Dim b3 = b1.Substring(4, 4).ToUpper
             Dim mask As Integer = Convert.ToInt32(b3, 16)
-            mask = &H10000 - mask
+            mask = &HFFFF - mask
             If b2 = "1" Then
                 tmp(1) = "0x9A000000 0x" & Convert.ToString(mask, 16).ToUpper & b3 & vbCrLf
             Else
