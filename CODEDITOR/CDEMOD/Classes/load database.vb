@@ -21,6 +21,8 @@ Public Class load_db
         Dim cwcar As String = "_L"
         Dim b4 As String = Nothing
 
+        My.Settings.lastcodepath = filename
+
         m.codetree.Nodes.Add(Path.GetFileNameWithoutExtension(filename)).ImageIndex = 0 ' Add the root node and set its icon
         m.progbar.Value = 0 ' Reset the progress bar
         m.progbar.Visible = True ' Show the progress bar 
@@ -692,12 +694,19 @@ Public Class load_db
                 i += 34
                 Array.ConstrainedCopy(bs, i - 32, cf_utf16, 0, 32)
                 str = System.Text.Encoding.GetEncoding(1201).GetString(cf_utf16)
-                Dim s1 As Integer = Convert.ToInt32(str.Substring(0, 2), 16)
-                Dim s2 As Integer = Convert.ToInt32(str.Substring(2, 2), 16)
-                Dim s3 As Integer = Convert.ToInt32(str.Substring(4, 2), 16)
-                Dim s4 As Integer = Convert.ToInt32(str.Substring(6, 2), 16)
-                b3 = Chr(s1) & Chr(s2) & Chr(s3)
-                b3 &= Chr(s4) & "-" & str.Substring(8, 5)
+                Dim sb As New System.Text.StringBuilder()
+                Dim s1 As String = Chr(Convert.ToInt32(str.Substring(0, 2), 16))
+                Dim s2 As String = Chr(Convert.ToInt32(str.Substring(2, 2), 16))
+                Dim s3 As String = Chr(Convert.ToInt32(str.Substring(4, 2), 16))
+                Dim s4 As String = Chr(Convert.ToInt32(str.Substring(6, 2), 16))
+                Dim s5 As String = str.Substring(8, 5)
+                sb.Append(s1)
+                sb.Append(s2)
+                sb.Append(s3)
+                sb.Append(s4)
+                sb.Append("-")
+                sb.Append(s5)
+                b3 = sb.ToString()
                 gnode.Tag = b3
                 counts(1) += 1
 

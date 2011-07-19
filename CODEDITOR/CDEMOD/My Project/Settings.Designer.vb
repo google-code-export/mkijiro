@@ -185,6 +185,18 @@ Namespace My
                 Me("gridview") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property lastcodepath() As String
+            Get
+                Return CType(Me("lastcodepath"),String)
+            End Get
+            Set
+                Me("lastcodepath") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

@@ -1,76 +1,78 @@
-﻿Public Class GID_sort
+﻿
+'ICOMPAREはインデックスを破壊するのでつかわない
+'Public Class GID_sort
 
-    Implements IComparer
+'    Implements IComparer
 
-    Private Function Compare(ByVal x As Object, ByVal y As Object) As Integer Implements IComparer.Compare
+'    Private Function Compare(ByVal x As Object, ByVal y As Object) As Integer Implements IComparer.Compare
 
-        Dim tx As TreeNode = CType(x, TreeNode)
-        Dim ty As TreeNode = CType(y, TreeNode)
+'        Dim tx As TreeNode = CType(x, TreeNode)
+'        Dim ty As TreeNode = CType(y, TreeNode)
 
-        If tx.Level = 1 Then ' If the treenode is level 1, aka a Game title
-            Return String.Compare(tx.Tag.ToString, ty.Tag.ToString) ' Sort the nodes by the game node tags which contain the GID's
-        Else
-            Return 0 ' If not, don't sort it.
-        End If
+'        If tx.Level = 1 And ty.Level = 1 Then ' If the treenode is level 1, aka a Game title
+'            Return String.Compare(tx.Tag.ToString, ty.Tag.ToString) ' Sort the nodes by the game node tags which contain the GID's
+'        Else
+'            Return 0 ' If not, don't sort it.
+'        End If
 
-    End Function
+'    End Function
 
-End Class
+'End Class
 
-Public Class G_Title_sort
+'Public Class GID_sortz
 
-    Implements IComparer
+'    Implements IComparer
 
-    Private Function Compare(ByVal x As Object, ByVal y As Object) As Integer Implements IComparer.Compare
+'    Private Function Compare(ByVal x As Object, ByVal y As Object) As Integer Implements IComparer.Compare
 
-        Dim tx As TreeNode = CType(x, TreeNode)
-        Dim ty As TreeNode = CType(y, TreeNode)
+'        Dim tx As TreeNode = CType(x, TreeNode)
+'        Dim ty As TreeNode = CType(y, TreeNode)
 
-        If tx.Level = 1 Then ' If the treenode is level 1, aka a Game title
-            Return String.Compare(tx.Text, ty.Text) ' Sort the nodes by the game node titles
-        Else
-            Return 0 ' If not, don't sort it.
-        End If
+'        If tx.Level = 1 And ty.Level = 1 Then ' If the treenode is level 1, aka a Game title
+'            Return String.Compare(ty.Tag.ToString, tx.Tag.ToString) ' Sort the nodes by the game node tags which contain the GID's
+'        Else
+'            Return 0 ' If not, don't sort it.
+'        End If
 
-    End Function
+'    End Function
 
-End Class
+'End Class
 
-Public Class C_Title_sort
+'Public Class G_Title_sort
 
-    Implements IComparer
+'    Implements IComparer
 
-    Private Function Compare(ByVal x As Object, ByVal y As Object) As Integer Implements IComparer.Compare
+'    Private Function Compare(ByVal x As Object, ByVal y As Object) As Integer Implements IComparer.Compare
 
-        Dim tx As TreeNode = CType(x, TreeNode)
-        Dim ty As TreeNode = CType(y, TreeNode)
+'        Dim tx As TreeNode = CType(x, TreeNode)
+'        Dim ty As TreeNode = CType(y, TreeNode)
 
-        If tx.Level = 2 Then ' If the tree node is level 2, aka Code name
-            Return String.Compare(tx.Text, ty.Text) ' Sort the nodes by the code node titles
-        Else
-            Return 0 ' If not, don't sort it.
-        End If
+'        If tx.Level = 1 And ty.Level = 1 Then ' If the treenode is level 1, aka a Game title
+'            Return String.Compare(tx.Text, ty.Text) ' Sort the nodes by the game node titles
+'        Else
+'            Return 0 ' If not, don't sort it.
+'        End If
 
-    End Function
+'    End Function
 
-End Class
+'End Class
 
-Public Class C_code_sort
+'Public Class G_Title_sortz
 
-    Implements IComparer
+'    Implements IComparer
 
-    Private Function Compare(ByVal x As Object, ByVal y As Object) As Integer Implements IComparer.Compare
+'    Private Function Compare(ByVal x As Object, ByVal y As Object) As Integer Implements IComparer.Compare
 
-        Dim tx As TreeNode = CType(x, TreeNode)
-        Dim ty As TreeNode = CType(y, TreeNode)
+'        Dim tx As TreeNode = CType(x, TreeNode)
+'        Dim ty As TreeNode = CType(y, TreeNode)
 
-        If tx.Level = 2 Then ' If the tree node is level 2, aka Code name
-            Dim b1 As String = tx.Tag.ToString
-            Dim b2 As String = ty.Tag.ToString
-            Return String.Compare(b1, b2) ' Sort the nodes by the code node titles
-        Else
-            Return 0 ' If not, don't sort it.
-        End If
+'        If tx.Level = 1 And ty.Level = 1 Then ' If the treenode is level 1, aka a Game title
+'            Return String.Compare(ty.Text, tx.Text) ' Sort the nodes by the game node titles
+'        Else
+'            Return 0 ' If not, don't sort it.
+'        End If
 
-    End Function
-End Class
+'    End Function
+
+'End Class
+
