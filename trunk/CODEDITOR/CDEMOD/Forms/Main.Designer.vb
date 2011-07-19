@@ -216,7 +216,7 @@ Partial Class MERGE
         Me.sort_GID.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Sort_GID１, Me.Sort_GID2})
         Me.sort_GID.Image = CType(resources.GetObject("sort_GID.Image"), System.Drawing.Image)
         Me.sort_GID.Name = "sort_GID"
-        Me.sort_GID.Size = New System.Drawing.Size(152, 22)
+        Me.sort_GID.Size = New System.Drawing.Size(112, 22)
         Me.sort_GID.Text = "ゲームID"
         Me.sort_GID.ToolTipText = "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ゲームIDでのソート"
         '
@@ -224,7 +224,7 @@ Partial Class MERGE
         '
         Me.Sort_GID１.Image = CType(resources.GetObject("Sort_GID１.Image"), System.Drawing.Image)
         Me.Sort_GID１.Name = "Sort_GID１"
-        Me.Sort_GID１.Size = New System.Drawing.Size(152, 22)
+        Me.Sort_GID１.Size = New System.Drawing.Size(94, 22)
         Me.Sort_GID１.Text = "昇順"
         Me.Sort_GID１.ToolTipText = "アルファベットA-Z　の順に並べ直します。"
         '
@@ -232,7 +232,7 @@ Partial Class MERGE
         '
         Me.Sort_GID2.Image = CType(resources.GetObject("Sort_GID2.Image"), System.Drawing.Image)
         Me.Sort_GID2.Name = "Sort_GID2"
-        Me.Sort_GID2.Size = New System.Drawing.Size(152, 22)
+        Me.Sort_GID2.Size = New System.Drawing.Size(94, 22)
         Me.Sort_GID2.Text = "降順"
         Me.Sort_GID2.ToolTipText = "アルファベットZ-A　の順に並べ直します。"
         '
@@ -241,7 +241,7 @@ Partial Class MERGE
         Me.name_sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Sort_GTitle1, Me.Sort_GTitle2})
         Me.name_sort.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.abc
         Me.name_sort.Name = "name_sort"
-        Me.name_sort.Size = New System.Drawing.Size(152, 22)
+        Me.name_sort.Size = New System.Drawing.Size(112, 22)
         Me.name_sort.Text = "ゲーム名"
         Me.name_sort.ToolTipText = "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ゲーム名でのソート"
         '
@@ -249,7 +249,7 @@ Partial Class MERGE
         '
         Me.Sort_GTitle1.Image = CType(resources.GetObject("Sort_GTitle1.Image"), System.Drawing.Image)
         Me.Sort_GTitle1.Name = "Sort_GTitle1"
-        Me.Sort_GTitle1.Size = New System.Drawing.Size(152, 22)
+        Me.Sort_GTitle1.Size = New System.Drawing.Size(94, 22)
         Me.Sort_GTitle1.Text = "昇順"
         Me.Sort_GTitle1.ToolTipText = "アルファベットA-Z,あ-漢字　の順に並べ直します。" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
@@ -257,7 +257,7 @@ Partial Class MERGE
         '
         Me.Sort_GTitle2.Image = CType(resources.GetObject("Sort_GTitle2.Image"), System.Drawing.Image)
         Me.Sort_GTitle2.Name = "Sort_GTitle2"
-        Me.Sort_GTitle2.Size = New System.Drawing.Size(152, 22)
+        Me.Sort_GTitle2.Size = New System.Drawing.Size(94, 22)
         Me.Sort_GTitle2.Text = "降順"
         Me.Sort_GTitle2.ToolTipText = "漢字-あ,アルファベットA-Z　の順に並べ直します。" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '

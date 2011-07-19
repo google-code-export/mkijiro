@@ -178,7 +178,7 @@ Public Class parser
     System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                 Dim mp As System.Text.RegularExpressions.Match = p.Match(s)
                 Dim cf As New System.Text.RegularExpressions.Regex( _
-    "[0-9A-Fa-f]{8} [0-9A-Fa-f]{8}", _
+    "[0-9A-Fa-f]{8} [0-9A-Za-z]{8}", _
     System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                 Dim mc As System.Text.RegularExpressions.Match = cf.Match(s)
                 Dim ar As New System.Text.RegularExpressions.Regex( _
@@ -191,6 +191,8 @@ Public Class parser
                 If mc.Success And bc2 <> "_M" And bc2 <> "_N" Then
                     s = mc.Value
                     s = s.Replace("_L ", "")
+                    s = System.Text.RegularExpressions.Regex.Replace( _
+                       s, "[g-zG-Z]", "A")
                     s = s.Insert(0, "0x")
                     s = s.Insert(11, "0x")
                     s = "_L " & s & vbCrLf

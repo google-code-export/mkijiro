@@ -585,6 +585,18 @@ Public Class MERGE
 
 #End Region
 
+    Private Sub CWCWIKIToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CWCWIKIToolStripMenuItem.Click
+        ToolStripButton1.Enabled = False
+        ToolStripButton2.Enabled = False
+        ToolStripButton3.Enabled = False
+    End Sub
+
+    Private Sub EXE起動ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EXE起動ToolStripMenuItem.Click
+        ToolStripButton1.Enabled = False
+        ToolStripButton2.Enabled = False
+        ToolStripButton3.Enabled = False
+    End Sub
+
     'コードパーサー
     Private Sub paserToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles paserToolStripMenuItem.Click
         Dim backup As String = cmt_tb.Text
@@ -1291,6 +1303,10 @@ Public Class MERGE
         Dim j As New joker
 
         changed.Text = ""
+        ToolStripButton1.Enabled = True
+        ToolStripButton2.Enabled = True
+        ToolStripButton3.Enabled = True
+
 
         Select Case codetree.SelectedNode.Level
 
@@ -1380,6 +1396,7 @@ Public Class MERGE
 
     End Sub
 
+    'ドラッグ
     Private Sub codetree_ItemDrag(ByVal sender As Object, _
         ByVal e As ItemDragEventArgs)
         Dim tv As TreeView = CType(sender, TreeView)
