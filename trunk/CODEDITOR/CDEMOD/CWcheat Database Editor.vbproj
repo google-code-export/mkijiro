@@ -225,6 +225,7 @@
   <ItemGroup>
     <None Include="Icons\save.png" />
     <None Include="Icons\alwaystop.png" />
+    <None Include="Icons\abc.png" />
     <Content Include="Icons\cabview_1.ico" />
     <None Include="Icons\psp_menu.png" />
     <None Include="Icons\new.png" />

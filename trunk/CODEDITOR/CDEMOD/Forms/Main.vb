@@ -1,6 +1,7 @@
 ﻿Imports System.IO       'Stream、StreamWriter、StreamReader、FileStream用
 Imports System.Text     'Encoding用
 Imports System.Diagnostics
+Imports System.Collections
 
 Public Class MERGE
     Friend database As String = Nothing
@@ -181,78 +182,122 @@ Public Class MERGE
     End Sub
 
 #End Region
-    'ICOMPAREはインデックスを破壊？
+
 #Region "Sort procedures"
 
-    Private Sub sort_GID_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles sort_GID.Click
+    'ICOMPAREはインデックスを破壊するのでつかわない
+    Function sort_game(ByVal mode As Integer) As Boolean
+
         error_window.Visible = False
         codetree.BeginUpdate() ' This will stop the tree view from constantly drawing the changes while we sort the nodes
-        codetree.TreeViewNodeSorter = New GID_sort
-        codetree.TreeViewNodeSorter = New GID_sort
+
+        Dim z As Integer = codetree.Nodes(0).Nodes.Count
+        Dim i As Integer = 0
+        Dim b1 As String = Nothing
+        Dim b2 As String = Nothing
+        Dim s(z) As String
+        For Each n As TreeNode In codetree.Nodes(0).Nodes
+            If (mode And 2) = 2 Then
+                b1 = n.Name
+            Else
+                b1 = n.Tag.ToString
+            End If
+            Dim sb As New System.Text.StringBuilder()
+            b2 = n.Index.ToString
+            b1 = b1.Replace(",", "+")
+            sb.Append(b1)
+            sb.Append(" ")
+            sb.Append(",")
+            sb.Append(b2)
+            s(i) = sb.ToString
+            i += 1
+        Next
+        Array.Sort(s)
+        Dim j As Integer = 1
+        Dim k As Integer = 0
+        Dim y As Integer = 0
+        Dim odd As Boolean = False
+        codetree.Nodes.Add("sort")
+        If (mode And 1) = 0 Then
+            While k < z
+                Dim b4 As String() = s(j).Split(CChar(","))
+                For Each ss In b4
+                    If odd = True Then
+                        y = CInt(ss)
+                        codetree.SelectedNode = codetree.Nodes(0).Nodes(y)
+                        Dim cln As TreeNode = CType(codetree.SelectedNode.Clone(), TreeNode)
+                        codetree.Nodes(1).Nodes.Add(cln)
+                        k += 1
+                        j += 1
+                    End If
+                    odd = True
+                Next
+                odd = False
+            End While
+        ElseIf (mode And 1) = 1 Then
+            j = z
+            While k < z
+                Dim b4 As String() = s(j).Split(CChar(","))
+                For Each ss In b4
+                    If odd = True Then
+                        y = CInt(ss)
+                        codetree.SelectedNode = codetree.Nodes(0).Nodes(y)
+                        Dim cln As TreeNode = CType(codetree.SelectedNode.Clone(), TreeNode)
+                        codetree.Nodes(1).Nodes.Add(cln)
+                        k += 1
+                        j -= 1
+                    End If
+                    odd = True
+                Next
+                odd = False
+            End While
+        End If
+        codetree.Nodes(0).Remove()
+        If codetree.Nodes.Count >= 1 Then
+            codetree.Nodes(0).Expand()
+        End If
+
+
         codetree.EndUpdate() ' Update the changes made to the tree view.
 
         If options_error.Checked = True Then
             error_window.Visible = True
         End If
-        ToolStripButton1.Enabled = False
-        ToolStripButton2.Enabled = False
-        ToolStripButton3.Enabled = False
+
+        Return True
+    End Function
+
+    Private Sub GID昇順(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Sort_GID１.Click
+
+        'codetree.TreeViewNodeSorter = New GID_sort
+        'codetree.TreeViewNodeSorter = New
+        sort_game(0)
 
     End Sub
 
-    Private Sub Sort_GTitle_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Sort_GTitle.Click
-
-        error_window.Visible = False
-        codetree.BeginUpdate() ' This will stop the tree view from constantly drawing the changes while we sort the nodes
-        codetree.TreeViewNodeSorter = New G_Title_sort
-        codetree.TreeViewNodeSorter = New G_Title_sort
-        codetree.EndUpdate() ' Update the changes made to the tree view.
-
-        If options_error.Checked = True Then
-            error_window.Visible = True
-        End If
-
-        ToolStripButton1.Enabled = False
-        ToolStripButton2.Enabled = False
-        ToolStripButton3.Enabled = False
+    Private Sub GID降順(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Sort_GID2.Click
+        'codetree.TreeViewNodeSorter = New GID_sortz
+        'codetree.TreeViewNodeSorter = New GID_sortz
+        sort_game(1)
 
     End Sub
 
-    Private Sub Sort_CTitle_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Sort_CTitle.Click
+    Private Sub Sort_GTitle1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Sort_GTitle1.Click
 
-        error_window.Visible = False
-        codetree.BeginUpdate() ' This will stop the tree view from constantly drawing the changes while we sort the nodes
-        codetree.TreeViewNodeSorter = New C_Title_sort
-        codetree.TreeViewNodeSorter = New C_Title_sort
-        codetree.EndUpdate() ' Update the changes made to the tree view.
-
-        If options_error.Checked = True Then
-            error_window.Visible = True
-        End If
-
-        ToolStripButton1.Enabled = False
-        ToolStripButton2.Enabled = False
-        ToolStripButton3.Enabled = False
+        'codetree.TreeViewNodeSorter = New G_Title_sort
+        'codetree.TreeViewNodeSorter = New G_Title_sort
+        sort_game(2)
 
     End Sub
 
-    Private Sub Sort_code_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Sort_code.Click
+    Private Sub Sort_CTitle2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Sort_GTitle2.Click
 
-        error_window.Visible = False
-        codetree.BeginUpdate() ' This will stop the tree view from constantly drawing the changes while we sort the nodes
-        codetree.TreeViewNodeSorter = New C_code_sort
-        codetree.TreeViewNodeSorter = New C_code_sort
-        codetree.EndUpdate() ' Update the changes made to the tree view.
-
-        If options_error.Checked = True Then
-            error_window.Visible = True
-        End If
-
-        ToolStripButton1.Enabled = False
-        ToolStripButton2.Enabled = False
-        ToolStripButton3.Enabled = False
+        'codetree.TreeViewNodeSorter = New G_Title_sortz
+        'codetree.TreeViewNodeSorter = New G_Title_sortz
+        sort_game(3)
 
     End Sub
+
 #End Region
 
 #Region "Options"
@@ -1127,6 +1172,98 @@ Public Class MERGE
 
 #Region "Code tree procedures"
 
+    Private Sub main_Load(ByVal sender As Object, _
+        ByVal e As EventArgs) Handles MyBase.Load
+        'http://dobon.net/vb/dotnet/control/tvdraganddrop.html
+        'TreeView1へのドラッグを受け入れる
+        codetree.AllowDrop = True
+
+
+        If System.IO.File.Exists(browser) Then
+        Else
+            browser = "IExplore.exe"
+        End If
+        If System.IO.File.Exists(My.Settings.lastcodepath) Then
+            Dim open As New load_db
+            database = My.Settings.lastcodepath
+            PSX = open.check_db(database, 932) ' Check the file's format
+            CODEFREAK = open.check2_db(database, 1201)
+            codetree.BeginUpdate()
+            error_window.list_load_error.BeginUpdate()
+
+            If CODEFREAK = True Then
+                reset_PSP()
+                Application.DoEvents()
+                enc1 = 1201
+                open.read_cf(database, 1201)
+                saveas_cwcheat.Enabled = True
+                saveas_psx.Enabled = False
+                UTF16BECP1201ToolStripMenuItem.Enabled = True
+            ElseIf PSX = True Then
+                enc1 = My.Settings.MSCODEPAGE
+                reset_PSX()
+                Application.DoEvents()
+                open.read_PSX(database, enc1)
+                saveas_psx.Enabled = True
+                saveas_cwcheat.Enabled = False
+                UTF16BECP1201ToolStripMenuItem.Enabled = False
+            Else
+                enc1 = My.Settings.MSCODEPAGE
+                reset_PSP()
+                Application.DoEvents()
+                open.read_PSP(database, enc1)
+                saveas_cwcheat.Enabled = True
+                saveas_psx.Enabled = False
+                UTF16BECP1201ToolStripMenuItem.Enabled = False
+            End If
+            If codetree.Nodes.Count >= 1 Then
+                codetree.Nodes(0).Expand()
+            End If
+            codetree.EndUpdate()
+            error_window.list_load_error.EndUpdate()
+            loaded = True
+            file_saveas.Enabled = True
+        End If
+
+        'イベントハンドラを追加する
+        AddHandler codetree.ItemDrag, AddressOf codetree_ItemDrag
+        AddHandler codetree.DragOver, AddressOf codetree_DragOver
+        AddHandler codetree.DragDrop, AddressOf codetree_DragDrop
+
+        If showerror = True Then
+            error_window.Show()
+            options_error.Checked = True
+            options_error.Text = "エラー画面を隠す"
+
+            If maintop = True Then
+                error_window.TopMost = True
+            End If
+
+        Else
+            error_window.Hide()
+            options_error.Checked = False
+            options_error.Text = "エラー画面を表示"
+        End If
+
+        If maintop = True Then
+            Me.TopMost = True
+            error_window.TopMost = True
+            options_ontop.Checked = True
+        Else
+            error_window.TopMost = False
+            options_ontop.Checked = False
+        End If
+
+
+        CT_tb.Font = My.Settings.CT_tb
+        GID_tb.Font = My.Settings.GID_tb
+        GT_tb.Font = My.Settings.CT_tb
+        cmt_tb.Font = My.Settings.cmt_tb
+        cl_tb.Font = My.Settings.cl_tb
+        codetree.Font = My.Settings.codetree
+
+    End Sub
+
     Private Sub codetree_KeyUp(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles codetree.KeyUp
         If e.KeyCode = Keys.Delete Then
             Try
@@ -1243,56 +1380,6 @@ Public Class MERGE
 
     End Sub
 
-    Private Sub main_Load(ByVal sender As Object, _
-        ByVal e As EventArgs) Handles MyBase.Load
-        'http://dobon.net/vb/dotnet/control/tvdraganddrop.html
-        'TreeView1へのドラッグを受け入れる
-        codetree.AllowDrop = True
-
-
-        If System.IO.File.Exists(browser) Then
-        Else
-            browser = "IExplore.exe"
-        End If
-        'イベントハンドラを追加する
-        AddHandler codetree.ItemDrag, AddressOf codetree_ItemDrag
-        AddHandler codetree.DragOver, AddressOf codetree_DragOver
-        AddHandler codetree.DragDrop, AddressOf codetree_DragDrop
-
-        If showerror = True Then
-            error_window.Show()
-            options_error.Checked = True
-            options_error.Text = "エラー画面を隠す"
-
-            If maintop = True Then
-                error_window.TopMost = True
-            End If
-
-        Else
-            error_window.Hide()
-            options_error.Checked = False
-            options_error.Text = "エラー画面を表示"
-        End If
-
-        If maintop = True Then
-            Me.TopMost = True
-            error_window.TopMost = True
-            options_ontop.Checked = True
-        Else
-            error_window.TopMost = False
-            options_ontop.Checked = False
-        End If
-
-
-        CT_tb.Font = My.Settings.CT_tb
-        GID_tb.Font = My.Settings.GID_tb
-        GT_tb.Font = My.Settings.CT_tb
-        cmt_tb.Font = My.Settings.cmt_tb
-        cl_tb.Font = My.Settings.cl_tb
-        codetree.Font = My.Settings.codetree
-
-    End Sub
-
     Private Sub codetree_ItemDrag(ByVal sender As Object, _
         ByVal e As ItemDragEventArgs)
         Dim tv As TreeView = CType(sender, TreeView)
@@ -1341,7 +1428,7 @@ Public Class MERGE
             If Not target Is Nothing AndAlso _
                 target.Level = [source].Level AndAlso _
                 Not target Is [source] AndAlso _
-                Not IsChildNode([source], target) andalso _
+                Not IsChildNode([source], target) AndAlso _
         ToolStripButton1.Enabled = True Then
                 'Nodeを選択する
                 If target.IsSelected = False Then
@@ -1572,7 +1659,6 @@ Public Class MERGE
     Private Sub reset_PSX()
 
         codetree.ImageList = PSX_iconset
-        Sort_GTitle.Image = My.Resources.sony_playstation
         With tool_menu
             add_game.Image = My.Resources.Resources.add_PSX_game
             rem_game.Image = My.Resources.Resources.remove_PSX_game
@@ -1584,7 +1670,6 @@ Public Class MERGE
     Private Sub reset_PSP()
 
         codetree.ImageList = iconset
-        Sort_GTitle.Image = My.Resources.sony_psp
         With tool_menu
             add_game.Image = My.Resources.Resources.add_game
             rem_game.Image = My.Resources.remove_game
@@ -1791,7 +1876,4 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
     End Sub
 #End Region
 
-    Private Sub ソート後はインデックスが破壊されますToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-
-    End Sub
 End Class
