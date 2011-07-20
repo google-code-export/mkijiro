@@ -616,11 +616,18 @@ Public Class MERGE
         Dim havegame As Boolean = False
         Dim nullcode As Boolean = False
         Dim i As Integer = 0
+        Dim level2insert As Integer = 1
+        Dim pos As Integer
+        Dim parent As Integer
         If codetree.Nodes.Count >= 1 And b1 <> Nothing Then
-            'If codetree.SelectedNode Is Nothing Then
-            '    codetree.SelectedNode = codetree.TopNode
-            'End If
+
+            codetree.BeginUpdate()
+
             Dim selnode1stlv As Integer = codetree.SelectedNode.Level
+            If selnode1stlv = 2 Then
+                pos = codetree.SelectedNode.Index
+                Parent = codetree.SelectedNode.Parent.Index
+            End If
 
             For Each s As String In b2
 
@@ -727,7 +734,8 @@ Public Class MERGE
                             Case Is = 1
                                 codetree.SelectedNode.Nodes.Add(newcode)
                             Case Is = 2
-                                codetree.SelectedNode.Parent.Nodes.Add(newcode)
+                                codetree.Nodes(0).Nodes(Parent).Nodes.Insert(pos + level2insert, newcode)
+                                level2insert += 1
                         End Select
 
                     Catch ex As Exception
@@ -740,6 +748,7 @@ Public Class MERGE
                     add = False
                 End If
             Next
+            codetree.EndUpdate()
         End If
         f.Dispose()
         cmt_tb.Text = backup
@@ -842,7 +851,7 @@ Public Class MERGE
         Try
             If codetree.SelectedNode.Level = 2 Then
 
-                If MessageBox.Show("選択されたコードを削除しますか?", "削除の確認", MessageBoxButtons.OKCancel, _
+                If MessageBox.Show("選択しているコードを削除しますか?", "削除の確認", MessageBoxButtons.OKCancel, _
                    MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
 
                     codetree.SelectedNode.Remove()
@@ -861,7 +870,7 @@ Public Class MERGE
 
         changed.Text = ""
         Try
-
+            GID_tb.Text = System.Text.RegularExpressions.Regex.Replace(GID_tb.Text, "[^\-0-9A-Za-z]", "0").ToUpper
             Select Case codetree.SelectedNode.Level
 
                 Case Is = 1
@@ -877,7 +886,6 @@ Public Class MERGE
                         .Text = GT_tb.Text
                         .Tag = GID_tb.Text
                     End With
-                    codetree.EndUpdate()
             End Select
 
         Catch ex As Exception
@@ -960,6 +968,7 @@ Public Class MERGE
             End If
 
             If codetree.SelectedNode.Level = 2 Then
+                codetree.BeginUpdate()
                 codetree.SelectedNode.Name = CT_tb.Text.Replace("_C0 ", "")
                 codetree.SelectedNode.Text = CT_tb.Text.Replace("_C0 ", "")
                 codetree.SelectedNode.Name = codetree.SelectedNode.Name.Replace("_C1 ", "")

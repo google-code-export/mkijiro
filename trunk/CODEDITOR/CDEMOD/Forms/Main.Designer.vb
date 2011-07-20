@@ -259,7 +259,7 @@ Partial Class MERGE
         Me.Sort_GTitle2.Name = "Sort_GTitle2"
         Me.Sort_GTitle2.Size = New System.Drawing.Size(94, 22)
         Me.Sort_GTitle2.Text = "降順"
-        Me.Sort_GTitle2.ToolTipText = "漢字-あ,アルファベットA-Z　の順に並べ直します。" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        Me.Sort_GTitle2.ToolTipText = "漢字-あ,アルファベットZ-A　の順に並べ直します。" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'menu_options
         '
@@ -357,7 +357,7 @@ Partial Class MERGE
         Me.GBKToolStripMenuItem.Name = "GBKToolStripMenuItem"
         Me.GBKToolStripMenuItem.Size = New System.Drawing.Size(166, 22)
         Me.GBKToolStripMenuItem.Text = "GBK(CP936)"
-        Me.GBKToolStripMenuItem.ToolTipText = "中国語GBKのDBを編集します"
+        Me.GBKToolStripMenuItem.ToolTipText = "簡体中国語GBKのDBを編集します"
         '
         'UTF16BECP1201ToolStripMenuItem
         '
