@@ -260,7 +260,7 @@ Public Class load_db
 
                                     End If
 
-                                    If counts(1) >= 20 Then
+                                    If counts(1) >= 100 Then
                                         ' Update the progressbar every 20 repetitions otherwise the program 
                                         ' will slow to a crawl from the constant re-draw of the progress bar
                                         m.progbar.Value = Convert.ToInt32(percent)
@@ -322,7 +322,7 @@ Public Class load_db
                     skip = False
                 End If
 
-                If counts(1) >= 20 Then
+                If counts(1) >= 100 Then
 
                     ' Update the progressbar every 20 repetitions otherwise the program 
                     ' will slow to a crawl from the constant re-draw of the progress bar
@@ -604,7 +604,7 @@ Public Class load_db
                     End If
                 End If
 
-                If counts(1) >= 20 Then
+                If counts(1) >= 100 Then
 
                     ' Update the progressbar every 20 repetitions otherwise the program 
                     ' will slow to a crawl from the constant re-draw of the progress bar
@@ -661,26 +661,30 @@ Public Class load_db
         Dim bs(CInt(file.Length)) As Byte
         'ファイルの内容をすべて読み込む
         file.Read(bs, 0, bs.Length)
-
+        Dim cfdatlen As Integer = bs.Length
         Dim cf_utf16(33) As Byte
         Dim str As String = Nothing
         Dim i As Integer = 0
-        Dim n As Integer = -3
-        While i < bs.Length - 3
+        Dim n As Integer = 0
+        While i < cfdatlen - 3
 
-            If bs(i) = &H47 And bs(i + 1) = &H20 Then 'G
+            If bs(i) = &H47 And bs(i + 1) = &H20 Then 'G ゲーム名
                 If b6 <> Nothing Then
                     cnode.Tag = b6
                     b6 = Nothing
                 End If
-                Do Until bs(i) = 10 'linefeed
+                i += 2
+                'ヽ|・∀・|ノCP1201　上=0x\4E0A
+                '　|＿＿＿|
+                '　　|　|
+                Do Until bs(i) = 10 And bs(i + 1) = 10 '0A0A
                     n += 1
                     i += 1
                 Loop
-                Dim name(n + 2) As Byte
-                Array.ConstrainedCopy(bs, i - n - 1, name, 0, n + 1)
+                Dim name(n + 1) As Byte
+                Array.ConstrainedCopy(bs, i - n, name, 0, n)
                 str = System.Text.Encoding.GetEncoding(1201).GetString(name)
-                n = -3
+                n = 0
                 gnode = New TreeNode(str.Trim)
                 With gnode
                     .Name = str.Trim
@@ -690,7 +694,7 @@ Public Class load_db
                 m.codetree.Nodes(0).Nodes.Add(gnode)
                 counts(1) += 1
 
-            ElseIf bs(i) = &H4D And bs(i + 1) = &H20 Then 'M
+            ElseIf bs(i) = &H4D And bs(i + 1) = &H20 Then 'M ゲームID
                 i += 34
                 Array.ConstrainedCopy(bs, i - 32, cf_utf16, 0, 32)
                 str = System.Text.Encoding.GetEncoding(1201).GetString(cf_utf16)
@@ -707,23 +711,28 @@ Public Class load_db
                 sb.Append("-")
                 sb.Append(s5)
                 b3 = sb.ToString()
+                b3 = b3.Replace(CChar(Chr(0)), "0")
                 gnode.Tag = b3
                 counts(1) += 1
 
-            ElseIf bs(i) = &H44 And bs(i + 1) = &H20 Then 'D
+            ElseIf bs(i) = &H44 And bs(i + 1) = &H20 Then 'D コード名
 
                 If b6 <> Nothing Then
                     cnode.Tag = b6
                     b6 = Nothing
                 End If
-                Do Until bs(i) = 10 'linefeed
+                i += 2
+                'ヽ|・∀・|ノCP1201　上=0x\4E0A
+                '　|＿＿＿|
+                '　　|　|
+                Do Until bs(i) = 10 And bs(i + 1) = 10  '0A0A
                     n += 1
                     i += 1
                 Loop
-                Dim cname(n + 2) As Byte
-                Array.ConstrainedCopy(bs, i - n - 1, cname, 0, n + 1)
+                Dim cname(n + 1) As Byte
+                Array.ConstrainedCopy(bs, i - n, cname, 0, n)
                 str = System.Text.Encoding.GetEncoding(1201).GetString(cname)
-                n = -3
+                n = 0
                 cnode = New TreeNode(str.Trim)
                 cnode.Name = str.Trim
                 cnode.ImageIndex = 2
@@ -731,24 +740,29 @@ Public Class load_db
                 b6 = "0" & vbCrLf
                 counts(1) += 1
 
-            ElseIf bs(i) = &H43 And bs(i + 1) = &H20 Then 'C
+            ElseIf bs(i) = &H43 And bs(i + 1) = &H20 Then 'C コード内容
                 b5 = Nothing
                 i += 34
                 Array.ConstrainedCopy(bs, i - 32, cf_utf16, 0, 32)
                 str = System.Text.Encoding.GetEncoding(1201).GetString(cf_utf16)
-                b5 &= "0x" & str.Substring(0, 8) & " "
-                b5 &= "0x" & str.Substring(8, 8) & vbCrLf
+                Dim sb As New System.Text.StringBuilder()
+                sb.Append("0x")
+                sb.Append(str.Substring(0, 8))
+                sb.Append(" 0x")
+                sb.Append(str.Substring(8, 8))
+                sb.Append(vbCrLf)
+                b5 = sb.ToString
                 b6 &= b5
                 counts(1) += 1
             End If
 
             i += 1
 
-            If counts(1) = 20 Then
+            If counts(1) = 100 Then
 
                 ' Update the progressbar every 20 repetitions otherwise the program 
                 ' will slow to a crawl from the constant re-draw of the progress bar
-                percent = (i * 100) / bs.Length
+                percent = (i * 100) / cfdatlen
                 m.progbar.Value = Convert.ToInt32(percent)
                 m.progbar.PerformStep()
                 Application.DoEvents()
@@ -916,13 +930,16 @@ Public Class load_db
 
         Dim file As New FileStream(filename, FileMode.Open, FileAccess.Read)
         Dim cf As Boolean = False
-            If file.ReadByte = &H47 Then ' If we're on a code line
-
-            cf = True
-            Else
-
-            cf = False
-
+        Dim Code(1) As Byte
+        Dim bs(1) As Byte
+        If file.ReadByte = &H47 And file.Length Mod 2 = 0 And file.Length > 54 Then
+            file.Seek(file.Length - 36, SeekOrigin.Begin)
+            file.Read(Code, 0, 2)
+            file.Seek(file.Length - 2, SeekOrigin.Begin)
+            file.Read(bs, 0, 2)
+            If Code(0) = &H43 And Code(1) = &H20 And bs(0) = 10 And bs(1) = 10 Then
+                cf = True
+            End If
         End If
 
         file.Close()
