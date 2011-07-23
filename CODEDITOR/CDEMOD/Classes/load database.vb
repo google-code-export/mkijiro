@@ -642,7 +642,6 @@ Public Class load_db
         Dim ew As error_window = error_window
         Dim memory As New MemoryManagement
         Dim file As New FileStream(filename, FileMode.Open, FileAccess.Read)
-        Dim buffer(4) As String ' 0 = stream buffer, 1 = SLUS address, 2 = Game name, 3 = Codes, 4 = fixed codes
         Dim counts(2) As Integer ' 0 = Line #, 1 = Progress bar counter, 2 = Total formatting errors, 3 = Error number
         Dim percent As Double = 0
         Dim gnode As New TreeNode ' Game name node for the TreeView control
@@ -666,99 +665,102 @@ Public Class load_db
         Dim str As String = Nothing
         Dim i As Integer = 0
         Dim n As Integer = 0
+        counts(0) = cfdatlen \ 36
+
         While i < cfdatlen - 3
 
-            If bs(i) = &H47 And bs(i + 1) = &H20 Then 'G ゲーム名
-                If b6 <> Nothing Then
-                    cnode.Tag = b6
-                    b6 = Nothing
+            If (i And 1) = 0 Then
+                If bs(i) = &H47 And bs(i + 1) = &H20 Then 'G ゲーム名
+                    If b6 <> Nothing Then
+                        cnode.Tag = b6
+                        b6 = Nothing
+                    End If
+                    i += 2
+                    'ヽ|・∀・|ノCP1201　上=0x\4E0A
+                    '　|＿＿＿|
+                    '　　|　|
+                    Do Until bs(i) = 10 And bs(i + 1) = 10 And (i And 1) = 0 '0A0A
+                        n += 1
+                        i += 1
+                    Loop
+                    Dim name(n + 1) As Byte
+                    Array.ConstrainedCopy(bs, i - n, name, 0, n)
+                    str = System.Text.Encoding.GetEncoding(1201).GetString(name)
+                    n = 0
+                    gnode = New TreeNode(str.Trim)
+                    With gnode
+                        .Name = str.Trim
+                        .Tag = Nothing
+                        .ImageIndex = 1
+                    End With
+                    m.codetree.Nodes(0).Nodes.Add(gnode)
+                    counts(1) += 1
+
+                ElseIf bs(i) = &H4D And bs(i + 1) = &H20 Then 'M ゲームID
+                    i += 34
+                    Array.ConstrainedCopy(bs, i - 32, cf_utf16, 0, 32)
+                    str = System.Text.Encoding.GetEncoding(1201).GetString(cf_utf16)
+                    Dim sb As New System.Text.StringBuilder()
+                    Dim s1 As String = Chr(Convert.ToInt32(str.Substring(0, 2), 16))
+                    Dim s2 As String = Chr(Convert.ToInt32(str.Substring(2, 2), 16))
+                    Dim s3 As String = Chr(Convert.ToInt32(str.Substring(4, 2), 16))
+                    Dim s4 As String = Chr(Convert.ToInt32(str.Substring(6, 2), 16))
+                    Dim s5 As String = str.Substring(8, 5)
+                    sb.Append(s1)
+                    sb.Append(s2)
+                    sb.Append(s3)
+                    sb.Append(s4)
+                    sb.Append("-")
+                    sb.Append(s5)
+                    b3 = sb.ToString()
+                    b3 = b3.Replace(CChar(Chr(0)), "0")
+                    gnode.Tag = b3
+                    counts(1) += 1
+
+                ElseIf bs(i) = &H44 And bs(i + 1) = &H20 Then 'D コード名
+
+                    If b6 <> Nothing Then
+                        cnode.Tag = b6
+                        b6 = Nothing
+                    End If
+                    i += 2
+                    'ヽ|・∀・|ノCP1201　上=0x\4E0A
+                    '　|＿＿＿|
+                    '　　|　|
+                    Do Until bs(i) = 10 And bs(i + 1) = 10 And (i And 1) = 0  '0A0A
+                        n += 1
+                        i += 1
+                    Loop
+                    Dim cname(n + 1) As Byte
+                    Array.ConstrainedCopy(bs, i - n, cname, 0, n)
+                    str = System.Text.Encoding.GetEncoding(1201).GetString(cname)
+                    n = 0
+                    cnode = New TreeNode(str.Trim)
+                    cnode.Name = str.Trim
+                    cnode.ImageIndex = 2
+                    gnode.Nodes.Add(cnode)
+                    b6 = "0" & vbCrLf
+                    counts(1) += 1
+
+                ElseIf bs(i) = &H43 And bs(i + 1) = &H20 Then 'C コード内容
+                    b5 = Nothing
+                    i += 34
+                    Array.ConstrainedCopy(bs, i - 32, cf_utf16, 0, 32)
+                    str = System.Text.Encoding.GetEncoding(1201).GetString(cf_utf16)
+                    Dim sb As New System.Text.StringBuilder()
+                    sb.Append("0x")
+                    sb.Append(str.Substring(0, 8))
+                    sb.Append(" 0x")
+                    sb.Append(str.Substring(8, 8))
+                    sb.Append(vbCrLf)
+                    b5 = sb.ToString
+                    b6 &= b5
+                    counts(1) += 1
                 End If
-                i += 2
-                'ヽ|・∀・|ノCP1201　上=0x\4E0A
-                '　|＿＿＿|
-                '　　|　|
-                Do Until bs(i) = 10 And bs(i + 1) = 10 And (i And 1) = 0 '0A0A
-                    n += 1
-                    i += 1
-                Loop
-                Dim name(n + 1) As Byte
-                Array.ConstrainedCopy(bs, i - n, name, 0, n)
-                str = System.Text.Encoding.GetEncoding(1201).GetString(name)
-                n = 0
-                gnode = New TreeNode(str.Trim)
-                With gnode
-                    .Name = str.Trim
-                    .Tag = Nothing
-                    .ImageIndex = 1
-                End With
-                m.codetree.Nodes(0).Nodes.Add(gnode)
-                counts(1) += 1
-
-            ElseIf bs(i) = &H4D And bs(i + 1) = &H20 Then 'M ゲームID
-                i += 34
-                Array.ConstrainedCopy(bs, i - 32, cf_utf16, 0, 32)
-                str = System.Text.Encoding.GetEncoding(1201).GetString(cf_utf16)
-                Dim sb As New System.Text.StringBuilder()
-                Dim s1 As String = Chr(Convert.ToInt32(str.Substring(0, 2), 16))
-                Dim s2 As String = Chr(Convert.ToInt32(str.Substring(2, 2), 16))
-                Dim s3 As String = Chr(Convert.ToInt32(str.Substring(4, 2), 16))
-                Dim s4 As String = Chr(Convert.ToInt32(str.Substring(6, 2), 16))
-                Dim s5 As String = str.Substring(8, 5)
-                sb.Append(s1)
-                sb.Append(s2)
-                sb.Append(s3)
-                sb.Append(s4)
-                sb.Append("-")
-                sb.Append(s5)
-                b3 = sb.ToString()
-                b3 = b3.Replace(CChar(Chr(0)), "0")
-                gnode.Tag = b3
-                counts(1) += 1
-
-            ElseIf bs(i) = &H44 And bs(i + 1) = &H20 Then 'D コード名
-
-                If b6 <> Nothing Then
-                    cnode.Tag = b6
-                    b6 = Nothing
-                End If
-                i += 2
-                'ヽ|・∀・|ノCP1201　上=0x\4E0A
-                '　|＿＿＿|
-                '　　|　|
-                Do Until bs(i) = 10 And bs(i + 1) = 10 And (i And 1) = 0  '0A0A
-                    n += 1
-                    i += 1
-                Loop
-                Dim cname(n + 1) As Byte
-                Array.ConstrainedCopy(bs, i - n, cname, 0, n)
-                str = System.Text.Encoding.GetEncoding(1201).GetString(cname)
-                n = 0
-                cnode = New TreeNode(str.Trim)
-                cnode.Name = str.Trim
-                cnode.ImageIndex = 2
-                gnode.Nodes.Add(cnode)
-                b6 = "0" & vbCrLf
-                counts(1) += 1
-
-            ElseIf bs(i) = &H43 And bs(i + 1) = &H20 Then 'C コード内容
-                b5 = Nothing
-                i += 34
-                Array.ConstrainedCopy(bs, i - 32, cf_utf16, 0, 32)
-                str = System.Text.Encoding.GetEncoding(1201).GetString(cf_utf16)
-                Dim sb As New System.Text.StringBuilder()
-                sb.Append("0x")
-                sb.Append(str.Substring(0, 8))
-                sb.Append(" 0x")
-                sb.Append(str.Substring(8, 8))
-                sb.Append(vbCrLf)
-                b5 = sb.ToString
-                b6 &= b5
-                counts(1) += 1
             End If
-
             i += 1
 
-            If counts(1) = 100 Then
+            If counts(1) = counts(0) Then
 
                 ' Update the progressbar every 20 repetitions otherwise the program 
                 ' will slow to a crawl from the constant re-draw of the progress bar
