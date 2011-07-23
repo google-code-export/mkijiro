@@ -677,7 +677,7 @@ Public Class load_db
                 'ヽ|・∀・|ノCP1201　上=0x\4E0A
                 '　|＿＿＿|
                 '　　|　|
-                Do Until bs(i) = 10 And bs(i + 1) = 10 '0A0A
+                Do Until bs(i) = 10 And bs(i + 1) = 10 And (i And 1) = 0 '0A0A
                     n += 1
                     i += 1
                 Loop
@@ -725,7 +725,7 @@ Public Class load_db
                 'ヽ|・∀・|ノCP1201　上=0x\4E0A
                 '　|＿＿＿|
                 '　　|　|
-                Do Until bs(i) = 10 And bs(i + 1) = 10  '0A0A
+                Do Until bs(i) = 10 And bs(i + 1) = 10 And (i And 1) = 0  '0A0A
                     n += 1
                     i += 1
                 Loop
