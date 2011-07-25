@@ -33,6 +33,7 @@ Partial Class MERGE
         Me.file_saveas = New System.Windows.Forms.ToolStripMenuItem()
         Me.saveas_cwcheat = New System.Windows.Forms.ToolStripMenuItem()
         Me.saveas_psx = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CODEFREAKToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.file_exit = New System.Windows.Forms.ToolStripMenuItem()
         Me.menu_sort = New System.Windows.Forms.ToolStripMenuItem()
         Me.sort_GID = New System.Windows.Forms.ToolStripMenuItem()
@@ -123,6 +124,8 @@ Partial Class MERGE
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
+        Me.Button4 = New System.Windows.Forms.Button()
+        Me.G有効ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.treeopen.SuspendLayout()
         Me.tool_menu.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -175,7 +178,7 @@ Partial Class MERGE
         '
         'file_saveas
         '
-        Me.file_saveas.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.saveas_cwcheat, Me.saveas_psx})
+        Me.file_saveas.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.saveas_cwcheat, Me.saveas_psx, Me.CODEFREAKToolStripMenuItem})
         Me.file_saveas.Enabled = False
         Me.file_saveas.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.save
         Me.file_saveas.Name = "file_saveas"
@@ -195,6 +198,13 @@ Partial Class MERGE
         Me.saveas_psx.Name = "saveas_psx"
         Me.saveas_psx.Size = New System.Drawing.Size(174, 22)
         Me.saveas_psx.Text = "PSX"
+        '
+        'CODEFREAKToolStripMenuItem
+        '
+        Me.CODEFREAKToolStripMenuItem.Image = CType(resources.GetObject("CODEFREAKToolStripMenuItem.Image"), System.Drawing.Image)
+        Me.CODEFREAKToolStripMenuItem.Name = "CODEFREAKToolStripMenuItem"
+        Me.CODEFREAKToolStripMenuItem.Size = New System.Drawing.Size(174, 22)
+        Me.CODEFREAKToolStripMenuItem.Text = "CODEFREAK"
         '
         'file_exit
         '
@@ -263,7 +273,7 @@ Partial Class MERGE
         '
         'menu_options
         '
-        Me.menu_options.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.options_ontop, Me.options_error, Me.ブラウザ変更ToolStripMenuItem})
+        Me.menu_options.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.options_ontop, Me.options_error, Me.ブラウザ変更ToolStripMenuItem, Me.G有効ToolStripMenuItem})
         Me.menu_options.Name = "menu_options"
         Me.menu_options.Size = New System.Drawing.Size(76, 20)
         Me.menu_options.Text = "オプション(&O)"
@@ -506,7 +516,7 @@ Partial Class MERGE
         Me.codetree.Location = New System.Drawing.Point(0, 104)
         Me.codetree.Name = "codetree"
         Me.codetree.SelectedImageIndex = 0
-        Me.codetree.Size = New System.Drawing.Size(309, 458)
+        Me.codetree.Size = New System.Drawing.Size(309, 563)
         Me.codetree.TabIndex = 1
         '
         'iconset
@@ -547,7 +557,7 @@ Partial Class MERGE
         Me.GT_tb.Location = New System.Drawing.Point(320, 95)
         Me.GT_tb.MaxLength = 64
         Me.GT_tb.Name = "GT_tb"
-        Me.GT_tb.Size = New System.Drawing.Size(316, 19)
+        Me.GT_tb.Size = New System.Drawing.Size(324, 19)
         Me.GT_tb.TabIndex = 2
         '
         'gtitle_lbl
@@ -586,7 +596,7 @@ Partial Class MERGE
         Me.CT_tb.Location = New System.Drawing.Point(320, 169)
         Me.CT_tb.MaxLength = 72
         Me.CT_tb.Name = "CT_tb"
-        Me.CT_tb.Size = New System.Drawing.Size(316, 19)
+        Me.CT_tb.Size = New System.Drawing.Size(324, 19)
         Me.CT_tb.TabIndex = 4
         '
         'codetitle_lbl
@@ -613,7 +623,7 @@ Partial Class MERGE
         Me.cl_tb.Multiline = True
         Me.cl_tb.Name = "cl_tb"
         Me.cl_tb.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.cl_tb.Size = New System.Drawing.Size(193, 234)
+        Me.cl_tb.Size = New System.Drawing.Size(193, 233)
         Me.cl_tb.TabIndex = 8
         '
         'cl_lbl
@@ -661,14 +671,14 @@ Partial Class MERGE
         Me.cmt_tb.Multiline = True
         Me.cmt_tb.Name = "cmt_tb"
         Me.cmt_tb.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.cmt_tb.Size = New System.Drawing.Size(321, 102)
+        Me.cmt_tb.Size = New System.Drawing.Size(329, 207)
         Me.cmt_tb.TabIndex = 5
         '
         'cm_lbl
         '
         Me.cm_lbl.AutoSize = True
         Me.cm_lbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cm_lbl.Location = New System.Drawing.Point(322, 442)
+        Me.cm_lbl.Location = New System.Drawing.Point(319, 442)
         Me.cm_lbl.Name = "cm_lbl"
         Me.cm_lbl.Size = New System.Drawing.Size(40, 15)
         Me.cm_lbl.TabIndex = 13
@@ -827,9 +837,9 @@ Partial Class MERGE
         Me.button_list.Enabled = False
         Me.button_list.FormattingEnabled = True
         Me.button_list.Items.AddRange(New Object() {"セレクト", "スタート", "↑", "→", "↓", "←", "Lトリガー", "Rトリガー", "△", "○", "Ｘ", "□", "HOME", "HOLD", "ミュート", "スクリーン", "音量+", "音量-", "WLAN UP", "REMOTE HOLD"})
-        Me.button_list.Location = New System.Drawing.Point(519, 206)
+        Me.button_list.Location = New System.Drawing.Point(519, 205)
         Me.button_list.Name = "button_list"
-        Me.button_list.Size = New System.Drawing.Size(116, 228)
+        Me.button_list.Size = New System.Drawing.Size(124, 228)
         Me.button_list.TabIndex = 9
         '
         'inverse_chk
@@ -1012,12 +1022,32 @@ Partial Class MERGE
         Me.Button3.Text = "・・"
         Me.Button3.UseVisualStyleBackColor = True
         '
+        'Button4
+        '
+        Me.Button4.Font = New System.Drawing.Font("MS UI Gothic", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Button4.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Button4.Location = New System.Drawing.Point(503, 447)
+        Me.Button4.Name = "Button4"
+        Me.Button4.Size = New System.Drawing.Size(10, 10)
+        Me.Button4.TabIndex = 31
+        Me.Button4.Text = "+"
+        Me.Button4.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage
+        Me.Button4.UseVisualStyleBackColor = False
+        Me.Button4.Visible = False
+        '
+        'G有効ToolStripMenuItem
+        '
+        Me.G有効ToolStripMenuItem.Name = "G有効ToolStripMenuItem"
+        Me.G有効ToolStripMenuItem.Size = New System.Drawing.Size(154, 22)
+        Me.G有効ToolStripMenuItem.Text = "G有効"
+        '
         'MERGE
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
         Me.ClientSize = New System.Drawing.Size(643, 562)
+        Me.Controls.Add(Me.Button4)
         Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Button1)
@@ -1053,7 +1083,7 @@ Partial Class MERGE
         Me.KeyPreview = True
         Me.MainMenuStrip = Me.treeopen
         Me.Name = "MERGE"
-        Me.Text = "CDEMOD20110719"
+        Me.Text = "CDEMOD20110725"
         Me.treeopen.ResumeLayout(False)
         Me.treeopen.PerformLayout()
         Me.tool_menu.ResumeLayout(False)
@@ -1163,5 +1193,8 @@ Partial Class MERGE
     Friend WithEvents name_sort As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Sort_GTitle1 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Sort_GTitle2 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents Button4 As System.Windows.Forms.Button
+    Friend WithEvents CODEFREAKToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents G有効ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class

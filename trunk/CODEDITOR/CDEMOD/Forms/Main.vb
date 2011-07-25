@@ -37,7 +37,7 @@ Public Class MERGE
         End If
         file_saveas.Enabled = True
         UTF16BECP1201ToolStripMenuItem.Enabled = False
-
+        CODEFREAKToolStripMenuItem.Enabled = False
         PSX = False
         saveas_cwcheat.Enabled = True
         saveas_psx.Enabled = False
@@ -62,7 +62,7 @@ Public Class MERGE
         End If
         file_saveas.Enabled = True
         UTF16BECP1201ToolStripMenuItem.Enabled = False
-
+        CODEFREAKToolStripMenuItem.Enabled = False
         PSX = True
         saveas_cwcheat.Enabled = False
         saveas_psx.Enabled = True
@@ -82,30 +82,28 @@ Public Class MERGE
             codetree.BeginUpdate()
             error_window.list_load_error.BeginUpdate()
 
+            UTF16BECP1201ToolStripMenuItem.Enabled = False
+            CODEFREAKToolStripMenuItem.Enabled = False
+            PSX = False
+
             If CODEFREAK = True Then
                 reset_PSP()
                 Application.DoEvents()
                 enc1 = 1201
                 open.read_cf(database, 1201)
-                saveas_cwcheat.Enabled = True
-                saveas_psx.Enabled = False
                 UTF16BECP1201ToolStripMenuItem.Enabled = True
+                CODEFREAKToolStripMenuItem.Enabled = True
             ElseIf PSX = True Then
                 enc1 = My.Settings.MSCODEPAGE
                 reset_PSX()
                 Application.DoEvents()
                 open.read_PSX(database, enc1)
-                saveas_psx.Enabled = True
-                saveas_cwcheat.Enabled = False
-                UTF16BECP1201ToolStripMenuItem.Enabled = False
+                PSX = True
             Else
                 enc1 = My.Settings.MSCODEPAGE
                 reset_PSP()
                 Application.DoEvents()
                 open.read_PSP(database, enc1)
-                saveas_cwcheat.Enabled = True
-                saveas_psx.Enabled = False
-                UTF16BECP1201ToolStripMenuItem.Enabled = False
             End If
             If codetree.Nodes.Count >= 1 Then
                 codetree.Nodes(0).Expand()
@@ -177,9 +175,170 @@ Public Class MERGE
         End If
     End Sub
 
+
+    Private Sub CODEFREAKToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CODEFREAKToolStripMenuItem.Click
+        Dim open As New load_db
+        Dim s As New save_db
+
+        If save_file.ShowDialog = Windows.Forms.DialogResult.OK And save_file.FileName <> Nothing Then
+            database = save_file.FileName
+
+            s.save_cf(database, 1201)
+
+            ' Reload the file
+            codetree.Nodes.Clear()
+            codetree.BeginUpdate()
+            error_window.list_load_error.BeginUpdate()
+
+            reset_PSP()
+            Application.DoEvents()
+            open.read_cf(database, 1201)
+
+            If codetree.Nodes.Count >= 1 Then
+                codetree.Nodes(0).Expand()
+            End If
+
+            codetree.EndUpdate()
+            error_window.list_load_error.EndUpdate()
+            file_saveas.Enabled = True
+        End If
+    End Sub
+
     Private Sub file_exit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles file_exit.Click
         Close()
     End Sub
+
+
+    '初期化
+#Region "Control resets"
+
+    Private Sub resets_level1()
+
+        ' Disable editing of games and codes if the root node is selected
+        GID_tb.Enabled = False
+        GID_tb.Text = Nothing
+        GT_tb.Enabled = False
+        GT_tb.Text = Nothing
+        cmt_tb.Enabled = False
+        cmt_tb.Text = Nothing
+        cl_tb.Enabled = False
+        cl_tb.Text = Nothing
+        CT_tb.Enabled = False
+        CT_tb.Text = Nothing
+        off_rd.Enabled = False
+        on_rd.Enabled = False
+        Panel1.Enabled = False
+
+        Button1.Enabled = False
+        Button2.Enabled = False
+        Button3.Enabled = False
+
+        If PSX = False Then
+            saveas_cwcheat.Enabled = True
+            saveas_psx.Enabled = False
+        ElseIf PSX = True Then
+            saveas_cwcheat.Enabled = False
+            saveas_psx.Enabled = True
+        End If
+
+        button_list.Enabled = False
+        inverse_chk.Enabled = False
+        inverse_chk.Checked = False
+
+        For i = 0 To 19 ' Reset the checked list box state
+            button_list.SetItemChecked(i, False)
+        Next
+
+    End Sub
+
+    Private Sub resets_level2()
+
+        ' Disable editing of a code if one is not selected
+        GID_tb.Enabled = True
+        GT_tb.Enabled = True
+        cmt_tb.Enabled = False
+        cmt_tb.Text = Nothing
+        cl_tb.Enabled = False
+        cl_tb.Text = Nothing
+        CT_tb.Enabled = False
+        CT_tb.Text = Nothing
+        off_rd.Enabled = False
+        on_rd.Enabled = False
+        Panel1.Enabled = False
+
+        Button1.Enabled = False
+        Button2.Enabled = False
+        Button3.Enabled = False
+
+
+        If PSX = False Then
+            saveas_cwcheat.Enabled = True
+            saveas_psx.Enabled = False
+        ElseIf PSX = True Then
+            saveas_cwcheat.Enabled = False
+            saveas_psx.Enabled = True
+        End If
+
+
+        button_list.Enabled = False
+        inverse_chk.Enabled = False
+        inverse_chk.Checked = False
+
+        For i = 0 To 19 ' Reset the checked list box state
+            button_list.SetItemChecked(i, False)
+        Next
+
+    End Sub
+
+    Private Sub resets_level3()
+
+        ' Enable editing of all controls
+        cmt_tb.Enabled = True
+        cmt_tb.Text = Nothing
+        cl_tb.Enabled = True
+        cl_tb.Text = Nothing
+        CT_tb.Enabled = True
+        off_rd.Enabled = True
+        on_rd.Enabled = True
+        Panel1.Enabled = True
+        Button1.Enabled = True
+        Button2.Enabled = True
+        Button3.Enabled = True
+
+        If PSX = False Then
+            button_list.Enabled = True
+            inverse_chk.Enabled = True
+        End If
+
+        For i = 0 To 19 ' Reset the checked list box state
+            button_list.SetItemChecked(i, False)
+        Next
+
+    End Sub
+
+    Private Sub reset_PSX()
+
+        codetree.ImageList = PSX_iconset
+        With tool_menu
+            add_game.Image = My.Resources.Resources.add_PSX_game
+            rem_game.Image = My.Resources.Resources.remove_PSX_game
+            save_gc.Image = My.Resources.Resources.save_PSX_game
+        End With
+
+    End Sub
+
+    Private Sub reset_PSP()
+
+        codetree.ImageList = iconset
+        With tool_menu
+            add_game.Image = My.Resources.Resources.add_game
+            rem_game.Image = My.Resources.remove_game
+            save_gc.Image = My.Resources.Resources.save_game
+        End With
+
+    End Sub
+
+#End Region
 
 #End Region
 
@@ -1190,7 +1349,7 @@ Public Class MERGE
         Return True
     End Function
 #End Region
-
+    'ツリー操作
 #Region "Code tree procedures"
 
     Private Sub main_Load(ByVal sender As Object, _
@@ -1591,120 +1750,6 @@ Public Class MERGE
     End Sub
 
 #End Region
-    '初期化
-#Region "Control resets"
-
-    Private Sub resets_level1()
-
-        ' Disable editing of games and codes if the root node is selected
-        GID_tb.Enabled = False
-        GID_tb.Text = Nothing
-        GT_tb.Enabled = False
-        GT_tb.Text = Nothing
-        cmt_tb.Enabled = False
-        cmt_tb.Text = Nothing
-        cl_tb.Enabled = False
-        cl_tb.Text = Nothing
-        CT_tb.Enabled = False
-        CT_tb.Text = Nothing
-        off_rd.Enabled = False
-        on_rd.Enabled = False
-        Panel1.Enabled = False
-
-        Button1.Enabled = False
-        Button2.Enabled = False
-        Button3.Enabled = False
-
-        button_list.Enabled = False
-        inverse_chk.Enabled = False
-        inverse_chk.Checked = False
-
-        For i = 0 To 19 ' Reset the checked list box state
-            button_list.SetItemChecked(i, False)
-        Next
-
-    End Sub
-
-    Private Sub resets_level2()
-
-        ' Disable editing of a code if one is not selected
-        GID_tb.Enabled = True
-        GT_tb.Enabled = True
-        cmt_tb.Enabled = False
-        cmt_tb.Text = Nothing
-        cl_tb.Enabled = False
-        cl_tb.Text = Nothing
-        CT_tb.Enabled = False
-        CT_tb.Text = Nothing
-        off_rd.Enabled = False
-        on_rd.Enabled = False
-        Panel1.Enabled = False
-
-        Button1.Enabled = False
-        Button2.Enabled = False
-        Button3.Enabled = False
-
-        button_list.Enabled = False
-        inverse_chk.Enabled = False
-        inverse_chk.Checked = False
-
-        For i = 0 To 19 ' Reset the checked list box state
-            button_list.SetItemChecked(i, False)
-        Next
-
-    End Sub
-
-    Private Sub resets_level3()
-
-        ' Enable editing of all controls
-        cmt_tb.Enabled = True
-        cmt_tb.Text = Nothing
-        cl_tb.Enabled = True
-        cl_tb.Text = Nothing
-        CT_tb.Enabled = True
-        off_rd.Enabled = True
-        on_rd.Enabled = True
-        Panel1.Enabled = True
-        Button1.Enabled = True
-        Button2.Enabled = True
-        Button3.Enabled = True
-
-        If PSX = False Then
-
-            button_list.Enabled = True
-            inverse_chk.Enabled = True
-
-        End If
-
-        For i = 0 To 19 ' Reset the checked list box state
-            button_list.SetItemChecked(i, False)
-        Next
-
-    End Sub
-
-    Private Sub reset_PSX()
-
-        codetree.ImageList = PSX_iconset
-        With tool_menu
-            add_game.Image = My.Resources.Resources.add_PSX_game
-            rem_game.Image = My.Resources.Resources.remove_PSX_game
-            save_gc.Image = My.Resources.Resources.save_PSX_game
-        End With
-
-    End Sub
-
-    Private Sub reset_PSP()
-
-        codetree.ImageList = iconset
-        With tool_menu
-            add_game.Image = My.Resources.Resources.add_game
-            rem_game.Image = My.Resources.remove_game
-            save_gc.Image = My.Resources.Resources.save_game
-        End With
-
-    End Sub
-
-#End Region
 
 #Region "Window control"
 
@@ -1901,5 +1946,13 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         changed.Text = "コード実行状態が変更されました。"
     End Sub
 #End Region
-
+    'ぐっりど値えｄぃた
+    Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button4.Click
+        Dim f As New Form1
+        f.Show(Me)
+    End Sub
+    '隠し
+    Private Sub G有効ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles G有効ToolStripMenuItem.Click
+        Button4.Visible = True
+    End Sub
 End Class
