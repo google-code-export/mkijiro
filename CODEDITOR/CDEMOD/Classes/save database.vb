@@ -3,8 +3,7 @@ Imports System.IO
 
 Public Class save_db
 
-    Public Sub save_cwcheat(ByVal filename As String, ByVal enc1 As Integer
-                            )
+    Public Sub save_cwcheat(ByVal filename As String, ByVal enc1 As Integer)
 
         Dim m As MERGE = MERGE
         Dim i As Integer = 0 ' Error count
@@ -229,6 +228,107 @@ Public Class save_db
         Next
 
         tw.Close()
+
+    End Sub
+
+    Public Sub save_cf(ByVal filename As String, ByVal enc1 As Integer)
+
+        Dim m As MERGE = MERGE
+        Dim i As Integer = 0
+        Dim buffer As String()
+        Dim fs As New System.IO.FileStream(filename, _
+                                           System.IO.FileMode.Create, _
+                                            System.IO.FileAccess.Write)
+        Dim cp1201len As Integer = 0
+        Dim bs(3 * 1024 * 1024) As Byte '３Mばいとぐらい
+
+        Try
+
+            For Each n As TreeNode In m.codetree.Nodes(0).Nodes
+                Dim gname As String = n.Name.ToString
+                Dim gid As String = n.Tag.ToString.Remove(4, 1)
+                Dim bytesData As Byte()
+                'Shift JISとして文字列に変換
+                bytesData = System.Text.Encoding.GetEncoding(932).GetBytes(gid)
+                Dim s1 As Integer = CType(bytesData(0), Integer)
+                Dim s2 As Integer = CType(bytesData(1), Integer)
+                Dim s3 As Integer = CType(bytesData(2), Integer)
+                Dim s4 As Integer = CType(bytesData(3), Integer)
+                gid = (s1 \ &H10).ToString("X") & (s1 And &HF).ToString("X")
+                gid &= (s2 \ &H10).ToString("X") & (s2 And &HF).ToString("X")
+                gid &= (s3 \ &H10).ToString("X") & (s3 And &HF).ToString("X")
+                gid &= (s4 \ &H10).ToString("X") & (s4 And &HF).ToString("X")
+                gid &= n.Tag.ToString.Remove(0, 5) & "820"
+                bs(i) = &H47
+                bs(i + 1) = &H20
+                i += 2
+                cp1201len = gname.Length * 2
+                Dim name(cp1201len + 1) As Byte
+                name = System.Text.Encoding.GetEncoding(1201).GetBytes(gname)
+                Array.ConstrainedCopy(name, 0, bs, i, cp1201len)
+                i += cp1201len
+                bs(i) = 10
+                bs(i + 1) = 10
+                i += 2
+                bs(i) = &H4D
+                bs(i + 1) = &H20
+                i += 2
+                Dim id(34) As Byte
+                cp1201len = gid.Length * 2
+                id = System.Text.Encoding.GetEncoding(1201).GetBytes(gid)
+                Array.ConstrainedCopy(id, 0, bs, i, cp1201len)
+                i += cp1201len
+                bs(i) = 10
+                bs(i + 1) = 10
+                i += 2
+
+                For Each n1 As TreeNode In n.Nodes
+
+                    bs(i) = &H44
+                    bs(i + 1) = &H20
+                    i += 2
+                    Dim ccname As String = n1.Text
+                    cp1201len = (ccname.Length - 1) * 2
+                    Dim cname(cp1201len + 1) As Byte
+                    cname = System.Text.Encoding.GetEncoding(1201).GetBytes(ccname)
+                    Array.ConstrainedCopy(cname, 0, bs, i, cp1201len)
+                    i += cp1201len
+                    bs(i) = 10
+                    bs(i + 1) = 10
+                    i += 2
+
+                    buffer = n1.Tag.ToString.Split(CChar(vbCrLf))
+
+                    For Each s As String In buffer
+                        If s.Contains("0x") Then
+                            bs(i) = &H43
+                            bs(i + 1) = &H20
+                            i += 2
+                            s = s.Replace("0x", "")
+                            s = s.Replace(" ", "")
+                            s = s.Remove(0, 1)
+                            Dim code(34) As Byte
+                            cp1201len = s.Length * 2
+                            code = System.Text.Encoding.GetEncoding(1201).GetBytes(s)
+                            Array.ConstrainedCopy(code, 0, bs, i, cp1201len)
+                            i += cp1201len
+                            bs(i) = 10
+                            bs(i + 1) = 10
+                            i += 2
+                        End If
+                    Next
+
+                Next
+
+
+            Next
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+        End Try
+
+        fs.Write(bs, 0, i)
+        fs.Close()
 
     End Sub
 
