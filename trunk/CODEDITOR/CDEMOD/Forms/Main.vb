@@ -121,9 +121,8 @@ Public Class MERGE
         Dim s As New save_db
 
         If save_file.ShowDialog = Windows.Forms.DialogResult.OK And save_file.FileName <> Nothing Then
+
             database = save_file.FileName
-
-
             s.save_cwcheat(database, enc1)
 
             ' Reload the file
@@ -151,8 +150,8 @@ Public Class MERGE
         Dim s As New save_db
 
         If save_file.ShowDialog = Windows.Forms.DialogResult.OK And save_file.FileName <> Nothing Then
-            database = save_file.FileName
 
+            database = save_file.FileName
             s.save_psx(database, enc1)
 
             ' Reload the file
@@ -175,16 +174,14 @@ Public Class MERGE
         End If
     End Sub
 
-
     Private Sub CODEFREAKToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CODEFREAKToolStripMenuItem.Click
         Dim open As New load_db
         Dim s As New save_db
 
         If save_file.ShowDialog = Windows.Forms.DialogResult.OK And save_file.FileName <> Nothing Then
+
             database = save_file.FileName
-
             s.save_cf(database, 1201)
-
             ' Reload the file
             codetree.Nodes.Clear()
             codetree.BeginUpdate()
@@ -1434,6 +1431,10 @@ Public Class MERGE
             options_ontop.Checked = False
         End If
 
+        If My.Settings.gridvalueedit = True Then
+            Button4.Visible = True
+        End If
+
 
         CT_tb.Font = My.Settings.CT_tb
         GID_tb.Font = My.Settings.GID_tb
@@ -1953,6 +1954,13 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
     End Sub
     '隠し
     Private Sub G有効ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles G有効ToolStripMenuItem.Click
-        Button4.Visible = True
+
+        If Button4.Visible = False Then
+            Button4.Visible = True
+        Else
+            Button4.Visible = False
+        End If
+        My.Settings.gridvalueedit = Button4.Visible
+
     End Sub
 End Class
