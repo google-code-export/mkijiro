@@ -241,6 +241,7 @@ Public Class save_db
                                             System.IO.FileAccess.Write)
         Dim cp1201len As Integer = 0
         Dim bs(3 * 1024 * 1024) As Byte '３Mばいとぐらい
+        Dim cfutf16be(34) As Byte
 
         Try
 
@@ -273,10 +274,9 @@ Public Class save_db
                 bs(i) = &H4D
                 bs(i + 1) = &H20
                 i += 2
-                Dim id(34) As Byte
                 cp1201len = gid.Length * 2
-                id = System.Text.Encoding.GetEncoding(1201).GetBytes(gid)
-                Array.ConstrainedCopy(id, 0, bs, i, cp1201len)
+                cfutf16be = System.Text.Encoding.GetEncoding(1201).GetBytes(gid)
+                Array.ConstrainedCopy(cfutf16be, 0, bs, i, cp1201len)
                 i += cp1201len
                 bs(i) = 10
                 bs(i + 1) = 10
@@ -307,10 +307,9 @@ Public Class save_db
                             s = s.Replace("0x", "")
                             s = s.Replace(" ", "")
                             s = s.Remove(0, 1)
-                            Dim code(34) As Byte
                             cp1201len = s.Length * 2
-                            code = System.Text.Encoding.GetEncoding(1201).GetBytes(s)
-                            Array.ConstrainedCopy(code, 0, bs, i, cp1201len)
+                            cfutf16be = System.Text.Encoding.GetEncoding(1201).GetBytes(s)
+                            Array.ConstrainedCopy(cfutf16be, 0, bs, i, cp1201len)
                             i += cp1201len
                             bs(i) = 10
                             bs(i + 1) = 10

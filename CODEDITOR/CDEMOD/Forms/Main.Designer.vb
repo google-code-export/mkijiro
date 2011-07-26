@@ -46,6 +46,7 @@ Partial Class MERGE
         Me.options_ontop = New System.Windows.Forms.ToolStripMenuItem()
         Me.options_error = New System.Windows.Forms.ToolStripMenuItem()
         Me.ブラウザ変更ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.G有効ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.menu_font = New System.Windows.Forms.ToolStripMenuItem()
         Me.ツリービューToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ゲームタイトルToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -125,7 +126,6 @@ Partial Class MERGE
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.Button4 = New System.Windows.Forms.Button()
-        Me.G有効ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.treeopen.SuspendLayout()
         Me.tool_menu.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -301,6 +301,12 @@ Partial Class MERGE
         Me.ブラウザ変更ToolStripMenuItem.Size = New System.Drawing.Size(154, 22)
         Me.ブラウザ変更ToolStripMenuItem.Text = "ブラウザ変更"
         Me.ブラウザ変更ToolStripMenuItem.ToolTipText = "コードサイトを表示するブラウザの変更をします。"
+        '
+        'G有効ToolStripMenuItem
+        '
+        Me.G有効ToolStripMenuItem.Name = "G有効ToolStripMenuItem"
+        Me.G有効ToolStripMenuItem.Size = New System.Drawing.Size(154, 22)
+        Me.G有効ToolStripMenuItem.Text = "G有効"
         '
         'menu_font
         '
@@ -516,7 +522,7 @@ Partial Class MERGE
         Me.codetree.Location = New System.Drawing.Point(0, 104)
         Me.codetree.Name = "codetree"
         Me.codetree.SelectedImageIndex = 0
-        Me.codetree.Size = New System.Drawing.Size(309, 563)
+        Me.codetree.Size = New System.Drawing.Size(309, 457)
         Me.codetree.TabIndex = 1
         '
         'iconset
@@ -666,12 +672,12 @@ Partial Class MERGE
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmt_tb.Enabled = False
         Me.cmt_tb.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.cmt_tb.Location = New System.Drawing.Point(317, 460)
+        Me.cmt_tb.Location = New System.Drawing.Point(320, 460)
         Me.cmt_tb.MaxLength = 0
         Me.cmt_tb.Multiline = True
         Me.cmt_tb.Name = "cmt_tb"
         Me.cmt_tb.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.cmt_tb.Size = New System.Drawing.Size(329, 207)
+        Me.cmt_tb.Size = New System.Drawing.Size(326, 101)
         Me.cmt_tb.TabIndex = 5
         '
         'cm_lbl
@@ -826,7 +832,7 @@ Partial Class MERGE
         'save_file
         '
         Me.save_file.Filter = "CWcheat (*.db)|*.db|ACTIOPREPLAY (*.ar)|*.ar|CMFUSION (*.cmf)|*.cmf|FreeCheat (*." & _
-            "txt)|*.txt"
+            "txt)|*.txt|CODEFREAK (*.dat)|*.dat"
         '
         'button_list
         '
@@ -1034,12 +1040,6 @@ Partial Class MERGE
         Me.Button4.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage
         Me.Button4.UseVisualStyleBackColor = False
         Me.Button4.Visible = False
-        '
-        'G有効ToolStripMenuItem
-        '
-        Me.G有効ToolStripMenuItem.Name = "G有効ToolStripMenuItem"
-        Me.G有効ToolStripMenuItem.Size = New System.Drawing.Size(154, 22)
-        Me.G有効ToolStripMenuItem.Text = "G有効"
         '
         'MERGE
         '
