@@ -1,5 +1,5 @@
 ﻿
-'ICOMPAREはインデックスを破壊するのでつかわない
+'ICOMPAREはインデックスを破壊する?のでつかわない
 'Public Class GID_sort
 
 '    Implements IComparer

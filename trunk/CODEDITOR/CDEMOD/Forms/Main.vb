@@ -340,8 +340,7 @@ Public Class MERGE
 #End Region
 
 #Region "Sort procedures"
-
-    'ICOMPAREはインデックスを破壊するのでつかわない
+    'さんぷるどおりだとうごくがなぜかうまくいかないので代替関数
     Function sort_game(ByVal mode As Integer) As Boolean
 
         error_window.Visible = False
@@ -360,10 +359,8 @@ Public Class MERGE
             End If
             Dim sb As New System.Text.StringBuilder()
             b2 = n.Index.ToString
-            b1 = b1.Replace(",", "+")
             sb.Append(b1)
-            sb.Append(" ")
-            sb.Append(",")
+            sb.Append(" ,")
             sb.Append(b2)
             s(i) = sb.ToString
             i += 1
@@ -372,47 +369,33 @@ Public Class MERGE
         Dim j As Integer = 1
         Dim k As Integer = 0
         Dim y As Integer = 0
-        Dim odd As Boolean = False
         codetree.Nodes.Add("sort")
         If (mode And 1) = 0 Then
             While k < z
-                Dim b4 As String() = s(j).Split(CChar(","))
-                For Each ss In b4
-                    If odd = True Then
-                        y = CInt(ss)
-                        codetree.SelectedNode = codetree.Nodes(0).Nodes(y)
-                        Dim cln As TreeNode = CType(codetree.SelectedNode.Clone(), TreeNode)
-                        codetree.Nodes(1).Nodes.Add(cln)
-                        k += 1
-                        j += 1
-                    End If
-                    odd = True
-                Next
-                odd = False
+                Dim commaindex As Integer = s(j).LastIndexOf(",") + 1
+                Dim ss As String = s(j).Substring(commaindex, s(j).Length - commaindex)
+                y = CInt(ss)
+                Dim cln As TreeNode = CType(codetree.Nodes(0).Nodes(y).Clone(), TreeNode)
+                codetree.Nodes(1).Nodes.Add(cln)
+                k += 1
+                j += 1
             End While
         ElseIf (mode And 1) = 1 Then
             j = z
             While k < z
-                Dim b4 As String() = s(j).Split(CChar(","))
-                For Each ss In b4
-                    If odd = True Then
-                        y = CInt(ss)
-                        codetree.SelectedNode = codetree.Nodes(0).Nodes(y)
-                        Dim cln As TreeNode = CType(codetree.SelectedNode.Clone(), TreeNode)
-                        codetree.Nodes(1).Nodes.Add(cln)
-                        k += 1
-                        j -= 1
-                    End If
-                    odd = True
-                Next
-                odd = False
+                Dim commaindex As Integer = s(j).LastIndexOf(",") + 1
+                Dim ss As String = s(j).Substring(commaindex, s(j).Length - commaindex)
+                y = CInt(ss)
+                Dim cln As TreeNode = CType(codetree.Nodes(0).Nodes(y).Clone(), TreeNode)
+                codetree.Nodes(1).Nodes.Add(cln)
+                k += 1
+                j -= 1
             End While
         End If
         codetree.Nodes(0).Remove()
         If codetree.Nodes.Count >= 1 Then
             codetree.Nodes(0).Expand()
         End If
-
 
         codetree.EndUpdate() ' Update the changes made to the tree view.
 
@@ -425,8 +408,9 @@ Public Class MERGE
 
     Private Sub GID昇順(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Sort_GID１.Click
 
+        'http://msdn.microsoft.com/ja-jp/library/system.windows.forms.treeview.treeviewnodesorter.aspx
         'codetree.TreeViewNodeSorter = New GID_sort
-        'codetree.TreeViewNodeSorter = New
+        'codetree.TreeViewNodeSorter = New GID_sort
         sort_game(0)
 
     End Sub
