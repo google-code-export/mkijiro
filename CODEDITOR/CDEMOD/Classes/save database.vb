@@ -259,11 +259,11 @@ Public Class save_db
                 gid &= (s2 \ &H10).ToString("X") & (s2 And &HF).ToString("X")
                 gid &= (s3 \ &H10).ToString("X") & (s3 And &HF).ToString("X")
                 gid &= (s4 \ &H10).ToString("X") & (s4 And &HF).ToString("X")
-                gid &= n.Tag.ToString.Remove(0, 5) & "820"
-                bs(i) = &H47
+                gid &= n.Tag.ToString.Remove(0, 5) & "820" 'CWC生コードモード
+                bs(i) = &H47 'G ゲームタイトル
                 bs(i + 1) = &H20
                 i += 2
-                cp1201len = gname.Length * 2
+                cp1201len = (gname.Length - 1) * 2
                 Dim name(cp1201len + 1) As Byte
                 name = System.Text.Encoding.GetEncoding(1201).GetBytes(gname)
                 Array.ConstrainedCopy(name, 0, bs, i, cp1201len)
@@ -271,7 +271,7 @@ Public Class save_db
                 bs(i) = 10
                 bs(i + 1) = 10
                 i += 2
-                bs(i) = &H4D
+                bs(i) = &H4D    'M ゲームID
                 bs(i + 1) = &H20
                 i += 2
                 cp1201len = gid.Length * 2
@@ -284,10 +284,10 @@ Public Class save_db
 
                 For Each n1 As TreeNode In n.Nodes
 
-                    bs(i) = &H44
+                    bs(i) = &H44 'D コード名
                     bs(i + 1) = &H20
                     i += 2
-                    Dim ccname As String = n1.Text
+                    Dim ccname As String = n1.Text.Trim
                     cp1201len = (ccname.Length - 1) * 2
                     Dim cname(cp1201len + 1) As Byte
                     cname = System.Text.Encoding.GetEncoding(1201).GetBytes(ccname)
@@ -301,7 +301,7 @@ Public Class save_db
 
                     For Each s As String In buffer
                         If s.Contains("0x") Then
-                            bs(i) = &H43
+                            bs(i) = &H43 'C コード内容
                             bs(i + 1) = &H20
                             i += 2
                             s = s.Replace("0x", "")
