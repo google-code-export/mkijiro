@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <StartupObject>CWcheat_Database_Editor.My.MyApplication</StartupObject>
     <RootNamespace>CWcheat_Database_Editor</RootNamespace>
-    <AssemblyName>CDE_CP932</AssemblyName>
+    <AssemblyName>CDE_CP932_FM4</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>WindowsForms</MyType>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
@@ -50,8 +50,9 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>CDE_CP932.xml</DocumentationFile>
-    <NoWarn>42105,42106,42107</NoWarn>
+    <DocumentationFile>CDE_CP932_FM4.xml</DocumentationFile>
+    <NoWarn>
+    </NoWarn>
     <WarningsAsErrors>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</WarningsAsErrors>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <Optimize>true</Optimize>
@@ -61,9 +62,10 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>CDE_CP932.xml</DocumentationFile>
-    <NoWarn>42105,42106,42107</NoWarn>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>CDE_CP932_FM4.xml</DocumentationFile>
+    <NoWarn>
+    </NoWarn>
     <WarningsAsErrors>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</WarningsAsErrors>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <DebugSymbols>true</DebugSymbols>
