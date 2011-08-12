@@ -2,6 +2,7 @@
 Imports System.Text     'Encoding用
 Imports System.Diagnostics
 Imports System.Collections
+Imports System.Text.RegularExpressions
 
 Public Class MERGE
     Friend database As String = Nothing
@@ -649,11 +650,11 @@ Public Class MERGE
 #End Region
 
 #Region "tree expand"
-    Private Sub すべて閉じるToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles すべて閉じるToolStripMenuItem.Click
+    Private Sub すべて閉じるToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles すべて閉じるToolStripMenuItem.Click, cntclose.Click
         codetree.CollapseAll()
     End Sub
 
-    Private Sub 全て展開するToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles 全て展開するToolStripMenuItem.Click
+    Private Sub 全て展開するToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles 全て展開するToolStripMenuItem.Click, cntexpand.Click
         codetree.ExpandAll()
     End Sub
 #End Region
@@ -685,7 +686,7 @@ Public Class MERGE
 #End Region
 
 #Region "EXECUTE"
-    Private Sub KAKASI_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles KAKASI.Click
+    Private Sub KAKASI_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles KAKASI.Click, KAKASI変換ToolStripMenuItem.Click
         boot("APP\kakasi.bat")
     End Sub
 
@@ -709,7 +710,7 @@ Public Class MERGE
         boot("APP\jane.bat")
     End Sub
 
-    Private Sub PSPへコードコピーToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PSPへコードコピーToolStripMenuItem.Click
+    Private Sub PSPへコードコピーToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PSPへコードコピーToolStripMenuItem.Click, PSPコピーToolStripMenuItem.Click
         boot("APP\cp.bat")
     End Sub
 
@@ -738,7 +739,7 @@ Public Class MERGE
     End Sub
 
     'コードパーサー
-    Private Sub paserToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles paserToolStripMenuItem.Click
+    Private Sub paserToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles paserToolStripMenuItem.Click, 新規ゲーム追加ToolStripMenuItem.Click
         Dim backup As String = cmt_tb.Text
         Dim f As New parser
         cmt_tb.Text = Nothing
@@ -766,7 +767,7 @@ Public Class MERGE
             Dim selnode1stlv As Integer = codetree.SelectedNode.Level
             If selnode1stlv = 2 Then
                 pos = codetree.SelectedNode.Index
-                Parent = codetree.SelectedNode.Parent.Index
+                parent = codetree.SelectedNode.Parent.Index
             End If
 
             For Each s As String In b2
@@ -874,7 +875,7 @@ Public Class MERGE
                             Case Is = 1
                                 codetree.SelectedNode.Nodes.Add(newcode)
                             Case Is = 2
-                                codetree.Nodes(0).Nodes(Parent).Nodes.Insert(pos + level2insert, newcode)
+                                codetree.Nodes(0).Nodes(parent).Nodes.Insert(pos + level2insert, newcode)
                                 level2insert += 1
                         End Select
 
@@ -1662,6 +1663,79 @@ Public Class MERGE
         End If
     End Function
 
+
+    Private Sub 半角カナ全角ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles 半角カナ全角ToolStripMenuItem.Click, hankaku.Click
+
+        codetree.BeginUpdate() ' This will stop the tree view from constantly drawing the changes while we sort the nodes
+
+        Dim z As Integer = 0
+        Dim i As Integer = 0
+        Dim b1 As String = Nothing
+        Dim b2 As String = Nothing
+        For Each n As TreeNode In codetree.Nodes(0).Nodes
+            b1 = n.Text
+            b1 = ConvANK(b1)
+            codetree.Nodes(0).Nodes(i).Text = b1
+            For Each m As TreeNode In n.Nodes
+                b2 = m.Text
+                b2 = ConvANK(b2)
+                codetree.Nodes(0).Nodes(i).Nodes(z).Text = b2
+                z += 1
+            Next
+            i += 1
+            z = 0
+        Next
+        codetree.EndUpdate()
+    End Sub
+
+    Public Function ConvANK(ByVal moto As String) As String
+        '-- 半角カタカナ(Unicodeで\uFF61-\uFF9Fが範囲)を全角に --
+        Dim re2 As Regex = New Regex("[\uFF61-\uFF9F]+")
+        Dim output2 As String = re2.Replace(moto, AddressOf myReplacer2)
+        Return output2
+    End Function
+
+    Shared Function myReplacer2(ByVal m As Match) As String
+        Return Strings.StrConv(m.Value, VbStrConv.Wide, 0)
+    End Function
+
+
+    Private Sub 中国語文字化け対策ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles 中国語文字化け対策ToolStripMenuItem.Click, CNchar.Click
+
+        codetree.BeginUpdate() ' This will stop the tree view from constantly drawing the changes while we sort the nodes
+
+        Dim z As Integer = 0
+        Dim i As Integer = 0
+        Dim b1 As String = Nothing
+        Dim b2 As String = Nothing
+        For Each n As TreeNode In codetree.Nodes(0).Nodes
+            b1 = n.Text
+            b1 = ConvCH(b1)
+            codetree.Nodes(0).Nodes(i).Text = b1
+            For Each m As TreeNode In n.Nodes
+                b2 = m.Text
+                b2 = ConvCH(b2)
+                codetree.Nodes(0).Nodes(i).Nodes(z).Text = b2
+                z += 1
+            Next
+            i += 1
+            z = 0
+        Next
+        codetree.EndUpdate()
+    End Sub
+
+
+    Public Function ConvCH(ByVal moto As String) As String
+        Dim st As String() = {"ー", "∋", "⊆", "⊇", "⊂", "⊃", "￢", "⇒", "⇔", "∃", "∂", "∇", "≪", "≫", "∬", "Å", "♯", "♭", "♪", "†", "‡", "¶", "⑪", "⑫", "⑬", "⑭", "⑮", "⑯", "⑰", "⑱", "⑲", "⑳", "㍉", "㌔", "㌢", "㍍", "㌘", "㌧", "㌃", "㌶", "㍑", "㍗", "㌍", "㌦", "㌣", "㌫", "㍊", "㌻", "㍻", "〝", "〟", "㏍", "㊤", "㊥", "㊦", "㊧", "㊨", "㍾", "㍽", "㍼"}
+        Dim sr As String() = {"-", " ", " ", " ", " ", " ", " ", "→", "↔", "ヨ", "", "", "<<", ">>", "ダブルインテグラル", "オングストローム", "シャ-プ", "フラット", "8分音符", "ダガー", "ダブルダガー", "パラグラフ", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "ミリ", "キロ", "センチ", "メ-トル", "グラム", "トン", "ア-ル", "ヘクタ-ル", "リットル", "ワｯト", "カロリ-", "ドル", "セント", "パ-セント", "ミリバ-ル", "ペ-ジ", "平成", " ", " ", "KK", "上", "中", "下", "左", "右", "明治", "大正", "昭和"}
+        Dim i As Integer = 0
+        While i < 60
+            moto = moto.Replace(st(i), sr(i))
+            i += 1
+        End While
+        Return moto
+    End Function
+
 #End Region
 
     'パッドボタン
@@ -1947,4 +2021,5 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         My.Settings.gridvalueedit = Button4.Visible
 
     End Sub
+
 End Class
