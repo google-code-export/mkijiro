@@ -84,11 +84,15 @@ Partial Class MERGE
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.新規ゲーム追加ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
-        Me.cntexpand = New System.Windows.Forms.ToolStripMenuItem()
         Me.cntclose = New System.Windows.Forms.ToolStripMenuItem()
+        Me.cntexpand = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.hankaku = New System.Windows.Forms.ToolStripMenuItem()
         Me.CNchar = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator()
+        Me.EXE起動ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.KAKASI変換ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.PSPコピーToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.iconset = New System.Windows.Forms.ImageList(Me.components)
         Me.open_file = New System.Windows.Forms.OpenFileDialog()
         Me.GID_tb = New System.Windows.Forms.TextBox()
@@ -137,10 +141,6 @@ Partial Class MERGE
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.Button4 = New System.Windows.Forms.Button()
-        Me.ToolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator()
-        Me.EXE起動ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.KAKASI変換ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.PSPコピーToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.treeopen.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.tool_menu.SuspendLayout()
@@ -561,7 +561,7 @@ Partial Class MERGE
         '
         'ContextMenuStrip1
         '
-        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.新規ゲーム追加ToolStripMenuItem, Me.ToolStripSeparator4, Me.cntexpand, Me.cntclose, Me.ToolStripSeparator5, Me.hankaku, Me.CNchar, Me.ToolStripSeparator6, Me.EXE起動ToolStripMenuItem1})
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.新規ゲーム追加ToolStripMenuItem, Me.ToolStripSeparator4, Me.cntclose, Me.cntexpand, Me.ToolStripSeparator5, Me.hankaku, Me.CNchar, Me.ToolStripSeparator6, Me.EXE起動ToolStripMenuItem1})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
         Me.ContextMenuStrip1.Size = New System.Drawing.Size(177, 176)
         '
@@ -576,17 +576,17 @@ Partial Class MERGE
         Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
         Me.ToolStripSeparator4.Size = New System.Drawing.Size(173, 6)
         '
-        'cntexpand
-        '
-        Me.cntexpand.Name = "cntexpand"
-        Me.cntexpand.Size = New System.Drawing.Size(176, 22)
-        Me.cntexpand.Text = "全て折りたたむ"
-        '
         'cntclose
         '
         Me.cntclose.Name = "cntclose"
         Me.cntclose.Size = New System.Drawing.Size(176, 22)
-        Me.cntclose.Text = "全て展開する"
+        Me.cntclose.Text = "全て折りたたむ"
+        '
+        'cntexpand
+        '
+        Me.cntexpand.Name = "cntexpand"
+        Me.cntexpand.Size = New System.Drawing.Size(176, 22)
+        Me.cntexpand.Text = "全て展開する"
         '
         'ToolStripSeparator5
         '
@@ -604,6 +604,30 @@ Partial Class MERGE
         Me.CNchar.Name = "CNchar"
         Me.CNchar.Size = New System.Drawing.Size(176, 22)
         Me.CNchar.Text = "中国語文字化け対策"
+        '
+        'ToolStripSeparator6
+        '
+        Me.ToolStripSeparator6.Name = "ToolStripSeparator6"
+        Me.ToolStripSeparator6.Size = New System.Drawing.Size(173, 6)
+        '
+        'EXE起動ToolStripMenuItem1
+        '
+        Me.EXE起動ToolStripMenuItem1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.KAKASI変換ToolStripMenuItem, Me.PSPコピーToolStripMenuItem})
+        Me.EXE起動ToolStripMenuItem1.Name = "EXE起動ToolStripMenuItem1"
+        Me.EXE起動ToolStripMenuItem1.Size = New System.Drawing.Size(176, 22)
+        Me.EXE起動ToolStripMenuItem1.Text = "EXE起動"
+        '
+        'KAKASI変換ToolStripMenuItem
+        '
+        Me.KAKASI変換ToolStripMenuItem.Name = "KAKASI変換ToolStripMenuItem"
+        Me.KAKASI変換ToolStripMenuItem.Size = New System.Drawing.Size(134, 22)
+        Me.KAKASI変換ToolStripMenuItem.Text = "KAKASI変換"
+        '
+        'PSPコピーToolStripMenuItem
+        '
+        Me.PSPコピーToolStripMenuItem.Name = "PSPコピーToolStripMenuItem"
+        Me.PSPコピーToolStripMenuItem.Size = New System.Drawing.Size(134, 22)
+        Me.PSPコピーToolStripMenuItem.Text = "PSPコピー"
         '
         'iconset
         '
@@ -1121,30 +1145,6 @@ Partial Class MERGE
         Me.Button4.UseVisualStyleBackColor = False
         Me.Button4.Visible = False
         '
-        'ToolStripSeparator6
-        '
-        Me.ToolStripSeparator6.Name = "ToolStripSeparator6"
-        Me.ToolStripSeparator6.Size = New System.Drawing.Size(173, 6)
-        '
-        'EXE起動ToolStripMenuItem1
-        '
-        Me.EXE起動ToolStripMenuItem1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.KAKASI変換ToolStripMenuItem, Me.PSPコピーToolStripMenuItem})
-        Me.EXE起動ToolStripMenuItem1.Name = "EXE起動ToolStripMenuItem1"
-        Me.EXE起動ToolStripMenuItem1.Size = New System.Drawing.Size(176, 22)
-        Me.EXE起動ToolStripMenuItem1.Text = "EXE起動"
-        '
-        'KAKASI変換ToolStripMenuItem
-        '
-        Me.KAKASI変換ToolStripMenuItem.Name = "KAKASI変換ToolStripMenuItem"
-        Me.KAKASI変換ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-        Me.KAKASI変換ToolStripMenuItem.Text = "KAKASI変換"
-        '
-        'PSPコピーToolStripMenuItem
-        '
-        Me.PSPコピーToolStripMenuItem.Name = "PSPコピーToolStripMenuItem"
-        Me.PSPコピーToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-        Me.PSPコピーToolStripMenuItem.Text = "PSPコピー"
-        '
         'MERGE
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
@@ -1307,8 +1307,8 @@ Partial Class MERGE
     Friend WithEvents 半角カナ全角ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents 中国語文字化け対策ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator4 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents cntexpand As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents cntclose As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents cntexpand As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator5 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents hankaku As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents CNchar As System.Windows.Forms.ToolStripMenuItem
