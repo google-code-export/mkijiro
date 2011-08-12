@@ -650,11 +650,11 @@ Public Class MERGE
 #End Region
 
 #Region "tree expand"
-    Private Sub すべて閉じるToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles すべて閉じるToolStripMenuItem.Click, cntclose.Click
+    Private Sub すべて閉じるToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles すべて閉じるToolStripMenuItem.Click, cntexpand.Click
         codetree.CollapseAll()
     End Sub
 
-    Private Sub 全て展開するToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles 全て展開するToolStripMenuItem.Click, cntexpand.Click
+    Private Sub 全て展開するToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles 全て展開するToolStripMenuItem.Click, cntclose.Click
         codetree.ExpandAll()
     End Sub
 #End Region
