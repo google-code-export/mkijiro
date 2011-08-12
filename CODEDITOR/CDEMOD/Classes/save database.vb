@@ -263,7 +263,7 @@ Public Class save_db
                 bs(i) = &H47 'G ゲームタイトル
                 bs(i + 1) = &H20
                 i += 2
-                cp1201len = (gname.Length - 1) * 2
+                cp1201len = gname.Length * 2
                 Dim name(cp1201len + 1) As Byte
                 name = System.Text.Encoding.GetEncoding(1201).GetBytes(gname)
                 Array.ConstrainedCopy(name, 0, bs, i, cp1201len)
@@ -288,7 +288,7 @@ Public Class save_db
                     bs(i + 1) = &H20
                     i += 2
                     Dim ccname As String = n1.Text.Trim
-                    cp1201len = (ccname.Length - 1) * 2
+                    cp1201len = ccname.Length * 2
                     Dim cname(cp1201len + 1) As Byte
                     cname = System.Text.Encoding.GetEncoding(1201).GetBytes(ccname)
                     Array.ConstrainedCopy(cname, 0, bs, i, cp1201len)
