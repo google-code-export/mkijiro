@@ -1,4 +1,6 @@
 ﻿Imports System.IO
+Imports System.Text.RegularExpressions
+
 Public Class parser
 
     Public Opener As Form
@@ -63,10 +65,10 @@ Public Class parser
                 End If
 
                 If s.Length >= 7 Then
-                    Dim t As New System.Text.RegularExpressions.Regex( _
+                    Dim t As New Regex( _
             "トラックバック.[0-9]+.+リンク元.[0-9]+", _
-            System.Text.RegularExpressions.RegexOptions.IgnoreCase)
-                    Dim w As System.Text.RegularExpressions.Match = t.Match(s)
+            RegexOptions.IgnoreCase)
+                    Dim w As Match = t.Match(s)
                     If w.Success Then
                         b2 &= "_CW cwcwiki用,最後にある場合は消さないでください" & vbCrLf
                         s = ""
@@ -116,7 +118,7 @@ Public Class parser
                             s = s.PadRight(24, "0"c)
                             If s.Substring(3, 2) = "0x" And s.Substring(14, 2) = "0x" Then
 
-                                s = System.Text.RegularExpressions.Regex.Replace( _
+                                s = Regex.Replace( _
                         s, "[g-zG-Z]", "A")
                                 s = s.ToUpper
                                 s = s.Replace("_A ", cwcar)
@@ -125,7 +127,7 @@ Public Class parser
                                 code = 1
                                 'popdb
                             ElseIf s.Substring(2, 1) = " " And s.Substring(11, 1) = " " Then
-                                s = System.Text.RegularExpressions.Regex.Replace( _
+                                s = Regex.Replace( _
                         s, "[g-zG-Z]", "A")
                                 s = s.ToUpper
                                 s = s.Replace("_A ", "_L ")
@@ -137,15 +139,15 @@ Public Class parser
                             b2 &= s.Trim & vbCrLf
                         ElseIf code = 1 Then
                             '661 名前：名無しさん＠お腹いっぱい。[sage] 投稿日：2011/06/28(火) 19:45:22.31 ID:Nl1EJEAd
-                            Dim r As New System.Text.RegularExpressions.Regex( _
+                            Dim r As New Regex( _
                     "[0-9]+ 名前.+投稿日.+ID.+", _
-                    System.Text.RegularExpressions.RegexOptions.IgnoreCase)
-                            Dim m As System.Text.RegularExpressions.Match = r.Match(s)
+                    RegexOptions.IgnoreCase)
+                            Dim m As Match = r.Match(s)
 
-                            Dim p As New System.Text.RegularExpressions.Regex( _
+                            Dim p As New Regex( _
                     "-{60}", _
-                    System.Text.RegularExpressions.RegexOptions.IgnoreCase)
-                            Dim l As System.Text.RegularExpressions.Match = p.Match(s)
+                    RegexOptions.IgnoreCase)
+                            Dim l As Match = p.Match(s)
                             If m.Success Then
                                 b2 &= s.Trim & vbCrLf
                             ElseIf l.Success Then
@@ -173,25 +175,25 @@ Public Class parser
 
         For Each s As String In b1
             If s.Length > 12 Then
-                Dim p As New System.Text.RegularExpressions.Regex( _
+                Dim p As New Regex( _
     "[0-9A-Fa-f]{8} [0-9A-Fa-f?]{4}", _
-    System.Text.RegularExpressions.RegexOptions.IgnoreCase)
-                Dim mp As System.Text.RegularExpressions.Match = p.Match(s)
-                Dim cf As New System.Text.RegularExpressions.Regex( _
+    RegexOptions.IgnoreCase)
+                Dim mp As Match = p.Match(s)
+                Dim cf As New Regex( _
     "[0-9A-Fa-f]{8} [0-9A-Za-z]{8}", _
-    System.Text.RegularExpressions.RegexOptions.IgnoreCase)
-                Dim mc As System.Text.RegularExpressions.Match = cf.Match(s)
-                Dim ar As New System.Text.RegularExpressions.Regex( _
+    RegexOptions.IgnoreCase)
+                Dim mc As Match = cf.Match(s)
+                Dim ar As New Regex( _
     "0x[0-9A-Fa-f]{8} 0x[0-9A-Fa-f]{8}", _
-    System.Text.RegularExpressions.RegexOptions.IgnoreCase)
-                Dim ma As System.Text.RegularExpressions.Match = ar.Match(s)
+    RegexOptions.IgnoreCase)
+                Dim ma As Match = ar.Match(s)
 
                 bc2 = s.Substring(0, 2)
                 s = s.Trim
                 If mc.Success And bc2 <> "_M" And bc2 <> "_N" Then
                     s = mc.Value
                     s = s.Replace("_L ", "")
-                    s = System.Text.RegularExpressions.Regex.Replace( _
+                    s = Regex.Replace( _
                        s, "[g-zG-Z]", "A")
                     s = s.Insert(0, "0x")
                     s = s.Insert(11, "0x")
@@ -237,14 +239,14 @@ Public Class parser
                 End If
 
                 '661 名前：名無しさん＠お腹いっぱい。[sage] 投稿日：2011/06/28(火) 19:45:22.31 ID:Nl1EJEAd
-                Dim r As New System.Text.RegularExpressions.Regex( _
+                Dim r As New Regex( _
         "[0-9]+ 名前.+投稿日.+ID.+", _
-        System.Text.RegularExpressions.RegexOptions.IgnoreCase)
-                Dim m As System.Text.RegularExpressions.Match = r.Match(s)
-                Dim p As New System.Text.RegularExpressions.Regex( _
+        RegexOptions.IgnoreCase)
+                Dim m As Match = r.Match(s)
+                Dim p As New Regex( _
         "-{60}", _
-        System.Text.RegularExpressions.RegexOptions.IgnoreCase)
-                Dim l As System.Text.RegularExpressions.Match = p.Match(s)
+        RegexOptions.IgnoreCase)
+                Dim l As Match = p.Match(s)
 
                 If m.Success Or bc1 = "#" Or bc2 = "_L" Or bc2 = "_M" Or bc2 = "_N" Then
                     s = s.Trim & vbCrLf

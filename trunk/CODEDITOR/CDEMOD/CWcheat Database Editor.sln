@@ -1,10 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-# SharpDevelop 4.0.0.7070
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "CWcheat Database Editor", "CWcheat Database Editor.vbproj", "{202D3F54-B339-4919-A6FE-4995BE78F0AF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CWcheat Database Editor.Converted", "..\CDEMOD.ConvertedToC#\CWcheat Database Editor.Converted.csproj", "{D78418B1-74A3-4B76-8439-7ADF51C3A028}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

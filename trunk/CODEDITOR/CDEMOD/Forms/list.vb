@@ -293,7 +293,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         RadioButton10.Enabled = False
 
         Dim text As Integer = 0
-        Dim w As Integer = 1
+        Dim w As Integer = 0
         Dim b1 As String = buf
         Dim b2 As String = Nothing
         Dim r As New System.Text.RegularExpressions.Regex( _
@@ -303,36 +303,36 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         While max.Success
             Dim b3 = b1.Substring(text, max.Index - text)
             Select Case w
-                Case 1 + i
+                Case 0 + i
                     RadioButton1.Enabled = True
-                Case 2 + i
+                Case 1 + i
                     RadioButton2.Enabled = True
                     RadioButton1.Text &= b3
-                Case 3 + i
+                Case 2 + i
                     RadioButton3.Enabled = True
                     RadioButton2.Text &= b3
-                Case 4 + i
+                Case 3 + i
                     RadioButton4.Enabled = True
                     RadioButton3.Text &= b3
-                Case 5 + i
+                Case 4 + i
                     RadioButton5.Enabled = True
                     RadioButton4.Text &= b3
-                Case 6 + i
+                Case 5 + i
                     RadioButton6.Enabled = True
                     RadioButton5.Text &= b3
-                Case 7 + i
+                Case 6 + i
                     RadioButton7.Enabled = True
                     RadioButton6.Text &= b3
-                Case 8 + i
+                Case 7 + i
                     RadioButton8.Enabled = True
                     RadioButton7.Text &= b3
-                Case 9 + i
+                Case 8 + i
                     RadioButton9.Enabled = True
                     RadioButton8.Text &= b3
-                Case 10 + i
+                Case 9 + i
                     RadioButton10.Enabled = True
                     RadioButton9.Text &= b3
-                Case 11 + i
+                Case 10 + i
                     RadioButton10.Text &= b3
             End Select
             w += 1
@@ -344,30 +344,31 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         If linefeed > 0 Then
             b4 = b4.Substring(0, linefeed)
         End If
-        Select w
-            Case 2 + i
+
+        Select Case w
+            Case 1 + i
                 RadioButton1.Text &= b4
-            Case 3 + i
+            Case 2 + i
                 RadioButton2.Text &= b4
-            Case 4 + i
+            Case 3 + i
                 RadioButton3.Text &= b4
-            Case 5 + i
+            Case 4 + i
                 RadioButton4.Text &= b4
-            Case 6 + i
+            Case 5 + i
                 RadioButton5.Text &= b4
-            Case 7 + i
+            Case 6 + i
                 RadioButton6.Text &= b4
-            Case 8 + i
+            Case 7 + i
                 RadioButton7.Text &= b4
-            Case 9 + i
+            Case 8 + i
                 RadioButton8.Text &= b4
-            Case 10 + i
+            Case 9 + i
                 RadioButton9.Text &= b4
-            Case 11 + i
+            Case 10 + i
                 v = i + 10
                 RadioButton10.Text &= b4
         End Select
-        Dim k As Integer = Convert.ToInt32((w - 2) \ 10)
+        Dim k As Integer = Convert.ToInt32((w - 1) \ 10)
         NumericUpDown1.Maximum = Convert.ToDecimal(k)
         Return True
     End Function
