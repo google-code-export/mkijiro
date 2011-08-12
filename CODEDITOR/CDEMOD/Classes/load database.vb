@@ -670,7 +670,7 @@ Public Class load_db
         While i < cfdatlen - 3
 
             If (i And 1) = 0 Then
-                If bs(i) = &H47 And bs(i + 1) = &H20 Then 'G ゲーム名
+                If bs(i) = &H47 AndAlso bs(i + 1) = &H20 Then 'G ゲーム名
                     If b6 <> Nothing Then
                         cnode.Tag = b6
                         b6 = Nothing
@@ -679,11 +679,11 @@ Public Class load_db
                     'ヽ|・∀・|ノCP1201　上=0x\4E0A
                     '　|＿＿＿|
                     '　　|　|
-                    Do Until bs(i) = 10 And bs(i + 1) = 10 And (i And 1) = 0 '0A0A
+                    Do Until bs(i) = 10 AndAlso bs(i + 1) = 10 AndAlso (i And 1) = 0 '0A0A
                         n += 1
                         i += 1
                     Loop
-                    Dim name(n + 1) As Byte
+                    Dim name(n - 1) As Byte
                     Array.ConstrainedCopy(bs, i - n, name, 0, n)
                     str = System.Text.Encoding.GetEncoding(1201).GetString(name)
                     n = 0
@@ -696,7 +696,7 @@ Public Class load_db
                     m.codetree.Nodes(0).Nodes.Add(gnode)
                     counts(1) += 1
 
-                ElseIf bs(i) = &H4D And bs(i + 1) = &H20 Then 'M ゲームID
+                ElseIf bs(i) = &H4D AndAlso bs(i + 1) = &H20 Then 'M ゲームID
                     i += 34
                     Array.ConstrainedCopy(bs, i - 32, cf_utf16, 0, 32)
                     str = System.Text.Encoding.GetEncoding(1201).GetString(cf_utf16)
@@ -717,7 +717,7 @@ Public Class load_db
                     gnode.Tag = b3
                     counts(1) += 1
 
-                ElseIf bs(i) = &H44 And bs(i + 1) = &H20 Then 'D コード名
+                ElseIf bs(i) = &H44 AndAlso bs(i + 1) = &H20 Then 'D コード名
 
                     If b6 <> Nothing Then
                         cnode.Tag = b6
@@ -727,11 +727,11 @@ Public Class load_db
                     'ヽ|・∀・|ノCP1201　上=0x\4E0A
                     '　|＿＿＿|
                     '　　|　|
-                    Do Until bs(i) = 10 And bs(i + 1) = 10 And (i And 1) = 0  '0A0A
+                    Do Until bs(i) = 10 AndAlso bs(i + 1) = 10 AndAlso (i And 1) = 0  '0A0A
                         n += 1
                         i += 1
                     Loop
-                    Dim cname(n + 1) As Byte
+                    Dim cname(n - 1) As Byte
                     Array.ConstrainedCopy(bs, i - n, cname, 0, n)
                     str = System.Text.Encoding.GetEncoding(1201).GetString(cname)
                     n = 0
@@ -742,7 +742,7 @@ Public Class load_db
                     b6 = "0" & vbCrLf
                     counts(1) += 1
 
-                ElseIf bs(i) = &H43 And bs(i + 1) = &H20 Then 'C コード内容
+                ElseIf bs(i) = &H43 AndAlso bs(i + 1) = &H20 Then 'C コード内容
                     b5 = Nothing
                     i += 34
                     Array.ConstrainedCopy(bs, i - 32, cf_utf16, 0, 32)

@@ -1417,6 +1417,7 @@ Public Class MERGE
         End If
 
         If My.Settings.gridvalueedit = True Then
+            G有効ToolStripMenuItem.Checked = True
             Button4.Visible = True
         End If
 
@@ -2015,8 +2016,10 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 
         If Button4.Visible = False Then
             Button4.Visible = True
+            G有効ToolStripMenuItem.Checked = True
         Else
             Button4.Visible = False
+            G有効ToolStripMenuItem.Checked = False
         End If
         My.Settings.gridvalueedit = Button4.Visible
 

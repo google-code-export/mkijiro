@@ -322,7 +322,9 @@ Partial Class MERGE
         '
         Me.G有効ToolStripMenuItem.Name = "G有効ToolStripMenuItem"
         Me.G有効ToolStripMenuItem.Size = New System.Drawing.Size(154, 22)
-        Me.G有効ToolStripMenuItem.Text = "G有効"
+        Me.G有効ToolStripMenuItem.Text = "グリッド編集有効"
+        Me.G有効ToolStripMenuItem.ToolTipText = "データグリッドでコードの値を編集します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "DEC；32bit10進数" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "OR；32bit論理和" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "AND；32bit論理積" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "XOR；32bit排他的論理和" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "B" & _
+            "INARY32；単精度浮動小数点数" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "BINARY32(16bit)；単精度浮動小数点数の16bit右シフト" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "BINARY16；半精度浮動小数点"
         '
         'menu_font
         '
@@ -429,12 +431,15 @@ Partial Class MERGE
         Me.半角カナ全角ToolStripMenuItem.Name = "半角カナ全角ToolStripMenuItem"
         Me.半角カナ全角ToolStripMenuItem.Size = New System.Drawing.Size(176, 22)
         Me.半角カナ全角ToolStripMenuItem.Text = "半角カナ->全角"
+        Me.半角カナ全角ToolStripMenuItem.ToolTipText = "半角カナを全角カタカナに変換します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "GBKCP936では半角カナ自体が存在しないため必要" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         '中国語文字化け対策ToolStripMenuItem
         '
         Me.中国語文字化け対策ToolStripMenuItem.Name = "中国語文字化け対策ToolStripMenuItem"
         Me.中国語文字化け対策ToolStripMenuItem.Size = New System.Drawing.Size(176, 22)
         Me.中国語文字化け対策ToolStripMenuItem.Text = "中国語文字化け対策"
+        Me.中国語文字化け対策ToolStripMenuItem.ToolTipText = "FREECHEAT/CMFUSIONで半角カナ以外の表示できない文字を代替文字かスペースで置換します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "対象；" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "・ー∋⊆⊇⊂⊃￢⇒⇔∀∃∂∇≪≫∬Å♯♭♪†‡¶" & _
+            "⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳㍉㌔㌢㍍㌘㌧㌃㌶㍑㍗㌍㌦㌣㌫㍊㌻㍻〝〟㏍㊤㊥㊦㊧㊨㍾㍽㍼"
         '
         'paserToolStripMenuItem
         '
@@ -542,7 +547,7 @@ Partial Class MERGE
         '
         Me.PSPへコードコピーToolStripMenuItem.Name = "PSPへコードコピーToolStripMenuItem"
         Me.PSPへコードコピーToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.PSPへコードコピーToolStripMenuItem.Text = "PSPへコードコピー"
+        Me.PSPへコードコピーToolStripMenuItem.Text = "PSPへコードを転送"
         Me.PSPへコードコピーToolStripMenuItem.ToolTipText = "PSPへコードを転送します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "メモリースティックのパスの入力が必要です" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "例；パスがE場合　E:"
         '
         'codetree
@@ -570,6 +575,8 @@ Partial Class MERGE
         Me.新規ゲーム追加ToolStripMenuItem.Name = "新規ゲーム追加ToolStripMenuItem"
         Me.新規ゲーム追加ToolStripMenuItem.Size = New System.Drawing.Size(176, 22)
         Me.新規ゲーム追加ToolStripMenuItem.Text = "パーサー"
+        Me.新規ゲーム追加ToolStripMenuItem.ToolTipText = "チートコードを加工してまとめて追加します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ツリーの一番上ファイル名を選択時；_S_G追加が有効になります" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ゲームタイトル名選択時；ゲームの末尾に追加" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "コード" & _
+            "名選択時；選択箇所の次に挿入"
         '
         'ToolStripSeparator4
         '
@@ -598,12 +605,15 @@ Partial Class MERGE
         Me.hankaku.Name = "hankaku"
         Me.hankaku.Size = New System.Drawing.Size(176, 22)
         Me.hankaku.Text = "半角カナ→全角"
+        Me.hankaku.ToolTipText = "半角カナを全角カタカナに変換します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "GBKCP936では半角カナ自体が存在しないため必要" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'CNchar
         '
         Me.CNchar.Name = "CNchar"
         Me.CNchar.Size = New System.Drawing.Size(176, 22)
         Me.CNchar.Text = "中国語文字化け対策"
+        Me.CNchar.ToolTipText = "FREECHEAT/CMFUSIONで半角カナ以外の表示できない文字を代替文字かスペースで置換します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "対象；" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "・ー∋⊆⊇⊂⊃￢⇒⇔∀∃∂∇≪≫∬Å♯♭♪†‡¶" & _
+            "⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳㍉㌔㌢㍍㌘㌧㌃㌶㍑㍗㌍㌦㌣㌫㍊㌻㍻〝〟㏍㊤㊥㊦㊧㊨㍾㍽㍼" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'ToolStripSeparator6
         '
@@ -620,14 +630,16 @@ Partial Class MERGE
         'KAKASI変換ToolStripMenuItem
         '
         Me.KAKASI変換ToolStripMenuItem.Name = "KAKASI変換ToolStripMenuItem"
-        Me.KAKASI変換ToolStripMenuItem.Size = New System.Drawing.Size(134, 22)
+        Me.KAKASI変換ToolStripMenuItem.Size = New System.Drawing.Size(161, 22)
         Me.KAKASI変換ToolStripMenuItem.Text = "KAKASI変換"
+        Me.KAKASI変換ToolStripMenuItem.ToolTipText = "kakasiエンジンで全角文字を半角カナに変換する" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "対象cheat.sjis.db"
         '
         'PSPコピーToolStripMenuItem
         '
         Me.PSPコピーToolStripMenuItem.Name = "PSPコピーToolStripMenuItem"
-        Me.PSPコピーToolStripMenuItem.Size = New System.Drawing.Size(134, 22)
-        Me.PSPコピーToolStripMenuItem.Text = "PSPコピー"
+        Me.PSPコピーToolStripMenuItem.Size = New System.Drawing.Size(161, 22)
+        Me.PSPコピーToolStripMenuItem.Text = "PSPへコードを転送"
+        Me.PSPコピーToolStripMenuItem.ToolTipText = "PSPへコードを転送します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "メモリースティックのパスの入力が必要です" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "例；パスがE場合　E:"
         '
         'iconset
         '
@@ -1187,7 +1199,7 @@ Partial Class MERGE
         Me.KeyPreview = True
         Me.MainMenuStrip = Me.treeopen
         Me.Name = "MERGE"
-        Me.Text = "CDEMOD20110812"
+        Me.Text = "CDEMOD20110813"
         Me.treeopen.ResumeLayout(False)
         Me.treeopen.PerformLayout()
         Me.ContextMenuStrip1.ResumeLayout(False)

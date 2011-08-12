@@ -23,13 +23,13 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.Button2 = New System.Windows.Forms.Button()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.アドレス = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.値 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.編集タイプ = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.入力値 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.Button2 = New System.Windows.Forms.Button()
-        Me.Label1 = New System.Windows.Forms.Label()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -37,36 +37,12 @@ Partial Class Form1
         '
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.アドレス, Me.値, Me.編集タイプ, Me.入力値})
+        Me.DataGridView1.ImeMode = System.Windows.Forms.ImeMode.Alpha
         Me.DataGridView1.Location = New System.Drawing.Point(3, 39)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.RowTemplate.Height = 21
         Me.DataGridView1.Size = New System.Drawing.Size(443, 240)
         Me.DataGridView1.TabIndex = 0
-        '
-        'アドレス
-        '
-        Me.アドレス.HeaderText = "アドレス"
-        Me.アドレス.MaxInputLength = 10
-        Me.アドレス.Name = "アドレス"
-        '
-        '値
-        '
-        Me.値.HeaderText = "値"
-        Me.値.MaxInputLength = 10
-        Me.値.Name = "値"
-        '
-        '編集タイプ
-        '
-        Me.編集タイプ.HeaderText = "編集タイプ"
-        Me.編集タイプ.MaxInputLength = 20
-        Me.編集タイプ.Name = "編集タイプ"
-        Me.編集タイプ.ReadOnly = True
-        '
-        '入力値
-        '
-        Me.入力値.HeaderText = "入力値"
-        Me.入力値.MaxInputLength = 11
-        Me.入力値.Name = "入力値"
         '
         'Button1
         '
@@ -96,6 +72,35 @@ Partial Class Form1
         Me.Label1.TabIndex = 3
         Me.Label1.Text = " "
         '
+        'アドレス
+        '
+        Me.アドレス.HeaderText = "アドレス"
+        Me.アドレス.MaxInputLength = 10
+        Me.アドレス.Name = "アドレス"
+        Me.アドレス.Resizable = System.Windows.Forms.DataGridViewTriState.[False]
+        '
+        '値
+        '
+        Me.値.HeaderText = "値"
+        Me.値.MaxInputLength = 10
+        Me.値.Name = "値"
+        Me.値.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        '
+        '編集タイプ
+        '
+        Me.編集タイプ.HeaderText = "編集タイプ"
+        Me.編集タイプ.MaxInputLength = 20
+        Me.編集タイプ.Name = "編集タイプ"
+        Me.編集タイプ.ReadOnly = True
+        Me.編集タイプ.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        '
+        '入力値
+        '
+        Me.入力値.HeaderText = "入力値"
+        Me.入力値.MaxInputLength = 11
+        Me.入力値.Name = "入力値"
+        Me.入力値.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
@@ -107,7 +112,7 @@ Partial Class Form1
         Me.Controls.Add(Me.DataGridView1)
         Me.Name = "Form1"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Form1"
+        Me.Text = "グリッドエディター"
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()

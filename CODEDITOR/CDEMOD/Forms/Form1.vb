@@ -189,13 +189,7 @@
 "0x[0-9A-F]{8} 0x[0-9A-F]{8}", _
 System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         Dim ed As System.Text.RegularExpressions.Match = r.Match(b1)
-        While ed.Success
-            DataGridView1.Rows.Add()
-            DataGridView1.Rows(i).Cells(0).Value = ed.Value.Substring(0, 10)
-            DataGridView1.Rows(i).Cells(1).Value = ed.Value.Substring(11, 10)
-            ed = ed.NextMatch()
-            i += 1
-        End While
+
 
         Dim column As New DataGridViewComboBoxColumn()
         'ComboBoxのリストに表示する項目を指定する
@@ -212,6 +206,16 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         DataGridView1.Columns.Insert(DataGridView1.Columns("編集タイプ").Index, column)
         DataGridView1.Columns.Remove("編集タイプ")
         column.Name = "編集タイプ"
+
+        While ed.Success
+            DataGridView1.Rows.Add()
+            DataGridView1.Rows(i).Cells(0).Value = ed.Value.Substring(0, 10)
+            DataGridView1.Rows(i).Cells(1).Value = ed.Value.Substring(11, 10)
+            DataGridView1.Rows(i).Cells(2).Value = "DEC"
+            ed = ed.NextMatch()
+            i += 1
+        End While
+
 
     End Sub
 
