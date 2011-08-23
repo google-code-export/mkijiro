@@ -78,6 +78,7 @@ Partial Class Form1
         Me.アドレス.MaxInputLength = 10
         Me.アドレス.Name = "アドレス"
         Me.アドレス.Resizable = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.アドレス.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         '
         '値
         '

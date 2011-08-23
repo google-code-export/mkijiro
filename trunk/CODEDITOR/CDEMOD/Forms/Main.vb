@@ -650,96 +650,9 @@ Public Class MERGE
 #End Region
 
 #Region "tree expand"
-    Private Sub すべて閉じるToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles すべて閉じるToolStripMenuItem.Click, cntclose.Click
-        codetree.CollapseAll()
-    End Sub
-
-    Private Sub 全て展開するToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles 全て展開するToolStripMenuItem.Click, cntexpand.Click
-        codetree.ExpandAll()
-    End Sub
-#End Region
-
-#Region "BROWSER"
-    Private Sub wikiToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles wikiToolStripMenuItem1.Click
-        System.Diagnostics.Process.Start(browser, "http://www21.atwiki.jp/cwcwiki/")
-    End Sub
-
-    Private Sub OHGToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OHGToolStripMenuItem.Click
-        System.Diagnostics.Process.Start(browser, "http://www.onehitgamer.com/forum/")
-    End Sub
-
-    Private Sub HAXToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HAXToolStripMenuItem.Click
-        System.Diagnostics.Process.Start(browser, "http://haxcommunity.org/")
-    End Sub
-
-    Private Sub CNGBAToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CNGBAToolStripMenuItem.Click
-        System.Diagnostics.Process.Start(browser, "http://www.cngba.com/forum-988-1.html")
-    End Sub
-
-    Private Sub GOOGLEToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GOOGLEToolStripMenuItem.Click
-        System.Diagnostics.Process.Start(browser, "http://www.google.co.jp/")
-    End Sub
-
-    Private Sub CMF暗号復元ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CMF暗号復元ToolStripMenuItem.Click
-        System.Diagnostics.Process.Start(browser, "http://raing3.gshi.org/psp-utilities/#index.php?action=cmf-decrypter")
-    End Sub
-#End Region
-
-#Region "EXECUTE"
-    Private Sub KAKASI_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles KAKASI.Click, KAKASI変換ToolStripMenuItem.Click
-        boot("APP\kakasi.bat")
-    End Sub
-
-    Private Sub MECAB_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MECAB.Click
-        boot("APP\kanahenkan.bat")
-    End Sub
-
-    Private Sub PMETAN変換ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PMETAN変換ToolStripMenuItem.Click
-        boot("APP\pme.bat")
-    End Sub
-
-    Private Sub TEMPAR鶴ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TEMPAR鶴ToolStripMenuItem.Click
-        boot("APP\temp.bat")
-    End Sub
-
-    Private Sub WgetToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles WgetToolStripMenuItem.Click
-        boot("APP\wget.bat")
-    End Sub
-
-    Private Sub JaneStyleToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles JaneStyleToolStripMenuItem.Click
-        boot("APP\jane.bat")
-    End Sub
-
-    Private Sub PSPへコードコピーToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PSPへコードコピーToolStripMenuItem.Click, PSPコピーToolStripMenuItem.Click
-        boot("APP\cp.bat")
-    End Sub
-
-    Function boot(ByVal exe As String) As Boolean
-        Dim b1 = My.Application.Info.DirectoryPath.ToString() & "\" & exe
-        If System.IO.File.Exists(b1) Then
-            Process.Start(exe)
-        Else
-            MessageBox.Show("'" + b1 + "'が見つかりませんでした。")
-        End If
-        Return True
-    End Function
-
-#End Region
-
-    Private Sub CWCWIKIToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CWCWIKIToolStripMenuItem.Click
-        ToolStripButton1.Enabled = False
-        ToolStripButton2.Enabled = False
-        ToolStripButton3.Enabled = False
-    End Sub
-
-    Private Sub EXE起動ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EXE起動ToolStripMenuItem.Click
-        ToolStripButton1.Enabled = False
-        ToolStripButton2.Enabled = False
-        ToolStripButton3.Enabled = False
-    End Sub
 
     'コードパーサー
-    Private Sub paserToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles paserToolStripMenuItem.Click, 新規ゲーム追加ToolStripMenuItem.Click
+    Private Sub paserToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles 新規ゲーム追加ToolStripMenuItem.Click, paserToolStripMenuItem.Click
         Dim backup As String = cmt_tb.Text
         Dim f As New parser
         cmt_tb.Text = Nothing
@@ -757,6 +670,7 @@ Public Class MERGE
         Dim havegame As Boolean = False
         Dim nullcode As Boolean = False
         Dim i As Integer = 0
+        Dim k As Integer = 0
         Dim level2insert As Integer = 1
         Dim pos As Integer
         Dim parent As Integer
@@ -775,7 +689,7 @@ Public Class MERGE
                 If s.Length >= 2 Then
                     If selnode1stlv = 0 Then
                         If s.Substring(0, 2) = "_S" Then
-                            If havegame = True Then
+                            If havegame = True AndAlso nullcode = False Then
                                 add = True
                                 i = 0
                             End If
@@ -790,10 +704,13 @@ Public Class MERGE
                                 .Tag = gid
                                 .ImageIndex = 1
                             End With
-                            codetree.Nodes(0).Nodes.Insert(0, gnode)
+                            codetree.Nodes(0).Nodes.Insert(k, gnode)
+                            k += 1
                             codetree.SelectedNode = gnode
                             havegame = True
+                            nullcode = True
                         End If
+
                     End If
 
                     If s.Substring(0, 2) = "_C" Then
@@ -893,6 +810,193 @@ Public Class MERGE
         End If
         f.Dispose()
         cmt_tb.Text = backup
+    End Sub
+
+    Private Sub すべて閉じるToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles すべて閉じるToolStripMenuItem.Click, cntclose.Click
+        codetree.CollapseAll()
+    End Sub
+
+    Private Sub 全て展開するToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles 全て展開するToolStripMenuItem.Click, cntexpand.Click
+        codetree.ExpandAll()
+    End Sub
+
+
+    Private Sub 半角カナ全角ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles 半角カナ全角ToolStripMenuItem.Click, hankaku.Click
+
+        codetree.BeginUpdate() ' This will stop the tree view from constantly drawing the changes while we sort the nodes
+
+        Dim z As Integer = 0
+        Dim i As Integer = 0
+        Dim b1 As String = Nothing
+        Dim b2 As String = Nothing
+        For Each n As TreeNode In codetree.Nodes(0).Nodes
+            b1 = n.Text
+            b1 = ConvANK(b1)
+            codetree.Nodes(0).Nodes(i).Text = b1
+            For Each m As TreeNode In n.Nodes
+                b2 = m.Text
+                b2 = ConvANK(b2)
+                codetree.Nodes(0).Nodes(i).Nodes(z).Text = b2
+                z += 1
+            Next
+            i += 1
+            z = 0
+        Next
+        codetree.EndUpdate()
+    End Sub
+
+    Public Function ConvANK(ByVal moto As String) As String
+        '-- 半角カタカナ(Unicodeで\uFF61-\uFF9Fが範囲)を全角に --
+        Dim re2 As Regex = New Regex("[\uFF61-\uFF9F]+")
+        Dim output2 As String = re2.Replace(moto, AddressOf myReplacer2)
+        Return output2
+    End Function
+
+    Shared Function myReplacer2(ByVal m As Match) As String
+        Return Strings.StrConv(m.Value, VbStrConv.Wide, 0)
+    End Function
+
+
+    Private Sub 中国語文字化け対策ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles 中国語文字化け対策ToolStripMenuItem.Click, CNchar.Click
+
+        codetree.BeginUpdate() ' This will stop the tree view from constantly drawing the changes while we sort the nodes
+
+        Dim z As Integer = 0
+        Dim i As Integer = 0
+        Dim b1 As String = Nothing
+        Dim b2 As String = Nothing
+        For Each n As TreeNode In codetree.Nodes(0).Nodes
+            b1 = n.Text
+            b1 = ConvCH(b1)
+            codetree.Nodes(0).Nodes(i).Text = b1
+            For Each m As TreeNode In n.Nodes
+                b2 = m.Text
+                b2 = ConvCH(b2)
+                codetree.Nodes(0).Nodes(i).Nodes(z).Text = b2
+                z += 1
+            Next
+            i += 1
+            z = 0
+        Next
+        codetree.EndUpdate()
+    End Sub
+
+
+    Public Function ConvCH(ByVal moto As String) As String
+        Dim st As String() = {"ー", "∋", "⊆", "⊇", "⊂", "⊃", "￢", "⇒", "⇔", "∃", "∂", "∇", "≪", "≫", "∬", "Å", "♯", "♭", "♪", "†", "‡", "¶", "⑪", "⑫", "⑬", "⑭", "⑮", "⑯", "⑰", "⑱", "⑲", "⑳", "㍉", "㌔", "㌢", "㍍", "㌘", "㌧", "㌃", "㌶", "㍑", "㍗", "㌍", "㌦", "㌣", "㌫", "㍊", "㌻", "㍻", "〝", "〟", "㏍", "㊤", "㊥", "㊦", "㊧", "㊨", "㍾", "㍽", "㍼"}
+        Dim sr As String() = {"-", " ", " ", " ", " ", " ", " ", "→", "↔", "ヨ", "", "", "<<", ">>", "ダブルインテグラル", "オングストローム", "シャ-プ", "フラット", "8分音符", "ダガー", "ダブルダガー", "パラグラフ", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "ミリ", "キロ", "センチ", "メ-トル", "グラム", "トン", "ア-ル", "ヘクタ-ル", "リットル", "ワｯト", "カロリ-", "ドル", "セント", "パ-セント", "ミリバ-ル", "ペ-ジ", "平成", " ", " ", "KK", "上", "中", "下", "左", "右", "明治", "大正", "昭和"}
+        Dim i As Integer = 0
+        For i = 0 To 59
+            If moto.Contains(st(i)) Then
+                moto = moto.Replace(st(i), sr(i))
+            End If
+        Next
+        Return moto
+    End Function
+
+#End Region
+
+#Region "BROWSER"
+    Private Sub wikiToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles wikiToolStripMenuItem1.Click
+        System.Diagnostics.Process.Start(browser, "http://www21.atwiki.jp/cwcwiki/")
+    End Sub
+
+    Private Sub OHGToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OHGToolStripMenuItem.Click
+        System.Diagnostics.Process.Start(browser, "http://www.onehitgamer.com/forum/")
+    End Sub
+
+    Private Sub HAXToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HAXToolStripMenuItem.Click
+        System.Diagnostics.Process.Start(browser, "http://haxcommunity.org/")
+    End Sub
+
+    Private Sub CNGBAToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CNGBAToolStripMenuItem.Click
+        System.Diagnostics.Process.Start(browser, "http://www.cngba.com/forum-988-1.html")
+    End Sub
+
+    Private Sub GOOGLEToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GOOGLEToolStripMenuItem.Click
+        System.Diagnostics.Process.Start(browser, "http://www.google.co.jp/")
+    End Sub
+
+    Private Sub CMF暗号復元ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CMF暗号復元ToolStripMenuItem.Click
+        System.Diagnostics.Process.Start(browser, "http://raing3.gshi.org/psp-utilities/#index.php?action=cmf-decrypter")
+    End Sub
+
+
+    Private Sub CDEMODToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        System.Diagnostics.Process.Start(browser, "http://unzu127xp.pa.land.to/data/IJIRO/CDEMOD/bin/Release/index.html")
+    End Sub
+#End Region
+
+#Region "EXECUTE"
+    Private Sub KAKASI_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles KAKASI.Click, KAKASI変換ToolStripMenuItem.Click
+        boot("APP\kakasi.bat")
+    End Sub
+
+    Private Sub MECAB_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MECAB.Click
+        boot("APP\kanahenkan.bat")
+    End Sub
+
+    Private Sub PMETAN変換ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PMETAN変換ToolStripMenuItem.Click
+        boot("APP\pme.bat")
+    End Sub
+
+    Private Sub TEMPAR鶴ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TEMPAR鶴ToolStripMenuItem.Click
+        boot("APP\temp.bat")
+    End Sub
+
+    Private Sub WgetToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles WgetToolStripMenuItem.Click
+        boot("APP\wget.bat")
+    End Sub
+
+    Private Sub JaneStyleToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles JaneStyleToolStripMenuItem.Click
+        boot("APP\jane.bat")
+    End Sub
+
+    Private Sub PSPへコードコピーToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PSPへコードコピーToolStripMenuItem.Click, PSPコピーToolStripMenuItem.Click
+        boot("APP\cp.bat")
+    End Sub
+
+    Function boot(ByVal exe As String) As Boolean
+        Dim b1 = My.Application.Info.DirectoryPath.ToString() & "\" & exe
+        If System.IO.File.Exists(b1) Then
+            Process.Start(exe)
+        Else
+            MessageBox.Show("'" + b1 + "'が見つかりませんでした。")
+        End If
+        Return True
+    End Function
+
+#End Region
+
+#Region "HELP"
+
+    Private Sub オンラインヘルプToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles オンラインヘルプToolStripMenuItem.Click
+        System.Diagnostics.Process.Start(browser, "http://unzu127xp.pa.land.to/data/IJIRO/CDEMOD/bin/Release/index.html")
+    End Sub
+
+    Private Sub バージョン情報ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles バージョン情報ToolStripMenuItem.Click
+        Dim f As New Form2
+        f.ShowDialog(Me)
+        f.Dispose()
+    End Sub
+#End Region
+
+    Private Sub CWCWIKIToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CWCWIKIToolStripMenuItem.Click
+        ToolStripButton1.Enabled = False
+        ToolStripButton2.Enabled = False
+        ToolStripButton3.Enabled = False
+    End Sub
+
+    Private Sub EXE起動ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EXE起動ToolStripMenuItem.Click
+        ToolStripButton1.Enabled = False
+        ToolStripButton2.Enabled = False
+        ToolStripButton3.Enabled = False
+    End Sub
+
+    Private Sub ヘルプHToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ヘルプHToolStripMenuItem.Click
+        ToolStripButton1.Enabled = False
+        ToolStripButton2.Enabled = False
+        ToolStripButton3.Enabled = False
     End Sub
 
 #End Region
@@ -1665,77 +1769,6 @@ Public Class MERGE
     End Function
 
 
-    Private Sub 半角カナ全角ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles 半角カナ全角ToolStripMenuItem.Click, hankaku.Click
-
-        codetree.BeginUpdate() ' This will stop the tree view from constantly drawing the changes while we sort the nodes
-
-        Dim z As Integer = 0
-        Dim i As Integer = 0
-        Dim b1 As String = Nothing
-        Dim b2 As String = Nothing
-        For Each n As TreeNode In codetree.Nodes(0).Nodes
-            b1 = n.Text
-            b1 = ConvANK(b1)
-            codetree.Nodes(0).Nodes(i).Text = b1
-            For Each m As TreeNode In n.Nodes
-                b2 = m.Text
-                b2 = ConvANK(b2)
-                codetree.Nodes(0).Nodes(i).Nodes(z).Text = b2
-                z += 1
-            Next
-            i += 1
-            z = 0
-        Next
-        codetree.EndUpdate()
-    End Sub
-
-    Public Function ConvANK(ByVal moto As String) As String
-        '-- 半角カタカナ(Unicodeで\uFF61-\uFF9Fが範囲)を全角に --
-        Dim re2 As Regex = New Regex("[\uFF61-\uFF9F]+")
-        Dim output2 As String = re2.Replace(moto, AddressOf myReplacer2)
-        Return output2
-    End Function
-
-    Shared Function myReplacer2(ByVal m As Match) As String
-        Return Strings.StrConv(m.Value, VbStrConv.Wide, 0)
-    End Function
-
-
-    Private Sub 中国語文字化け対策ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles 中国語文字化け対策ToolStripMenuItem.Click, CNchar.Click
-
-        codetree.BeginUpdate() ' This will stop the tree view from constantly drawing the changes while we sort the nodes
-
-        Dim z As Integer = 0
-        Dim i As Integer = 0
-        Dim b1 As String = Nothing
-        Dim b2 As String = Nothing
-        For Each n As TreeNode In codetree.Nodes(0).Nodes
-            b1 = n.Text
-            b1 = ConvCH(b1)
-            codetree.Nodes(0).Nodes(i).Text = b1
-            For Each m As TreeNode In n.Nodes
-                b2 = m.Text
-                b2 = ConvCH(b2)
-                codetree.Nodes(0).Nodes(i).Nodes(z).Text = b2
-                z += 1
-            Next
-            i += 1
-            z = 0
-        Next
-        codetree.EndUpdate()
-    End Sub
-
-
-    Public Function ConvCH(ByVal moto As String) As String
-        Dim st As String() = {"ー", "∋", "⊆", "⊇", "⊂", "⊃", "￢", "⇒", "⇔", "∃", "∂", "∇", "≪", "≫", "∬", "Å", "♯", "♭", "♪", "†", "‡", "¶", "⑪", "⑫", "⑬", "⑭", "⑮", "⑯", "⑰", "⑱", "⑲", "⑳", "㍉", "㌔", "㌢", "㍍", "㌘", "㌧", "㌃", "㌶", "㍑", "㍗", "㌍", "㌦", "㌣", "㌫", "㍊", "㌻", "㍻", "〝", "〟", "㏍", "㊤", "㊥", "㊦", "㊧", "㊨", "㍾", "㍽", "㍼"}
-        Dim sr As String() = {"-", " ", " ", " ", " ", " ", " ", "→", "↔", "ヨ", "", "", "<<", ">>", "ダブルインテグラル", "オングストローム", "シャ-プ", "フラット", "8分音符", "ダガー", "ダブルダガー", "パラグラフ", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "ミリ", "キロ", "センチ", "メ-トル", "グラム", "トン", "ア-ル", "ヘクタ-ル", "リットル", "ワｯト", "カロリ-", "ドル", "セント", "パ-セント", "ミリバ-ル", "ペ-ジ", "平成", " ", " ", "KK", "上", "中", "下", "左", "右", "明治", "大正", "昭和"}
-        Dim i As Integer = 0
-        While i < 60
-            moto = moto.Replace(st(i), sr(i))
-            i += 1
-        End While
-        Return moto
-    End Function
 
 #End Region
 
@@ -2024,5 +2057,6 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         My.Settings.gridvalueedit = Button4.Visible
 
     End Sub
+
 
 End Class
