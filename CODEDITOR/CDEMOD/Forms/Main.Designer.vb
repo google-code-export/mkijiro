@@ -701,8 +701,8 @@ Partial Class MERGE
         '
         'save_file
         '
-        Me.save_file.Filter = "CWcheat (*.db)|*.db|ACTIOPREPLAY (*.ar)|*.ar|CMFUSION (*.cmf)|*.cmf|FreeCheat (*." & _
-            "txt)|*.txt|CODEFREAK (*.dat)|*.dat"
+        'Me.save_file.Filter = "CWcheat (*.db)|*.db|ACTIOPREPLAY (*.ar)|*.ar|CMFUSION (*.cmf)|*.cmf|FreeCheat (*." & _
+        '    "txt)|*.txt|CODEFREAK (*.dat)|*.dat"
         '
         'button_list
         '

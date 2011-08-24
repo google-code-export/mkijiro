@@ -54,7 +54,7 @@ Partial Class Form2
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(130, 12)
         Me.Label2.TabIndex = 2
-        Me.Label2.Text = "BUILD:2011/08/23 23:06"
+        Me.Label2.Text = "BUILD:2011/08/24 15:26"
         '
         'Form2
         '
