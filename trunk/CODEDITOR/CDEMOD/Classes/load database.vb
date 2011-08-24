@@ -655,6 +655,8 @@ Public Class load_db
         m.progbar.Visible = True ' Show the progress bar and reset it's value
         m.progbar.Value = 0 ' Reset the progress bar
 
+        My.Settings.lastcodepath = filename
+
         reset_errors() ' Clear the error list before loading
         'ファイルを読み込むバイト型配列を作成する
         Dim bs(CInt(file.Length)) As Byte

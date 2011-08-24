@@ -121,6 +121,9 @@ Public Class MERGE
         Dim open As New load_db
         Dim s As New save_db
 
+        Me.save_file.Filter = "CWcheat (*.db)|*.db|ACTIOPREPLAY (*.ar)|*.ar|CMFUSION (*.cmf)|*.cmf|FreeCheat (*." & _
+            "txt)|*.txt"
+
         If save_file.ShowDialog = Windows.Forms.DialogResult.OK And save_file.FileName <> Nothing Then
 
             database = save_file.FileName
@@ -150,6 +153,8 @@ Public Class MERGE
         Dim open As New load_db
         Dim s As New save_db
 
+        Me.save_file.Filter = "CWcheat (*.db)|*.db"
+
         If save_file.ShowDialog = Windows.Forms.DialogResult.OK And save_file.FileName <> Nothing Then
 
             database = save_file.FileName
@@ -178,6 +183,8 @@ Public Class MERGE
     Private Sub CODEFREAKToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CODEFREAKToolStripMenuItem.Click
         Dim open As New load_db
         Dim s As New save_db
+
+        Me.save_file.Filter = "CODEFREAK (*.dat)|*.dat"
 
         If save_file.ShowDialog = Windows.Forms.DialogResult.OK And save_file.FileName <> Nothing Then
 
@@ -1965,7 +1972,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 
     Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
         If cl_tb.Text.Length > 20 Then
-            changed.Text = "簡易シフトが追加されました,行を合わせて下さい。"
+            changed.Text = "簡易シフトが追加されました,行を合わせてください。"
             Dim z As String = "0"
             If cmt_tb.Text.Contains("840") Then
                 z = "8"
@@ -1985,7 +1992,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         ofd.Title = "追加するリストのTXTを選んでください"
         If cl_tb.Text.Length > 20 Then
             If ofd.ShowDialog() = DialogResult.OK Then
-                changed.Text = "リストが追加されました,行を合わせて下さい。"
+                changed.Text = "リストが追加されました,行を合わせてください。"
                 lspath = ofd.FileName
                 lspath = lspath.Replace(My.Application.Info.DirectoryPath.ToString(), "")
                 lspath = lspath.Replace("\", "/")
@@ -2042,7 +2049,8 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
     'ぐっりど値えｄぃた
     Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button4.Click
         Dim f As New Form1
-        f.Show(Me)
+        f.ShowDialog(Me)
+        f.Dispose()
     End Sub
     '隠し
     Private Sub G有効ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles G有効ToolStripMenuItem.Click
