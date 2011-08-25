@@ -979,7 +979,7 @@ Public Class MERGE
 #Region "HELP"
 
     Private Sub オンラインヘルプToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles オンラインヘルプToolStripMenuItem.Click
-        System.Diagnostics.Process.Start(browser, "http://unzu127xp.pa.land.to/data/IJIRO/CDE.html")
+        System.Diagnostics.Process.Start(browser, "http://unzu127xp.pa.land.to/data/CDE.html")
     End Sub
 
     Private Sub バージョン情報ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles バージョン情報ToolStripMenuItem.Click
