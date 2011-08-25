@@ -2,6 +2,7 @@
 Imports System.Text     'Encoding用
 Imports System.Diagnostics
 Imports System.Collections
+Imports System.Net
 Imports System.Text.RegularExpressions
 
 Public Class MERGE
@@ -656,7 +657,7 @@ Public Class MERGE
     End Sub
 #End Region
 
-#Region "tree expand"
+#Region "codetree"
 
     'コードパーサー
     Private Sub paserToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles 新規ゲーム追加ToolStripMenuItem.Click, paserToolStripMenuItem.Click
@@ -978,7 +979,7 @@ Public Class MERGE
 #Region "HELP"
 
     Private Sub オンラインヘルプToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles オンラインヘルプToolStripMenuItem.Click
-        System.Diagnostics.Process.Start(browser, "http://unzu127xp.pa.land.to/data/IJIRO/CDEMOD/bin/Release/index.html")
+        System.Diagnostics.Process.Start(browser, "http://unzu127xp.pa.land.to/data/IJIRO/CDE.html")
     End Sub
 
     Private Sub バージョン情報ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles バージョン情報ToolStripMenuItem.Click
@@ -986,6 +987,10 @@ Public Class MERGE
         f.ShowDialog(Me)
         f.Dispose()
     End Sub
+
+
+
+   
 #End Region
 
     Private Sub CWCWIKIToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CWCWIKIToolStripMenuItem.Click
@@ -2065,6 +2070,5 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         My.Settings.gridvalueedit = Button4.Visible
 
     End Sub
-
 
 End Class

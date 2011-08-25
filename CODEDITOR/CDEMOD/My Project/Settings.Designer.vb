@@ -209,6 +209,19 @@ Namespace My
                 Me("gridvalueedit") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("http://unzu127xp.pa.land.to/mogura/writelog.php?dl=http://unzu127xp.pa.land.to/da"& _ 
+            "ta/IJIRO/CDEMOD/bin/Release/CDE_CP932_FM4.exe")>  _
+        Public Property download() As String
+            Get
+                Return CType(Me("download"),String)
+            End Get
+            Set
+                Me("download") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

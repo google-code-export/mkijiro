@@ -41,5 +41,8 @@
     <Setting Name="gridvalueedit" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="download" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://unzu127xp.pa.land.to/mogura/writelog.php?dl=http://unzu127xp.pa.land.to/data/IJIRO/CDEMOD/bin/Release/CDE_CP932_FM4.exe</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

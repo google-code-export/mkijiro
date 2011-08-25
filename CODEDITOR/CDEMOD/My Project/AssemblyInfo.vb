@@ -14,7 +14,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("CWCデータベース編集")> 
 <Assembly: AssemblyCompany("")> 
 <Assembly: AssemblyProduct("CDEMOD")> 
-<Assembly: AssemblyCopyright("orig;pasky,mod by (ﾟ∀ﾟ)")> 
+<Assembly: AssemblyCopyright("orig;pasky,moded by (ﾟ∀ﾟ)")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)> 
