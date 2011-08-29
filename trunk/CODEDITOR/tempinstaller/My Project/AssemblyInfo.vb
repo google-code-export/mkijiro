@@ -8,11 +8,11 @@ Imports System.Runtime.InteropServices
 
 ' アセンブリ属性の値を確認します。
 
-<Assembly: AssemblyTitle("WindowsApplication1")> 
+<Assembly: AssemblyTitle("tempar update checker")> 
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("WindowsApplication1")> 
-<Assembly: AssemblyCopyright("Copyright ©  2011")> 
+<Assembly: AssemblyProduct("tempar update checker")> 
+<Assembly: AssemblyCopyright("(ﾟ∀ﾟ)")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>

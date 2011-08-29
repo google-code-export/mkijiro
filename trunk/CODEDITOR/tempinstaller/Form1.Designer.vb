@@ -29,16 +29,17 @@ Partial Class Form1
         Me.Label1 = New System.Windows.Forms.Label()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.Button2 = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(146, 33)
+        Me.Button1.Location = New System.Drawing.Point(146, 47)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
+        Me.Button1.Size = New System.Drawing.Size(98, 23)
         Me.Button1.TabIndex = 0
-        Me.Button1.Text = "INSTALL"
+        Me.Button1.Text = "インストール"
         Me.Button1.UseVisualStyleBackColor = True
         '
         'RadioButton1
@@ -48,7 +49,6 @@ Partial Class Form1
         Me.RadioButton1.Name = "RadioButton1"
         Me.RadioButton1.Size = New System.Drawing.Size(101, 16)
         Me.RadioButton1.TabIndex = 1
-        Me.RadioButton1.TabStop = True
         Me.RadioButton1.Text = "TEMPAR1.62-3"
         Me.RadioButton1.UseVisualStyleBackColor = True
         '
@@ -59,7 +59,6 @@ Partial Class Form1
         Me.RadioButton2.Name = "RadioButton2"
         Me.RadioButton2.Size = New System.Drawing.Size(111, 16)
         Me.RadioButton2.TabIndex = 2
-        Me.RadioButton2.TabStop = True
         Me.RadioButton2.Text = "TEMPAR1.63beta"
         Me.RadioButton2.UseVisualStyleBackColor = True
         '
@@ -68,7 +67,7 @@ Partial Class Form1
         Me.TextBox1.Location = New System.Drawing.Point(4, 126)
         Me.TextBox1.Multiline = True
         Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(214, 75)
+        Me.TextBox1.Size = New System.Drawing.Size(240, 75)
         Me.TextBox1.TabIndex = 3
         '
         'Label1
@@ -101,18 +100,28 @@ Partial Class Form1
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "tempar version"
         '
+        'Button2
+        '
+        Me.Button2.Location = New System.Drawing.Point(146, 16)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(98, 23)
+        Me.Button2.TabIndex = 7
+        Me.Button2.Text = "リリース日のみ"
+        Me.Button2.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(225, 213)
+        Me.ClientSize = New System.Drawing.Size(256, 213)
+        Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.CheckBox1)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.TextBox1)
         Me.Controls.Add(Me.Button1)
         Me.Name = "Form1"
-        Me.Text = "TEMPINST"
+        Me.Text = "tempar update checker"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.ResumeLayout(False)
@@ -126,5 +135,6 @@ Partial Class Form1
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
+    Friend WithEvents Button2 As System.Windows.Forms.Button
 
 End Class
