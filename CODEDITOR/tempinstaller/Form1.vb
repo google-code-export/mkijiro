@@ -9,6 +9,10 @@ Public Class Form1
         Else
             RadioButton2.Checked = True
         End If
+        TextBox1.Text = "前回インストールしたPRX" & vbCrLf & My.Settings.lastprx
+        CheckBox1.Checked = My.Settings.lang
+        DomainUpDown1.Text = My.Settings.drivepath
+        CheckBox2.Checked = My.Settings.drivelock
     End Sub
 
     Function getweb(ByVal filename3 As String, ByVal url As String) As Boolean
@@ -143,13 +147,14 @@ System.IO.FileAccess.Read)
         If My.Computer.Network.IsAvailable Then
             Dim installpath As String = findpsp()
             Dim temp() As String = {"\seplugins\TempAR\tempar.prx", "\seplugins\TempAR\tempar_lite.prx", "\seplugins\TempAR\tempar_autooff.prx"}
+            Dim builddate As String = Nothing
             If installpath <> "" Then
                 TextBox1.Text = "PSPが見つかりました,temparのダウンロードを開始します" & vbCrLf
                 Dim fileName As String = "tmp.zip"
                 getweb(fileName, My.Settings.tempar)
                 unzip(fileName)
-
-                TextBox1.Text &= "TEMPAR " & getdate(Application.StartupPath & temp(0)) & "をPSPにコピーしています..." & vbCrLf
+                builddate = getdate(Application.StartupPath & temp(0))
+                TextBox1.Text &= "TEMPAR " & builddate & "をPSPにコピーしています..." & vbCrLf
                 For i = 0 To 1
                     File.Copy(Application.StartupPath & temp(i), installpath & temp(i), True)
                 Next
@@ -164,9 +169,10 @@ System.IO.FileAccess.Read)
                     Next
                 End If
                 TextBox1.Text &= "インストールが完了しました"
+                My.Settings.lastprx = builddate
                 System.Media.SystemSounds.Asterisk.Play()
             Else
-                TextBox1.Text = "PSPが接続されてません"
+                TextBox1.Text = "メモリースティックフォーマット時自動生成されるPSPフォルダとMEMSTICK.INDが見つかりませんでした" & vbCrLf & "隠しファイルMEMSTICK.INDがない場合はメモリースティックのルートに作成してください"
             End If
 
             Else
@@ -181,7 +187,13 @@ System.IO.FileAccess.Read)
         For i = 0 To 22
             PSP = PSP.Remove(0, 1)
             PSP = PSP.Insert(0, Chr(driveletter))
-            If My.Computer.FileSystem.DirectoryExists(PSP) Then
+            driveletter += 1
+            If CheckBox2.Checked = True Then
+                    PSP = DomainUpDown1.Text & "\PSP"
+            Else
+                DomainUpDown1.Text = PSP.Substring(0, 2)
+            End If
+            If My.Computer.FileSystem.DirectoryExists(PSP) AndAlso File.Exists(PSP.Substring(0, 2) & "MEMSTICK.IND") Then
                 PSP = PSP.Substring(0, 2)
                 If Not File.Exists(PSP & "\seplugins") Then
                     System.IO.Directory.CreateDirectory(PSP & "\seplugins")
@@ -193,9 +205,9 @@ System.IO.FileAccess.Read)
                     System.IO.Directory.CreateDirectory(PSP & "\seplugins\TempAR\languages")
                 End If
 
+                My.Settings.drivepath = PSP
                 Return PSP
             End If
-            driveletter += 1
         Next
         Return ""
     End Function
@@ -221,5 +233,28 @@ System.IO.FileAccess.Read)
         TextBox1.Text &= getdate(Application.StartupPath & "\seplugins\TempAR\tempar.prx") & " がリリースされてます"
         System.Media.SystemSounds.Asterisk.Play()
 
+    End Sub
+
+    Private Sub DomainUpDown1_SelectedItemChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DomainUpDown1.SelectedItemChanged
+    End Sub
+
+    Private Sub CheckBox2_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox2.CheckedChanged
+
+        My.Settings.drivepath = DomainUpDown1.Text
+        If CheckBox2.Checked = True Then
+            DomainUpDown1.ReadOnly = True
+            My.Settings.drivelock = True
+        Else
+            DomainUpDown1.ReadOnly = False
+            My.Settings.drivelock = False
+        End If
+    End Sub
+
+    Private Sub CheckBox1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox1.CheckedChanged
+        If CheckBox1.Checked = True Then
+            My.Settings.lang = True
+        Else
+            My.Settings.lang = False
+        End If
     End Sub
 End Class

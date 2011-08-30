@@ -5,5 +5,17 @@
     <Setting Name="tempar" Type="System.String" Scope="User">
       <Value Profile="(Default)">http://raing3.gshi.org/psp-utilities/files/psp/tempar/tempar-1.62-3.zip</Value>
     </Setting>
+    <Setting Name="lastprx" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="lang" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="drivelock" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="drivepath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">D:</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

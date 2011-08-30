@@ -30,6 +30,8 @@ Partial Class Form1
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.Button2 = New System.Windows.Forms.Button()
+        Me.DomainUpDown1 = New System.Windows.Forms.DomainUpDown()
+        Me.CheckBox2 = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -64,7 +66,7 @@ Partial Class Form1
         '
         'TextBox1
         '
-        Me.TextBox1.Location = New System.Drawing.Point(4, 126)
+        Me.TextBox1.Location = New System.Drawing.Point(4, 151)
         Me.TextBox1.Multiline = True
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.Size = New System.Drawing.Size(240, 75)
@@ -73,7 +75,7 @@ Partial Class Form1
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(10, 111)
+        Me.Label1.Location = New System.Drawing.Point(12, 136)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(53, 12)
         Me.Label1.TabIndex = 4
@@ -109,11 +111,55 @@ Partial Class Form1
         Me.Button2.Text = "リリース日のみ"
         Me.Button2.UseVisualStyleBackColor = True
         '
+        'DomainUpDown1
+        '
+        Me.DomainUpDown1.ImeMode = System.Windows.Forms.ImeMode.Alpha
+        Me.DomainUpDown1.Items.Add("D:")
+        Me.DomainUpDown1.Items.Add("E:")
+        Me.DomainUpDown1.Items.Add("F:")
+        Me.DomainUpDown1.Items.Add("G:")
+        Me.DomainUpDown1.Items.Add("H:")
+        Me.DomainUpDown1.Items.Add("I:")
+        Me.DomainUpDown1.Items.Add("J:")
+        Me.DomainUpDown1.Items.Add("K:")
+        Me.DomainUpDown1.Items.Add("L:")
+        Me.DomainUpDown1.Items.Add("M:")
+        Me.DomainUpDown1.Items.Add("N:")
+        Me.DomainUpDown1.Items.Add("O:")
+        Me.DomainUpDown1.Items.Add("P:")
+        Me.DomainUpDown1.Items.Add("Q:")
+        Me.DomainUpDown1.Items.Add("R:")
+        Me.DomainUpDown1.Items.Add("S:")
+        Me.DomainUpDown1.Items.Add("T:")
+        Me.DomainUpDown1.Items.Add("U:")
+        Me.DomainUpDown1.Items.Add("V:")
+        Me.DomainUpDown1.Items.Add("W:")
+        Me.DomainUpDown1.Items.Add("X:")
+        Me.DomainUpDown1.Items.Add("Y:")
+        Me.DomainUpDown1.Items.Add("Z:")
+        Me.DomainUpDown1.Location = New System.Drawing.Point(138, 103)
+        Me.DomainUpDown1.Name = "DomainUpDown1"
+        Me.DomainUpDown1.Size = New System.Drawing.Size(33, 19)
+        Me.DomainUpDown1.TabIndex = 8
+        Me.DomainUpDown1.Text = "D:"
+        '
+        'CheckBox2
+        '
+        Me.CheckBox2.AutoSize = True
+        Me.CheckBox2.Location = New System.Drawing.Point(14, 104)
+        Me.CheckBox2.Name = "CheckBox2"
+        Me.CheckBox2.Size = New System.Drawing.Size(120, 16)
+        Me.CheckBox2.TabIndex = 10
+        Me.CheckBox2.Text = "ドライブレターのロック"
+        Me.CheckBox2.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(256, 213)
+        Me.ClientSize = New System.Drawing.Size(256, 238)
+        Me.Controls.Add(Me.CheckBox2)
+        Me.Controls.Add(Me.DomainUpDown1)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.CheckBox1)
@@ -136,5 +182,7 @@ Partial Class Form1
     Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
     Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents DomainUpDown1 As System.Windows.Forms.DomainUpDown
+    Friend WithEvents CheckBox2 As System.Windows.Forms.CheckBox
 
 End Class
