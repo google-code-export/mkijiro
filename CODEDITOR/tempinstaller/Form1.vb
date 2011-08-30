@@ -176,13 +176,24 @@ System.IO.FileAccess.Read)
 
     Function findpsp() As String
         Dim PSP As String = " :\PSP"
-        Dim driveletter As Integer = &H44 'drivepath "E"
+        Dim driveletter As Integer = &H44 'drivepath D～Z
         Dim i As Integer
         For i = 0 To 22
             PSP = PSP.Remove(0, 1)
             PSP = PSP.Insert(0, Chr(driveletter))
             If My.Computer.FileSystem.DirectoryExists(PSP) Then
-                Return PSP.Substring(0, 3)
+                PSP = PSP.Substring(0, 2)
+                If Not File.Exists(PSP & "\seplugins") Then
+                    System.IO.Directory.CreateDirectory(PSP & "\seplugins")
+                End If
+                If Not File.Exists(PSP & "\seplugins\TempAR") Then
+                    System.IO.Directory.CreateDirectory(PSP & "\seplugins\TempAR")
+                End If
+                If CheckBox1.Checked = True AndAlso File.Exists(PSP & "\seplugins\TempAR\languages") Then
+                    System.IO.Directory.CreateDirectory(PSP & "\seplugins\TempAR\languages")
+                End If
+
+                Return PSP
             End If
             driveletter += 1
         Next
