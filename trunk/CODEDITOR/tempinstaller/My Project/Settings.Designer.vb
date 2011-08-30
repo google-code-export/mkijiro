@@ -65,6 +65,54 @@ Namespace My
                 Me("tempar") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property lastprx() As String
+            Get
+                Return CType(Me("lastprx"),String)
+            End Get
+            Set
+                Me("lastprx") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property lang() As Boolean
+            Get
+                Return CType(Me("lang"),Boolean)
+            End Get
+            Set
+                Me("lang") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property drivelock() As Boolean
+            Get
+                Return CType(Me("drivelock"),Boolean)
+            End Get
+            Set
+                Me("drivelock") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("D:")>  _
+        Public Property drivepath() As String
+            Get
+                Return CType(Me("drivepath"),String)
+            End Get
+            Set
+                Me("drivepath") = value
+            End Set
+        End Property
     End Class
 End Namespace
 
