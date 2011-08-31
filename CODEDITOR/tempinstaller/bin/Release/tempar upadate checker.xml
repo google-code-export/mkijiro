@@ -1,0 +1,96 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+temparupadatechecker
+</name>
+</assembly>
+<members>
+<member name="P:temparchecker.My.Resources.Resources.ResourceManager">
+	<summary>
+  このクラスで使用されているキャッシュされた ResourceManager インスタンスを返します。
+</summary>
+</member><member name="P:temparchecker.My.Resources.Resources.Culture">
+	<summary>
+  厳密に型指定されたこのリソース クラスを使用して、すべての検索リソースに対し、
+  現在のスレッドの CurrentUICulture プロパティをオーバーライドします。
+</summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s1">
+	<summary>
+  前回インストールしたｐｒｘ に類似しているローカライズされた文字列を検索します。
+</summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s1_e">
+	<summary>
+  last installed prx に類似しているローカライズされた文字列を検索します。
+</summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s2">
+	<summary>
+  PSPが見つかりました,temparのダウンロードを開始します に類似しているローカライズされた文字列を検索します。
+</summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s2_e">
+	<summary>
+  found psp,downloading latest tempar に類似しているローカライズされた文字列を検索します。
+</summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s3">
+	<summary>
+  をPSPにコピーしています... に類似しているローカライズされた文字列を検索します。
+</summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s3_e">
+	<summary>
+  copy to psp... に類似しているローカライズされた文字列を検索します。
+</summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s4">
+	<summary>
+  ランゲージファイルをコピーしています に類似しているローカライズされた文字列を検索します。
+</summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s4_e">
+	<summary>
+  copy languagefiles to psp... に類似しているローカライズされた文字列を検索します。
+</summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s5">
+	<summary>
+  インストールが完了しました に類似しているローカライズされた文字列を検索します。
+</summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s5_e">
+	<summary>
+  install completed!! に類似しているローカライズされた文字列を検索します。
+</summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s6">
+	<summary>
+  メモリースティックフォーマット時自動生成されるPSPフォルダとMEMSTICK.INDが見つかりませんでした に類似しているローカライズされた文字列を検索します。
+</summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s6_e">
+	<summary>
+  cannot find PSP directory and hidden file "MEMSTICK.IND" created  with psp-xmb memorystick format menu に類似しているローカライズされた文字列を検索します。
+</summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s7">
+	<summary>
+  隠しファイルMEMSTICK.INDがない場合はメモリースティックのルートに作成してください に類似しているローカライズされた文字列を検索します。
+</summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s7_e">
+	<summary>
+  if there are no MEMSTICK.IND,please make it on memorysitck root directory  に類似しているローカライズされた文字列を検索します。
+</summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s8">
+	<summary>
+  インターネットに接続されてません に類似しているローカライズされた文字列を検索します。
+</summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s8_e">
+	<summary>
+  internet connection not working に類似しているローカライズされた文字列を検索します。
+</summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s9">
+	<summary>
+  がリリースされてます に類似しているローカライズされた文字列を検索します。
+</summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s9_e">
+	<summary>
+   has been released に類似しているローカライズされた文字列を検索します。
+</summary>
+</member><member name="T:temparchecker.My.Resources.Resources">
+	<summary>
+  ローカライズされた文字列などを検索するための、厳密に型指定されたリソース クラスです。
+</summary>
+</member>
+</members>
+</doc>

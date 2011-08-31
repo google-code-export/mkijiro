@@ -17,5 +17,8 @@
     <Setting Name="drivepath" Type="System.String" Scope="User">
       <Value Profile="(Default)">D:</Value>
     </Setting>
+    <Setting Name="Setting" Type="System.String" Scope="User">
+      <Value Profile="(Default)">日本語</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

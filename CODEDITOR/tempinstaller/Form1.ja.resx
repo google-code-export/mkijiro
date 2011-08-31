@@ -117,58 +117,29 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="s1" xml:space="preserve">
-    <value>前回インストールしたｐｒｘ</value>
+  <data name="Button1.Text" xml:space="preserve">
+    <value>インストール</value>
   </data>
-  <data name="s1_e" xml:space="preserve">
-    <value>last installed prx</value>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="Label1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>29, 12</value>
   </data>
-  <data name="s2" xml:space="preserve">
-    <value>PSPが見つかりました,temparのダウンロードを開始します</value>
+  <data name="Label1.Text" xml:space="preserve">
+    <value>進歩</value>
   </data>
-  <data name="s2_e" xml:space="preserve">
-    <value>found psp,downloading latest tempar</value>
+  <data name="CheckBox1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>157, 16</value>
   </data>
-  <data name="s3" xml:space="preserve">
-    <value>をPSPにコピーしています...</value>
+  <data name="CheckBox1.Text" xml:space="preserve">
+    <value>ランゲージファイルも更新する</value>
   </data>
-  <data name="s3_e" xml:space="preserve">
-    <value>copy to psp...</value>
+  <data name="Button2.Text" xml:space="preserve">
+    <value>MD5ハッシュのみ</value>
   </data>
-  <data name="s4" xml:space="preserve">
-    <value>ランゲージファイルをコピーしています</value>
+  <data name="CheckBox2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>165, 16</value>
   </data>
-  <data name="s4_e" xml:space="preserve">
-    <value>copy languagefiles to psp...</value>
-  </data>
-  <data name="s5" xml:space="preserve">
-    <value>インストールが完了しました</value>
-  </data>
-  <data name="s5_e" xml:space="preserve">
-    <value>install completed!!</value>
-  </data>
-  <data name="s6" xml:space="preserve">
-    <value>メモリースティックフォーマット時自動生成されるPSPフォルダとMEMSTICK.INDが見つかりませんでした</value>
-  </data>
-  <data name="s6_e" xml:space="preserve">
-    <value>cannot find PSP directory and hidden file "MEMSTICK.IND" created  with psp-xmb memorystick format menu</value>
-  </data>
-  <data name="s7" xml:space="preserve">
-    <value>隠しファイルMEMSTICK.INDがない場合はメモリースティックのルートに作成してください</value>
-  </data>
-  <data name="s7_e" xml:space="preserve">
-    <value>if there are no MEMSTICK.IND,please make it on memorysitck root directory </value>
-  </data>
-  <data name="s8" xml:space="preserve">
-    <value>インターネットに接続されてません</value>
-  </data>
-  <data name="s8_e" xml:space="preserve">
-    <value>internet connection not working</value>
-  </data>
-  <data name="s9" xml:space="preserve">
-    <value>がリリースされてます</value>
-  </data>
-  <data name="s9_e" xml:space="preserve">
-    <value> has been released</value>
+  <data name="CheckBox2.Text" xml:space="preserve">
+    <value>転送先のドライブレターを固定</value>
   </data>
 </root>
