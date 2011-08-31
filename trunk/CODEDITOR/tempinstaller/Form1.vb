@@ -1,19 +1,31 @@
 ﻿Imports System.IO
 Imports System.Text.RegularExpressions
+Imports System.Globalization
+Imports System.Threading
 
 Public Class Form1
 
     Private Sub form1load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        Dim trans As String = ""
+        '前回インストールしたｐｒｘ
+        If My.Application.Culture.Name = "ja-JP" Then
+            trans = My.Resources.s1
+        Else
+            trans = My.Resources.s1_e
+        End If
         If My.Settings.tempar.Contains("1.62") Then
             RadioButton1.Checked = True
         Else
             RadioButton2.Checked = True
         End If
-        TextBox1.Text = "前回インストールしたPRX" & vbCrLf & My.Settings.lastprx
+        TextBox1.Text = trans & vbCrLf & My.Settings.lastprx
         CheckBox1.Checked = My.Settings.lang
         DomainUpDown1.Text = My.Settings.drivepath
         CheckBox2.Checked = My.Settings.drivelock
+        Me.FormBorderStyle = FormBorderStyle.FixedToolWindow
+
     End Sub
+
 
     Function getweb(ByVal filename3 As String, ByVal url As String) As Boolean
 
@@ -119,6 +131,19 @@ System.IO.FileMode.Open, _
 System.IO.FileAccess.Read)
         Dim bs(CInt(prx.Length - 1)) As Byte
         prx.Read(bs, 0, bs.Length)
+
+        Dim md5 As New System.Security.Cryptography.MD5CryptoServiceProvider()
+
+        'ハッシュ値を計算する 
+        Dim temp As Byte() = md5.ComputeHash(bs)
+
+        'byte型配列を16進数の文字列に変換 
+        Dim result As New System.Text.StringBuilder()
+        For Each b As Byte In temp
+            result.Append(b.ToString("x2"))
+        Next
+        Dim md5hash As String = result.ToString
+
         prx.Close()
         Dim str(48) As Byte
         '42 75 69 6C 64
@@ -138,23 +163,35 @@ System.IO.FileAccess.Read)
             i += 1
         End While
         Dim builddate As String = System.Text.Encoding.GetEncoding(932).GetString(str)
-        Return builddate.Replace(vbNullChar, "")
+        Return builddate.Replace(vbNullChar, "") & vbCrLf & "MD5;" & md5hash
     End Function
 
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
         TextBox1.Text = ""
-
+        Dim trans As String = ""
         If My.Computer.Network.IsAvailable Then
             Dim installpath As String = findpsp()
             Dim temp() As String = {"\seplugins\TempAR\tempar.prx", "\seplugins\TempAR\tempar_lite.prx", "\seplugins\TempAR\tempar_autooff.prx"}
             Dim builddate As String = Nothing
             If installpath <> "" Then
-                TextBox1.Text = "PSPが見つかりました,temparのダウンロードを開始します" & vbCrLf
+                'PSPが見つかりました,temparのダウンロードを開始します
+                If My.Application.Culture.Name = "ja-JP" Then
+                    trans = My.Resources.s2
+                Else
+                    trans = My.Resources.s2_e
+                End If
+                TextBox1.Text = trans & vbCrLf
                 Dim fileName As String = "tmp.zip"
                 getweb(fileName, My.Settings.tempar)
                 unzip(fileName)
                 builddate = getdate(Application.StartupPath & temp(0))
-                TextBox1.Text &= "TEMPAR " & builddate & "をPSPにコピーしています..." & vbCrLf
+                'をPSPにコピーしています...
+                If My.Application.Culture.Name = "ja-JP" Then
+                    trans = My.Resources.s3
+                Else
+                    trans = My.Resources.s3_e
+                End If
+                TextBox1.Text &= "TEMPAR " & builddate & trans & vbCrLf
                 For i = 0 To 1
                     File.Copy(Application.StartupPath & temp(i), installpath & temp(i), True)
                 Next
@@ -162,22 +199,53 @@ System.IO.FileAccess.Read)
                     File.Copy(Application.StartupPath & temp(2), installpath & temp(2), True)
                 End If
                 If My.Settings.tempar.Contains("1.63") AndAlso CheckBox1.Checked = True Then
-                    TextBox1.Text &= "ランゲージファイルをコピーしています" & vbCrLf
+                    '"ランゲージファイルをコピーしています"
+                    If My.Application.Culture.Name = "ja-JP" Then
+                        trans = My.Resources.s4
+                    Else
+                        trans = My.Resources.s4_e
+                    End If
+                    TextBox1.Text &= trans & vbCrLf
                     Dim temptxt As String = "\seplugins\TempAR\languages\language"
                     For k = 1 To 2
                         File.Copy(Application.StartupPath & temptxt & k.ToString & ".bin", installpath & temptxt & k.ToString & ".bin", True)
                     Next
                 End If
-                TextBox1.Text &= "インストールが完了しました"
+                '"インストールが完了しました"
+                If My.Application.Culture.Name = "ja-JP" Then
+                    trans = My.Resources.s5
+                Else
+                    trans = My.Resources.s5_e
+                End If
+                TextBox1.Text &= trans
                 My.Settings.lastprx = builddate
                 System.Media.SystemSounds.Asterisk.Play()
             Else
-                TextBox1.Text = "メモリースティックフォーマット時自動生成されるPSPフォルダとMEMSTICK.INDが見つかりませんでした" & vbCrLf & "隠しファイルMEMSTICK.INDがない場合はメモリースティックのルートに作成してください"
-            End If
+                '"メモリースティックフォーマット時自動生成されるPSPフォルダとMEMSTICK.INDが見つかりませんでした"
+                If My.Application.Culture.Name = "ja-JP" Then
+                    trans = My.Resources.s6
+                Else
+                    trans = My.Resources.s6_e
+                End If
+                TextBox1.Text = trans & vbCrLf
 
-            Else
-                TextBox1.Text = "インターネットに接続されてません"
+                '"隠しファイルMEMSTICK.INDがない場合はメモリースティックのルートに作成してください"
+                If My.Application.Culture.Name = "ja-JP" Then
+                    trans = My.Resources.s7
+                Else
+                    trans = My.Resources.s7_e
+                End If
+                TextBox1.Text &= trans
             End If
+        Else
+            '"インターネットに接続されてません"
+            If My.Application.Culture.Name = "ja-JP" Then
+                trans = My.Resources.s8
+            Else
+                trans = My.Resources.s8_e
+            End If
+            TextBox1.Text = trans
+        End If
     End Sub
 
     Function findpsp() As String
@@ -230,9 +298,15 @@ System.IO.FileAccess.Read)
         Dim fileName As String = "tmp.zip"
         getweb(fileName, My.Settings.tempar)
         unzip(fileName)
-        TextBox1.Text &= getdate(Application.StartupPath & "\seplugins\TempAR\tempar.prx") & " がリリースされてます"
+        Dim trans As String
+        '" がリリースされてます"
+        If My.Application.Culture.Name = "ja-JP" Then
+            trans = My.Resources.s9
+        Else
+            trans = My.Resources.s9_e
+        End If
+        TextBox1.Text &= getdate(Application.StartupPath & "\seplugins\TempAR\tempar.prx") & trans
         System.Media.SystemSounds.Asterisk.Play()
-
     End Sub
 
     Private Sub DomainUpDown1_SelectedItemChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DomainUpDown1.SelectedItemChanged
@@ -257,4 +331,5 @@ System.IO.FileAccess.Read)
             My.Settings.lang = False
         End If
     End Sub
+
 End Class
