@@ -159,7 +159,7 @@ Partial Class MERGE
         Me.treeopen.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menu_file, Me.menu_sort, Me.menu_options, Me.menu_font, Me.EncodeToolStripMenuItem, Me.ツリー開閉ToolStripMenuItem, Me.CWCWIKIToolStripMenuItem, Me.EXE起動ToolStripMenuItem, Me.ヘルプHToolStripMenuItem})
         Me.treeopen.Location = New System.Drawing.Point(0, 0)
         Me.treeopen.Name = "treeopen"
-        Me.treeopen.Size = New System.Drawing.Size(806, 26)
+        Me.treeopen.Size = New System.Drawing.Size(647, 24)
         Me.treeopen.TabIndex = 0
         Me.treeopen.Text = "MenuStrip1"
         '
@@ -167,7 +167,7 @@ Partial Class MERGE
         '
         Me.menu_file.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.file_new, Me.file_open, Me.file_saveas, Me.file_exit})
         Me.menu_file.Name = "menu_file"
-        Me.menu_file.Size = New System.Drawing.Size(87, 22)
+        Me.menu_file.Size = New System.Drawing.Size(66, 20)
         Me.menu_file.Text = "ファイル(&F)"
         '
         'file_new
@@ -175,28 +175,28 @@ Partial Class MERGE
         Me.file_new.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.new_psp, Me.new_psx})
         Me.file_new.Image = Global.CWcheat_Database_Editor.My.Resources.Resources._new
         Me.file_new.Name = "file_new"
-        Me.file_new.Size = New System.Drawing.Size(168, 22)
+        Me.file_new.Size = New System.Drawing.Size(141, 22)
         Me.file_new.Text = "新規(&N)"
         '
         'new_psp
         '
         Me.new_psp.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.psp_menu
         Me.new_psp.Name = "new_psp"
-        Me.new_psp.Size = New System.Drawing.Size(101, 22)
+        Me.new_psp.Size = New System.Drawing.Size(91, 22)
         Me.new_psp.Text = "PSP"
         '
         'new_psx
         '
         Me.new_psx.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.sony_playstation1
         Me.new_psx.Name = "new_psx"
-        Me.new_psx.Size = New System.Drawing.Size(101, 22)
+        Me.new_psx.Size = New System.Drawing.Size(91, 22)
         Me.new_psx.Text = "PSX"
         '
         'file_open
         '
         Me.file_open.Image = CType(resources.GetObject("file_open.Image"), System.Drawing.Image)
         Me.file_open.Name = "file_open"
-        Me.file_open.Size = New System.Drawing.Size(168, 22)
+        Me.file_open.Size = New System.Drawing.Size(141, 22)
         Me.file_open.Text = "開く(&O)"
         '
         'file_saveas
@@ -205,42 +205,42 @@ Partial Class MERGE
         Me.file_saveas.Enabled = False
         Me.file_saveas.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.save
         Me.file_saveas.Name = "file_saveas"
-        Me.file_saveas.Size = New System.Drawing.Size(168, 22)
+        Me.file_saveas.Size = New System.Drawing.Size(141, 22)
         Me.file_saveas.Text = "...として保存(&S)"
         '
         'saveas_cwcheat
         '
         Me.saveas_cwcheat.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.psp_menu
         Me.saveas_cwcheat.Name = "saveas_cwcheat"
-        Me.saveas_cwcheat.Size = New System.Drawing.Size(196, 22)
+        Me.saveas_cwcheat.Size = New System.Drawing.Size(174, 22)
         Me.saveas_cwcheat.Text = "CWC/PSPAR/TEMP"
         '
         'saveas_psx
         '
         Me.saveas_psx.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.sony_playstation1
         Me.saveas_psx.Name = "saveas_psx"
-        Me.saveas_psx.Size = New System.Drawing.Size(196, 22)
+        Me.saveas_psx.Size = New System.Drawing.Size(174, 22)
         Me.saveas_psx.Text = "PSX"
         '
         'CODEFREAKToolStripMenuItem
         '
         Me.CODEFREAKToolStripMenuItem.Image = CType(resources.GetObject("CODEFREAKToolStripMenuItem.Image"), System.Drawing.Image)
         Me.CODEFREAKToolStripMenuItem.Name = "CODEFREAKToolStripMenuItem"
-        Me.CODEFREAKToolStripMenuItem.Size = New System.Drawing.Size(196, 22)
+        Me.CODEFREAKToolStripMenuItem.Size = New System.Drawing.Size(174, 22)
         Me.CODEFREAKToolStripMenuItem.Text = "CODEFREAK"
         '
         'file_exit
         '
         Me.file_exit.Image = CType(resources.GetObject("file_exit.Image"), System.Drawing.Image)
         Me.file_exit.Name = "file_exit"
-        Me.file_exit.Size = New System.Drawing.Size(168, 22)
+        Me.file_exit.Size = New System.Drawing.Size(141, 22)
         Me.file_exit.Text = "閉じる(&C)"
         '
         'menu_sort
         '
         Me.menu_sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.sort_GID, Me.name_sort})
         Me.menu_sort.Name = "menu_sort"
-        Me.menu_sort.Size = New System.Drawing.Size(64, 22)
+        Me.menu_sort.Size = New System.Drawing.Size(56, 20)
         Me.menu_sort.Text = "整列(&S)"
         Me.menu_sort.ToolTipText = "データベースの整列を実行します"
         '
@@ -249,7 +249,7 @@ Partial Class MERGE
         Me.sort_GID.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Sort_GID１, Me.Sort_GID2})
         Me.sort_GID.Image = CType(resources.GetObject("sort_GID.Image"), System.Drawing.Image)
         Me.sort_GID.Name = "sort_GID"
-        Me.sort_GID.Size = New System.Drawing.Size(127, 22)
+        Me.sort_GID.Size = New System.Drawing.Size(112, 22)
         Me.sort_GID.Text = "ゲームID"
         Me.sort_GID.ToolTipText = "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ゲームIDでのソート"
         '
@@ -257,7 +257,7 @@ Partial Class MERGE
         '
         Me.Sort_GID１.Image = CType(resources.GetObject("Sort_GID１.Image"), System.Drawing.Image)
         Me.Sort_GID１.Name = "Sort_GID１"
-        Me.Sort_GID１.Size = New System.Drawing.Size(100, 22)
+        Me.Sort_GID１.Size = New System.Drawing.Size(94, 22)
         Me.Sort_GID１.Text = "昇順"
         Me.Sort_GID１.ToolTipText = "アルファベットA-Z　の順に並べ直します。"
         '
@@ -265,7 +265,7 @@ Partial Class MERGE
         '
         Me.Sort_GID2.Image = CType(resources.GetObject("Sort_GID2.Image"), System.Drawing.Image)
         Me.Sort_GID2.Name = "Sort_GID2"
-        Me.Sort_GID2.Size = New System.Drawing.Size(100, 22)
+        Me.Sort_GID2.Size = New System.Drawing.Size(94, 22)
         Me.Sort_GID2.Text = "降順"
         Me.Sort_GID2.ToolTipText = "アルファベットZ-A　の順に並べ直します。"
         '
@@ -274,7 +274,7 @@ Partial Class MERGE
         Me.name_sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Sort_GTitle1, Me.Sort_GTitle2})
         Me.name_sort.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.abc
         Me.name_sort.Name = "name_sort"
-        Me.name_sort.Size = New System.Drawing.Size(127, 22)
+        Me.name_sort.Size = New System.Drawing.Size(112, 22)
         Me.name_sort.Text = "ゲーム名"
         Me.name_sort.ToolTipText = "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ゲーム名でのソート"
         '
@@ -282,7 +282,7 @@ Partial Class MERGE
         '
         Me.Sort_GTitle1.Image = CType(resources.GetObject("Sort_GTitle1.Image"), System.Drawing.Image)
         Me.Sort_GTitle1.Name = "Sort_GTitle1"
-        Me.Sort_GTitle1.Size = New System.Drawing.Size(100, 22)
+        Me.Sort_GTitle1.Size = New System.Drawing.Size(94, 22)
         Me.Sort_GTitle1.Text = "昇順"
         Me.Sort_GTitle1.ToolTipText = "アルファベットA-Z,あ-漢字　の順に並べ直します。" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
@@ -290,7 +290,7 @@ Partial Class MERGE
         '
         Me.Sort_GTitle2.Image = CType(resources.GetObject("Sort_GTitle2.Image"), System.Drawing.Image)
         Me.Sort_GTitle2.Name = "Sort_GTitle2"
-        Me.Sort_GTitle2.Size = New System.Drawing.Size(100, 22)
+        Me.Sort_GTitle2.Size = New System.Drawing.Size(94, 22)
         Me.Sort_GTitle2.Text = "降順"
         Me.Sort_GTitle2.ToolTipText = "漢字-あ,アルファベットZ-A　の順に並べ直します。" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
@@ -298,7 +298,7 @@ Partial Class MERGE
         '
         Me.menu_options.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.options_ontop, Me.options_error, Me.ブラウザ変更ToolStripMenuItem, Me.G有効ToolStripMenuItem})
         Me.menu_options.Name = "menu_options"
-        Me.menu_options.Size = New System.Drawing.Size(102, 22)
+        Me.menu_options.Size = New System.Drawing.Size(76, 20)
         Me.menu_options.Text = "オプション(&O)"
         Me.menu_options.ToolTipText = "メニューが常にTOPに表示されます"
         '
@@ -306,14 +306,14 @@ Partial Class MERGE
         '
         Me.options_ontop.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.alwaystop
         Me.options_ontop.Name = "options_ontop"
-        Me.options_ontop.Size = New System.Drawing.Size(172, 22)
+        Me.options_ontop.Size = New System.Drawing.Size(154, 22)
         Me.options_ontop.Text = "常に前面表示"
         '
         'options_error
         '
         Me.options_error.Image = CType(resources.GetObject("options_error.Image"), System.Drawing.Image)
         Me.options_error.Name = "options_error"
-        Me.options_error.Size = New System.Drawing.Size(172, 22)
+        Me.options_error.Size = New System.Drawing.Size(154, 22)
         Me.options_error.Text = "エラー画面を表示"
         Me.options_error.ToolTipText = "起動時のエラー画面の表示の設定"
         '
@@ -321,14 +321,14 @@ Partial Class MERGE
         '
         Me.ブラウザ変更ToolStripMenuItem.Image = CType(resources.GetObject("ブラウザ変更ToolStripMenuItem.Image"), System.Drawing.Image)
         Me.ブラウザ変更ToolStripMenuItem.Name = "ブラウザ変更ToolStripMenuItem"
-        Me.ブラウザ変更ToolStripMenuItem.Size = New System.Drawing.Size(172, 22)
+        Me.ブラウザ変更ToolStripMenuItem.Size = New System.Drawing.Size(154, 22)
         Me.ブラウザ変更ToolStripMenuItem.Text = "ブラウザ変更"
         Me.ブラウザ変更ToolStripMenuItem.ToolTipText = "コードサイトを表示するブラウザの変更をします。"
         '
         'G有効ToolStripMenuItem
         '
         Me.G有効ToolStripMenuItem.Name = "G有効ToolStripMenuItem"
-        Me.G有効ToolStripMenuItem.Size = New System.Drawing.Size(172, 22)
+        Me.G有効ToolStripMenuItem.Size = New System.Drawing.Size(154, 22)
         Me.G有効ToolStripMenuItem.Text = "グリッド編集有効"
         Me.G有効ToolStripMenuItem.ToolTipText = "データグリッドでコードの値を編集します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "DEC；32bit10進数" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "OR；32bit論理和" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "AND；32bit論理積" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "XOR；32bit排他的論理和" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "B" & _
             "INARY32；単精度浮動小数点数" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "BINARY32(16bit)；単精度浮動小数点数の16bit右シフト" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "BINARY16；半精度浮動小数点"
@@ -337,51 +337,51 @@ Partial Class MERGE
         '
         Me.menu_font.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ツリービューToolStripMenuItem, Me.ゲームタイトルToolStripMenuItem, Me.ゲームIDToolStripMenuItem, Me.コード名ToolStripMenuItem, Me.コード内容ToolStripMenuItem, Me.コメントToolStripMenuItem})
         Me.menu_font.Name = "menu_font"
-        Me.menu_font.Size = New System.Drawing.Size(90, 22)
+        Me.menu_font.Size = New System.Drawing.Size(66, 20)
         Me.menu_font.Text = "フォント(&N)"
         Me.menu_font.ToolTipText = "メニューのフォントを指定します"
         '
         'ツリービューToolStripMenuItem
         '
         Me.ツリービューToolStripMenuItem.Name = "ツリービューToolStripMenuItem"
-        Me.ツリービューToolStripMenuItem.Size = New System.Drawing.Size(160, 22)
+        Me.ツリービューToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
         Me.ツリービューToolStripMenuItem.Text = "ツリービュー"
         '
         'ゲームタイトルToolStripMenuItem
         '
         Me.ゲームタイトルToolStripMenuItem.Name = "ゲームタイトルToolStripMenuItem"
-        Me.ゲームタイトルToolStripMenuItem.Size = New System.Drawing.Size(160, 22)
+        Me.ゲームタイトルToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
         Me.ゲームタイトルToolStripMenuItem.Text = "ゲームタイトル"
         '
         'ゲームIDToolStripMenuItem
         '
         Me.ゲームIDToolStripMenuItem.Name = "ゲームIDToolStripMenuItem"
-        Me.ゲームIDToolStripMenuItem.Size = New System.Drawing.Size(160, 22)
+        Me.ゲームIDToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
         Me.ゲームIDToolStripMenuItem.Text = "ゲームID"
         '
         'コード名ToolStripMenuItem
         '
         Me.コード名ToolStripMenuItem.Name = "コード名ToolStripMenuItem"
-        Me.コード名ToolStripMenuItem.Size = New System.Drawing.Size(160, 22)
+        Me.コード名ToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
         Me.コード名ToolStripMenuItem.Text = "コード名"
         '
         'コード内容ToolStripMenuItem
         '
         Me.コード内容ToolStripMenuItem.Name = "コード内容ToolStripMenuItem"
-        Me.コード内容ToolStripMenuItem.Size = New System.Drawing.Size(160, 22)
+        Me.コード内容ToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
         Me.コード内容ToolStripMenuItem.Text = "コード内容"
         '
         'コメントToolStripMenuItem
         '
         Me.コメントToolStripMenuItem.Name = "コメントToolStripMenuItem"
-        Me.コメントToolStripMenuItem.Size = New System.Drawing.Size(160, 22)
+        Me.コメントToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
         Me.コメントToolStripMenuItem.Text = "コメント"
         '
         'EncodeToolStripMenuItem
         '
         Me.EncodeToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CP932ToolStripMenuItem, Me.GBKToolStripMenuItem, Me.UTF16BECP1201ToolStripMenuItem})
         Me.EncodeToolStripMenuItem.Name = "EncodeToolStripMenuItem"
-        Me.EncodeToolStripMenuItem.Size = New System.Drawing.Size(101, 22)
+        Me.EncodeToolStripMenuItem.Size = New System.Drawing.Size(78, 20)
         Me.EncodeToolStripMenuItem.Text = "エンコード(&D)"
         Me.EncodeToolStripMenuItem.ToolTipText = "コードデータベースの読み込み保存エンコードを指定します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "CP932≒日本語SJIS Cwcijiro/Tempar/Jpcheat用" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "CP936=中国語GBK" & _
             " CheatmasterやFreecheat用"
@@ -389,14 +389,14 @@ Partial Class MERGE
         'CP932ToolStripMenuItem
         '
         Me.CP932ToolStripMenuItem.Name = "CP932ToolStripMenuItem"
-        Me.CP932ToolStripMenuItem.Size = New System.Drawing.Size(193, 22)
+        Me.CP932ToolStripMenuItem.Size = New System.Drawing.Size(166, 22)
         Me.CP932ToolStripMenuItem.Text = "SJIS(CP932)"
         Me.CP932ToolStripMenuItem.ToolTipText = "日本語シフトJISのDBを編集します"
         '
         'GBKToolStripMenuItem
         '
         Me.GBKToolStripMenuItem.Name = "GBKToolStripMenuItem"
-        Me.GBKToolStripMenuItem.Size = New System.Drawing.Size(193, 22)
+        Me.GBKToolStripMenuItem.Size = New System.Drawing.Size(166, 22)
         Me.GBKToolStripMenuItem.Text = "GBK(CP936)"
         Me.GBKToolStripMenuItem.ToolTipText = "簡体中国語GBKのDBを編集します"
         '
@@ -404,7 +404,7 @@ Partial Class MERGE
         '
         Me.UTF16BECP1201ToolStripMenuItem.Enabled = False
         Me.UTF16BECP1201ToolStripMenuItem.Name = "UTF16BECP1201ToolStripMenuItem"
-        Me.UTF16BECP1201ToolStripMenuItem.Size = New System.Drawing.Size(193, 22)
+        Me.UTF16BECP1201ToolStripMenuItem.Size = New System.Drawing.Size(166, 22)
         Me.UTF16BECP1201ToolStripMenuItem.Text = "UTF16BE(CP1201)"
         Me.UTF16BECP1201ToolStripMenuItem.ToolTipText = "マルチバイトUTF16ビッグエンディアン" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "コードフリーク専用DBをTXTに戻します。"
         '
@@ -412,51 +412,50 @@ Partial Class MERGE
         '
         Me.ツリー開閉ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.paserToolStripMenuItem, Me.ToolStripSeparator7, Me.すべて閉じるToolStripMenuItem, Me.全て展開するToolStripMenuItem, Me.ToolStripSeparator3, Me.半角カナ全角ToolStripMenuItem, Me.中国語文字化け対策ToolStripMenuItem})
         Me.ツリー開閉ToolStripMenuItem.Name = "ツリー開閉ToolStripMenuItem"
-        Me.ツリー開閉ToolStripMenuItem.Size = New System.Drawing.Size(76, 22)
+        Me.ツリー開閉ToolStripMenuItem.Size = New System.Drawing.Size(58, 20)
         Me.ツリー開閉ToolStripMenuItem.Text = "ツリー(&T)"
         Me.ツリー開閉ToolStripMenuItem.ToolTipText = "ツリーノードの全展開、折りたたみを実行"
         '
         'paserToolStripMenuItem
         '
         Me.paserToolStripMenuItem.Name = "paserToolStripMenuItem"
-        Me.paserToolStripMenuItem.Size = New System.Drawing.Size(184, 22)
-        Me.paserToolStripMenuItem.Text = "パーサー"
-        Me.paserToolStripMenuItem.ToolTipText = "チートコードを加工してまとめて追加します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ツリーの一番上ファイル名を選択時；_S_G追加が有効になります" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ゲームタイトル名選択時；ゲームの末尾に追加" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "コード" & _
-            "名選択時；選択箇所の次に挿入"
+        Me.paserToolStripMenuItem.Size = New System.Drawing.Size(176, 22)
+        Me.paserToolStripMenuItem.Text = "コードパーサー"
+        Me.paserToolStripMenuItem.ToolTipText = "チートコードをまとめて追加してツリーに反映します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ツリーの一番上ファイル名を選択時；_S_G追加が有効になります" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ゲームタイトル名選択時；ゲームの末尾に追加" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "コード名選択時；選択箇所の次に挿入"
         '
         'ToolStripSeparator7
         '
         Me.ToolStripSeparator7.Name = "ToolStripSeparator7"
-        Me.ToolStripSeparator7.Size = New System.Drawing.Size(181, 6)
+        Me.ToolStripSeparator7.Size = New System.Drawing.Size(173, 6)
         '
         'すべて閉じるToolStripMenuItem
         '
         Me.すべて閉じるToolStripMenuItem.Name = "すべて閉じるToolStripMenuItem"
-        Me.すべて閉じるToolStripMenuItem.Size = New System.Drawing.Size(184, 22)
+        Me.すべて閉じるToolStripMenuItem.Size = New System.Drawing.Size(176, 22)
         Me.すべて閉じるToolStripMenuItem.Text = "全て折りたたむ"
         '
         '全て展開するToolStripMenuItem
         '
         Me.全て展開するToolStripMenuItem.Name = "全て展開するToolStripMenuItem"
-        Me.全て展開するToolStripMenuItem.Size = New System.Drawing.Size(184, 22)
+        Me.全て展開するToolStripMenuItem.Size = New System.Drawing.Size(176, 22)
         Me.全て展開するToolStripMenuItem.Text = "全て展開する"
         '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(181, 6)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(173, 6)
         '
         '半角カナ全角ToolStripMenuItem
         '
         Me.半角カナ全角ToolStripMenuItem.Name = "半角カナ全角ToolStripMenuItem"
-        Me.半角カナ全角ToolStripMenuItem.Size = New System.Drawing.Size(184, 22)
-        Me.半角カナ全角ToolStripMenuItem.Text = "半角カナ->全角"
-        Me.半角カナ全角ToolStripMenuItem.ToolTipText = "半角カナを全角カタカナに変換します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "GBKCP936では半角カナ自体が存在しないため必要" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        Me.半角カナ全角ToolStripMenuItem.Size = New System.Drawing.Size(185, 22)
+        Me.半角カナ全角ToolStripMenuItem.Text = "半角カナ→全角カタカナ"
+        Me.半角カナ全角ToolStripMenuItem.ToolTipText = "半角カナを全角カタカナに変換します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "中国語GBKには半角カナが存在しないため半角のまま保存すると文字化けが発生します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         '中国語文字化け対策ToolStripMenuItem
         '
         Me.中国語文字化け対策ToolStripMenuItem.Name = "中国語文字化け対策ToolStripMenuItem"
-        Me.中国語文字化け対策ToolStripMenuItem.Size = New System.Drawing.Size(184, 22)
+        Me.中国語文字化け対策ToolStripMenuItem.Size = New System.Drawing.Size(176, 22)
         Me.中国語文字化け対策ToolStripMenuItem.Text = "中国語文字化け対策"
         Me.中国語文字化け対策ToolStripMenuItem.ToolTipText = "FREECHEAT/CMFUSIONで半角カナ以外の表示できない文字を代替文字かスペースで置換します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "対象；" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "・ー∋⊆⊇⊂⊃￢⇒⇔∀∃∂∇≪≫∬Å♯♭♪†‡¶" & _
             "⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳㍉㌔㌢㍍㌘㌧㌃㌶㍑㍗㌍㌦㌣㌫㍊㌻㍻〝〟㏍㊤㊥㊦㊧㊨㍾㍽㍼"
@@ -465,46 +464,44 @@ Partial Class MERGE
         '
         Me.CWCWIKIToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.wikiToolStripMenuItem1, Me.OHGToolStripMenuItem, Me.HAXToolStripMenuItem, Me.CNGBAToolStripMenuItem, Me.GOOGLEToolStripMenuItem, Me.CMF暗号復元ToolStripMenuItem})
         Me.CWCWIKIToolStripMenuItem.Name = "CWCWIKIToolStripMenuItem"
-        Me.CWCWIKIToolStripMenuItem.Size = New System.Drawing.Size(89, 22)
+        Me.CWCWIKIToolStripMenuItem.Size = New System.Drawing.Size(69, 20)
         Me.CWCWIKIToolStripMenuItem.Text = "ブラウザ(&B)"
         Me.CWCWIKIToolStripMenuItem.ToolTipText = "ブラウザでCWCheatwikiにアクセス"
         '
         'wikiToolStripMenuItem1
         '
         Me.wikiToolStripMenuItem1.Name = "wikiToolStripMenuItem1"
-        Me.wikiToolStripMenuItem1.Size = New System.Drawing.Size(186, 22)
+        Me.wikiToolStripMenuItem1.Size = New System.Drawing.Size(169, 22)
         Me.wikiToolStripMenuItem1.Text = "CWCWIKI"
         '
         'OHGToolStripMenuItem
         '
         Me.OHGToolStripMenuItem.Name = "OHGToolStripMenuItem"
-        Me.OHGToolStripMenuItem.Size = New System.Drawing.Size(186, 22)
+        Me.OHGToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
         Me.OHGToolStripMenuItem.Text = "OHG"
         '
         'HAXToolStripMenuItem
         '
         Me.HAXToolStripMenuItem.Name = "HAXToolStripMenuItem"
-        Me.HAXToolStripMenuItem.Size = New System.Drawing.Size(186, 22)
+        Me.HAXToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
         Me.HAXToolStripMenuItem.Text = "HAX"
         '
         'CNGBAToolStripMenuItem
         '
         Me.CNGBAToolStripMenuItem.Name = "CNGBAToolStripMenuItem"
-        Me.CNGBAToolStripMenuItem.Size = New System.Drawing.Size(186, 22)
+        Me.CNGBAToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
         Me.CNGBAToolStripMenuItem.Text = "CNGBA"
-        Me.CNGBAToolStripMenuItem.ToolTipText = "指定ブラウザで"
         '
         'GOOGLEToolStripMenuItem
         '
         Me.GOOGLEToolStripMenuItem.Name = "GOOGLEToolStripMenuItem"
-        Me.GOOGLEToolStripMenuItem.Size = New System.Drawing.Size(186, 22)
+        Me.GOOGLEToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
         Me.GOOGLEToolStripMenuItem.Text = "GOOGLE"
-        Me.GOOGLEToolStripMenuItem.ToolTipText = "指定ブラウザでGOOGLE表示"
         '
         'CMF暗号復元ToolStripMenuItem
         '
         Me.CMF暗号復元ToolStripMenuItem.Name = "CMF暗号復元ToolStripMenuItem"
-        Me.CMF暗号復元ToolStripMenuItem.Size = New System.Drawing.Size(186, 22)
+        Me.CMF暗号復元ToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
         Me.CMF暗号復元ToolStripMenuItem.Text = "CMF暗号コード復元"
         Me.CMF暗号復元ToolStripMenuItem.ToolTipText = "CMFUSION専用暗号コードをTEMAR専用サブルーチンコードに復号する"
         '
@@ -512,55 +509,55 @@ Partial Class MERGE
         '
         Me.EXE起動ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.KAKASI, Me.MECAB, Me.PMETAN変換ToolStripMenuItem, Me.TEMPAR鶴ToolStripMenuItem, Me.WgetToolStripMenuItem, Me.JaneStyleToolStripMenuItem, Me.PSPへコードコピーToolStripMenuItem})
         Me.EXE起動ToolStripMenuItem.Name = "EXE起動ToolStripMenuItem"
-        Me.EXE起動ToolStripMenuItem.Size = New System.Drawing.Size(89, 22)
+        Me.EXE起動ToolStripMenuItem.Size = New System.Drawing.Size(77, 20)
         Me.EXE起動ToolStripMenuItem.Text = "EXE起動(&E)"
         '
         'KAKASI
         '
         Me.KAKASI.Name = "KAKASI"
-        Me.KAKASI.Size = New System.Drawing.Size(205, 22)
+        Me.KAKASI.Size = New System.Drawing.Size(180, 22)
         Me.KAKASI.Text = "KAKASI変換"
         Me.KAKASI.ToolTipText = "kakasiエンジンで全角文字を半角カナに変換する" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "対象cheat.sjis.db"
         '
         'MECAB
         '
         Me.MECAB.Name = "MECAB"
-        Me.MECAB.Size = New System.Drawing.Size(205, 22)
+        Me.MECAB.Size = New System.Drawing.Size(180, 22)
         Me.MECAB.Text = "MECAB+KAKASI変換"
         Me.MECAB.ToolTipText = "MECABエンジンで全角文字をカナカナにしたあとkakasiで半角カナに変更する" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "対象cheatsjis.db"
         '
         'PMETAN変換ToolStripMenuItem
         '
         Me.PMETAN変換ToolStripMenuItem.Name = "PMETAN変換ToolStripMenuItem"
-        Me.PMETAN変換ToolStripMenuItem.Size = New System.Drawing.Size(205, 22)
+        Me.PMETAN変換ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.PMETAN変換ToolStripMenuItem.Text = "PMETAN変換"
         Me.PMETAN変換ToolStripMenuItem.ToolTipText = "PMETANを起動してARコードに変換します"
         '
         'TEMPAR鶴ToolStripMenuItem
         '
         Me.TEMPAR鶴ToolStripMenuItem.Name = "TEMPAR鶴ToolStripMenuItem"
-        Me.TEMPAR鶴ToolStripMenuItem.Size = New System.Drawing.Size(205, 22)
+        Me.TEMPAR鶴ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.TEMPAR鶴ToolStripMenuItem.Text = "TEMPAR鶴"
         Me.TEMPAR鶴ToolStripMenuItem.ToolTipText = "TEMARを起動してBINに変換します"
         '
         'WgetToolStripMenuItem
         '
         Me.WgetToolStripMenuItem.Name = "WgetToolStripMenuItem"
-        Me.WgetToolStripMenuItem.Size = New System.Drawing.Size(205, 22)
+        Me.WgetToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.WgetToolStripMenuItem.Text = "WGETコード取得"
         Me.WgetToolStripMenuItem.ToolTipText = "特定のサイトからコードをDLします"
         '
         'JaneStyleToolStripMenuItem
         '
         Me.JaneStyleToolStripMenuItem.Name = "JaneStyleToolStripMenuItem"
-        Me.JaneStyleToolStripMenuItem.Size = New System.Drawing.Size(205, 22)
+        Me.JaneStyleToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.JaneStyleToolStripMenuItem.Text = "JaneStyle"
         Me.JaneStyleToolStripMenuItem.ToolTipText = "2CHブラウザを起動してコードを探します"
         '
         'PSPへコードコピーToolStripMenuItem
         '
         Me.PSPへコードコピーToolStripMenuItem.Name = "PSPへコードコピーToolStripMenuItem"
-        Me.PSPへコードコピーToolStripMenuItem.Size = New System.Drawing.Size(205, 22)
+        Me.PSPへコードコピーToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.PSPへコードコピーToolStripMenuItem.Text = "PSPへコードを転送"
         Me.PSPへコードコピーToolStripMenuItem.ToolTipText = "PSPへコードを転送します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "メモリースティックのパスの入力が必要です" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "例；パスがE場合　E:"
         '
@@ -568,19 +565,19 @@ Partial Class MERGE
         '
         Me.ヘルプHToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.オンラインヘルプToolStripMenuItem, Me.バージョン情報ToolStripMenuItem})
         Me.ヘルプHToolStripMenuItem.Name = "ヘルプHToolStripMenuItem"
-        Me.ヘルプHToolStripMenuItem.Size = New System.Drawing.Size(78, 22)
+        Me.ヘルプHToolStripMenuItem.Size = New System.Drawing.Size(62, 20)
         Me.ヘルプHToolStripMenuItem.Text = "ヘルプ(&H)"
         '
         'オンラインヘルプToolStripMenuItem
         '
         Me.オンラインヘルプToolStripMenuItem.Name = "オンラインヘルプToolStripMenuItem"
-        Me.オンラインヘルプToolStripMenuItem.Size = New System.Drawing.Size(172, 22)
+        Me.オンラインヘルプToolStripMenuItem.Size = New System.Drawing.Size(143, 22)
         Me.オンラインヘルプToolStripMenuItem.Text = "オンラインヘルプ"
         '
         'バージョン情報ToolStripMenuItem
         '
         Me.バージョン情報ToolStripMenuItem.Name = "バージョン情報ToolStripMenuItem"
-        Me.バージョン情報ToolStripMenuItem.Size = New System.Drawing.Size(172, 22)
+        Me.バージョン情報ToolStripMenuItem.Size = New System.Drawing.Size(143, 22)
         Me.バージョン情報ToolStripMenuItem.Text = "バージョン情報"
         '
         'codetree
@@ -607,9 +604,7 @@ Partial Class MERGE
         '
         Me.新規ゲーム追加ToolStripMenuItem.Name = "新規ゲーム追加ToolStripMenuItem"
         Me.新規ゲーム追加ToolStripMenuItem.Size = New System.Drawing.Size(176, 22)
-        Me.新規ゲーム追加ToolStripMenuItem.Text = "パーサー"
-        Me.新規ゲーム追加ToolStripMenuItem.ToolTipText = "チートコードを加工してまとめて追加します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ツリーの一番上ファイル名を選択時；_S_G追加が有効になります" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ゲームタイトル名選択時；ゲームの末尾に追加" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "コード" & _
-            "名選択時；選択箇所の次に挿入"
+        Me.新規ゲーム追加ToolStripMenuItem.Text = "コードパーサー"
         '
         'ToolStripSeparator4
         '
@@ -638,15 +633,12 @@ Partial Class MERGE
         Me.hankaku.Name = "hankaku"
         Me.hankaku.Size = New System.Drawing.Size(176, 22)
         Me.hankaku.Text = "半角カナ→全角"
-        Me.hankaku.ToolTipText = "半角カナを全角カタカナに変換します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "GBKCP936では半角カナ自体が存在しないため必要" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'CNchar
         '
         Me.CNchar.Name = "CNchar"
         Me.CNchar.Size = New System.Drawing.Size(176, 22)
         Me.CNchar.Text = "中国語文字化け対策"
-        Me.CNchar.ToolTipText = "FREECHEAT/CMFUSIONで半角カナ以外の表示できない文字を代替文字かスペースで置換します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "対象；" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "・ー∋⊆⊇⊂⊃￢⇒⇔∀∃∂∇≪≫∬Å♯♭♪†‡¶" & _
-            "⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳㍉㌔㌢㍍㌘㌧㌃㌶㍑㍗㌍㌦㌣㌫㍊㌻㍻〝〟㏍㊤㊥㊦㊧㊨㍾㍽㍼" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'ToolStripSeparator6
         '
@@ -663,16 +655,14 @@ Partial Class MERGE
         'KAKASI変換ToolStripMenuItem
         '
         Me.KAKASI変換ToolStripMenuItem.Name = "KAKASI変換ToolStripMenuItem"
-        Me.KAKASI変換ToolStripMenuItem.Size = New System.Drawing.Size(184, 22)
+        Me.KAKASI変換ToolStripMenuItem.Size = New System.Drawing.Size(161, 22)
         Me.KAKASI変換ToolStripMenuItem.Text = "KAKASI変換"
-        Me.KAKASI変換ToolStripMenuItem.ToolTipText = "kakasiエンジンで全角文字を半角カナに変換する" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "対象cheat.sjis.db"
         '
         'PSPコピーToolStripMenuItem
         '
         Me.PSPコピーToolStripMenuItem.Name = "PSPコピーToolStripMenuItem"
-        Me.PSPコピーToolStripMenuItem.Size = New System.Drawing.Size(184, 22)
+        Me.PSPコピーToolStripMenuItem.Size = New System.Drawing.Size(161, 22)
         Me.PSPコピーToolStripMenuItem.Text = "PSPへコードを転送"
-        Me.PSPコピーToolStripMenuItem.ToolTipText = "PSPへコードを転送します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "メモリースティックのパスの入力が必要です" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "例；パスがE場合　E:"
         '
         'iconset
         '
@@ -713,7 +703,7 @@ Partial Class MERGE
         Me.GT_tb.Location = New System.Drawing.Point(320, 95)
         Me.GT_tb.MaxLength = 64
         Me.GT_tb.Name = "GT_tb"
-        Me.GT_tb.Size = New System.Drawing.Size(487, 19)
+        Me.GT_tb.Size = New System.Drawing.Size(328, 19)
         Me.GT_tb.TabIndex = 2
         '
         'gtitle_lbl
@@ -752,7 +742,7 @@ Partial Class MERGE
         Me.CT_tb.Location = New System.Drawing.Point(320, 169)
         Me.CT_tb.MaxLength = 72
         Me.CT_tb.Name = "CT_tb"
-        Me.CT_tb.Size = New System.Drawing.Size(487, 19)
+        Me.CT_tb.Size = New System.Drawing.Size(328, 19)
         Me.CT_tb.TabIndex = 4
         '
         'codetitle_lbl
@@ -828,7 +818,7 @@ Partial Class MERGE
         Me.cmt_tb.Multiline = True
         Me.cmt_tb.Name = "cmt_tb"
         Me.cmt_tb.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.cmt_tb.Size = New System.Drawing.Size(489, 101)
+        Me.cmt_tb.Size = New System.Drawing.Size(330, 101)
         Me.cmt_tb.TabIndex = 5
         '
         'cm_lbl
@@ -844,9 +834,9 @@ Partial Class MERGE
         'tool_menu
         '
         Me.tool_menu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.add_game, Me.rem_game, Me.ToolStripSeparator2, Me.Add_cd, Me.rem_cd, Me.ToolStripSeparator1, Me.save_gc, Me.save_cc, Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripButton3})
-        Me.tool_menu.Location = New System.Drawing.Point(0, 26)
+        Me.tool_menu.Location = New System.Drawing.Point(0, 24)
         Me.tool_menu.Name = "tool_menu"
-        Me.tool_menu.Size = New System.Drawing.Size(806, 54)
+        Me.tool_menu.Size = New System.Drawing.Size(647, 54)
         Me.tool_menu.TabIndex = 14
         Me.tool_menu.Text = "ToolStrip1"
         '
@@ -991,7 +981,7 @@ Partial Class MERGE
         Me.button_list.Items.AddRange(New Object() {"セレクト", "スタート", "↑", "→", "↓", "←", "Lトリガー", "Rトリガー", "△", "○", "Ｘ", "□", "HOME", "HOLD", "ミュート", "スクリーン", "音量+", "音量-", "WLAN UP", "REMOTE HOLD"})
         Me.button_list.Location = New System.Drawing.Point(519, 205)
         Me.button_list.Name = "button_list"
-        Me.button_list.Size = New System.Drawing.Size(287, 228)
+        Me.button_list.Size = New System.Drawing.Size(128, 228)
         Me.button_list.TabIndex = 9
         '
         'inverse_chk
@@ -1204,7 +1194,7 @@ Partial Class MERGE
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
-        Me.ClientSize = New System.Drawing.Size(806, 562)
+        Me.ClientSize = New System.Drawing.Size(647, 562)
         Me.Controls.Add(Me.Button4)
         Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.Button2)

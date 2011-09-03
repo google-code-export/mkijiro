@@ -54,7 +54,7 @@ PSP_MODULE_INFO("nitePRmod", 0x3007, 1, 2); //0x3007
 PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 
 //Globals
-unsigned char *NPRVER="nitePRmod 20110519";
+unsigned char *NPRVER="nitePRhorizon20110904";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -175,7 +175,7 @@ unsigned int counteraddress=0;
 unsigned char logcounter=0;
 unsigned char countermax=0;
 unsigned char cheatLength=1;
-unsigned char fileBuffer[1536];
+unsigned char fileBuffer[2048];
 unsigned int fileBufferSize=0;
 unsigned int fileBufferBackup=0;
 unsigned int fileBufferFileOffset=0;
@@ -299,7 +299,7 @@ unsigned int cheatNew(unsigned char a_size, unsigned int a_address, unsigned int
   }
 }
 
-unsigned int blockAdd(int fd, unsigned char *a_data)
+/*unsigned int blockAdd(int fd, unsigned char *a_data)
 {
   unsigned int type;
   unsigned int offset;
@@ -351,7 +351,7 @@ unsigned int blockAdd(int fd, unsigned char *a_data)
     return 1;
   }
   return 0;
-}
+}*/
 
 
 void cheatEnable(unsigned int a_cheat)
@@ -643,7 +643,209 @@ void cheatSave()
 	searchResultCounter=0;
 }
 
+
 void cheatLoad(){
+	int fd;
+
+	fd=sceIoOpen(gameDir, PSP_O_RDONLY, 0777);
+	if(cheatRefresh){
+
+		int counter=0;
+
+		cheatSelected=counter;
+		while(counter < cheatTotal){ //cycle through cheats in ram
+			
+			int scounter=0;
+			while(scounter < blockTotal){ 
+				//delete a cheat from ram
+				block[cheatSelected].flags;
+				block[cheatSelected].address;
+				block[cheatSelected].stdVal;
+				block[cheatSelected].hakVal;
+				scounter++;
+			}
+
+			//reset the cheats info
+			cheat[cheatSelected].block=0;
+			cheat[cheatSelected].len=0;
+			cheat[cheatSelected].flags=0;
+			strcpy(cheat[cheatSelected].name, NULL);
+			counter++;
+		}
+
+		cheatTotal=0;
+		blockTotal=0;
+
+		//delay
+		sceKernelDelayThread(1500);
+		cheatRefresh=0;
+
+	}
+
+	//Load the cheats
+	if(fd > 0){
+		unsigned int fileSize=sceIoLseek(fd, 0, SEEK_END);
+		sceIoLseek(fd, 0, SEEK_SET);
+		unsigned int fileOffset=0;
+		unsigned int filecurr=0;
+		unsigned char commentMode=0;
+		unsigned char nameMode=0;
+		unsigned int i=0;
+		int counter=0;
+	  	unsigned int type;
+	// unsigned int offset;
+  		unsigned char hex[8];
+		unsigned int k=0;
+
+
+		sceIoRead(fd, &fileBuffer[0], 2048);
+		
+		while(fileOffset < fileSize){
+			
+			if(i == 2048){
+			i=0;
+			filecurr+=2048;
+			sceKernelDelayThread(1500);
+			sceIoLseek(fd, filecurr, SEEK_SET);
+			sceIoRead(fd, &fileBuffer[0], 2048);
+			}
+			
+			if((fileBuffer[i]=='\r') || (fileBuffer[i]=='\n')){
+				commentMode=0;
+				if(nameMode){
+					cheatTotal++;
+					nameMode=0;
+				}
+			}
+			else if((fileBuffer[i]==' ') && (!nameMode)){}
+			else if(fileBuffer[i]==';'){commentMode=1; if(nameMode){cheatTotal++; nameMode=0;}} //Skip comments till next line
+			else if(fileBuffer[i]=='#'){ //Read in the cheat name
+				if(cheatTotal >= NAME_MAX) { break;}
+				cheat[cheatTotal].block=blockTotal;
+				cheat[cheatTotal].flags=0;
+				cheat[cheatTotal].len=0;
+				cheat[cheatTotal].name[0]=0;
+				nameMode=1;
+			}
+			else if((fileBuffer[i]=='!') && (nameMode)){
+				//Cheat's selected by default
+				if(cheat[cheatTotal].flags & FLAG_SELECTED){ //Two ! = selected for constant on status
+					cheat[cheatTotal].flags|=FLAG_CONSTANT;
+					cheat[cheatTotal].flags&=~FLAG_SELECTED;
+				}
+				else{ //One ! = selected for music on/off button
+					cheat[cheatTotal].flags|=FLAG_SELECTED;
+				}
+			}
+			else if((!commentMode) && (nameMode)){
+				if(nameMode<32){ //1 to 31 = letters, 32=Null terminator
+					cheat[cheatTotal].name[nameMode-1]=fileBuffer[i];
+					nameMode++;
+					cheat[cheatTotal].name[nameMode-1]=0;
+				}
+			}
+			else if((!commentMode) && (!nameMode)){
+				//Add 0xAABBCCDD 0xAABBCCDD block
+				//if(!blockAdd(i)){
+				if(blockTotal!=BLOCK_MAX){
+
+  //int cheatType=0;
+    block[blockTotal].flags=0;
+    
+    //read address
+    //0x12345678 0x
+	if(i >= 2024){
+	filecurr+=i;
+	i=0;
+	sceKernelDelayThread(1500);
+	sceIoLseek(fd, filecurr, SEEK_SET);
+	sceIoRead(fd, &fileBuffer[0], 2048);
+	}
+	counter=0;
+	while(counter < 100){ //correct missaligned addressing in db
+	    memcpy(&buffer[0],&fileBuffer[i+counter],1);
+		if((buffer[0]=='x') || (buffer[0]=='X')){
+		 break;
+		}
+		counter++;
+	}
+	k=counter+1;
+	
+    memcpy(&hex[0],&fileBuffer[i+k],8);
+    block[blockTotal].address=char2hex(hex, &type);
+    
+	//is our addressing within bounds?
+    if(block[blockTotal].address==0xFFFFFFFF){ // is block dma?
+		block[blockTotal].flags|=FLAG_DMA;
+		block[blockTotal].stdVal=0xFFFFFFFF;
+    }
+    #ifdef _JOKER_
+    else if((block[blockTotal].address>=0xFF000000) && (block[blockTotal].address<=0xFFFFF3F9)){ // is block joker?
+    	block[blockTotal].flags|=FLAG_JOKER;
+    }
+    else if((block[blockTotal].address > 0x10000000)&&(block[blockTotal].address < 0x30000000)){ //is it cw mode (non dma)?
+	block[blockTotal].flags|=FLAG_CWC;
+    	block[blockTotal].address&=0x0FFFFFFF;
+    	block[blockTotal].address+=0x08800000;
+	}
+    #endif
+    else{ //is block other?
+    	block[blockTotal].address&=0x0FFFFFFF;
+    	if(block[blockTotal].address < 0x08800000){
+    		block[blockTotal].address+=0x08800000;
+		}
+    }
+	//read value 
+	counter=0;
+	while(counter < 100){ //correct missaligned values in db and check for cheat value flagging
+	    memcpy(&hex[0],&fileBuffer[i+k+counter],1);
+		if((hex[0]=='x') || (hex[0]=="X")){ break; }
+		counter++;
+	}
+	k=k+counter+1;
+	
+	if(counter == 100){ strcpy(hex, "00000000"); }
+	else{
+		//switch(cheatType){
+			//case 0: //hex cheat
+				memcpy(&hex[0],&fileBuffer[i+k],8);
+				block[blockTotal].hakVal=char2hex(hex, &type);
+		//	break;
+		//}
+	}
+    if(hex[0]=='_'){
+    	block[blockTotal].flags|=FLAG_FREEZE;
+    }
+
+	switch(type){
+		case 2: block[blockTotal].flags|=FLAG_BYTE; break;
+		case 4: block[blockTotal].flags|=FLAG_WORD; break;
+		case 8: block[blockTotal].flags|=FLAG_DWORD; break;
+		default: block[blockTotal].flags|=FLAG_UWORD;
+	}
+    
+    blockTotal++;
+    i+=k+type;
+				}
+				else{
+					//No more RAM?
+				if(cheatTotal != 0){
+						cheatTotal--;
+						break;
+					}
+				}
+				if(cheatTotal != 0){
+					cheat[cheatTotal-1].len++;
+				}
+			}
+			i++;
+			fileOffset=filecurr+i;
+		}
+		sceIoClose(fd);
+	}
+}
+
+/*void cheatLoad(){
   unsigned char fileChar=0;
   unsigned char fileMisc[3];
   unsigned int fileSize=0;
@@ -759,7 +961,7 @@ void cheatLoad(){
     }
     sceIoClose(fd);
   }
-}
+}*/
 
 void buttonCallback(int curr, int last, void *arg)
 {
