@@ -22,6 +22,10 @@ as for 8byte RAMeditor,strange copy position
 0x8838DBF0 moviezone,pspfat should freeze after search/save...slim user use extraram setting
 
 
+2011/9/3
+パーサーの処理速度向上
+いーす７で２～３秒ぐらい
+
 2011/5/30
 浮動小数の桁あふれを表示しないようにした(HUGEと表示される)
 
@@ -351,7 +355,7 @@ added screeshot toggles(need compile)
 make -f Makefile_screenshot
 
 2010/11/14
-UFLOAT 2バイトかつ&2,MFLOAT lui+addi/addiu/ori でレジスタが全部同じとき 
+UFLOAT 2バイトかつ&2,MFLOAT lui+addi/addiu/ori でレジスタが全部同じとき
 UPPERFLOAT(VALUE<<16),MERGEDFLOAT LUI+ADDI/ADDIU/ORI && ALL REGISTER SAME
 unknown vfpu opcode 0xD039****
 

@@ -100,7 +100,7 @@ PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 #endif
 
 //Globals
-unsigned char *MKVER="  MKIJIRO20110523";
+unsigned char *MKVER="  MKIJIRO BUILD:20110904";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -138,9 +138,11 @@ typedef struct Cheat{
 //Block flags
 #define FLAG_CWC (1<<3)   //00001000
 #define FLAG_DMA (1<<4)   //00010000
+
 #ifdef _JOKER_
 #define FLAG_JOKER (1<<1) //00000001
 #endif
+
 #define FLAG_FREEZE (1<<5)//00100000
 #define FLAG_DWORD (3<<6) //11000000
 #define FLAG_UWORD (2<<6) //10000000 unaligned flag this is a note for me ignore this
@@ -151,6 +153,7 @@ typedef struct Cheat{
 #define FLAG_SELECTED (1<<0) //If selected, will be disabled/enabled by music button
 #define FLAG_CONSTANT (1<<1) //If 1, cheat is constantly on regardless of music button
 #define FLAG_FRESH (1<<2) //Cheat was just recently enabled/disabled
+
 #ifdef _100_
 //省メモリ版 HEN+PIL使用時対策
 #define NAME_MAX 100
@@ -164,6 +167,7 @@ unsigned int searchAddress[500]; //サーチアドレス表示用
 #define NAME_MAX 512 //チート名最大数
 #define BLOCK_MAX 1024 //チートコード最大数
 #endif
+
 #define LOCKINTERVAL 7812 //ロック間隔
 
 //Globals
@@ -255,6 +259,7 @@ char FAKEHYOGEN=-1;
 unsigned int setting=0;
 unsigned char codedumpNo=0;
 //unsigned char *dumptype[]={"nitePR","CWCheat","ACTIONREPLAY","PMETAN","AR 0xE"};
+
 #ifdef _SWAPBUTTON_
 unsigned short SWAPBUTTON=0x4000;
 unsigned short SWAPBUTTON2=0x2000;
@@ -263,13 +268,15 @@ unsigned short SWAPBUTTON3=0x8000;
 #define SWAPBUTTON PSP_CTRL_CROSS
 #define SWAPBUTTON2 PSP_CTRL_CIRCLE
 #define SWAPBUTTON3 PSP_CTRL_SQUARE
+
 #endif
 #ifdef _USB_
 unsigned char usbmod=0;
 unsigned char usbonbitch=0;
 #endif
+
 #ifdef _SCREENSHOT_
-	#include "headers/screenshot.h"
+#include "headers/screenshot.h"
 unsigned int screenKey=0x00100000;//screenkey
 unsigned char screenPath[64]={0};
 unsigned char screenTime=0;
@@ -277,12 +284,14 @@ unsigned char screenshot_mode=0;
 unsigned short screenNo=0;
 unsigned char *screenshotstring[]={"NONE", "GAME","VRAM"};
 #endif
+
 unsigned char copyMenuX=25;
 unsigned char copyMenuY=0;
 
 //gui shit
 unsigned int menuKey=PSP_CTRL_VOLUP | PSP_CTRL_VOLDOWN;
 unsigned int triggerKey=PSP_CTRL_NOTE;
+
 #ifdef _UMDMODE_
 unsigned int color01=0xFFFFFF00; //bright Red
 unsigned int color01_to=0x00030300; //fade amount
@@ -290,6 +299,7 @@ unsigned int color01_to=0x00030300; //fade amount
 unsigned int color01=0xFFFFFF00; //bright Yellow
 unsigned int color01_to=0x00030300; //fade amount
 #endif
+
 unsigned int color02=0xFFCCCCCC; //grey
 unsigned int color02_to=0x00060606; //fade amount
 unsigned int color03=0xFFFF0000; //blue
@@ -521,111 +531,6 @@ unsigned int cheatNew(unsigned char a_size, unsigned int a_address, unsigned int
   }
 }
 
-unsigned int blockAdd(int fd, unsigned char *a_data){
-  
-  unsigned int type;
-  unsigned int offset;
-  unsigned char hex[8];
-  unsigned char temp[8];
-
-
-  unsigned char chartemp[4];
-  int counter=0;
-  int cheatType=0;
-  int copyAmount=0;
-  
-  if(blockTotal!=BLOCK_MAX){
-    block[blockTotal].flags=0;
-    
-    //read address
-    counter=0;
-	while(counter < 100){ //correct missaligned addressing in db
-		offset=sceIoLseek(fd, 0, SEEK_CUR);
-		sceIoRead(fd, hex, 1);
-		if(hex[0]=='x'){ break; }
-		else if(hex[0]=='X'){ break; }
-		counter++;
-	}
-	
-    sceIoLseek(fd, 0, SEEK_CUR);
-    sceIoRead(fd, hex, 8);
-    block[blockTotal].address=char2hex(hex, &type);
-    
-	//is our addressing within bounds?
-    if(block[blockTotal].address==0xFFFFFFFF){ // is block dma?
-		block[blockTotal].flags|=FLAG_DMA;
-		block[blockTotal].stdVal=0xFFFFFFFF;
-    }
-    #ifdef _JOKER_
-    else if((block[blockTotal].address>=0xFF000000) && (block[blockTotal].address<=0xFFFFF3F9)){ // is block joker?
-    	block[blockTotal].flags|=FLAG_JOKER;
-    	//block[blockTotal].address+=0x08800000;
-    	//block[blockTotal].address-=0xFF000000;
-		//block[blockTotal].stdVal=0xFF000000;
-    }
-    #endif
-    else if((block[blockTotal].address > 0x10000000)&&(block[blockTotal].address < 0x30000000)){ //is it cw mode (non dma)?
-	block[blockTotal].flags|=FLAG_CWC;
-    	block[blockTotal].address&=0x0FFFFFFF;
-    	block[blockTotal].address+=0x08800000;
-	}
-    else{ //is block other?
-    	block[blockTotal].address&=0x0FFFFFFF;
-    	if(block[blockTotal].address < 0x08800000){
-    		block[blockTotal].address+=0x08800000;
-		}
-    }
-   
-	//read value 
-	counter=0;
-	while(counter < 100){ //correct missaligned values in db and check for cheat value flagging
-		offset=sceIoLseek(fd, 0, SEEK_CUR);
-		sceIoRead(fd, hex, 1);
-		if(hex[0]=='x'){ break; }
-		else if(hex[0]=='X'){ cheatType=0; break; }
-		else if(hex[0]==':'){ cheatType=1; break; }
-		counter++;
-	}
-	offset=sceIoLseek(fd, 0, SEEK_CUR);
-	
-	if(counter == 100){ strcpy(hex, "00000000"); }
-	else{
-		switch(cheatType){
-			case 0: //hex cheat
-				sceIoRead(fd, hex, 8);
-				block[blockTotal].hakVal=char2hex(hex, &type);
-			break;
-			case 1: //text cheat
-				sceIoRead(fd, hex, 4);
-				counter=0;
-				while(counter < 4){ if((hex[counter]==0x0D) || (hex[counter]==0x0A)){hex[counter]=NULL;} counter++; }
-				if(strlen(hex)==1){ hex[1]=NULL; hex[2]=NULL; hex[3]=NULL; type=2; }
-				else if(strlen(hex)==2){ hex[2]=NULL; hex[3]=NULL; type=4; }
-				else if(strlen(hex)==3){ hex[2]=NULL; hex[3]=NULL; type=4; }
-				else if(strlen(hex)==4){ type=8; }
-				memcpy(&block[blockTotal].hakVal, hex, 4);
-			break;
-		}
-	}
-    if(hex[0]=='_'){
-    	block[blockTotal].flags|=FLAG_FREEZE;
-    }
-
-	switch(type){
-		case 2: block[blockTotal].flags|=FLAG_BYTE; break;
-		case 4: block[blockTotal].flags|=FLAG_WORD; break;
-		case 8: block[blockTotal].flags|=FLAG_DWORD; break;
-		default: block[blockTotal].flags|=FLAG_UWORD;
-	}
-
-    sceIoLseek(fd, offset+type, SEEK_SET); //Reposition the cursor depending on size of Hex value
-    
-    blockTotal++;
-    
-    return 1;
-  }
-  return 0;
-}
 
 unsigned int colorAdd(unsigned char colorDir[]){
   
@@ -1130,26 +1035,40 @@ void cheatLoad(){
 
 	//Load the cheats
 	if(fd > 0){
-		unsigned int fileSize=sceIoLseek(fd, 0, SEEK_END); sceIoLseek(fd, 0, SEEK_SET);
+		unsigned int fileSize=sceIoLseek(fd, 0, SEEK_END);
+		sceIoLseek(fd, 0, SEEK_SET);
 		unsigned int fileOffset=0;
+		unsigned int filecurr=0;
 		unsigned char commentMode=0;
 		unsigned char nameMode=0;
-
-		while(fileOffset < fileSize){ 
-			sceKernelDelayThread(1500);
-
-			sceIoRead(fd, &buffer[0], 1);
+		unsigned int i=0;
+  		unsigned int type;
+ 		// unsigned int offset;
+  		unsigned char hex[8];
+		unsigned int k=0;
+	  	int counter=0;
+		sceIoRead(fd, &fileBuffer[0], 2048);
+		
+		while(fileOffset < fileSize){
 			
-			if((buffer[0]=='\r') || (buffer[0]=='\n')){
+			if(i == 2048){
+			i=0;
+			filecurr+=2048;
+			sceKernelDelayThread(1500);
+			sceIoLseek(fd, filecurr, SEEK_SET);
+			sceIoRead(fd, &fileBuffer[0], 2048);
+			}
+			
+			if((fileBuffer[i]=='\r') || (fileBuffer[i]=='\n')){
 				commentMode=0;
 				if(nameMode){
-					cheatTotal++; 
+					cheatTotal++;
 					nameMode=0;
 				}
 			}
-			else if((buffer[0]==' ') && (!nameMode)){}
-			else if(buffer[0]==';'){commentMode=1; if(nameMode){cheatTotal++; nameMode=0;}} //Skip comments till next line
-			else if(buffer[0]=='#'){ //Read in the cheat name
+			else if((fileBuffer[i]==' ') && (!nameMode)){}
+			else if(fileBuffer[i]==';'){commentMode=1; if(nameMode){cheatTotal++; nameMode=0;}} //Skip comments till next line
+			else if(fileBuffer[i]=='#'){ //Read in the cheat name
 				if(cheatTotal >= NAME_MAX) { break;}
 				cheat[cheatTotal].block=blockTotal;
 				cheat[cheatTotal].flags=0;
@@ -1157,7 +1076,7 @@ void cheatLoad(){
 				cheat[cheatTotal].name[0]=0;
 				nameMode=1;
 			}
-			else if((buffer[0]=='!') && (nameMode)){
+			else if((fileBuffer[i]=='!') && (nameMode)){
 				//Cheat's selected by default
 				if(cheat[cheatTotal].flags & FLAG_SELECTED){ //Two ! = selected for constant on status
 					cheat[cheatTotal].flags|=FLAG_CONSTANT;
@@ -1169,16 +1088,98 @@ void cheatLoad(){
 			}
 			else if((!commentMode) && (nameMode)){
 				if(nameMode<32){ //1 to 31 = letters, 32=Null terminator
-					cheat[cheatTotal].name[nameMode-1]=buffer[0];
+					cheat[cheatTotal].name[nameMode-1]=fileBuffer[i];
 					nameMode++;
 					cheat[cheatTotal].name[nameMode-1]=0;
 				}
 			}
 			else if((!commentMode) && (!nameMode)){
 				//Add 0xAABBCCDD 0xAABBCCDD block
-				if(!blockAdd(fd, buffer)){
+				//if(!blockAdd(i)){
+				if(blockTotal!=BLOCK_MAX){
+	
+ // int cheatType=0;
+//  int copyAmount=0;
+    block[blockTotal].flags=0;
+    
+    //read address
+    //0x12345678 0x
+	if(i >= 2024){
+	filecurr+=i;
+	i=0;
+	sceKernelDelayThread(1500);
+	sceIoLseek(fd, filecurr, SEEK_SET);
+	sceIoRead(fd, &fileBuffer[0], 2048);
+	}
+	counter=0;
+	while(counter < 100){ //correct missaligned addressing in db
+	    memcpy(&buffer[0],&fileBuffer[i+counter],1);
+		if((buffer[0]=='x') || (buffer[0]=='X')){
+		 break;
+		}
+		counter++;
+	}
+	k=counter+1;
+	
+    memcpy(&hex[0],&fileBuffer[i+k],8);
+    block[blockTotal].address=char2hex(hex, &type);
+    
+	//is our addressing within bounds?
+    if(block[blockTotal].address==0xFFFFFFFF){ // is block dma?
+		block[blockTotal].flags|=FLAG_DMA;
+		block[blockTotal].stdVal=0xFFFFFFFF;
+    }
+    #ifdef _JOKER_
+    else if((block[blockTotal].address>=0xFF000000) && (block[blockTotal].address<=0xFFFFF3F9)){ // is block joker?
+    	block[blockTotal].flags|=FLAG_JOKER;
+    }
+    #endif
+    else if((block[blockTotal].address > 0x10000000)&&(block[blockTotal].address < 0x30000000)){ //is it cw mode (non dma)?
+	block[blockTotal].flags|=FLAG_CWC;
+    	block[blockTotal].address&=0x0FFFFFFF;
+    	block[blockTotal].address+=0x08800000;
+	}
+    else{ //is block other?
+    	block[blockTotal].address&=0x0FFFFFFF;
+    	if(block[blockTotal].address < 0x08800000){
+    		block[blockTotal].address+=0x08800000;
+		}
+    }
+	//read value 
+	counter=0;
+	while(counter < 100){ //correct missaligned values in db and check for cheat value flagging
+	    memcpy(&hex[0],&fileBuffer[i+k+counter],1);
+		if((hex[0]=='x') || (hex[0]=="X")){ break; }
+		counter++;
+	}
+	k=k+counter+1;
+	
+	if(counter == 100){ strcpy(hex, "00000000"); }
+	else{
+		//switch(cheatType){
+			//case 0: //hex cheat
+				memcpy(&hex[0],&fileBuffer[i+k],8);
+				block[blockTotal].hakVal=char2hex(hex, &type);
+			//break;
+		//}
+	}
+    if(hex[0]=='_'){
+    	block[blockTotal].flags|=FLAG_FREEZE;
+    }
+
+	switch(type){
+		case 2: block[blockTotal].flags|=FLAG_BYTE; break;
+		case 4: block[blockTotal].flags|=FLAG_WORD; break;
+		case 8: block[blockTotal].flags|=FLAG_DWORD; break;
+		default: block[blockTotal].flags|=FLAG_UWORD;
+	}
+    
+    blockTotal++;
+    i+=k+type;
+				}
+				else{
 					//No more RAM?
-					if(cheatTotal != 0){
+				if(cheatTotal != 0){
 						cheatTotal--;
 						break;
 					}
@@ -1187,8 +1188,8 @@ void cheatLoad(){
 					cheat[cheatTotal-1].len++;
 				}
 			}
-
-			fileOffset=sceIoLseek(fd, 0, SEEK_CUR);
+			i++;
+			fileOffset=filecurr+i;
 		}
 		sceIoClose(fd);
 	}
@@ -2467,7 +2468,7 @@ void menuDraw(){
 						}
 						else if(cheat[cheatSelected].flags & FLAG_CONSTANT){
 							pspDebugScreenSetTextColor(constant_cheat);  pspDebugScreenPuts("   [!!] ");
-						}               
+						}
 						else{
 							pspDebugScreenSetTextColor(color01); pspDebugScreenPuts("  [OFF] ");
 						}
@@ -2476,20 +2477,20 @@ void menuDraw(){
 						pspDebugScreenPuts(" ");
 						//Don't highlight the selection
 						if(cheat[counter].flags & FLAG_SELECTED){
-							pspDebugScreenSetTextColor(select_cheat); pspDebugScreenPuts("    [!] "); //pspDebugScreenSetTextColor(color02);
+							pspDebugScreenSetTextColor(select_cheat); pspDebugScreenPuts("    [!] "); pspDebugScreenSetTextColor(color02);
 						}
 						else if(cheat[counter].flags & FLAG_CONSTANT){
-							pspDebugScreenSetTextColor(constant_cheat);  pspDebugScreenPuts("   [!!] "); //pspDebugScreenSetTextColor(color02);
+							pspDebugScreenSetTextColor(constant_cheat);  pspDebugScreenPuts("   [!!] "); pspDebugScreenSetTextColor(color02);
 						}
 						else{
-							pspDebugScreenSetTextColor(color01); pspDebugScreenPuts("  [OFF] "); //pspDebugScreenSetTextColor(color02);
+							pspDebugScreenSetTextColor(color01); pspDebugScreenPuts("  [OFF] "); pspDebugScreenSetTextColor(color02);
 						}
 					}
 					#endif
 
 					pspDebugScreenPuts(cheat[counter].name);
 
-					//cheat status info caption
+
 					if(cheatSelected == counter){
 						//Highlight the selection
 						if(cheat[cheatSelected].flags & FLAG_SELECTED){
