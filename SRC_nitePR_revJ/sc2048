@@ -1,0 +1,26 @@
+TARGET = nitePRmodSC_2048
+OBJS = crt0_prx.o exports.o module.o blit.o
+
+# Define to build this as a prx (instead of a static elf)
+BUILD_PRX=1
+# Define the name of our custom exports (minus the .exp extension)
+PRX_EXPORTS=exports.exp
+
+USE_KERNEL_LIBS = 1
+USE_KERNEL_LIBC = 1
+
+INCDIR =
+CFLAGS = -O2 -G0 -w -msingle-float -g -D_FONT_misaki_hira -D_HBIJIRO_ -D_CFW_ -D_SCREENSHOT_Å@-D_2048_
+#-D_FONT_misaki
+#-D_DOUBLETAP_
+CXXFLAGS = $(CFLAGS) -fno-exceptions -fno-rtti
+ASFLAGS = $(CFLAGS)
+
+LIBDIR =
+LIBS = -lpspchnnlsv -lpsputility -lpspdebug -lpspge_driver -lpspwlan -lpspumd
+LDFLAGS = -nostdlib  -nodefaultlibs -g
+
+PSPSDK=$(shell psp-config --pspsdk-path)
+include $(PSPSDK)/lib/build.mak
+
+

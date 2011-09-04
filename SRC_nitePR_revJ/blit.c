@@ -38,7 +38,7 @@ extern int enable_blit;
 int blit_string(int sx,int sy,const char *msg,int fg_col,int bg_col){
 	int x,y,p;
 	int offset;
-	char code;
+	unsigned char code;
 	unsigned char font;
 	int pwidth, pheight, bufferwidth, pixelformat, unk;
 	unsigned int* vram32;
@@ -49,7 +49,7 @@ int blit_string(int sx,int sy,const char *msg,int fg_col,int bg_col){
    	if( (bufferwidth==0) || (pixelformat!=3)) return -1;
 
    	for(x=0;msg[x] && x<(pwidth/8);x++){
-   		code = msg[x] & 0xFF; // 7bit ANK
+   		code = msg[x];
    		for(y=0;y<7;y++)
    		{
    			offset = (sy+y)*bufferwidth + (sx+x)*8;

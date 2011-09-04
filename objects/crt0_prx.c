@@ -156,10 +156,16 @@ typedef struct Cheat{
 
 #ifdef _100_
 //省メモリ版 HEN+PIL使用時対策
-#define NAME_MAX 100
-#define BLOCK_MAX 300
-unsigned int searchAddress[100];
-#define searchResultMax 99
+#define NAME_MAX 100 //サーチアドレス表示用
+#define BLOCK_MAX 300  //サーチ表示最大数
+unsigned int searchAddress[100]; //チート名最大数
+#define searchResultMax 99  //チートコード最大数
+#elif _2048_
+//npr標準設定,かなりのメモリが必要
+unsigned int searchAddress[100]; //サーチアドレス表示用
+#define searchResultMax 99  //サーチ表示最大数
+#define NAME_MAX  2048 //チート名最大数
+#define BLOCK_MAX 2048 //チートコード最大数
 #else
 //薄型＋最新CFW+パッチ無しME/INFELNO/M33ドライバー推奨
 unsigned int searchAddress[500]; //サーチアドレス表示用
