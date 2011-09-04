@@ -193,8 +193,6 @@ unsigned char screenshot_mode=0;
 unsigned short screenNo=0;
 unsigned char *screenshotstring[]={"NONE", "GAME","VRAM"};
 #endif
-unsigned char HBFLAG=0;
-unsigned char k=0;
 char *hbpath=NULL;
 #define fileBufferPeek(a_out, a_ahead) if((fileBufferOffset + a_ahead) >= 1024) { fileBufferBackup=sceIoLseek(fd, 0, SEEK_CUR); sceIoLseek(fd, a_ahead, SEEK_CUR); sceIoRead(fd, &a_out, 1); sceIoLseek(fd, fileBufferBackup, SEEK_SET); } else { a_out=fileBuffer[fileBufferOffset + a_ahead]; }
 #define fileBufferRead(a_out, a_size) if(fileBufferOffset == 1024) { fileBufferSize=sceIoRead(fd, fileBuffer, 1024); fileBufferOffset=0; } memcpy(a_out, &fileBuffer[fileBufferOffset], a_size); fileBufferOffset+=a_size; fileBufferFileOffset+=a_size;
@@ -5848,6 +5846,16 @@ int _start(SceSize args, void *argp)
   //Start thread
   if(thid >= 0) sceKernelStartThread(thid, 0, NULL);
   
+  
+  strcpy(buffer,"font.bin\x0");
+  memcpy(&gameDir[22],&buffer[0],10);
+  int fd=sceIoOpen(gameDir,PSP_O_RDONLY,0777);
+  if(fd>0){
+  extern u8 msx[];
+  sceIoRead(fd,&msx[0],2048);
+  }
+  sceIoClose(fd);
+  
 	return 0;
 }
 
@@ -5870,6 +5878,9 @@ void dump_memregion(const char* file, void *addr, int len){
 #else
 void GETID(){
 	//GAMEID
+	
+unsigned char HBFLAG=0;
+unsigned char k=0;
 		int fd=sceIoOpen("disc0:/UMD_DATA.BIN", PSP_O_RDONLY, 0777);
 if(fd >0){
 		sceIoRead(fd, gameId, 10);

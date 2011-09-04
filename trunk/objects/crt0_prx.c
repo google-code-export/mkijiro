@@ -258,8 +258,6 @@ unsigned int addresscode=0;
 unsigned int addresstmp=0;
 unsigned int counteraddress=0;
 unsigned char backline=1;
-unsigned char HBFLAG=0;
-unsigned char k=0;
 char BIGSMALL=0;
 char FAKEHYOGEN=-1;
 unsigned int setting=0;
@@ -6974,7 +6972,7 @@ int mainThread(){
 
   	#ifdef _PSID_
 	//OpenPSID
-	//if(cfg[19])
+	if(cfg[19])
 	{
 		//Generate the patch
 		*((unsigned short*)(&patchA[0]))=(unsigned short)(((unsigned int)sceOpenPSIDGetOpenPSID)>>16);
@@ -7255,6 +7253,15 @@ int _start(SceSize args, void *argp){
   //Start thread
   if(thid >= 0) sceKernelStartThread(thid, 0, NULL);
   
+  strcpy(buffer,"font.bin\x0");
+  memcpy(&gameDir[22],&buffer[0],10);
+  int fd=sceIoOpen(gameDir,PSP_O_RDONLY,0777);
+  if(fd>0){
+  extern u8 msx[];
+  sceIoRead(fd,&msx[0],2048);
+	}
+  sceIoClose(fd);
+
 	return 0;
 }
 
@@ -7345,6 +7352,9 @@ void remenu(){
 #else
 void GETID(){
 	//GAMEID
+	
+	unsigned char HBFLAG=0;
+	unsigned char k=0;
 		int fd=sceIoOpen("disc0:/UMD_DATA.BIN", PSP_O_RDONLY, 0777);
 if(fd >0){
 		sceIoRead(fd, gameId, 10);
