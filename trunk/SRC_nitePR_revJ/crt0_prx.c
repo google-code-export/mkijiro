@@ -100,10 +100,14 @@ typedef struct Cheat{
 #define FLAG_SELECTED (1<<0)	//If selected, will be disabled/enabled by music button
 #define FLAG_CONSTANT	(1<<1)  //If 1, cheat is constantly on regardless of music button
 #define FLAG_FRESH    (1<<2)  //Cheat was just recently enabled/disabled
-#ifdef _100_
+
+#ifdef _100_ //Èƒƒ‚ƒŠ
 #define NAME_MAX 100
 #define BLOCK_MAX 300 //for HEN+PROMETHEUSLOADER SETTING
-#else
+#elif _2048_ //NPR•W€Ý’è,‚©‚È‚èH‚¤
+#define NAME_MAX 2048
+#define BLOCK_MAX 2048
+#else //‚â‚âŒ¸‚ç‚µ‚½
 #define NAME_MAX 512
 #define BLOCK_MAX 1024  //nitepr default both 2048,but i think a lot...
 #endif
@@ -298,60 +302,6 @@ unsigned int cheatNew(unsigned char a_size, unsigned int a_address, unsigned int
   	cheatTotal++;
   }
 }
-
-/*unsigned int blockAdd(int fd, unsigned char *a_data)
-{
-  unsigned int type;
-  unsigned int offset;
-  unsigned char hex[8];
-  
-  if(blockTotal!=BLOCK_MAX)
-  {
-    block[blockTotal].flags=0;
-    
-    sceIoLseek(fd, 1, SEEK_CUR);
-    sceIoRead(fd, hex, 8);
-    
-    block[blockTotal].address=char2hex(hex, &type);
-    
-    if(block[blockTotal].address==0xFFFFFFFF)
-    {
-      block[blockTotal].flags|=FLAG_DMA;
-      block[blockTotal].stdVal=0xFFFFFFFF;
-    }
-    else
-    {
-    	block[blockTotal].address&=0x0FFFFFFF;
-    	block[blockTotal].address+=0x08800000;
-    }
-    
-    offset=sceIoLseek(fd, 3, SEEK_CUR);
-    sceIoRead(fd, hex, 8);
-    
-    block[blockTotal].hakVal=char2hex(hex, &type);
-    
-    if(hex[0]=='_')
-    {
-      block[blockTotal].flags|=FLAG_FREEZE;
-    }
-    
-    switch(type)
-    {
-      case 2: block[blockTotal].flags|=FLAG_BYTE; break;
-      case 4: block[blockTotal].flags|=FLAG_WORD; break;
-      case 8: block[blockTotal].flags|=FLAG_DWORD; break;
-      default:
-      	block[blockTotal].flags|=FLAG_UWORD;
-    }
-    
-    sceIoLseek(fd, offset+type, SEEK_SET); //Reposition the cursor depending on size of Hex value
-    
-    blockTotal++;
-    
-    return 1;
-  }
-  return 0;
-}*/
 
 
 void cheatEnable(unsigned int a_cheat)
@@ -844,124 +794,6 @@ void cheatLoad(){
 		sceIoClose(fd);
 	}
 }
-
-/*void cheatLoad(){
-  unsigned char fileChar=0;
-  unsigned char fileMisc[3];
-  unsigned int fileSize=0;
-  unsigned int counter=-1;
-  unsigned int scounter=0;
-  unsigned char fileMode=0; //0=Unknown/Initial, 1=Comment, 2=Waiting for \n (ignoring)
-  int fd;
-  int tempFd;
-
-  //Load the cheats
-  fd=sceIoOpen(gameDir, PSP_O_RDONLY, 0777);
-  
-  	if(cheatRefresh){
-
-		int counter=0;
-
-		cheatSelected=counter;
-		while(counter < cheatTotal){ //cycle through cheats in ram
-			
-			int scounter=0;
-			while(scounter < blockTotal){ 
-				//delete a cheat from ram
-				block[cheatSelected].flags;
-				block[cheatSelected].address;
-				block[cheatSelected].stdVal;
-				block[cheatSelected].hakVal;
-				scounter++;
-			}
-
-			//reset the cheats info
-			cheat[cheatSelected].block=0;
-			cheat[cheatSelected].len=0;
-			cheat[cheatSelected].flags=0;
-			strcpy(cheat[cheatSelected].name, NULL);
-			counter++;
-		}
-
-		cheatTotal=0;
-		blockTotal=0;
-
-		//delay
-		sceKernelDelayThread(1500);
-		cheatRefresh=0;
-
-	}
-
-  if(fd > 0)
-  {
-    unsigned int fileSize=sceIoLseek(fd, 0, SEEK_END); sceIoLseek(fd, 0, SEEK_SET);
-    unsigned int fileOffset=0;
-    unsigned char commentMode=0;
-    unsigned char nameMode=0;
-  
-    while(fileOffset < fileSize)
-    { 
-    	sceKernelDelayThread(1500);
-    
-      sceIoRead(fd, &buffer[0], 1);
-    	
-      if((buffer[0]=='\r') || (buffer[0]=='\n')){commentMode=0;if(nameMode){cheatTotal++; nameMode=0;}}
-      else if((buffer[0]==' ') && (!nameMode)){}
-     	else if(buffer[0]==';'){commentMode=1;if(nameMode){cheatTotal++; nameMode=0;}} //Skip comments till next line
-      else if(buffer[0]=='#') //Read in the cheat name
-      {
-        if(cheatTotal >= NAME_MAX) { break;}
-        cheat[cheatTotal].block=blockTotal;
-        cheat[cheatTotal].flags=0;
-        cheat[cheatTotal].len=0;
-        cheat[cheatTotal].name[0]=0;
-        nameMode=1;
-      }
-      else if((buffer[0]=='!') && (nameMode))
-    	{
-        //Cheat's selected by default
-        if(cheat[cheatTotal].flags & FLAG_SELECTED) //Two ! = selected for constant on status
-        {
-          cheat[cheatTotal].flags|=FLAG_CONSTANT;
-        	cheat[cheatTotal].flags&=~FLAG_SELECTED;
-        }
-        else //One ! = selected for music on/off button
-        {
-        	cheat[cheatTotal].flags|=FLAG_SELECTED;
-      	}
-      }
-      else if((!commentMode) && (nameMode))
-      {
-        if(nameMode<32) //1 to 31 = letters, 32=Null terminator
-        {
-        	cheat[cheatTotal].name[nameMode-1]=buffer[0];
-        	nameMode++;
-        	cheat[cheatTotal].name[nameMode-1]=0;
-        }
-      }
-      else if((!commentMode) && (!nameMode))
-      {
-        //Add 0xAABBCCDD 0xAABBCCDD block
-        if(!blockAdd(fd, buffer))
-        {
-          //No more RAM?
-          if(cheatTotal != 0)
-        	{
-        		cheatTotal--;
-            break;
-      		}
-        }
-        if(cheatTotal != 0)
-        {
-        	cheat[cheatTotal-1].len++;
-      	}
-      }
-     
-      fileOffset=sceIoLseek(fd, 0, SEEK_CUR);
-    }
-    sceIoClose(fd);
-  }
-}*/
 
 void buttonCallback(int curr, int last, void *arg)
 {
