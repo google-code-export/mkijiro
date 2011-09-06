@@ -13,4 +13,7 @@
     <ErrorReportUrlHistory>
     </ErrorReportUrlHistory>
   </PropertyGroup>
+  <PropertyGroup>
+    <EnableSecurityDebugging>false</EnableSecurityDebugging>
+  </PropertyGroup>
 </Project>

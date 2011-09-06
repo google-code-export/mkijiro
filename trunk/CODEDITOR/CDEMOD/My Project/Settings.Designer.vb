@@ -222,6 +222,90 @@ Namespace My
                 Me("download") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("C:\Program Files\Jane Style\Jane2ch.exe")>  _
+        Public Property nichbrowser() As String
+            Get
+                Return CType(Me("nichbrowser"),String)
+            End Get
+            Set
+                Me("nichbrowser") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property app8() As String
+            Get
+                Return CType(Me("app8"),String)
+            End Get
+            Set
+                Me("app8") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property app9() As String
+            Get
+                Return CType(Me("app9"),String)
+            End Get
+            Set
+                Me("app9") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property app10() As String
+            Get
+                Return CType(Me("app10"),String)
+            End Get
+            Set
+                Me("app10") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property url8() As String
+            Get
+                Return CType(Me("url8"),String)
+            End Get
+            Set
+                Me("url8") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property url9() As String
+            Get
+                Return CType(Me("url9"),String)
+            End Get
+            Set
+                Me("url9") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property url10() As String
+            Get
+                Return CType(Me("url10"),String)
+            End Get
+            Set
+                Me("url10") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

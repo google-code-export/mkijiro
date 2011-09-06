@@ -14,6 +14,8 @@
         point.Y = MERGE.Location.Y + MERGE.Height
         Me.Width = MERGE.Width
         Me.Location = point
+
+        Me.FormBorderStyle = FormBorderStyle.FixedToolWindow
     End Sub
 
     Private Sub error_window_visible(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.VisibleChanged

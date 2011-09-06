@@ -8,6 +8,9 @@ Public Class Form2
         Dim m As MERGE
         m = CType(Me.Owner, MERGE)
         Me.Location = New Point(m.Location.X + 500, m.Location.Y + 40)
+
+        Me.FormBorderStyle = FormBorderStyle.FixedToolWindow
+
     End Sub
 
     Private Sub LinkLabel1_LinkClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
@@ -25,45 +28,49 @@ Public Class Form2
             Dim fileName As String = "APP\version"
             Dim fileName2 As String = "CDEMOD.exe"
 
-            getweb(fileName, tx)
-            Dim b1 As String
-            Dim dd As String = Me.Label2.Text.Substring(6, 10)
-            Dim txt As New FileStream(fileName, FileMode.Open, FileAccess.Read)
-            Dim sr As New StreamReader(fileName, _
-                                       System.Text.Encoding.GetEncoding(0))
+            If Not My.Computer.FileSystem.DirectoryExists(Application.StartupPath & "\APP") Then
+                System.IO.Directory.CreateDirectory(Application.StartupPath & "\APP")
+            End If
 
-            Do Until sr.EndOfStream = True ' Begin reading the file and stop when we reach the end
-                b1 = sr.ReadLine
-                Dim s As New Regex("\d\d\d\d/\d{1,2}/\d{1,2}", RegexOptions.IgnoreCase)
-                Dim m As Match = s.Match(b1)
-                If m.Success Then
-                    Dim rr As String = m.Value
-                    If rr.Substring(7, 1) <> "/" Then
-                        rr = rr.Insert(5, "0")
+                getweb(fileName, tx)
+                Dim b1 As String
+                Dim dd As String = Me.Label2.Text.Substring(6, 10)
+                Dim txt As New FileStream(fileName, FileMode.Open, FileAccess.Read)
+                Dim sr As New StreamReader(fileName, _
+                                           System.Text.Encoding.GetEncoding(0))
+
+                Do Until sr.EndOfStream = True ' Begin reading the file and stop when we reach the end
+                    b1 = sr.ReadLine
+                    Dim s As New Regex("\d\d\d\d/\d{1,2}/\d{1,2}", RegexOptions.IgnoreCase)
+                    Dim m As Match = s.Match(b1)
+                    If m.Success Then
+                        Dim rr As String = m.Value
+                        If rr.Substring(7, 1) <> "/" Then
+                            rr = rr.Insert(5, "0")
+                        End If
+                        If rr.Length = 9 Then
+                        rr = rr.Insert(8, "0")
+                        End If
+
+                        If String.Compare(dd, rr, True) < 0 Then
+                            Dim save As String = fileName2.Insert(fileName2.LastIndexOf("."), Now.ToString)
+                            save = save.Replace(":", "")
+                            save = save.Replace("/", "")
+                            getweb(save, exe)
+                            MessageBox.Show(save & vbCrLf & "BUID:" & m.Value & "のダウンロードが完了しました", "ダウンロード完了")
+                        Else
+                            MessageBox.Show("最新版です", "更新の確認")
+                        End If
+
+                        Exit Do
                     End If
-                    If rr.Length = 9 Then
-                        rr = rr.Insert(9, "0")
-                    End If
+                Loop
+                sr.Close()
+                txt.Close()
 
-                    If String.Compare(dd, rr, True) < 0 Then
-                        Dim save As String = fileName2.Insert(fileName2.LastIndexOf("."), Now.ToString)
-                        save = save.Replace(":", "")
-                        save = save.Replace("/", "")
-                        getweb(save, exe)
-                        MessageBox.Show(save & vbCrLf & "BUID:" & m.Value & "のダウンロードが完了しました")
-                    Else
-                        MessageBox.Show("最新版です")
-                    End If
-
-                    Exit Do
-                End If
-            Loop
-            sr.Close()
-            txt.Close()
-
-        Else
-            MessageBox.Show("インターネットに接続されてません")
-        End If
+            Else
+                MessageBox.Show("インターネットに接続されてません", "接続エラー")
+            End If
     End Sub
     Function getweb(ByVal filename3 As String, ByVal url As String) As Boolean
 

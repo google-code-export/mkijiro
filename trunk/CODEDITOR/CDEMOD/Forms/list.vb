@@ -10,6 +10,8 @@
         m = CType(Me.Owner, MERGE)
         Me.Location = New Point(m.Location.X + 460, m.Location.Y + 190)
 
+        Me.FormBorderStyle = FormBorderStyle.FixedToolWindow
+
         ListView1.View = View.Details
 
         'ヘッダーを追加する（ヘッダー名、幅、アライメント）
