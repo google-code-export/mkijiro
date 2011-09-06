@@ -1102,8 +1102,8 @@ void cheatLoad(){
 				//if(!blockAdd(i)){
 				if(blockTotal!=BLOCK_MAX){
 	
- // int cheatType=0;
-//  int copyAmount=0;
+ 	//int cheatType=0;
+	//int copyAmount=0;
     block[blockTotal].flags=0;
     
     //read address
