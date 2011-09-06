@@ -17,6 +17,9 @@ Public Class save_db
 
         reset_errors() ' Clear prior save errors if any
 
+
+        tw.Write("[CP" & enc1.ToString & "]" & vbCrLf)
+
         Try
 
             For Each n As TreeNode In m.codetree.Nodes(0).Nodes
@@ -146,6 +149,8 @@ Public Class save_db
         Dim ew As error_window = error_window
         Dim errors As Boolean = False
         Dim code As String = Nothing
+
+        tw.Write("[CP" & enc1.ToString & "]" & vbCrLf)
 
         reset_errors() ' Clear prior save errors if any
 

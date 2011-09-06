@@ -43,6 +43,7 @@ Public Class MERGE
         PSX = False
         saveas_cwcheat.Enabled = True
         saveas_psx.Enabled = False
+        overwrite_db.Enabled = True
     End Sub
 
     Private Sub new_psx_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles new_psx.Click
@@ -68,6 +69,7 @@ Public Class MERGE
         PSX = True
         saveas_cwcheat.Enabled = False
         saveas_psx.Enabled = True
+        overwrite_db.Enabled = True
     End Sub
 
     Private Sub file_open_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles file_open.Click
@@ -93,16 +95,14 @@ Public Class MERGE
                 Application.DoEvents()
                 enc1 = 1201
                 open.read_cf(database, 1201)
-                UTF16BECP1201ToolStripMenuItem.Enabled = True
-                CODEFREAKToolStripMenuItem.Enabled = True
             ElseIf PSX = True Then
-                enc1 = My.Settings.MSCODEPAGE
+                enc1 = open.check_enc(database)
                 reset_PSX()
                 Application.DoEvents()
                 open.read_PSX(database, enc1)
                 PSX = True
             Else
-                enc1 = My.Settings.MSCODEPAGE
+                enc1 = open.check_enc(database)
                 reset_PSP()
                 Application.DoEvents()
                 open.read_PSP(database, enc1)
@@ -110,10 +110,27 @@ Public Class MERGE
             If codetree.Nodes.Count >= 1 Then
                 codetree.Nodes(0).Expand()
             End If
+            If enc1 = 1201 Then
+                UTF16BECP1201ToolStripMenuItem.Enabled = True
+                CODEFREAKToolStripMenuItem.Enabled = True
+            End If
             codetree.EndUpdate()
             error_window.list_load_error.EndUpdate()
             loaded = True
             file_saveas.Enabled = True
+            overwrite_db.Enabled = True
+        End If
+
+    End Sub
+
+    Private Sub overwrite_db_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles overwrite_db.Click
+        Dim s As New save_db
+        If CODEFREAK = True Then
+            s.save_cf(database, 1201)
+        ElseIf PSX = True Then
+            s.save_psx(database, enc1)
+        Else
+            s.save_cwcheat(database, enc1)
         End If
 
     End Sub
@@ -131,21 +148,20 @@ Public Class MERGE
             s.save_cwcheat(database, enc1)
 
             ' Reload the file
-            codetree.Nodes.Clear()
-            codetree.BeginUpdate()
-            error_window.list_load_error.BeginUpdate()
+            'codetree.Nodes.Clear()
+            'codetree.BeginUpdate()
+            'error_window.list_load_error.BeginUpdate()
 
-            reset_PSP()
-            Application.DoEvents()
-            open.read_PSP(database, enc1)
+            'reset_PSP()
+            'Application.DoEvents()
+            'open.read_PSP(database, enc1)
 
-            If codetree.Nodes.Count >= 1 Then
-                codetree.Nodes(0).Expand()
-            End If
+            'If codetree.Nodes.Count >= 1 Then
+            '    codetree.Nodes(0).Expand()
+            'End If
 
-            codetree.EndUpdate()
-            error_window.list_load_error.EndUpdate()
-            file_saveas.Enabled = True
+            'codetree.EndUpdate()
+            'error_window.list_load_error.EndUpdate()
 
         End If
     End Sub
@@ -162,21 +178,20 @@ Public Class MERGE
             s.save_psx(database, enc1)
 
             ' Reload the file
-            codetree.Nodes.Clear()
-            codetree.BeginUpdate()
-            error_window.list_load_error.BeginUpdate()
+            'codetree.Nodes.Clear()
+            'codetree.BeginUpdate()
+            'error_window.list_load_error.BeginUpdate()
 
-            reset_PSX()
-            Application.DoEvents()
-            open.read_PSX(database, enc1)
+            'reset_PSX()
+            'Application.DoEvents()
+            'open.read_PSX(database, enc1)
 
-            If codetree.Nodes.Count >= 1 Then
-                codetree.Nodes(0).Expand()
-            End If
+            'If codetree.Nodes.Count >= 1 Then
+            '    codetree.Nodes(0).Expand()
+            'End If
 
-            codetree.EndUpdate()
-            error_window.list_load_error.EndUpdate()
-            file_saveas.Enabled = True
+            'codetree.EndUpdate()
+            'error_window.list_load_error.EndUpdate()
 
         End If
     End Sub
@@ -191,22 +206,23 @@ Public Class MERGE
 
             database = save_file.FileName
             s.save_cf(database, 1201)
-            ' Reload the file
-            codetree.Nodes.Clear()
-            codetree.BeginUpdate()
-            error_window.list_load_error.BeginUpdate()
 
-            reset_PSP()
-            Application.DoEvents()
-            open.read_cf(database, 1201)
+            '' Reload the file
+            'codetree.Nodes.Clear()
+            'codetree.BeginUpdate()
+            'error_window.list_load_error.BeginUpdate()
 
-            If codetree.Nodes.Count >= 1 Then
-                codetree.Nodes(0).Expand()
-            End If
+            'reset_PSP()
+            'Application.DoEvents()
+            'open.read_cf(database, 1201)
 
-            codetree.EndUpdate()
-            error_window.list_load_error.EndUpdate()
-            file_saveas.Enabled = True
+            'If codetree.Nodes.Count >= 1 Then
+            '    codetree.Nodes(0).Expand()
+            'End If
+
+            'codetree.EndUpdate()
+            'error_window.list_load_error.EndUpdate()
+
         End If
     End Sub
 
@@ -378,11 +394,20 @@ Public Class MERGE
         Dim j As Integer = 1
         Dim k As Integer = 0
         Dim y As Integer = 0
-        codetree.Nodes.Add("sort")
+        Dim commaindex As Integer = 0
+        Dim ss As String
+        Dim dbtrim As String = database.Replace(Application.StartupPath, "")
+        commaindex = dbtrim.LastIndexOf(".") - 1
+        If dbtrim.Contains(".") Then
+            dbtrim = dbtrim.Substring(1, commaindex)
+        Else
+            dbtrim = dbtrim.Replace("\", "")
+        End If
+        codetree.Nodes.Add(dbtrim & "_sort")
         If (mode And 1) = 0 Then
             While k < z
-                Dim commaindex As Integer = s(j).LastIndexOf(",") + 1
-                Dim ss As String = s(j).Substring(commaindex, s(j).Length - commaindex)
+                commaindex = s(j).LastIndexOf(",") + 1
+                ss = s(j).Substring(commaindex, s(j).Length - commaindex)
                 y = CInt(ss)
                 Dim cln As TreeNode = CType(codetree.Nodes(0).Nodes(y).Clone(), TreeNode)
                 codetree.Nodes(1).Nodes.Add(cln)
@@ -392,8 +417,8 @@ Public Class MERGE
         ElseIf (mode And 1) = 1 Then
             j = z
             While k < z
-                Dim commaindex As Integer = s(j).LastIndexOf(",") + 1
-                Dim ss As String = s(j).Substring(commaindex, s(j).Length - commaindex)
+                commaindex = s(j).LastIndexOf(",") + 1
+                ss = s(j).Substring(commaindex, s(j).Length - commaindex)
                 y = CInt(ss)
                 Dim cln As TreeNode = CType(codetree.Nodes(0).Nodes(y).Clone(), TreeNode)
                 codetree.Nodes(1).Nodes.Add(cln)
@@ -451,7 +476,106 @@ Public Class MERGE
 
 #Region "Options"
 
-    Private Sub options_error_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles options_error.Click
+#Region "FONT"
+    Private Sub ツリービューToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles font_treeview.Click
+
+        Dim fd As New FontDialog()
+
+        fd.Font = codetree.Font
+        fd.Color = codetree.ForeColor
+        fd.MaxSize = 24
+        fd.MinSize = 9
+        fd.FontMustExist = True
+        fd.ShowHelp = True
+        fd.ShowApply = True
+        If fd.ShowDialog() <> DialogResult.Cancel Then
+            codetree.Font = fd.Font
+            My.Settings.codetree = fd.Font
+        End If
+    End Sub
+
+    Private Sub ゲームタイトルToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles font_gtitle.Click
+        Dim fd As New FontDialog()
+        fd.Font = GT_tb.Font
+        fd.Color = GT_tb.ForeColor
+        fd.MaxSize = 12
+        fd.MinSize = 9
+        fd.FontMustExist = True
+        fd.ShowHelp = True
+        fd.ShowApply = True
+        If fd.ShowDialog() <> DialogResult.Cancel Then
+            GT_tb.Font = fd.Font
+            My.Settings.GT_tb = fd.Font
+        End If
+    End Sub
+
+    Private Sub ゲームIDToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles font_gid.Click
+        Dim fd As New FontDialog()
+        fd.Font = GID_tb.Font
+        fd.Color = GID_tb.ForeColor
+        fd.MaxSize = 12
+        fd.MinSize = 9
+        fd.FontMustExist = True
+        fd.ShowHelp = True
+        fd.ShowApply = True
+        fd.FixedPitchOnly = True
+        If fd.ShowDialog() <> DialogResult.Cancel Then
+            GID_tb.Font = fd.Font
+            My.Settings.GID_tb = fd.Font
+        End If
+    End Sub
+
+    Private Sub コード名ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles font_codetxt.Click
+        Dim fd As New FontDialog()
+        fd.Font = CT_tb.Font
+        fd.Color = CT_tb.ForeColor
+        fd.MaxSize = 12
+        fd.MinSize = 9
+        fd.FontMustExist = True
+        fd.ShowHelp = True
+        fd.ShowApply = True
+        If fd.ShowDialog() <> DialogResult.Cancel Then
+            CT_tb.Font = fd.Font
+            My.Settings.CT_tb = fd.Font
+        End If
+    End Sub
+
+    Private Sub コード内容ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles font_cmt.Click
+
+        Dim fd As New FontDialog()
+
+        fd.Font = cl_tb.Font
+        fd.Color = cl_tb.ForeColor
+        fd.MaxSize = 12
+        fd.MinSize = 9
+        fd.FontMustExist = True
+        fd.ShowHelp = True
+        fd.ShowApply = True
+        fd.FixedPitchOnly = True
+        If fd.ShowDialog() <> DialogResult.Cancel Then
+            cl_tb.Font = fd.Font
+            My.Settings.cl_tb = fd.Font
+        End If
+    End Sub
+
+    Private Sub コメントToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        Dim fd As New FontDialog()
+
+        fd.Font = cmt_tb.Font
+        fd.Color = cmt_tb.ForeColor
+        fd.MaxSize = 24
+        fd.MinSize = 9
+        fd.FontMustExist = True
+        fd.ShowHelp = True
+        fd.ShowApply = True
+        If fd.ShowDialog() <> DialogResult.Cancel Then
+            cmt_tb.Font = fd.Font
+            My.Settings.cmt_tb = fd.Font
+        End If
+    End Sub
+#End Region
+
+    Private Sub options_error_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
         If options_error.Checked = False Then
             error_window.Show()
@@ -474,7 +598,7 @@ Public Class MERGE
 
     End Sub
 
-    Private Sub options_ontop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles options_ontop.Click
+    Private Sub options_ontop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
         If options_ontop.Checked = False Then
             Me.TopMost = True
@@ -490,7 +614,7 @@ Public Class MERGE
 
     End Sub
 
-    Private Sub ブラウザ変更ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ブラウザ変更ToolStripMenuItem.Click
+    Private Sub codesite(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles codesite_browser.Click
         Dim ofd As New OpenFileDialog()
         ofd.InitialDirectory = "C:\Program Files"
         ofd.Filter = _
@@ -503,6 +627,118 @@ Public Class MERGE
             browser = ofd.FileName
         End If
     End Sub
+
+    Private Sub nichsite(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles nichannel_browser.Click
+        Dim ofd As New OpenFileDialog()
+        ofd.InitialDirectory = "C:\Program Files"
+        ofd.Filter = _
+    "EXEファイル(*.exe)|*.exe"
+        ofd.Title = "ブラウザのEXEを選んでください"
+        If ofd.ShowDialog() = DialogResult.OK Then
+            'OKボタンがクリックされたとき
+            '選択されたファイル名を表示する
+            My.Settings.nichbrowser = ofd.FileName
+        End If
+    End Sub
+
+
+    Private Sub URL8ToolStripMenuItem1_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles URL8custom.Click
+        Dim f As New Form3
+        f.TextBox1.Text = My.Settings.url8
+        f.ShowDialog(Me)
+        My.Settings.url8 = f.TextBox1.Text
+        URL8.Text = urltrim(f.TextBox1.Text)
+        URL8custom.Text = urltrim(f.TextBox1.Text)
+        f.Dispose()
+    End Sub
+
+    Private Sub URL9ToolStripMenuItem1_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles URL9custom.Click
+        Dim f As New Form3
+        f.TextBox1.Text = My.Settings.url9
+        f.ShowDialog(Me)
+        My.Settings.url9 = f.TextBox1.Text
+        URL9.Text = urltrim(f.TextBox1.Text)
+        URL9custom.Text = urltrim(f.TextBox1.Text)
+        f.Dispose()
+    End Sub
+
+    Private Sub URL10ToolStripMenuItem1_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles URL10custom.Click
+        Dim f As New Form3
+        f.TextBox1.Text = My.Settings.url10
+        f.ShowDialog(Me)
+        My.Settings.url10 = f.TextBox1.Text
+        URL10.Text = urltrim(f.TextBox1.Text)
+        URL10custom.Text = urltrim(f.TextBox1.Text)
+        f.Dispose()
+    End Sub
+
+    Function urltrim(ByVal url As String) As String
+        Dim r As New Regex(
+    "^s?https?://[-_.!~*'()a-zA-Z0-9;/?:@&=+$,%#]+$")
+        Dim m As Match = r.Match(url)
+        If m.Success Then
+            Dim i As Integer = m.Value.IndexOf(":") + 3
+            url = url.Substring(i, url.Length - i)
+            i = 0
+            i = url.IndexOf("/")
+            If i > 0 Then
+                url = url.Substring(0, i)
+            End If
+        End If
+        Return url
+    End Function
+
+    Private Sub APP8ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles APP8custom.Click
+        Dim ofd As New OpenFileDialog()
+        ofd.InitialDirectory = "C:\Program Files"
+        ofd.Filter = _
+    "EXEファイル(*.exe)|*.exe"
+        ofd.Title = "ブラウザのEXEを選んでください"
+        If ofd.ShowDialog() = DialogResult.OK Then
+            'OKボタンがクリックされたとき
+            '選択されたファイル名を表示する
+            My.Settings.app8 = ofd.FileName
+            APP8.Text = exename(ofd.FileName)
+            APP8custom.Text = exename(ofd.FileName)
+        End If
+    End Sub
+    Private Sub APP9ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles APP9custom.Click
+        Dim ofd As New OpenFileDialog()
+        ofd.InitialDirectory = "C:\Program Files"
+        ofd.Filter = _
+    "EXEファイル(*.exe)|*.exe"
+        ofd.Title = "ブラウザのEXEを選んでください"
+        If ofd.ShowDialog() = DialogResult.OK Then
+            'OKボタンがクリックされたとき
+            '選択されたファイル名を表示する
+            My.Settings.app9 = ofd.FileName
+            APP9.Text = exename(ofd.FileName)
+            APP9custom.Text = exename(ofd.FileName)
+        End If
+    End Sub
+    Private Sub APP10ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles APP10custom.Click
+        Dim ofd As New OpenFileDialog()
+        ofd.InitialDirectory = "C:\Program Files"
+        ofd.Filter = _
+    "EXEファイル(*.exe)|*.exe"
+        ofd.Title = "ブラウザのEXEを選んでください"
+        If ofd.ShowDialog() = DialogResult.OK Then
+            'OKボタンがクリックされたとき
+            '選択されたファイル名を表示する
+            My.Settings.app10 = ofd.FileName
+            APP10.Text = exename(ofd.FileName)
+            APP10custom.Text = exename(ofd.FileName)
+        End If
+    End Sub
+
+    Function exename(ByVal path As String) As String
+        Dim root As Integer = path.LastIndexOf("\") + 1
+
+        Dim str As String = path.Substring(root, path.Length - root)
+
+        Return str.Replace(".exe", "")
+
+    End Function
 
 #End Region
 
@@ -538,7 +774,7 @@ Public Class MERGE
         UTF16BECP1201ToolStripMenuItem.Checked = True
     End Sub
 
-    Private Sub EncodeToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EncodeToolStripMenuItem.Click
+    Private Sub EncodeToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles codepage_select.Click
 
         If enc1 = 932 Then
             GBKToolStripMenuItem.Checked = False
@@ -548,7 +784,7 @@ Public Class MERGE
             GBKToolStripMenuItem.Checked = False
             CP932ToolStripMenuItem.Checked = False
             UTF16BECP1201ToolStripMenuItem.Checked = True
-        Else
+        ElseIf enc1 = 936 Then
             GBKToolStripMenuItem.Checked = True
             CP932ToolStripMenuItem.Checked = False
             UTF16BECP1201ToolStripMenuItem.Checked = False
@@ -556,105 +792,6 @@ Public Class MERGE
 
     End Sub
 
-#End Region
-
-#Region "FONT"
-    Private Sub ツリービューToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ツリービューToolStripMenuItem.Click
-
-        Dim fd As New FontDialog()
-
-        fd.Font = codetree.Font
-        fd.Color = codetree.ForeColor
-        fd.MaxSize = 24
-        fd.MinSize = 9
-        fd.FontMustExist = True
-        fd.ShowHelp = True
-        fd.ShowApply = True
-        If fd.ShowDialog() <> DialogResult.Cancel Then
-            codetree.Font = fd.Font
-            My.Settings.codetree = fd.Font
-        End If
-    End Sub
-
-    Private Sub ゲームタイトルToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ゲームタイトルToolStripMenuItem.Click
-        Dim fd As New FontDialog()
-        fd.Font = GT_tb.Font
-        fd.Color = GT_tb.ForeColor
-        fd.MaxSize = 24
-        fd.MinSize = 9
-        fd.FontMustExist = True
-        fd.ShowHelp = True
-        fd.ShowApply = True
-        If fd.ShowDialog() <> DialogResult.Cancel Then
-            GT_tb.Font = fd.Font
-            My.Settings.GT_tb = fd.Font
-        End If
-    End Sub
-
-    Private Sub ゲームIDToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ゲームIDToolStripMenuItem.Click
-        Dim fd As New FontDialog()
-        fd.Font = GID_tb.Font
-        fd.Color = GID_tb.ForeColor
-        fd.MaxSize = 24
-        fd.MinSize = 9
-        fd.FontMustExist = True
-        fd.ShowHelp = True
-        fd.ShowApply = True
-        fd.FixedPitchOnly = True
-        If fd.ShowDialog() <> DialogResult.Cancel Then
-            GID_tb.Font = fd.Font
-            My.Settings.GID_tb = fd.Font
-        End If
-    End Sub
-
-    Private Sub コード名ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles コード名ToolStripMenuItem.Click
-        Dim fd As New FontDialog()
-        fd.Font = CT_tb.Font
-        fd.Color = CT_tb.ForeColor
-        fd.MaxSize = 24
-        fd.MinSize = 9
-        fd.FontMustExist = True
-        fd.ShowHelp = True
-        fd.ShowApply = True
-        If fd.ShowDialog() <> DialogResult.Cancel Then
-            CT_tb.Font = fd.Font
-            My.Settings.CT_tb = fd.Font
-        End If
-    End Sub
-
-    Private Sub コード内容ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles コード内容ToolStripMenuItem.Click
-
-        Dim fd As New FontDialog()
-
-        fd.Font = cl_tb.Font
-        fd.Color = cl_tb.ForeColor
-        fd.MaxSize = 24
-        fd.MinSize = 9
-        fd.FontMustExist = True
-        fd.ShowHelp = True
-        fd.ShowApply = True
-        fd.FixedPitchOnly = True
-        If fd.ShowDialog() <> DialogResult.Cancel Then
-            cl_tb.Font = fd.Font
-            My.Settings.cl_tb = fd.Font
-        End If
-    End Sub
-
-    Private Sub コメントToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles コメントToolStripMenuItem.Click
-        Dim fd As New FontDialog()
-
-        fd.Font = cmt_tb.Font
-        fd.Color = cmt_tb.ForeColor
-        fd.MaxSize = 24
-        fd.MinSize = 9
-        fd.FontMustExist = True
-        fd.ShowHelp = True
-        fd.ShowApply = True
-        If fd.ShowDialog() <> DialogResult.Cancel Then
-            cmt_tb.Font = fd.Font
-            My.Settings.cmt_tb = fd.Font
-        End If
-    End Sub
 #End Region
 
 #Region "codetree"
@@ -820,16 +957,16 @@ Public Class MERGE
         cmt_tb.Text = backup
     End Sub
 
-    Private Sub すべて閉じるToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles すべて閉じるToolStripMenuItem.Click, cntclose.Click
+    Private Sub すべて閉じるToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tree_collapse.Click, cntclose.Click
         codetree.CollapseAll()
     End Sub
 
-    Private Sub 全て展開するToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles 全て展開するToolStripMenuItem.Click, cntexpand.Click
+    Private Sub 全て展開するToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tree_expand.Click, cntexpand.Click
         codetree.ExpandAll()
     End Sub
 
 
-    Private Sub 半角カナ全角ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles 半角カナ全角ToolStripMenuItem.Click, hankaku.Click
+    Private Sub 半角カナ全角ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles str_wide.Click, hankaku.Click
 
         codetree.BeginUpdate() ' This will stop the tree view from constantly drawing the changes while we sort the nodes
 
@@ -865,7 +1002,7 @@ Public Class MERGE
     End Function
 
 
-    Private Sub 中国語文字化け対策ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles 中国語文字化け対策ToolStripMenuItem.Click, CNchar.Click
+    Private Sub 中国語文字化け対策ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles str_gbk.Click, CNchar.Click
 
         codetree.BeginUpdate() ' This will stop the tree view from constantly drawing the changes while we sort the nodes
 
@@ -906,33 +1043,47 @@ Public Class MERGE
 
 #Region "BROWSER"
     Private Sub wikiToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles wikiToolStripMenuItem1.Click
-        System.Diagnostics.Process.Start(browser, "http://www21.atwiki.jp/cwcwiki/")
+        Process.Start(browser, "http://www21.atwiki.jp/cwcwiki/")
     End Sub
 
     Private Sub OHGToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OHGToolStripMenuItem.Click
-        System.Diagnostics.Process.Start(browser, "http://www.onehitgamer.com/forum/")
+        Process.Start(browser, "http://www.onehitgamer.com/forum/")
     End Sub
 
     Private Sub HAXToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HAXToolStripMenuItem.Click
-        System.Diagnostics.Process.Start(browser, "http://haxcommunity.org/")
+        Process.Start(browser, "http://haxcommunity.org/")
     End Sub
 
     Private Sub CNGBAToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CNGBAToolStripMenuItem.Click
-        System.Diagnostics.Process.Start(browser, "http://www.cngba.com/forum-988-1.html")
+        Process.Start(browser, "http://www.cngba.com/forum-988-1.html")
     End Sub
 
     Private Sub GOOGLEToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GOOGLEToolStripMenuItem.Click
-        System.Diagnostics.Process.Start(browser, "http://www.google.co.jp/")
+        Process.Start(browser, "http://www.google.co.jp/")
     End Sub
 
     Private Sub CMF暗号復元ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CMF暗号復元ToolStripMenuItem.Click
-        System.Diagnostics.Process.Start(browser, "http://raing3.gshi.org/psp-utilities/#index.php?action=cmf-decrypter")
+        Process.Start(browser, "http://raing3.gshi.org/psp-utilities/#index.php?action=cmf-decrypter")
     End Sub
 
+    Private Sub cwcToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cwcToolStripMenuItem1.Click
+        Process.Start(browser, "http://www.myconsole.it/143-cwcheat-official-support-forum/98-english-support-board/")
+    End Sub
+
+    Private Sub url8ToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles URL8.Click
+        Process.Start(browser, My.Settings.url8)
+    End Sub
+    Private Sub url9ToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles URL9.Click
+        Process.Start(browser, My.Settings.url9)
+    End Sub
+    Private Sub url10ToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles URL10.Click
+        Process.Start(browser, My.Settings.url10)
+    End Sub
 
     Private Sub CDEMODToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        System.Diagnostics.Process.Start(browser, "http://unzu127xp.pa.land.to/data/IJIRO/CDEMOD/bin/Release/index.html")
+        Process.Start(browser, "http://unzu127xp.pa.land.to/data/IJIRO/CDEMOD/bin/Release/index.html")
     End Sub
+
 #End Region
 
 #Region "EXECUTE"
@@ -944,33 +1095,52 @@ Public Class MERGE
         boot("APP\kanahenkan.bat")
     End Sub
 
-    Private Sub PMETAN変換ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PMETAN変換ToolStripMenuItem.Click
+    Private Sub PMETAN変換ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles pme_cnv.Click
         boot("APP\pme.bat")
     End Sub
 
-    Private Sub TEMPAR鶴ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TEMPAR鶴ToolStripMenuItem.Click
+    Private Sub TEMPAR鶴ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles temparutility.Click
         boot("APP\temp.bat")
     End Sub
 
-    Private Sub WgetToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles WgetToolStripMenuItem.Click
+    Private Sub WgetToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Wget.Click
         boot("APP\wget.bat")
     End Sub
 
-    Private Sub JaneStyleToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles JaneStyleToolStripMenuItem.Click
-        boot("APP\jane.bat")
+    Private Sub JaneStyleToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles nichanbrowser.Click
+        boot(My.Settings.nichbrowser)
     End Sub
 
-    Private Sub PSPへコードコピーToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PSPへコードコピーToolStripMenuItem.Click, PSPコピーToolStripMenuItem.Click
+    Private Sub PSPへコードコピーToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles copy_to_psp.Click, PSPコピーToolStripMenuItem.Click
         boot("APP\cp.bat")
     End Sub
 
+    Private Sub 登録なし8ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles APP8.Click
+        boot(My.Settings.app8)
+    End Sub
+    Private Sub 登録なし9ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles APP9.Click
+        boot(My.Settings.app9)
+    End Sub
+    Private Sub 登録なし10ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles APP10.Click
+        boot(My.Settings.app10)
+    End Sub
+
     Function boot(ByVal exe As String) As Boolean
-        Dim b1 = My.Application.Info.DirectoryPath.ToString() & "\" & exe
-        If System.IO.File.Exists(b1) Then
+
+        If exe = "" Then
+            MessageBox.Show("'アプリケーションが未登録です。")
+            Return False
+        ElseIf Not exe.Contains(":") AndAlso Not exe.Contains(Application.StartupPath) _
+            AndAlso exe.Contains("APP\") AndAlso exe.Contains(".bat") Then
+            exe = Application.StartupPath & "\" & exe
+        End If
+
+        If System.IO.File.Exists(exe) Then
             Process.Start(exe)
         Else
-            MessageBox.Show("'" + b1 + "'が見つかりませんでした。")
+            MessageBox.Show("'" + exe + "'が見つかりませんでした。")
         End If
+
         Return True
     End Function
 
@@ -993,19 +1163,13 @@ Public Class MERGE
    
 #End Region
 
-    Private Sub CWCWIKIToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CWCWIKIToolStripMenuItem.Click
+    Private Sub menu_option(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menu_options.Click
         ToolStripButton1.Enabled = False
         ToolStripButton2.Enabled = False
         ToolStripButton3.Enabled = False
     End Sub
 
-    Private Sub EXE起動ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EXE起動ToolStripMenuItem.Click
-        ToolStripButton1.Enabled = False
-        ToolStripButton2.Enabled = False
-        ToolStripButton3.Enabled = False
-    End Sub
-
-    Private Sub ヘルプHToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ヘルプHToolStripMenuItem.Click
+    Private Sub help(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ヘルプHToolStripMenuItem.Click
         ToolStripButton1.Enabled = False
         ToolStripButton2.Enabled = False
         ToolStripButton3.Enabled = False
@@ -1456,11 +1620,41 @@ Public Class MERGE
         'TreeView1へのドラッグを受け入れる
         codetree.AllowDrop = True
 
+        Me.FormBorderStyle = FormBorderStyle.FixedToolWindow
 
         If System.IO.File.Exists(browser) Then
         Else
             browser = "IExplore.exe"
         End If
+
+        If My.Settings.app8 <> "" Then
+            APP8.Text = exename(My.Settings.app8)
+            APP8custom.Text = APP8.Text
+        End If
+        If My.Settings.app9 <> "" Then
+            APP9.Text = exename(My.Settings.app9)
+            APP9custom.Text = APP9.Text
+        End If
+        If My.Settings.app10 <> "" Then
+            APP10.Text = exename(My.Settings.app10)
+            APP10custom.Text = APP10.Text
+        End If
+
+        If My.Settings.url8 <> "" Then
+            URL8.Text = urltrim(My.Settings.url8)
+            URL8custom.Text = URL8.Text
+        End If
+        If My.Settings.url9 <> "" Then
+            URL9.Text = urltrim(My.Settings.url9)
+            URL9custom.Text = URL9.Text
+        End If
+        If My.Settings.url10 <> "" Then
+            URL10.Text = urltrim(My.Settings.url10)
+            URL10custom.Text = URL8.Text
+        End If
+
+
+
         If System.IO.File.Exists(My.Settings.lastcodepath) Then
             Dim open As New load_db
             database = My.Settings.lastcodepath
@@ -1476,9 +1670,8 @@ Public Class MERGE
                 open.read_cf(database, 1201)
                 saveas_cwcheat.Enabled = True
                 saveas_psx.Enabled = False
-                UTF16BECP1201ToolStripMenuItem.Enabled = True
             ElseIf PSX = True Then
-                enc1 = My.Settings.MSCODEPAGE
+                enc1 = open.check_enc(database)
                 reset_PSX()
                 Application.DoEvents()
                 open.read_PSX(database, enc1)
@@ -1486,13 +1679,17 @@ Public Class MERGE
                 saveas_cwcheat.Enabled = False
                 UTF16BECP1201ToolStripMenuItem.Enabled = False
             Else
-                enc1 = My.Settings.MSCODEPAGE
+                enc1 = open.check_enc(database)
                 reset_PSP()
                 Application.DoEvents()
                 open.read_PSP(database, enc1)
                 saveas_cwcheat.Enabled = True
                 saveas_psx.Enabled = False
                 UTF16BECP1201ToolStripMenuItem.Enabled = False
+            End If
+            If enc1 = 1201 Then
+                UTF16BECP1201ToolStripMenuItem.Enabled = True
+                CODEFREAKToolStripMenuItem.Enabled = True
             End If
             If codetree.Nodes.Count >= 1 Then
                 codetree.Nodes(0).Expand()
@@ -1501,6 +1698,7 @@ Public Class MERGE
             error_window.list_load_error.EndUpdate()
             loaded = True
             file_saveas.Enabled = True
+            overwrite_db.Enabled = True
         End If
 
         'イベントハンドラを追加する
@@ -1533,7 +1731,7 @@ Public Class MERGE
         End If
 
         If My.Settings.gridvalueedit = True Then
-            G有効ToolStripMenuItem.Checked = True
+            grided_use.Checked = True
             Button4.Visible = True
         End If
 
@@ -2058,17 +2256,20 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         f.Dispose()
     End Sub
     '隠し
-    Private Sub G有効ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles G有効ToolStripMenuItem.Click
+    Private Sub G有効ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
         If Button4.Visible = False Then
             Button4.Visible = True
-            G有効ToolStripMenuItem.Checked = True
+            grided_use.Checked = True
         Else
             Button4.Visible = False
-            G有効ToolStripMenuItem.Checked = False
+            grided_use.Checked = False
         End If
         My.Settings.gridvalueedit = Button4.Visible
 
     End Sub
 
+    Private Sub menu_font_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menu_font.Click
+
+    End Sub
 End Class

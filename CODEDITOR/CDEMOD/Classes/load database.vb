@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports System.Text     'Encoding用
+Imports System.Text.RegularExpressions
 
 Public Class load_db
 
@@ -276,6 +277,8 @@ Public Class load_db
 
                             If buffer(0).Substring(0, 1) = "#" Then
                                 b4 &= buffer(0) & vbCrLf
+
+                            ElseIf counts(0) = 1 AndAlso buffer(0).Contains("[CP") AndAlso buffer(0).Contains("]") Then
 
                             Else ' If what we found isn't a comment, ignore it
 
@@ -556,6 +559,7 @@ Public Class load_db
                             If buffer(0).Substring(0, 1) = "#" Then
                                 b4 &= buffer(0).Trim & vbCrLf
 
+                            ElseIf counts(0) = 1 AndAlso buffer(0).Contains("[CP") AndAlso buffer(0).Contains("]") Then
                             Else ' what we found isn't a comment, ignore it
 
                                 counts(2) += 1
@@ -888,6 +892,38 @@ Public Class load_db
 
     End Function
 
+
+    Public Function check_enc(ByVal filename As String) As Integer
+
+        Dim file As New FileStream(filename, FileMode.Open, FileAccess.Read)
+        Dim codepage As Integer = 932
+        Dim cp(7) As Byte
+        Dim bs(1) As Byte
+        Dim str As String
+        '5B 43 50 39 33 36 5D
+        If file.ReadByte = &H5B Then
+            file.Seek(0, SeekOrigin.Begin)
+            file.Read(cp, 0, 8)
+            file.Close()
+            str = Encoding.GetEncoding(0).GetString(cp)
+            Dim r As New Regex("\[CP\d\d\d\]", RegexOptions.ECMAScript)
+            Dim m As Match = r.Match(str)
+            If m.Success Then
+                str = m.Value
+                If str = "[CP932]" Then
+                    Return 932
+                ElseIf str = "[CP936]" Then
+                    Return 936
+                ElseIf str = "[CP1201]" Then
+                    Return 1201
+                End If
+            End If
+        End If
+
+        Return My.Settings.MSCODEPAGE
+
+    End Function
+
     Public Function check_db(ByVal filename As String, ByVal enc1 As Integer) As Boolean
 
         Dim file As New FileStream(filename, FileMode.Open, FileAccess.Read)
@@ -895,13 +931,11 @@ Public Class load_db
                                    System.Text.Encoding.GetEncoding(enc1))
         Dim buffer As String = Nothing
         Dim cwcpop As Boolean = False
-
         Do Until sr.EndOfStream = True
 
             buffer = sr.ReadLine
             buffer = buffer.PadRight(2)
             Try
-
                 If buffer.Substring(0, 2) = "_L" Then ' If we're on a code line
 
                     If buffer.Substring(3, 2) <> "0x" And buffer.Length <> 24 Then ' If the format isn't a PSP format
@@ -947,6 +981,7 @@ Public Class load_db
         End If
 
         file.Close()
+
         Return cf
     End Function
 

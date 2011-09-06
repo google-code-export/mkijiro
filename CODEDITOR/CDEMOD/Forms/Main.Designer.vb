@@ -30,6 +30,7 @@ Partial Class MERGE
         Me.new_psp = New System.Windows.Forms.ToolStripMenuItem()
         Me.new_psx = New System.Windows.Forms.ToolStripMenuItem()
         Me.file_open = New System.Windows.Forms.ToolStripMenuItem()
+        Me.overwrite_db = New System.Windows.Forms.ToolStripMenuItem()
         Me.file_saveas = New System.Windows.Forms.ToolStripMenuItem()
         Me.saveas_cwcheat = New System.Windows.Forms.ToolStripMenuItem()
         Me.saveas_psx = New System.Windows.Forms.ToolStripMenuItem()
@@ -42,45 +43,62 @@ Partial Class MERGE
         Me.name_sort = New System.Windows.Forms.ToolStripMenuItem()
         Me.Sort_GTitle1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.Sort_GTitle2 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.menu_options = New System.Windows.Forms.ToolStripMenuItem()
-        Me.options_ontop = New System.Windows.Forms.ToolStripMenuItem()
-        Me.options_error = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ブラウザ変更ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.G有効ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.menu_font = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ツリービューToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ゲームタイトルToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ゲームIDToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.コード名ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.コード内容ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.コメントToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.EncodeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.codepage_select = New System.Windows.Forms.ToolStripMenuItem()
         Me.CP932ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GBKToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.UTF16BECP1201ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ツリー開閉ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.codetreeview = New System.Windows.Forms.ToolStripMenuItem()
         Me.paserToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator7 = New System.Windows.Forms.ToolStripSeparator()
-        Me.すべて閉じるToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.全て展開するToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tree_collapse = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tree_expand = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
-        Me.半角カナ全角ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.中国語文字化け対策ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CWCWIKIToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.str_wide = New System.Windows.Forms.ToolStripMenuItem()
+        Me.str_gbk = New System.Windows.Forms.ToolStripMenuItem()
+        Me.browsecodesite = New System.Windows.Forms.ToolStripMenuItem()
         Me.wikiToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.cwcToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.OHGToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HAXToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CNGBAToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GOOGLEToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CMF暗号復元ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.URL8 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.URL9 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.URL10 = New System.Windows.Forms.ToolStripMenuItem()
         Me.EXE起動ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.KAKASI = New System.Windows.Forms.ToolStripMenuItem()
         Me.MECAB = New System.Windows.Forms.ToolStripMenuItem()
-        Me.PMETAN変換ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TEMPAR鶴ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.WgetToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.JaneStyleToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.PSPへコードコピーToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.pme_cnv = New System.Windows.Forms.ToolStripMenuItem()
+        Me.temparutility = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Wget = New System.Windows.Forms.ToolStripMenuItem()
+        Me.nichanbrowser = New System.Windows.Forms.ToolStripMenuItem()
+        Me.copy_to_psp = New System.Windows.Forms.ToolStripMenuItem()
+        Me.APP8 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.APP9 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.APP10 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.menu_options = New System.Windows.Forms.ToolStripMenuItem()
+        Me.options_ontop = New System.Windows.Forms.ToolStripMenuItem()
+        Me.options_error = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ブラウザ変更ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.codesite_browser = New System.Windows.Forms.ToolStripMenuItem()
+        Me.nichannel_browser = New System.Windows.Forms.ToolStripMenuItem()
+        Me.menu_font = New System.Windows.Forms.ToolStripMenuItem()
+        Me.font_treeview = New System.Windows.Forms.ToolStripMenuItem()
+        Me.font_gtitle = New System.Windows.Forms.ToolStripMenuItem()
+        Me.font_gid = New System.Windows.Forms.ToolStripMenuItem()
+        Me.font_codename = New System.Windows.Forms.ToolStripMenuItem()
+        Me.font_codetxt = New System.Windows.Forms.ToolStripMenuItem()
+        Me.font_cmt = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.URL8custom = New System.Windows.Forms.ToolStripMenuItem()
+        Me.URL9custom = New System.Windows.Forms.ToolStripMenuItem()
+        Me.URL10custom = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator8 = New System.Windows.Forms.ToolStripSeparator()
+        Me.APP8custom = New System.Windows.Forms.ToolStripMenuItem()
+        Me.APP9custom = New System.Windows.Forms.ToolStripMenuItem()
+        Me.APP10custom = New System.Windows.Forms.ToolStripMenuItem()
+        Me.grided_use = New System.Windows.Forms.ToolStripMenuItem()
         Me.ヘルプHToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.オンラインヘルプToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.バージョン情報ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -145,18 +163,15 @@ Partial Class MERGE
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.Button4 = New System.Windows.Forms.Button()
-        Me.ContextMenuStrip2 = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.貼付けToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.treeopen.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.tool_menu.SuspendLayout()
         Me.Panel1.SuspendLayout()
-        Me.ContextMenuStrip2.SuspendLayout()
         Me.SuspendLayout()
         '
         'treeopen
         '
-        Me.treeopen.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menu_file, Me.menu_sort, Me.menu_options, Me.menu_font, Me.EncodeToolStripMenuItem, Me.ツリー開閉ToolStripMenuItem, Me.CWCWIKIToolStripMenuItem, Me.EXE起動ToolStripMenuItem, Me.ヘルプHToolStripMenuItem})
+        Me.treeopen.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menu_file, Me.menu_sort, Me.codepage_select, Me.codetreeview, Me.browsecodesite, Me.EXE起動ToolStripMenuItem, Me.menu_options, Me.ヘルプHToolStripMenuItem})
         Me.treeopen.Location = New System.Drawing.Point(0, 0)
         Me.treeopen.Name = "treeopen"
         Me.treeopen.Size = New System.Drawing.Size(647, 24)
@@ -165,7 +180,7 @@ Partial Class MERGE
         '
         'menu_file
         '
-        Me.menu_file.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.file_new, Me.file_open, Me.file_saveas, Me.file_exit})
+        Me.menu_file.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.file_new, Me.file_open, Me.overwrite_db, Me.file_saveas, Me.file_exit})
         Me.menu_file.Name = "menu_file"
         Me.menu_file.Size = New System.Drawing.Size(66, 20)
         Me.menu_file.Text = "ファイル(&F)"
@@ -175,7 +190,7 @@ Partial Class MERGE
         Me.file_new.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.new_psp, Me.new_psx})
         Me.file_new.Image = Global.CWcheat_Database_Editor.My.Resources.Resources._new
         Me.file_new.Name = "file_new"
-        Me.file_new.Size = New System.Drawing.Size(141, 22)
+        Me.file_new.Size = New System.Drawing.Size(144, 22)
         Me.file_new.Text = "新規(&N)"
         '
         'new_psp
@@ -196,8 +211,16 @@ Partial Class MERGE
         '
         Me.file_open.Image = CType(resources.GetObject("file_open.Image"), System.Drawing.Image)
         Me.file_open.Name = "file_open"
-        Me.file_open.Size = New System.Drawing.Size(141, 22)
+        Me.file_open.Size = New System.Drawing.Size(152, 22)
         Me.file_open.Text = "開く(&O)"
+        '
+        'overwrite_db
+        '
+        Me.overwrite_db.Enabled = False
+        Me.overwrite_db.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.save
+        Me.overwrite_db.Name = "overwrite_db"
+        Me.overwrite_db.Size = New System.Drawing.Size(144, 22)
+        Me.overwrite_db.Text = "上書き保存(&W)"
         '
         'file_saveas
         '
@@ -205,7 +228,7 @@ Partial Class MERGE
         Me.file_saveas.Enabled = False
         Me.file_saveas.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.save
         Me.file_saveas.Name = "file_saveas"
-        Me.file_saveas.Size = New System.Drawing.Size(141, 22)
+        Me.file_saveas.Size = New System.Drawing.Size(144, 22)
         Me.file_saveas.Text = "...として保存(&S)"
         '
         'saveas_cwcheat
@@ -233,7 +256,7 @@ Partial Class MERGE
         '
         Me.file_exit.Image = CType(resources.GetObject("file_exit.Image"), System.Drawing.Image)
         Me.file_exit.Name = "file_exit"
-        Me.file_exit.Size = New System.Drawing.Size(141, 22)
+        Me.file_exit.Size = New System.Drawing.Size(144, 22)
         Me.file_exit.Text = "閉じる(&C)"
         '
         'menu_sort
@@ -294,96 +317,13 @@ Partial Class MERGE
         Me.Sort_GTitle2.Text = "降順"
         Me.Sort_GTitle2.ToolTipText = "漢字-あ,アルファベットZ-A　の順に並べ直します。" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
-        'menu_options
+        'codepage_select
         '
-        Me.menu_options.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.options_ontop, Me.options_error, Me.ブラウザ変更ToolStripMenuItem, Me.G有効ToolStripMenuItem})
-        Me.menu_options.Name = "menu_options"
-        Me.menu_options.Size = New System.Drawing.Size(76, 20)
-        Me.menu_options.Text = "オプション(&O)"
-        Me.menu_options.ToolTipText = "メニューが常にTOPに表示されます"
-        '
-        'options_ontop
-        '
-        Me.options_ontop.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.alwaystop
-        Me.options_ontop.Name = "options_ontop"
-        Me.options_ontop.Size = New System.Drawing.Size(154, 22)
-        Me.options_ontop.Text = "常に前面表示"
-        '
-        'options_error
-        '
-        Me.options_error.Image = CType(resources.GetObject("options_error.Image"), System.Drawing.Image)
-        Me.options_error.Name = "options_error"
-        Me.options_error.Size = New System.Drawing.Size(154, 22)
-        Me.options_error.Text = "エラー画面を表示"
-        Me.options_error.ToolTipText = "起動時のエラー画面の表示の設定"
-        '
-        'ブラウザ変更ToolStripMenuItem
-        '
-        Me.ブラウザ変更ToolStripMenuItem.Image = CType(resources.GetObject("ブラウザ変更ToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.ブラウザ変更ToolStripMenuItem.Name = "ブラウザ変更ToolStripMenuItem"
-        Me.ブラウザ変更ToolStripMenuItem.Size = New System.Drawing.Size(154, 22)
-        Me.ブラウザ変更ToolStripMenuItem.Text = "ブラウザ変更"
-        Me.ブラウザ変更ToolStripMenuItem.ToolTipText = "コードサイトを表示するブラウザの変更をします。"
-        '
-        'G有効ToolStripMenuItem
-        '
-        Me.G有効ToolStripMenuItem.Name = "G有効ToolStripMenuItem"
-        Me.G有効ToolStripMenuItem.Size = New System.Drawing.Size(154, 22)
-        Me.G有効ToolStripMenuItem.Text = "グリッド編集有効"
-        Me.G有効ToolStripMenuItem.ToolTipText = "データグリッドでコードの値を編集します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "DEC；32bit10進数" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "OR；32bit論理和" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "AND；32bit論理積" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "XOR；32bit排他的論理和" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "B" & _
-            "INARY32；単精度浮動小数点数" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "BINARY32(16bit)；単精度浮動小数点数の16bit右シフト" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "BINARY16；半精度浮動小数点"
-        '
-        'menu_font
-        '
-        Me.menu_font.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ツリービューToolStripMenuItem, Me.ゲームタイトルToolStripMenuItem, Me.ゲームIDToolStripMenuItem, Me.コード名ToolStripMenuItem, Me.コード内容ToolStripMenuItem, Me.コメントToolStripMenuItem})
-        Me.menu_font.Name = "menu_font"
-        Me.menu_font.Size = New System.Drawing.Size(66, 20)
-        Me.menu_font.Text = "フォント(&N)"
-        Me.menu_font.ToolTipText = "メニューのフォントを指定します"
-        '
-        'ツリービューToolStripMenuItem
-        '
-        Me.ツリービューToolStripMenuItem.Name = "ツリービューToolStripMenuItem"
-        Me.ツリービューToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
-        Me.ツリービューToolStripMenuItem.Text = "ツリービュー"
-        '
-        'ゲームタイトルToolStripMenuItem
-        '
-        Me.ゲームタイトルToolStripMenuItem.Name = "ゲームタイトルToolStripMenuItem"
-        Me.ゲームタイトルToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
-        Me.ゲームタイトルToolStripMenuItem.Text = "ゲームタイトル"
-        '
-        'ゲームIDToolStripMenuItem
-        '
-        Me.ゲームIDToolStripMenuItem.Name = "ゲームIDToolStripMenuItem"
-        Me.ゲームIDToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
-        Me.ゲームIDToolStripMenuItem.Text = "ゲームID"
-        '
-        'コード名ToolStripMenuItem
-        '
-        Me.コード名ToolStripMenuItem.Name = "コード名ToolStripMenuItem"
-        Me.コード名ToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
-        Me.コード名ToolStripMenuItem.Text = "コード名"
-        '
-        'コード内容ToolStripMenuItem
-        '
-        Me.コード内容ToolStripMenuItem.Name = "コード内容ToolStripMenuItem"
-        Me.コード内容ToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
-        Me.コード内容ToolStripMenuItem.Text = "コード内容"
-        '
-        'コメントToolStripMenuItem
-        '
-        Me.コメントToolStripMenuItem.Name = "コメントToolStripMenuItem"
-        Me.コメントToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
-        Me.コメントToolStripMenuItem.Text = "コメント"
-        '
-        'EncodeToolStripMenuItem
-        '
-        Me.EncodeToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CP932ToolStripMenuItem, Me.GBKToolStripMenuItem, Me.UTF16BECP1201ToolStripMenuItem})
-        Me.EncodeToolStripMenuItem.Name = "EncodeToolStripMenuItem"
-        Me.EncodeToolStripMenuItem.Size = New System.Drawing.Size(78, 20)
-        Me.EncodeToolStripMenuItem.Text = "エンコード(&D)"
-        Me.EncodeToolStripMenuItem.ToolTipText = "コードデータベースの読み込み保存エンコードを指定します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "CP932≒日本語SJIS Cwcijiro/Tempar/Jpcheat用" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "CP936=中国語GBK" & _
+        Me.codepage_select.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CP932ToolStripMenuItem, Me.GBKToolStripMenuItem, Me.UTF16BECP1201ToolStripMenuItem})
+        Me.codepage_select.Name = "codepage_select"
+        Me.codepage_select.Size = New System.Drawing.Size(78, 20)
+        Me.codepage_select.Text = "エンコード(&D)"
+        Me.codepage_select.ToolTipText = "コードデータベースの読み込み保存エンコードを指定します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "CP932≒日本語SJIS Cwcijiro/Tempar/Jpcheat用" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "CP936=中国語GBK" & _
             " CheatmasterやFreecheat用"
         '
         'CP932ToolStripMenuItem
@@ -408,109 +348,132 @@ Partial Class MERGE
         Me.UTF16BECP1201ToolStripMenuItem.Text = "UTF16BE(CP1201)"
         Me.UTF16BECP1201ToolStripMenuItem.ToolTipText = "マルチバイトUTF16ビッグエンディアン" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "コードフリーク専用DBをTXTに戻します。"
         '
-        'ツリー開閉ToolStripMenuItem
+        'codetreeview
         '
-        Me.ツリー開閉ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.paserToolStripMenuItem, Me.ToolStripSeparator7, Me.すべて閉じるToolStripMenuItem, Me.全て展開するToolStripMenuItem, Me.ToolStripSeparator3, Me.半角カナ全角ToolStripMenuItem, Me.中国語文字化け対策ToolStripMenuItem})
-        Me.ツリー開閉ToolStripMenuItem.Name = "ツリー開閉ToolStripMenuItem"
-        Me.ツリー開閉ToolStripMenuItem.Size = New System.Drawing.Size(58, 20)
-        Me.ツリー開閉ToolStripMenuItem.Text = "ツリー(&T)"
-        Me.ツリー開閉ToolStripMenuItem.ToolTipText = "ツリーノードの全展開、折りたたみを実行"
+        Me.codetreeview.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.paserToolStripMenuItem, Me.ToolStripSeparator7, Me.tree_collapse, Me.tree_expand, Me.ToolStripSeparator3, Me.str_wide, Me.str_gbk})
+        Me.codetreeview.Name = "codetreeview"
+        Me.codetreeview.Size = New System.Drawing.Size(58, 20)
+        Me.codetreeview.Text = "ツリー(&T)"
+        Me.codetreeview.ToolTipText = "ツリーノードの全展開、折りたたみを実行"
         '
         'paserToolStripMenuItem
         '
         Me.paserToolStripMenuItem.Name = "paserToolStripMenuItem"
-        Me.paserToolStripMenuItem.Size = New System.Drawing.Size(176, 22)
+        Me.paserToolStripMenuItem.Size = New System.Drawing.Size(185, 22)
         Me.paserToolStripMenuItem.Text = "コードパーサー"
         Me.paserToolStripMenuItem.ToolTipText = "チートコードをまとめて追加してツリーに反映します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ツリーの一番上ファイル名を選択時；_S_G追加が有効になります" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ゲームタイトル名選択時；ゲームの末尾に追加" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "コード名選択時；選択箇所の次に挿入"
         '
         'ToolStripSeparator7
         '
         Me.ToolStripSeparator7.Name = "ToolStripSeparator7"
-        Me.ToolStripSeparator7.Size = New System.Drawing.Size(173, 6)
+        Me.ToolStripSeparator7.Size = New System.Drawing.Size(182, 6)
         '
-        'すべて閉じるToolStripMenuItem
+        'tree_collapse
         '
-        Me.すべて閉じるToolStripMenuItem.Name = "すべて閉じるToolStripMenuItem"
-        Me.すべて閉じるToolStripMenuItem.Size = New System.Drawing.Size(176, 22)
-        Me.すべて閉じるToolStripMenuItem.Text = "全て折りたたむ"
+        Me.tree_collapse.Name = "tree_collapse"
+        Me.tree_collapse.Size = New System.Drawing.Size(185, 22)
+        Me.tree_collapse.Text = "全て折りたたむ"
         '
-        '全て展開するToolStripMenuItem
+        'tree_expand
         '
-        Me.全て展開するToolStripMenuItem.Name = "全て展開するToolStripMenuItem"
-        Me.全て展開するToolStripMenuItem.Size = New System.Drawing.Size(176, 22)
-        Me.全て展開するToolStripMenuItem.Text = "全て展開する"
+        Me.tree_expand.Name = "tree_expand"
+        Me.tree_expand.Size = New System.Drawing.Size(185, 22)
+        Me.tree_expand.Text = "全て展開する"
         '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(173, 6)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(182, 6)
         '
-        '半角カナ全角ToolStripMenuItem
+        'str_wide
         '
-        Me.半角カナ全角ToolStripMenuItem.Name = "半角カナ全角ToolStripMenuItem"
-        Me.半角カナ全角ToolStripMenuItem.Size = New System.Drawing.Size(185, 22)
-        Me.半角カナ全角ToolStripMenuItem.Text = "半角カナ→全角カタカナ"
-        Me.半角カナ全角ToolStripMenuItem.ToolTipText = "半角カナを全角カタカナに変換します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "中国語GBKには半角カナが存在しないため半角のまま保存すると文字化けが発生します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        Me.str_wide.Name = "str_wide"
+        Me.str_wide.Size = New System.Drawing.Size(185, 22)
+        Me.str_wide.Text = "半角カナ→全角カタカナ"
+        Me.str_wide.ToolTipText = "半角カナを全角カタカナに変換します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "中国語GBKには半角カナが存在しないため半角のまま保存すると文字化けが発生します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
-        '中国語文字化け対策ToolStripMenuItem
+        'str_gbk
         '
-        Me.中国語文字化け対策ToolStripMenuItem.Name = "中国語文字化け対策ToolStripMenuItem"
-        Me.中国語文字化け対策ToolStripMenuItem.Size = New System.Drawing.Size(176, 22)
-        Me.中国語文字化け対策ToolStripMenuItem.Text = "中国語文字化け対策"
-        Me.中国語文字化け対策ToolStripMenuItem.ToolTipText = "FREECHEAT/CMFUSIONで半角カナ以外の表示できない文字を代替文字かスペースで置換します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "対象；" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "・ー∋⊆⊇⊂⊃￢⇒⇔∀∃∂∇≪≫∬Å♯♭♪†‡¶" & _
+        Me.str_gbk.Name = "str_gbk"
+        Me.str_gbk.Size = New System.Drawing.Size(185, 22)
+        Me.str_gbk.Text = "中国語文字化け対策"
+        Me.str_gbk.ToolTipText = "FREECHEAT/CMFUSIONで半角カナ以外の表示できない文字を代替文字かスペースで置換します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "対象；" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "・ー∋⊆⊇⊂⊃￢⇒⇔∀∃∂∇≪≫∬Å♯♭♪†‡¶" & _
             "⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳㍉㌔㌢㍍㌘㌧㌃㌶㍑㍗㌍㌦㌣㌫㍊㌻㍻〝〟㏍㊤㊥㊦㊧㊨㍾㍽㍼"
         '
-        'CWCWIKIToolStripMenuItem
+        'browsecodesite
         '
-        Me.CWCWIKIToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.wikiToolStripMenuItem1, Me.OHGToolStripMenuItem, Me.HAXToolStripMenuItem, Me.CNGBAToolStripMenuItem, Me.GOOGLEToolStripMenuItem, Me.CMF暗号復元ToolStripMenuItem})
-        Me.CWCWIKIToolStripMenuItem.Name = "CWCWIKIToolStripMenuItem"
-        Me.CWCWIKIToolStripMenuItem.Size = New System.Drawing.Size(69, 20)
-        Me.CWCWIKIToolStripMenuItem.Text = "ブラウザ(&B)"
-        Me.CWCWIKIToolStripMenuItem.ToolTipText = "ブラウザでCWCheatwikiにアクセス"
+        Me.browsecodesite.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.wikiToolStripMenuItem1, Me.cwcToolStripMenuItem1, Me.OHGToolStripMenuItem, Me.HAXToolStripMenuItem, Me.CNGBAToolStripMenuItem, Me.GOOGLEToolStripMenuItem, Me.CMF暗号復元ToolStripMenuItem, Me.URL8, Me.URL9, Me.URL10})
+        Me.browsecodesite.Name = "browsecodesite"
+        Me.browsecodesite.Size = New System.Drawing.Size(69, 20)
+        Me.browsecodesite.Text = "ブラウザ(&B)"
+        Me.browsecodesite.ToolTipText = "ブラウザでCWCheatwikiにアクセス"
         '
         'wikiToolStripMenuItem1
         '
         Me.wikiToolStripMenuItem1.Name = "wikiToolStripMenuItem1"
-        Me.wikiToolStripMenuItem1.Size = New System.Drawing.Size(169, 22)
+        Me.wikiToolStripMenuItem1.Size = New System.Drawing.Size(195, 22)
         Me.wikiToolStripMenuItem1.Text = "CWCWIKI"
+        '
+        'cwcToolStripMenuItem1
+        '
+        Me.cwcToolStripMenuItem1.Name = "cwcToolStripMenuItem1"
+        Me.cwcToolStripMenuItem1.Size = New System.Drawing.Size(195, 22)
+        Me.cwcToolStripMenuItem1.Text = "cwcheat_official-support"
         '
         'OHGToolStripMenuItem
         '
         Me.OHGToolStripMenuItem.Name = "OHGToolStripMenuItem"
-        Me.OHGToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
-        Me.OHGToolStripMenuItem.Text = "OHG"
+        Me.OHGToolStripMenuItem.Size = New System.Drawing.Size(195, 22)
+        Me.OHGToolStripMenuItem.Text = "OneHitGamer"
         '
         'HAXToolStripMenuItem
         '
         Me.HAXToolStripMenuItem.Name = "HAXToolStripMenuItem"
-        Me.HAXToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
-        Me.HAXToolStripMenuItem.Text = "HAX"
+        Me.HAXToolStripMenuItem.Size = New System.Drawing.Size(195, 22)
+        Me.HAXToolStripMenuItem.Text = "HAXCoummunity"
         '
         'CNGBAToolStripMenuItem
         '
         Me.CNGBAToolStripMenuItem.Name = "CNGBAToolStripMenuItem"
-        Me.CNGBAToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
+        Me.CNGBAToolStripMenuItem.Size = New System.Drawing.Size(195, 22)
         Me.CNGBAToolStripMenuItem.Text = "CNGBA"
         '
         'GOOGLEToolStripMenuItem
         '
         Me.GOOGLEToolStripMenuItem.Name = "GOOGLEToolStripMenuItem"
-        Me.GOOGLEToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
+        Me.GOOGLEToolStripMenuItem.Size = New System.Drawing.Size(195, 22)
         Me.GOOGLEToolStripMenuItem.Text = "GOOGLE"
         '
         'CMF暗号復元ToolStripMenuItem
         '
         Me.CMF暗号復元ToolStripMenuItem.Name = "CMF暗号復元ToolStripMenuItem"
-        Me.CMF暗号復元ToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
-        Me.CMF暗号復元ToolStripMenuItem.Text = "CMF暗号コード復元"
-        Me.CMF暗号復元ToolStripMenuItem.ToolTipText = "CMFUSION専用暗号コードをTEMAR専用サブルーチンコードに復号する"
+        Me.CMF暗号復元ToolStripMenuItem.Size = New System.Drawing.Size(195, 22)
+        Me.CMF暗号復元ToolStripMenuItem.Text = "raing3's cmf decription"
+        '
+        'URL8
+        '
+        Me.URL8.Name = "URL8"
+        Me.URL8.Size = New System.Drawing.Size(195, 22)
+        Me.URL8.Text = "URL8"
+        '
+        'URL9
+        '
+        Me.URL9.Name = "URL9"
+        Me.URL9.Size = New System.Drawing.Size(195, 22)
+        Me.URL9.Text = "URL9"
+        '
+        'URL10
+        '
+        Me.URL10.Name = "URL10"
+        Me.URL10.Size = New System.Drawing.Size(195, 22)
+        Me.URL10.Text = "URL10"
         '
         'EXE起動ToolStripMenuItem
         '
-        Me.EXE起動ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.KAKASI, Me.MECAB, Me.PMETAN変換ToolStripMenuItem, Me.TEMPAR鶴ToolStripMenuItem, Me.WgetToolStripMenuItem, Me.JaneStyleToolStripMenuItem, Me.PSPへコードコピーToolStripMenuItem})
+        Me.EXE起動ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.KAKASI, Me.MECAB, Me.pme_cnv, Me.temparutility, Me.Wget, Me.nichanbrowser, Me.copy_to_psp, Me.APP8, Me.APP9, Me.APP10})
         Me.EXE起動ToolStripMenuItem.Name = "EXE起動ToolStripMenuItem"
-        Me.EXE起動ToolStripMenuItem.Size = New System.Drawing.Size(77, 20)
-        Me.EXE起動ToolStripMenuItem.Text = "EXE起動(&E)"
+        Me.EXE起動ToolStripMenuItem.Size = New System.Drawing.Size(53, 20)
+        Me.EXE起動ToolStripMenuItem.Text = "EXE(&E)"
         '
         'KAKASI
         '
@@ -526,40 +489,204 @@ Partial Class MERGE
         Me.MECAB.Text = "MECAB+KAKASI変換"
         Me.MECAB.ToolTipText = "MECABエンジンで全角文字をカナカナにしたあとkakasiで半角カナに変更する" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "対象cheatsjis.db"
         '
-        'PMETAN変換ToolStripMenuItem
+        'pme_cnv
         '
-        Me.PMETAN変換ToolStripMenuItem.Name = "PMETAN変換ToolStripMenuItem"
-        Me.PMETAN変換ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.PMETAN変換ToolStripMenuItem.Text = "PMETAN変換"
-        Me.PMETAN変換ToolStripMenuItem.ToolTipText = "PMETANを起動してARコードに変換します"
+        Me.pme_cnv.Name = "pme_cnv"
+        Me.pme_cnv.Size = New System.Drawing.Size(180, 22)
+        Me.pme_cnv.Text = "PMETAN変換"
+        Me.pme_cnv.ToolTipText = "PMETANを起動してARコードに変換します"
         '
-        'TEMPAR鶴ToolStripMenuItem
+        'temparutility
         '
-        Me.TEMPAR鶴ToolStripMenuItem.Name = "TEMPAR鶴ToolStripMenuItem"
-        Me.TEMPAR鶴ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.TEMPAR鶴ToolStripMenuItem.Text = "TEMPAR鶴"
-        Me.TEMPAR鶴ToolStripMenuItem.ToolTipText = "TEMARを起動してBINに変換します"
+        Me.temparutility.Name = "temparutility"
+        Me.temparutility.Size = New System.Drawing.Size(180, 22)
+        Me.temparutility.Text = "TEMPAR鶴"
+        Me.temparutility.ToolTipText = "TEMARを起動してBINに変換します"
         '
-        'WgetToolStripMenuItem
+        'Wget
         '
-        Me.WgetToolStripMenuItem.Name = "WgetToolStripMenuItem"
-        Me.WgetToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.WgetToolStripMenuItem.Text = "WGETコード取得"
-        Me.WgetToolStripMenuItem.ToolTipText = "特定のサイトからコードをDLします"
+        Me.Wget.Name = "Wget"
+        Me.Wget.Size = New System.Drawing.Size(180, 22)
+        Me.Wget.Text = "WGETコード取得"
+        Me.Wget.ToolTipText = "特定のサイトからコードをDLします"
         '
-        'JaneStyleToolStripMenuItem
+        'nichanbrowser
         '
-        Me.JaneStyleToolStripMenuItem.Name = "JaneStyleToolStripMenuItem"
-        Me.JaneStyleToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.JaneStyleToolStripMenuItem.Text = "JaneStyle"
-        Me.JaneStyleToolStripMenuItem.ToolTipText = "2CHブラウザを起動してコードを探します"
+        Me.nichanbrowser.Name = "nichanbrowser"
+        Me.nichanbrowser.Size = New System.Drawing.Size(180, 22)
+        Me.nichanbrowser.Text = "2CHブラウザ"
+        Me.nichanbrowser.ToolTipText = "2CHブラウザを起動してコードを探します"
         '
-        'PSPへコードコピーToolStripMenuItem
+        'copy_to_psp
         '
-        Me.PSPへコードコピーToolStripMenuItem.Name = "PSPへコードコピーToolStripMenuItem"
-        Me.PSPへコードコピーToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.PSPへコードコピーToolStripMenuItem.Text = "PSPへコードを転送"
-        Me.PSPへコードコピーToolStripMenuItem.ToolTipText = "PSPへコードを転送します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "メモリースティックのパスの入力が必要です" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "例；パスがE場合　E:"
+        Me.copy_to_psp.Name = "copy_to_psp"
+        Me.copy_to_psp.Size = New System.Drawing.Size(180, 22)
+        Me.copy_to_psp.Text = "PSPへコードを転送"
+        Me.copy_to_psp.ToolTipText = "PSPへコードを転送します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "メモリースティックのパスの入力が必要です" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "例；パスがE場合　E:"
+        '
+        'APP8
+        '
+        Me.APP8.Name = "APP8"
+        Me.APP8.Size = New System.Drawing.Size(180, 22)
+        Me.APP8.Text = "APP8"
+        '
+        'APP9
+        '
+        Me.APP9.Name = "APP9"
+        Me.APP9.Size = New System.Drawing.Size(180, 22)
+        Me.APP9.Text = "APP9"
+        '
+        'APP10
+        '
+        Me.APP10.Name = "APP10"
+        Me.APP10.Size = New System.Drawing.Size(180, 22)
+        Me.APP10.Text = "APP10"
+        '
+        'menu_options
+        '
+        Me.menu_options.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.options_ontop, Me.options_error, Me.ブラウザ変更ToolStripMenuItem, Me.menu_font, Me.ToolStripMenuItem1, Me.grided_use})
+        Me.menu_options.Name = "menu_options"
+        Me.menu_options.Size = New System.Drawing.Size(76, 20)
+        Me.menu_options.Text = "オプション(&O)"
+        Me.menu_options.ToolTipText = "メニューが常にTOPに表示されます"
+        '
+        'options_ontop
+        '
+        Me.options_ontop.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.alwaystop
+        Me.options_ontop.Name = "options_ontop"
+        Me.options_ontop.Size = New System.Drawing.Size(168, 22)
+        Me.options_ontop.Text = "常に前面表示"
+        '
+        'options_error
+        '
+        Me.options_error.Image = CType(resources.GetObject("options_error.Image"), System.Drawing.Image)
+        Me.options_error.Name = "options_error"
+        Me.options_error.Size = New System.Drawing.Size(168, 22)
+        Me.options_error.Text = "エラー画面を表示"
+        Me.options_error.ToolTipText = "起動時のエラー画面の表示の設定"
+        '
+        'ブラウザ変更ToolStripMenuItem
+        '
+        Me.ブラウザ変更ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.codesite_browser, Me.nichannel_browser})
+        Me.ブラウザ変更ToolStripMenuItem.Image = CType(resources.GetObject("ブラウザ変更ToolStripMenuItem.Image"), System.Drawing.Image)
+        Me.ブラウザ変更ToolStripMenuItem.Name = "ブラウザ変更ToolStripMenuItem"
+        Me.ブラウザ変更ToolStripMenuItem.Size = New System.Drawing.Size(168, 22)
+        Me.ブラウザ変更ToolStripMenuItem.Text = "ブラウザ変更"
+        '
+        'codesite_browser
+        '
+        Me.codesite_browser.Name = "codesite_browser"
+        Me.codesite_browser.Size = New System.Drawing.Size(152, 22)
+        Me.codesite_browser.Text = "コードサイト"
+        Me.codesite_browser.ToolTipText = "コードサイトを表示するブラウザの変更をします。"
+        '
+        'nichannel_browser
+        '
+        Me.nichannel_browser.Name = "nichannel_browser"
+        Me.nichannel_browser.Size = New System.Drawing.Size(152, 22)
+        Me.nichannel_browser.Text = "2CH専用"
+        Me.nichannel_browser.ToolTipText = "２CH専用ブラウザの変更をします。"
+        '
+        'menu_font
+        '
+        Me.menu_font.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.font_treeview, Me.font_gtitle, Me.font_gid, Me.font_codename, Me.font_codetxt, Me.font_cmt})
+        Me.menu_font.Image = CType(resources.GetObject("menu_font.Image"), System.Drawing.Image)
+        Me.menu_font.Name = "menu_font"
+        Me.menu_font.Size = New System.Drawing.Size(168, 22)
+        Me.menu_font.Text = "フォント"
+        Me.menu_font.ToolTipText = "メニューのフォントを指定します"
+        '
+        'font_treeview
+        '
+        Me.font_treeview.Name = "font_treeview"
+        Me.font_treeview.Size = New System.Drawing.Size(135, 22)
+        Me.font_treeview.Text = "ツリービュー"
+        '
+        'font_gtitle
+        '
+        Me.font_gtitle.Name = "font_gtitle"
+        Me.font_gtitle.Size = New System.Drawing.Size(135, 22)
+        Me.font_gtitle.Text = "ゲームタイトル"
+        '
+        'font_gid
+        '
+        Me.font_gid.Name = "font_gid"
+        Me.font_gid.Size = New System.Drawing.Size(135, 22)
+        Me.font_gid.Text = "ゲームID"
+        '
+        'font_codename
+        '
+        Me.font_codename.Name = "font_codename"
+        Me.font_codename.Size = New System.Drawing.Size(135, 22)
+        Me.font_codename.Text = "コード名"
+        '
+        'font_codetxt
+        '
+        Me.font_codetxt.Name = "font_codetxt"
+        Me.font_codetxt.Size = New System.Drawing.Size(135, 22)
+        Me.font_codetxt.Text = "コード内容"
+        '
+        'font_cmt
+        '
+        Me.font_cmt.Name = "font_cmt"
+        Me.font_cmt.Size = New System.Drawing.Size(135, 22)
+        Me.font_cmt.Text = "コメント"
+        '
+        'ToolStripMenuItem1
+        '
+        Me.ToolStripMenuItem1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.URL8custom, Me.URL9custom, Me.URL10custom, Me.ToolStripSeparator8, Me.APP8custom, Me.APP9custom, Me.APP10custom})
+        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(168, 22)
+        Me.ToolStripMenuItem1.Text = "URL/APPカスタム枠"
+        '
+        'URL8custom
+        '
+        Me.URL8custom.Name = "URL8custom"
+        Me.URL8custom.Size = New System.Drawing.Size(152, 22)
+        Me.URL8custom.Text = "URL8"
+        '
+        'URL9custom
+        '
+        Me.URL9custom.Name = "URL9custom"
+        Me.URL9custom.Size = New System.Drawing.Size(152, 22)
+        Me.URL9custom.Text = "URL9"
+        '
+        'URL10custom
+        '
+        Me.URL10custom.Name = "URL10custom"
+        Me.URL10custom.Size = New System.Drawing.Size(152, 22)
+        Me.URL10custom.Text = "URL10"
+        '
+        'ToolStripSeparator8
+        '
+        Me.ToolStripSeparator8.Name = "ToolStripSeparator8"
+        Me.ToolStripSeparator8.Size = New System.Drawing.Size(149, 6)
+        '
+        'APP8custom
+        '
+        Me.APP8custom.Name = "APP8custom"
+        Me.APP8custom.Size = New System.Drawing.Size(152, 22)
+        Me.APP8custom.Text = "APP8"
+        '
+        'APP9custom
+        '
+        Me.APP9custom.Name = "APP9custom"
+        Me.APP9custom.Size = New System.Drawing.Size(152, 22)
+        Me.APP9custom.Text = "APP9"
+        '
+        'APP10custom
+        '
+        Me.APP10custom.Name = "APP10custom"
+        Me.APP10custom.Size = New System.Drawing.Size(152, 22)
+        Me.APP10custom.Text = "APP10"
+        '
+        'grided_use
+        '
+        Me.grided_use.Name = "grided_use"
+        Me.grided_use.Size = New System.Drawing.Size(168, 22)
+        Me.grided_use.Text = "グリッド編集有効"
+        Me.grided_use.ToolTipText = "データグリッドでコードの値を編集します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "DEC；32bit10進数" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "OR；32bit論理和" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "AND；32bit論理積" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "XOR；32bit排他的論理和" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "B" & _
+            "INARY32；単精度浮動小数点数" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "BINARY32(16bit)；単精度浮動小数点数の16bit右シフト" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "BINARY16；半精度浮動小数点"
         '
         'ヘルプHToolStripMenuItem
         '
@@ -979,7 +1106,7 @@ Partial Class MERGE
         Me.button_list.Enabled = False
         Me.button_list.FormattingEnabled = True
         Me.button_list.Items.AddRange(New Object() {"セレクト", "スタート", "↑", "→", "↓", "←", "Lトリガー", "Rトリガー", "△", "○", "Ｘ", "□", "HOME", "HOLD", "ミュート", "スクリーン", "音量+", "音量-", "WLAN UP", "REMOTE HOLD"})
-        Me.button_list.Location = New System.Drawing.Point(519, 205)
+        Me.button_list.Location = New System.Drawing.Point(519, 206)
         Me.button_list.Name = "button_list"
         Me.button_list.Size = New System.Drawing.Size(128, 228)
         Me.button_list.TabIndex = 9
@@ -1177,18 +1304,6 @@ Partial Class MERGE
         Me.Button4.UseVisualStyleBackColor = False
         Me.Button4.Visible = False
         '
-        'ContextMenuStrip2
-        '
-        Me.ContextMenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.貼付けToolStripMenuItem})
-        Me.ContextMenuStrip2.Name = "ContextMenuStrip2"
-        Me.ContextMenuStrip2.Size = New System.Drawing.Size(105, 26)
-        '
-        '貼付けToolStripMenuItem
-        '
-        Me.貼付けToolStripMenuItem.Name = "貼付けToolStripMenuItem"
-        Me.貼付けToolStripMenuItem.Size = New System.Drawing.Size(104, 22)
-        Me.貼付けToolStripMenuItem.Text = "貼付け"
-        '
         'MERGE
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
@@ -1210,9 +1325,9 @@ Partial Class MERGE
         Me.Controls.Add(Me.TextBox1)
         Me.Controls.Add(Me.Joker_lbl)
         Me.Controls.Add(Me.inverse_chk)
-        Me.Controls.Add(Me.button_list)
         Me.Controls.Add(Me.progbar)
         Me.Controls.Add(Me.tool_menu)
+        Me.Controls.Add(Me.button_list)
         Me.Controls.Add(Me.cm_lbl)
         Me.Controls.Add(Me.cmt_tb)
         Me.Controls.Add(Me.off_rd)
@@ -1239,7 +1354,6 @@ Partial Class MERGE
         Me.tool_menu.PerformLayout()
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
-        Me.ContextMenuStrip2.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1280,40 +1394,36 @@ Partial Class MERGE
     Friend WithEvents Joker_lbl As System.Windows.Forms.Label
     Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents sort_GID As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents menu_options As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents options_error As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents PSX_iconset As System.Windows.Forms.ImageList
     Friend WithEvents file_new As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents new_psp As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents new_psx As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents options_ontop As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents saveas_cwcheat As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents saveas_psx As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents menu_font As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents EncodeToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents codepage_select As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents CP932ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents GBKToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ツリー開閉ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents すべて閉じるToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents 全て展開するToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents codetreeview As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tree_collapse As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tree_expand As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripButton1 As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton2 As System.Windows.Forms.ToolStripButton
-    Friend WithEvents CWCWIKIToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents browsecodesite As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents wikiToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents OHGToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents HAXToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents EXE起動ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MECAB As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents PMETAN変換ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents TEMPAR鶴ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents WgetToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents JaneStyleToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents pme_cnv As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents temparutility As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents Wget As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents nichanbrowser As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents CNGBAToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents GOOGLEToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents KAKASI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
     Friend WithEvents TextBox2 As System.Windows.Forms.TextBox
-    Friend WithEvents PSPへコードコピーToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents copy_to_psp As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents コード形式 As System.Windows.Forms.Label
     Friend WithEvents RadioButton1 As System.Windows.Forms.RadioButton
     Friend WithEvents RadioButton2 As System.Windows.Forms.RadioButton
@@ -1324,14 +1434,7 @@ Partial Class MERGE
     Friend WithEvents RadioButton6 As System.Windows.Forms.RadioButton
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents changed As System.Windows.Forms.Label
-    Friend WithEvents ツリービューToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ゲームタイトルToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ゲームIDToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents コード名ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents コード内容ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents コメントToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents UTF16BECP1201ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ブラウザ変更ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Button1 As System.Windows.Forms.Button
     Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents Button3 As System.Windows.Forms.Button
@@ -1344,12 +1447,11 @@ Partial Class MERGE
     Friend WithEvents Sort_GTitle2 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Button4 As System.Windows.Forms.Button
     Friend WithEvents CODEFREAKToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents G有効ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ContextMenuStrip1 As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents 新規ゲーム追加ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator3 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents 半角カナ全角ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents 中国語文字化け対策ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents str_wide As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents str_gbk As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator4 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents cntclose As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents cntexpand As System.Windows.Forms.ToolStripMenuItem
@@ -1360,12 +1462,40 @@ Partial Class MERGE
     Friend WithEvents EXE起動ToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents KAKASI変換ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents PSPコピーToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ContextMenuStrip2 As System.Windows.Forms.ContextMenuStrip
-    Friend WithEvents 貼付けToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents paserToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator7 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents ヘルプHToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents オンラインヘルプToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents バージョン情報ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents APP8 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents APP9 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents APP10 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents URL8 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents URL9 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents URL10 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents cwcToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents menu_options As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents options_ontop As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents options_error As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ブラウザ変更ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents codesite_browser As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents nichannel_browser As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents grided_use As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents menu_font As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents font_treeview As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents font_gtitle As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents font_gid As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents font_codename As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents font_codetxt As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents font_cmt As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents URL8custom As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents URL9custom As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents URL10custom As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator8 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents APP8custom As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents APP9custom As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents APP10custom As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents overwrite_db As System.Windows.Forms.ToolStripMenuItem
 
 End Class

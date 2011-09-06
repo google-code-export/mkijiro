@@ -7,6 +7,10 @@ Public Class parser
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Dim f As MERGE
         f = CType(Me.Owner, MERGE)
+
+
+        Me.FormBorderStyle = FormBorderStyle.FixedToolWindow
+
         Dim mode As String = Nothing
 
         If f.codetree.Nodes.Count >= 1 Then
