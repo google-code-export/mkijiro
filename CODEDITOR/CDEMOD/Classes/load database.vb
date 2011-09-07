@@ -22,8 +22,6 @@ Public Class load_db
         Dim cwcar As String = "_L"
         Dim b4 As String = Nothing
 
-        My.Settings.lastcodepath = filename
-
         m.codetree.Nodes.Add(Path.GetFileNameWithoutExtension(filename)).ImageIndex = 0 ' Add the root node and set its icon
         m.progbar.Value = 0 ' Reset the progress bar
         m.progbar.Visible = True ' Show the progress bar 
@@ -659,7 +657,6 @@ Public Class load_db
         m.progbar.Visible = True ' Show the progress bar and reset it's value
         m.progbar.Value = 0 ' Reset the progress bar
 
-        My.Settings.lastcodepath = filename
 
         reset_errors() ' Clear the error list before loading
         'ファイルを読み込むバイト型配列を作成する
