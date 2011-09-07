@@ -39,7 +39,7 @@ Public Class MERGE
         End If
         file_saveas.Enabled = True
         UTF16BECP1201ToolStripMenuItem.Enabled = False
-        CODEFREAKToolStripMenuItem.Enabled = False
+        saveas_codefreak.Enabled = False
         PSX = False
         saveas_cwcheat.Enabled = True
         saveas_psx.Enabled = False
@@ -65,7 +65,7 @@ Public Class MERGE
         End If
         file_saveas.Enabled = True
         UTF16BECP1201ToolStripMenuItem.Enabled = False
-        CODEFREAKToolStripMenuItem.Enabled = False
+        saveas_codefreak.Enabled = False
         PSX = True
         saveas_cwcheat.Enabled = False
         saveas_psx.Enabled = True
@@ -87,7 +87,7 @@ Public Class MERGE
             error_window.list_load_error.BeginUpdate()
 
             UTF16BECP1201ToolStripMenuItem.Enabled = False
-            CODEFREAKToolStripMenuItem.Enabled = False
+            saveas_codefreak.Enabled = False
 
             If CODEFREAK = True Then
                 reset_PSP()
@@ -111,27 +111,38 @@ Public Class MERGE
             End If
             If enc1 = 1201 Then
                 UTF16BECP1201ToolStripMenuItem.Enabled = True
-                CODEFREAKToolStripMenuItem.Enabled = True
+                saveas_codefreak.Enabled = True
             End If
             codetree.EndUpdate()
             error_window.list_load_error.EndUpdate()
             loaded = True
             file_saveas.Enabled = True
             overwrite_db.Enabled = True
+
+            My.Settings.lastcodepath = database
+            overwrite_db.ToolTipText = "対象;" & Path.GetFileNameWithoutExtension(database)
         End If
+
 
     End Sub
 
     Private Sub overwrite_db_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles overwrite_db.Click
         Dim s As New save_db
-        If CODEFREAK = True Then
-            s.save_cf(database, 1201)
-        ElseIf PSX = True Then
-            s.save_psx(database, enc1)
-        Else
-            s.save_cwcheat(database, enc1)
-        End If
+        If My.Settings.lastcodepath <> "" Then
+            If CODEFREAK = True Then
+                s.save_cf(database, 1201)
+            ElseIf PSX = True Then
+                s.save_psx(database, enc1)
+            Else
+                s.save_cwcheat(database, enc1)
+            End If
 
+            codetree.Nodes(0).Text = Path.GetFileNameWithoutExtension(database)
+            If My.Settings.codepathwhensave = True Then
+                My.Settings.lastcodepath = database
+            End If
+
+        End If
     End Sub
 
     Private Sub saveas_cwcheat_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles saveas_cwcheat.Click
@@ -145,6 +156,13 @@ Public Class MERGE
 
             database = save_file.FileName
             s.save_cwcheat(database, enc1)
+
+            codetree.Nodes(0).Text = Path.GetFileNameWithoutExtension(database)
+            overwrite_db.ToolTipText = "対象;" & database
+
+            If My.Settings.codepathwhensave = True Then
+                My.Settings.lastcodepath = database
+            End If
 
             ' Reload the file
             'codetree.Nodes.Clear()
@@ -175,6 +193,12 @@ Public Class MERGE
 
             database = save_file.FileName
             s.save_psx(database, enc1)
+            codetree.Nodes(0).Text = Path.GetFileNameWithoutExtension(database)
+            overwrite_db.ToolTipText = "対象;" & database
+
+            If My.Settings.codepathwhensave = True Then
+                My.Settings.lastcodepath = database
+            End If
 
             ' Reload the file
             'codetree.Nodes.Clear()
@@ -195,7 +219,7 @@ Public Class MERGE
         End If
     End Sub
 
-    Private Sub CODEFREAKToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CODEFREAKToolStripMenuItem.Click
+    Private Sub saveas_codefreak_click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles saveas_codefreak.Click
         Dim open As New load_db
         Dim s As New save_db
 
@@ -205,6 +229,12 @@ Public Class MERGE
 
             database = save_file.FileName
             s.save_cf(database, 1201)
+            overwrite_db.ToolTipText = "対象;" & database
+
+            If My.Settings.codepathwhensave = True Then
+                My.Settings.lastcodepath = database
+                codetree.Nodes(0).Text = Path.GetFileNameWithoutExtension(database)
+            End If
 
             '' Reload the file
             'codetree.Nodes.Clear()
@@ -398,13 +428,7 @@ Public Class MERGE
         Dim y As Integer = 0
         Dim commaindex As Integer = 0
         Dim ss As String
-        Dim dbtrim As String = database.Replace(Application.StartupPath, "")
-        commaindex = dbtrim.LastIndexOf(".") - 1
-        If dbtrim.Contains(".") Then
-            dbtrim = dbtrim.Substring(1, commaindex)
-        Else
-            dbtrim = dbtrim.Replace("\", "")
-        End If
+        Dim dbtrim As String = Path.GetFileNameWithoutExtension(database)
         codetree.Nodes.Add(dbtrim & "_sort")
         If (mode And 1) = 0 Then
             While k < z
@@ -799,7 +823,7 @@ Public Class MERGE
 #Region "codetree"
 
     'コードパーサー
-    Private Sub paserToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles 新規ゲーム追加ToolStripMenuItem.Click, paserToolStripMenuItem.Click
+    Private Sub paserToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cntparser.Click, paserToolStripMenuItem.Click
         Dim backup As String = cmt_tb.Text
         Dim f As New parser
         cmt_tb.Text = Nothing
@@ -1064,7 +1088,7 @@ Public Class MERGE
         Process.Start(browser, "http://www.google.co.jp/")
     End Sub
 
-    Private Sub CMF暗号復元ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CMF暗号復元ToolStripMenuItem.Click
+    Private Sub CMF暗号復元ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmf_decript.Click
         Process.Start(browser, "http://raing3.gshi.org/psp-utilities/#index.php?action=cmf-decrypter")
     End Sub
 
@@ -1089,7 +1113,7 @@ Public Class MERGE
 #End Region
 
 #Region "EXECUTE"
-    Private Sub KAKASI_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles KAKASI.Click, KAKASI変換ToolStripMenuItem.Click
+    Private Sub KAKASI_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles KAKASI.Click, cntkakasi.Click
         boot("APP\kakasi.bat")
     End Sub
 
@@ -1113,7 +1137,7 @@ Public Class MERGE
         boot(My.Settings.nichbrowser)
     End Sub
 
-    Private Sub PSPへコードコピーToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles copy_to_psp.Click, PSPコピーToolStripMenuItem.Click
+    Private Sub PSPへコードコピーToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles copy_to_psp.Click, cntdbcopy.Click
         boot("APP\cp.bat")
     End Sub
 
@@ -1130,7 +1154,7 @@ Public Class MERGE
     Function boot(ByVal exe As String) As Boolean
 
         If exe = "" Then
-            MessageBox.Show("'アプリケーションが未登録です。")
+            MessageBox.Show("アプリケーションが登録されてません。", "アプリ未登録")
             Return False
         ElseIf Not exe.Contains(":") AndAlso Not exe.Contains(Application.StartupPath) _
             AndAlso exe.Contains("APP\") AndAlso exe.Contains(".bat") Then
@@ -1162,7 +1186,7 @@ Public Class MERGE
 
 
 
-   
+
 #End Region
 
     Private Sub menu_option(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menu_options.Click
@@ -1677,6 +1701,8 @@ Public Class MERGE
                 open.read_cf(database, 1201)
                 saveas_cwcheat.Enabled = True
                 saveas_psx.Enabled = False
+                UTF16BECP1201ToolStripMenuItem.Enabled = True
+                saveas_codefreak.Enabled = True
             ElseIf PSX = True Then
                 enc1 = open.check_enc(database)
                 reset_PSX()
@@ -1685,6 +1711,7 @@ Public Class MERGE
                 saveas_psx.Enabled = True
                 saveas_cwcheat.Enabled = False
                 UTF16BECP1201ToolStripMenuItem.Enabled = False
+                saveas_codefreak.Enabled = False
             Else
                 enc1 = open.check_enc(database)
                 reset_PSP()
@@ -1693,11 +1720,15 @@ Public Class MERGE
                 saveas_cwcheat.Enabled = True
                 saveas_psx.Enabled = False
                 UTF16BECP1201ToolStripMenuItem.Enabled = False
+                saveas_codefreak.Enabled = False
             End If
-            If enc1 = 1201 Then
-                UTF16BECP1201ToolStripMenuItem.Enabled = True
-                CODEFREAKToolStripMenuItem.Enabled = True
+
+            If My.Settings.codepathwhensave = True Then
+                update_save_filepass.Checked = True
+            Else
+                update_save_filepass.Checked = False
             End If
+
             If codetree.Nodes.Count >= 1 Then
                 codetree.Nodes(0).Expand()
             End If
@@ -1706,6 +1737,7 @@ Public Class MERGE
             loaded = True
             file_saveas.Enabled = True
             overwrite_db.Enabled = True
+            overwrite_db.ToolTipText = "対象;" & database
         End If
 
         'イベントハンドラを追加する
@@ -2313,6 +2345,17 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         Else
             My.Settings.fixedform = True
             fixedform.Checked = True
+        End If
+    End Sub
+
+    Private Sub 保存時最終コードパスを更新ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles update_save_filepass.Click
+
+        If update_save_filepass.Checked = True Then
+            My.Settings.codepathwhensave = False
+            update_save_filepass.Checked = False
+        Else
+            My.Settings.codepathwhensave = True
+            update_save_filepass.Checked = True
         End If
     End Sub
 End Class
