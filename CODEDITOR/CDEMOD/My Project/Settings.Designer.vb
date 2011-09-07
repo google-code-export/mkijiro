@@ -306,6 +306,42 @@ Namespace My
                 Me("url10") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property fixedform() As Boolean
+            Get
+                Return CType(Me("fixedform"),Boolean)
+            End Get
+            Set
+                Me("fixedform") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("655")>  _
+        Public Property mainyoko() As Integer
+            Get
+                Return CType(Me("mainyoko"),Integer)
+            End Get
+            Set
+                Me("mainyoko") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("596")>  _
+        Public Property maintate() As Integer
+            Get
+                Return CType(Me("maintate"),Integer)
+            End Get
+            Set
+                Me("maintate") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

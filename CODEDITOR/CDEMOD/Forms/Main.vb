@@ -88,7 +88,6 @@ Public Class MERGE
 
             UTF16BECP1201ToolStripMenuItem.Enabled = False
             CODEFREAKToolStripMenuItem.Enabled = False
-            PSX = False
 
             If CODEFREAK = True Then
                 reset_PSP()
@@ -227,6 +226,9 @@ Public Class MERGE
     End Sub
 
     Private Sub file_exit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles file_exit.Click
+
+        My.Settings.mainyoko = Me.Width
+        My.Settings.maintate = Me.Height
         Close()
     End Sub
 
@@ -1620,7 +1622,12 @@ Public Class MERGE
         'TreeView1へのドラッグを受け入れる
         codetree.AllowDrop = True
 
-        Me.FormBorderStyle = FormBorderStyle.FixedToolWindow
+        Me.Width = My.Settings.mainyoko
+        Me.Height = My.Settings.maintate
+        If My.Settings.fixedform = True Then
+            Me.FormBorderStyle = FormBorderStyle.FixedToolWindow
+            fixedform.Checked = True
+        End If
 
         If System.IO.File.Exists(browser) Then
         Else
@@ -2119,9 +2126,15 @@ Public Class MERGE
         Dim truelist As Boolean = True
         Dim b3 As String = cl_tb.Text
         Dim r As New System.Text.RegularExpressions.Regex( _
-"LIST/.+\.txt\((A|V|B),([1-9]|[1-9][0-9]),[1-8],[1-8]\)", _
+"LIST/.+\.txt\((A|V),([1-9]|[1-9][0-9]),[1-8],[1-8]\)", _
 System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         Dim m As System.Text.RegularExpressions.Match = r.Match(backup)
+        Dim len As Integer = 20
+        If PSX = True Then
+            lslen = 15
+            len = 13
+        End If
+
         While m.Success
             Dim b1 As String = m.Value
             b1 = b1.Substring(b1.Length - 9, 9)
@@ -2146,8 +2159,11 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                 End Select
                 i += 1
             Next
-            If type = "V" Or type = "B" Then
+            If type = "V" Then
                 i = 11
+                If PSX = True Then
+                    i = 7
+                End If
             Else
                 i = 0
             End If
@@ -2155,17 +2171,27 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
             m = m.NextMatch()
             z += 1
             i += (line - 1) * lslen + bit + 1
-            If truelist = True And i + rmlen < b3.Length And rmlen + bit <= 9 Then
-                truelist = True
-            Else
-                truelist = False
+            If PSX = False Then
+                If truelist = True AndAlso i + rmlen < b3.Length AndAlso rmlen + bit <= 9 Then
+                    truelist = True
+                Else
+                    truelist = False
+                End If
+            ElseIf PSX = True Then
+                If type = "A" AndAlso i + rmlen < b3.Length AndAlso rmlen + bit <= 9 Then
+                    truelist = True
+                ElseIf type = "V" AndAlso i + rmlen < b3.Length AndAlso rmlen + bit <= 5 Then
+                    truelist = True
+                Else
+                    truelist = False
+                End If
             End If
         End While
 
         If truelist = True And changed.Text <> "コード内容が変更されました。" And backup <> Nothing And z > 0 Then
             f.ShowDialog(Me)
             f.Dispose()
-        ElseIf cl_tb.Text.Length < 20 Then
+        ElseIf cl_tb.Text.Length < len Then
             changed.Text = "コード内容が空か文字数が足りません。"
         Else
             changed.Text = "リスト定義がないか,範囲が異常です。"
@@ -2174,12 +2200,17 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
     End Sub
 
     Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
-        If cl_tb.Text.Length > 20 Then
+        Dim len As Integer = 20
+        If PSX = True Then
+            Exit Sub
+        End If
+        If cl_tb.Text.Length > len Then
             changed.Text = "簡易シフトが追加されました,行を合わせてください。"
             Dim z As String = "0"
             If cmt_tb.Text.Contains("840") Then
                 z = "8"
             End If
+
             cmt_tb.Text = "LIST/shift" & z & ".txt" & "(V,1,6,3)シフト倍" & vbCrLf & cmt_tb.Text
         Else
             changed.Text = "コード内容が空か文字数が足りません。"
@@ -2187,13 +2218,18 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
     End Sub
 
     Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
+
+        Dim len As Integer = 20
+        If PSX = True Then
+            len = 12
+        End If
         Dim ofd As New OpenFileDialog()
         Dim lspath As String = Nothing
         ofd.InitialDirectory = My.Application.Info.DirectoryPath.ToString() & "\LIST\"
         ofd.Filter = _
     "txtファイル(*.txt)|*.txt"
         ofd.Title = "追加するリストのTXTを選んでください"
-        If cl_tb.Text.Length > 20 Then
+        If cl_tb.Text.Length > len Then
             If ofd.ShowDialog() = DialogResult.OK Then
                 changed.Text = "リストが追加されました,行を合わせてください。"
                 lspath = ofd.FileName
@@ -2269,7 +2305,14 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 
     End Sub
 
-    Private Sub menu_font_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menu_font.Click
+    Private Sub フォーム固定ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles fixedform.Click
 
+        If fixedform.Checked = True Then
+            My.Settings.fixedform = False
+            fixedform.Checked = False
+        Else
+            My.Settings.fixedform = True
+            fixedform.Checked = True
+        End If
     End Sub
 End Class

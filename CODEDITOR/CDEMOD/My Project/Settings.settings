@@ -65,5 +65,14 @@
     <Setting Name="url10" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="fixedform" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="mainyoko" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">655</Value>
+    </Setting>
+    <Setting Name="maintate" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">596</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

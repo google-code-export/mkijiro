@@ -8,8 +8,9 @@ Public Class parser
         Dim f As MERGE
         f = CType(Me.Owner, MERGE)
 
-
-        Me.FormBorderStyle = FormBorderStyle.FixedToolWindow
+        If f.fixedform.Checked = True Then
+            Me.FormBorderStyle = FormBorderStyle.FixedToolWindow
+        End If
 
         Dim mode As String = Nothing
 

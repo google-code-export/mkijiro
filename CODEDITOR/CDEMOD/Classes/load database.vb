@@ -904,11 +904,11 @@ Public Class load_db
         If file.ReadByte = &H5B Then
             file.Seek(0, SeekOrigin.Begin)
             file.Read(cp, 0, 8)
-            file.Close()
             str = Encoding.GetEncoding(0).GetString(cp)
             Dim r As New Regex("\[CP\d\d\d\]", RegexOptions.ECMAScript)
             Dim m As Match = r.Match(str)
             If m.Success Then
+                file.Close()
                 str = m.Value
                 If str = "[CP932]" Then
                     Return 932
@@ -919,6 +919,8 @@ Public Class load_db
                 End If
             End If
         End If
+
+        file.Close()
 
         Return My.Settings.MSCODEPAGE
 
