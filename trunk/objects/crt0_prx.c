@@ -100,7 +100,7 @@ PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 #endif
 
 //Globals
-unsigned char *MKVER="  MKIJIRO BUILD:20110904";
+unsigned char *MKVER="  MKIJIRO SRC:20110908";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -160,12 +160,21 @@ typedef struct Cheat{
 #define BLOCK_MAX 300  //サーチ表示最大数
 unsigned int searchAddress[100]; //チート名最大数
 #define searchResultMax 99  //チートコード最大数
+
 #elif _2048_
 //npr標準設定,かなりのメモリが必要
 unsigned int searchAddress[100]; //サーチアドレス表示用
 #define searchResultMax 99  //サーチ表示最大数
 #define NAME_MAX  2048 //チート名最大数
 #define BLOCK_MAX 2048 //チートコード最大数
+
+#elif _3072_
+//3072だがコード名だけ512,かなりのメモリが必要
+unsigned int searchAddress[100]; //サーチアドレス表示用
+#define searchResultMax 99  //サーチ表示最大数
+#define NAME_MAX  512 //チート名最大数
+#define BLOCK_MAX 3072 //チートコード最大数
+
 #else
 //薄型＋最新CFW+パッチ無しME/INFELNO/M33ドライバー推奨
 unsigned int searchAddress[500]; //サーチアドレス表示用
@@ -7256,6 +7265,8 @@ int _start(SceSize args, void *argp){
   strcpy(buffer,"font.bin\x0");
   memcpy(&gameDir[22],&buffer[0],10);
   int fd=sceIoOpen(gameDir,PSP_O_RDONLY,0777);
+  strcpy(buffer,"POPS/");
+  memcpy(&gameDir[22],&buffer[0],5);
   if(fd>0){
   extern u8 msx[];
   sceIoRead(fd,&msx[0],2048);
