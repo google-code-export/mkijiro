@@ -99,6 +99,7 @@ Partial Class MERGE
         Me.APP9custom = New System.Windows.Forms.ToolStripMenuItem()
         Me.APP10custom = New System.Windows.Forms.ToolStripMenuItem()
         Me.grided_use = New System.Windows.Forms.ToolStripMenuItem()
+        Me.fixedform = New System.Windows.Forms.ToolStripMenuItem()
         Me.ヘルプHToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.オンラインヘルプToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.バージョン情報ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -211,7 +212,7 @@ Partial Class MERGE
         '
         Me.file_open.Image = CType(resources.GetObject("file_open.Image"), System.Drawing.Image)
         Me.file_open.Name = "file_open"
-        Me.file_open.Size = New System.Drawing.Size(152, 22)
+        Me.file_open.Size = New System.Drawing.Size(144, 22)
         Me.file_open.Text = "開く(&O)"
         '
         'overwrite_db
@@ -428,6 +429,7 @@ Partial Class MERGE
         '
         'HAXToolStripMenuItem
         '
+        Me.HAXToolStripMenuItem.Enabled = False
         Me.HAXToolStripMenuItem.Name = "HAXToolStripMenuItem"
         Me.HAXToolStripMenuItem.Size = New System.Drawing.Size(195, 22)
         Me.HAXToolStripMenuItem.Text = "HAXCoummunity"
@@ -544,7 +546,7 @@ Partial Class MERGE
         '
         'menu_options
         '
-        Me.menu_options.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.options_ontop, Me.options_error, Me.ブラウザ変更ToolStripMenuItem, Me.menu_font, Me.ToolStripMenuItem1, Me.grided_use})
+        Me.menu_options.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.options_ontop, Me.options_error, Me.ブラウザ変更ToolStripMenuItem, Me.menu_font, Me.ToolStripMenuItem1, Me.grided_use, Me.fixedform})
         Me.menu_options.Name = "menu_options"
         Me.menu_options.Size = New System.Drawing.Size(76, 20)
         Me.menu_options.Text = "オプション(&O)"
@@ -576,14 +578,14 @@ Partial Class MERGE
         'codesite_browser
         '
         Me.codesite_browser.Name = "codesite_browser"
-        Me.codesite_browser.Size = New System.Drawing.Size(152, 22)
+        Me.codesite_browser.Size = New System.Drawing.Size(124, 22)
         Me.codesite_browser.Text = "コードサイト"
         Me.codesite_browser.ToolTipText = "コードサイトを表示するブラウザの変更をします。"
         '
         'nichannel_browser
         '
         Me.nichannel_browser.Name = "nichannel_browser"
-        Me.nichannel_browser.Size = New System.Drawing.Size(152, 22)
+        Me.nichannel_browser.Size = New System.Drawing.Size(124, 22)
         Me.nichannel_browser.Text = "2CH専用"
         Me.nichannel_browser.ToolTipText = "２CH専用ブラウザの変更をします。"
         '
@@ -642,42 +644,42 @@ Partial Class MERGE
         'URL8custom
         '
         Me.URL8custom.Name = "URL8custom"
-        Me.URL8custom.Size = New System.Drawing.Size(152, 22)
+        Me.URL8custom.Size = New System.Drawing.Size(104, 22)
         Me.URL8custom.Text = "URL8"
         '
         'URL9custom
         '
         Me.URL9custom.Name = "URL9custom"
-        Me.URL9custom.Size = New System.Drawing.Size(152, 22)
+        Me.URL9custom.Size = New System.Drawing.Size(104, 22)
         Me.URL9custom.Text = "URL9"
         '
         'URL10custom
         '
         Me.URL10custom.Name = "URL10custom"
-        Me.URL10custom.Size = New System.Drawing.Size(152, 22)
+        Me.URL10custom.Size = New System.Drawing.Size(104, 22)
         Me.URL10custom.Text = "URL10"
         '
         'ToolStripSeparator8
         '
         Me.ToolStripSeparator8.Name = "ToolStripSeparator8"
-        Me.ToolStripSeparator8.Size = New System.Drawing.Size(149, 6)
+        Me.ToolStripSeparator8.Size = New System.Drawing.Size(101, 6)
         '
         'APP8custom
         '
         Me.APP8custom.Name = "APP8custom"
-        Me.APP8custom.Size = New System.Drawing.Size(152, 22)
+        Me.APP8custom.Size = New System.Drawing.Size(104, 22)
         Me.APP8custom.Text = "APP8"
         '
         'APP9custom
         '
         Me.APP9custom.Name = "APP9custom"
-        Me.APP9custom.Size = New System.Drawing.Size(152, 22)
+        Me.APP9custom.Size = New System.Drawing.Size(104, 22)
         Me.APP9custom.Text = "APP9"
         '
         'APP10custom
         '
         Me.APP10custom.Name = "APP10custom"
-        Me.APP10custom.Size = New System.Drawing.Size(152, 22)
+        Me.APP10custom.Size = New System.Drawing.Size(104, 22)
         Me.APP10custom.Text = "APP10"
         '
         'grided_use
@@ -687,6 +689,13 @@ Partial Class MERGE
         Me.grided_use.Text = "グリッド編集有効"
         Me.grided_use.ToolTipText = "データグリッドでコードの値を編集します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "DEC；32bit10進数" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "OR；32bit論理和" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "AND；32bit論理積" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "XOR；32bit排他的論理和" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "B" & _
             "INARY32；単精度浮動小数点数" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "BINARY32(16bit)；単精度浮動小数点数の16bit右シフト" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "BINARY16；半精度浮動小数点"
+        '
+        'fixedform
+        '
+        Me.fixedform.Name = "fixedform"
+        Me.fixedform.Size = New System.Drawing.Size(168, 22)
+        Me.fixedform.Text = "フォーム固定"
+        Me.fixedform.ToolTipText = "再起動した際フォームがリサイズできなくなります" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "フォーム横サイズはファイルの閉じるボタンで終了すると保存されます"
         '
         'ヘルプHToolStripMenuItem
         '
@@ -1497,5 +1506,6 @@ Partial Class MERGE
     Friend WithEvents APP9custom As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents APP10custom As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents overwrite_db As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents fixedform As System.Windows.Forms.ToolStripMenuItem
 
 End Class

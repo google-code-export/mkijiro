@@ -9,7 +9,9 @@ Public Class Form2
         m = CType(Me.Owner, MERGE)
         Me.Location = New Point(m.Location.X + 500, m.Location.Y + 40)
 
-        Me.FormBorderStyle = FormBorderStyle.FixedToolWindow
+        If m.fixedform.Checked = True Then
+            Me.FormBorderStyle = FormBorderStyle.FixedToolWindow
+        End If
 
     End Sub
 

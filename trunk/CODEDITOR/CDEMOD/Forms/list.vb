@@ -10,7 +10,10 @@
         m = CType(Me.Owner, MERGE)
         Me.Location = New Point(m.Location.X + 460, m.Location.Y + 190)
 
-        Me.FormBorderStyle = FormBorderStyle.FixedToolWindow
+
+        If m.fixedform.Checked = True Then
+            Me.FormBorderStyle = FormBorderStyle.FixedToolWindow
+        End If
 
         ListView1.View = View.Details
 
@@ -72,8 +75,12 @@
         Dim i As Integer = 0
         Dim y As Integer = 1
         Dim lslen As Integer = 23
+
+        If m.PSX = True Then
+            lslen = 15
+        End If
         Dim r As New System.Text.RegularExpressions.Regex( _
-    "LIST/.+\.txt\((A|V|B),([1-9]|[1-9][0-9]),[1-8],[1-8]\)", _
+    "LIST/.+\.txt\((A|V),([1-9]|[1-9][0-9]),[1-8],[1-8]\)", _
     System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         Dim l As System.Text.RegularExpressions.Match = r.Match(b2)
         While l.Success
@@ -97,10 +104,16 @@
                 End Select
                 i += 1
             Next
-            If type = "V" Or type = "B" Then
+            If type = "V" Then
                 rplen = 11
+                If m.PSX = True Then
+                    rplen = 7
+                End If
             Else
                 rplen = 0
+                If m.PSX = True Then
+                    rplen = -2
+                End If
             End If
             l = l.NextMatch()
             rplen += (line - 1) * lslen + bit + 1

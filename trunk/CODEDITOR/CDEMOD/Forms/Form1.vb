@@ -183,8 +183,9 @@
         Dim m As MERGE
         m = CType(Me.Owner, MERGE)
 
-
-        Me.FormBorderStyle = FormBorderStyle.FixedToolWindow
+        If m.fixedform.Checked = True Then
+            Me.FormBorderStyle = FormBorderStyle.FixedToolWindow
+        End If
 
         Dim b1 As String = m.cl_tb.Text
         Dim i As Integer = 0
