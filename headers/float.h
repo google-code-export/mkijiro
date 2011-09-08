@@ -104,11 +104,11 @@ void f_cvt(unsigned int addr, char *buf, int bufsize, int precision, int mode)
   char conv_buf[128];
   char *conv_p = conv_buf;
   float normval;
-  int digits = 0;
-  int exp = 0;
-  int exp_pos = 0;
-  int inf=0;
-  int sign = 0;
+  int digits = 0;//Œ…”
+  int exp = 0;//Žw”
+  int exp_pos = 0;//Žw”‚ÌˆÊ’u
+  int inf=0;//–³ŒÀ‘å
+  int sign = 0;//•„†
   float round;
   int rndpos = 0;
   float val=*((float*)(addr));
@@ -158,22 +158,22 @@ void f_cvt(unsigned int addr, char *buf, int bufsize, int precision, int mode)
   {
     while((normval >= 1e8f) && (digits++ < 100))
     {
-      normval *= 1e-8f;
+      normval *= 1e-8f;//0.00000001”{
       exp += 8;
     }
     while((normval >= 10.0f) && (digits++ < 100))
     {
-      normval *= 0.1f;
+      normval *= 0.1f;//0.1”{
       exp++;
     }
     while((normval < 1e-8f) && (digits++ < 100))
     {
-      normval *= 1e8f;
+      normval *= 1e8f;//1–œ”{
       exp -= 8;
     }
     while((normval < 1.0f) && (digits++ < 100))
     {
-      normval *= 10.0f;
+      normval *= 10.0f;//10”{
       exp--;
     }
   }
