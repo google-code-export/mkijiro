@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace WindowsFormsApplication1
+namespace binary32_normalize
+
 {
     static class Program
     {
