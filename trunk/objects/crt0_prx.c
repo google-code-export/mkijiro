@@ -2541,7 +2541,7 @@ void menuDraw(){
 				pspDebugScreenSetXY(0, 29);
 
 				pspDebugScreenSetTextColor(color01);
-				pspDebugScreenPuts(MKVER);
+				pspDebugScreenPuts(MKVER)
 				#ifdef _UMDMODE_
 				pspDebugScreenPuts(" ");
 				#elif _POPSMODE_
