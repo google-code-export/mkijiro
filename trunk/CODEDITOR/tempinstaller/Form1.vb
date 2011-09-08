@@ -5,6 +5,8 @@ Imports System.Threading
 
 Public Class Form1
 
+    Friend Shared trans(9) As String
+
     Private Sub form1load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Dim trans As String = ""
         '前回インストールしたｐｒｘ
@@ -45,12 +47,23 @@ Public Class Form1
         Dim fs As New System.IO.FileStream(filename3, _
             System.IO.FileMode.Create, System.IO.FileAccess.Write)
 
+        ProgressBar1.Value = 0
         '応答データをファイルに書き込む
-        Dim b As Integer
+        Dim readData(5096) As Byte
+        Dim readSize As Integer = 0
+        Dim i As Integer
         While True
-            b = strm.ReadByte()
-            If b = -1 Then Exit While
-            fs.WriteByte(Convert.ToByte(b))
+            readSize = strm.Read(readData, 0, readData.Length)
+            If readSize = 0 Then
+                ProgressBar1.Value = 100
+                Exit While
+            End If
+            fs.Write(readData, 0, readSize)
+            i += 1
+            ProgressBar1.Value = i
+            If i = 100 Then
+                i = 0
+            End If
         End While
 
         '閉じる
@@ -71,9 +84,6 @@ Public Class Form1
             System.IO.FileAccess.Read)
         'ZipInputStreamオブジェクトの作成 
         Dim zis As New ICSharpCode.SharpZipLib.Zip.ZipInputStream(fs)
-
-        'パスワードが設定されているときは指定する 
-        'zis.Password = "pass"
 
         'ZIP内のエントリを列挙 
         Dim ze As ICSharpCode.SharpZipLib.Zip.ZipEntry
@@ -236,6 +246,7 @@ System.IO.FileAccess.Read)
                     trans = My.Resources.s7_e
                 End If
                 TextBox1.Text &= trans
+                ProgressBar1.Value = 0
             End If
         Else
             '"インターネットに接続されてません"
@@ -245,6 +256,7 @@ System.IO.FileAccess.Read)
                 trans = My.Resources.s8_e
             End If
             TextBox1.Text = trans
+            ProgressBar1.Value = 0
         End If
     End Sub
 

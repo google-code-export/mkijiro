@@ -33,6 +33,8 @@ Partial Class Form1
         Me.Button2 = New System.Windows.Forms.Button()
         Me.DomainUpDown1 = New System.Windows.Forms.DomainUpDown()
         Me.CheckBox2 = New System.Windows.Forms.CheckBox()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -72,9 +74,9 @@ Partial Class Form1
         '
         'GroupBox1
         '
-        resources.ApplyResources(Me.GroupBox1, "GroupBox1")
         Me.GroupBox1.Controls.Add(Me.RadioButton2)
         Me.GroupBox1.Controls.Add(Me.RadioButton1)
+        resources.ApplyResources(Me.GroupBox1, "GroupBox1")
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.TabStop = False
         '
@@ -118,10 +120,22 @@ Partial Class Form1
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.UseVisualStyleBackColor = True
         '
+        'Label3
+        '
+        resources.ApplyResources(Me.Label3, "Label3")
+        Me.Label3.Name = "Label3"
+        '
+        'ProgressBar1
+        '
+        resources.ApplyResources(Me.ProgressBar1, "ProgressBar1")
+        Me.ProgressBar1.Name = "ProgressBar1"
+        '
         'Form1
         '
         resources.ApplyResources(Me, "$this")
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.Controls.Add(Me.ProgressBar1)
+        Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.CheckBox2)
         Me.Controls.Add(Me.DomainUpDown1)
         Me.Controls.Add(Me.Button2)
@@ -147,5 +161,7 @@ Partial Class Form1
     Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents DomainUpDown1 As System.Windows.Forms.DomainUpDown
     Friend WithEvents CheckBox2 As System.Windows.Forms.CheckBox
+    Friend WithEvents Label3 As System.Windows.Forms.Label
+    Friend WithEvents ProgressBar1 As System.Windows.Forms.ProgressBar
 
 End Class
