@@ -54,7 +54,7 @@ PSP_MODULE_INFO("nitePRmod", 0x3007, 1, 2); //0x3007
 PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 
 //Globals
-unsigned char *NPRVER="nitePRhorizon20110904";
+unsigned char *NPRVER="nitePRhorizon20110909";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;

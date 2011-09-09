@@ -255,14 +255,32 @@ void f_cvt(unsigned int addr, char *buf, int bufsize, int precision, int mode)
       *conv_p++ = '.';
     }
 
+    float  x=0.0f;
+    float  y=1.0f;
+    char   zero=0;
     for( ; (exp < 0) && (precision > 0); exp++, precision--)
     {
-      *conv_p++ = '0';
+    
+      y/=10.0f;
+      x= 0.999999f*y;
+		if(val > x && zero==0){
+        *conv_p++ = '1';
+        zero=1;
+    	}
+        else{
+        *conv_p++ = '0';
+        }
     }
-
+	//int value = *(u32 *)(addr);
+	//int mask = value&0x7FFFFF;
     while(precision > 0)
     {
+    	if(zero){
+      *conv_p++ = 0x30;
+    	}
+    	else{
       *conv_p++ = get_num(&normval, &exp_pos);
+      }
       precision--;
     }
   //}

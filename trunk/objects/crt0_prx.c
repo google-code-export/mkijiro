@@ -100,7 +100,7 @@ PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 #endif
 
 //Globals
-unsigned char *MKVER="  MKIJIRO SRC:20110908";
+unsigned char *MKVER="  MKIJIRO SRC:20110909";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -2541,7 +2541,7 @@ void menuDraw(){
 				pspDebugScreenSetXY(0, 29);
 
 				pspDebugScreenSetTextColor(color01);
-				pspDebugScreenPuts(MKVER)
+				pspDebugScreenPuts(MKVER);
 				#ifdef _UMDMODE_
 				pspDebugScreenPuts(" ");
 				#elif _POPSMODE_
