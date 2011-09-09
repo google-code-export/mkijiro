@@ -16,26 +16,6 @@
 #define MODE_EXP 1
 #define MODE_FLOAT_ONLY 2
 
-/*static int is_nan(unsigned int val)
-{
-  unsigned int conv;
-  int sign;
-  int exp;
-  int mantissa;
-
-  conv = *((unsigned int *) val);
-  sign = (conv >> 31) & 1;
-
-  exp = (conv >> 23) & 0xff;
-  mantissa = conv & 0x7fffff;
-
-  if(exp == 255)
-  {
-    return 1;
-  }
-  return 0;
-}*/
-
 static int is_inf(unsigned int val)
 {
   unsigned int conv;
@@ -72,6 +52,7 @@ static int is_inf(unsigned int val)
   return 0;
 }
 
+
 static char get_num(float *val, int *exp)
 {
   int digit;
@@ -94,12 +75,7 @@ static char get_num(float *val, int *exp)
 
 void f_cvt(unsigned int addr, char *buf, int bufsize, int precision, int mode)
 {
-  /*if(addr % 4) 
-  {
-    strncpy(buf, "ERR", bufsize);
-    buf[bufsize-1] = 0;
-    return;
-  }*/
+
   addr&=0xFFFFFFFC;
   char conv_buf[128];
   char *conv_p = conv_buf;
@@ -112,7 +88,8 @@ void f_cvt(unsigned int addr, char *buf, int bufsize, int precision, int mode)
   float round;
   int rndpos = 0;
   float val=*((float*)(addr));
-
+  char   zero=0;
+    
   /* check for nan and +/- infinity */  
   inf = is_inf(addr);
   if(inf != 0)
@@ -153,7 +130,7 @@ void f_cvt(unsigned int addr, char *buf, int bufsize, int precision, int mode)
     precision = 6;
   }
 
-  /* normalise value */
+  // normalise value 10‚×‚«æŽw”‰»
   if(normval > 0.0f)
   {
     while((normval >= 1e8f) && (digits++ < 100))
@@ -168,7 +145,7 @@ void f_cvt(unsigned int addr, char *buf, int bufsize, int precision, int mode)
     }
     while((normval < 1e-8f) && (digits++ < 100))
     {
-      normval *= 1e8f;//1–œ”{
+      normval *= 1e8f;//100000000”{
       exp -= 8;
     }
     while((normval < 1.0f) && (digits++ < 100))
@@ -178,71 +155,67 @@ void f_cvt(unsigned int addr, char *buf, int bufsize, int precision, int mode)
     }
   }
 
-  for(rndpos = precision, round = 0.5f; rndpos > 0; rndpos--, round *= 0.1f);
+
+  for(rndpos = precision, round = 0.49999f; rndpos > 0; rndpos--, round *= 0.1f);
 
   if(sign)
   {
     *conv_p++ = '-';
-  }
-
-  /*if((mode != MODE_EXP) && (mode != MODE_FLOAT_ONLY))
-  {
-    if((exp < -4) || (exp > precision))
-    {
-      mode = MODE_EXP;
     }
-  }*/
+    else{
+    *conv_p++ = '+';
+  }
 
   normval += round;
 
-  /*if(mode == MODE_EXP)
-  {
-    *conv_p++ = get_num(&normval, &exp_pos);
-    *conv_p++ = '.';
-
-    while(precision > 0)
-    {
-      *conv_p++ = get_num(&normval, &exp_pos);
-      precision--;
-    }
-
-    while((conv_p[-1] == '0') || (conv_p[-1] == '.'))
-    {
-      conv_p--;
-    }
-
-    *conv_p++ = 'e';
-    if(exp < 0)
-    {
-      exp = -exp;
-      *conv_p++ = '-';
-    }
-    else
-    {
-      *conv_p++ = '+';
-    }
-
-    if(exp / 100)
-    {
-      *conv_p++ = (exp / 100) + '0';
-      exp %= 100;
-    }
-
-    if(exp / 10)
-    {
-      *conv_p++ = (exp / 10) + '0';
-      exp %= 10;
-    }
-    *conv_p++ = exp + '0';
-  }*/
-  //else
-  //{
+   
+ 	float   x=0.0f;
+	float   y=1.0f;
+	float   z=0.0f;
+		
     if(exp >= 0)
     {
-      for(; (exp >= 0); exp--)
-      {
-        *conv_p++ = get_num(&normval, &exp_pos);
+
+		/*
+	float   w=0.0f;
+	float   v=val;
+	char   c='0';
+      while (y <= val){
+      y*= 10.0f;
       }
+		
+      for(; (y == 1.0f);exp--){
+		x=v/y;
+		z=v-y*x;
+		while (x==w){
+		w+=1.0f;
+		c+=1;
+		}
+		y/=10.0f;
+		v=z;
+		*conv_p++ = c;
+		c ='0';
+		zero++;
+      }*/
+      
+      while (y <= val){
+      y*= 10.0f;
+      }
+      
+      for (;exp>=0;exp--){
+      x=0.9999998f*y;
+      z=1.000000f*y;
+      y/=10.0f;
+      	if (val>x && val<z && zero==0){
+      *conv_p++= '1';
+      *conv_p++=get_num(&normval, &exp_pos);
+      zero=1;
+      	}
+      else{
+      *conv_p++=get_num(&normval, &exp_pos);
+      }
+      }
+      zero=0;
     }
     else
     {
@@ -256,9 +229,8 @@ void f_cvt(unsigned int addr, char *buf, int bufsize, int precision, int mode)
     }
     
     
-    float  x=0.0f;
-    float  y=1.0f;
-    char   zero=0;
+    x=0.0f;
+    y=1.0f;
     for( ; (exp < 0) && (precision > 0); exp++, precision--)
     {
     
@@ -272,8 +244,7 @@ void f_cvt(unsigned int addr, char *buf, int bufsize, int precision, int mode)
         *conv_p++ = '0';
         }
     }
-	//int value = *(u32 *)(addr);
-	//int mask = value&0x7FFFFF;
+    
     while(precision > 0)
     {
     	if(zero){
@@ -284,7 +255,6 @@ void f_cvt(unsigned int addr, char *buf, int bufsize, int precision, int mode)
       }
       precision--;
     }
-  //}
 
   *conv_p = 0;
 
