@@ -53,9 +53,9 @@ Partial Class Form2
         Me.Label2.AutoSize = True
         Me.Label2.Location = New System.Drawing.Point(12, 85)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(124, 12)
+        Me.Label2.Size = New System.Drawing.Size(126, 12)
         Me.Label2.TabIndex = 2
-        Me.Label2.Text = "BUILD:2011/09/08 0:24"
+        Me.Label2.Text = "BUILD:2011/09/１1 4:05"
         '
         'CDEupdate
         '
@@ -70,7 +70,7 @@ Partial Class Form2
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(214, 159)
+        Me.ClientSize = New System.Drawing.Size(214, 152)
         Me.Controls.Add(Me.CDEupdate)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.LinkLabel1)
