@@ -40,9 +40,13 @@ Partial Class MERGE
         Me.sort_GID = New System.Windows.Forms.ToolStripMenuItem()
         Me.Sort_GID１ = New System.Windows.Forms.ToolStripMenuItem()
         Me.Sort_GID2 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
+        Me.gid_country = New System.Windows.Forms.ToolStripMenuItem()
         Me.name_sort = New System.Windows.Forms.ToolStripMenuItem()
         Me.Sort_GTitle1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.Sort_GTitle2 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator10 = New System.Windows.Forms.ToolStripSeparator()
+        Me.gname_country = New System.Windows.Forms.ToolStripMenuItem()
         Me.codepage_select = New System.Windows.Forms.ToolStripMenuItem()
         Me.CP932ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GBKToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -101,6 +105,7 @@ Partial Class MERGE
         Me.grided_use = New System.Windows.Forms.ToolStripMenuItem()
         Me.fixedform = New System.Windows.Forms.ToolStripMenuItem()
         Me.update_save_filepass = New System.Windows.Forms.ToolStripMenuItem()
+        Me.autoupdater = New System.Windows.Forms.ToolStripMenuItem()
         Me.ヘルプHToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.オンラインヘルプToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.バージョン情報ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -192,7 +197,7 @@ Partial Class MERGE
         Me.file_new.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.new_psp, Me.new_psx})
         Me.file_new.Image = Global.CWcheat_Database_Editor.My.Resources.Resources._new
         Me.file_new.Name = "file_new"
-        Me.file_new.Size = New System.Drawing.Size(152, 22)
+        Me.file_new.Size = New System.Drawing.Size(144, 22)
         Me.file_new.Text = "新規(&N)"
         '
         'new_psp
@@ -213,7 +218,7 @@ Partial Class MERGE
         '
         Me.file_open.Image = CType(resources.GetObject("file_open.Image"), System.Drawing.Image)
         Me.file_open.Name = "file_open"
-        Me.file_open.Size = New System.Drawing.Size(152, 22)
+        Me.file_open.Size = New System.Drawing.Size(144, 22)
         Me.file_open.Text = "開く(&O)"
         '
         'overwrite_db
@@ -221,7 +226,7 @@ Partial Class MERGE
         Me.overwrite_db.Enabled = False
         Me.overwrite_db.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.save
         Me.overwrite_db.Name = "overwrite_db"
-        Me.overwrite_db.Size = New System.Drawing.Size(152, 22)
+        Me.overwrite_db.Size = New System.Drawing.Size(144, 22)
         Me.overwrite_db.Text = "上書き保存(&W)"
         '
         'file_saveas
@@ -230,7 +235,7 @@ Partial Class MERGE
         Me.file_saveas.Enabled = False
         Me.file_saveas.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.save
         Me.file_saveas.Name = "file_saveas"
-        Me.file_saveas.Size = New System.Drawing.Size(152, 22)
+        Me.file_saveas.Size = New System.Drawing.Size(144, 22)
         Me.file_saveas.Text = "...として保存(&S)"
         '
         'saveas_cwcheat
@@ -258,7 +263,7 @@ Partial Class MERGE
         '
         Me.file_exit.Image = CType(resources.GetObject("file_exit.Image"), System.Drawing.Image)
         Me.file_exit.Name = "file_exit"
-        Me.file_exit.Size = New System.Drawing.Size(152, 22)
+        Me.file_exit.Size = New System.Drawing.Size(144, 22)
         Me.file_exit.Text = "閉じる(&C)"
         '
         'menu_sort
@@ -271,10 +276,10 @@ Partial Class MERGE
         '
         'sort_GID
         '
-        Me.sort_GID.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Sort_GID１, Me.Sort_GID2})
+        Me.sort_GID.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Sort_GID１, Me.Sort_GID2, Me.ToolStripSeparator9, Me.gid_country})
         Me.sort_GID.Image = CType(resources.GetObject("sort_GID.Image"), System.Drawing.Image)
         Me.sort_GID.Name = "sort_GID"
-        Me.sort_GID.Size = New System.Drawing.Size(112, 22)
+        Me.sort_GID.Size = New System.Drawing.Size(152, 22)
         Me.sort_GID.Text = "ゲームID"
         Me.sort_GID.ToolTipText = "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ゲームIDでのソート"
         '
@@ -282,7 +287,7 @@ Partial Class MERGE
         '
         Me.Sort_GID１.Image = CType(resources.GetObject("Sort_GID１.Image"), System.Drawing.Image)
         Me.Sort_GID１.Name = "Sort_GID１"
-        Me.Sort_GID１.Size = New System.Drawing.Size(94, 22)
+        Me.Sort_GID１.Size = New System.Drawing.Size(154, 22)
         Me.Sort_GID１.Text = "昇順"
         Me.Sort_GID１.ToolTipText = "アルファベットA-Z　の順に並べ直します。"
         '
@@ -290,16 +295,27 @@ Partial Class MERGE
         '
         Me.Sort_GID2.Image = CType(resources.GetObject("Sort_GID2.Image"), System.Drawing.Image)
         Me.Sort_GID2.Name = "Sort_GID2"
-        Me.Sort_GID2.Size = New System.Drawing.Size(94, 22)
+        Me.Sort_GID2.Size = New System.Drawing.Size(154, 22)
         Me.Sort_GID2.Text = "降順"
         Me.Sort_GID2.ToolTipText = "アルファベットZ-A　の順に並べ直します。"
         '
+        'ToolStripSeparator9
+        '
+        Me.ToolStripSeparator9.Name = "ToolStripSeparator9"
+        Me.ToolStripSeparator9.Size = New System.Drawing.Size(151, 6)
+        '
+        'gid_country
+        '
+        Me.gid_country.Name = "gid_country"
+        Me.gid_country.Size = New System.Drawing.Size(154, 22)
+        Me.gid_country.Text = "日→米→欧→他"
+        '
         'name_sort
         '
-        Me.name_sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Sort_GTitle1, Me.Sort_GTitle2})
+        Me.name_sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Sort_GTitle1, Me.Sort_GTitle2, Me.ToolStripSeparator10, Me.gname_country})
         Me.name_sort.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.abc
         Me.name_sort.Name = "name_sort"
-        Me.name_sort.Size = New System.Drawing.Size(112, 22)
+        Me.name_sort.Size = New System.Drawing.Size(152, 22)
         Me.name_sort.Text = "ゲーム名"
         Me.name_sort.ToolTipText = "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ゲーム名でのソート"
         '
@@ -307,7 +323,7 @@ Partial Class MERGE
         '
         Me.Sort_GTitle1.Image = CType(resources.GetObject("Sort_GTitle1.Image"), System.Drawing.Image)
         Me.Sort_GTitle1.Name = "Sort_GTitle1"
-        Me.Sort_GTitle1.Size = New System.Drawing.Size(94, 22)
+        Me.Sort_GTitle1.Size = New System.Drawing.Size(154, 22)
         Me.Sort_GTitle1.Text = "昇順"
         Me.Sort_GTitle1.ToolTipText = "アルファベットA-Z,あ-漢字　の順に並べ直します。" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
@@ -315,9 +331,20 @@ Partial Class MERGE
         '
         Me.Sort_GTitle2.Image = CType(resources.GetObject("Sort_GTitle2.Image"), System.Drawing.Image)
         Me.Sort_GTitle2.Name = "Sort_GTitle2"
-        Me.Sort_GTitle2.Size = New System.Drawing.Size(94, 22)
+        Me.Sort_GTitle2.Size = New System.Drawing.Size(154, 22)
         Me.Sort_GTitle2.Text = "降順"
         Me.Sort_GTitle2.ToolTipText = "漢字-あ,アルファベットZ-A　の順に並べ直します。" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        '
+        'ToolStripSeparator10
+        '
+        Me.ToolStripSeparator10.Name = "ToolStripSeparator10"
+        Me.ToolStripSeparator10.Size = New System.Drawing.Size(151, 6)
+        '
+        'gname_country
+        '
+        Me.gname_country.Name = "gname_country"
+        Me.gname_country.Size = New System.Drawing.Size(154, 22)
+        Me.gname_country.Text = "日→米→欧→他"
         '
         'codepage_select
         '
@@ -430,11 +457,10 @@ Partial Class MERGE
         '
         'HAXToolStripMenuItem
         '
-        Me.HAXToolStripMenuItem.Enabled = False
         Me.HAXToolStripMenuItem.Name = "HAXToolStripMenuItem"
         Me.HAXToolStripMenuItem.Size = New System.Drawing.Size(195, 22)
         Me.HAXToolStripMenuItem.Text = "HAXCoummunity"
-        Me.HAXToolStripMenuItem.ToolTipText = "404"
+        Me.HAXToolStripMenuItem.ToolTipText = "for sale?"
         '
         'CNGBAToolStripMenuItem
         '
@@ -548,7 +574,7 @@ Partial Class MERGE
         '
         'menu_options
         '
-        Me.menu_options.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.options_ontop, Me.options_error, Me.ブラウザ変更ToolStripMenuItem, Me.menu_font, Me.ToolStripMenuItem1, Me.grided_use, Me.fixedform, Me.update_save_filepass})
+        Me.menu_options.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.options_ontop, Me.options_error, Me.ブラウザ変更ToolStripMenuItem, Me.menu_font, Me.ToolStripMenuItem1, Me.grided_use, Me.fixedform, Me.update_save_filepass, Me.autoupdater})
         Me.menu_options.Name = "menu_options"
         Me.menu_options.Size = New System.Drawing.Size(76, 20)
         Me.menu_options.Text = "オプション(&O)"
@@ -697,14 +723,21 @@ Partial Class MERGE
         Me.fixedform.Name = "fixedform"
         Me.fixedform.Size = New System.Drawing.Size(192, 22)
         Me.fixedform.Text = "フォーム固定"
-        Me.fixedform.ToolTipText = "再起動した際フォームがリサイズできなくなります" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "フォーム横サイズはファイルの閉じるボタンで終了すると保存されます"
+        Me.fixedform.ToolTipText = "再起動した際フォームがリサイズできなくなります" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "メインフォームのサイズはファイルの閉じるボタンで終了すると保存されます"
         '
         'update_save_filepass
         '
         Me.update_save_filepass.Name = "update_save_filepass"
         Me.update_save_filepass.Size = New System.Drawing.Size(192, 22)
-        Me.update_save_filepass.Text = "保存時ファイルパスを更新"
-        Me.update_save_filepass.ToolTipText = "初回起動時に最後に保存したファイル名のデータベースがあれば" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "それを読み込むようになります。" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "チェックなしの場合、最後に読み込んだファイル名だけになります。"
+        Me.update_save_filepass.Text = "起動時DB読み込み設定"
+        Me.update_save_filepass.ToolTipText = "チェック有りの場合、起動時に最後に保存したデータベースを読み込むようになります。" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "チェックなしの場合、起動時に最後に読み込んだデータベースを読み込みます。"
+        '
+        'autoupdater
+        '
+        Me.autoupdater.Name = "autoupdater"
+        Me.autoupdater.Size = New System.Drawing.Size(192, 22)
+        Me.autoupdater.Text = "起動時最新版チェック"
+        Me.autoupdater.ToolTipText = "起動時にCDEの最新版があるかどうかをチェックします。"
         '
         'ヘルプHToolStripMenuItem
         '
@@ -743,7 +776,7 @@ Partial Class MERGE
         '
         Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cntparser, Me.ToolStripSeparator4, Me.cntclose, Me.cntexpand, Me.ToolStripSeparator5, Me.hankaku, Me.CNchar, Me.ToolStripSeparator6, Me.cntexe})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(177, 176)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(177, 154)
         '
         'cntparser
         '
@@ -1411,7 +1444,6 @@ Partial Class MERGE
     Friend WithEvents inverse_chk As System.Windows.Forms.CheckBox
     Friend WithEvents Joker_lbl As System.Windows.Forms.Label
     Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents sort_GID As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents PSX_iconset As System.Windows.Forms.ImageList
     Friend WithEvents file_new As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents new_psp As System.Windows.Forms.ToolStripMenuItem
@@ -1458,8 +1490,6 @@ Partial Class MERGE
     Friend WithEvents Button3 As System.Windows.Forms.Button
     Friend WithEvents cmf_decript As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripButton3 As System.Windows.Forms.ToolStripButton
-    Friend WithEvents Sort_GID１ As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents Sort_GID2 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents name_sort As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Sort_GTitle1 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Sort_GTitle2 As System.Windows.Forms.ToolStripMenuItem
@@ -1517,5 +1547,13 @@ Partial Class MERGE
     Friend WithEvents overwrite_db As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents fixedform As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents update_save_filepass As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents sort_GID As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents Sort_GID１ As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents Sort_GID2 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator9 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents gid_country As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator10 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents gname_country As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents autoupdater As System.Windows.Forms.ToolStripMenuItem
 
 End Class

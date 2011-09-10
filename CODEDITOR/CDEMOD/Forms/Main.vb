@@ -2,6 +2,7 @@
 Imports System.Text     'Encoding用
 Imports System.Diagnostics
 Imports System.Collections
+Imports System.Linq
 Imports System.Net
 Imports System.Text.RegularExpressions
 
@@ -262,7 +263,6 @@ Public Class MERGE
         Close()
     End Sub
 
-
     '初期化
 #Region "Control resets"
 
@@ -407,7 +407,16 @@ Public Class MERGE
         Dim i As Integer = 0
         Dim b1 As String = Nothing
         Dim b2 As String = Nothing
+        Dim b3 As String = Nothing
         Dim s(z) As String
+        Dim jp(z) As String
+        Dim us(z) As String
+        Dim eu(z) As String
+        Dim hb(z) As String
+        Dim c As Integer = 0
+        Dim d As Integer = 0
+        Dim e As Integer = 0
+        Dim f As Integer = 0
         For Each n As TreeNode In codetree.Nodes(0).Nodes
             If (mode And 2) = 2 Then
                 b1 = n.Name
@@ -416,13 +425,56 @@ Public Class MERGE
             End If
             Dim sb As New System.Text.StringBuilder()
             b2 = n.Index.ToString
-            sb.Append(b1)
+            If mode = 8 Then
+                b3 = n.Name
+                sb.Append(b3)
+            Else
+                sb.Append(b1)
+            End If
             sb.Append(" ,")
             sb.Append(b2)
-            s(i) = sb.ToString
-            i += 1
+            If mode >= 4 Then
+                If b1.Contains("J") Then
+                    jp(c) = sb.ToString
+                    c += 1
+                ElseIf b1.Contains("US") Then
+                    us(d) = sb.ToString
+                    d += 1
+                ElseIf b1.Contains("ES") Then
+                    eu(e) = sb.ToString
+                    e += 1
+                ElseIf b1.Contains("HB") Then
+                    hb(f) = sb.ToString
+                    f += 1
+                Else
+                    s(i) = sb.ToString
+                    i += 1
+                End If
+            Else
+                s(i) = sb.ToString
+                i += 1
+            End If
         Next
-        Array.Sort(s)
+        If mode >= 4 Then
+            Array.Resize(jp, c)
+            Array.Resize(us, d)
+            Array.Resize(eu, e)
+            Array.Resize(hb, f)
+            Array.Resize(s, i)
+            Array.Sort(jp)
+            Array.Sort(us)
+            Array.Sort(eu)
+            Array.Sort(hb)
+            Array.Sort(s)
+            Dim mergedArray As String() = jp.Union(us).ToArray()
+            mergedArray = mergedArray.Union(eu).ToArray()
+            mergedArray = mergedArray.Union(s).ToArray()
+            mergedArray = mergedArray.Union(hb).ToArray()
+            Array.Resize(s, z + 1)
+            Array.Copy(mergedArray, 0, s, 1, z)
+        Else
+            Array.Sort(s)
+        End If
         Dim j As Integer = 1
         Dim k As Integer = 0
         Dim y As Integer = 0
@@ -481,6 +533,15 @@ Public Class MERGE
         sort_game(1)
 
     End Sub
+
+
+    Private Sub 国別ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles gid_country.Click
+        sort_game(4)
+    End Sub
+    Private Sub 国別gnameToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles gname_country.Click
+        sort_game(8)
+    End Sub
+
 
     Private Sub Sort_GTitle1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Sort_GTitle1.Click
 
@@ -1684,8 +1745,6 @@ Public Class MERGE
             URL10custom.Text = URL8.Text
         End If
 
-
-
         If System.IO.File.Exists(My.Settings.lastcodepath) Then
             Dim open As New load_db
             database = My.Settings.lastcodepath
@@ -1710,8 +1769,8 @@ Public Class MERGE
                 open.read_PSX(database, enc1)
                 saveas_psx.Enabled = True
                 saveas_cwcheat.Enabled = False
-                UTF16BECP1201ToolStripMenuItem.Enabled = False
                 saveas_codefreak.Enabled = False
+                UTF16BECP1201ToolStripMenuItem.Enabled = False
             Else
                 enc1 = open.check_enc(database)
                 reset_PSP()
@@ -1719,14 +1778,23 @@ Public Class MERGE
                 open.read_PSP(database, enc1)
                 saveas_cwcheat.Enabled = True
                 saveas_psx.Enabled = False
-                UTF16BECP1201ToolStripMenuItem.Enabled = False
                 saveas_codefreak.Enabled = False
+                UTF16BECP1201ToolStripMenuItem.Enabled = False
             End If
 
             If My.Settings.codepathwhensave = True Then
                 update_save_filepass.Checked = True
             Else
                 update_save_filepass.Checked = False
+            End If
+
+
+            If My.Settings.updater = True Then
+                Dim check As New checkupdate
+                check.CDEupater("start")
+                autoupdater.Checked = True
+            Else
+                autoupdater.Checked = False
             End If
 
             If codetree.Nodes.Count >= 1 Then
@@ -2356,6 +2424,16 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         Else
             My.Settings.codepathwhensave = True
             update_save_filepass.Checked = True
+        End If
+    End Sub
+
+    Private Sub autoupdater_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles autoupdater.Click
+        If autoupdater.Checked = True Then
+            My.Settings.updater = False
+            autoupdater.Checked = False
+        Else
+            My.Settings.updater = True
+            autoupdater.Checked = True
         End If
     End Sub
 End Class

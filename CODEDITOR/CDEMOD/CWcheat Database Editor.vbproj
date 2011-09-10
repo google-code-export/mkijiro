@@ -119,6 +119,7 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\checkupdate.vb" />
     <Compile Include="Classes\codecheck.vb" />
     <Compile Include="Classes\joker.vb" />
     <Compile Include="Classes\load database.vb" />

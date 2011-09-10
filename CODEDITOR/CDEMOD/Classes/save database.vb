@@ -17,7 +17,6 @@ Public Class save_db
 
         reset_errors() ' Clear prior save errors if any
 
-
         tw.Write("[CP" & enc1.ToString & "]" & vbCrLf)
 
         Try
@@ -54,27 +53,6 @@ Public Class save_db
                         '    'errors = True
 
                     Else
-                        'Dim w As String = n1.Tag.ToString.Trim
-                        'If w = "0" Or w = "2" Or w = "5" Then
-                        '    If w = "0" Then
-                        '        cwcar = "_L "
-                        '    ElseIf w = "2" Then
-                        '        cwcar = "_M "
-                        '    ElseIf w = "4" Then
-                        '        cwcar = "_N "
-                        '    End If
-                        '    tw.Write("_C0 " & n1.Text.Trim & vbCrLf)
-                        'ElseIf w = "1" Or w = "3" Or w = "5" Then
-                        '    If w = "1" Then
-                        '        cwcar = "_L "
-                        '    ElseIf w = "3" Then
-                        '        cwcar = "_M "
-                        '    ElseIf w = "5" Then
-                        '        cwcar = "_N "
-                        '    End If
-                        '    tw.Write("_C1 " & n1.Text.Trim & vbCrLf)
-                        'End If
-
 
                         buffer = n1.Tag.ToString.Split(CChar(vbCrLf))
 

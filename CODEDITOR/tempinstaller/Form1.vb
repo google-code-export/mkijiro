@@ -49,7 +49,7 @@ Public Class Form1
 
         ProgressBar1.Value = 0
         '応答データをファイルに書き込む
-        Dim readData(5096) As Byte
+        Dim readData(5095) As Byte
         Dim readSize As Integer = 0
         Dim i As Integer
         While True
