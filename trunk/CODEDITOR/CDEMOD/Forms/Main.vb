@@ -9,6 +9,7 @@ Imports System.Text.RegularExpressions
 Public Class MERGE
     Friend database As String = Nothing
     Friend loaded As Boolean = False
+    Friend saved As Boolean = False
     Friend PSX As Boolean = False
     Friend CODEFREAK As Boolean = False
     Dim enc1 As Integer = My.Settings.MSCODEPAGE
@@ -16,6 +17,160 @@ Public Class MERGE
     Friend showerror As Boolean = My.Settings.ERR
     Friend browser As String = My.Settings.browser
 
+#Region "ini"
+
+    Private Sub main_Load(ByVal sender As Object, _
+        ByVal e As EventArgs) Handles MyBase.Load
+        'http://dobon.net/vb/dotnet/control/tvdraganddrop.html
+        'TreeView1へのドラッグを受け入れる
+        codetree.AllowDrop = True
+
+        Me.Width = My.Settings.mainyoko
+        Me.Height = My.Settings.maintate
+        If My.Settings.fixedform = True Then
+            Me.FormBorderStyle = FormBorderStyle.FixedToolWindow
+            fixedform.Checked = True
+        End If
+
+
+        If My.Settings.codepathwhensave = True Then
+            update_save_filepass.Checked = True
+        Else
+            update_save_filepass.Checked = False
+        End If
+
+        If My.Settings.updater = True Then
+            Dim check As New checkupdate
+            check.CDEupater("start")
+            autoupdater.Checked = True
+        Else
+            autoupdater.Checked = False
+        End If
+
+
+        If showerror = True Then
+            error_window.Show()
+            options_error.Checked = True
+            options_error.Text = "エラー画面を隠す"
+
+            If maintop = True Then
+                error_window.TopMost = True
+            End If
+
+        Else
+            error_window.Hide()
+            options_error.Checked = False
+            options_error.Text = "エラー画面を表示"
+        End If
+
+        If maintop = True Then
+            Me.TopMost = True
+            error_window.TopMost = True
+            options_ontop.Checked = True
+        Else
+            error_window.TopMost = False
+            options_ontop.Checked = False
+        End If
+
+        If My.Settings.gridvalueedit = True Then
+            grided_use.Checked = True
+            Button4.Visible = True
+        End If
+
+        If System.IO.File.Exists(browser) Then
+        Else
+            browser = "IExplore.exe"
+        End If
+
+        If My.Settings.app8 <> "" Then
+            APP8.Text = exename(My.Settings.app8)
+            APP8custom.Text = APP8.Text
+        End If
+        If My.Settings.app9 <> "" Then
+            APP9.Text = exename(My.Settings.app9)
+            APP9custom.Text = APP9.Text
+        End If
+        If My.Settings.app10 <> "" Then
+            APP10.Text = exename(My.Settings.app10)
+            APP10custom.Text = APP10.Text
+        End If
+
+        If My.Settings.url8 <> "" Then
+            URL8.Text = urltrim(My.Settings.url8)
+            URL8custom.Text = URL8.Text
+        End If
+        If My.Settings.url9 <> "" Then
+            URL9.Text = urltrim(My.Settings.url9)
+            URL9custom.Text = URL9.Text
+        End If
+        If My.Settings.url10 <> "" Then
+            URL10.Text = urltrim(My.Settings.url10)
+            URL10custom.Text = URL8.Text
+        End If
+
+        If System.IO.File.Exists(My.Settings.lastcodepath) Then
+            Dim open As New load_db
+            database = My.Settings.lastcodepath
+            PSX = open.check_db(database, 932) ' Check the file's format
+            CODEFREAK = open.check2_db(database, 1201)
+            codetree.BeginUpdate()
+            error_window.list_load_error.BeginUpdate()
+
+            If CODEFREAK = True Then
+                reset_PSP()
+                Application.DoEvents()
+                enc1 = 1201
+                open.read_cf(database, 1201)
+                saveas_cwcheat.Enabled = True
+                saveas_psx.Enabled = False
+                UTF16BECP1201ToolStripMenuItem.Enabled = True
+                saveas_codefreak.Enabled = True
+            ElseIf PSX = True Then
+                enc1 = open.check_enc(database)
+                reset_PSX()
+                Application.DoEvents()
+                open.read_PSX(database, enc1)
+                saveas_psx.Enabled = True
+                saveas_cwcheat.Enabled = False
+                saveas_codefreak.Enabled = False
+                UTF16BECP1201ToolStripMenuItem.Enabled = False
+            Else
+                enc1 = open.check_enc(database)
+                reset_PSP()
+                Application.DoEvents()
+                open.read_PSP(database, enc1)
+                saveas_cwcheat.Enabled = True
+                saveas_psx.Enabled = False
+                saveas_codefreak.Enabled = False
+                UTF16BECP1201ToolStripMenuItem.Enabled = False
+            End If
+
+            If codetree.Nodes.Count >= 1 Then
+                codetree.Nodes(0).Expand()
+            End If
+            codetree.EndUpdate()
+            error_window.list_load_error.EndUpdate()
+            loaded = True
+            file_saveas.Enabled = True
+            overwrite_db.Enabled = True
+            overwrite_db.ToolTipText = "対象;" & database
+            saved = True
+        End If
+
+        'イベントハンドラを追加する
+        AddHandler codetree.ItemDrag, AddressOf codetree_ItemDrag
+        AddHandler codetree.DragOver, AddressOf codetree_DragOver
+        AddHandler codetree.DragDrop, AddressOf codetree_DragDrop
+
+        CT_tb.Font = My.Settings.CT_tb
+        GID_tb.Font = My.Settings.GID_tb
+        GT_tb.Font = My.Settings.CT_tb
+        cmt_tb.Font = My.Settings.cmt_tb
+        cl_tb.Font = My.Settings.cl_tb
+        codetree.Font = My.Settings.codetree
+
+    End Sub
+#End Region
 #Region "Menubar procedures"
 
 #Region "Open Database/Save Database"
@@ -45,6 +200,7 @@ Public Class MERGE
         saveas_cwcheat.Enabled = True
         saveas_psx.Enabled = False
         overwrite_db.Enabled = True
+        saved = False
     End Sub
 
     Private Sub new_psx_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles new_psx.Click
@@ -71,6 +227,7 @@ Public Class MERGE
         saveas_cwcheat.Enabled = False
         saveas_psx.Enabled = True
         overwrite_db.Enabled = True
+        saved = False
     End Sub
 
     Private Sub file_open_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles file_open.Click
@@ -142,7 +299,7 @@ Public Class MERGE
             If My.Settings.codepathwhensave = True Then
                 My.Settings.lastcodepath = database
             End If
-
+            saved = True
         End If
     End Sub
 
@@ -164,7 +321,7 @@ Public Class MERGE
             If My.Settings.codepathwhensave = True Then
                 My.Settings.lastcodepath = database
             End If
-
+            saved = True
             ' Reload the file
             'codetree.Nodes.Clear()
             'codetree.BeginUpdate()
@@ -201,6 +358,7 @@ Public Class MERGE
                 My.Settings.lastcodepath = database
             End If
 
+            saved = True
             ' Reload the file
             'codetree.Nodes.Clear()
             'codetree.BeginUpdate()
@@ -232,6 +390,8 @@ Public Class MERGE
             s.save_cf(database, 1201)
             overwrite_db.ToolTipText = "対象;" & database
 
+            saved = True
+
             If My.Settings.codepathwhensave = True Then
                 My.Settings.lastcodepath = database
                 codetree.Nodes(0).Text = Path.GetFileNameWithoutExtension(database)
@@ -257,10 +417,16 @@ Public Class MERGE
     End Sub
 
     Private Sub file_exit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles file_exit.Click
-
         My.Settings.mainyoko = Me.Width
         My.Settings.maintate = Me.Height
         Close()
+    End Sub
+
+    Private Sub MainForm_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+        
+        My.Settings.mainyoko = Me.Width
+        My.Settings.maintate = Me.Height
+
     End Sub
 
     '初期化
@@ -400,6 +566,8 @@ Public Class MERGE
     'さんぷるどおりだとうごくがなぜかうまくいかないので代替関数
     Function sort_game(ByVal mode As Integer) As Boolean
 
+
+        saved = False
         error_window.Visible = False
         codetree.BeginUpdate() ' This will stop the tree view from constantly drawing the changes while we sort the nodes
 
@@ -531,13 +699,12 @@ Public Class MERGE
         'codetree.TreeViewNodeSorter = New GID_sortz
         'codetree.TreeViewNodeSorter = New GID_sortz
         sort_game(1)
-
     End Sub
-
 
     Private Sub 国別ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles gid_country.Click
         sort_game(4)
     End Sub
+
     Private Sub 国別gnameToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles gname_country.Click
         sort_game(8)
     End Sub
@@ -612,7 +779,7 @@ Public Class MERGE
         End If
     End Sub
 
-    Private Sub コード名ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles font_codetxt.Click
+    Private Sub コード名ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles font_codename.Click
         Dim fd As New FontDialog()
         fd.Font = CT_tb.Font
         fd.Color = CT_tb.ForeColor
@@ -627,7 +794,7 @@ Public Class MERGE
         End If
     End Sub
 
-    Private Sub コード内容ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles font_cmt.Click
+    Private Sub コード内容ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles font_codetxt.Click
 
         Dim fd As New FontDialog()
 
@@ -645,7 +812,7 @@ Public Class MERGE
         End If
     End Sub
 
-    Private Sub コメントToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    Private Sub コメントToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles font_cmt.Click
         Dim fd As New FontDialog()
 
         fd.Font = cmt_tb.Font
@@ -662,7 +829,7 @@ Public Class MERGE
     End Sub
 #End Region
 
-    Private Sub options_error_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    Private Sub options_error_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles options_error.Click
 
         If options_error.Checked = False Then
             error_window.Show()
@@ -685,7 +852,7 @@ Public Class MERGE
 
     End Sub
 
-    Private Sub options_ontop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    Private Sub options_ontop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles options_ontop.Click
 
         If options_ontop.Checked = False Then
             Me.TopMost = True
@@ -727,7 +894,6 @@ Public Class MERGE
             My.Settings.nichbrowser = ofd.FileName
         End If
     End Sub
-
 
     Private Sub URL8ToolStripMenuItem1_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles URL8custom.Click
         Dim f As New Form3
@@ -826,6 +992,51 @@ Public Class MERGE
         Return str.Replace(".exe", "")
 
     End Function
+
+    Private Sub G有効ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles grided_use.Click
+
+        If Button4.Visible = False Then
+            Button4.Visible = True
+            grided_use.Checked = True
+        Else
+            Button4.Visible = False
+            grided_use.Checked = False
+        End If
+        My.Settings.gridvalueedit = Button4.Visible
+
+    End Sub
+
+    Private Sub フォーム固定ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles fixedform.Click
+
+        If fixedform.Checked = True Then
+            My.Settings.fixedform = False
+            fixedform.Checked = False
+        Else
+            My.Settings.fixedform = True
+            fixedform.Checked = True
+        End If
+    End Sub
+
+    Private Sub 保存時最終コードパスを更新ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles update_save_filepass.Click
+
+        If update_save_filepass.Checked = True Then
+            My.Settings.codepathwhensave = False
+            update_save_filepass.Checked = False
+        Else
+            My.Settings.codepathwhensave = True
+            update_save_filepass.Checked = True
+        End If
+    End Sub
+
+    Private Sub autoupdater_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles autoupdater.Click
+        If autoupdater.Checked = True Then
+            My.Settings.updater = False
+            autoupdater.Checked = False
+        Else
+            My.Settings.updater = True
+            autoupdater.Checked = True
+        End If
+    End Sub
 
 #End Region
 
@@ -1039,9 +1250,12 @@ Public Class MERGE
                 End If
             Next
             codetree.EndUpdate()
+
+            saved = False
         End If
         f.Dispose()
         cmt_tb.Text = backup
+
     End Sub
 
     Private Sub すべて閉じるToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tree_collapse.Click, cntclose.Click
@@ -1075,6 +1289,8 @@ Public Class MERGE
             z = 0
         Next
         codetree.EndUpdate()
+
+        saved = False
     End Sub
 
     Public Function ConvANK(ByVal moto As String) As String
@@ -1111,6 +1327,8 @@ Public Class MERGE
             z = 0
         Next
         codetree.EndUpdate()
+
+        saved = False
     End Sub
 
 
@@ -1250,21 +1468,23 @@ Public Class MERGE
 
 #End Region
 
+
     Private Sub menu_option(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menu_options.Click
-        ToolStripButton1.Enabled = False
-        ToolStripButton2.Enabled = False
-        ToolStripButton3.Enabled = False
+        move_up.Enabled = False
+        move_down.Enabled = False
+        merge_codes.Enabled = False
     End Sub
 
     Private Sub help(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ヘルプHToolStripMenuItem.Click
-        ToolStripButton1.Enabled = False
-        ToolStripButton2.Enabled = False
-        ToolStripButton3.Enabled = False
+        move_up.Enabled = False
+        move_down.Enabled = False
+        merge_codes.Enabled = False
     End Sub
 
 #End Region
 
 #Region "Toolbar buttons procedures"
+
     Private Sub add_game_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles add_game.Click
 
         Try
@@ -1285,6 +1505,7 @@ Public Class MERGE
         End Try
 
 
+        saved = False
     End Sub
 
     Private Sub rem_game_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rem_game.Click
@@ -1302,6 +1523,7 @@ Public Class MERGE
                                 codetree.SelectedNode.Parent.Remove()
                         End Select
 
+                        saved = False
                     End If
 
             End Select
@@ -1352,6 +1574,7 @@ Public Class MERGE
 
         End Try
 
+        saved = False
     End Sub
 
     Private Sub rem_cd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rem_cd.Click
@@ -1372,6 +1595,7 @@ Public Class MERGE
 
         End Try
 
+        saved = False
     End Sub
 
     Private Sub save_gc_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles save_gc.Click
@@ -1400,6 +1624,7 @@ Public Class MERGE
 
         End Try
 
+        saved = False
     End Sub
 
     Private Sub save_cc_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles save_cc.Click
@@ -1530,9 +1755,10 @@ Public Class MERGE
 
         End Try
 
+        saved = False
     End Sub
 
-    Private Sub ToolStripButton1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton1.Click
+    Private Sub ToolStripButton1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles move_up.Click
 
         Try
 
@@ -1567,9 +1793,11 @@ Public Class MERGE
         Catch ex As Exception
 
         End Try
+
+        saved = False
     End Sub
 
-    Private Sub ToolStripButton2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton2.Click
+    Private Sub ToolStripButton2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles move_down.Click
 
         Try
             Dim newcode As New TreeNode
@@ -1604,9 +1832,11 @@ Public Class MERGE
         Catch ex As Exception
 
         End Try
+
+        saved = False
     End Sub
 
-    Private Sub ToolStripButton3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton3.Click
+    Private Sub ToolStripButton3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles merge_codes.Click
 
         Try
             Dim newcode As New TreeNode
@@ -1680,6 +1910,7 @@ Public Class MERGE
         Catch ex As Exception
 
         End Try
+        saved = False
     End Sub
 
     Function merge_prevtreeview(ByVal z As Integer) As Boolean
@@ -1701,157 +1932,6 @@ Public Class MERGE
     'ツリー操作
 #Region "Code tree procedures"
 
-    Private Sub main_Load(ByVal sender As Object, _
-        ByVal e As EventArgs) Handles MyBase.Load
-        'http://dobon.net/vb/dotnet/control/tvdraganddrop.html
-        'TreeView1へのドラッグを受け入れる
-        codetree.AllowDrop = True
-
-        Me.Width = My.Settings.mainyoko
-        Me.Height = My.Settings.maintate
-        If My.Settings.fixedform = True Then
-            Me.FormBorderStyle = FormBorderStyle.FixedToolWindow
-            fixedform.Checked = True
-        End If
-
-        If System.IO.File.Exists(browser) Then
-        Else
-            browser = "IExplore.exe"
-        End If
-
-        If My.Settings.app8 <> "" Then
-            APP8.Text = exename(My.Settings.app8)
-            APP8custom.Text = APP8.Text
-        End If
-        If My.Settings.app9 <> "" Then
-            APP9.Text = exename(My.Settings.app9)
-            APP9custom.Text = APP9.Text
-        End If
-        If My.Settings.app10 <> "" Then
-            APP10.Text = exename(My.Settings.app10)
-            APP10custom.Text = APP10.Text
-        End If
-
-        If My.Settings.url8 <> "" Then
-            URL8.Text = urltrim(My.Settings.url8)
-            URL8custom.Text = URL8.Text
-        End If
-        If My.Settings.url9 <> "" Then
-            URL9.Text = urltrim(My.Settings.url9)
-            URL9custom.Text = URL9.Text
-        End If
-        If My.Settings.url10 <> "" Then
-            URL10.Text = urltrim(My.Settings.url10)
-            URL10custom.Text = URL8.Text
-        End If
-
-        If System.IO.File.Exists(My.Settings.lastcodepath) Then
-            Dim open As New load_db
-            database = My.Settings.lastcodepath
-            PSX = open.check_db(database, 932) ' Check the file's format
-            CODEFREAK = open.check2_db(database, 1201)
-            codetree.BeginUpdate()
-            error_window.list_load_error.BeginUpdate()
-
-            If CODEFREAK = True Then
-                reset_PSP()
-                Application.DoEvents()
-                enc1 = 1201
-                open.read_cf(database, 1201)
-                saveas_cwcheat.Enabled = True
-                saveas_psx.Enabled = False
-                UTF16BECP1201ToolStripMenuItem.Enabled = True
-                saveas_codefreak.Enabled = True
-            ElseIf PSX = True Then
-                enc1 = open.check_enc(database)
-                reset_PSX()
-                Application.DoEvents()
-                open.read_PSX(database, enc1)
-                saveas_psx.Enabled = True
-                saveas_cwcheat.Enabled = False
-                saveas_codefreak.Enabled = False
-                UTF16BECP1201ToolStripMenuItem.Enabled = False
-            Else
-                enc1 = open.check_enc(database)
-                reset_PSP()
-                Application.DoEvents()
-                open.read_PSP(database, enc1)
-                saveas_cwcheat.Enabled = True
-                saveas_psx.Enabled = False
-                saveas_codefreak.Enabled = False
-                UTF16BECP1201ToolStripMenuItem.Enabled = False
-            End If
-
-            If My.Settings.codepathwhensave = True Then
-                update_save_filepass.Checked = True
-            Else
-                update_save_filepass.Checked = False
-            End If
-
-
-            If My.Settings.updater = True Then
-                Dim check As New checkupdate
-                check.CDEupater("start")
-                autoupdater.Checked = True
-            Else
-                autoupdater.Checked = False
-            End If
-
-            If codetree.Nodes.Count >= 1 Then
-                codetree.Nodes(0).Expand()
-            End If
-            codetree.EndUpdate()
-            error_window.list_load_error.EndUpdate()
-            loaded = True
-            file_saveas.Enabled = True
-            overwrite_db.Enabled = True
-            overwrite_db.ToolTipText = "対象;" & database
-        End If
-
-        'イベントハンドラを追加する
-        AddHandler codetree.ItemDrag, AddressOf codetree_ItemDrag
-        AddHandler codetree.DragOver, AddressOf codetree_DragOver
-        AddHandler codetree.DragDrop, AddressOf codetree_DragDrop
-
-        If showerror = True Then
-            error_window.Show()
-            options_error.Checked = True
-            options_error.Text = "エラー画面を隠す"
-
-            If maintop = True Then
-                error_window.TopMost = True
-            End If
-
-        Else
-            error_window.Hide()
-            options_error.Checked = False
-            options_error.Text = "エラー画面を表示"
-        End If
-
-        If maintop = True Then
-            Me.TopMost = True
-            error_window.TopMost = True
-            options_ontop.Checked = True
-        Else
-            error_window.TopMost = False
-            options_ontop.Checked = False
-        End If
-
-        If My.Settings.gridvalueedit = True Then
-            grided_use.Checked = True
-            Button4.Visible = True
-        End If
-
-
-        CT_tb.Font = My.Settings.CT_tb
-        GID_tb.Font = My.Settings.GID_tb
-        GT_tb.Font = My.Settings.CT_tb
-        cmt_tb.Font = My.Settings.cmt_tb
-        cl_tb.Font = My.Settings.cl_tb
-        codetree.Font = My.Settings.codetree
-
-    End Sub
-
     Private Sub codetree_KeyUp(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles codetree.KeyUp
         If e.KeyCode = Keys.Delete Then
             Try
@@ -1871,6 +1951,8 @@ Public Class MERGE
             Catch ex As Exception
 
             End Try
+
+            saved = False
         End If
     End Sub
 
@@ -1879,9 +1961,9 @@ Public Class MERGE
         Dim j As New joker
 
         changed.Text = ""
-        ToolStripButton1.Enabled = True
-        ToolStripButton2.Enabled = True
-        ToolStripButton3.Enabled = True
+        move_up.Enabled = True
+        move_down.Enabled = True
+        merge_codes.Enabled = True
 
 
         Select Case codetree.SelectedNode.Level
@@ -2022,7 +2104,7 @@ Public Class MERGE
                 target.Level = [source].Level AndAlso _
                 Not target Is [source] AndAlso _
                 Not IsChildNode([source], target) AndAlso _
-        ToolStripButton1.Enabled = True Then
+        move_up.Enabled = True Then
                 'Nodeを選択する
                 If target.IsSelected = False Then
                     tv.SelectedNode = target
@@ -2050,7 +2132,7 @@ Public Class MERGE
                 target.Level = [source].Level AndAlso _
                 Not target Is [source] AndAlso _
                 Not IsChildNode([source], target) And
-        ToolStripButton1.Enabled = True Then
+        move_up.Enabled = True Then
                 'ドロップされたNodeのコピーを作成
                 Dim cln As TreeNode = CType([source].Clone(), TreeNode)
                 'Nodeを追加
@@ -2064,6 +2146,7 @@ Public Class MERGE
                 End If
                 '追加されたNodeを選択
                 tv.SelectedNode = cln
+                saved = False
             Else
                 e.Effect = DragDropEffects.None
             End If
@@ -2391,49 +2474,5 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         f.ShowDialog(Me)
         f.Dispose()
     End Sub
-    '隠し
-    Private Sub G有効ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
-        If Button4.Visible = False Then
-            Button4.Visible = True
-            grided_use.Checked = True
-        Else
-            Button4.Visible = False
-            grided_use.Checked = False
-        End If
-        My.Settings.gridvalueedit = Button4.Visible
-
-    End Sub
-
-    Private Sub フォーム固定ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles fixedform.Click
-
-        If fixedform.Checked = True Then
-            My.Settings.fixedform = False
-            fixedform.Checked = False
-        Else
-            My.Settings.fixedform = True
-            fixedform.Checked = True
-        End If
-    End Sub
-
-    Private Sub 保存時最終コードパスを更新ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles update_save_filepass.Click
-
-        If update_save_filepass.Checked = True Then
-            My.Settings.codepathwhensave = False
-            update_save_filepass.Checked = False
-        Else
-            My.Settings.codepathwhensave = True
-            update_save_filepass.Checked = True
-        End If
-    End Sub
-
-    Private Sub autoupdater_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles autoupdater.Click
-        If autoupdater.Checked = True Then
-            My.Settings.updater = False
-            autoupdater.Checked = False
-        Else
-            My.Settings.updater = True
-            autoupdater.Checked = True
-        End If
-    End Sub
 End Class
