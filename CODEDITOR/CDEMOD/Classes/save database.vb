@@ -320,7 +320,7 @@ Public Class save_db
         Dim m As MERGE = MERGE
 
         ew.Hide()
-        m.options_error.Text = "Show Error Log"
+        m.options_error.Text = "エラー画面を隠す"
         m.options_error.Checked = False
         ew.list_save_error.Items.Clear()
 
