@@ -157,6 +157,14 @@ Public Class MERGE
             saved = True
         End If
 
+        If enc1 = 932 Then
+            CP932ToolStripMenuItem.Checked = True
+        ElseIf enc1 = 1201 Then
+            UTF16BECP1201ToolStripMenuItem.Checked = True
+        ElseIf enc1 = 936 Then
+            GBKToolStripMenuItem.Checked = True
+        End If
+
         'イベントハンドラを追加する
         AddHandler codetree.ItemDrag, AddressOf codetree_ItemDrag
         AddHandler codetree.DragOver, AddressOf codetree_DragOver
@@ -602,7 +610,10 @@ Public Class MERGE
             sb.Append(" ,")
             sb.Append(b2)
             If mode >= 4 Then
-                If b1.Contains("J") Then
+                If b1.Contains("J") AndAlso PSX = False Then
+                    jp(c) = sb.ToString
+                    c += 1
+                ElseIf b1.Contains("P") AndAlso PSX = True Then
                     jp(c) = sb.ToString
                     c += 1
                 ElseIf b1.Contains("US") Then
@@ -1070,24 +1081,6 @@ Public Class MERGE
         GBKToolStripMenuItem.Checked = False
         CP932ToolStripMenuItem.Checked = False
         UTF16BECP1201ToolStripMenuItem.Checked = True
-    End Sub
-
-    Private Sub EncodeToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles codepage_select.Click
-
-        If enc1 = 932 Then
-            GBKToolStripMenuItem.Checked = False
-            CP932ToolStripMenuItem.Checked = True
-            UTF16BECP1201ToolStripMenuItem.Checked = False
-        ElseIf enc1 = 1201 Then
-            GBKToolStripMenuItem.Checked = False
-            CP932ToolStripMenuItem.Checked = False
-            UTF16BECP1201ToolStripMenuItem.Checked = True
-        ElseIf enc1 = 936 Then
-            GBKToolStripMenuItem.Checked = True
-            CP932ToolStripMenuItem.Checked = False
-            UTF16BECP1201ToolStripMenuItem.Checked = False
-        End If
-
     End Sub
 
 #End Region
