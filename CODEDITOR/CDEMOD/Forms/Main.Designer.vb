@@ -145,9 +145,9 @@ Partial Class MERGE
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.save_gc = New System.Windows.Forms.ToolStripButton()
         Me.save_cc = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton3 = New System.Windows.Forms.ToolStripButton()
+        Me.move_up = New System.Windows.Forms.ToolStripButton()
+        Me.move_down = New System.Windows.Forms.ToolStripButton()
+        Me.merge_codes = New System.Windows.Forms.ToolStripButton()
         Me.progbar = New System.Windows.Forms.ProgressBar()
         Me.save_file = New System.Windows.Forms.SaveFileDialog()
         Me.button_list = New System.Windows.Forms.CheckedListBox()
@@ -279,7 +279,7 @@ Partial Class MERGE
         Me.sort_GID.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Sort_GID１, Me.Sort_GID2, Me.ToolStripSeparator9, Me.gid_country})
         Me.sort_GID.Image = CType(resources.GetObject("sort_GID.Image"), System.Drawing.Image)
         Me.sort_GID.Name = "sort_GID"
-        Me.sort_GID.Size = New System.Drawing.Size(152, 22)
+        Me.sort_GID.Size = New System.Drawing.Size(112, 22)
         Me.sort_GID.Text = "ゲームID"
         Me.sort_GID.ToolTipText = "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ゲームIDでのソート"
         '
@@ -315,7 +315,7 @@ Partial Class MERGE
         Me.name_sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Sort_GTitle1, Me.Sort_GTitle2, Me.ToolStripSeparator10, Me.gname_country})
         Me.name_sort.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.abc
         Me.name_sort.Name = "name_sort"
-        Me.name_sort.Size = New System.Drawing.Size(152, 22)
+        Me.name_sort.Size = New System.Drawing.Size(112, 22)
         Me.name_sort.Text = "ゲーム名"
         Me.name_sort.ToolTipText = "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ゲーム名でのソート"
         '
@@ -722,8 +722,8 @@ Partial Class MERGE
         '
         Me.fixedform.Name = "fixedform"
         Me.fixedform.Size = New System.Drawing.Size(192, 22)
-        Me.fixedform.Text = "フォーム固定"
-        Me.fixedform.ToolTipText = "再起動した際フォームがリサイズできなくなります" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "メインフォームのサイズはファイルの閉じるボタンで終了すると保存されます"
+        Me.fixedform.Text = "フォームサイズ固定"
+        Me.fixedform.ToolTipText = "再起動した際フォームがリサイズできなくなります" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "メインフォームのサイズは終了すると保存されます"
         '
         'update_save_filepass
         '
@@ -1011,7 +1011,7 @@ Partial Class MERGE
         '
         'tool_menu
         '
-        Me.tool_menu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.add_game, Me.rem_game, Me.ToolStripSeparator2, Me.Add_cd, Me.rem_cd, Me.ToolStripSeparator1, Me.save_gc, Me.save_cc, Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripButton3})
+        Me.tool_menu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.add_game, Me.rem_game, Me.ToolStripSeparator2, Me.Add_cd, Me.rem_cd, Me.ToolStripSeparator1, Me.save_gc, Me.save_cc, Me.move_up, Me.move_down, Me.merge_codes})
         Me.tool_menu.Location = New System.Drawing.Point(0, 24)
         Me.tool_menu.Name = "tool_menu"
         Me.tool_menu.Size = New System.Drawing.Size(647, 54)
@@ -1101,42 +1101,42 @@ Partial Class MERGE
         Me.save_cc.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.save_cc.ToolTipText = "コードの保存をします。クリックしないと保存されません"
         '
-        'ToolStripButton1
+        'move_up
         '
-        Me.ToolStripButton1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ToolStripButton1.Image = CType(resources.GetObject("ToolStripButton1.Image"), System.Drawing.Image)
-        Me.ToolStripButton1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton1.Name = "ToolStripButton1"
-        Me.ToolStripButton1.Size = New System.Drawing.Size(60, 51)
-        Me.ToolStripButton1.Text = "上に移動"
-        Me.ToolStripButton1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.ToolStripButton1.ToolTipText = "選択しているタイトル/コードを1つ上に移動します"
+        Me.move_up.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.move_up.Image = CType(resources.GetObject("move_up.Image"), System.Drawing.Image)
+        Me.move_up.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.move_up.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.move_up.Name = "move_up"
+        Me.move_up.Size = New System.Drawing.Size(60, 51)
+        Me.move_up.Text = "上に移動"
+        Me.move_up.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.move_up.ToolTipText = "選択しているタイトル/コードを1つ上に移動します"
         '
-        'ToolStripButton2
+        'move_down
         '
-        Me.ToolStripButton2.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ToolStripButton2.Image = CType(resources.GetObject("ToolStripButton2.Image"), System.Drawing.Image)
-        Me.ToolStripButton2.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.ToolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton2.Name = "ToolStripButton2"
-        Me.ToolStripButton2.Size = New System.Drawing.Size(60, 51)
-        Me.ToolStripButton2.Text = "下に移動"
-        Me.ToolStripButton2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.ToolStripButton2.ToolTipText = "選択しているタイトル/コードを1つ下へ移動します"
+        Me.move_down.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.move_down.Image = CType(resources.GetObject("move_down.Image"), System.Drawing.Image)
+        Me.move_down.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.move_down.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.move_down.Name = "move_down"
+        Me.move_down.Size = New System.Drawing.Size(60, 51)
+        Me.move_down.Text = "下に移動"
+        Me.move_down.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.move_down.ToolTipText = "選択しているタイトル/コードを1つ下へ移動します"
         '
-        'ToolStripButton3
+        'merge_codes
         '
-        Me.ToolStripButton3.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ToolStripButton3.Image = CType(resources.GetObject("ToolStripButton3.Image"), System.Drawing.Image)
-        Me.ToolStripButton3.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.ToolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton3.Name = "ToolStripButton3"
-        Me.ToolStripButton3.Size = New System.Drawing.Size(67, 51)
-        Me.ToolStripButton3.Text = "コード合成"
-        Me.ToolStripButton3.TextDirection = System.Windows.Forms.ToolStripTextDirection.Horizontal
-        Me.ToolStripButton3.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.ToolStripButton3.ToolTipText = "選択コードと上にあるコードを合成します。" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "選択コードが各レベル一番上にある場合何も起きません。"
+        Me.merge_codes.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.merge_codes.Image = CType(resources.GetObject("merge_codes.Image"), System.Drawing.Image)
+        Me.merge_codes.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.merge_codes.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.merge_codes.Name = "merge_codes"
+        Me.merge_codes.Size = New System.Drawing.Size(67, 51)
+        Me.merge_codes.Text = "コード合成"
+        Me.merge_codes.TextDirection = System.Windows.Forms.ToolStripTextDirection.Horizontal
+        Me.merge_codes.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.merge_codes.ToolTipText = "選択コードと上にあるコードを合成します。" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "選択コードが各レベル一番上にある場合何も起きません。"
         '
         'progbar
         '
@@ -1456,8 +1456,8 @@ Partial Class MERGE
     Friend WithEvents codetreeview As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents tree_collapse As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents tree_expand As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripButton1 As System.Windows.Forms.ToolStripButton
-    Friend WithEvents ToolStripButton2 As System.Windows.Forms.ToolStripButton
+    Friend WithEvents move_up As System.Windows.Forms.ToolStripButton
+    Friend WithEvents move_down As System.Windows.Forms.ToolStripButton
     Friend WithEvents browsecodesite As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents wikiToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents OHGToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
@@ -1489,7 +1489,7 @@ Partial Class MERGE
     Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents Button3 As System.Windows.Forms.Button
     Friend WithEvents cmf_decript As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripButton3 As System.Windows.Forms.ToolStripButton
+    Friend WithEvents merge_codes As System.Windows.Forms.ToolStripButton
     Friend WithEvents name_sort As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Sort_GTitle1 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Sort_GTitle2 As System.Windows.Forms.ToolStripMenuItem
