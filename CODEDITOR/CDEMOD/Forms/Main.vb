@@ -153,6 +153,8 @@ Public Class MERGE
             file_saveas.Enabled = True
             overwrite_db.Enabled = True
             overwrite_db.ToolTipText = "対象;" & database
+        Else
+            codetree.Nodes.Add("NEW_DB").ImageIndex = 0
         End If
 
         If enc1 = 932 Then
