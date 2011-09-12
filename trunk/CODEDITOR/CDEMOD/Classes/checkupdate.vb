@@ -14,9 +14,9 @@ Public Class checkupdate
             Dim check As New checkupdate
             Dim f As Form2 = Form2
             Dim b1 As String = check.getweb(fileName, tx, 0)
-            Dim dd As String = f.Label2.Text.Substring(6, 10)
+            Dim b2 As String = StrConv(f.Label2.Text, VbStrConv.Narrow)
+            Dim dd As String = b2.Substring(6, 10)
             Dim textsubnum As String = ""
-            dd = StrConv(dd, VbStrConv.Narrow)
             Dim s As New Regex("\d\d\d\d/\d{1,2}/\d{1,2}", RegexOptions.IgnoreCase)
             Dim m As Match = s.Match(b1)
             If m.Success Then
@@ -33,14 +33,14 @@ Public Class checkupdate
                     If String.Compare(dd, rr, True) < 0 Then
                         exeupdate = True
                     ElseIf String.Compare(dd, rr, True) = 0 AndAlso b1.Contains("-") Then
-                        If Not f.Label2.Text.Contains("-") Then
+                        If Not b2.Contains("-") Then
                             exeupdate = True
-                        ElseIf f.Label2.Text.Contains("-") Then
-                            Dim subnum As String = f.Label2.Text.Substring(17, 1)
+                        ElseIf b2.Contains("-") Then
+                            Dim subnum As String = b2.Substring(17, 1)
                             textsubnum = b1.Substring(b1.Length - 1, 1)
                             subnum = StrConv(subnum, VbStrConv.Narrow)
                             textsubnum = StrConv(textsubnum, VbStrConv.Narrow)
-                            If String.Compare(subnum, subnum, True) < 0 Then
+                            If String.Compare(subnum, textsubnum, True) < 0 Then
                                 exeupdate = True
                             End If
                         End If
