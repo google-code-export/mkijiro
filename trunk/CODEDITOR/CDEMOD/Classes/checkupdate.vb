@@ -26,32 +26,54 @@ Public Class checkupdate
                     rr = rr.Insert(8, "0")
                 End If
 
-                If String.Compare(dd, rr, True) < 0 Then
-                    Dim result As DialogResult = MessageBox.Show("最新版が見つかりました、ダウンロードしますか？", "更新の確認", _
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
-                    If result = DialogResult.Yes Then
-                        Dim save As String = fileName.Insert(fileName.LastIndexOf("."), rr)
-                        save = save.Replace(":", "")
-                        save = save.Replace("/", "")
-                        Dim ok As String = check.getweb(save, exe, 1)
-                        If ok = "OK" Then
-                            MessageBox.Show(save & vbCrLf & "BUID:" & m.Value & "のダウンロードが完了しました" _
-                             & vbCrLf & "設定を引き継ぎたい場合は起動しているEXE名と同じ名前にしてください", "ダウンロード完了")
-                        Else
-                            MessageBox.Show("ダウンロードに失敗しました", "ダウンロード失敗")
+                If String.Compare(dd, rr, True) <= 0 Then
+                    Dim exeupdate As Boolean = False
+                    If String.Compare(dd, rr, True) < 0 Then
+                        exeupdate = True
+                    ElseIf String.Compare(dd, rr, True) = 0 AndAlso b1.Contains("-") Then
+                        If Not f.Label2.Text.Contains("-") Then
+                            exeupdate = True
+                        ElseIf f.Label2.Text.Contains("-") Then
+                            Dim subnum As String = f.Label2.Text.Substring(17, 1)
+                            Dim textsubnum As String = b1.Substring(b1.Length - 1, 1)
+                            If String.Compare(subnum, subnum, True) < 0 Then
+                                exeupdate = True
+                            End If
                         End If
                     End If
-                ElseIf mode = "start" AndAlso My.Settings.updater = True Then
 
-                Else
+                    If exeupdate = True Then
+                        Dim result As DialogResult = MessageBox.Show("最新版が見つかりました、ダウンロードしますか？", "更新の確認", _
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
+                        If result = DialogResult.Yes Then
+                            Dim save As String = fileName.Insert(fileName.LastIndexOf("."), rr)
+                            save = save.Replace(":", "")
+                            save = save.Replace("/", "")
+                            Dim ok As String = check.getweb(save, exe, 1)
+                            If ok = "OK" Then
+                                MessageBox.Show(save & vbCrLf & "BUID:" & m.Value & "のダウンロードが完了しました" _
+                                 & vbCrLf & "設定を引き継ぎたい場合は起動しているEXE名と同じ名前にしてください", "ダウンロード完了")
+                            Else
+                                MessageBox.Show("ダウンロードに失敗しました", "ダウンロード失敗")
+                            End If
+                        End If
+
+                    ElseIf mode = "help" Then
+                        MessageBox.Show("最新版です", "更新の確認")
+                    End If
+
+                ElseIf mode = "help" Then
                     MessageBox.Show("最新版です", "更新の確認")
                 End If
-            Else
+
+            ElseIf mode = "help" Then
                 MessageBox.Show("更新情報の取得に失敗しました", "サーバーエラー")
             End If
-        Else
-            MessageBox.Show("インターネットに接続されてません", "更新の確認")
+
+        ElseIf mode = "help" Then
+            MessageBox.Show("インターネットに接続されてません", "接続エラー")
         End If
+
     End Sub
 
     Function getweb(ByVal filename3 As String, ByVal url As String, ByVal webmode As Integer) As String
