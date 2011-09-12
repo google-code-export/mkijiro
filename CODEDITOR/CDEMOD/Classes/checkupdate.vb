@@ -15,6 +15,8 @@ Public Class checkupdate
             Dim f As Form2 = Form2
             Dim b1 As String = check.getweb(fileName, tx, 0)
             Dim dd As String = f.Label2.Text.Substring(6, 10)
+            Dim textsubnum As String = ""
+            dd = StrConv(dd, VbStrConv.Narrow)
             Dim s As New Regex("\d\d\d\d/\d{1,2}/\d{1,2}", RegexOptions.IgnoreCase)
             Dim m As Match = s.Match(b1)
             If m.Success Then
@@ -35,7 +37,9 @@ Public Class checkupdate
                             exeupdate = True
                         ElseIf f.Label2.Text.Contains("-") Then
                             Dim subnum As String = f.Label2.Text.Substring(17, 1)
-                            Dim textsubnum As String = b1.Substring(b1.Length - 1, 1)
+                            textsubnum = b1.Substring(b1.Length - 1, 1)
+                            subnum = StrConv(subnum, VbStrConv.Narrow)
+                            textsubnum = StrConv(textsubnum, VbStrConv.Narrow)
                             If String.Compare(subnum, subnum, True) < 0 Then
                                 exeupdate = True
                             End If
@@ -116,7 +120,7 @@ Public Class checkupdate
 
             sr.Close()
             strm.Close()
-            Return html
+            Return StrConv(html, VbStrConv.Narrow)
 
         ElseIf webmode = 1 Then
             'ファイルに書き込むためのFileStreamを作成
