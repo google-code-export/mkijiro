@@ -197,7 +197,7 @@ Partial Class MERGE
         Me.file_new.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.new_psp, Me.new_psx})
         Me.file_new.Image = Global.CWcheat_Database_Editor.My.Resources.Resources._new
         Me.file_new.Name = "file_new"
-        Me.file_new.Size = New System.Drawing.Size(152, 22)
+        Me.file_new.Size = New System.Drawing.Size(144, 22)
         Me.file_new.Text = "新規(&N)"
         '
         'new_psp
@@ -218,7 +218,7 @@ Partial Class MERGE
         '
         Me.file_open.Image = CType(resources.GetObject("file_open.Image"), System.Drawing.Image)
         Me.file_open.Name = "file_open"
-        Me.file_open.Size = New System.Drawing.Size(152, 22)
+        Me.file_open.Size = New System.Drawing.Size(144, 22)
         Me.file_open.Text = "開く(&O)"
         '
         'overwrite_db
@@ -226,7 +226,7 @@ Partial Class MERGE
         Me.overwrite_db.Enabled = False
         Me.overwrite_db.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.save
         Me.overwrite_db.Name = "overwrite_db"
-        Me.overwrite_db.Size = New System.Drawing.Size(152, 22)
+        Me.overwrite_db.Size = New System.Drawing.Size(144, 22)
         Me.overwrite_db.Text = "上書き保存(&W)"
         '
         'file_saveas
@@ -235,7 +235,7 @@ Partial Class MERGE
         Me.file_saveas.Enabled = False
         Me.file_saveas.Image = CType(resources.GetObject("file_saveas.Image"), System.Drawing.Image)
         Me.file_saveas.Name = "file_saveas"
-        Me.file_saveas.Size = New System.Drawing.Size(152, 22)
+        Me.file_saveas.Size = New System.Drawing.Size(144, 22)
         Me.file_saveas.Text = "...として保存(&S)"
         '
         'saveas_cwcheat
@@ -263,7 +263,7 @@ Partial Class MERGE
         '
         Me.file_exit.Image = CType(resources.GetObject("file_exit.Image"), System.Drawing.Image)
         Me.file_exit.Name = "file_exit"
-        Me.file_exit.Size = New System.Drawing.Size(152, 22)
+        Me.file_exit.Size = New System.Drawing.Size(144, 22)
         Me.file_exit.Text = "閉じる(&C)"
         '
         'menu_sort
@@ -279,7 +279,7 @@ Partial Class MERGE
         Me.sort_GID.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Sort_GID１, Me.Sort_GID2, Me.ToolStripSeparator9, Me.gid_country})
         Me.sort_GID.Image = CType(resources.GetObject("sort_GID.Image"), System.Drawing.Image)
         Me.sort_GID.Name = "sort_GID"
-        Me.sort_GID.Size = New System.Drawing.Size(112, 22)
+        Me.sort_GID.Size = New System.Drawing.Size(152, 22)
         Me.sort_GID.Text = "ゲームID"
         Me.sort_GID.ToolTipText = "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ゲームIDでのソート"
         '
@@ -309,14 +309,14 @@ Partial Class MERGE
         Me.gid_country.Name = "gid_country"
         Me.gid_country.Size = New System.Drawing.Size(154, 22)
         Me.gid_country.Text = "日→米→欧→他"
-        Me.gid_country.ToolTipText = "ゲームIDを判断基準にして国別に降順ソートします" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ID降順"
+        Me.gid_country.ToolTipText = "ゲームIDを判断基準にして国ごとわけてIDで昇順ソートします"
         '
         'name_sort
         '
         Me.name_sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Sort_GTitle1, Me.Sort_GTitle2, Me.ToolStripSeparator10, Me.gname_country})
         Me.name_sort.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.abc
         Me.name_sort.Name = "name_sort"
-        Me.name_sort.Size = New System.Drawing.Size(112, 22)
+        Me.name_sort.Size = New System.Drawing.Size(152, 22)
         Me.name_sort.Text = "ゲーム名"
         Me.name_sort.ToolTipText = "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ゲーム名でのソート"
         '
@@ -346,7 +346,7 @@ Partial Class MERGE
         Me.gname_country.Name = "gname_country"
         Me.gname_country.Size = New System.Drawing.Size(154, 22)
         Me.gname_country.Text = "日→米→欧→他"
-        Me.gname_country.ToolTipText = "ゲームIDを判断基準にして国別にソートします" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "名前降順"
+        Me.gname_country.ToolTipText = "ゲームIDを判断基準にして国ごとにわけてゲーム名で昇順ソートします"
         '
         'codepage_select
         '
@@ -751,13 +751,13 @@ Partial Class MERGE
         'オンラインヘルプToolStripMenuItem
         '
         Me.オンラインヘルプToolStripMenuItem.Name = "オンラインヘルプToolStripMenuItem"
-        Me.オンラインヘルプToolStripMenuItem.Size = New System.Drawing.Size(143, 22)
+        Me.オンラインヘルプToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.オンラインヘルプToolStripMenuItem.Text = "オンラインヘルプ"
         '
         'バージョン情報ToolStripMenuItem
         '
         Me.バージョン情報ToolStripMenuItem.Name = "バージョン情報ToolStripMenuItem"
-        Me.バージョン情報ToolStripMenuItem.Size = New System.Drawing.Size(143, 22)
+        Me.バージョン情報ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.バージョン情報ToolStripMenuItem.Text = "バージョン情報"
         '
         'codetree
