@@ -5,7 +5,10 @@
         ByVal e As DataGridViewCellValidatingEventArgs) _
         Handles DataGridView1.CellValidating
 
+        Dim f As New MERGE
         Dim dgv As DataGridView = DirectCast(sender, DataGridView)
+
+        Dim mask As String = ""
 
         '新しい行のセルでなく、セルの内容が変更されている時だけ検証する 
         If e.RowIndex = dgv.NewRowIndex OrElse Not dgv.IsCurrentCellDirty Then
@@ -22,7 +25,7 @@
                 Select check
                     Case "DEC", "BINARY32", "BINARY32(16bit)", "BINARY16"
                         DirectCast(DataGridView1.Columns(3), DataGridViewTextBoxColumn).MaxInputLength = 11
-                        DataGridView1.Rows(d).Cells(3).Value = ""
+                        DataGridView1.Rows(d).Cells(3).Value = "0"
                     Case "OR", "AND", "XOR"
                         DirectCast(DataGridView1.Columns(3), DataGridViewTextBoxColumn).MaxInputLength = 10
                         DataGridView1.Rows(d).Cells(3).Value = "0x0"
@@ -36,7 +39,11 @@
             If Not DataGridView1.Rows(d).Cells(2).Value Is Nothing Then
                 Dim check As String = DataGridView1.Rows(d).Cells(2).Value.ToString
                 If check = "DEC" Then
-                    DirectCast(DataGridView1.Columns(3), DataGridViewTextBoxColumn).MaxInputLength = 11
+                    If f.PSX = False Then
+                        DirectCast(DataGridView1.Columns(3), DataGridViewTextBoxColumn).MaxInputLength = 11
+                    Else
+                        DirectCast(DataGridView1.Columns(3), DataGridViewTextBoxColumn).MaxInputLength = 5
+                    End If
                     Dim str As String = e.FormattedValue.ToString()
                     Dim r As New System.Text.RegularExpressions.Regex( _
             "-?\d{1,11}", _
@@ -44,14 +51,22 @@
                     Dim m As System.Text.RegularExpressions.Match = r.Match(str)
                     If m.Success And m.Length = str.Length Then
                         Label1.Text = ""
+                        DataGridView1.Rows(d).Cells(3).Value = m.Value
                         Dim b1 As String = m.Value
                         Dim max As Int64 = Convert.ToInt64(b1)
-                        If max > 2147483647 Then
-                            Label1.Text = "2147483647を超えてます"
-                            e.Cancel = True
-                        ElseIf max < -2147483647 Then
-                            Label1.Text = "-2147483647を超えてます"
-                            e.Cancel = True
+                        If f.PSX = True Then
+                            If max > 2147483647 Then
+                                Label1.Text = "2147483647を超えてます"
+                                e.Cancel = True
+                            ElseIf max < -2147483647 Then
+                                Label1.Text = "-2147483647を超えてます"
+                                e.Cancel = True
+                            End If
+                        Else
+                            If max > 65535 Then
+                                Label1.Text = "65535を超えてます"
+                                e.Cancel = True
+                            End If
                         End If
                     Else
                         '行にエラーテキストを設定 
@@ -62,7 +77,11 @@
                         e.Cancel = True
                     End If
                 ElseIf check = "OR" Or check = "AND" Or check = "XOR" Then
-                    DirectCast(DataGridView1.Columns(3), DataGridViewTextBoxColumn).MaxInputLength = 10
+                    If f.PSX = False Then
+                        DirectCast(DataGridView1.Columns(3), DataGridViewTextBoxColumn).MaxInputLength = 10
+                    Else
+                        DirectCast(DataGridView1.Columns(3), DataGridViewTextBoxColumn).MaxInputLength = 6
+                    End If
                     Dim str As String = e.FormattedValue.ToString()
                     Dim r As New System.Text.RegularExpressions.Regex( _
                      "0x[0-9A-Fa-f]{1,8}", _
@@ -70,6 +89,7 @@
                     Dim m As System.Text.RegularExpressions.Match = r.Match(str)
                     If m.Success Then
                         Label1.Text = ""
+                        DataGridView1.Rows(d).Cells(3).Value = m.Value
                     Else
                         '行にエラーテキストを設定 
                         Label1.Text = "不正な値です"
@@ -78,27 +98,51 @@
                         'キャンセルする 
                         e.Cancel = True
                     End If
-                ElseIf check.Contains("BINARY") Then
-                    DirectCast(DataGridView1.Columns(3), DataGridViewTextBoxColumn).MaxInputLength = 11
-                    Dim str As String = e.FormattedValue.ToString()
-                    Dim r As New System.Text.RegularExpressions.Regex( _
-                     "-?\d+.?\d*", _
-                                System.Text.RegularExpressions.RegexOptions.IgnoreCase)
-                    Dim m As System.Text.RegularExpressions.Match = r.Match(str)
-                    If m.Success Then
-                        Label1.Text = ""
+                    ElseIf check.Contains("BINARY") Then
+                        DirectCast(DataGridView1.Columns(3), DataGridViewTextBoxColumn).MaxInputLength = 11
+                        Dim str As String = e.FormattedValue.ToString()
+                        Dim r As New System.Text.RegularExpressions.Regex( _
+                         "-?\d+.?\d*", _
+                                    System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+                        Dim m As System.Text.RegularExpressions.Match = r.Match(str)
+                        If m.Success Then
+                            Label1.Text = ""
+                            DataGridView1.Rows(d).Cells(3).Value = m.Value
+                        Else
+                            '行にエラーテキストを設定 
+                            Label1.Text = "不正な値です"
+                            '入力した値をキャンセルして元に戻すには、次のようにする 
+                            dgv.CancelEdit()
+                            'キャンセルする 
+                            e.Cancel = True
+                        End If
                     Else
-                        '行にエラーテキストを設定 
-                        Label1.Text = "不正な値です"
-                        '入力した値をキャンセルして元に戻すには、次のようにする 
                         dgv.CancelEdit()
-                        'キャンセルする 
-                        e.Cancel = True
+                        Label1.Text = "編集タイプが選択されてません"
                     End If
-                Else
-                    dgv.CancelEdit()
-                    Label1.Text = "編集タイプが選択されてません"
                 End If
+        ElseIf dgv.Columns(e.ColumnIndex).Name = "アドレス" Or dgv.Columns(e.ColumnIndex).Name = "値" Then
+            Dim str As String = e.FormattedValue.ToString()
+            If f.PSX = False Then
+                mask = "0x[0-9a-fA-F]{8}"
+            ElseIf dgv.Columns(e.ColumnIndex).Name = "アドレス" Then
+                mask = "[0-9A-F]{8}"
+            ElseIf dgv.Columns(e.ColumnIndex).Name = "値" Then
+                mask = "[0-9a-fA-F]{4}"
+            End If
+            Dim r As New System.Text.RegularExpressions.Regex( _
+             mask, _
+                        System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+            Dim m As System.Text.RegularExpressions.Match = r.Match(str)
+            If m.Success Then
+                Label1.Text = ""
+            Else
+                '行にエラーテキストを設定 
+                Label1.Text = "不正な値です"
+                '入力した値をキャンセルして元に戻すには、次のようにする 
+                dgv.CancelEdit()
+                'キャンセルする 
+                e.Cancel = True
             End If
         End If
     End Sub
@@ -189,11 +233,20 @@
 
         Dim b1 As String = m.cl_tb.Text
         Dim i As Integer = 0
+        Dim mask As String
+        If m.PSX = False Then
+            mask = "0x[0-9A-F]{8} 0x[0-9A-F]{8}"
+            DirectCast(DataGridView1.Columns(1), DataGridViewTextBoxColumn).MaxInputLength = 10
+        Else
+            DirectCast(DataGridView1.Columns(0), DataGridViewTextBoxColumn).MaxInputLength = 8
+            DirectCast(DataGridView1.Columns(1), DataGridViewTextBoxColumn).MaxInputLength = 4
+            mask = "[0-9A-F]{8} [0-9A-F]{4}"
+        End If
+
         Dim r As New System.Text.RegularExpressions.Regex( _
-"0x[0-9A-F]{8} 0x[0-9A-F]{8}", _
+mask, _
 System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         Dim ed As System.Text.RegularExpressions.Match = r.Match(b1)
-
 
         Dim column As New DataGridViewComboBoxColumn()
         'ComboBoxのリストに表示する項目を指定する
@@ -201,7 +254,9 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         column.Items.Add("OR")
         column.Items.Add("AND")
         column.Items.Add("XOR")
-        column.Items.Add("BINARY32")
+        If m.PSX = False Then
+            column.Items.Add("BINARY32")
+        End If
         column.Items.Add("BINARY32(16bit)")
         column.Items.Add("BINARY16")
         '"Week"列にバインドされているデータを表示する
@@ -213,8 +268,13 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 
         While ed.Success
             DataGridView1.Rows.Add()
-            DataGridView1.Rows(i).Cells(0).Value = ed.Value.Substring(0, 10)
-            DataGridView1.Rows(i).Cells(1).Value = ed.Value.Substring(11, 10)
+            If m.PSX = False Then
+                DataGridView1.Rows(i).Cells(0).Value = ed.Value.Substring(0, 10)
+                DataGridView1.Rows(i).Cells(1).Value = ed.Value.Substring(11, 10)
+            Else
+                DataGridView1.Rows(i).Cells(0).Value = ed.Value.Substring(0, 8)
+                DataGridView1.Rows(i).Cells(1).Value = ed.Value.Substring(9, 4)
+            End If
             DataGridView1.Rows(i).Cells(2).Value = "DEC"
             ed = ed.NextMatch()
             i += 1
@@ -226,54 +286,112 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
     Private Sub edival(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
         Dim m As MERGE
         m = CType(Me.Owner, MERGE)
+        Dim mask As String = ""
         Dim d As Integer = DataGridView1.CurrentCell.RowIndex
         Dim c As Integer = DataGridView1.CurrentCell.ColumnIndex
         If Not DataGridView1.Rows(d).Cells(2).Value Is Nothing And Not DataGridView1.Rows(d).Cells(3).Value Is Nothing Then
             Dim check As String = DataGridView1.Rows(d).Cells(2).Value.ToString
+            Dim str As String = DataGridView1.Rows(d).Cells(3).Value.ToString
             If check = "DEC" Then
-                Dim dec As Integer = Convert.ToInt32(DataGridView1.Rows(d).Cells(3).Value.ToString)
-                DataGridView1.Rows(d).Cells(1).Value = "0x" + dec.ToString("X").PadLeft(8, "0"c).ToUpper
-            ElseIf check = "OR" Then
-                Dim b1 As Int32 = Convert.ToInt32(DataGridView1.Rows(d).Cells(1).Value.ToString, 16)
-                Dim hex As Int32 = Convert.ToInt32(DataGridView1.Rows(d).Cells(3).Value.ToString, 16)
-                DataGridView1.Rows(d).Cells(1).Value = "0x" + Convert.ToString((b1 Or hex), 16).PadLeft(8, "0"c).ToUpper
-            ElseIf check = "AND" Then
-                Dim b1 As Int32 = Convert.ToInt32(DataGridView1.Rows(d).Cells(1).Value.ToString, 16)
-                Dim hex As Int32 = Convert.ToInt32(DataGridView1.Rows(d).Cells(3).Value.ToString, 16)
-                DataGridView1.Rows(d).Cells(1).Value = "0x" + Convert.ToString((b1 And hex), 16).ToString.PadLeft(8, "0"c).ToUpper
-            ElseIf check = "XOR" Then
-                Dim b1 As Int32 = Convert.ToInt32(DataGridView1.Rows(d).Cells(1).Value.ToString, 16)
-                Dim hex As Int32 = Convert.ToInt32(DataGridView1.Rows(d).Cells(3).Value.ToString, 16)
-                DataGridView1.Rows(d).Cells(1).Value = "0x" + Convert.ToString((b1 Xor hex), 16).ToString.PadLeft(8, "0"c).ToUpper
-            Else
-                Dim f As Single = Convert.ToSingle(DataGridView1.Rows(d).Cells(3).Value.ToString)
-                Dim bit() As Byte = BitConverter.GetBytes(f)
-                Dim sb As New System.Text.StringBuilder()
-                Dim i As Integer = 3
-                While i >= 0
-                    sb.Append(Convert.ToString(bit(i), 16).PadLeft(2, "0"c))
-                    i -= 1
-                End While
-                Dim half As String = DataGridView1.Rows(d).Cells(1).Value.ToString.Substring(0, 6)
-                If check = "BINARY32" Then
-                    DataGridView1.Rows(d).Cells(1).Value = "0x" + sb.ToString.ToUpper
-                ElseIf check = "BINARY32(16bit)" Then
-                    DataGridView1.Rows(d).Cells(1).Value = half + sb.ToString.Substring(0, 4).ToUpper
-                ElseIf check = "BINARY16" Then
-                    Dim hf As String = sb.ToString
-                    hf = converthalffloat(hf)
-                    DataGridView1.Rows(d).Cells(1).Value = half & hf
+                mask = "-?\d{1,11}"
+                Dim r As New System.Text.RegularExpressions.Regex( _
+                 mask, _
+                            System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+                Dim v As System.Text.RegularExpressions.Match = r.Match(str)
+                If v.Success Then
+                    Dim dec As Integer = Convert.ToInt32(v.Value)
+                    If m.PSX = False Then
+                        DataGridView1.Rows(d).Cells(1).Value = "0x" + dec.ToString("X").PadLeft(8, "0"c).ToUpper
+                    Else
+                        DataGridView1.Rows(d).Cells(1).Value = dec.ToString("X").PadLeft(4, "0"c).ToUpper
+                    End If
                 End If
-            End If
+            ElseIf check = "OR" Then
+                mask = "0x[0-9a-fA-F]{1,8}"
+                Dim r As New System.Text.RegularExpressions.Regex(mask, System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+                Dim v As System.Text.RegularExpressions.Match = r.Match(str)
+                If v.Success Then
+                    Dim b1 As Int32 = Convert.ToInt32(DataGridView1.Rows(d).Cells(1).Value.ToString, 16)
+                    Dim hex As Int32 = Convert.ToInt32(v.Value, 16)
+                    If m.PSX = False Then
+                        DataGridView1.Rows(d).Cells(1).Value = "0x" + Convert.ToString((b1 Or hex), 16).PadLeft(8, "0"c).ToUpper
+                    Else
+                        DataGridView1.Rows(d).Cells(1).Value = Convert.ToString((b1 Or hex), 16).PadLeft(4, "0"c).ToUpper
+                    End If
+                End If
+            ElseIf check = "AND" Then
+                mask = "0x[0-9a-fA-F]{1,8}"
+                Dim r As New System.Text.RegularExpressions.Regex(mask, System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+                Dim v As System.Text.RegularExpressions.Match = r.Match(str)
+                If v.Success Then
+                    Dim b1 As Int32 = Convert.ToInt32(DataGridView1.Rows(d).Cells(1).Value.ToString, 16)
+                    Dim hex As Int32 = Convert.ToInt32(v.Value, 16)
+                    If m.PSX = False Then
+                        DataGridView1.Rows(d).Cells(1).Value = "0x" + Convert.ToString((b1 And hex), 16).ToString.PadLeft(8, "0"c).ToUpper
+                    Else
+                        DataGridView1.Rows(d).Cells(1).Value = Convert.ToString((b1 And hex), 16).ToString.PadLeft(4, "0"c).ToUpper
+                    End If
+                End If
+            ElseIf check = "XOR" Then
+                mask = "0x[0-9a-fA-F]{1,8}"
+                Dim r As New System.Text.RegularExpressions.Regex(mask, System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+                Dim v As System.Text.RegularExpressions.Match = r.Match(str)
+                If v.Success Then
+                    Dim b1 As Int32 = Convert.ToInt32(DataGridView1.Rows(d).Cells(1).Value.ToString, 16)
+                    Dim hex As Int32 = Convert.ToInt32(v.Value, 16)
+                    If m.PSX = False Then
+                        DataGridView1.Rows(d).Cells(1).Value = "0x" + Convert.ToString((b1 Xor hex), 16).ToString.PadLeft(8, "0"c).ToUpper
+                    Else
+                        DataGridView1.Rows(d).Cells(1).Value = Convert.ToString((b1 Xor hex), 16).ToString.PadLeft(4, "0"c).ToUpper
+                    End If
+                End If
+            Else
+                Dim r As New System.Text.RegularExpressions.Regex( _
+                 "-?\d+.?\d*", _
+                            System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+                Dim v As System.Text.RegularExpressions.Match = r.Match(str)
+                If v.Success Then
+                    Dim f As Single = Convert.ToSingle(v.Value)
+                    Dim bit() As Byte = BitConverter.GetBytes(f)
+                    Dim sb As New System.Text.StringBuilder()
+                    Dim i As Integer = 3
+                    While i >= 0
+                        sb.Append(Convert.ToString(bit(i), 16).PadLeft(2, "0"c))
+                        i -= 1
+                    End While
+                    Dim half As String = ""
+                    If check = "BINARY32" Then
+                        DataGridView1.Rows(d).Cells(1).Value = "0x" + sb.ToString.ToUpper
+                    ElseIf check = "BINARY32(16bit)" Then
+                        If m.PSX = False Then
+                            half = DataGridView1.Rows(d).Cells(1).Value.ToString.Substring(0, 6)
+                            DataGridView1.Rows(d).Cells(1).Value = half & sb.ToString.Substring(0, 4).ToUpper
+                        Else
+                            DataGridView1.Rows(d).Cells(1).Value = sb.ToString.Substring(0, 4).ToUpper
+                        End If
+                    ElseIf check = "BINARY16" Then
+                        Dim hf As String = sb.ToString
+                        hf = converthalffloat(hf)
+                        If m.PSX = False Then
+                            half = DataGridView1.Rows(d).Cells(1).Value.ToString.Substring(0, 6)
+                            DataGridView1.Rows(d).Cells(1).Value = half & hf
+                        Else
+                            DataGridView1.Rows(d).Cells(1).Value = hf
+                        End If
+                    End If
+                End If
+                End If
+                Dim gridtx As String = Nothing
+                Dim k As Integer = 0
+                While Not DataGridView1.Rows(k).Cells(0).Value Is Nothing
+                    gridtx &= DataGridView1.Rows(k).Cells(0).Value.ToString & " "
+                    gridtx &= DataGridView1.Rows(k).Cells(1).Value.ToString & vbCrLf
+                    k += 1
+                End While
+                m.cl_tb.Text = gridtx
+                m.changed.Text = "データグリッドでコードが変更されてます"
+
         End If
-        Dim gridtx As String = Nothing
-        Dim k As Integer = 0
-        While Not DataGridView1.Rows(k).Cells(0).Value Is Nothing
-            gridtx &= DataGridView1.Rows(k).Cells(0).Value.ToString & " "
-            gridtx &= DataGridView1.Rows(k).Cells(1).Value.ToString & vbCrLf
-            k += 1
-        End While
-        m.cl_tb.Text = gridtx
     End Sub
 
     'IEE754単精度浮動小数点binary32を半精度浮動小数点binary16に変換 Cから移植、VB.NET

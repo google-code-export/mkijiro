@@ -161,19 +161,19 @@ System.IO.FileAccess.Read)
         Dim k As Integer = 0
         While i < bs.Length - 5
             If bs(i) = &H42 AndAlso bs(i + 1) = &H75 AndAlso bs(i + 2) = &H69 AndAlso bs(i + 3) = &H6C AndAlso bs(i + 4) = &H64 Then
-                While i + k < bs.Length
-                    If bs(i + k) = &H0 Then
-                        Exit While
-                    End If
-                    k += 1
-                End While
-                Array.ConstrainedCopy(bs, i, str, 0, k)
+                'While i + k < bs.Length
+                '    If bs(i + k) = &H0 Then
+                '        Exit While
+                '    End If
+                '    k += 1
+                'End While
+                Array.ConstrainedCopy(bs, i, str, 0, 48)
                 Exit While
             End If
             i += 1
         End While
         Dim builddate As String = System.Text.Encoding.GetEncoding(932).GetString(str)
-        Return builddate.Replace(vbNullChar, "") & vbCrLf & "MD5;" & md5hash
+        Return builddate & vbCrLf & "MD5;" & md5hash
     End Function
 
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
@@ -317,7 +317,8 @@ System.IO.FileAccess.Read)
         Else
             trans = My.Resources.s9_e
         End If
-        TextBox1.Text &= getdate(Application.StartupPath & "\seplugins\TempAR\tempar.prx") & trans
+        Dim s As String = getdate(Application.StartupPath & "\seplugins\TempAR\tempar.prx")
+        TextBox1.Text &= s & trans
         System.Media.SystemSounds.Asterisk.Play()
     End Sub
 

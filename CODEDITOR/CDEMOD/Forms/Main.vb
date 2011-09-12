@@ -9,7 +9,6 @@ Imports System.Text.RegularExpressions
 Public Class MERGE
     Friend database As String = Nothing
     Friend loaded As Boolean = False
-    Friend saved As Boolean = False
     Friend PSX As Boolean = False
     Friend CODEFREAK As Boolean = False
     Dim enc1 As Integer = My.Settings.MSCODEPAGE
@@ -154,7 +153,6 @@ Public Class MERGE
             file_saveas.Enabled = True
             overwrite_db.Enabled = True
             overwrite_db.ToolTipText = "対象;" & database
-            saved = True
         End If
 
         If enc1 = 932 Then
@@ -178,6 +176,31 @@ Public Class MERGE
         codetree.Font = My.Settings.codetree
 
     End Sub
+
+    'BeforeLabelEditイベントハンドラ
+    'ツリーノードのラベルの編集が開始された時
+    Private Sub TreeView1_BeforeLabelEdit(ByVal sender As Object, _
+                                          ByVal e As NodeLabelEditEventArgs) Handles codetree.BeforeLabelEdit
+        'ルートのコードは編集できないようにする
+        If e.Node.Parent Is Nothing Then
+            e.CancelEdit = True
+        End If
+
+    End Sub
+
+    'AfterLabelEditイベントハンドラ
+    'ツリーノードのラベルの編集された時
+    Private Sub TreeView1_AfterLabelEdit(ByVal sender As Object, _
+                                         ByVal e As NodeLabelEditEventArgs) Handles codetree.AfterLabelEdit
+        'ラベルが変更されたか調べる
+        'e.LabelがNothingならば、変更されていない
+        If (e.Label = "") Then
+            e.CancelEdit = True
+        ElseIf (e.Label.Trim = "") Then
+            e.CancelEdit = True
+        End If
+    End Sub
+
 #End Region
 #Region "Menubar procedures"
 
@@ -186,6 +209,7 @@ Public Class MERGE
     Private Sub new_psp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles new_psp.Click
 
         resets_level1()
+        Dim ok As Boolean = False
 
         If loaded = False Then
             codetree.BeginUpdate()
@@ -194,26 +218,31 @@ Public Class MERGE
             codetree.Nodes.Add("新規データベース").ImageIndex = 0 ' Add the root node and set its icon
             codetree.EndUpdate()
             loaded = True
+            ok = True
         ElseIf MessageBox.Show("新規データベースを作成すると現在のデータベースが消えてしまいます。このまま新規データベースを作成してもよろしいですか？", "データベース保存の確認", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) = Windows.Forms.DialogResult.OK Then
             codetree.BeginUpdate()
             reset_PSP()
             codetree.Nodes.Clear()
             codetree.Nodes.Add("新規データベース").ImageIndex = 0 ' Add the root node and set its icon
             codetree.EndUpdate()
+            ok = True
         End If
-        file_saveas.Enabled = True
-        UTF16BECP1201ToolStripMenuItem.Enabled = False
-        saveas_codefreak.Enabled = False
-        PSX = False
-        saveas_cwcheat.Enabled = True
-        saveas_psx.Enabled = False
-        overwrite_db.Enabled = True
-        saved = False
+        If ok = True Then
+            file_saveas.Enabled = True
+            UTF16BECP1201ToolStripMenuItem.Enabled = False
+            saveas_codefreak.Enabled = False
+            PSX = False
+            saveas_cwcheat.Enabled = True
+            saveas_psx.Enabled = False
+            overwrite_db.Enabled = True
+        End If
     End Sub
 
     Private Sub new_psx_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles new_psx.Click
 
         resets_level1()
+        Dim ok As Boolean = False
+
         If loaded = False Then
             codetree.BeginUpdate()
             reset_PSX()
@@ -228,14 +257,15 @@ Public Class MERGE
             codetree.Nodes.Add("新規データベース").ImageIndex = 0 ' Add the root node and set its icon
             codetree.EndUpdate()
         End If
-        file_saveas.Enabled = True
-        UTF16BECP1201ToolStripMenuItem.Enabled = False
-        saveas_codefreak.Enabled = False
-        PSX = True
-        saveas_cwcheat.Enabled = False
-        saveas_psx.Enabled = True
-        overwrite_db.Enabled = True
-        saved = False
+        If ok = True Then
+            file_saveas.Enabled = True
+            UTF16BECP1201ToolStripMenuItem.Enabled = False
+            saveas_codefreak.Enabled = False
+            PSX = True
+            saveas_cwcheat.Enabled = False
+            saveas_psx.Enabled = True
+            overwrite_db.Enabled = True
+        End If
     End Sub
 
     Private Sub file_open_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles file_open.Click
@@ -307,7 +337,7 @@ Public Class MERGE
             If My.Settings.codepathwhensave = True Then
                 My.Settings.lastcodepath = database
             End If
-            saved = True
+
         End If
     End Sub
 
@@ -329,7 +359,7 @@ Public Class MERGE
             If My.Settings.codepathwhensave = True Then
                 My.Settings.lastcodepath = database
             End If
-            saved = True
+
             ' Reload the file
             'codetree.Nodes.Clear()
             'codetree.BeginUpdate()
@@ -366,7 +396,6 @@ Public Class MERGE
                 My.Settings.lastcodepath = database
             End If
 
-            saved = True
             ' Reload the file
             'codetree.Nodes.Clear()
             'codetree.BeginUpdate()
@@ -396,13 +425,12 @@ Public Class MERGE
 
             database = save_file.FileName
             s.save_cf(database, 1201)
-            overwrite_db.ToolTipText = "対象;" & database
 
-            saved = True
+            codetree.Nodes(0).Text = Path.GetFileNameWithoutExtension(database)
+            overwrite_db.ToolTipText = "対象;" & database
 
             If My.Settings.codepathwhensave = True Then
                 My.Settings.lastcodepath = database
-                codetree.Nodes(0).Text = Path.GetFileNameWithoutExtension(database)
             End If
 
             '' Reload the file
@@ -575,7 +603,6 @@ Public Class MERGE
     Function sort_game(ByVal mode As Integer) As Boolean
 
 
-        saved = False
         error_window.Visible = False
         codetree.BeginUpdate() ' This will stop the tree view from constantly drawing the changes while we sort the nodes
 
@@ -1244,7 +1271,6 @@ Public Class MERGE
             Next
             codetree.EndUpdate()
 
-            saved = False
         End If
         f.Dispose()
         cmt_tb.Text = backup
@@ -1283,7 +1309,6 @@ Public Class MERGE
         Next
         codetree.EndUpdate()
 
-        saved = False
     End Sub
 
     Public Function ConvANK(ByVal moto As String) As String
@@ -1320,8 +1345,6 @@ Public Class MERGE
             z = 0
         Next
         codetree.EndUpdate()
-
-        saved = False
     End Sub
 
 
@@ -1498,7 +1521,6 @@ Public Class MERGE
         End Try
 
 
-        saved = False
     End Sub
 
     Private Sub rem_game_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rem_game.Click
@@ -1516,7 +1538,6 @@ Public Class MERGE
                                 codetree.SelectedNode.Parent.Remove()
                         End Select
 
-                        saved = False
                     End If
 
             End Select
@@ -1567,7 +1588,6 @@ Public Class MERGE
 
         End Try
 
-        saved = False
     End Sub
 
     Private Sub rem_cd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rem_cd.Click
@@ -1588,7 +1608,6 @@ Public Class MERGE
 
         End Try
 
-        saved = False
     End Sub
 
     Private Sub save_gc_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles save_gc.Click
@@ -1617,7 +1636,6 @@ Public Class MERGE
 
         End Try
 
-        saved = False
     End Sub
 
     Private Sub save_cc_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles save_cc.Click
@@ -1748,7 +1766,6 @@ Public Class MERGE
 
         End Try
 
-        saved = False
     End Sub
 
     Private Sub ToolStripButton1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles move_up.Click
@@ -1787,7 +1804,6 @@ Public Class MERGE
 
         End Try
 
-        saved = False
     End Sub
 
     Private Sub ToolStripButton2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles move_down.Click
@@ -1826,7 +1842,6 @@ Public Class MERGE
 
         End Try
 
-        saved = False
     End Sub
 
     Private Sub ToolStripButton3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles merge_codes.Click
@@ -1903,7 +1918,7 @@ Public Class MERGE
         Catch ex As Exception
 
         End Try
-        saved = False
+
     End Sub
 
     Function merge_prevtreeview(ByVal z As Integer) As Boolean
@@ -1945,7 +1960,6 @@ Public Class MERGE
 
             End Try
 
-            saved = False
         End If
     End Sub
 
@@ -2139,7 +2153,6 @@ Public Class MERGE
                 End If
                 '追加されたNodeを選択
                 tv.SelectedNode = cln
-                saved = False
             Else
                 e.Effect = DragDropEffects.None
             End If

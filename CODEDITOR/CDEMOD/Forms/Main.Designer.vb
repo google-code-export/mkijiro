@@ -197,7 +197,7 @@ Partial Class MERGE
         Me.file_new.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.new_psp, Me.new_psx})
         Me.file_new.Image = Global.CWcheat_Database_Editor.My.Resources.Resources._new
         Me.file_new.Name = "file_new"
-        Me.file_new.Size = New System.Drawing.Size(144, 22)
+        Me.file_new.Size = New System.Drawing.Size(152, 22)
         Me.file_new.Text = "新規(&N)"
         '
         'new_psp
@@ -218,7 +218,7 @@ Partial Class MERGE
         '
         Me.file_open.Image = CType(resources.GetObject("file_open.Image"), System.Drawing.Image)
         Me.file_open.Name = "file_open"
-        Me.file_open.Size = New System.Drawing.Size(144, 22)
+        Me.file_open.Size = New System.Drawing.Size(152, 22)
         Me.file_open.Text = "開く(&O)"
         '
         'overwrite_db
@@ -226,16 +226,16 @@ Partial Class MERGE
         Me.overwrite_db.Enabled = False
         Me.overwrite_db.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.save
         Me.overwrite_db.Name = "overwrite_db"
-        Me.overwrite_db.Size = New System.Drawing.Size(144, 22)
+        Me.overwrite_db.Size = New System.Drawing.Size(152, 22)
         Me.overwrite_db.Text = "上書き保存(&W)"
         '
         'file_saveas
         '
         Me.file_saveas.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.saveas_cwcheat, Me.saveas_psx, Me.saveas_codefreak})
         Me.file_saveas.Enabled = False
-        Me.file_saveas.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.save
+        Me.file_saveas.Image = CType(resources.GetObject("file_saveas.Image"), System.Drawing.Image)
         Me.file_saveas.Name = "file_saveas"
-        Me.file_saveas.Size = New System.Drawing.Size(144, 22)
+        Me.file_saveas.Size = New System.Drawing.Size(152, 22)
         Me.file_saveas.Text = "...として保存(&S)"
         '
         'saveas_cwcheat
@@ -263,7 +263,7 @@ Partial Class MERGE
         '
         Me.file_exit.Image = CType(resources.GetObject("file_exit.Image"), System.Drawing.Image)
         Me.file_exit.Name = "file_exit"
-        Me.file_exit.Size = New System.Drawing.Size(144, 22)
+        Me.file_exit.Size = New System.Drawing.Size(152, 22)
         Me.file_exit.Text = "閉じる(&C)"
         '
         'menu_sort
@@ -309,6 +309,7 @@ Partial Class MERGE
         Me.gid_country.Name = "gid_country"
         Me.gid_country.Size = New System.Drawing.Size(154, 22)
         Me.gid_country.Text = "日→米→欧→他"
+        Me.gid_country.ToolTipText = "ゲームIDを判断基準にして国別に降順ソートします" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ID降順"
         '
         'name_sort
         '
@@ -345,6 +346,7 @@ Partial Class MERGE
         Me.gname_country.Name = "gname_country"
         Me.gname_country.Size = New System.Drawing.Size(154, 22)
         Me.gname_country.Text = "日→米→欧→他"
+        Me.gname_country.ToolTipText = "ゲームIDを判断基準にして国別にソートします" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "名前降順"
         '
         'codepage_select
         '
@@ -375,7 +377,7 @@ Partial Class MERGE
         Me.UTF16BECP1201ToolStripMenuItem.Name = "UTF16BECP1201ToolStripMenuItem"
         Me.UTF16BECP1201ToolStripMenuItem.Size = New System.Drawing.Size(166, 22)
         Me.UTF16BECP1201ToolStripMenuItem.Text = "UTF16BE(CP1201)"
-        Me.UTF16BECP1201ToolStripMenuItem.ToolTipText = "マルチバイトUTF16ビッグエンディアン" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "コードフリーク専用DBをTXTに戻します。"
+        Me.UTF16BECP1201ToolStripMenuItem.ToolTipText = "マルチバイトUTF16ビッグエンディアン" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "コードフリーク専用DBのみ対象"
         '
         'codetreeview
         '
@@ -593,7 +595,7 @@ Partial Class MERGE
         Me.options_error.Name = "options_error"
         Me.options_error.Size = New System.Drawing.Size(192, 22)
         Me.options_error.Text = "エラー画面を表示"
-        Me.options_error.ToolTipText = "起動時のエラー画面の表示の設定"
+        Me.options_error.ToolTipText = "エラー画面の表示の設定"
         '
         'ブラウザ変更ToolStripMenuItem
         '
@@ -715,8 +717,8 @@ Partial Class MERGE
         Me.grided_use.Name = "grided_use"
         Me.grided_use.Size = New System.Drawing.Size(192, 22)
         Me.grided_use.Text = "グリッド編集有効"
-        Me.grided_use.ToolTipText = "データグリッドでコードの値を編集します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "DEC；32bit10進数" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "OR；32bit論理和" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "AND；32bit論理積" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "XOR；32bit排他的論理和" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "B" & _
-            "INARY32；単精度浮動小数点数" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "BINARY32(16bit)；単精度浮動小数点数の16bit右シフト" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "BINARY16；半精度浮動小数点"
+        Me.grided_use.ToolTipText = "データグリッドでコードの値を編集可能にします" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "DEC；32bit10進数" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "OR；32bit論理和" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "AND；32bit論理積" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "XOR；32bit排他的論理和" & _
+            "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "BINARY32；単精度浮動小数点数" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "BINARY32(16bit)；単精度浮動小数点数の16bit右シフト" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "BINARY16；半精度浮動小数点"
         '
         'fixedform
         '
@@ -766,6 +768,7 @@ Partial Class MERGE
         Me.codetree.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.codetree.ImageIndex = 0
         Me.codetree.ImageList = Me.iconset
+        Me.codetree.LabelEdit = True
         Me.codetree.Location = New System.Drawing.Point(0, 104)
         Me.codetree.Name = "codetree"
         Me.codetree.SelectedImageIndex = 0
@@ -1099,7 +1102,7 @@ Partial Class MERGE
         Me.save_cc.Size = New System.Drawing.Size(74, 51)
         Me.save_cc.Text = "変更の保存"
         Me.save_cc.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.save_cc.ToolTipText = "コードの保存をします。クリックしないと保存されません"
+        Me.save_cc.ToolTipText = "コード内容の保存をします。クリックしないと保存されません"
         '
         'move_up
         '
