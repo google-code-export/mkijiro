@@ -7,6 +7,7 @@ Imports System.Net.Sockets
 
 Public Class Form1
 
+
     Private Sub form1load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Dim trans As String = ""
         '前回インストールしたｐｒｘ
@@ -267,7 +268,7 @@ System.IO.FileAccess.Read)
                     TextBox1.Text &= ReceiveData(ns)
                     SendData(ns, "PWD" & vbCrLf)
                     TextBox1.Text &= ReceiveData(ns)
-                    Dim prx As New FileStream(Application.StartupPath & temp(1), FileMode.Open, FileAccess.Read)
+                    Dim prx As New FileStream(Application.StartupPath & temp(0), FileMode.Open, FileAccess.Read)
                     Dim bs(CInt(prx.Length - 1)) As Byte
                     prx.Read(bs, 0, bs.Length)
                     prx.Close()
@@ -275,7 +276,7 @@ System.IO.FileAccess.Read)
                     data.Connect(host, p + q)
                     UpLoadStream = data.GetStream
                     'ばぐでるーといがいほｚんできんらしい？
-                    SendData(ns, "STOR tempar_lite.prx" & vbCrLf)
+                    SendData(ns, "STOR tempar.prx" & vbCrLf)
                     UpLoadStream.Write(bs, 0, bs.Length)
                     UpLoadStream.Close()
                     data.Close()
@@ -305,7 +306,6 @@ System.IO.FileAccess.Read)
                     Else
                         trans = My.Resources.s11_e
                     End If
-                    TextBox1.Text &= TextBox2.Text & trans & vbCrLf
                     TextBox1.Text &= trans & vbCrLf
                     System.Media.SystemSounds.Asterisk.Play()
                 Else
@@ -564,4 +564,21 @@ System.IO.FileAccess.Read)
         End If
     End Sub
 
+    Private Sub TextBox2_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox2.TextChanged
+        Dim trans As String = ""
+
+        Dim r As New Regex("^1(0|72|92)\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$")
+        Dim m As Match = r.Match(TextBox2.Text)
+        If m.Success Then
+
+        Else
+            'IP
+            If My.Application.Culture.Name = "ja-JP" Then
+                trans = My.Resources.s13
+            Else
+                trans = My.Resources.s13_e
+            End If
+            TextBox1.Text = trans
+        End If
+    End Sub
 End Class

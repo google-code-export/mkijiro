@@ -138,6 +138,18 @@
   <data name="s12_e" xml:space="preserve">
     <value>no response</value>
   </data>
+  <data name="s13" xml:space="preserve">
+    <value>有効なローカルアドレスを入力してください
+クラスA:10.0.0.0-10.255.255.255
+クラスB:172.16.0.0-172.31.255.255
+クラスC:192.168.0.0-192.168.255.255</value>
+  </data>
+  <data name="s13_e" xml:space="preserve">
+    <value>enter vaid local ipaddress
+classA:10.0.0.0-10.255.255.255
+classB:172.16.0.0-172.31.255.255
+classC:192.168.0.0-192.168.255.255</value>
+  </data>
   <data name="s1_e" xml:space="preserve">
     <value>last installed prx</value>
   </data>

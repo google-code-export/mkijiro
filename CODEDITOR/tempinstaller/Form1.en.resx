@@ -133,4 +133,7 @@
   <data name="CheckBox2.Text" xml:space="preserve">
     <value>only copy to this drive lettter</value>
   </data>
+  <data name="TextBox2.Text" xml:space="preserve">
+    <value>192.168.1.10</value>
+  </data>
 </root>

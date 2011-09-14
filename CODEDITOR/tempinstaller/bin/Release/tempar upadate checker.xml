@@ -47,6 +47,20 @@ temparupadatechecker
 	<summary>
   no response に類似しているローカライズされた文字列を検索します。
 </summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s13">
+	<summary>
+  有効なローカルアドレスを入力してください
+クラスA:10.0.0.0-10.255.255.255
+クラスB:172.16.0.0-172.31.255.255
+クラスC:192.168.0.0-192.168.255.255 に類似しているローカライズされた文字列を検索します。
+</summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s13_e">
+	<summary>
+  enter vaid local ipaddress
+classA:10.0.0.0-10.255.255.255
+classB:172.16.0.0-172.31.255.255
+classC:192.168.0.0-192.168.255.255 に類似しているローカライズされた文字列を検索します。
+</summary>
 </member><member name="P:temparchecker.My.Resources.Resources.s2">
 	<summary>
   PSPが見つかりました,temparのダウンロードを開始します に類似しているローカライズされた文字列を検索します。

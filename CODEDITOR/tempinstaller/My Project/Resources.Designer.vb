@@ -133,6 +133,30 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  有効なローカルアドレスを入力してください
+        '''クラスA:10.0.0.0-10.255.255.255
+        '''クラスB:172.16.0.0-172.31.255.255
+        '''クラスC:192.168.0.0-192.168.255.255 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property s13() As String
+            Get
+                Return ResourceManager.GetString("s13", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  enter vaid local ipaddress
+        '''classA:10.0.0.0-10.255.255.255
+        '''classB:172.16.0.0-172.31.255.255
+        '''classC:192.168.0.0-192.168.255.255 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property s13_e() As String
+            Get
+                Return ResourceManager.GetString("s13_e", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  PSPが見つかりました,temparのダウンロードを開始します に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property s2() As String
