@@ -240,8 +240,14 @@ System.IO.FileAccess.Read)
                     Dim tcp As New TcpClient(host, port)
 
                     'NetworkStreamを取得する
+                    Dim p As Integer = 0
+                    Dim q As Integer = 0
+                    Dim s As String = ""
+                    Dim sendp As String = ""
+
                     Dim ns As NetworkStream = tcp.GetStream
                     Dim UpLoadStream As NetworkStream
+                    Dim UpLoadStream2 As NetworkStream
 
                     SendData(ns, "PWD" & vbCrLf)
                     TextBox1.Text &= ReceiveData(ns)
@@ -254,17 +260,17 @@ System.IO.FileAccess.Read)
                     SendData(ns, "TYPE I" & vbCrLf)
                     'pasvのぽーとげと、あくてぃぶはPORTにかえるだけ
                     'http://www.java2s.com/Tutorial/VB/0400__Socket-Network/FtpClientinVBnet.htm
-                    Dim sendp As String = ReceiveData(ns).Replace(")", "")
-                    Dim p As Integer = sendp.LastIndexOf(",")
-                    Dim s = sendp.Substring(p + 1, sendp.Length - p - 1)
+                    sendp = ReceiveData(ns).Replace(")", "")
+                    TextBox1.Text &= sendp.Replace("(", "")
+                    p = sendp.LastIndexOf(",")
+                    s = sendp.Substring(p + 1, sendp.Length - p - 1)
                     sendp = sendp.Remove(p)
                     p = CInt(s)
-                    Dim q As Integer = sendp.LastIndexOf(",")
+                    q = sendp.LastIndexOf(",")
                     s = sendp.Substring(q + 1, sendp.Length - q - 1)
                     q = CInt(s) * 256
-                    TextBox1.Text &= ReceiveData(ns)
-                    'CWDないとかくじつに書きこむがよくわからんので不明
-                    SendData(ns, "CWD seplugins/TempAR" & vbCrLf)
+                    'ftpdのしようのためseplugins/tempar　は使えないっぽいのでるーと+TEMPARしかないっぽい
+                    SendData(ns, "CWD TempAR" & vbCrLf)
                     TextBox1.Text &= ReceiveData(ns)
                     SendData(ns, "PWD" & vbCrLf)
                     TextBox1.Text &= ReceiveData(ns)
@@ -275,22 +281,34 @@ System.IO.FileAccess.Read)
                     Dim data As New TcpClient()
                     data.Connect(host, p + q)
                     UpLoadStream = data.GetStream
-                    'ばぐでるーといがいほｚんできんらしい？
                     SendData(ns, "STOR tempar.prx" & vbCrLf)
                     UpLoadStream.Write(bs, 0, bs.Length)
                     UpLoadStream.Close()
                     data.Close()
-                    'Dim prx2 As New FileStream(Application.StartupPath & temp(1), FileMode.Open, FileAccess.Read)
-                    'Array.Resize(bs, CInt(prx2.Length - 1))
-                    'prx2.Read(bs, 0, bs.Length)
-                    'prx2.Close()
-                    'Dim data2 As New TcpClient()
-                    'data2.Connect(host, p + q)
-                    'UpLoadStream = data2.GetStream
-                    'SendData(ns, "STOR tempar_lite.prx" & vbCrLf)
-                    'UpLoadStream.Write(bs, 0, bs.Length)
-                    'UpLoadStream.Close()
-                    'data2.Close()
+                    TextBox1.Text &= ReceiveData(ns)
+                    TextBox1.Text &= ReceiveData(ns)
+                    SendData(ns, "PASV" & vbCrLf)
+                    TextBox1.Text &= ReceiveData(ns)
+                    sendp = ReceiveData(ns).Replace(")", "")
+                    TextBox1.Text &= sendp.Replace("(", "")
+                    p = sendp.LastIndexOf(",")
+                    s = sendp.Substring(p + 1, sendp.Length - p - 1)
+                    sendp = sendp.Remove(p)
+                    p = CInt(s)
+                    q = sendp.LastIndexOf(",")
+                    s = sendp.Substring(q + 1, sendp.Length - q - 1)
+                    q = CInt(s) * 256
+                    Dim prx2 As New FileStream(Application.StartupPath & temp(1), FileMode.Open, FileAccess.Read)
+                    Array.Resize(bs, CInt(prx2.Length - 1))
+                    prx2.Read(bs, 0, bs.Length)
+                    prx2.Close()
+                    Dim data2 As New TcpClient()
+                    data2.Connect(host, p + q)
+                    UpLoadStream2 = data2.GetStream
+                    SendData(ns, "STOR tempar_lite.prx" & vbCrLf)
+                    UpLoadStream2.Write(bs, 0, bs.Length)
+                    UpLoadStream2.Close()
+                    data.Close()
                     SendData(ns, "PWD" & vbCrLf)
                     TextBox1.Text &= ReceiveData(ns)
                     SendData(ns, "QUIT" + vbCrLf)
