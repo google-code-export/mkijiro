@@ -23,6 +23,30 @@ temparupadatechecker
 	<summary>
   last installed prx に類似しているローカライズされた文字列を検索します。
 </summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s10">
+	<summary>
+  から応答がありました、送信を開始します に類似しているローカライズされた文字列を検索します。
+</summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s10_e">
+	<summary>
+  good response,ftp started に類似しているローカライズされた文字列を検索します。
+</summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s11">
+	<summary>
+  アップロードが完了しました に類似しているローカライズされた文字列を検索します。
+</summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s11_e">
+	<summary>
+  done,upload completed に類似しているローカライズされた文字列を検索します。
+</summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s12">
+	<summary>
+  から応答がありませんでした に類似しているローカライズされた文字列を検索します。
+</summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s12_e">
+	<summary>
+  no response に類似しているローカライズされた文字列を検索します。
+</summary>
 </member><member name="P:temparchecker.My.Resources.Resources.s2">
 	<summary>
   PSPが見つかりました,temparのダウンロードを開始します に類似しているローカライズされた文字列を検索します。

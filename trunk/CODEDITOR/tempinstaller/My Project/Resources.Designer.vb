@@ -79,6 +79,60 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  から応答がありました、送信を開始します に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property s10() As String
+            Get
+                Return ResourceManager.GetString("s10", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  good response,ftp started に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property s10_e() As String
+            Get
+                Return ResourceManager.GetString("s10_e", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  アップロードが完了しました に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property s11() As String
+            Get
+                Return ResourceManager.GetString("s11", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  done,upload completed に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property s11_e() As String
+            Get
+                Return ResourceManager.GetString("s11_e", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  から応答がありませんでした に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property s12() As String
+            Get
+                Return ResourceManager.GetString("s12", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  no response に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property s12_e() As String
+            Get
+                Return ResourceManager.GetString("s12_e", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  PSPが見つかりました,temparのダウンロードを開始します に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property s2() As String

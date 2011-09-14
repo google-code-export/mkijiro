@@ -142,4 +142,10 @@
   <data name="CheckBox2.Text" xml:space="preserve">
     <value>転送先のドライブレターを固定</value>
   </data>
+  <data name="CheckBox3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>102, 16</value>
+  </data>
+  <data name="CheckBox3.Text" xml:space="preserve">
+    <value>PSPFTPDを使う</value>
+  </data>
 </root>
