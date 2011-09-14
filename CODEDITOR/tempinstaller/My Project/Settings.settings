@@ -20,5 +20,11 @@
     <Setting Name="Setting" Type="System.String" Scope="User">
       <Value Profile="(Default)">日本語</Value>
     </Setting>
+    <Setting Name="pspipaddress" Type="System.String" Scope="User">
+      <Value Profile="(Default)">192.168.1.10</Value>
+    </Setting>
+    <Setting Name="useftp" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

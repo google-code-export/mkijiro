@@ -120,6 +120,24 @@
   <data name="s1" xml:space="preserve">
     <value>前回インストールしたｐｒｘ</value>
   </data>
+  <data name="s10" xml:space="preserve">
+    <value>から応答がありました、送信を開始します</value>
+  </data>
+  <data name="s10_e" xml:space="preserve">
+    <value>good response,ftp started</value>
+  </data>
+  <data name="s11" xml:space="preserve">
+    <value>アップロードが完了しました</value>
+  </data>
+  <data name="s11_e" xml:space="preserve">
+    <value>done,upload completed</value>
+  </data>
+  <data name="s12" xml:space="preserve">
+    <value>から応答がありませんでした</value>
+  </data>
+  <data name="s12_e" xml:space="preserve">
+    <value>no response</value>
+  </data>
   <data name="s1_e" xml:space="preserve">
     <value>last installed prx</value>
   </data>

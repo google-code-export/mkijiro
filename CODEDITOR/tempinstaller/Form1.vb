@@ -1,11 +1,11 @@
 ﻿Imports System.IO
+Imports System.Text
 Imports System.Text.RegularExpressions
 Imports System.Globalization
 Imports System.Threading
+Imports System.Net.Sockets
 
 Public Class Form1
-
-    Friend Shared trans(9) As String
 
     Private Sub form1load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Dim trans As String = ""
@@ -20,14 +20,32 @@ Public Class Form1
         Else
             RadioButton2.Checked = True
         End If
+
+        TextBox2.Text = My.Settings.pspipaddress
         TextBox1.Text = trans & vbCrLf & My.Settings.lastprx
-        CheckBox1.Checked = My.Settings.lang
         DomainUpDown1.Text = My.Settings.drivepath
+        CheckBox1.Checked = My.Settings.lang
         CheckBox2.Checked = My.Settings.drivelock
+        CheckBox3.Checked = My.Settings.useftp
+
+        If CheckBox2.Checked = True Then
+            DomainUpDown1.ReadOnly = True
+            If DomainUpDown1.Text = "D:" Then
+                TextBox2.Enabled = True
+                CheckBox3.Enabled = True
+            End If
+        End If
         Me.FormBorderStyle = FormBorderStyle.FixedToolWindow
 
     End Sub
 
+
+    Private Sub MainForm_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+
+        My.Settings.pspipaddress = TextBox2.Text
+        My.Settings.drivepath = DomainUpDown1.Text
+
+    End Sub
 
     Function getweb(ByVal filename3 As String, ByVal url As String) As Boolean
 
@@ -161,19 +179,19 @@ System.IO.FileAccess.Read)
         Dim k As Integer = 0
         While i < bs.Length - 5
             If bs(i) = &H42 AndAlso bs(i + 1) = &H75 AndAlso bs(i + 2) = &H69 AndAlso bs(i + 3) = &H6C AndAlso bs(i + 4) = &H64 Then
-                'While i + k < bs.Length
-                '    If bs(i + k) = &H0 Then
-                '        Exit While
-                '    End If
-                '    k += 1
-                'End While
-                Array.ConstrainedCopy(bs, i, str, 0, 48)
+                While i + k < bs.Length
+                    If bs(i + k) = &H0 Then
+                        Exit While
+                    End If
+                    k += 1
+                End While
+                Array.ConstrainedCopy(bs, i, str, 0, k)
                 Exit While
             End If
             i += 1
         End While
-        Dim builddate As String = System.Text.Encoding.GetEncoding(932).GetString(str)
-        Return builddate & vbCrLf & "MD5;" & md5hash
+        Dim builddate As String = System.Text.Encoding.GetEncoding(0).GetString(str)
+        Return builddate.Replace(vbNullChar, "") & vbCrLf & "MD5;" & md5hash
     End Function
 
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
@@ -183,7 +201,121 @@ System.IO.FileAccess.Read)
             Dim installpath As String = findpsp()
             Dim temp() As String = {"\seplugins\TempAR\tempar.prx", "\seplugins\TempAR\tempar_lite.prx", "\seplugins\TempAR\tempar_autooff.prx"}
             Dim builddate As String = Nothing
-            If installpath <> "" Then
+
+            'サーバーのホスト名とポート番号
+            Dim host As String = TextBox2.Text
+            Dim port As Integer = 21
+
+            If CheckBox3.Checked = True Then
+                'Pingオブジェクトの作成
+                Dim ping As New System.Net.NetworkInformation.Ping()
+                Dim reply As System.Net.NetworkInformation.PingReply = ping.Send(host)
+
+                '結果を取得
+                If reply.Status = System.Net.NetworkInformation.IPStatus.Success Then
+                    Dim fileName As String = "tmp.zip"
+                    getweb(fileName, My.Settings.tempar)
+                    unzip(fileName)
+                    builddate = getdate(Application.StartupPath & temp(0))
+                    '"から応答がありました、送信を開始します"
+                    If My.Application.Culture.Name = "ja-JP" Then
+                        trans = My.Resources.s10
+                    Else
+                        trans = My.Resources.s10_e
+                    End If
+                    TextBox1.Text &= TextBox2.Text & trans & vbCrLf
+
+                    'をPSPにコピーしています...
+                    If My.Application.Culture.Name = "ja-JP" Then
+                        trans = My.Resources.s3
+                    Else
+                        trans = My.Resources.s3_e
+                    End If
+
+                    TextBox1.Text &= "TEMPAR " & builddate & trans & vbCrLf
+
+                    'http://dobon.net/vb/dotnet/internet/receivepop3mail.html
+                    'TcpClientを作成し、サーバーと接続する
+                    Dim tcp As New TcpClient(host, port)
+
+                    'NetworkStreamを取得する
+                    Dim ns As NetworkStream = tcp.GetStream
+                    Dim UpLoadStream As NetworkStream
+
+                    SendData(ns, "PWD" & vbCrLf)
+                    TextBox1.Text &= ReceiveData(ns)
+                    SendData(ns, "USER " & "anonymous" & vbCrLf)
+                    TextBox1.Text &= ReceiveData(ns)
+                    SendData(ns, "PASS " & "anonymous" & vbCrLf)
+                    TextBox1.Text &= ReceiveData(ns)
+                    SendData(ns, "PASV" & vbCrLf)
+                    TextBox1.Text &= ReceiveData(ns)
+                    SendData(ns, "TYPE I" & vbCrLf)
+                    'pasvのぽーとげと、あくてぃぶはPORTにかえるだけ
+                    'http://www.java2s.com/Tutorial/VB/0400__Socket-Network/FtpClientinVBnet.htm
+                    Dim sendp As String = ReceiveData(ns).Replace(")", "")
+                    Dim p As Integer = sendp.LastIndexOf(",")
+                    Dim s = sendp.Substring(p + 1, sendp.Length - p - 1)
+                    sendp = sendp.Remove(p)
+                    p = CInt(s)
+                    Dim q As Integer = sendp.LastIndexOf(",")
+                    s = sendp.Substring(q + 1, sendp.Length - q - 1)
+                    q = CInt(s) * 256
+                    TextBox1.Text &= ReceiveData(ns)
+                    'CWDないとかくじつに書きこむがよくわからんので不明
+                    SendData(ns, "CWD seplugins/TempAR" & vbCrLf)
+                    TextBox1.Text &= ReceiveData(ns)
+                    SendData(ns, "PWD" & vbCrLf)
+                    TextBox1.Text &= ReceiveData(ns)
+                    Dim prx As New FileStream(Application.StartupPath & temp(1), FileMode.Open, FileAccess.Read)
+                    Dim bs(CInt(prx.Length - 1)) As Byte
+                    prx.Read(bs, 0, bs.Length)
+                    prx.Close()
+                    Dim data As New TcpClient()
+                    data.Connect(host, p + q)
+                    UpLoadStream = data.GetStream
+                    'ばぐでるーといがいほｚんできんらしい？
+                    SendData(ns, "STOR tempar_lite.prx" & vbCrLf)
+                    UpLoadStream.Write(bs, 0, bs.Length)
+                    UpLoadStream.Close()
+                    data.Close()
+                    'Dim prx2 As New FileStream(Application.StartupPath & temp(1), FileMode.Open, FileAccess.Read)
+                    'Array.Resize(bs, CInt(prx2.Length - 1))
+                    'prx2.Read(bs, 0, bs.Length)
+                    'prx2.Close()
+                    'Dim data2 As New TcpClient()
+                    'data2.Connect(host, p + q)
+                    'UpLoadStream = data2.GetStream
+                    'SendData(ns, "STOR tempar_lite.prx" & vbCrLf)
+                    'UpLoadStream.Write(bs, 0, bs.Length)
+                    'UpLoadStream.Close()
+                    'data2.Close()
+                    SendData(ns, "PWD" & vbCrLf)
+                    TextBox1.Text &= ReceiveData(ns)
+                    SendData(ns, "QUIT" + vbCrLf)
+                    ns.Close()
+                    tcp.Close()
+
+                    My.Settings.lastprx = builddate
+
+
+                    '"アップロードが完了しました"
+                    If My.Application.Culture.Name = "ja-JP" Then
+                        trans = My.Resources.s11
+                    Else
+                        trans = My.Resources.s11_e
+                    End If
+                    TextBox1.Text &= TextBox2.Text & trans & vbCrLf
+                    TextBox1.Text &= trans & vbCrLf
+                    System.Media.SystemSounds.Asterisk.Play()
+                Else
+                    TextBox1.Text = TextBox2.Text & "からの応答がありません" & vbCrLf
+                    System.Media.SystemSounds.Exclamation.Play()
+                End If
+
+                ping.Dispose()
+
+            ElseIf installpath <> "" Then
                 'PSPが見つかりました,temparのダウンロードを開始します
                 If My.Application.Culture.Name = "ja-JP" Then
                     trans = My.Resources.s2
@@ -195,6 +327,7 @@ System.IO.FileAccess.Read)
                 getweb(fileName, My.Settings.tempar)
                 unzip(fileName)
                 builddate = getdate(Application.StartupPath & temp(0))
+
                 'をPSPにコピーしています...
                 If My.Application.Culture.Name = "ja-JP" Then
                     trans = My.Resources.s3
@@ -247,17 +380,86 @@ System.IO.FileAccess.Read)
                 End If
                 TextBox1.Text &= trans
                 ProgressBar1.Value = 0
+                System.Media.SystemSounds.Exclamation.Play()
             End If
-        Else
-            '"インターネットに接続されてません"
-            If My.Application.Culture.Name = "ja-JP" Then
-                trans = My.Resources.s8
             Else
-                trans = My.Resources.s8_e
+                '"インターネットに接続されてません"
+                If My.Application.Culture.Name = "ja-JP" Then
+                    trans = My.Resources.s8
+                Else
+                    trans = My.Resources.s8_e
+                End If
+                TextBox1.Text = trans
+                ProgressBar1.Value = 0
+
+                System.Media.SystemSounds.Exclamation.Play()
             End If
-            TextBox1.Text = trans
-            ProgressBar1.Value = 0
+    End Sub
+
+    Private Overloads Shared Function ReceiveData( _
+        ByVal stream As NetworkStream, _
+        ByVal multiLines As Boolean, _
+        ByVal bufferSize As Integer, _
+        ByVal enc As Encoding) As String
+        Dim data(bufferSize - 1) As Byte
+        Dim len As Integer = 0
+        Dim msg As String = ""
+        Dim ms As New System.IO.MemoryStream
+
+        'すべて受信する
+        '(無限ループに陥る恐れあり)
+        Do
+            '受信
+            len = stream.Read(data, 0, data.Length)
+            ms.Write(data, 0, len)
+            '文字列に変換する
+            msg = enc.GetString(ms.ToArray())
+        Loop While stream.DataAvailable OrElse _
+            ((Not multiLines OrElse msg.StartsWith("-ERR")) AndAlso _
+                Not msg.EndsWith(vbCrLf)) OrElse _
+            (multiLines AndAlso Not msg.EndsWith(vbCrLf + "." + vbCrLf))
+
+        ms.Close()
+
+        '"-ERR"を受け取った時は例外をスロー
+        If msg.StartsWith("-ERR") Then
+            Throw New ApplicationException("Received Error")
         End If
+
+        Return msg
+    End Function
+    Private Overloads Shared Function ReceiveData( _
+            ByVal stream As NetworkStream, _
+            ByVal multiLines As Boolean, _
+            ByVal bufferSize As Integer) As String
+        Return ReceiveData(stream, multiLines, bufferSize, _
+            Encoding.GetEncoding(0))
+    End Function
+    Private Overloads Shared Function ReceiveData( _
+            ByVal stream As NetworkStream, _
+            ByVal multiLines As Boolean) As String
+        Return ReceiveData(stream, multiLines, 256)
+    End Function
+
+    Private Overloads Shared Function ReceiveData( _
+            ByVal stream As NetworkStream) As String
+        Return ReceiveData(stream, False)
+    End Function
+
+    Private Overloads Shared Sub SendData( _
+        ByVal stream As NetworkStream, _
+        ByVal msg As String, _
+        ByVal enc As Encoding)
+        'byte型配列に変換
+        Dim data As Byte() = enc.GetBytes(msg)
+        '送信
+        stream.Write(data, 0, data.Length)
+    End Sub
+
+    Private Overloads Shared Sub SendData( _
+            ByVal stream As NetworkStream, _
+            ByVal msg As String)
+        SendData(stream, msg, Encoding.ASCII)
     End Sub
 
     Function findpsp() As String
@@ -269,7 +471,7 @@ System.IO.FileAccess.Read)
             PSP = PSP.Insert(0, Chr(driveletter))
             driveletter += 1
             If CheckBox2.Checked = True Then
-                    PSP = DomainUpDown1.Text & "\PSP"
+                PSP = DomainUpDown1.Text & "\PSP"
             Else
                 DomainUpDown1.Text = PSP.Substring(0, 2)
             End If
@@ -327,18 +529,35 @@ System.IO.FileAccess.Read)
 
     Private Sub CheckBox2_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox2.CheckedChanged
 
-        My.Settings.drivepath = DomainUpDown1.Text
         If CheckBox2.Checked = True Then
             DomainUpDown1.ReadOnly = True
             My.Settings.drivelock = True
+
+            If DomainUpDown1.Text = "D:" Then
+                TextBox2.Enabled = True
+                CheckBox3.Enabled = True
+            End If
         Else
             DomainUpDown1.ReadOnly = False
             My.Settings.drivelock = False
         End If
+
+
+    End Sub
+
+    Private Sub CheckBox3_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox3.CheckedChanged
+
+        If CheckBox3.Checked = True Then
+            My.Settings.useftp = True
+        Else
+            My.Settings.useftp = False
+        End If
+
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox1.CheckedChanged
-        If CheckBox1.Checked = True Then
+
+        If CheckBox3.Checked = True Then
             My.Settings.lang = True
         Else
             My.Settings.lang = False
