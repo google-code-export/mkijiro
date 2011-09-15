@@ -125,7 +125,7 @@
     <value>update language file</value>
   </data>
   <data name="DomainUpDown1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>188, 103</value>
+    <value>194, 129</value>
   </data>
   <data name="CheckBox2.Size" type="System.Drawing.Size, System.Drawing">
     <value>174, 16</value>
@@ -133,7 +133,17 @@
   <data name="CheckBox2.Text" xml:space="preserve">
     <value>only copy to this drive lettter</value>
   </data>
-  <data name="TextBox2.Text" xml:space="preserve">
-    <value>192.168.1.10</value>
+  <data name="customdir.ToolTipText" xml:space="preserve">
+    <value>change install path via USB/FTP
+path should be absolute path and unix-like
+USB：
+ms0:/seplugins/TempAR/tempar.prx　game.txt decription
+↓
+/seplugins/TempAR　remove ms0,/tempar.prx
+
+FTP(note:PSPFPTD seemed to support single dir excect certain PSP model.only worked PSP4gmodel double dir)：
+ms0:/TempAR/tempar.prx　game.txt　decription
+↓
+/TempAR　remove ms0,/tempar.prx </value>
   </data>
 </root>

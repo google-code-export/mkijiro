@@ -116,18 +116,6 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("日本語")>  _
-        Public Property Setting() As String
-            Get
-                Return CType(Me("Setting"),String)
-            End Get
-            Set
-                Me("Setting") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("192.168.1.10")>  _
         Public Property pspipaddress() As String
             Get
@@ -147,6 +135,30 @@ Namespace My
             End Get
             Set
                 Me("useftp") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("/seplugins/TempAR")>  _
+        Public Property usbpath() As String
+            Get
+                Return CType(Me("usbpath"),String)
+            End Get
+            Set
+                Me("usbpath") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("/TempAR")>  _
+        Public Property ftppath() As String
+            Get
+                Return CType(Me("ftppath"),String)
+            End Get
+            Set
+                Me("ftppath") = value
             End Set
         End Property
     End Class
