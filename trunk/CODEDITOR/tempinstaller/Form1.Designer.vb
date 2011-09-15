@@ -37,7 +37,14 @@ Partial Class Form1
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
+        Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
+        Me.tool = New System.Windows.Forms.ToolStripMenuItem()
+        Me.customdir = New System.Windows.Forms.ToolStripMenuItem()
+        Me.help = New System.Windows.Forms.ToolStripMenuItem()
+        Me.toolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
+        Me.verinfo = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox1.SuspendLayout()
+        Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'Button1
@@ -76,9 +83,9 @@ Partial Class Form1
         '
         'GroupBox1
         '
+        resources.ApplyResources(Me.GroupBox1, "GroupBox1")
         Me.GroupBox1.Controls.Add(Me.RadioButton2)
         Me.GroupBox1.Controls.Add(Me.RadioButton1)
-        resources.ApplyResources(Me.GroupBox1, "GroupBox1")
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.TabStop = False
         '
@@ -143,10 +150,45 @@ Partial Class Form1
         resources.ApplyResources(Me.TextBox2, "TextBox2")
         Me.TextBox2.Name = "TextBox2"
         '
+        'MenuStrip1
+        '
+        resources.ApplyResources(Me.MenuStrip1, "MenuStrip1")
+        Me.MenuStrip1.BackColor = System.Drawing.SystemColors.MenuBar
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tool, Me.help})
+        Me.MenuStrip1.Name = "MenuStrip1"
+        '
+        'tool
+        '
+        resources.ApplyResources(Me.tool, "tool")
+        Me.tool.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.customdir})
+        Me.tool.Name = "tool"
+        '
+        'customdir
+        '
+        resources.ApplyResources(Me.customdir, "customdir")
+        Me.customdir.Name = "customdir"
+        '
+        'help
+        '
+        resources.ApplyResources(Me.help, "help")
+        Me.help.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.toolStripSeparator5, Me.verinfo})
+        Me.help.Name = "help"
+        '
+        'toolStripSeparator5
+        '
+        resources.ApplyResources(Me.toolStripSeparator5, "toolStripSeparator5")
+        Me.toolStripSeparator5.Name = "toolStripSeparator5"
+        '
+        'verinfo
+        '
+        resources.ApplyResources(Me.verinfo, "verinfo")
+        Me.verinfo.Name = "verinfo"
+        '
         'Form1
         '
         resources.ApplyResources(Me, "$this")
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.BackColor = System.Drawing.SystemColors.Control
         Me.Controls.Add(Me.TextBox2)
         Me.Controls.Add(Me.CheckBox3)
         Me.Controls.Add(Me.ProgressBar1)
@@ -159,9 +201,13 @@ Partial Class Form1
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.TextBox1)
         Me.Controls.Add(Me.Button1)
+        Me.Controls.Add(Me.MenuStrip1)
+        Me.MainMenuStrip = Me.MenuStrip1
         Me.Name = "Form1"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        Me.MenuStrip1.ResumeLayout(False)
+        Me.MenuStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -180,5 +226,11 @@ Partial Class Form1
     Friend WithEvents ProgressBar1 As System.Windows.Forms.ProgressBar
     Friend WithEvents CheckBox3 As System.Windows.Forms.CheckBox
     Friend WithEvents TextBox2 As System.Windows.Forms.TextBox
+    Friend WithEvents tool As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents customdir As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents help As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents toolStripSeparator5 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents verinfo As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
 
 End Class

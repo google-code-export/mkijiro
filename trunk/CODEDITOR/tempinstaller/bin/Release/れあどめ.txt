@@ -3,8 +3,22 @@ PSPをUSBでつないでぼたんをおすだけです。
 更新対象はtempar.prxとおぷしょんでランゲージファイルのみ。
 
 更新履歴
+2011/9/16
+ばーじょんといんすとぱす伊次郎を追加、FTPは特定の本体以外1階層までしか使えないので注意
+game.txtからms0:と/tempar.prxをぬいたやつでおｋ
+ms0:/seplugins/TempAR/tempar.prx
+↓
+/seplugins/TempAR
+
+0階層=MSのルート
+/
+1階層(USB/FTP可能)
+/TempAR
+2階層～(FTPほぼ不可,USBのみ？FTPでもPSP3000-4gモデルだと問題ないらしい)
+/seplugins/TempAR
+
 2011/9/15
-FTPDは2回層以上できないらしいのでFTPの場合はms0:/TempARフォルダに転送するよう変更
+FTPDは2階層目以降のディレクトリに転送できないらしいのでFTPの場合はms0:/TempARフォルダに転送するよう変更
 
 2011/9/14-1
 くらすｂは172だったので修正

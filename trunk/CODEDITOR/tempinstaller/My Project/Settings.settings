@@ -17,14 +17,17 @@
     <Setting Name="drivepath" Type="System.String" Scope="User">
       <Value Profile="(Default)">D:</Value>
     </Setting>
-    <Setting Name="Setting" Type="System.String" Scope="User">
-      <Value Profile="(Default)">日本語</Value>
-    </Setting>
     <Setting Name="pspipaddress" Type="System.String" Scope="User">
       <Value Profile="(Default)">192.168.1.10</Value>
     </Setting>
     <Setting Name="useftp" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="usbpath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">/seplugins/TempAR</Value>
+    </Setting>
+    <Setting Name="ftppath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">/TempAR</Value>
     </Setting>
   </Settings>
 </SettingsFile>

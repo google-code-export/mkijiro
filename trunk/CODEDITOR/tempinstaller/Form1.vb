@@ -29,13 +29,6 @@ Public Class Form1
         CheckBox2.Checked = My.Settings.drivelock
         CheckBox3.Checked = My.Settings.useftp
 
-        If CheckBox2.Checked = True Then
-            DomainUpDown1.ReadOnly = True
-            If DomainUpDown1.Text = "D:" Then
-                TextBox2.Enabled = True
-                CheckBox3.Enabled = True
-            End If
-        End If
         Me.FormBorderStyle = FormBorderStyle.FixedToolWindow
 
     End Sub
@@ -244,6 +237,7 @@ System.IO.FileAccess.Read)
                     Dim q As Integer = 0
                     Dim s As String = ""
                     Dim sendp As String = ""
+                    Dim ftpdir As String = My.Settings.ftppath.Replace("\", "/")
 
                     Dim ns As NetworkStream = tcp.GetStream
                     Dim UpLoadStream As NetworkStream
@@ -270,7 +264,7 @@ System.IO.FileAccess.Read)
                     s = sendp.Substring(q + 1, sendp.Length - q - 1)
                     q = CInt(s) * 256
                     'ftpdのしようのためseplugins/tempar　は使えないっぽいのでるーと+TEMPARしかないっぽい
-                    SendData(ns, "CWD TempAR" & vbCrLf)
+                    SendData(ns, "CWD " & ftpdir & vbCrLf)
                     TextBox1.Text &= ReceiveData(ns)
                     SendData(ns, "PWD" & vbCrLf)
                     TextBox1.Text &= ReceiveData(ns)
@@ -309,9 +303,9 @@ System.IO.FileAccess.Read)
                     UpLoadStream2.Write(bs, 0, bs.Length)
                     UpLoadStream2.Close()
                     data.Close()
-                    SendData(ns, "PWD" & vbCrLf)
                     TextBox1.Text &= ReceiveData(ns)
                     SendData(ns, "QUIT" + vbCrLf)
+                    TextBox1.Text &= ReceiveData(ns)
                     ns.Close()
                     tcp.Close()
 
@@ -354,10 +348,10 @@ System.IO.FileAccess.Read)
                 End If
                 TextBox1.Text &= "TEMPAR " & builddate & trans & vbCrLf
                 For i = 0 To 1
-                    File.Copy(Application.StartupPath & temp(i), installpath & temp(i), True)
+                    File.Copy(Application.StartupPath & temp(i), installpath & My.Settings.usbpath & temp(i).Replace("\seplugins\TempAR", ""), True)
                 Next
                 If My.Settings.tempar.Contains("1.62") Then
-                    File.Copy(Application.StartupPath & temp(2), installpath & temp(2), True)
+                    File.Copy(Application.StartupPath & temp(2), installpath & My.Settings.usbpath & temp(2).Replace("\seplugins\TempAR", ""), True)
                 End If
                 If My.Settings.tempar.Contains("1.63") AndAlso CheckBox1.Checked = True Then
                     '"ランゲージファイルをコピーしています"
@@ -367,9 +361,10 @@ System.IO.FileAccess.Read)
                         trans = My.Resources.s4_e
                     End If
                     TextBox1.Text &= trans & vbCrLf
-                    Dim temptxt As String = "\seplugins\TempAR\languages\language"
+                    Dim temptxt As String = My.Settings.usbpath & "\languages\language"
+                    temptxt = temptxt.Replace("/", "\")
                     For k = 1 To 2
-                        File.Copy(Application.StartupPath & temptxt & k.ToString & ".bin", installpath & temptxt & k.ToString & ".bin", True)
+                        File.Copy(Application.StartupPath & "\seplugins\TempAR\languages\language" & k.ToString & ".bin", installpath & temptxt & k.ToString & ".bin", True)
                     Next
                 End If
                 '"インストールが完了しました"
@@ -379,6 +374,7 @@ System.IO.FileAccess.Read)
                     trans = My.Resources.s5_e
                 End If
                 TextBox1.Text &= trans
+                TextBox1.SelectionStart = TextBox1.Text.Length
                 My.Settings.lastprx = builddate
                 System.Media.SystemSounds.Asterisk.Play()
             Else
@@ -495,14 +491,13 @@ System.IO.FileAccess.Read)
             End If
             If My.Computer.FileSystem.DirectoryExists(PSP) AndAlso File.Exists(PSP.Substring(0, 2) & "MEMSTICK.IND") Then
                 PSP = PSP.Substring(0, 2)
-                If Not File.Exists(PSP & "\seplugins") Then
-                    System.IO.Directory.CreateDirectory(PSP & "\seplugins")
+                Dim prxpath As String = My.Settings.usbpath.Replace("/", "\")
+                Dim langpath As String = prxpath & "\languages"
+                If Not File.Exists(PSP & prxpath) Then
+                    System.IO.Directory.CreateDirectory(PSP & prxpath)
                 End If
-                If Not File.Exists(PSP & "\seplugins\TempAR") Then
-                    System.IO.Directory.CreateDirectory(PSP & "\seplugins\TempAR")
-                End If
-                If CheckBox1.Checked = True AndAlso File.Exists(PSP & "\seplugins\TempAR\languages") Then
-                    System.IO.Directory.CreateDirectory(PSP & "\seplugins\TempAR\languages")
+                If CheckBox1.Checked = True AndAlso Not File.Exists(PSP & langpath) Then
+                    System.IO.Directory.CreateDirectory(PSP & langpath)
                 End If
 
                 My.Settings.drivepath = PSP
@@ -550,11 +545,6 @@ System.IO.FileAccess.Read)
         If CheckBox2.Checked = True Then
             DomainUpDown1.ReadOnly = True
             My.Settings.drivelock = True
-
-            If DomainUpDown1.Text = "D:" Then
-                TextBox2.Enabled = True
-                CheckBox3.Enabled = True
-            End If
         Else
             DomainUpDown1.ReadOnly = False
             My.Settings.drivelock = False
@@ -598,5 +588,21 @@ System.IO.FileAccess.Read)
             End If
             TextBox1.Text = trans
         End If
+    End Sub
+
+    Private Sub カスタマイズCToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles customdir.Click
+        Dim c As New Form2
+        c.ShowDialog()
+        c.Dispose()
+    End Sub
+
+    Private Sub verinfo_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles verinfo.Click
+        Dim v As New Form3
+        v.ShowDialog()
+        v.Dispose()
+    End Sub
+
+    Private Sub MenuStrip1_ItemClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ToolStripItemClickedEventArgs) Handles MenuStrip1.ItemClicked
+
     End Sub
 End Class
