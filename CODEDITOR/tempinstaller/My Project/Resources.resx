@@ -133,10 +133,10 @@
     <value>done,upload completed</value>
   </data>
   <data name="s12" xml:space="preserve">
-    <value>から応答がありませんでした</value>
+    <value>から応答がありませんでした、FTPデーモンではありません</value>
   </data>
   <data name="s12_e" xml:space="preserve">
-    <value>no response</value>
+    <value>no response,not FTP daemon</value>
   </data>
   <data name="s13" xml:space="preserve">
     <value>有効なローカルアドレスを入力してください
