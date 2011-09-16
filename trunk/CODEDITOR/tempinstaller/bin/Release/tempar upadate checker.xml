@@ -41,11 +41,11 @@ temparupadatechecker
 </summary>
 </member><member name="P:temparchecker.My.Resources.Resources.s12">
 	<summary>
-  から応答がありませんでした に類似しているローカライズされた文字列を検索します。
+  から応答がありませんでした、FTPデーモンではありません に類似しているローカライズされた文字列を検索します。
 </summary>
 </member><member name="P:temparchecker.My.Resources.Resources.s12_e">
 	<summary>
-  no response に類似しているローカライズされた文字列を検索します。
+  no response,not FTP daemon に類似しているローカライズされた文字列を検索します。
 </summary>
 </member><member name="P:temparchecker.My.Resources.Resources.s13">
 	<summary>

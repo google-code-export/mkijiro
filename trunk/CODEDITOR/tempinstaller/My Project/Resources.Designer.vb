@@ -115,7 +115,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  から応答がありませんでした に類似しているローカライズされた文字列を検索します。
+        '''  から応答がありませんでした、FTPデーモンではありません に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property s12() As String
             Get
@@ -124,7 +124,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  no response に類似しているローカライズされた文字列を検索します。
+        '''  no response,not FTP daemon に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property s12_e() As String
             Get

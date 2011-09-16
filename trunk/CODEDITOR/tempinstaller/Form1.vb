@@ -201,131 +201,83 @@ System.IO.FileAccess.Read)
             Dim port As Integer = 21
 
             If CheckBox3.Checked = True Then
-                'Pingオブジェクトの作成
-                Dim ping As New System.Net.NetworkInformation.Ping()
-                Dim reply As System.Net.NetworkInformation.PingReply = ping.Send(host)
-
-                '結果を取得
-                If reply.Status = System.Net.NetworkInformation.IPStatus.Success Then
-                    Dim fileName As String = "tmp.zip"
-                    getweb(fileName, My.Settings.tempar)
-                    unzip(fileName)
-                    builddate = getdate(Application.StartupPath & temp(0))
-                    '"から応答がありました、送信を開始します"
-                    If My.Application.Culture.Name = "ja-JP" Then
-                        trans = My.Resources.s10
-                    Else
-                        trans = My.Resources.s10_e
-                    End If
-                    TextBox1.Text &= TextBox2.Text & trans & vbCrLf
-
-                    'をPSPにコピーしています...
-                    If My.Application.Culture.Name = "ja-JP" Then
-                        trans = My.Resources.s3
-                    Else
-                        trans = My.Resources.s3_e
-                    End If
-
-                    TextBox1.Text &= "TEMPAR " & builddate & trans & vbCrLf
-
                     'http://dobon.net/vb/dotnet/internet/receivepop3mail.html
                     'TcpClientを作成し、サーバーと接続する
                     Dim tcp As New TcpClient(host, port)
-
-                    'NetworkStreamを取得する
-                    Dim p As Integer = 0
-                    Dim q As Integer = 0
-                    Dim s As String = ""
-                    Dim sendp As String = ""
-                    Dim ftpdir As String = My.Settings.ftppath.Replace("\", "/")
-
                     Dim ns As NetworkStream = tcp.GetStream
-                    Dim UpLoadStream As NetworkStream
-                    Dim UpLoadStream2 As NetworkStream
+                    'NetworkStreamを取得する
+                    Dim ftpdir As String = My.Settings.ftppath.Replace("\", "/")
+                    '待ち時間
+                    Thread.Sleep(100)
 
-                    SendData(ns, "PWD" & vbCrLf)
-                    TextBox1.Text &= ReceiveData(ns)
-                    SendData(ns, "USER " & "anonymous" & vbCrLf)
-                    TextBox1.Text &= ReceiveData(ns)
-                    SendData(ns, "PASS " & "anonymous" & vbCrLf)
-                    TextBox1.Text &= ReceiveData(ns)
-                    SendData(ns, "PASV" & vbCrLf)
-                    TextBox1.Text &= ReceiveData(ns)
-                    SendData(ns, "TYPE I" & vbCrLf)
-                    'pasvのぽーとげと、あくてぃぶはPORTにかえるだけ
-                    'http://www.java2s.com/Tutorial/VB/0400__Socket-Network/FtpClientinVBnet.htm
-                    sendp = ReceiveData(ns).Replace(")", "")
-                    TextBox1.Text &= sendp.Replace("(", "")
-                    p = sendp.LastIndexOf(",")
-                    s = sendp.Substring(p + 1, sendp.Length - p - 1)
-                    sendp = sendp.Remove(p)
-                    p = CInt(s)
-                    q = sendp.LastIndexOf(",")
-                    s = sendp.Substring(q + 1, sendp.Length - q - 1)
-                    q = CInt(s) * 256
-                    'ftpdのしようのためseplugins/tempar　は使えないっぽいのでるーと+TEMPARしかないっぽい
-                    SendData(ns, "CWD " & ftpdir & vbCrLf)
-                    TextBox1.Text &= ReceiveData(ns)
-                    SendData(ns, "PWD" & vbCrLf)
-                    TextBox1.Text &= ReceiveData(ns)
-                    Dim prx As New FileStream(Application.StartupPath & temp(0), FileMode.Open, FileAccess.Read)
-                    Dim bs(CInt(prx.Length - 1)) As Byte
-                    prx.Read(bs, 0, bs.Length)
-                    prx.Close()
-                    Dim data As New TcpClient()
-                    data.Connect(host, p + q)
-                    UpLoadStream = data.GetStream
-                    SendData(ns, "STOR tempar.prx" & vbCrLf)
-                    UpLoadStream.Write(bs, 0, bs.Length)
-                    UpLoadStream.Close()
-                    data.Close()
-                    TextBox1.Text &= ReceiveData(ns)
-                    TextBox1.Text &= ReceiveData(ns)
-                    SendData(ns, "PASV" & vbCrLf)
-                    TextBox1.Text &= ReceiveData(ns)
-                    sendp = ReceiveData(ns).Replace(")", "")
-                    TextBox1.Text &= sendp.Replace("(", "")
-                    p = sendp.LastIndexOf(",")
-                    s = sendp.Substring(p + 1, sendp.Length - p - 1)
-                    sendp = sendp.Remove(p)
-                    p = CInt(s)
-                    q = sendp.LastIndexOf(",")
-                    s = sendp.Substring(q + 1, sendp.Length - q - 1)
-                    q = CInt(s) * 256
-                    Dim prx2 As New FileStream(Application.StartupPath & temp(1), FileMode.Open, FileAccess.Read)
-                    Array.Resize(bs, CInt(prx2.Length - 1))
-                    prx2.Read(bs, 0, bs.Length)
-                    prx2.Close()
-                    Dim data2 As New TcpClient()
-                    data2.Connect(host, p + q)
-                    UpLoadStream2 = data2.GetStream
-                    SendData(ns, "STOR tempar_lite.prx" & vbCrLf)
-                    UpLoadStream2.Write(bs, 0, bs.Length)
-                    UpLoadStream2.Close()
-                    data.Close()
-                    TextBox1.Text &= ReceiveData(ns)
-                    SendData(ns, "QUIT" + vbCrLf)
-                    TextBox1.Text &= ReceiveData(ns)
-                    ns.Close()
-                    tcp.Close()
+                    If ns.DataAvailable = True Then
+                        Dim fileName As String = "tmp.zip"
+                        getweb(fileName, My.Settings.tempar)
+                        unzip(fileName)
+                        builddate = getdate(Application.StartupPath & temp(0))
+                        '"から応答がありました、送信を開始します"
+                        If My.Application.Culture.Name = "ja-JP" Then
+                            trans = My.Resources.s10
+                        Else
+                            trans = My.Resources.s10_e
+                        End If
+                        TextBox1.Text &= TextBox2.Text & trans & vbCrLf
 
-                    My.Settings.lastprx = builddate
+                        'をPSPにコピーしています...
+                        If My.Application.Culture.Name = "ja-JP" Then
+                            trans = My.Resources.s3
+                        Else
+                            trans = My.Resources.s3_e
+                        End If
+
+                        TextBox1.Text &= "TEMPAR " & builddate & trans & vbCrLf
 
 
-                    '"アップロードが完了しました"
-                    If My.Application.Culture.Name = "ja-JP" Then
-                        trans = My.Resources.s11
+                        TextBox1.Text &= ReceiveData(ns)
+                        SendData(ns, "PWD" & vbCrLf)
+                        TextBox1.Text &= ReceiveData(ns)
+                        SendData(ns, "USER " & "anonymous" & vbCrLf)
+                        TextBox1.Text &= ReceiveData(ns)
+                        SendData(ns, "PASS " & "anonymous" & vbCrLf)
+                        TextBox1.Text &= ReceiveData(ns)
+                        SendData(ns, "CWD " & ftpdir & vbCrLf)
+                        TextBox1.Text &= ReceiveData(ns)
+                        SendData(ns, "PWD" & vbCrLf)
+                        TextBox1.Text &= ReceiveData(ns)
+                        SendData(ns, "TYPE I" & vbCrLf)
+                        TextBox1.Text &= ReceiveData(ns)
+
+                        upload(ns, temp(0))
+                        upload(ns, temp(1))
+                        If RadioButton1.Checked = True Then
+                            upload(ns, temp(2))
+                        End If
+
+                        SendData(ns, "QUIT" + vbCrLf)
+                        ns.Close()
+                        tcp.Close()
+                        My.Settings.lastprx = builddate
+
+                        '"アップロードが完了しました"
+                        If My.Application.Culture.Name = "ja-JP" Then
+                            trans = My.Resources.s11
+                        Else
+                            trans = My.Resources.s11_e
+                        End If
+                        TextBox1.Text &= trans & vbCrLf
+                        System.Media.SystemSounds.Asterisk.Play()
                     Else
-                        trans = My.Resources.s11_e
+                        ns.Close()
+                        tcp.Close()
+                        'デーモンじゃない
+                        If My.Application.Culture.Name = "ja-JP" Then
+                            trans = My.Resources.s12
+                        Else
+                            trans = My.Resources.s12_e
+                        End If
+                        TextBox1.Text = TextBox2.Text & trans & vbCrLf
+                        System.Media.SystemSounds.Exclamation.Play()
                     End If
-                    TextBox1.Text &= trans & vbCrLf
-                    System.Media.SystemSounds.Asterisk.Play()
-                Else
-                    TextBox1.Text = TextBox2.Text & "からの応答がありません" & vbCrLf
-                    System.Media.SystemSounds.Exclamation.Play()
-                End If
-
-                ping.Dispose()
 
             ElseIf installpath <> "" Then
                 'PSPが見つかりました,temparのダウンロードを開始します
@@ -374,7 +326,6 @@ System.IO.FileAccess.Read)
                     trans = My.Resources.s5_e
                 End If
                 TextBox1.Text &= trans
-                TextBox1.SelectionStart = TextBox1.Text.Length
                 My.Settings.lastprx = builddate
                 System.Media.SystemSounds.Asterisk.Play()
             Else
@@ -409,6 +360,46 @@ System.IO.FileAccess.Read)
                 System.Media.SystemSounds.Exclamation.Play()
             End If
     End Sub
+
+    Function upload(ByVal ns As NetworkStream, ByVal tmpath As String) As Boolean
+        Dim sendp As String = ""
+        Dim host As String = TextBox2.Text
+        Dim p As Integer = 0
+        Dim q As Integer = 0
+        Dim s As String = ""
+        Dim inst As Integer = tmpath.LastIndexOf("\") + 1
+        Dim prxname As String = tmpath.Substring(inst, tmpath.Length - inst)
+        Dim UpLoadStream As NetworkStream
+
+        SendData(ns, "PASV" & vbCrLf)
+        'pasvのぽーとげと、あくてぃぶはPORTにかえるだけ
+        'http://www.java2s.com/Tutorial/VB/0400__Socket-Network/FtpClientinVBnet.htm
+        sendp = ReceiveData(ns).Replace(")", "")
+        TextBox1.Text &= sendp.Replace("(", "")
+        p = sendp.LastIndexOf(",")
+        s = sendp.Substring(p + 1, sendp.Length - p - 1)
+        sendp = sendp.Remove(p)
+        p = CInt(s)
+        q = sendp.LastIndexOf(",")
+        s = sendp.Substring(q + 1, sendp.Length - q - 1)
+        q = CInt(s) * 256
+        'ftpdのしようのためseplugins/tempar　は使えないっぽいのでるーと+TEMPARしかないっぽい
+        Dim prx As New FileStream(Application.StartupPath & tmpath, FileMode.Open, FileAccess.Read)
+        Dim bs(CInt(prx.Length - 1)) As Byte
+        prx.Read(bs, 0, bs.Length)
+        prx.Close()
+        Dim data As New TcpClient()
+        data.Connect(host, p + q)
+        UpLoadStream = data.GetStream
+        SendData(ns, "STOR " & prxname & vbCrLf)
+        TextBox1.Text &= ReceiveData(ns)
+        UpLoadStream.Write(bs, 0, bs.Length)
+        UpLoadStream.Close()
+        data.Close()
+        TextBox1.Text &= ReceiveData(ns)
+
+        Return True
+    End Function
 
     Private Overloads Shared Function ReceiveData( _
         ByVal stream As NetworkStream, _
@@ -602,7 +593,4 @@ System.IO.FileAccess.Read)
         v.Dispose()
     End Sub
 
-    Private Sub MenuStrip1_ItemClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ToolStripItemClickedEventArgs) Handles MenuStrip1.ItemClicked
-
-    End Sub
 End Class

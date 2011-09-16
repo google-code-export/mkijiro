@@ -34,18 +34,18 @@ Partial Class Form3
         Me.Label1.AutoSize = True
         Me.Label1.Location = New System.Drawing.Point(12, 9)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(141, 12)
+        Me.Label1.Size = New System.Drawing.Size(135, 12)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = "TempAR Update Cheacker"
+        Me.Label1.Text = "TempAR Update Checker"
         '
         'Label2
         '
         Me.Label2.AutoSize = True
         Me.Label2.Location = New System.Drawing.Point(12, 30)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(80, 12)
+        Me.Label2.Size = New System.Drawing.Size(91, 12)
         Me.Label2.TabIndex = 1
-        Me.Label2.Text = "made by （ﾟ∀ﾟ)"
+        Me.Label2.Text = "created by （ﾟ∀ﾟ)"
         '
         'Label3
         '
@@ -73,7 +73,7 @@ Partial Class Form3
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(124, 12)
         Me.Label4.TabIndex = 4
-        Me.Label4.Text = "BUILD:2011/09/16 6:59"
+        Me.Label4.Text = "BUILD:2011/09/17 5:37"
         '
         'Form3
         '

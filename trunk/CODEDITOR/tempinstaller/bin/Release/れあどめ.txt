@@ -1,8 +1,14 @@
 temparのnightlybuild1.63beta版を主に更新するやつです。
 PSPをUSBでつないでぼたんをおすだけです。
 更新対象はtempar.prxとおぷしょんでランゲージファイルのみ。
+PSPFTPDとPSPWIFITRANSFERのFTP送信も一応対応。
 
 更新履歴
+2011/9/17
+PING廃止してデーモンかどうかチェックをDataAvailable=trueに変更
+待ち時間0だと反応できないため一応Thread.Sleep(100)にすた
+FTPでの1.62autoff.prxいんすこが抜けたので追加
+
 2011/9/16
 ばーじょんといんすとぱす伊次郎を追加、FTPは特定の本体以外1階層までしか使えないので注意
 game.txtからms0:と/tempar.prxをぬいたやつでおｋ
