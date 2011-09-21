@@ -41,11 +41,11 @@ struct BitmapHeader
 
 int write_8888_data(void *frame, int pixel_data)
 {
-  int line; /*uint8_t*/
+  int line=0; /*uint8_t*/
   char lineOutput=0;
   uint8_t *p;
-  int i;
-  int h;
+  int i=0;
+  int h=0;
 
   line = pixel_data;
   for(h = 271; h >= 0; h--)
@@ -66,11 +66,11 @@ int write_8888_data(void *frame, int pixel_data)
 
 int write_5551_data(void *frame, int pixel_data)
 {
-  int line; /*uint8_t*/
+  int line=0; /*uint8_t*/
   char lineOutput=0;
   uint16_t *p;
-  int i;
-  int h;
+  int i=0;
+  int h=0;
 
   line = pixel_data;
   for(h = 271; h >= 0; h--)
@@ -92,11 +92,11 @@ int write_5551_data(void *frame, int pixel_data)
 
 int write_565_data(void *frame, int pixel_data)
 {
-  int line; /*uint8_t*/
+  int line=0; /*uint8_t*/
   char lineOutput=0;
   uint16_t *p;
-  int i;
-  int h;
+  int i=0;
+  int h=0;
 
   line = pixel_data;
   for(h = 271; h >= 0; h--)
@@ -118,11 +118,11 @@ int write_565_data(void *frame, int pixel_data)
 
 int write_4444_data(void *frame, int pixel_data)
 {
-  int line; /*uint8_t*/
+  int line=0; /*uint8_t*/
   char lineOutput=0;
   uint16_t *p;
-  int i;
-  int h;
+  int i=0;
+  int h=0;
 
   line=pixel_data;
   for(h = 271; h >= 0; h--)

@@ -230,12 +230,12 @@ Public Class MERGE
             ok = True
         End If
         If ok = True Then
-            file_saveas.Enabled = True
             UTF16BECP1201ToolStripMenuItem.Enabled = False
             saveas_codefreak.Enabled = False
             PSX = False
             saveas_cwcheat.Enabled = True
             saveas_psx.Enabled = False
+            file_saveas.Enabled = True
             overwrite_db.Enabled = True
         End If
     End Sub
@@ -601,169 +601,34 @@ Public Class MERGE
 #End Region
 
 #Region "Sort procedures"
-    'さんぷるどおりだとうごくがなぜかうまくいかないので代替関数
-    Function sort_game(ByVal mode As Integer) As Boolean
-
-
-        error_window.Visible = False
-        codetree.BeginUpdate() ' This will stop the tree view from constantly drawing the changes while we sort the nodes
-
-        Dim z As Integer = codetree.Nodes(0).Nodes.Count
-        Dim i As Integer = 0
-        Dim b1 As String = Nothing
-        Dim b2 As String = Nothing
-        Dim b3 As String = Nothing
-        Dim s(z) As String
-        Dim jp(z) As String
-        Dim us(z) As String
-        Dim eu(z) As String
-        Dim hb(z) As String
-        Dim c As Integer = 0
-        Dim d As Integer = 0
-        Dim e As Integer = 0
-        Dim f As Integer = 0
-        For Each n As TreeNode In codetree.Nodes(0).Nodes
-            If (mode And 2) = 2 Then
-                b1 = n.Name
-            Else
-                b1 = n.Tag.ToString
-            End If
-            Dim sb As New System.Text.StringBuilder()
-            b2 = n.Index.ToString
-            If mode = 8 Then
-                b3 = n.Name
-                sb.Append(b3)
-            Else
-                sb.Append(b1)
-            End If
-            sb.Append(" ,")
-            sb.Append(b2)
-            If mode >= 4 Then
-                If b1.Contains("J") AndAlso PSX = False Then
-                    jp(c) = sb.ToString
-                    c += 1
-                ElseIf b1.Contains("P") AndAlso PSX = True Then
-                    jp(c) = sb.ToString
-                    c += 1
-                ElseIf b1.Contains("US") Then
-                    us(d) = sb.ToString
-                    d += 1
-                ElseIf b1.Contains("ES") Then
-                    eu(e) = sb.ToString
-                    e += 1
-                ElseIf b1.Contains("HB") Then
-                    hb(f) = sb.ToString
-                    f += 1
-                Else
-                    s(i) = sb.ToString
-                    i += 1
-                End If
-            Else
-                s(i) = sb.ToString
-                i += 1
-            End If
-        Next
-        If mode >= 4 Then
-            Array.Resize(jp, c)
-            Array.Resize(us, d)
-            Array.Resize(eu, e)
-            Array.Resize(hb, f)
-            Array.Resize(s, i)
-            Array.Sort(jp)
-            Array.Sort(us)
-            Array.Sort(eu)
-            Array.Sort(hb)
-            Array.Sort(s)
-            Dim mergedArray As String() = jp.Union(us).ToArray()
-            mergedArray = mergedArray.Union(eu).ToArray()
-            mergedArray = mergedArray.Union(s).ToArray()
-            mergedArray = mergedArray.Union(hb).ToArray()
-            Array.Resize(s, z + 1)
-            Array.Copy(mergedArray, 0, s, 1, z)
-        Else
-            Array.Sort(s)
-        End If
-        Dim j As Integer = 1
-        Dim k As Integer = 0
-        Dim y As Integer = 0
-        Dim commaindex As Integer = 0
-        Dim ss As String
-        Dim dbtrim As String = Path.GetFileNameWithoutExtension(database)
-        codetree.Nodes.Add(dbtrim & "_sort")
-        If (mode And 1) = 0 Then
-            While k < z
-                commaindex = s(j).LastIndexOf(",") + 1
-                ss = s(j).Substring(commaindex, s(j).Length - commaindex)
-                y = CInt(ss)
-                Dim cln As TreeNode = CType(codetree.Nodes(0).Nodes(y).Clone(), TreeNode)
-                codetree.Nodes(1).Nodes.Add(cln)
-                k += 1
-                j += 1
-            End While
-        ElseIf (mode And 1) = 1 Then
-            j = z
-            While k < z
-                commaindex = s(j).LastIndexOf(",") + 1
-                ss = s(j).Substring(commaindex, s(j).Length - commaindex)
-                y = CInt(ss)
-                Dim cln As TreeNode = CType(codetree.Nodes(0).Nodes(y).Clone(), TreeNode)
-                codetree.Nodes(1).Nodes.Add(cln)
-                k += 1
-                j -= 1
-            End While
-        End If
-        codetree.Nodes(0).Remove()
-        If codetree.Nodes.Count >= 1 Then
-            codetree.Nodes(0).Expand()
-        End If
-
-        codetree.EndUpdate() ' Update the changes made to the tree view.
-
-        If options_error.Checked = True Then
-            error_window.Visible = True
-        End If
-
-        Return True
-    End Function
-
     Private Sub GID昇順(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Sort_GID１.Click
-
-        'http://msdn.microsoft.com/ja-jp/library/system.windows.forms.treeview.treeviewnodesorter.aspx
-        'codetree.TreeViewNodeSorter = New GID_sort
-        'codetree.TreeViewNodeSorter = New GID_sort
-        sort_game(0)
-
+        Dim s As New sort
+        s.sort_game(0)
     End Sub
 
     Private Sub GID降順(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Sort_GID2.Click
-        'codetree.TreeViewNodeSorter = New GID_sortz
-        'codetree.TreeViewNodeSorter = New GID_sortz
-        sort_game(1)
+        Dim s As New sort
+        s.sort_game(1)
     End Sub
 
     Private Sub 国別ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles gid_country.Click
-        sort_game(4)
+        Dim s As New sort
+        s.sort_game(4)
     End Sub
 
     Private Sub 国別gnameToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles gname_country.Click
-        sort_game(8)
+        Dim s As New sort
+        s.sort_game(8)
     End Sub
-
 
     Private Sub Sort_GTitle1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Sort_GTitle1.Click
-
-        'codetree.TreeViewNodeSorter = New G_Title_sort
-        'codetree.TreeViewNodeSorter = New G_Title_sort
-        sort_game(2)
-
+        Dim s As New sort
+        s.sort_game(2)
     End Sub
 
-    Private Sub Sort_CTitle2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Sort_GTitle2.Click
-
-        'codetree.TreeViewNodeSorter = New G_Title_sortz
-        'codetree.TreeViewNodeSorter = New G_Title_sortz
-        sort_game(3)
-
+    Private Sub Sort_CTitle2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Sort_GTitle2.Click        
+        Dim s As New sort
+        s.sort_game(3)
     End Sub
 
 #End Region
@@ -927,7 +792,7 @@ Public Class MERGE
         ofd.InitialDirectory = "C:\Program Files"
         ofd.Filter = _
     "EXEファイル(*.exe)|*.exe"
-        ofd.Title = "ブラウザのEXEを選んでください"
+        ofd.Title = "2CHブラウザのEXEを選んでください"
         If ofd.ShowDialog() = DialogResult.OK Then
             'OKボタンがクリックされたとき
             '選択されたファイル名を表示する
@@ -986,7 +851,7 @@ Public Class MERGE
         ofd.InitialDirectory = "C:\Program Files"
         ofd.Filter = _
     "EXEファイル(*.exe)|*.exe"
-        ofd.Title = "ブラウザのEXEを選んでください"
+        ofd.Title = "EXEを選んでください"
         If ofd.ShowDialog() = DialogResult.OK Then
             'OKボタンがクリックされたとき
             '選択されたファイル名を表示する
@@ -1000,7 +865,7 @@ Public Class MERGE
         ofd.InitialDirectory = "C:\Program Files"
         ofd.Filter = _
     "EXEファイル(*.exe)|*.exe"
-        ofd.Title = "ブラウザのEXEを選んでください"
+        ofd.Title = "EXEを選んでください"
         If ofd.ShowDialog() = DialogResult.OK Then
             'OKボタンがクリックされたとき
             '選択されたファイル名を表示する
@@ -1014,7 +879,7 @@ Public Class MERGE
         ofd.InitialDirectory = "C:\Program Files"
         ofd.Filter = _
     "EXEファイル(*.exe)|*.exe"
-        ofd.Title = "ブラウザのEXEを選んでください"
+        ofd.Title = "EXEを選んでください"
         If ofd.ShowDialog() = DialogResult.OK Then
             'OKボタンがクリックされたとき
             '選択されたファイル名を表示する
@@ -1026,7 +891,6 @@ Public Class MERGE
 
     Function exename(ByVal path As String) As String
         Dim root As Integer = path.LastIndexOf("\") + 1
-
         Dim str As String = path.Substring(root, path.Length - root)
 
         Return str.Replace(".exe", "")
@@ -1273,6 +1137,9 @@ Public Class MERGE
             Next
             codetree.EndUpdate()
 
+            file_saveas.Enabled = True
+            overwrite_db.Enabled = True
+
         End If
         f.Dispose()
         cmt_tb.Text = backup
@@ -1518,6 +1385,10 @@ Public Class MERGE
             codetree.SelectedNode = newgame
             GT_tb.Enabled = True
             GT_tb.Text = "新規ゲーム"
+
+            file_saveas.Enabled = True
+            overwrite_db.Enabled = True
+
         Catch ex As Exception
 
         End Try
@@ -1720,24 +1591,7 @@ Public Class MERGE
                 codetree.SelectedNode.Name = codetree.SelectedNode.Name.Replace("_C1 ", "")
                 codetree.SelectedNode.Text = codetree.SelectedNode.Text.Replace("_C1 ", "")
                 CT_tb.Text = codetree.SelectedNode.Name
-                'For Each s As String In b2
 
-                '    If s <> vbCrLf Then
-                '        If i = 0 Then
-                '            If off_rd.Checked = True Then
-                '                buffer = "0" & vbCrLf
-                '            Else
-                '                buffer = "1" & vbCrLf
-                '            End If
-                '            i += 1
-                '        End If
-
-                '        If i > 0 And s.Length > 2 Then
-                '            buffer &= s.Trim & vbCrLf
-                '        End If
-                '    End If
-
-                'Next
                 If b5 <> Nothing Then
                     Dim b3 As String() = b5.Split(CChar(vbLf))
                     For Each s As String In b3
@@ -1952,7 +1806,7 @@ Public Class MERGE
                     End If
                 ElseIf codetree.SelectedNode.Level = 2 Then
 
-                    If MessageBox.Show("選択されたコードを削除しますか?", "削除の確認", MessageBoxButtons.OKCancel, _
+                    If MessageBox.Show("選択しているコードを削除しますか?", "削除の確認", MessageBoxButtons.OKCancel, _
                        MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
                         codetree.SelectedNode.Remove()
                     End If
