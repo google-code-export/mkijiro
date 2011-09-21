@@ -281,7 +281,6 @@ Partial Class MERGE
         Me.sort_GID.Name = "sort_GID"
         Me.sort_GID.Size = New System.Drawing.Size(152, 22)
         Me.sort_GID.Text = "ゲームID"
-        Me.sort_GID.ToolTipText = "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ゲームIDでのソート"
         '
         'Sort_GID１
         '
@@ -318,7 +317,6 @@ Partial Class MERGE
         Me.name_sort.Name = "name_sort"
         Me.name_sort.Size = New System.Drawing.Size(152, 22)
         Me.name_sort.Text = "ゲーム名"
-        Me.name_sort.ToolTipText = "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ゲーム名でのソート"
         '
         'Sort_GTitle1
         '
@@ -751,13 +749,13 @@ Partial Class MERGE
         'オンラインヘルプToolStripMenuItem
         '
         Me.オンラインヘルプToolStripMenuItem.Name = "オンラインヘルプToolStripMenuItem"
-        Me.オンラインヘルプToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.オンラインヘルプToolStripMenuItem.Size = New System.Drawing.Size(143, 22)
         Me.オンラインヘルプToolStripMenuItem.Text = "オンラインヘルプ"
         '
         'バージョン情報ToolStripMenuItem
         '
         Me.バージョン情報ToolStripMenuItem.Name = "バージョン情報ToolStripMenuItem"
-        Me.バージョン情報ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.バージョン情報ToolStripMenuItem.Size = New System.Drawing.Size(143, 22)
         Me.バージョン情報ToolStripMenuItem.Text = "バージョン情報"
         '
         'codetree
