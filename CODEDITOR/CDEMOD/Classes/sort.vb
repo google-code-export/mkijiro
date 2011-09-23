@@ -26,7 +26,7 @@ Class sort
         Dim f As Integer = 0
         For Each n As TreeNode In m.codetree.Nodes(0).Nodes
             If (mode And 2) = 2 Then
-                b1 = n.Name
+                b1 = n.Text
             Else
                 b1 = n.Tag.ToString
             End If
