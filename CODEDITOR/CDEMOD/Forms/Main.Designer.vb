@@ -854,10 +854,10 @@ Partial Class MERGE
         '
         'open_file
         '
-        Me.open_file.FileName = "*.db;*.ar;*.cmf;*.txt;*.dat"
-        Me.open_file.Filter = "対応ファイル(*.db;*ar;*.cmf;*.txt;*.dat)|*.db;*.ar;*.cmf;*.txt;*.dat|CWcheat (*.db)|*.d" & _
-            "b|ACTIONREPLAY(*.ar)|*.ar|CMFUSION (*.cmf)|*.cmf|FreeCheat (*.txt)|*.txt|CodeFre" & _
-            "ak (*.dat)|*.dat|全てのファイル (*.*)|*.*"
+        'Me.open_file.FileName = "*.db;*.ar;*.cmf;*.txt;*.dat"
+        'Me.open_file.Filter = "対応ファイル(*.db;*ar;*.cmf;*.txt;*.dat)|*.db;*.ar;*.cmf;*.txt;*.dat|CWcheat (*.db)|*.d" & _
+        '    "b|ACTIONREPLAY(*.ar)|*.ar|CMFUSION (*.cmf)|*.cmf|FreeCheat (*.txt)|*.txt|CodeFre" & _
+        '     "ak (*.dat)|*.dat|全てのファイル (*.*)|*.*"
         '
         'GID_tb
         '
