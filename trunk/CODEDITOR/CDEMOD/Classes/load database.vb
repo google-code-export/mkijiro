@@ -666,8 +666,16 @@ Public Class load_db
         Dim cfdatlen As Integer = bs.Length
         Dim cf_utf16(33) As Byte
         Dim str As String = Nothing
+        Dim gname() As Byte = Nothing
+        Dim cname() As Byte = Nothing
         Dim i As Integer = 0
         Dim n As Integer = 0
+        Dim s1 As String = Nothing
+        Dim s2 As String = Nothing
+        Dim s3 As String = Nothing
+        Dim s4 As String = Nothing
+        Dim s5 As String = Nothing
+        Dim sb As New System.Text.StringBuilder()
         counts(0) = cfdatlen \ 36
 
         While i < cfdatlen - 3
@@ -686,9 +694,9 @@ Public Class load_db
                         n += 1
                         i += 1
                     Loop
-                    Dim name(n - 1) As Byte
-                    Array.ConstrainedCopy(bs, i - n, name, 0, n)
-                    str = System.Text.Encoding.GetEncoding(1201).GetString(name)
+                    Array.Resize(gname, n)
+                    Array.ConstrainedCopy(bs, i - n, gname, 0, n)
+                    str = System.Text.Encoding.GetEncoding(1201).GetString(gname)
                     n = 0
                     gnode = New TreeNode(str.Trim)
                     With gnode
@@ -703,12 +711,12 @@ Public Class load_db
                     i += 34
                     Array.ConstrainedCopy(bs, i - 32, cf_utf16, 0, 32)
                     str = System.Text.Encoding.GetEncoding(1201).GetString(cf_utf16)
-                    Dim sb As New System.Text.StringBuilder()
-                    Dim s1 As String = Chr(Convert.ToInt32(str.Substring(0, 2), 16))
-                    Dim s2 As String = Chr(Convert.ToInt32(str.Substring(2, 2), 16))
-                    Dim s3 As String = Chr(Convert.ToInt32(str.Substring(4, 2), 16))
-                    Dim s4 As String = Chr(Convert.ToInt32(str.Substring(6, 2), 16))
-                    Dim s5 As String = str.Substring(8, 5)
+                    sb.Clear()
+                    s1 = Chr(Convert.ToInt32(str.Substring(0, 2), 16))
+                    s2 = Chr(Convert.ToInt32(str.Substring(2, 2), 16))
+                    s3 = Chr(Convert.ToInt32(str.Substring(4, 2), 16))
+                    s4 = Chr(Convert.ToInt32(str.Substring(6, 2), 16))
+                    s5 = str.Substring(8, 5)
                     sb.Append(s1)
                     sb.Append(s2)
                     sb.Append(s3)
@@ -734,7 +742,7 @@ Public Class load_db
                         n += 1
                         i += 1
                     Loop
-                    Dim cname(n - 1) As Byte
+                    Array.Resize(cname, n)
                     Array.ConstrainedCopy(bs, i - n, cname, 0, n)
                     str = System.Text.Encoding.GetEncoding(1201).GetString(cname)
                     n = 0
@@ -750,7 +758,7 @@ Public Class load_db
                     i += 34
                     Array.ConstrainedCopy(bs, i - 32, cf_utf16, 0, 32)
                     str = System.Text.Encoding.GetEncoding(1201).GetString(cf_utf16)
-                    Dim sb As New System.Text.StringBuilder()
+                    sb.Clear()
                     sb.Append("0x")
                     sb.Append(str.Substring(0, 8))
                     sb.Append(" 0x")
@@ -779,6 +787,136 @@ Public Class load_db
         If b6 <> Nothing Then
             cnode.Tag = b6
         End If
+
+        If ew.list_load_error.Items.Count = 0 And ew.list_save_error.Items.Count > 0 Then
+            ew.Show()
+            ew.tab_error.SelectedIndex = 1
+            m.Focus()
+            reset_toolbar()
+        End If
+
+        m.progbar.Visible = False
+        file.Close()
+        memory.FlushMemory() ' Force a garbage collection after all the memory processing
+
+    End Sub
+
+    Public Sub read_ar(ByVal filename As String, ByVal enc1 As Integer)
+
+        Dim m As MERGE = MERGE
+        Dim ew As error_window = error_window
+        Dim memory As New MemoryManagement
+        Dim file As New FileStream(filename, FileMode.Open, FileAccess.Read)
+        Dim counts(2) As Integer ' 0 = Line #, 1 = Progress bar counter, 2 = Total formatting errors, 3 = Error number
+        Dim percent As Double = 0
+        Dim gnode As New TreeNode ' Game name node for the TreeView control
+        Dim cnode As New TreeNode ' Code name node for the TreeView control
+        Dim skip As Boolean = False
+        m.codetree.Nodes.Add(Path.GetFileNameWithoutExtension(filename)).ImageIndex = 0 ' Add the root node and set its icon
+        m.progbar.Visible = True ' Show the progress bar and reset it's value
+        m.progbar.Value = 0 ' Reset the progress bar
+
+        reset_errors() ' Clear the error list before loading
+        'ファイルを読み込むバイト型配列を作成する
+        Dim bs(CInt(file.Length)) As Byte
+        'ファイルの内容をすべて読み込む
+        file.Read(bs, 0, bs.Length)
+        Dim datellen As Integer = bs.Length
+        Dim str As String = Nothing
+        Dim i As Integer = 28
+        Dim k As Integer = 0
+        Dim l As Integer = 0
+        Dim blocklen As Integer = 0
+        Dim id(9) As Byte
+        Dim code(3) As Byte
+        Dim gname() As Byte = Nothing
+        Dim cname() As Byte = Nothing
+        Dim codeline As Integer = 0
+        Dim parsemode As Boolean = False
+        Dim nextcode As Integer = 0
+        Dim sb As New System.Text.StringBuilder()
+        counts(0) = datellen \ 32
+
+        While i < datellen
+            blocklen = (CInt(bs(i)) + (CInt(bs(i + 1)) << 8)) << 2
+            If blocklen = 0 Then
+                blocklen = datellen - i
+            End If
+            While k < blocklen
+                If parsemode = False Then
+                    Array.ConstrainedCopy(bs, i + 7, id, 0, 10)
+                    str = Encoding.GetEncoding(932).GetString(id)
+                    str = str.PadRight(10, " "c)
+                    gnode = New TreeNode(str)
+                    With gnode
+                        .Name = Nothing
+                        .Tag = str
+                        .ImageIndex = 1
+                    End With
+                    m.codetree.Nodes(0).Nodes.Add(gnode)
+                    k = CInt(bs(i + 4)) - 18
+                    Array.Resize(gname, k)
+                    Array.ConstrainedCopy(bs, i + 18, gname, 0, k)
+                    str = Encoding.GetEncoding(932).GetString(gname)
+                    str = str.Replace(vbNullChar, "")
+                    gnode.Text = str
+                    gnode.Name = str
+                    k = CInt(bs(i + 4))
+                    parsemode = True
+                ElseIf parsemode = True Then
+                    codeline = CInt(bs(i + k))
+                    l = CInt(bs(i + k + 1)) - 1
+                    Array.Resize(cname, l)
+                    Array.ConstrainedCopy(bs, i + k + 4, cname, 0, l)
+                    str = Encoding.GetEncoding(932).GetString(cname)
+                    cnode = New TreeNode(str.Trim)
+                    cnode.Name = str.Trim
+                    cnode.ImageIndex = 2
+                    gnode.Nodes.Add(cnode)
+                    sb.Clear()
+                    sb.Append("2")
+                    sb.Append(vbCrLf)
+                    l = CInt(bs(i + k + 2)) << 2
+                    While codeline > 0
+                        Array.ConstrainedCopy(bs, i + k + l, code, 0, 4)
+                        str = Convert.ToString(BitConverter.ToInt32(code, 0), 16)
+                        str = str.ToUpper.PadLeft(8, "0"c)
+                        sb.Append("0x")
+                        sb.Append(str)
+                        sb.Append(" 0x")
+                        Array.ConstrainedCopy(bs, i + k + l + 4, code, 0, 4)
+                        str = Convert.ToString(BitConverter.ToInt32(code, 0), 16)
+                        str = str.ToUpper.PadLeft(8, "0"c)
+                        sb.Append(str)
+                        sb.Append(vbCrLf)
+                        l += 8
+                        codeline -= 1
+                    End While
+                    cnode.Tag = sb.ToString
+                    nextcode = CInt(bs(i + k + 3)) << 2
+                    k += nextcode
+                    counts(1) += 1
+                    If nextcode = 0 Then
+                        Exit While
+                    End If
+                End If
+            End While
+            i += blocklen
+            k = 0
+            parsemode = False
+
+            If counts(1) = counts(0) Then
+
+                ' Update the progressbar every 20 repetitions otherwise the program 
+                ' will slow to a crawl from the constant re-draw of the progress bar
+                percent = (i * 100) / datellen
+                m.progbar.Value = Convert.ToInt32(percent)
+                m.progbar.PerformStep()
+                Application.DoEvents()
+                counts(1) = 0
+            End If
+
+        End While
 
         If ew.list_load_error.Items.Count = 0 And ew.list_save_error.Items.Count > 0 Then
             ew.Show()
@@ -889,7 +1027,6 @@ Public Class load_db
 
     End Function
 
-
     Public Function check_enc(ByVal filename As String) As Integer
 
         Dim file As New FileStream(filename, FileMode.Open, FileAccess.Read)
@@ -982,6 +1119,76 @@ Public Class load_db
         file.Close()
 
         Return cf
+    End Function
+
+    Public Function check3_db(ByVal filename As String, ByVal enc1 As Integer) As Boolean
+
+        Dim file As New FileStream(filename, FileMode.Open, FileAccess.Read)
+        Dim ar As Boolean = False
+        Dim Code(20) As Byte
+        Dim binsize(3) As Byte
+        Dim binstr(3) As Byte
+        Dim arheader As String = Nothing
+        Dim size As Integer = 0
+        Dim hash(1) As String
+        Dim digit(1) As String
+        Dim z As UInteger = 0
+        If file.ReadByte = &H50 Then
+            file.Seek(0, SeekOrigin.Begin)
+            file.Read(Code, 0, 20)
+            arheader = Encoding.GetEncoding(0).GetString(Code)
+            arheader = arheader.Substring(0, 8)
+            Array.ConstrainedCopy(Code, 16, binsize, 0, 4)
+            size = BitConverter.ToInt32(binsize, 0) + 28
+            If arheader = "PSPARC01" AndAlso size = file.Length Then
+                'ARCを抜いたへっだのはっしゅ
+                Array.ConstrainedCopy(Code, 8, binstr, 0, 4)
+                size = BitConverter.ToInt32(binstr, 0)
+                digit(1) = size.ToString("X")
+
+                'コード部ばいなりのはっしゅ
+                Array.ConstrainedCopy(Code, 12, binstr, 0, 4)
+                size = BitConverter.ToInt32(binstr, 0)
+                digit(0) = size.ToString("X")
+
+                '偽CRCっぽいあれ、JADでおｋ
+                z = datel_hash(Code, 15, 12, 8)
+                hash(1) = Convert.ToString(z, 16).ToUpper
+
+                Array.Resize(Code, CInt(file.Length))
+                file.Seek(0, SeekOrigin.Begin)
+                file.Read(Code, 0, CInt(file.Length))
+                z = datel_hash(Code, CInt(file.Length) - 29, 28, CInt(file.Length) - 28)
+                hash(0) = Convert.ToString(z, 16).ToUpper
+                If hash(0) = digit(0) AndAlso hash(1) = digit(1) Then
+                    ar = True
+                End If
+            End If
+        End If
+
+        file.Close()
+
+        Return ar
+    End Function
+
+    Public Function datel_hash(ByVal bin() As Byte, ByVal t As Integer, ByVal v As Integer, ByVal w As Integer) As UInteger
+
+        'http://www.varaneckas.com/jad by JADED  playarts
+        Dim tmp(t) As Byte
+        Array.ConstrainedCopy(bin, v, tmp, 0, w)
+        Dim z As UInteger = 0
+        Dim y As UInteger = &H20000000
+        Dim x As UInteger = &H17072008
+        Dim i As Integer = 0
+        For i = 0 To t
+            z += Convert.ToUInt32(tmp(i))
+            If ((z And 1) = 1) Then
+                z += y
+            End If
+            z >>= 1
+        Next
+        z = z Xor x
+        Return z
     End Function
 
 End Class

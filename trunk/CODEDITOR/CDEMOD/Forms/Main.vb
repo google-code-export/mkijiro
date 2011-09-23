@@ -11,6 +11,7 @@ Public Class MERGE
     Friend loaded As Boolean = False
     Friend PSX As Boolean = False
     Friend CODEFREAK As Boolean = False
+    Friend DATEL As Boolean = False
     Dim enc1 As Integer = My.Settings.MSCODEPAGE
     Friend maintop As Boolean = My.Settings.TOP
     Friend showerror As Boolean = My.Settings.ERR
@@ -112,6 +113,7 @@ Public Class MERGE
             database = My.Settings.lastcodepath
             PSX = open.check_db(database, 932) ' Check the file's format
             CODEFREAK = open.check2_db(database, 1201)
+            DATEL = open.check3_db(database, 932)
             codetree.BeginUpdate()
             error_window.list_load_error.BeginUpdate()
 
@@ -120,26 +122,36 @@ Public Class MERGE
                 Application.DoEvents()
                 enc1 = 1201
                 open.read_cf(database, 1201)
-                saveas_cwcheat.Enabled = True
-                saveas_psx.Enabled = False
-                UTF16BECP1201ToolStripMenuItem.Enabled = True
-                saveas_codefreak.Enabled = True
+            ElseIf DATEL = True Then
+                reset_PSP()
+                Application.DoEvents()
+                enc1 = 932
+                open.read_ar(database, 932)
             ElseIf PSX = True Then
                 enc1 = open.check_enc(database)
                 reset_PSX()
                 Application.DoEvents()
                 open.read_PSX(database, enc1)
-                saveas_psx.Enabled = True
-                saveas_cwcheat.Enabled = False
-                saveas_codefreak.Enabled = False
-                UTF16BECP1201ToolStripMenuItem.Enabled = False
             Else
                 enc1 = open.check_enc(database)
                 reset_PSP()
                 Application.DoEvents()
                 open.read_PSP(database, enc1)
+            End If
+
+            If enc1 = 1201 Then
                 saveas_cwcheat.Enabled = True
                 saveas_psx.Enabled = False
+                saveas_codefreak.Enabled = True
+                UTF16BECP1201ToolStripMenuItem.Enabled = True
+            Else
+                If PSX = False Then
+                    saveas_cwcheat.Enabled = True
+                    saveas_psx.Enabled = False
+                Else
+                    saveas_cwcheat.Enabled = False
+                    saveas_psx.Enabled = True
+                End If
                 saveas_codefreak.Enabled = False
                 UTF16BECP1201ToolStripMenuItem.Enabled = False
             End If
@@ -153,6 +165,9 @@ Public Class MERGE
             file_saveas.Enabled = True
             overwrite_db.Enabled = True
             overwrite_db.ToolTipText = "対象;" & database
+            If DATEL = True Then
+                overwrite_db.ToolTipText &= vbCrLf & "ARMAX用BINは.arテキストに変換されます"
+            End If
         Else
             codetree.Nodes.Add("NEW_DB").ImageIndex = 0
         End If
@@ -274,12 +289,18 @@ Public Class MERGE
 
         Dim open As New load_db
 
+        Me.open_file.Filter = "対応ファイル(*.db;*ar;*.cmf;*.txt;*.dat;*.bin)|*.db;*.ar;*.cmf;*.txt;*.dat;*.bin|CWcheat (*.db)|*.d" & _
+            "b|ACTIONREPLAY(*.ar;*.bin)|*.ar;*.bin|CMFUSION (*.cmf)|*.cmf|FreeCheat (*.txt)|*.txt|CodeFre" & _
+            "ak (*.dat)|*.dat|全てのファイル (*.*)|*.*"
+
         If open_file.ShowDialog = Windows.Forms.DialogResult.OK And open_file.FileName <> Nothing Then
+
             database = open_file.FileName
 
             error_window.list_save_error.Items.Clear() 'Clear any save errors from a previous database
             PSX = open.check_db(database, 932) ' Check the file's format
             CODEFREAK = open.check2_db(database, 1201)
+            DATEL = open.check3_db(database, 932)
             codetree.Nodes.Clear()
             codetree.BeginUpdate()
             error_window.list_load_error.BeginUpdate()
@@ -292,6 +313,11 @@ Public Class MERGE
                 Application.DoEvents()
                 enc1 = 1201
                 open.read_cf(database, 1201)
+            ElseIf DATEL = True Then
+                reset_PSP()
+                Application.DoEvents()
+                enc1 = 932
+                open.read_ar(database, 932)
             ElseIf PSX = True Then
                 enc1 = open.check_enc(database)
                 reset_PSX()
@@ -316,21 +342,26 @@ Public Class MERGE
             loaded = True
             file_saveas.Enabled = True
             overwrite_db.Enabled = True
-
             My.Settings.lastcodepath = database
-            overwrite_db.ToolTipText = "対象;" & Path.GetFileNameWithoutExtension(database)
+            overwrite_db.ToolTipText = "対象;" & database
+            If DATEL = True Then
+                overwrite_db.ToolTipText &= vbCrLf & "ARMAX用BINは.arテキストに変換されます"
+            End If
+
         End If
-
-
     End Sub
 
     Private Sub overwrite_db_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles overwrite_db.Click
         Dim s As New save_db
         If My.Settings.lastcodepath <> "" Then
+
             If CODEFREAK = True Then
                 s.save_cf(database, 1201)
             ElseIf PSX = True Then
                 s.save_psx(database, enc1)
+            ElseIf DATEL = True Then
+                database &= ".ar"
+                s.save_cwcheat(database, enc1)
             Else
                 s.save_cwcheat(database, enc1)
             End If
@@ -340,6 +371,7 @@ Public Class MERGE
                 My.Settings.lastcodepath = database
             End If
 
+            DATEL = False
         End If
     End Sub
 
@@ -358,25 +390,10 @@ Public Class MERGE
             codetree.Nodes(0).Text = Path.GetFileNameWithoutExtension(database)
             overwrite_db.ToolTipText = "対象;" & database
 
+            DATEL = False
             If My.Settings.codepathwhensave = True Then
                 My.Settings.lastcodepath = database
             End If
-
-            ' Reload the file
-            'codetree.Nodes.Clear()
-            'codetree.BeginUpdate()
-            'error_window.list_load_error.BeginUpdate()
-
-            'reset_PSP()
-            'Application.DoEvents()
-            'open.read_PSP(database, enc1)
-
-            'If codetree.Nodes.Count >= 1 Then
-            '    codetree.Nodes(0).Expand()
-            'End If
-
-            'codetree.EndUpdate()
-            'error_window.list_load_error.EndUpdate()
 
         End If
     End Sub
@@ -397,22 +414,6 @@ Public Class MERGE
             If My.Settings.codepathwhensave = True Then
                 My.Settings.lastcodepath = database
             End If
-
-            ' Reload the file
-            'codetree.Nodes.Clear()
-            'codetree.BeginUpdate()
-            'error_window.list_load_error.BeginUpdate()
-
-            'reset_PSX()
-            'Application.DoEvents()
-            'open.read_PSX(database, enc1)
-
-            'If codetree.Nodes.Count >= 1 Then
-            '    codetree.Nodes(0).Expand()
-            'End If
-
-            'codetree.EndUpdate()
-            'error_window.list_load_error.EndUpdate()
 
         End If
     End Sub
