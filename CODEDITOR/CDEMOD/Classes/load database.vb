@@ -1125,41 +1125,43 @@ Public Class load_db
 
         Dim file As New FileStream(filename, FileMode.Open, FileAccess.Read)
         Dim ar As Boolean = False
-        Dim Code(20) As Byte
+        Dim Code(27) As Byte
         Dim binsize(3) As Byte
         Dim binstr(3) As Byte
         Dim arheader As String = Nothing
         Dim size As Integer = 0
+        Dim hex As UInteger = 0
         Dim hash(1) As String
         Dim digit(1) As String
         Dim z As UInteger = 0
         If file.ReadByte = &H50 Then
             file.Seek(0, SeekOrigin.Begin)
-            file.Read(Code, 0, 20)
+            file.Read(Code, 0, 28)
             arheader = Encoding.GetEncoding(0).GetString(Code)
             arheader = arheader.Substring(0, 8)
             Array.ConstrainedCopy(Code, 16, binsize, 0, 4)
             size = BitConverter.ToInt32(binsize, 0) + 28
-            If arheader = "PSPARC01" AndAlso size = file.Length Then
+            If arheader = "PSPARC01" Then 'AndAlso size = file.Length Then
                 'ARCを抜いたへっだのはっしゅ
                 Array.ConstrainedCopy(Code, 8, binstr, 0, 4)
-                size = BitConverter.ToInt32(binstr, 0)
-                digit(1) = size.ToString("X")
+                hex = BitConverter.ToUInt32(binstr, 0)
+                digit(1) = hex.ToString("X")
 
                 'コード部ばいなりのはっしゅ
                 Array.ConstrainedCopy(Code, 12, binstr, 0, 4)
-                size = BitConverter.ToInt32(binstr, 0)
-                digit(0) = size.ToString("X")
+                hex = BitConverter.ToUInt32(binstr, 0)
+                digit(0) = hex.ToString("X")
 
                 '偽CRCっぽいあれ、JADでおｋ
-                z = datel_hash(Code, 15, 12, 8)
+                z = datel_hash(Code, 15, 12, 16)
                 hash(1) = Convert.ToString(z, 16).ToUpper
 
-                Array.Resize(Code, CInt(file.Length))
+                Array.Resize(Code, size)
                 file.Seek(0, SeekOrigin.Begin)
-                file.Read(Code, 0, CInt(file.Length))
-                z = datel_hash(Code, CInt(file.Length) - 29, 28, CInt(file.Length) - 28)
+                file.Read(Code, 0, size)
+                z = datel_hash(Code, size - 29, 28, size - 28)
                 hash(0) = Convert.ToString(z, 16).ToUpper
+                'PAPARX01有りのあわないようなのでチェック修正
                 If hash(0) = digit(0) AndAlso hash(1) = digit(1) Then
                     ar = True
                 End If
