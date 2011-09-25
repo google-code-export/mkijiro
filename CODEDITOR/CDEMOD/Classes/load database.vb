@@ -1124,8 +1124,8 @@ Public Class load_db
     Public Function check3_db(ByVal filename As String, ByVal enc1 As Integer) As Boolean
 
         Dim file As New FileStream(filename, FileMode.Open, FileAccess.Read)
-        Dim ar As Boolean = False
-        Dim Code(27) As Byte
+        Dim DATEL_AR As Boolean = False
+        Dim Code(CInt(file.Length)) As Byte
         Dim binsize(3) As Byte
         Dim binstr(3) As Byte
         Dim arheader As String = Nothing
@@ -1136,7 +1136,7 @@ Public Class load_db
         Dim z As UInteger = 0
         If file.ReadByte = &H50 Then
             file.Seek(0, SeekOrigin.Begin)
-            file.Read(Code, 0, 28)
+            file.Read(Code, 0, CInt(file.Length))
             arheader = Encoding.GetEncoding(0).GetString(Code)
             arheader = arheader.Substring(0, 8)
             Array.ConstrainedCopy(Code, 16, binsize, 0, 4)
@@ -1152,38 +1152,40 @@ Public Class load_db
                 hex = BitConverter.ToUInt32(binstr, 0)
                 digit(0) = hex.ToString("X")
 
-                '偽CRCっぽいあれ、JADでおｋ
-                z = datel_hash(Code, 15, 12, 16)
+                'JADでおｋ
+                z = datel_hash(Code, 12, 28)
                 hash(1) = Convert.ToString(z, 16).ToUpper
 
-                Array.Resize(Code, size)
-                file.Seek(0, SeekOrigin.Begin)
-                file.Read(Code, 0, size)
-                z = datel_hash(Code, size - 29, 28, size - 28)
+                z = datel_hash(Code, 28, size)
                 hash(0) = Convert.ToString(z, 16).ToUpper
-                'PAPARX01有りのあわないようなのでチェック修正
+                'z = datel_hash(Code, &H60, &H64)
+                'Dim s = Convert.ToString(z, 16).ToUpper
+                'Dim a As UInteger = &H17072008
+                'z = datel_hash(Code, &H60, &H66)
+                'Dim s1 = Convert.ToString(z, 16).ToUpper
+                ''PAPARX01有りがあわないようなのでチェック修正
                 If hash(0) = digit(0) AndAlso hash(1) = digit(1) Then
-                    ar = True
+                    DATEL_AR = True
                 End If
             End If
         End If
 
         file.Close()
 
-        Return ar
+        Return DATEL_AR
     End Function
 
-    Public Function datel_hash(ByVal bin() As Byte, ByVal t As Integer, ByVal v As Integer, ByVal w As Integer) As UInteger
+    Public Function datel_hash(ByVal bin() As Byte, ByVal v As Integer, ByVal w As Integer) As UInteger
 
-        'http://www.varaneckas.com/jad by JADED  playarts
-        Dim tmp(t) As Byte
-        Array.ConstrainedCopy(bin, v, tmp, 0, w)
+        'http://www.playarts.co.jp/psptool/download.php　PLAYATRS
+        'http://www.varaneckas.com/jad JADED with playarts tool
+
         Dim z As UInteger = 0
         Dim y As UInteger = &H20000000
         Dim x As UInteger = &H17072008
         Dim i As Integer = 0
-        For i = 0 To t
-            z += Convert.ToUInt32(tmp(i))
+        For i = v To w - 1
+            z += Convert.ToUInt32(bin(i))
             If ((z And 1) = 1) Then
                 z += y
             End If
