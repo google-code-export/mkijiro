@@ -4,6 +4,9 @@ PSPをUSBでつないでぼたんをおすだけです。
 PSPFTPDとPSPWIFITRANSFERのFTP送信も一応対応。
 
 更新履歴
+2011/09/26
+TEMPARのLANGふぁいる変更に対応
+
 2011/9/17
 PING廃止してデーモンかどうかチェックをDataAvailable=trueに変更
 待ち時間0だと反応できないため一応Thread.Sleep(100)にすた

@@ -313,12 +313,12 @@ System.IO.FileAccess.Read)
                         trans = My.Resources.s4_e
                     End If
                     TextBox1.Text &= trans & vbCrLf
-                    Dim temptxt As String = My.Settings.usbpath & "\languages\language"
+                    Dim temptxt As String = My.Settings.usbpath & "\languages\"
                     temptxt = temptxt.Replace("/", "\")
-                    For k = 1 To 2
-                        File.Copy(Application.StartupPath & "\seplugins\TempAR\languages\language" & k.ToString & ".bin", installpath & temptxt & k.ToString & ".bin", True)
-                    Next
-                End If
+                    File.Copy(Application.StartupPath & "\seplugins\TempAR\languages\ja_font.bin", installpath & temptxt & "ja_font.bin", True)
+                    File.Copy(Application.StartupPath & "\seplugins\TempAR\languages\ja_strings.bin", installpath & temptxt & "ja_strings.bin", True)
+
+                 End If
                 '"インストールが完了しました"
                 If My.Application.Culture.Name = "ja-JP" Then
                     trans = My.Resources.s5
