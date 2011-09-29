@@ -25,7 +25,7 @@ Public Class Form2
             trans = My.Resources.s14_e
         End If
 
-        If ftpdirlevel.Contains("\") AndAlso MessageBox.Show(trans, "FTP", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = Windows.Forms.DialogResult.Yes Then
+        If ftpdirlevel.Contains("\") AndAlso MessageBox.Show(Me, trans, "FTP", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = Windows.Forms.DialogResult.Yes Then
             Exit Sub
         End If
         Me.Close()

@@ -621,7 +621,7 @@ System.IO.FileAccess.Read)
         End If
 
         If ftpdeamon.Checked = True AndAlso langupdate.Checked = True _
-             AndAlso MessageBox.Show(trans, "FTP", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = Windows.Forms.DialogResult.Yes Then
+             AndAlso MessageBox.Show(Me, trans, "FTP", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = Windows.Forms.DialogResult.Yes Then
             langupdate.Checked = False
             My.Settings.lang = False
             Return True
