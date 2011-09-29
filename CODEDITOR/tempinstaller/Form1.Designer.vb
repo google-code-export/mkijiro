@@ -23,23 +23,24 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.RadioButton1 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton2 = New System.Windows.Forms.RadioButton()
+        Me.INSTALL = New System.Windows.Forms.Button()
+        Me.temp162 = New System.Windows.Forms.RadioButton()
+        Me.temp163 = New System.Windows.Forms.RadioButton()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.langupdate = New System.Windows.Forms.CheckBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.Button2 = New System.Windows.Forms.Button()
-        Me.DomainUpDown1 = New System.Windows.Forms.DomainUpDown()
-        Me.CheckBox2 = New System.Windows.Forms.CheckBox()
+        Me.MD5HASH = New System.Windows.Forms.Button()
+        Me.drivelettter = New System.Windows.Forms.DomainUpDown()
+        Me.lockdriveletter = New System.Windows.Forms.CheckBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
-        Me.CheckBox3 = New System.Windows.Forms.CheckBox()
-        Me.TextBox2 = New System.Windows.Forms.TextBox()
+        Me.ftpdeamon = New System.Windows.Forms.CheckBox()
+        Me.IPBox = New System.Windows.Forms.TextBox()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.tool = New System.Windows.Forms.ToolStripMenuItem()
         Me.customdir = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DHCPRangeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.help = New System.Windows.Forms.ToolStripMenuItem()
         Me.toolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.verinfo = New System.Windows.Forms.ToolStripMenuItem()
@@ -47,23 +48,23 @@ Partial Class Form1
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
-        'Button1
+        'INSTALL
         '
-        resources.ApplyResources(Me.Button1, "Button1")
-        Me.Button1.Name = "Button1"
-        Me.Button1.UseVisualStyleBackColor = True
+        resources.ApplyResources(Me.INSTALL, "INSTALL")
+        Me.INSTALL.Name = "INSTALL"
+        Me.INSTALL.UseVisualStyleBackColor = True
         '
-        'RadioButton1
+        'temp162
         '
-        resources.ApplyResources(Me.RadioButton1, "RadioButton1")
-        Me.RadioButton1.Name = "RadioButton1"
-        Me.RadioButton1.UseVisualStyleBackColor = True
+        resources.ApplyResources(Me.temp162, "temp162")
+        Me.temp162.Name = "temp162"
+        Me.temp162.UseVisualStyleBackColor = True
         '
-        'RadioButton2
+        'temp163
         '
-        resources.ApplyResources(Me.RadioButton2, "RadioButton2")
-        Me.RadioButton2.Name = "RadioButton2"
-        Me.RadioButton2.UseVisualStyleBackColor = True
+        resources.ApplyResources(Me.temp163, "temp163")
+        Me.temp163.Name = "temp163"
+        Me.temp163.UseVisualStyleBackColor = True
         '
         'TextBox1
         '
@@ -75,59 +76,59 @@ Partial Class Form1
         resources.ApplyResources(Me.Label1, "Label1")
         Me.Label1.Name = "Label1"
         '
-        'CheckBox1
+        'langupdate
         '
-        resources.ApplyResources(Me.CheckBox1, "CheckBox1")
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.UseVisualStyleBackColor = True
+        resources.ApplyResources(Me.langupdate, "langupdate")
+        Me.langupdate.Name = "langupdate"
+        Me.langupdate.UseVisualStyleBackColor = True
         '
         'GroupBox1
         '
         resources.ApplyResources(Me.GroupBox1, "GroupBox1")
-        Me.GroupBox1.Controls.Add(Me.RadioButton2)
-        Me.GroupBox1.Controls.Add(Me.RadioButton1)
+        Me.GroupBox1.Controls.Add(Me.temp163)
+        Me.GroupBox1.Controls.Add(Me.temp162)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.TabStop = False
         '
-        'Button2
+        'MD5HASH
         '
-        resources.ApplyResources(Me.Button2, "Button2")
-        Me.Button2.Name = "Button2"
-        Me.Button2.UseVisualStyleBackColor = True
+        resources.ApplyResources(Me.MD5HASH, "MD5HASH")
+        Me.MD5HASH.Name = "MD5HASH"
+        Me.MD5HASH.UseVisualStyleBackColor = True
         '
-        'DomainUpDown1
+        'drivelettter
         '
-        resources.ApplyResources(Me.DomainUpDown1, "DomainUpDown1")
-        Me.DomainUpDown1.Items.Add(resources.GetString("DomainUpDown1.Items"))
-        Me.DomainUpDown1.Items.Add(resources.GetString("DomainUpDown1.Items1"))
-        Me.DomainUpDown1.Items.Add(resources.GetString("DomainUpDown1.Items2"))
-        Me.DomainUpDown1.Items.Add(resources.GetString("DomainUpDown1.Items3"))
-        Me.DomainUpDown1.Items.Add(resources.GetString("DomainUpDown1.Items4"))
-        Me.DomainUpDown1.Items.Add(resources.GetString("DomainUpDown1.Items5"))
-        Me.DomainUpDown1.Items.Add(resources.GetString("DomainUpDown1.Items6"))
-        Me.DomainUpDown1.Items.Add(resources.GetString("DomainUpDown1.Items7"))
-        Me.DomainUpDown1.Items.Add(resources.GetString("DomainUpDown1.Items8"))
-        Me.DomainUpDown1.Items.Add(resources.GetString("DomainUpDown1.Items9"))
-        Me.DomainUpDown1.Items.Add(resources.GetString("DomainUpDown1.Items10"))
-        Me.DomainUpDown1.Items.Add(resources.GetString("DomainUpDown1.Items11"))
-        Me.DomainUpDown1.Items.Add(resources.GetString("DomainUpDown1.Items12"))
-        Me.DomainUpDown1.Items.Add(resources.GetString("DomainUpDown1.Items13"))
-        Me.DomainUpDown1.Items.Add(resources.GetString("DomainUpDown1.Items14"))
-        Me.DomainUpDown1.Items.Add(resources.GetString("DomainUpDown1.Items15"))
-        Me.DomainUpDown1.Items.Add(resources.GetString("DomainUpDown1.Items16"))
-        Me.DomainUpDown1.Items.Add(resources.GetString("DomainUpDown1.Items17"))
-        Me.DomainUpDown1.Items.Add(resources.GetString("DomainUpDown1.Items18"))
-        Me.DomainUpDown1.Items.Add(resources.GetString("DomainUpDown1.Items19"))
-        Me.DomainUpDown1.Items.Add(resources.GetString("DomainUpDown1.Items20"))
-        Me.DomainUpDown1.Items.Add(resources.GetString("DomainUpDown1.Items21"))
-        Me.DomainUpDown1.Items.Add(resources.GetString("DomainUpDown1.Items22"))
-        Me.DomainUpDown1.Name = "DomainUpDown1"
+        resources.ApplyResources(Me.drivelettter, "drivelettter")
+        Me.drivelettter.Items.Add(resources.GetString("drivelettter.Items"))
+        Me.drivelettter.Items.Add(resources.GetString("drivelettter.Items1"))
+        Me.drivelettter.Items.Add(resources.GetString("drivelettter.Items2"))
+        Me.drivelettter.Items.Add(resources.GetString("drivelettter.Items3"))
+        Me.drivelettter.Items.Add(resources.GetString("drivelettter.Items4"))
+        Me.drivelettter.Items.Add(resources.GetString("drivelettter.Items5"))
+        Me.drivelettter.Items.Add(resources.GetString("drivelettter.Items6"))
+        Me.drivelettter.Items.Add(resources.GetString("drivelettter.Items7"))
+        Me.drivelettter.Items.Add(resources.GetString("drivelettter.Items8"))
+        Me.drivelettter.Items.Add(resources.GetString("drivelettter.Items9"))
+        Me.drivelettter.Items.Add(resources.GetString("drivelettter.Items10"))
+        Me.drivelettter.Items.Add(resources.GetString("drivelettter.Items11"))
+        Me.drivelettter.Items.Add(resources.GetString("drivelettter.Items12"))
+        Me.drivelettter.Items.Add(resources.GetString("drivelettter.Items13"))
+        Me.drivelettter.Items.Add(resources.GetString("drivelettter.Items14"))
+        Me.drivelettter.Items.Add(resources.GetString("drivelettter.Items15"))
+        Me.drivelettter.Items.Add(resources.GetString("drivelettter.Items16"))
+        Me.drivelettter.Items.Add(resources.GetString("drivelettter.Items17"))
+        Me.drivelettter.Items.Add(resources.GetString("drivelettter.Items18"))
+        Me.drivelettter.Items.Add(resources.GetString("drivelettter.Items19"))
+        Me.drivelettter.Items.Add(resources.GetString("drivelettter.Items20"))
+        Me.drivelettter.Items.Add(resources.GetString("drivelettter.Items21"))
+        Me.drivelettter.Items.Add(resources.GetString("drivelettter.Items22"))
+        Me.drivelettter.Name = "drivelettter"
         '
-        'CheckBox2
+        'lockdriveletter
         '
-        resources.ApplyResources(Me.CheckBox2, "CheckBox2")
-        Me.CheckBox2.Name = "CheckBox2"
-        Me.CheckBox2.UseVisualStyleBackColor = True
+        resources.ApplyResources(Me.lockdriveletter, "lockdriveletter")
+        Me.lockdriveletter.Name = "lockdriveletter"
+        Me.lockdriveletter.UseVisualStyleBackColor = True
         '
         'Label3
         '
@@ -139,16 +140,16 @@ Partial Class Form1
         resources.ApplyResources(Me.ProgressBar1, "ProgressBar1")
         Me.ProgressBar1.Name = "ProgressBar1"
         '
-        'CheckBox3
+        'ftpdeamon
         '
-        resources.ApplyResources(Me.CheckBox3, "CheckBox3")
-        Me.CheckBox3.Name = "CheckBox3"
-        Me.CheckBox3.UseVisualStyleBackColor = True
+        resources.ApplyResources(Me.ftpdeamon, "ftpdeamon")
+        Me.ftpdeamon.Name = "ftpdeamon"
+        Me.ftpdeamon.UseVisualStyleBackColor = True
         '
-        'TextBox2
+        'IPBox
         '
-        resources.ApplyResources(Me.TextBox2, "TextBox2")
-        Me.TextBox2.Name = "TextBox2"
+        resources.ApplyResources(Me.IPBox, "IPBox")
+        Me.IPBox.Name = "IPBox"
         '
         'MenuStrip1
         '
@@ -160,13 +161,18 @@ Partial Class Form1
         'tool
         '
         resources.ApplyResources(Me.tool, "tool")
-        Me.tool.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.customdir})
+        Me.tool.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.customdir, Me.DHCPRangeToolStripMenuItem})
         Me.tool.Name = "tool"
         '
         'customdir
         '
         resources.ApplyResources(Me.customdir, "customdir")
         Me.customdir.Name = "customdir"
+        '
+        'DHCPRangeToolStripMenuItem
+        '
+        resources.ApplyResources(Me.DHCPRangeToolStripMenuItem, "DHCPRangeToolStripMenuItem")
+        Me.DHCPRangeToolStripMenuItem.Name = "DHCPRangeToolStripMenuItem"
         '
         'help
         '
@@ -189,18 +195,18 @@ Partial Class Form1
         resources.ApplyResources(Me, "$this")
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.Controls.Add(Me.TextBox2)
-        Me.Controls.Add(Me.CheckBox3)
+        Me.Controls.Add(Me.IPBox)
+        Me.Controls.Add(Me.ftpdeamon)
         Me.Controls.Add(Me.ProgressBar1)
         Me.Controls.Add(Me.Label3)
-        Me.Controls.Add(Me.CheckBox2)
-        Me.Controls.Add(Me.DomainUpDown1)
-        Me.Controls.Add(Me.Button2)
+        Me.Controls.Add(Me.lockdriveletter)
+        Me.Controls.Add(Me.drivelettter)
+        Me.Controls.Add(Me.MD5HASH)
         Me.Controls.Add(Me.GroupBox1)
-        Me.Controls.Add(Me.CheckBox1)
+        Me.Controls.Add(Me.langupdate)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.TextBox1)
-        Me.Controls.Add(Me.Button1)
+        Me.Controls.Add(Me.INSTALL)
         Me.Controls.Add(Me.MenuStrip1)
         Me.MainMenuStrip = Me.MenuStrip1
         Me.Name = "Form1"
@@ -212,25 +218,26 @@ Partial Class Form1
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents Button1 As System.Windows.Forms.Button
-    Friend WithEvents RadioButton1 As System.Windows.Forms.RadioButton
-    Friend WithEvents RadioButton2 As System.Windows.Forms.RadioButton
+    Friend WithEvents INSTALL As System.Windows.Forms.Button
+    Friend WithEvents temp162 As System.Windows.Forms.RadioButton
+    Friend WithEvents temp163 As System.Windows.Forms.RadioButton
     Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
     Friend WithEvents Label1 As System.Windows.Forms.Label
-    Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
+    Friend WithEvents langupdate As System.Windows.Forms.CheckBox
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
-    Friend WithEvents Button2 As System.Windows.Forms.Button
-    Friend WithEvents DomainUpDown1 As System.Windows.Forms.DomainUpDown
-    Friend WithEvents CheckBox2 As System.Windows.Forms.CheckBox
+    Friend WithEvents MD5HASH As System.Windows.Forms.Button
+    Friend WithEvents drivelettter As System.Windows.Forms.DomainUpDown
+    Friend WithEvents lockdriveletter As System.Windows.Forms.CheckBox
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents ProgressBar1 As System.Windows.Forms.ProgressBar
-    Friend WithEvents CheckBox3 As System.Windows.Forms.CheckBox
-    Friend WithEvents TextBox2 As System.Windows.Forms.TextBox
+    Friend WithEvents ftpdeamon As System.Windows.Forms.CheckBox
+    Friend WithEvents IPBox As System.Windows.Forms.TextBox
     Friend WithEvents tool As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents customdir As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents help As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents toolStripSeparator5 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents verinfo As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
+    Friend WithEvents DHCPRangeToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class

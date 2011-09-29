@@ -157,6 +157,64 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  PSP3000本体以外ではPSPFTPDの仕様のため、ディレクトリが2階層以上だと上手くインスールできない可能性が高いです。
+        '''パスを変更しますか？ に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property s14() As String
+            Get
+                Return ResourceManager.GetString("s14", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  if your psp is not model3000,pspftpd seemed not to copy to more than 2 level directory...
+        '''change path?　 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property s14_e() As String
+            Get
+                Return ResourceManager.GetString("s14_e", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  PSP3000本体以外ではPSPFTPDの仕様のため、言語ファイルは上手くインスールできない可能性が高いです。
+        '''言語チェックを外しますか？ に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property s15() As String
+            Get
+                Return ResourceManager.GetString("s15", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  if your psp is not model3000,pspftpd seemed not to copy to more than 2 level directory...
+        '''diｓable languages check? に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property s15_e() As String
+            Get
+                Return ResourceManager.GetString("s15_e", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  開始アドレスが終了アドレスを超えてます。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property s16() As String
+            Get
+                Return ResourceManager.GetString("s16", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  start address greater than end address に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property s16_e() As String
+            Get
+                Return ResourceManager.GetString("s16_e", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  PSPが見つかりました,temparのダウンロードを開始します に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property s2() As String

@@ -150,6 +150,28 @@ classA:10.0.0.0-10.255.255.255
 classB:172.16.0.0-172.31.255.255
 classC:192.168.0.0-192.168.255.255</value>
   </data>
+  <data name="s14" xml:space="preserve">
+    <value>PSP3000本体以外ではPSPFTPDの仕様のため、ディレクトリが2階層以上だと上手くインスールできない可能性が高いです。
+パスを変更しますか？</value>
+  </data>
+  <data name="s14_e" xml:space="preserve">
+    <value>if your psp is not model3000,pspftpd seemed not to copy to more than 2 level directory...
+change path?　</value>
+  </data>
+  <data name="s15" xml:space="preserve">
+    <value>PSP3000本体以外ではPSPFTPDの仕様のため、言語ファイルは上手くインスールできない可能性が高いです。
+言語チェックを外しますか？</value>
+  </data>
+  <data name="s15_e" xml:space="preserve">
+    <value>if your psp is not model3000,pspftpd seemed not to copy to more than 2 level directory...
+diｓable languages check?</value>
+  </data>
+  <data name="s16" xml:space="preserve">
+    <value>開始アドレスが終了アドレスを超えてます。</value>
+  </data>
+  <data name="s16_e" xml:space="preserve">
+    <value>start address greater than end address</value>
+  </data>
   <data name="s1_e" xml:space="preserve">
     <value>last installed prx</value>
   </data>

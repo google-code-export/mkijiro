@@ -161,6 +161,66 @@ Namespace My
                 Me("ftppath") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("192.168.1.10")>  _
+        Public Property dhcpstart() As String
+            Get
+                Return CType(Me("dhcpstart"),String)
+            End Get
+            Set
+                Me("dhcpstart") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("192.168.1.50")>  _
+        Public Property dhcpend() As String
+            Get
+                Return CType(Me("dhcpend"),String)
+            End Get
+            Set
+                Me("dhcpend") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property daemonfinder() As Boolean
+            Get
+                Return CType(Me("daemonfinder"),Boolean)
+            End Get
+            Set
+                Me("daemonfinder") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property wait() As Boolean
+            Get
+                Return CType(Me("wait"),Boolean)
+            End Get
+            Set
+                Me("wait") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("100")>  _
+        Public Property second() As Integer
+            Get
+                Return CType(Me("second"),Integer)
+            End Get
+            Set
+                Me("second") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

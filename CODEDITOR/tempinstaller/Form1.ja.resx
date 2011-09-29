@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Button1.Text" xml:space="preserve">
+  <data name="INSTALL.Text" xml:space="preserve">
     <value>インストール</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
@@ -127,32 +127,26 @@
   <data name="Label1.Text" xml:space="preserve">
     <value>進歩</value>
   </data>
-  <data name="CheckBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>157, 16</value>
+  <data name="langupdate.Size" type="System.Drawing.Size, System.Drawing">
+    <value>134, 16</value>
   </data>
-  <data name="CheckBox1.Text" xml:space="preserve">
-    <value>ランゲージファイルも更新する</value>
+  <data name="langupdate.Text" xml:space="preserve">
+    <value>言語ファイルも更新する</value>
   </data>
-  <data name="Button2.Text" xml:space="preserve">
-    <value>MD5ハッシュのみ</value>
+  <data name="MD5HASH.Text" xml:space="preserve">
+    <value>MD5チェック</value>
   </data>
-  <data name="CheckBox2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>165, 16</value>
+  <data name="lockdriveletter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>156, 16</value>
   </data>
-  <data name="CheckBox2.Text" xml:space="preserve">
-    <value>転送先のドライブレターを固定</value>
+  <data name="lockdriveletter.Text" xml:space="preserve">
+    <value>転送先のドライブレター固定</value>
   </data>
-  <data name="CheckBox3.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="ftpdeamon.Size" type="System.Drawing.Size, System.Drawing">
     <value>102, 16</value>
   </data>
-  <data name="CheckBox3.Text" xml:space="preserve">
+  <data name="ftpdeamon.Text" xml:space="preserve">
     <value>PSPFTPDを使う</value>
-  </data>
-  <data name="tool.Size" type="System.Drawing.Size, System.Drawing">
-    <value>76, 20</value>
-  </data>
-  <data name="tool.Text" xml:space="preserve">
-    <value>オプション(&amp;O)</value>
   </data>
   <data name="customdir.Size" type="System.Drawing.Size, System.Drawing">
     <value>187, 22</value>
@@ -174,19 +168,36 @@ ms0:/TempAR/tempar.prx　game.txt記述パス
 ↓
 /TempAR　game.txt記述パスからms0,/tempar.prxを抜いたもの</value>
   </data>
+  <data name="DHCPRangeToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>187, 22</value>
+  </data>
+  <data name="DHCPRangeToolStripMenuItem.Text" xml:space="preserve">
+    <value>でーもんふぁいんだ(&amp;D)</value>
+  </data>
+  <data name="DHCPRangeToolStripMenuItem.ToolTipText" xml:space="preserve">
+    <value>PSPでかんたん設定(DHCP)をつかっている場合
+ルーターの割り当て範囲内でIPあどれすがかわるので
+ここで指定しておくと範囲内IPアドレスを探します。</value>
+  </data>
+  <data name="tool.Size" type="System.Drawing.Size, System.Drawing">
+    <value>76, 20</value>
+  </data>
+  <data name="tool.Text" xml:space="preserve">
+    <value>オプション(&amp;O)</value>
+  </data>
+  <data name="toolStripSeparator5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>134, 6</value>
+  </data>
+  <data name="verinfo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>137, 22</value>
+  </data>
+  <data name="verinfo.Text" xml:space="preserve">
+    <value>バージョン(&amp;A)...</value>
+  </data>
   <data name="help.Size" type="System.Drawing.Size, System.Drawing">
     <value>62, 20</value>
   </data>
   <data name="help.Text" xml:space="preserve">
     <value>ヘルプ(&amp;H)</value>
-  </data>
-  <data name="toolStripSeparator5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>149, 6</value>
-  </data>
-  <data name="verinfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
-  </data>
-  <data name="verinfo.Text" xml:space="preserve">
-    <value>バージョン(&amp;A)...</value>
   </data>
 </root>
