@@ -44,6 +44,31 @@
 
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
         Dim trans As String
+        If IP1.Text = "" Then
+            IP1.Text = "0"
+        End If
+        If IP2.Text = "" Then
+            IP2.Text = "0"
+        End If
+        If IP3.Text = "" Then
+            IP3.Text = "0"
+        End If
+        If IP4.Text = "" Then
+            IP4.Text = "0"
+        End If
+        If IP5.Text = "" Then
+            IP5.Text = "0"
+        End If
+        If IP6.Text = "" Then
+            IP6.Text = "0"
+        End If
+        If IP7.Text = "" Then
+            IP7.Text = "0"
+        End If
+        If IP8.Text = "" Then
+            IP8.Text = "0"
+        End If
+
         Dim IPval1 As Integer = CInt(IP1.Text)
         Dim IPval2 As Integer = CInt(IP2.Text)
         Dim IPval3 As Integer = CInt(IP3.Text)
@@ -70,7 +95,7 @@
             Else
                 trans = My.Resources.s16_e
             End If
-            MessageBox.Show(trans, "INVAIDIP", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show(Me, trans, "INVAIDIP", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         Else
             'IP
             If My.Application.Culture.Name = "ja-JP" Then
@@ -78,7 +103,7 @@
             Else
                 trans = My.Resources.s13_e
             End If
-            MessageBox.Show(trans, "INVAIDIP", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show(Me, trans, "INVAIDIP", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End If
     End Sub
 
@@ -117,7 +142,6 @@
 
     Private Sub IP5_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles IP5.TextChanged
         IP1.Text = IP5.Text
-
         If IP5.Text = "192" Then
             IP2.Text = "168"
             IP6.Text = "168"
