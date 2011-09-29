@@ -29,5 +29,20 @@
     <Setting Name="ftppath" Type="System.String" Scope="User">
       <Value Profile="(Default)">/TempAR</Value>
     </Setting>
+    <Setting Name="dhcpstart" Type="System.String" Scope="User">
+      <Value Profile="(Default)">192.168.1.10</Value>
+    </Setting>
+    <Setting Name="dhcpend" Type="System.String" Scope="User">
+      <Value Profile="(Default)">192.168.1.50</Value>
+    </Setting>
+    <Setting Name="daemonfinder" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="wait" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="second" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">100</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

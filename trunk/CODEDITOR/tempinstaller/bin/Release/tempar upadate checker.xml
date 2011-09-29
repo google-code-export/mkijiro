@@ -61,6 +61,34 @@ classA:10.0.0.0-10.255.255.255
 classB:172.16.0.0-172.31.255.255
 classC:192.168.0.0-192.168.255.255 に類似しているローカライズされた文字列を検索します。
 </summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s14">
+	<summary>
+  PSP3000本体以外ではPSPFTPDの仕様のため、ディレクトリが2階層以上だと上手くインスールできない可能性が高いです。
+パスを変更しますか？ に類似しているローカライズされた文字列を検索します。
+</summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s14_e">
+	<summary>
+  if your psp is not model3000,pspftpd seemed not to copy to more than 2 level directory...
+change path?　 に類似しているローカライズされた文字列を検索します。
+</summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s15">
+	<summary>
+  PSP3000本体以外ではPSPFTPDの仕様のため、言語ファイルは上手くインスールできない可能性が高いです。
+言語チェックを外しますか？ に類似しているローカライズされた文字列を検索します。
+</summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s15_e">
+	<summary>
+  if your psp is not model3000,pspftpd seemed not to copy to more than 2 level directory...
+diｓable languages check? に類似しているローカライズされた文字列を検索します。
+</summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s16">
+	<summary>
+  開始アドレスが終了アドレスを超えてます。 に類似しているローカライズされた文字列を検索します。
+</summary>
+</member><member name="P:temparchecker.My.Resources.Resources.s16_e">
+	<summary>
+  start address greater than end address に類似しているローカライズされた文字列を検索します。
+</summary>
 </member><member name="P:temparchecker.My.Resources.Resources.s2">
 	<summary>
   PSPが見つかりました,temparのダウンロードを開始します に類似しているローカライズされた文字列を検索します。

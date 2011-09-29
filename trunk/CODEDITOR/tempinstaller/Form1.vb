@@ -6,7 +6,7 @@ Imports System.Threading
 Imports System.Net.Sockets
 
 Public Class Form1
-
+    Friend Shared back As String = My.Settings.pspipaddress
 
     Private Sub form1load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Dim trans As String = ""
@@ -17,17 +17,19 @@ Public Class Form1
             trans = My.Resources.s1_e
         End If
         If My.Settings.tempar.Contains("1.62") Then
-            RadioButton1.Checked = True
+            temp162.Checked = True
         Else
-            RadioButton2.Checked = True
+            temp163.Checked = True
         End If
 
-        TextBox2.Text = My.Settings.pspipaddress
+        drivelettter.ContextMenu = New ContextMenu
+        IPBox.ContextMenu = New ContextMenu
+        IPBox.Text = My.Settings.pspipaddress
         TextBox1.Text = trans & vbCrLf & My.Settings.lastprx
-        DomainUpDown1.Text = My.Settings.drivepath
-        CheckBox1.Checked = My.Settings.lang
-        CheckBox2.Checked = My.Settings.drivelock
-        CheckBox3.Checked = My.Settings.useftp
+        drivelettter.Text = My.Settings.drivepath
+        langupdate.Checked = My.Settings.lang
+        lockdriveletter.Checked = My.Settings.drivelock
+        ftpdeamon.Checked = My.Settings.useftp
 
         Me.FormBorderStyle = FormBorderStyle.FixedToolWindow
 
@@ -36,8 +38,8 @@ Public Class Form1
 
     Private Sub MainForm_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
 
-        My.Settings.pspipaddress = TextBox2.Text
-        My.Settings.drivepath = DomainUpDown1.Text
+        My.Settings.pspipaddress = IPBox.Text
+        My.Settings.drivepath = drivelettter.Text
 
     End Sub
 
@@ -188,7 +190,7 @@ System.IO.FileAccess.Read)
         Return builddate.Replace(vbNullChar, "") & vbCrLf & "MD5;" & md5hash
     End Function
 
-    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles INSTALL.Click
         TextBox1.Text = ""
         Dim trans As String = ""
         If My.Computer.Network.IsAvailable Then
@@ -197,87 +199,142 @@ System.IO.FileAccess.Read)
             Dim builddate As String = Nothing
 
             'サーバーのホスト名とポート番号
-            Dim host As String = TextBox2.Text
+            Dim host As String = IPBox.Text
             Dim port As Integer = 21
+            Dim f As Form4 = Form4
+            Dim tcp As New TcpClient
+            Dim ns As NetworkStream = Nothing
+            Dim ftpdir As String = My.Settings.ftppath.Replace("\", "/")
+            Dim data As Boolean = False
+            Dim time As Integer = 100
+            If My.Settings.wait = True Then
+                time = My.Settings.second
+            End If
 
-            If CheckBox3.Checked = True Then
-                    'http://dobon.net/vb/dotnet/internet/receivepop3mail.html
-                    'TcpClientを作成し、サーバーと接続する
-                    Dim tcp As New TcpClient(host, port)
-                    Dim ns As NetworkStream = tcp.GetStream
+            If ftpdeamon.Checked = True Then
+                'http://dobon.net/vb/dotnet/internet/receivepop3mail.html
+                'TcpClientを作成し、サーバーと接続する
+                If My.Settings.daemonfinder = False Then
+                    tcp.Connect(host, port)
+                    ns = tcp.GetStream
                     'NetworkStreamを取得する
-                    Dim ftpdir As String = My.Settings.ftppath.Replace("\", "/")
                     '待ち時間
-                    Thread.Sleep(100)
-
+                    Thread.Sleep(time)
                     If ns.DataAvailable = True Then
-                        Dim fileName As String = "tmp.zip"
-                        getweb(fileName, My.Settings.tempar)
-                        unzip(fileName)
-                        builddate = getdate(Application.StartupPath & temp(0))
-                        '"から応答がありました、送信を開始します"
-                        If My.Application.Culture.Name = "ja-JP" Then
-                            trans = My.Resources.s10
-                        Else
-                            trans = My.Resources.s10_e
-                        End If
-                        TextBox1.Text &= TextBox2.Text & trans & vbCrLf
-
-                        'をPSPにコピーしています...
-                        If My.Application.Culture.Name = "ja-JP" Then
-                            trans = My.Resources.s3
-                        Else
-                            trans = My.Resources.s3_e
-                        End If
-
-                        TextBox1.Text &= "TEMPAR " & builddate & trans & vbCrLf
-
-
-                        TextBox1.Text &= ReceiveData(ns)
-                        SendData(ns, "PWD" & vbCrLf)
-                        TextBox1.Text &= ReceiveData(ns)
-                        SendData(ns, "USER " & "anonymous" & vbCrLf)
-                        TextBox1.Text &= ReceiveData(ns)
-                        SendData(ns, "PASS " & "anonymous" & vbCrLf)
-                        TextBox1.Text &= ReceiveData(ns)
-                        SendData(ns, "CWD " & ftpdir & vbCrLf)
-                        TextBox1.Text &= ReceiveData(ns)
-                        SendData(ns, "PWD" & vbCrLf)
-                        TextBox1.Text &= ReceiveData(ns)
-                        SendData(ns, "TYPE I" & vbCrLf)
-                        TextBox1.Text &= ReceiveData(ns)
-
-                        upload(ns, temp(0))
-                        upload(ns, temp(1))
-                        If RadioButton1.Checked = True Then
-                            upload(ns, temp(2))
-                        End If
-
-                        SendData(ns, "QUIT" + vbCrLf)
-                        ns.Close()
-                        tcp.Close()
-                        My.Settings.lastprx = builddate
-
-                        '"アップロードが完了しました"
-                        If My.Application.Culture.Name = "ja-JP" Then
-                            trans = My.Resources.s11
-                        Else
-                            trans = My.Resources.s11_e
-                        End If
-                        TextBox1.Text &= trans & vbCrLf
-                        System.Media.SystemSounds.Asterisk.Play()
-                    Else
-                        ns.Close()
-                        tcp.Close()
-                        'デーモンじゃない
-                        If My.Application.Culture.Name = "ja-JP" Then
-                            trans = My.Resources.s12
-                        Else
-                            trans = My.Resources.s12_e
-                        End If
-                        TextBox1.Text = TextBox2.Text & trans & vbCrLf
-                        System.Media.SystemSounds.Exclamation.Play()
+                        data = True
                     End If
+                Else
+                    Dim shost As String = My.Settings.dhcpstart
+                    Dim sta As String() = My.Settings.dhcpstart.Split("."c)
+                    Dim en As String() = My.Settings.dhcpend.Split("."c)
+                    Dim k As Integer = 0
+                    For Each s In sta
+                        sta(k) = s.ToString.Replace(".", "")
+                        k += 1
+                    Next
+                    k = 0
+                    For Each s In en
+                        en(k) = s.ToString.Replace(".", "")
+                        k += 1
+                    Next
+                    shost = shost.Substring(0, shost.LastIndexOf("."))
+                    shost = shost.Substring(0, shost.LastIndexOf(".") + 1)
+
+                    Dim i As Integer = CInt(sta(2)) * 256 + CInt(sta(3))
+                    Dim z As Integer = CInt(en(2)) * 256 + CInt(en(3)) + 1
+                    While i < z
+                        Dim tcp_dhcp As New TcpClient
+                        host = shost & (i \ 256).ToString & "." & (i And &HFF).ToString
+                        tcp_dhcp.Connect(host, port)
+                        ns = tcp_dhcp.GetStream
+                        'NetworkStreamを取得する
+                        IPBox.Text = host
+                        '待ち時間
+                        Thread.Sleep(time)
+                        If ns.DataAvailable = True Then
+                            data = True
+                            Exit While
+                        Else
+                            tcp_dhcp.Close()
+                        End If
+                        i += 1
+                    End While
+                End If
+
+                If data = True Then
+                    Dim fileName As String = "tmp.zip"
+                    getweb(fileName, My.Settings.tempar)
+                    unzip(fileName)
+                    builddate = getdate(Application.StartupPath & temp(0))
+                    '"から応答がありました、送信を開始します"
+                    If My.Application.Culture.Name = "ja-JP" Then
+                        trans = My.Resources.s10
+                    Else
+                        trans = My.Resources.s10_e
+                    End If
+                    TextBox1.Text &= host & trans & vbCrLf
+
+                    'をPSPにコピーしています...
+                    If My.Application.Culture.Name = "ja-JP" Then
+                        trans = My.Resources.s3
+                    Else
+                        trans = My.Resources.s3_e
+                    End If
+
+                    TextBox1.Text &= "TEMPAR " & builddate & trans & vbCrLf
+
+
+                    TextBox1.Text &= ReceiveData(ns)
+                    SendData(ns, "PWD" & vbCrLf)
+                    TextBox1.Text &= ReceiveData(ns)
+                    SendData(ns, "USER " & "anonymous" & vbCrLf)
+                    TextBox1.Text &= ReceiveData(ns)
+                    SendData(ns, "PASS " & "anonymous" & vbCrLf)
+                    TextBox1.Text &= ReceiveData(ns)
+                    SendData(ns, "CWD " & ftpdir & vbCrLf)
+                    TextBox1.Text &= ReceiveData(ns)
+                    SendData(ns, "PWD" & vbCrLf)
+                    TextBox1.Text &= ReceiveData(ns)
+                    SendData(ns, "TYPE I" & vbCrLf)
+                    TextBox1.Text &= ReceiveData(ns)
+
+                    upload(ns, temp(0))
+                    upload(ns, temp(1))
+                    If temp162.Checked = True Then
+                        upload(ns, temp(2))
+                    End If
+                    If langupdate.Checked = True Then
+                        SendData(ns, "CWD " & ftpdir & "/languages" & vbCrLf)
+                        TextBox1.Text &= ReceiveData(ns)
+                        upload(ns, "\seplugins\TempAR\languages\ja_font.bin")
+                        upload(ns, "\seplugins\TempAR\languages\ja_strings.bin")
+                    End If
+
+                    SendData(ns, "QUIT" + vbCrLf)
+                    ns.Close()
+                    tcp.Close()
+                    My.Settings.lastprx = builddate
+
+                    '"アップロードが完了しました"
+                    If My.Application.Culture.Name = "ja-JP" Then
+                        trans = My.Resources.s11
+                    Else
+                        trans = My.Resources.s11_e
+                    End If
+                    TextBox1.Text &= trans & vbCrLf
+                    System.Media.SystemSounds.Asterisk.Play()
+                Else
+                    ns.Close()
+                    tcp.Close()
+                    'デーモンじゃない
+                    If My.Application.Culture.Name = "ja-JP" Then
+                        trans = My.Resources.s12
+                    Else
+                        trans = My.Resources.s12_e
+                    End If
+                    TextBox1.Text = IPBox.Text & trans & vbCrLf
+                    System.Media.SystemSounds.Exclamation.Play()
+                End If
 
             ElseIf installpath <> "" Then
                 'PSPが見つかりました,temparのダウンロードを開始します
@@ -305,7 +362,7 @@ System.IO.FileAccess.Read)
                 If My.Settings.tempar.Contains("1.62") Then
                     File.Copy(Application.StartupPath & temp(2), installpath & My.Settings.usbpath & temp(2).Replace("\seplugins\TempAR", ""), True)
                 End If
-                If My.Settings.tempar.Contains("1.63") AndAlso CheckBox1.Checked = True Then
+                If My.Settings.tempar.Contains("1.63") AndAlso langupdate.Checked = True Then
                     '"ランゲージファイルをコピーしています"
                     If My.Application.Culture.Name = "ja-JP" Then
                         trans = My.Resources.s4
@@ -318,7 +375,7 @@ System.IO.FileAccess.Read)
                     File.Copy(Application.StartupPath & "\seplugins\TempAR\languages\ja_font.bin", installpath & temptxt & "ja_font.bin", True)
                     File.Copy(Application.StartupPath & "\seplugins\TempAR\languages\ja_strings.bin", installpath & temptxt & "ja_strings.bin", True)
 
-                 End If
+                End If
                 '"インストールが完了しました"
                 If My.Application.Culture.Name = "ja-JP" Then
                     trans = My.Resources.s5
@@ -363,7 +420,7 @@ System.IO.FileAccess.Read)
 
     Function upload(ByVal ns As NetworkStream, ByVal tmpath As String) As Boolean
         Dim sendp As String = ""
-        Dim host As String = TextBox2.Text
+        Dim host As String = IPBox.Text
         Dim p As Integer = 0
         Dim q As Integer = 0
         Dim s As String = ""
@@ -376,12 +433,12 @@ System.IO.FileAccess.Read)
         'http://www.java2s.com/Tutorial/VB/0400__Socket-Network/FtpClientinVBnet.htm
         sendp = ReceiveData(ns).Replace(")", "")
         TextBox1.Text &= sendp.Replace("(", "")
-        p = sendp.LastIndexOf(",")
-        s = sendp.Substring(p + 1, sendp.Length - p - 1)
-        sendp = sendp.Remove(p)
+        p = sendp.LastIndexOf(",") + 1
+        s = sendp.Substring(p, sendp.Length - p)
+        sendp = sendp.Remove(p - 1)
         p = CInt(s)
-        q = sendp.LastIndexOf(",")
-        s = sendp.Substring(q + 1, sendp.Length - q - 1)
+        q = sendp.LastIndexOf(",") + 1
+        s = sendp.Substring(q, sendp.Length - q)
         q = CInt(s) * 256
         'ftpdのしようのためseplugins/tempar　は使えないっぽいのでるーと+TEMPARしかないっぽい
         Dim prx As New FileStream(Application.StartupPath & tmpath, FileMode.Open, FileAccess.Read)
@@ -475,10 +532,10 @@ System.IO.FileAccess.Read)
             PSP = PSP.Remove(0, 1)
             PSP = PSP.Insert(0, Chr(driveletter))
             driveletter += 1
-            If CheckBox2.Checked = True Then
-                PSP = DomainUpDown1.Text & "\PSP"
+            If lockdriveletter.Checked = True Then
+                PSP = drivelettter.Text & "\PSP"
             Else
-                DomainUpDown1.Text = PSP.Substring(0, 2)
+                drivelettter.Text = PSP.Substring(0, 2)
             End If
             If My.Computer.FileSystem.DirectoryExists(PSP) AndAlso File.Exists(PSP.Substring(0, 2) & "MEMSTICK.IND") Then
                 PSP = PSP.Substring(0, 2)
@@ -487,7 +544,7 @@ System.IO.FileAccess.Read)
                 If Not File.Exists(PSP & prxpath) Then
                     System.IO.Directory.CreateDirectory(PSP & prxpath)
                 End If
-                If CheckBox1.Checked = True AndAlso Not File.Exists(PSP & langpath) Then
+                If langupdate.Checked = True AndAlso Not File.Exists(PSP & langpath) Then
                     System.IO.Directory.CreateDirectory(PSP & langpath)
                 End If
 
@@ -498,17 +555,17 @@ System.IO.FileAccess.Read)
         Return ""
     End Function
 
-    Private Sub RadioButton1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton1.CheckedChanged
+    Private Sub RadioButton1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles temp162.CheckedChanged
         My.Settings.tempar = "http://raing3.gshi.org/psp-utilities/files/psp/tempar/tempar-1.62-3.zip"
     End Sub
 
-    Private Sub RadioButton2_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton2.CheckedChanged
+    Private Sub RadioButton2_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles temp163.CheckedChanged
         My.Settings.tempar = "http://raing3.gshi.org/psp-utilities/files/psp/tempar/tempar-1.63.zip"
     End Sub
 
-    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MD5HASH.Click
         TextBox1.Text = "TEMPAR"
-        If RadioButton1.Checked = True Then
+        If temp162.Checked = True Then
             TextBox1.Text &= "1.62-3 "
         Else
             TextBox1.Text &= "1.63 "
@@ -528,48 +585,71 @@ System.IO.FileAccess.Read)
         System.Media.SystemSounds.Asterisk.Play()
     End Sub
 
-    Private Sub DomainUpDown1_SelectedItemChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DomainUpDown1.SelectedItemChanged
-    End Sub
+    Private Sub CheckBox2_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lockdriveletter.CheckedChanged
 
-    Private Sub CheckBox2_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox2.CheckedChanged
-
-        If CheckBox2.Checked = True Then
-            DomainUpDown1.ReadOnly = True
+        If lockdriveletter.Checked = True Then
+            drivelettter.ReadOnly = True
             My.Settings.drivelock = True
         Else
-            DomainUpDown1.ReadOnly = False
+            drivelettter.ReadOnly = False
             My.Settings.drivelock = False
         End If
 
 
     End Sub
 
-    Private Sub CheckBox3_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox3.CheckedChanged
+    Private Sub CheckBox3_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ftpdeamon.CheckedChanged
 
-        If CheckBox3.Checked = True Then
+        If ftpdeamon.Checked = True Then
             My.Settings.useftp = True
         Else
             My.Settings.useftp = False
         End If
 
+        If Me.FormBorderStyle.ToString <> "Sizable" Then
+            FTPalert()
+        End If
     End Sub
 
-    Private Sub CheckBox1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox1.CheckedChanged
+    Private Function FTPalert() As Boolean
+        Dim trans As String = ""
+        'FTP警告
+        If My.Application.Culture.Name = "ja-JP" Then
+            trans = My.Resources.s15
+        Else
+            trans = My.Resources.s15_e
+        End If
 
-        If CheckBox3.Checked = True Then
+        If ftpdeamon.Checked = True AndAlso langupdate.Checked = True _
+             AndAlso MessageBox.Show(trans, "FTP", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = Windows.Forms.DialogResult.Yes Then
+            langupdate.Checked = False
+            My.Settings.lang = False
+            Return True
+        End If
+
+        Return False
+    End Function
+
+    Private Sub CheckBox1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles langupdate.CheckedChanged
+
+        If FTPalert() = True Then
+            Exit Sub
+        End If
+
+        If langupdate.Checked = True Then
             My.Settings.lang = True
         Else
             My.Settings.lang = False
         End If
     End Sub
 
-    Private Sub TextBox2_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox2.TextChanged
+    Private Sub TextBox2_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles IPBox.TextChanged
         Dim trans As String = ""
 
         Dim r As New Regex("^1(0|72|92)\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$")
-        Dim m As Match = r.Match(TextBox2.Text)
+        Dim m As Match = r.Match(IPBox.Text)
         If m.Success Then
-
+            back = m.Value
         Else
             'IP
             If My.Application.Culture.Name = "ja-JP" Then
@@ -579,6 +659,7 @@ System.IO.FileAccess.Read)
             End If
             TextBox1.Text = trans
         End If
+
     End Sub
 
     Private Sub カスタマイズCToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles customdir.Click
@@ -591,6 +672,32 @@ System.IO.FileAccess.Read)
         Dim v As New Form3
         v.ShowDialog()
         v.Dispose()
+    End Sub
+
+    Private Sub DHCPRangeToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DHCPRangeToolStripMenuItem.Click
+        Dim dhcp As New Form4
+        dhcp.ShowDialog()
+        dhcp.Dispose()
+    End Sub
+
+    Private Sub TextBox1_KeyPress(ByVal sender As Object, _
+  ByVal e As System.Windows.Forms.KeyPressEventArgs) _
+  Handles IPBox.KeyPress
+        If (e.KeyChar < "0"c Or e.KeyChar > "9"c) And e.KeyChar <> vbBack And e.KeyChar <> "."c Then
+            e.Handled = True
+        End If
+    End Sub
+
+
+    Private Sub TextBox2_KeyPress(ByVal sender As Object, _
+  ByVal e As System.Windows.Forms.KeyPressEventArgs) _
+  Handles drivelettter.KeyPress
+        If (e.KeyChar < "A"c Or e.KeyChar > "Z"c) And (e.KeyChar < "a"c Or e.KeyChar > "z"c) And e.KeyChar <> vbBack Then
+            e.Handled = True
+        End If
+        If e.KeyChar <> vbBack Then
+            IPBox.Text = e.KeyChar & ":"
+        End If
     End Sub
 
 End Class

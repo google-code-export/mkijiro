@@ -71,9 +71,10 @@ Partial Class Form3
         Me.Label4.AutoSize = True
         Me.Label4.Location = New System.Drawing.Point(12, 72)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(124, 12)
+        Me.Label4.Size = New System.Drawing.Size(130, 12)
         Me.Label4.TabIndex = 4
-        Me.Label4.Text = "BUILD:2011/09/26 6:29"
+        Me.Label4.Text = "BUILD:2011/09/29 12:48"
+        Me.Label4.UseWaitCursor = True
         '
         'Form3
         '
@@ -86,7 +87,9 @@ Partial Class Form3
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Name = "Form3"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Version"
+        Me.UseWaitCursor = True
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

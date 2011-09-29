@@ -117,22 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="CheckBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>127, 16</value>
-  </data>
-  <data name="CheckBox1.Text" xml:space="preserve">
-    <value>update language file</value>
-  </data>
-  <data name="DomainUpDown1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>194, 129</value>
-  </data>
-  <data name="CheckBox2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>174, 16</value>
-  </data>
-  <data name="CheckBox2.Text" xml:space="preserve">
-    <value>only copy to this drive lettter</value>
-  </data>
   <data name="customdir.ToolTipText" xml:space="preserve">
     <value>change install path via USB/FTP
 path should be absolute path and unix-like
