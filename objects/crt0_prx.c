@@ -100,7 +100,7 @@ PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 #endif
 
 //Globals
-unsigned char *MKVER="  MKIJIRO SRC:20110909";
+unsigned char *MKVER="  MKIJIRO SRC:20111001";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -1449,12 +1449,15 @@ void menuDraw(){
 				break;
 				case 4:
 				if((pad.Buttons & SWAPBUTTON3) && (tabSelected==3 && flipme==0)){
-				if((searchHistory[0].hakVal!=0x03E00008) || extMenu == 1){
+					if((searchHistory[0].hakVal!=0x03E00008) || extMenu == 1){
+					pspDebugScreenPuts("  Paste Converted Jumpaddress+8\n");
+					}
+					else if(searchHistory[0].hakVal==0x03E00008){
+					pspDebugScreenPuts("  Quick Hook Find by break exception\n");
+					}
+				}
+				else if((pad.Buttons & SWAPBUTTON3) && (extMenu==1)){
 				pspDebugScreenPuts("  Paste Converted Jumpaddress+8\n");
-				}
-				else if(searchHistory[0].hakVal==0x03E00008){
-				pspDebugScreenPuts("  Quick Hook Find by break exception\n");
-				}
 				}
 				else{
 				pspDebugScreenPuts("  Paste value\n");
