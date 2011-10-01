@@ -21,6 +21,10 @@ certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
 0x8838DBF0 moviezone,pspfat should freeze after search/save...slim user use extraram setting
 
+2011/10/1
+コード編集時での□長押しでアドレス→ジャンプアドレス変換　が機能していたがちゃんとコンテキストのもじがでてなかったので修正。
+JET(jal)＋電車(jr)GOだといらねえけど一応修正。
+
 2011/9/9
 浮動小数で0になるやつを多少工作
 
