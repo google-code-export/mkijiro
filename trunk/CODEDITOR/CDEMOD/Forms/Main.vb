@@ -1524,17 +1524,17 @@ Public Class MERGE
             cl_tb.Text = Nothing
             cmt_tb.Text = Nothing
             If off_rd.Checked = True Then
-                If RadioButton5.Checked = True Then
+                If PSPAR.Checked = True Then
                     buffer = "2" & vbCrLf
-                ElseIf RadioButton6.Checked = True Then
+                ElseIf TEMP.Checked = True Then
                     buffer = "4" & vbCrLf
                 Else
                     buffer = "0" & vbCrLf
                 End If
             Else
-                If RadioButton5.Checked = True Then
+                If PSPAR.Checked = True Then
                     buffer = "3" & vbCrLf
-                ElseIf RadioButton6.Checked = True Then
+                ElseIf TEMP.Checked = True Then
                     buffer = "5" & vbCrLf
                 Else
                     buffer = "1" & vbCrLf
@@ -1867,11 +1867,11 @@ Public Class MERGE
                         End If
 
                         If s = "4" Or s = "5" Then
-                            RadioButton6.Checked = True
+                            TEMP.Checked = True
                         ElseIf s = "2" Or s = "3" Then
-                            RadioButton5.Checked = True
+                            PSPAR.Checked = True
                         ElseIf s = "0" Or s = "1" Then
-                            RadioButton4.Checked = True
+                            CWC.Checked = True
                         End If
 
                         skip = True
@@ -2292,14 +2292,14 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 
     '保存警告
 #Region "ALERTTXT"
-    Private Sub RadioButton4_clicked(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton4.Click
+    Private Sub RadioButton4_clicked(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CWC.Click
         changed.Text = "コード形式が変更されました。"
     End Sub
-    Private Sub RadioButton5_clicked(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton5.Click
+    Private Sub RadioButton5_clicked(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PSPAR.Click
         changed.Text = "コード形式が変更されました。"
     End Sub
 
-    Private Sub RadioButton6_clicked(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton6.Click
+    Private Sub RadioButton6_clicked(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TEMP.Click
         changed.Text = "コード形式が変更されました。"
     End Sub
 
@@ -2338,4 +2338,19 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         f.Dispose()
     End Sub
 
+    Private Sub クリップボードToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles クリップボードToolStripMenuItem.Click
+        Dim s As New save_db
+        s.clipboad("CLIP")
+    End Sub
+
+
+    Private Sub CMF出力ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CMF出力ToolStripMenuItem.Click
+        Dim s As New save_db
+        s.clipboad("CMF")
+    End Sub
+
+    Private Sub SCM出力ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SCM出力ToolStripMenuItem.Click
+        Dim s As New save_db
+        s.clipboad("SCM")
+    End Sub
 End Class

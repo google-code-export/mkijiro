@@ -122,6 +122,11 @@ Partial Class MERGE
         Me.cntexe = New System.Windows.Forms.ToolStripMenuItem()
         Me.cntkakasi = New System.Windows.Forms.ToolStripMenuItem()
         Me.cntdbcopy = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator11 = New System.Windows.Forms.ToolStripSeparator()
+        Me.変換ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.クリップボードToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CMF出力ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SCM出力ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.iconset = New System.Windows.Forms.ImageList(Me.components)
         Me.open_file = New System.Windows.Forms.OpenFileDialog()
         Me.GID_tb = New System.Windows.Forms.TextBox()
@@ -157,19 +162,18 @@ Partial Class MERGE
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.コード形式 = New System.Windows.Forms.Label()
-        Me.RadioButton1 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton2 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton3 = New System.Windows.Forms.RadioButton()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.RadioButton6 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton5 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton4 = New System.Windows.Forms.RadioButton()
+        Me.TEMP = New System.Windows.Forms.RadioButton()
+        Me.PSPAR = New System.Windows.Forms.RadioButton()
+        Me.CWC = New System.Windows.Forms.RadioButton()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.changed = New System.Windows.Forms.Label()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.Button4 = New System.Windows.Forms.Button()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.CFMODE = New System.Windows.Forms.TextBox()
         Me.treeopen.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.tool_menu.SuspendLayout()
@@ -279,7 +283,7 @@ Partial Class MERGE
         Me.sort_GID.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Sort_GID１, Me.Sort_GID2, Me.ToolStripSeparator9, Me.gid_country})
         Me.sort_GID.Image = CType(resources.GetObject("sort_GID.Image"), System.Drawing.Image)
         Me.sort_GID.Name = "sort_GID"
-        Me.sort_GID.Size = New System.Drawing.Size(152, 22)
+        Me.sort_GID.Size = New System.Drawing.Size(112, 22)
         Me.sort_GID.Text = "ゲームID"
         '
         'Sort_GID１
@@ -315,7 +319,7 @@ Partial Class MERGE
         Me.name_sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Sort_GTitle1, Me.Sort_GTitle2, Me.ToolStripSeparator10, Me.gname_country})
         Me.name_sort.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.abc
         Me.name_sort.Name = "name_sort"
-        Me.name_sort.Size = New System.Drawing.Size(152, 22)
+        Me.name_sort.Size = New System.Drawing.Size(112, 22)
         Me.name_sort.Text = "ゲーム名"
         '
         'Sort_GTitle1
@@ -775,9 +779,9 @@ Partial Class MERGE
         '
         'ContextMenuStrip1
         '
-        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cntparser, Me.ToolStripSeparator4, Me.cntclose, Me.cntexpand, Me.ToolStripSeparator5, Me.hankaku, Me.CNchar, Me.ToolStripSeparator6, Me.cntexe})
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cntparser, Me.ToolStripSeparator4, Me.cntclose, Me.cntexpand, Me.ToolStripSeparator5, Me.hankaku, Me.CNchar, Me.ToolStripSeparator6, Me.cntexe, Me.ToolStripSeparator11, Me.変換ToolStripMenuItem})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(177, 154)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(177, 204)
         '
         'cntparser
         '
@@ -843,6 +847,36 @@ Partial Class MERGE
         Me.cntdbcopy.Size = New System.Drawing.Size(161, 22)
         Me.cntdbcopy.Text = "PSPへコードを転送"
         '
+        'ToolStripSeparator11
+        '
+        Me.ToolStripSeparator11.Name = "ToolStripSeparator11"
+        Me.ToolStripSeparator11.Size = New System.Drawing.Size(173, 6)
+        '
+        '変換ToolStripMenuItem
+        '
+        Me.変換ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.クリップボードToolStripMenuItem, Me.CMF出力ToolStripMenuItem, Me.SCM出力ToolStripMenuItem})
+        Me.変換ToolStripMenuItem.Name = "変換ToolStripMenuItem"
+        Me.変換ToolStripMenuItem.Size = New System.Drawing.Size(176, 22)
+        Me.変換ToolStripMenuItem.Text = "変換"
+        '
+        'クリップボードToolStripMenuItem
+        '
+        Me.クリップボードToolStripMenuItem.Name = "クリップボードToolStripMenuItem"
+        Me.クリップボードToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.クリップボードToolStripMenuItem.Text = "クリップボード"
+        '
+        'CMF出力ToolStripMenuItem
+        '
+        Me.CMF出力ToolStripMenuItem.Name = "CMF出力ToolStripMenuItem"
+        Me.CMF出力ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.CMF出力ToolStripMenuItem.Text = "CMF出力"
+        '
+        'SCM出力ToolStripMenuItem
+        '
+        Me.SCM出力ToolStripMenuItem.Name = "SCM出力ToolStripMenuItem"
+        Me.SCM出力ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.SCM出力ToolStripMenuItem.Text = "SCM出力"
+        '
         'iconset
         '
         Me.iconset.ImageStream = CType(resources.GetObject("iconset.ImageStream"), System.Windows.Forms.ImageListStreamer)
@@ -851,13 +885,6 @@ Partial Class MERGE
         Me.iconset.Images.SetKeyName(1, "sony psp.png")
         Me.iconset.Images.SetKeyName(2, "code title.png")
         Me.iconset.Images.SetKeyName(3, "code selected.png")
-        '
-        'open_file
-        '
-        'Me.open_file.FileName = "*.db;*.ar;*.cmf;*.txt;*.dat"
-        'Me.open_file.Filter = "対応ファイル(*.db;*ar;*.cmf;*.txt;*.dat)|*.db;*.ar;*.cmf;*.txt;*.dat|CWcheat (*.db)|*.d" & _
-        '    "b|ACTIONREPLAY(*.ar)|*.ar|CMFUSION (*.cmf)|*.cmf|FreeCheat (*.txt)|*.txt|CodeFre" & _
-        '     "ak (*.dat)|*.dat|全てのファイル (*.*)|*.*"
         '
         'GID_tb
         '
@@ -1215,82 +1242,49 @@ Partial Class MERGE
         Me.コード形式.TabIndex = 21
         Me.コード形式.Text = "コード形式"
         '
-        'RadioButton1
-        '
-        Me.RadioButton1.AutoSize = True
-        Me.RadioButton1.Location = New System.Drawing.Point(414, 134)
-        Me.RadioButton1.Name = "RadioButton1"
-        Me.RadioButton1.Size = New System.Drawing.Size(48, 16)
-        Me.RadioButton1.TabIndex = 22
-        Me.RadioButton1.TabStop = True
-        Me.RadioButton1.Text = "CWC"
-        Me.RadioButton1.UseVisualStyleBackColor = True
-        '
-        'RadioButton2
-        '
-        Me.RadioButton2.AutoSize = True
-        Me.RadioButton2.Location = New System.Drawing.Point(468, 133)
-        Me.RadioButton2.Name = "RadioButton2"
-        Me.RadioButton2.Size = New System.Drawing.Size(60, 16)
-        Me.RadioButton2.TabIndex = 23
-        Me.RadioButton2.TabStop = True
-        Me.RadioButton2.Text = "PSPAR"
-        Me.RadioButton2.UseVisualStyleBackColor = True
-        '
-        'RadioButton3
-        '
-        Me.RadioButton3.AutoSize = True
-        Me.RadioButton3.Location = New System.Drawing.Point(534, 132)
-        Me.RadioButton3.Name = "RadioButton3"
-        Me.RadioButton3.Size = New System.Drawing.Size(69, 16)
-        Me.RadioButton3.TabIndex = 24
-        Me.RadioButton3.TabStop = True
-        Me.RadioButton3.Text = "TEMPAR"
-        Me.RadioButton3.UseVisualStyleBackColor = True
-        '
         'Panel1
         '
-        Me.Panel1.Controls.Add(Me.RadioButton6)
-        Me.Panel1.Controls.Add(Me.RadioButton5)
-        Me.Panel1.Controls.Add(Me.RadioButton4)
+        Me.Panel1.Controls.Add(Me.TEMP)
+        Me.Panel1.Controls.Add(Me.PSPAR)
+        Me.Panel1.Controls.Add(Me.CWC)
         Me.Panel1.Enabled = False
-        Me.Panel1.Location = New System.Drawing.Point(413, 130)
+        Me.Panel1.Location = New System.Drawing.Point(412, 131)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(200, 20)
+        Me.Panel1.Size = New System.Drawing.Size(160, 20)
         Me.Panel1.TabIndex = 25
         '
-        'RadioButton6
+        'TEMP
         '
-        Me.RadioButton6.AutoSize = True
-        Me.RadioButton6.Location = New System.Drawing.Point(106, 2)
-        Me.RadioButton6.Name = "RadioButton6"
-        Me.RadioButton6.Size = New System.Drawing.Size(53, 16)
-        Me.RadioButton6.TabIndex = 2
-        Me.RadioButton6.TabStop = True
-        Me.RadioButton6.Text = "TEMP"
-        Me.RadioButton6.UseVisualStyleBackColor = True
+        Me.TEMP.AutoSize = True
+        Me.TEMP.Location = New System.Drawing.Point(106, 2)
+        Me.TEMP.Name = "TEMP"
+        Me.TEMP.Size = New System.Drawing.Size(53, 16)
+        Me.TEMP.TabIndex = 2
+        Me.TEMP.TabStop = True
+        Me.TEMP.Text = "TEMP"
+        Me.TEMP.UseVisualStyleBackColor = True
         '
-        'RadioButton5
+        'PSPAR
         '
-        Me.RadioButton5.AutoSize = True
-        Me.RadioButton5.Location = New System.Drawing.Point(48, 2)
-        Me.RadioButton5.Name = "RadioButton5"
-        Me.RadioButton5.Size = New System.Drawing.Size(60, 16)
-        Me.RadioButton5.TabIndex = 1
-        Me.RadioButton5.TabStop = True
-        Me.RadioButton5.Text = "PSPAR"
-        Me.RadioButton5.UseVisualStyleBackColor = True
+        Me.PSPAR.AutoSize = True
+        Me.PSPAR.Location = New System.Drawing.Point(48, 2)
+        Me.PSPAR.Name = "PSPAR"
+        Me.PSPAR.Size = New System.Drawing.Size(60, 16)
+        Me.PSPAR.TabIndex = 1
+        Me.PSPAR.TabStop = True
+        Me.PSPAR.Text = "PSPAR"
+        Me.PSPAR.UseVisualStyleBackColor = True
         '
-        'RadioButton4
+        'CWC
         '
-        Me.RadioButton4.AutoSize = True
-        Me.RadioButton4.Location = New System.Drawing.Point(3, 2)
-        Me.RadioButton4.Name = "RadioButton4"
-        Me.RadioButton4.Size = New System.Drawing.Size(48, 16)
-        Me.RadioButton4.TabIndex = 0
-        Me.RadioButton4.TabStop = True
-        Me.RadioButton4.Text = "CWC"
-        Me.RadioButton4.UseVisualStyleBackColor = True
+        Me.CWC.AutoSize = True
+        Me.CWC.Location = New System.Drawing.Point(3, 2)
+        Me.CWC.Name = "CWC"
+        Me.CWC.Size = New System.Drawing.Size(48, 16)
+        Me.CWC.TabIndex = 0
+        Me.CWC.TabStop = True
+        Me.CWC.Text = "CWC"
+        Me.CWC.UseVisualStyleBackColor = True
         '
         'Label1
         '
@@ -1347,7 +1341,7 @@ Partial Class MERGE
         '
         Me.Button4.Font = New System.Drawing.Font("MS UI Gothic", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button4.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Button4.Location = New System.Drawing.Point(503, 447)
+        Me.Button4.Location = New System.Drawing.Point(504, 447)
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(10, 10)
         Me.Button4.TabIndex = 31
@@ -1356,24 +1350,43 @@ Partial Class MERGE
         Me.Button4.UseVisualStyleBackColor = False
         Me.Button4.Visible = False
         '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(578, 117)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(48, 12)
+        Me.Label2.TabIndex = 32
+        Me.Label2.Text = "CFモード"
+        Me.Label2.Visible = False
+        '
+        'CFMODE
+        '
+        Me.CFMODE.ImeMode = System.Windows.Forms.ImeMode.Alpha
+        Me.CFMODE.Location = New System.Drawing.Point(580, 131)
+        Me.CFMODE.MaxLength = 3
+        Me.CFMODE.Name = "CFMODE"
+        Me.CFMODE.Size = New System.Drawing.Size(46, 19)
+        Me.CFMODE.TabIndex = 33
+        Me.CFMODE.Visible = False
+        '
         'MERGE
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
         Me.ClientSize = New System.Drawing.Size(647, 562)
+        Me.Controls.Add(Me.CFMODE)
+        Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Button4)
         Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.changed)
         Me.Controls.Add(Me.Label1)
-        Me.Controls.Add(Me.Panel1)
-        Me.Controls.Add(Me.RadioButton3)
-        Me.Controls.Add(Me.RadioButton2)
-        Me.Controls.Add(Me.RadioButton1)
         Me.Controls.Add(Me.コード形式)
         Me.Controls.Add(Me.TextBox2)
+        Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.TextBox1)
         Me.Controls.Add(Me.Joker_lbl)
         Me.Controls.Add(Me.inverse_chk)
@@ -1476,13 +1489,10 @@ Partial Class MERGE
     Friend WithEvents TextBox2 As System.Windows.Forms.TextBox
     Friend WithEvents copy_to_psp As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents コード形式 As System.Windows.Forms.Label
-    Friend WithEvents RadioButton1 As System.Windows.Forms.RadioButton
-    Friend WithEvents RadioButton2 As System.Windows.Forms.RadioButton
-    Friend WithEvents RadioButton3 As System.Windows.Forms.RadioButton
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
-    Friend WithEvents RadioButton5 As System.Windows.Forms.RadioButton
-    Friend WithEvents RadioButton4 As System.Windows.Forms.RadioButton
-    Friend WithEvents RadioButton6 As System.Windows.Forms.RadioButton
+    Friend WithEvents PSPAR As System.Windows.Forms.RadioButton
+    Friend WithEvents CWC As System.Windows.Forms.RadioButton
+    Friend WithEvents TEMP As System.Windows.Forms.RadioButton
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents changed As System.Windows.Forms.Label
     Friend WithEvents UTF16BECP1201ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
@@ -1556,5 +1566,12 @@ Partial Class MERGE
     Friend WithEvents ToolStripSeparator10 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents gname_country As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents autoupdater As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents CFMODE As System.Windows.Forms.TextBox
+    Friend WithEvents ToolStripSeparator11 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents 変換ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents クリップボードToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents CMF出力ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents SCM出力ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class
