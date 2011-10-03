@@ -342,4 +342,223 @@ Public Class save_db
 
     End Sub
 
+    Public Sub clipboad(ByVal MODE As String)
+
+        Dim m As MERGE = MERGE
+        Dim i As Integer = 0 ' Error count
+        Dim buffer As String()
+        Dim filename = "TMP"
+        Dim ew As error_window = error_window
+        Dim errors As Boolean = False
+        Dim cwcar As String = "_L "
+        Dim b1 As String = Nothing
+        Dim gid As String = ""
+        Dim scm As String = ""
+        Dim cmf As String = ""
+        Dim scmclose As Boolean = False
+        Dim out As Boolean = False
+        Dim nullcode As Boolean = False
+        Dim line As Integer = 0
+        Dim nnnn As Integer = 0
+        reset_errors() ' Clear prior save errors if any
+
+        Try
+
+            Dim n As TreeNode = m.codetree.SelectedNode
+
+            If n.Level = 0 Then
+
+            ElseIf n.Level > 0 Then
+                If n.Level = 2 Then
+                    n = n.Parent
+                End If
+                gid = n.Tag.ToString.Trim
+                b1 = "_S " & gid & vbCrLf
+                scm = "ID:" & gid & vbCrLf
+                b1 &= "_G " & n.Text.Trim & vbCrLf
+                scm &= "NAME:" & n.Text.Trim & vbCrLf
+                cmf = b1
+
+                If m.codetree.SelectedNode.Level = 2 Then
+                        b1 = ""
+                End If
+
+                For Each n1 As TreeNode In n.Nodes
+
+                    If n1.Tag Is Nothing Then
+                        If n1.Tag.ToString.Substring(0, 1) = "0" Then
+                            b1 &= "_C0 " & n1.Text.Trim & vbCrLf
+                        Else
+                            b1 &= "_C1 " & n1.Text.Trim & vbCrLf
+                        End If
+                        If scmclose = True Then
+                            scm = scm.Insert(scm.Length - 1, "}")
+                        End If
+                        scm &= "$" & n1.Text.Trim & "{" & vbCrLf
+                        scm &= "$ $2 $(FFFFFFFF FFFFFFFF)}" & vbCrLf
+                        cmf &= "_C0 " & n1.Text.Trim & vbCrLf
+                        line = 0
+                    Else
+
+                        buffer = n1.Tag.ToString.Split(CChar(vbCrLf))
+
+                        For Each s As String In buffer
+                            If s.Length = 1 Then
+                                If s = "0" Or s = "2" Or s = "4" Then
+                                    If s = "0" Then
+                                        cwcar = "_L "
+                                    ElseIf s = "2" Then
+                                        cwcar = "_M "
+                                    ElseIf s = "4" Then
+                                        cwcar = "_N "
+                                    End If
+                                    b1 &= "_C0 " & n1.Text.Trim & vbCrLf
+                                    If MODE <> "CLIP" AndAlso s = "0" Then
+                                        If nullcode = True Then
+                                            scm &= "$ $2 $(FFFFFFFF FFFFFFFF)" & vbCrLf
+                                        End If
+                                        If scmclose = True Then
+                                            scm = scm.Insert(scm.Length - 2, "}")
+                                        End If
+                                        scm &= "$" & n1.Text.Trim & "{" & vbCrLf
+                                        cmf &= "_C0 " & n1.Text.Trim & vbCrLf
+                                        line = 0
+                                        out = True
+                                        nullcode = True
+                                    Else
+                                        out = False
+                                    End If
+                                ElseIf s = "1" Or s = "3" Or s = "5" Then
+                                    If s = "1" Then
+                                        cwcar = "_L "
+                                    ElseIf s = "3" Then
+                                        cwcar = "_M "
+                                    ElseIf s = "5" Then
+                                        cwcar = "_N "
+                                    End If
+                                    b1 &= "_C1 " & n1.Text.Trim & vbCrLf
+                                    If MODE <> "CLIP" AndAlso s = "1" Then
+                                        If nullcode = True Then
+                                            scm &= "$ $2 $(FFFFFFFF FFFFFFFF)" & vbCrLf
+                                        End If
+                                        If scmclose = True Then
+                                            scm = scm.Insert(scm.Length - 2, "}")
+                                        End If
+                                        scm &= "$" & n1.Text.Trim & "{" & vbCrLf
+                                        cmf &= "_C1 " & n1.Text.Trim & vbCrLf
+                                        line = 0
+                                        nullcode = True
+                                        out = True
+                                    Else
+                                        out = False
+                                    End If
+                                End If
+
+                            ElseIf s.Length > 1 Then
+
+                                If s.Contains("#") AndAlso MODE <> "SCM" Then
+                                    b1 &= s.Trim & vbCrLf
+                                Else
+                                    '0x00000000 0x00000000
+                                    If s.Contains("0x") Then
+                                        b1 &= cwcar & s.Trim & vbCrLf
+                                        scmclose = True
+                                        nullcode = False
+                                        If out = True Then
+                                            If (s.Substring(3, 1) = "4" Or s.Substring(3, 1) = "8" Or s.Substring(3, 1) = "5" Or s.Substring(3, 3) = "305" Or s.Substring(3, 3) = "306") _
+                                                AndAlso line = 0 Then
+                                                scm &= "$ $2 $(" & s.Trim.Replace("0x", "") & " "
+                                                line = 4
+                                            ElseIf s.Substring(3, 1) = "6" AndAlso line = 0 Then
+                                                scm &= "$ $2 $(" & s.Trim.Replace("0x", "") & " "
+                                                line = 6
+                                            ElseIf line = 6 Then
+                                                If CInt(s.Substring(10, 1)) > 1 Then
+                                                    scm &= s.Trim.Replace("0x", "") & " "
+                                                    nnnn = CInt(s.Substring(10, 1))
+                                                    line = 9
+                                                Else
+                                                    scm &= s.Trim.Replace("0x", "") & ")" & vbCrLf
+                                                    line = 0
+                                                End If
+                                            ElseIf line = 9 Then
+                                                If s.Substring(3, 1) = "2" Or s.Substring(3, 1) = "3" Then
+                                                    scm &= s.Trim.Replace("0x", "") & ")" & vbCrLf
+                                                    nnnn = nnnn \ 2 - 1
+                                                    If nnnn > 0 Then
+                                                        line = 2
+                                                    Else
+                                                        line = 0
+                                                    End If
+                                                Else
+                                                    scm &= s.Trim.Replace("0x", "") & ")" & vbCrLf
+                                                    line = 0
+                                                End If
+                                            ElseIf line = 2 Then
+                                                If nnnn > 0 Then
+                                                    scm &= "$└ $2 $(" & s.Trim.Replace("0x", "") & ")" & vbCrLf
+                                                Else
+                                                    scm &= "$ $2 $(" & s.Trim.Replace("0x", "") & ")" & vbCrLf
+                                                    line = 0
+                                                End If
+                                            ElseIf line = 4 Then
+                                                scm &= s.Trim.Replace("0x", "") & ")" & vbCrLf
+                                                line = 0
+                                            Else
+                                                scm &= "$ $2 $(" & s.Trim.Replace("0x", "") & ")" & vbCrLf
+                                            End If
+                                            cmf &= cwcar & s.Trim & vbCrLf
+                                        End If
+                                    Else
+                                        ' Error, code length was incorrect
+                                        i += 1
+                                        write_errors(i, n.Text.Trim, n1.Text.Trim, "不正なコード形式です: " & s.Trim)
+                                        errors = True
+                                    End If
+
+                                End If
+
+                            End If
+
+                        Next
+
+                        End If
+
+                    If m.codetree.SelectedNode.Level = 2 Then
+                        If n1.Index = m.codetree.SelectedNode.Index Then
+                            Exit For
+                        Else
+                            b1 = ""
+                        End If
+                    End If
+
+                Next
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+        End Try
+
+        filename = Application.StartupPath & "\" & gid
+
+        If nullcode = True Then
+            scm &= "$ $2 $(FFFFFFFF FFFFFFFF)" & vbCrLf
+        End If
+        scm = scm.Insert(scm.Length - 2, "}")
+
+        If MODE = "CLIP" Then
+            Clipboard.SetText(b1)
+        ElseIf MODE = "CMF" Then
+            filename &= ".cmf"
+            Dim tw As New StreamWriter(filename, False, System.Text.Encoding.GetEncoding(936))
+            tw.Write(cmf)
+            tw.Close()
+        ElseIf MODE = "SCM" Then
+            filename &= ".scm"
+            Dim tw As New StreamWriter(filename, False, System.Text.Encoding.GetEncoding(936))
+            tw.Write(scm)
+            tw.Close()
+        End If
+
+    End Sub
 End Class
