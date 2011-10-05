@@ -1,5 +1,6 @@
 ﻿Imports System
 Imports System.IO
+Imports System.Text
 
 Public Class save_db
 
@@ -314,6 +315,8 @@ Public Class save_db
 
     End Sub
 
+
+
     Private Sub reset_errors()
 
         Dim ew As error_window = error_window
@@ -377,6 +380,7 @@ Public Class save_db
                 scm = "ID:" & gid & vbCrLf
                 b1 &= "_G " & n.Text.Trim & vbCrLf
                 scm &= "NAME:" & n.Text.Trim & vbCrLf
+                scm &= "$START" & vbCrLf
                 cmf = b1
 
                 If m.codetree.SelectedNode.Level = 2 Then
@@ -472,6 +476,16 @@ Public Class save_db
                                             ElseIf s.Substring(3, 1) = "6" AndAlso line = 0 Then
                                                 scm &= "$ $2 $(" & s.Trim.Replace("0x", "") & " "
                                                 line = 6
+                                            ElseIf s.Substring(3, 2) = "F0" AndAlso line = 0 Then
+                                                scm &= "$暗号不可 $2 $(FFFFFFFF FFFFFFFF)" & vbCrLf
+                                                line = 15
+                                                nnnn = Convert.ToInt32(s.Substring(9, 2), 16)
+                                            ElseIf line = 15 Then
+                                                If nnnn > 0 Then
+                                                    nnnn -= 1
+                                                Else
+                                                    line = 0
+                                                End If
                                             ElseIf line = 6 Then
                                                 If CInt(s.Substring(10, 1)) > 1 Then
                                                     scm &= s.Trim.Replace("0x", "") & " "
@@ -559,6 +573,129 @@ Public Class save_db
             tw.Write(scm)
             tw.Close()
         End If
+
+    End Sub
+
+
+    Public Sub save_tab(ByVal filename As String)
+
+        Dim m As MERGE = MERGE
+        Dim buffer As String()
+        Dim i As Integer = 0
+        Dim k As Integer = 0
+        Dim hex As UInteger = 0
+        Dim address As ULong = 0
+        Dim real As ULong = &H8800000
+        Dim bs() As Byte = Nothing
+        Dim header(35) As Byte
+        Dim gametitle() As Byte = Nothing
+        Dim total(3) As Byte
+        Dim acode(7) As Byte
+        Dim code(3) As Byte
+        Dim name(9) As Byte
+        Dim codetotal(1000 * 16) As Byte
+        Dim nametotal(1000 * 10) As Byte
+        Dim nullcode As Boolean = False
+        Dim flag As Boolean = False
+
+        Dim n As TreeNode = m.codetree.SelectedNode
+
+        Try
+
+            If n.Level = 0 Then
+            ElseIf n.Level > 0 Then
+                If n.Level = 2 Then
+                    n = n.Parent
+                End If
+                name = Encoding.GetEncoding(0).GetBytes(n.Tag.ToString)
+                Array.ConstrainedCopy(name, 0, header, 0, 10)
+                Array.Resize(gametitle, 2 * n.Text.ToString.Length)
+                gametitle = Encoding.GetEncoding(936).GetBytes(n.Text.ToString)
+                Array.Resize(gametitle, 26)
+                Array.ConstrainedCopy(gametitle, 0, header, 10, gametitle.Length)
+
+                For Each n1 As TreeNode In n.Nodes
+
+                    If n1.Tag Is Nothing Then
+
+                    ElseIf i >= 999 Then
+                        Exit For
+                    Else
+
+                        buffer = n1.Tag.ToString.Split(CChar(vbCrLf))
+                        For Each s As String In buffer
+                            If s.Length = 1 Then
+                                If s = "0" Or s = "1" Then
+                                    Array.Clear(name, 0, 10)
+                                    Array.Resize(name, 2 * n1.Name.Length)
+                                    name = Encoding.GetEncoding(936).GetBytes(n1.Name)
+                                    Array.Resize(name, 10)
+                                    Array.ConstrainedCopy(name, 0, nametotal, i * 10, 10)
+                                    If s = "1" Then
+                                        flag = True
+                                    Else
+                                        flag = False
+                                    End If
+                                    If nullcode = True Then
+                                        i += 1
+                                    End If
+                                    nullcode = True
+                                End If
+                            ElseIf s.Length > 1 Then
+                                '0x00000000 0x00000000
+                                If s.Contains("#") Then
+
+                                ElseIf s.Contains("0x") Then
+                                    address = Convert.ToUInt64(s.Substring(3, 8), 16)
+                                    address += real
+                                    acode = BitConverter.GetBytes(address)
+                                    Array.ConstrainedCopy(acode, 0, codetotal, i * 16, 4)
+                                    hex = Convert.ToUInt32(s.Substring(12, 8), 16)
+                                    code = BitConverter.GetBytes(hex)
+                                    Array.ConstrainedCopy(code, 0, codetotal, i * 16 + 4, 4)
+                                    If flag = True Then
+                                        codetotal(i * 16 + 12) = 1
+                                    End If
+                                    If nullcode = False Then
+                                        nametotal(i * 10) = &H2B
+                                    End If
+                                    nullcode = False
+                                    i += 1
+                                End If
+
+                                If i >= 999 Then
+                                    Exit For
+                                End If
+
+                            End If
+
+                        Next
+
+                    End If
+
+                Next
+
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+        End Try
+
+        If nullcode = True Then
+            i += 1
+        End If
+
+        Array.Resize(nametotal, 10 * i)
+        Array.Resize(codetotal, 16 * i)
+        code = BitConverter.GetBytes(i)
+        Array.Resize(bs, 40 + 26 * i)
+        Array.ConstrainedCopy(header, 0, bs, 0, 36)
+        Array.ConstrainedCopy(code, 0, bs, 36, 4)
+        Array.ConstrainedCopy(codetotal, 0, bs, 40, codetotal.Length)
+        Array.ConstrainedCopy(nametotal, 0, bs, 40 + codetotal.Length, nametotal.Length)
+        filename = Application.StartupPath & "\" & n.Tag.ToString & ".tab"
+        Dim fs As New System.IO.FileStream(filename, System.IO.FileMode.Create, System.IO.FileAccess.Write)
+        fs.Write(bs, 0, bs.Length)
+        fs.Close()
 
     End Sub
 End Class

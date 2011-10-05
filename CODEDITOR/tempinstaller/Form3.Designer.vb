@@ -37,6 +37,7 @@ Partial Class Form3
         Me.Label1.Size = New System.Drawing.Size(135, 12)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "TempAR Update Checker"
+        Me.Label1.UseWaitCursor = True
         '
         'Label2
         '
@@ -46,6 +47,7 @@ Partial Class Form3
         Me.Label2.Size = New System.Drawing.Size(91, 12)
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "created by （ﾟ∀ﾟ)"
+        Me.Label2.UseWaitCursor = True
         '
         'Label3
         '
@@ -55,6 +57,7 @@ Partial Class Form3
         Me.Label3.Size = New System.Drawing.Size(115, 12)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "Licence: GNU GPL v3"
+        Me.Label3.UseWaitCursor = True
         '
         'LinkLabel1
         '
@@ -65,6 +68,7 @@ Partial Class Form3
         Me.LinkLabel1.TabIndex = 3
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "GOOGLESVN"
+        Me.LinkLabel1.UseWaitCursor = True
         '
         'Label4
         '
@@ -73,7 +77,7 @@ Partial Class Form3
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(130, 12)
         Me.Label4.TabIndex = 4
-        Me.Label4.Text = "BUILD:2011/09/29 12:48"
+        Me.Label4.Text = "BUILD:2011/10/04 23:03"
         Me.Label4.UseWaitCursor = True
         '
         'Form3
