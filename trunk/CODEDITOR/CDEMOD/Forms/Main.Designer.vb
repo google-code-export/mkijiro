@@ -174,6 +174,7 @@ Partial Class MERGE
         Me.Button4 = New System.Windows.Forms.Button()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.CFMODE = New System.Windows.Forms.TextBox()
+        Me.TAB出力ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.treeopen.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.tool_menu.SuspendLayout()
@@ -854,7 +855,7 @@ Partial Class MERGE
         '
         '変換ToolStripMenuItem
         '
-        Me.変換ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.クリップボードToolStripMenuItem, Me.CMF出力ToolStripMenuItem, Me.SCM出力ToolStripMenuItem})
+        Me.変換ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.クリップボードToolStripMenuItem, Me.CMF出力ToolStripMenuItem, Me.SCM出力ToolStripMenuItem, Me.TAB出力ToolStripMenuItem})
         Me.変換ToolStripMenuItem.Name = "変換ToolStripMenuItem"
         Me.変換ToolStripMenuItem.Size = New System.Drawing.Size(176, 22)
         Me.変換ToolStripMenuItem.Text = "変換"
@@ -1370,6 +1371,12 @@ Partial Class MERGE
         Me.CFMODE.TabIndex = 33
         Me.CFMODE.Visible = False
         '
+        'TAB出力ToolStripMenuItem
+        '
+        Me.TAB出力ToolStripMenuItem.Name = "TAB出力ToolStripMenuItem"
+        Me.TAB出力ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.TAB出力ToolStripMenuItem.Text = "TAB出力"
+        '
         'MERGE
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
@@ -1573,5 +1580,6 @@ Partial Class MERGE
     Friend WithEvents クリップボードToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents CMF出力ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents SCM出力ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents TAB出力ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class

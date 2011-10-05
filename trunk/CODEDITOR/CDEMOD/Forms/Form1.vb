@@ -397,7 +397,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
     'IEE754単精度浮動小数点binary32を半精度浮動小数点binary16に変換 Cから移植、VB.NET
     Function converthalffloat(ByVal hf As String) As String
         Dim hex As Integer = Convert.ToInt32(hf, 16)
-        Dim sign As Integer = (hex And &H80000000)\ &H10000
+        Dim sign As Integer = (hex And &H80000000) \ &H10000
         Dim exponent As Integer = (hex And &H7F800000) \ &H800000
         Dim fraction As Integer = (hex And &H7FFFFF)
 

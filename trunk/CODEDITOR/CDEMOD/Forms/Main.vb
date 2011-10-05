@@ -2353,4 +2353,9 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         Dim s As New save_db
         s.clipboad("SCM")
     End Sub
+
+    Private Sub TAB出力ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TAB出力ToolStripMenuItem.Click
+        Dim s As New save_db
+        s.save_tab("")
+    End Sub
 End Class
