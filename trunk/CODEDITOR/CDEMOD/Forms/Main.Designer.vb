@@ -123,7 +123,7 @@ Partial Class MERGE
         Me.cntkakasi = New System.Windows.Forms.ToolStripMenuItem()
         Me.cntdbcopy = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator11 = New System.Windows.Forms.ToolStripSeparator()
-        Me.変換ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.NodeConvert = New System.Windows.Forms.ToolStripMenuItem()
         Me.clipboad = New System.Windows.Forms.ToolStripMenuItem()
         Me.CMFexport = New System.Windows.Forms.ToolStripMenuItem()
         Me.SCMexport = New System.Windows.Forms.ToolStripMenuItem()
@@ -780,7 +780,7 @@ Partial Class MERGE
         '
         'ContextMenuStrip1
         '
-        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cntparser, Me.ToolStripSeparator4, Me.cntclose, Me.cntexpand, Me.ToolStripSeparator5, Me.hankaku, Me.CNchar, Me.ToolStripSeparator6, Me.cntexe, Me.ToolStripSeparator11, Me.変換ToolStripMenuItem})
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cntparser, Me.ToolStripSeparator4, Me.cntclose, Me.cntexpand, Me.ToolStripSeparator5, Me.hankaku, Me.CNchar, Me.ToolStripSeparator6, Me.cntexe, Me.ToolStripSeparator11, Me.NodeConvert})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
         Me.ContextMenuStrip1.Size = New System.Drawing.Size(177, 204)
         '
@@ -853,35 +853,35 @@ Partial Class MERGE
         Me.ToolStripSeparator11.Name = "ToolStripSeparator11"
         Me.ToolStripSeparator11.Size = New System.Drawing.Size(173, 6)
         '
-        '変換ToolStripMenuItem
+        'NodeConvert
         '
-        Me.変換ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.clipboad, Me.CMFexport, Me.SCMexport, Me.TABexport})
-        Me.変換ToolStripMenuItem.Name = "変換ToolStripMenuItem"
-        Me.変換ToolStripMenuItem.Size = New System.Drawing.Size(176, 22)
-        Me.変換ToolStripMenuItem.Text = "変換"
+        Me.NodeConvert.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.clipboad, Me.CMFexport, Me.SCMexport, Me.TABexport})
+        Me.NodeConvert.Name = "NodeConvert"
+        Me.NodeConvert.Size = New System.Drawing.Size(176, 22)
+        Me.NodeConvert.Text = "変換"
         '
         'clipboad
         '
         Me.clipboad.Name = "clipboad"
-        Me.clipboad.Size = New System.Drawing.Size(130, 22)
+        Me.clipboad.Size = New System.Drawing.Size(152, 22)
         Me.clipboad.Text = "クリップボード"
         '
         'CMFexport
         '
         Me.CMFexport.Name = "CMFexport"
-        Me.CMFexport.Size = New System.Drawing.Size(130, 22)
+        Me.CMFexport.Size = New System.Drawing.Size(152, 22)
         Me.CMFexport.Text = "CMF出力"
         '
         'SCMexport
         '
         Me.SCMexport.Name = "SCMexport"
-        Me.SCMexport.Size = New System.Drawing.Size(130, 22)
+        Me.SCMexport.Size = New System.Drawing.Size(152, 22)
         Me.SCMexport.Text = "SCM出力"
         '
         'TABexport
         '
         Me.TABexport.Name = "TABexport"
-        Me.TABexport.Size = New System.Drawing.Size(130, 22)
+        Me.TABexport.Size = New System.Drawing.Size(152, 22)
         Me.TABexport.Text = "TAB出力"
         '
         'iconset
@@ -1577,7 +1577,7 @@ Partial Class MERGE
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents CFMODE As System.Windows.Forms.TextBox
     Friend WithEvents ToolStripSeparator11 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents 変換ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents NodeConvert As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents clipboad As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents CMFexport As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents SCMexport As System.Windows.Forms.ToolStripMenuItem
