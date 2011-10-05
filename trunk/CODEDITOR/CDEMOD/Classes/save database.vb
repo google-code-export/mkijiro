@@ -417,7 +417,7 @@ Public Class save_db
                                         cwcar = "_N "
                                     End If
                                     b1 &= "_C0 " & n1.Text.Trim & vbCrLf
-                                    If MODE <> "CLIP" AndAlso s = "0" Then
+                                    If MODE <> "CLIP" AndAlso s = "0" AndAlso m.PSX = False Then
                                         If nullcode = True Then
                                             scm &= "$ $2 $(FFFFFFFF FFFFFFFF)" & vbCrLf
                                         End If
@@ -441,7 +441,7 @@ Public Class save_db
                                         cwcar = "_N "
                                     End If
                                     b1 &= "_C1 " & n1.Text.Trim & vbCrLf
-                                    If MODE <> "CLIP" AndAlso s = "1" Then
+                                    If MODE <> "CLIP" AndAlso s = "1" AndAlso m.PSX = False Then
                                         If nullcode = True Then
                                             scm &= "$ $2 $(FFFFFFFF FFFFFFFF)" & vbCrLf
                                         End If
@@ -462,13 +462,15 @@ Public Class save_db
 
                                 If s.Contains("#") AndAlso MODE <> "SCM" Then
                                     b1 &= s.Trim & vbCrLf
+                                ElseIf m.PSX = True Then
+                                    b1 &= cwcar & s.Trim & vbCrLf
                                 Else
                                     '0x00000000 0x00000000
                                     If s.Contains("0x") Then
                                         b1 &= cwcar & s.Trim & vbCrLf
                                         scmclose = True
                                         nullcode = False
-                                        If out = True Then
+                                        If out = True AndAlso m.PSX = False Then
                                             If (s.Substring(3, 1) = "4" Or s.Substring(3, 1) = "8" Or s.Substring(3, 1) = "5" Or s.Substring(3, 3) = "305" Or s.Substring(3, 3) = "306") _
                                                 AndAlso line = 0 Then
                                                 scm &= "$ $2 $(" & s.Trim.Replace("0x", "") & " "
@@ -650,7 +652,7 @@ Public Class save_db
                                     address += real
                                     acode = BitConverter.GetBytes(address)
                                     Array.ConstrainedCopy(acode, 0, codetotal, i * 16, 4)
-                                    hex = Convert.ToUInt32(s.Substring(12, 8), 16)
+                                    hex = Convert.ToUInt32(s.Substring(14, 8), 16)
                                     code = BitConverter.GetBytes(hex)
                                     Array.ConstrainedCopy(code, 0, codetotal, i * 16 + 4, 4)
                                     If flag = True Then

@@ -495,9 +495,15 @@ Public Class MERGE
         If PSX = False Then
             saveas_cwcheat.Enabled = True
             saveas_psx.Enabled = False
+            CMFexport.Enabled = True
+            SCMexport.Enabled = True
+            TABexport.Enabled = True
         ElseIf PSX = True Then
             saveas_cwcheat.Enabled = False
             saveas_psx.Enabled = True
+            CMFexport.Enabled = False
+            SCMexport.Enabled = False
+            TABexport.Enabled = False
         End If
 
         button_list.Enabled = False
@@ -533,9 +539,15 @@ Public Class MERGE
         If PSX = False Then
             saveas_cwcheat.Enabled = True
             saveas_psx.Enabled = False
+            CMFexport.Enabled = True
+            SCMexport.Enabled = True
+            TABexport.Enabled = True
         ElseIf PSX = True Then
             saveas_cwcheat.Enabled = False
             saveas_psx.Enabled = True
+            CMFexport.Enabled = False
+            SCMexport.Enabled = False
+            TABexport.Enabled = False
         End If
 
 
@@ -2338,23 +2350,23 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         f.Dispose()
     End Sub
 
-    Private Sub クリップボードToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles クリップボードToolStripMenuItem.Click
+    Private Sub クリップボードToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles clipboad.Click
         Dim s As New save_db
         s.clipboad("CLIP")
     End Sub
 
 
-    Private Sub CMF出力ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CMF出力ToolStripMenuItem.Click
+    Private Sub CMF出力ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CMFexport.Click
         Dim s As New save_db
         s.clipboad("CMF")
     End Sub
 
-    Private Sub SCM出力ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SCM出力ToolStripMenuItem.Click
+    Private Sub SCM出力ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SCMexport.Click
         Dim s As New save_db
         s.clipboad("SCM")
     End Sub
 
-    Private Sub TAB出力ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TAB出力ToolStripMenuItem.Click
+    Private Sub TAB出力ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TABexport.Click
         Dim s As New save_db
         s.save_tab("")
     End Sub
