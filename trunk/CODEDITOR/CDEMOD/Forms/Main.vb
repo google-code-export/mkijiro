@@ -74,7 +74,7 @@ Public Class MERGE
 
         If My.Settings.gridvalueedit = True Then
             grided_use.Checked = True
-            Button4.Visible = True
+            DATAGRID.Visible = True
         End If
 
         If System.IO.File.Exists(browser) Then
@@ -462,7 +462,7 @@ Public Class MERGE
     End Sub
 
     Private Sub MainForm_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
-        
+
         My.Settings.mainyoko = Me.Width
         My.Settings.maintate = Me.Height
 
@@ -487,6 +487,7 @@ Public Class MERGE
         off_rd.Enabled = False
         on_rd.Enabled = False
         Panel1.Enabled = False
+        DATAGRID.Enabled = False
 
         Button1.Enabled = False
         Button2.Enabled = False
@@ -530,6 +531,7 @@ Public Class MERGE
         off_rd.Enabled = False
         on_rd.Enabled = False
         Panel1.Enabled = False
+        DATAGRID.Enabled = False
 
         Button1.Enabled = False
         Button2.Enabled = False
@@ -575,6 +577,7 @@ Public Class MERGE
         Button1.Enabled = True
         Button2.Enabled = True
         Button3.Enabled = True
+        DATAGRID.Enabled = True
 
         If PSX = False Then
             button_list.Enabled = True
@@ -639,7 +642,7 @@ Public Class MERGE
         s.sort_game(2)
     End Sub
 
-    Private Sub Sort_CTitle2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Sort_GTitle2.Click        
+    Private Sub Sort_CTitle2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Sort_GTitle2.Click
         Dim s As New sort
         s.sort_game(3)
     End Sub
@@ -912,14 +915,14 @@ Public Class MERGE
 
     Private Sub G有効ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles grided_use.Click
 
-        If Button4.Visible = False Then
-            Button4.Visible = True
+        If DATAGRID.Visible = False Then
+            DATAGRID.Visible = True
             grided_use.Checked = True
         Else
-            Button4.Visible = False
+            DATAGRID.Visible = False
             grided_use.Checked = False
         End If
-        My.Settings.gridvalueedit = Button4.Visible
+        My.Settings.gridvalueedit = DATAGRID.Visible
 
     End Sub
 
@@ -2344,7 +2347,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
     End Sub
 #End Region
     'ぐっりど値えｄぃた
-    Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button4.Click
+    Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DATAGRID.Click
         Dim f As New Form1
         f.ShowDialog(Me)
         f.Dispose()

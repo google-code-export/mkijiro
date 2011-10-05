@@ -578,7 +578,6 @@ Public Class save_db
 
     End Sub
 
-
     Public Sub save_tab(ByVal filename As String)
 
         Dim m As MERGE = MERGE
@@ -628,6 +627,9 @@ Public Class save_db
                         For Each s As String In buffer
                             If s.Length = 1 Then
                                 If s = "0" Or s = "1" Then
+                                    If nullcode = True Then
+                                        i += 1
+                                    End If
                                     Array.Clear(name, 0, 10)
                                     Array.Resize(name, 2 * n1.Name.Length)
                                     name = Encoding.GetEncoding(936).GetBytes(n1.Name)
@@ -637,9 +639,6 @@ Public Class save_db
                                         flag = True
                                     Else
                                         flag = False
-                                    End If
-                                    If nullcode = True Then
-                                        i += 1
                                     End If
                                     nullcode = True
                                 End If

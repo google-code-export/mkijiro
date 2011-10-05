@@ -172,7 +172,7 @@ Partial Class MERGE
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
-        Me.Button4 = New System.Windows.Forms.Button()
+        Me.DATAGRID = New System.Windows.Forms.Button()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.CFMODE = New System.Windows.Forms.TextBox()
         Me.treeopen.SuspendLayout()
@@ -863,25 +863,25 @@ Partial Class MERGE
         'clipboad
         '
         Me.clipboad.Name = "clipboad"
-        Me.clipboad.Size = New System.Drawing.Size(152, 22)
+        Me.clipboad.Size = New System.Drawing.Size(130, 22)
         Me.clipboad.Text = "クリップボード"
         '
         'CMFexport
         '
         Me.CMFexport.Name = "CMFexport"
-        Me.CMFexport.Size = New System.Drawing.Size(152, 22)
+        Me.CMFexport.Size = New System.Drawing.Size(130, 22)
         Me.CMFexport.Text = "CMF出力"
         '
         'SCMexport
         '
         Me.SCMexport.Name = "SCMexport"
-        Me.SCMexport.Size = New System.Drawing.Size(152, 22)
+        Me.SCMexport.Size = New System.Drawing.Size(130, 22)
         Me.SCMexport.Text = "SCM出力"
         '
         'TABexport
         '
         Me.TABexport.Name = "TABexport"
-        Me.TABexport.Size = New System.Drawing.Size(152, 22)
+        Me.TABexport.Size = New System.Drawing.Size(130, 22)
         Me.TABexport.Text = "TAB出力"
         '
         'iconset
@@ -1344,18 +1344,19 @@ Partial Class MERGE
         Me.Button3.Text = "・・"
         Me.Button3.UseVisualStyleBackColor = True
         '
-        'Button4
+        'DATAGRID
         '
-        Me.Button4.Font = New System.Drawing.Font("MS UI Gothic", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Button4.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Button4.Location = New System.Drawing.Point(504, 447)
-        Me.Button4.Name = "Button4"
-        Me.Button4.Size = New System.Drawing.Size(10, 10)
-        Me.Button4.TabIndex = 31
-        Me.Button4.Text = "+"
-        Me.Button4.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage
-        Me.Button4.UseVisualStyleBackColor = False
-        Me.Button4.Visible = False
+        Me.DATAGRID.Enabled = False
+        Me.DATAGRID.Font = New System.Drawing.Font("MS UI Gothic", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.DATAGRID.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.DATAGRID.Location = New System.Drawing.Point(493, 442)
+        Me.DATAGRID.Name = "DATAGRID"
+        Me.DATAGRID.Size = New System.Drawing.Size(20, 18)
+        Me.DATAGRID.TabIndex = 31
+        Me.DATAGRID.Text = "D"
+        Me.DATAGRID.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage
+        Me.DATAGRID.UseVisualStyleBackColor = False
+        Me.DATAGRID.Visible = False
         '
         'Label2
         '
@@ -1385,11 +1386,11 @@ Partial Class MERGE
         Me.ClientSize = New System.Drawing.Size(647, 562)
         Me.Controls.Add(Me.CFMODE)
         Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.Button4)
         Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.changed)
+        Me.Controls.Add(Me.DATAGRID)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.コード形式)
         Me.Controls.Add(Me.TextBox2)
@@ -1511,7 +1512,7 @@ Partial Class MERGE
     Friend WithEvents name_sort As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Sort_GTitle1 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Sort_GTitle2 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents Button4 As System.Windows.Forms.Button
+    Friend WithEvents DATAGRID As System.Windows.Forms.Button
     Friend WithEvents saveas_codefreak As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ContextMenuStrip1 As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents cntparser As System.Windows.Forms.ToolStripMenuItem
