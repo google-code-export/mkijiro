@@ -486,6 +486,7 @@ Public Class MERGE
         CT_tb.Text = Nothing
         off_rd.Enabled = False
         on_rd.Enabled = False
+        NodeConvert.Visible = False
         Panel1.Enabled = False
         DATAGRID.Enabled = False
 
@@ -532,6 +533,7 @@ Public Class MERGE
         on_rd.Enabled = False
         Panel1.Enabled = False
         DATAGRID.Enabled = False
+        NodeConvert.Visible = True
 
         Button1.Enabled = False
         Button2.Enabled = False
@@ -577,6 +579,8 @@ Public Class MERGE
         Button1.Enabled = True
         Button2.Enabled = True
         Button3.Enabled = True
+
+        NodeConvert.Visible = True
         DATAGRID.Enabled = True
 
         If PSX = False Then

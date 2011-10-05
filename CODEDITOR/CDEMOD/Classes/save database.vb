@@ -549,32 +549,33 @@ Public Class save_db
                     End If
 
                 Next
+
+                filename = Application.StartupPath & "\" & gid
+
+                If nullcode = True Then
+                    scm &= "$ $2 $(FFFFFFFF FFFFFFFF)" & vbCrLf
+                End If
+                scm = scm.Insert(scm.Length - 2, "}")
+
+                If MODE = "CLIP" Then
+                    Clipboard.SetText(b1)
+                ElseIf MODE = "CMF" Then
+                    filename &= ".cmf"
+                    Dim tw As New StreamWriter(filename, False, System.Text.Encoding.GetEncoding(936))
+                    tw.Write(cmf)
+                    tw.Close()
+                ElseIf MODE = "SCM" Then
+                    filename &= ".scm"
+                    Dim tw As New StreamWriter(filename, False, System.Text.Encoding.GetEncoding(936))
+                    tw.Write(scm)
+                    tw.Close()
+                End If
+
             End If
 
         Catch ex As Exception
             MessageBox.Show(ex.Message)
         End Try
-
-        filename = Application.StartupPath & "\" & gid
-
-        If nullcode = True Then
-            scm &= "$ $2 $(FFFFFFFF FFFFFFFF)" & vbCrLf
-        End If
-        scm = scm.Insert(scm.Length - 2, "}")
-
-        If MODE = "CLIP" Then
-            Clipboard.SetText(b1)
-        ElseIf MODE = "CMF" Then
-            filename &= ".cmf"
-            Dim tw As New StreamWriter(filename, False, System.Text.Encoding.GetEncoding(936))
-            tw.Write(cmf)
-            tw.Close()
-        ElseIf MODE = "SCM" Then
-            filename &= ".scm"
-            Dim tw As New StreamWriter(filename, False, System.Text.Encoding.GetEncoding(936))
-            tw.Write(scm)
-            tw.Close()
-        End If
 
     End Sub
 
@@ -604,6 +605,7 @@ Public Class save_db
         Try
 
             If n.Level = 0 Then
+
             ElseIf n.Level > 0 Then
                 If n.Level = 2 Then
                     n = n.Parent
@@ -676,7 +678,21 @@ Public Class save_db
 
                 Next
 
+                Array.Resize(nametotal, 10 * i)
+                Array.Resize(codetotal, 16 * i)
+                code = BitConverter.GetBytes(i)
+                Array.Resize(bs, 40 + 26 * i)
+                Array.ConstrainedCopy(header, 0, bs, 0, 36)
+                Array.ConstrainedCopy(code, 0, bs, 36, 4)
+                Array.ConstrainedCopy(codetotal, 0, bs, 40, codetotal.Length)
+                Array.ConstrainedCopy(nametotal, 0, bs, 40 + codetotal.Length, nametotal.Length)
+                filename = Application.StartupPath & "\" & n.Tag.ToString & ".tab"
+                Dim fs As New System.IO.FileStream(filename, System.IO.FileMode.Create, System.IO.FileAccess.Write)
+                fs.Write(bs, 0, bs.Length)
+                fs.Close()
+
             End If
+
         Catch ex As Exception
             MessageBox.Show(ex.Message)
         End Try
@@ -685,18 +701,6 @@ Public Class save_db
             i += 1
         End If
 
-        Array.Resize(nametotal, 10 * i)
-        Array.Resize(codetotal, 16 * i)
-        code = BitConverter.GetBytes(i)
-        Array.Resize(bs, 40 + 26 * i)
-        Array.ConstrainedCopy(header, 0, bs, 0, 36)
-        Array.ConstrainedCopy(code, 0, bs, 36, 4)
-        Array.ConstrainedCopy(codetotal, 0, bs, 40, codetotal.Length)
-        Array.ConstrainedCopy(nametotal, 0, bs, 40 + codetotal.Length, nametotal.Length)
-        filename = Application.StartupPath & "\" & n.Tag.ToString & ".tab"
-        Dim fs As New System.IO.FileStream(filename, System.IO.FileMode.Create, System.IO.FileAccess.Write)
-        fs.Write(bs, 0, bs.Length)
-        fs.Close()
 
     End Sub
 End Class
