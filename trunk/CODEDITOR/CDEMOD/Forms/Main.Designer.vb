@@ -104,6 +104,7 @@ Partial Class MERGE
         Me.APP10custom = New System.Windows.Forms.ToolStripMenuItem()
         Me.grided_use = New System.Windows.Forms.ToolStripMenuItem()
         Me.fixedform = New System.Windows.Forms.ToolStripMenuItem()
+        Me.FTPDsetting = New System.Windows.Forms.ToolStripMenuItem()
         Me.update_save_filepass = New System.Windows.Forms.ToolStripMenuItem()
         Me.autoupdater = New System.Windows.Forms.ToolStripMenuItem()
         Me.ヘルプHToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -128,6 +129,11 @@ Partial Class MERGE
         Me.CMFexport = New System.Windows.Forms.ToolStripMenuItem()
         Me.SCMexport = New System.Windows.Forms.ToolStripMenuItem()
         Me.TABexport = New System.Windows.Forms.ToolStripMenuItem()
+        Me.useFTP = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ftpdb = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ftpcmf = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ftpscm = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ftptab = New System.Windows.Forms.ToolStripMenuItem()
         Me.iconset = New System.Windows.Forms.ImageList(Me.components)
         Me.open_file = New System.Windows.Forms.OpenFileDialog()
         Me.GID_tb = New System.Windows.Forms.TextBox()
@@ -579,7 +585,7 @@ Partial Class MERGE
         '
         'menu_options
         '
-        Me.menu_options.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.options_ontop, Me.options_error, Me.ブラウザ変更ToolStripMenuItem, Me.menu_font, Me.ToolStripMenuItem1, Me.grided_use, Me.fixedform, Me.update_save_filepass, Me.autoupdater})
+        Me.menu_options.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.options_ontop, Me.options_error, Me.ブラウザ変更ToolStripMenuItem, Me.menu_font, Me.ToolStripMenuItem1, Me.grided_use, Me.fixedform, Me.FTPDsetting, Me.update_save_filepass, Me.autoupdater})
         Me.menu_options.Name = "menu_options"
         Me.menu_options.Size = New System.Drawing.Size(76, 20)
         Me.menu_options.Text = "オプション(&O)"
@@ -730,6 +736,12 @@ Partial Class MERGE
         Me.fixedform.Text = "フォームサイズ固定"
         Me.fixedform.ToolTipText = "再起動した際フォームがリサイズできなくなります" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "メインフォームのサイズは終了すると保存されます"
         '
+        'FTPDsetting
+        '
+        Me.FTPDsetting.Name = "FTPDsetting"
+        Me.FTPDsetting.Size = New System.Drawing.Size(192, 22)
+        Me.FTPDsetting.Text = "FTP設定"
+        '
         'update_save_filepass
         '
         Me.update_save_filepass.Name = "update_save_filepass"
@@ -780,9 +792,9 @@ Partial Class MERGE
         '
         'ContextMenuStrip1
         '
-        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cntparser, Me.ToolStripSeparator4, Me.cntclose, Me.cntexpand, Me.ToolStripSeparator5, Me.hankaku, Me.CNchar, Me.ToolStripSeparator6, Me.cntexe, Me.ToolStripSeparator11, Me.NodeConvert})
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cntparser, Me.ToolStripSeparator4, Me.cntclose, Me.cntexpand, Me.ToolStripSeparator5, Me.hankaku, Me.CNchar, Me.ToolStripSeparator6, Me.cntexe, Me.ToolStripSeparator11, Me.NodeConvert, Me.useFTP})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(177, 204)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(177, 226)
         '
         'cntparser
         '
@@ -863,26 +875,57 @@ Partial Class MERGE
         'clipboad
         '
         Me.clipboad.Name = "clipboad"
-        Me.clipboad.Size = New System.Drawing.Size(152, 22)
+        Me.clipboad.Size = New System.Drawing.Size(130, 22)
         Me.clipboad.Text = "クリップボード"
         '
         'CMFexport
         '
         Me.CMFexport.Name = "CMFexport"
-        Me.CMFexport.Size = New System.Drawing.Size(152, 22)
+        Me.CMFexport.Size = New System.Drawing.Size(130, 22)
         Me.CMFexport.Text = "CMF出力"
         '
         'SCMexport
         '
         Me.SCMexport.Name = "SCMexport"
-        Me.SCMexport.Size = New System.Drawing.Size(152, 22)
+        Me.SCMexport.Size = New System.Drawing.Size(130, 22)
         Me.SCMexport.Text = "SCM出力"
         '
         'TABexport
         '
         Me.TABexport.Name = "TABexport"
-        Me.TABexport.Size = New System.Drawing.Size(152, 22)
+        Me.TABexport.Size = New System.Drawing.Size(130, 22)
         Me.TABexport.Text = "TAB出力"
+        '
+        'useFTP
+        '
+        Me.useFTP.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ftpdb, Me.ftpcmf, Me.ftpscm, Me.ftptab})
+        Me.useFTP.Name = "useFTP"
+        Me.useFTP.Size = New System.Drawing.Size(176, 22)
+        Me.useFTP.Text = "FTP送信"
+        '
+        'ftpdb
+        '
+        Me.ftpdb.Name = "ftpdb"
+        Me.ftpdb.Size = New System.Drawing.Size(152, 22)
+        Me.ftpdb.Text = "編集DBを転送"
+        '
+        'ftpcmf
+        '
+        Me.ftpcmf.Name = "ftpcmf"
+        Me.ftpcmf.Size = New System.Drawing.Size(152, 22)
+        Me.ftpcmf.Text = "CMF転送"
+        '
+        'ftpscm
+        '
+        Me.ftpscm.Name = "ftpscm"
+        Me.ftpscm.Size = New System.Drawing.Size(152, 22)
+        Me.ftpscm.Text = "SCM転送"
+        '
+        'ftptab
+        '
+        Me.ftptab.Name = "ftptab"
+        Me.ftptab.Size = New System.Drawing.Size(152, 22)
+        Me.ftptab.Text = "TAB転送"
         '
         'iconset
         '
@@ -1582,5 +1625,11 @@ Partial Class MERGE
     Friend WithEvents CMFexport As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents SCMexport As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents TABexport As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents useFTP As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ftpdb As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ftpcmf As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ftpscm As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ftptab As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents FTPDsetting As System.Windows.Forms.ToolStripMenuItem
 
 End Class

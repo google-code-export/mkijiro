@@ -4,6 +4,7 @@ Imports System.Text.RegularExpressions
 Public Class parser
 
     Public Opener As Form
+
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Dim f As MERGE
         f = CType(Me.Owner, MERGE)

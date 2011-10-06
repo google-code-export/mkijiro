@@ -160,4 +160,20 @@
   <data name="abc" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Icons\abc.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ip1" xml:space="preserve">
+    <value>開始アドレスが終了アドレスを超えてます</value>
+  </data>
+  <data name="ip2" xml:space="preserve">
+    <value>有効なローカルアドレスを入力してください
+クラスA:10.0.0.0-10.255.255.255
+クラスB:172.16.0.0-172.31.255.255
+クラスC:192.168.0.0-192.168.255.255</value>
+  </data>
+  <data name="ftpf" xml:space="preserve">
+    <value>PSPFTPDサーバーが見つかりませんでした</value>
+  </data>
+  <data name="ftps" xml:space="preserve">
+    <value>PSPFTPDサーバーが見つかりました
+</value>
+  </data>
 </root>

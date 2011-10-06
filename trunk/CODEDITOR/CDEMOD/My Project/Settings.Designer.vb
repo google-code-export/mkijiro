@@ -366,6 +366,90 @@ Namespace My
                 Me("updater") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("192.168.1.10")>  _
+        Public Property dhcpstart() As String
+            Get
+                Return CType(Me("dhcpstart"),String)
+            End Get
+            Set
+                Me("dhcpstart") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("192.168.1.100")>  _
+        Public Property dhcpend() As String
+            Get
+                Return CType(Me("dhcpend"),String)
+            End Get
+            Set
+                Me("dhcpend") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property ftpdaemon() As Boolean
+            Get
+                Return CType(Me("ftpdaemon"),Boolean)
+            End Get
+            Set
+                Me("ftpdaemon") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("/PICTURE/CWC")>  _
+        Public Property ftpdir() As String
+            Get
+                Return CType(Me("ftpdir"),String)
+            End Get
+            Set
+                Me("ftpdir") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("192.168.1.18")>  _
+        Public Property staticip() As String
+            Get
+                Return CType(Me("staticip"),String)
+            End Get
+            Set
+                Me("staticip") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property customwait() As Boolean
+            Get
+                Return CType(Me("customwait"),Boolean)
+            End Get
+            Set
+                Me("customwait") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("100")>  _
+        Public Property customsecond() As Integer
+            Get
+                Return CType(Me("customsecond"),Integer)
+            End Get
+            Set
+                Me("customsecond") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

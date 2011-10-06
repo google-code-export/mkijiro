@@ -95,6 +95,46 @@ Namespace My.Resources
             End Get
         End Property
         
+        '''<summary>
+        '''  PSPFTPDサーバーが見つかりませんでした に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ftpf() As String
+            Get
+                Return ResourceManager.GetString("ftpf", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  PSPFTPDサーバーが見つかりました
+        ''' に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ftps() As String
+            Get
+                Return ResourceManager.GetString("ftps", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  開始アドレスが終了アドレスを超えてます に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ip1() As String
+            Get
+                Return ResourceManager.GetString("ip1", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  有効なローカルアドレスを入力してください
+        '''クラスA:10.0.0.0-10.255.255.255
+        '''クラスB:172.16.0.0-172.31.255.255
+        '''クラスC:192.168.0.0-192.168.255.255 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ip2() As String
+            Get
+                Return ResourceManager.GetString("ip2", resourceCulture)
+            End Get
+        End Property
+        
         Friend ReadOnly Property psp_menu() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("psp_menu", resourceCulture)
