@@ -436,22 +436,6 @@ Public Class MERGE
                 My.Settings.lastcodepath = database
             End If
 
-            '' Reload the file
-            'codetree.Nodes.Clear()
-            'codetree.BeginUpdate()
-            'error_window.list_load_error.BeginUpdate()
-
-            'reset_PSP()
-            'Application.DoEvents()
-            'open.read_cf(database, 1201)
-
-            'If codetree.Nodes.Count >= 1 Then
-            '    codetree.Nodes(0).Expand()
-            'End If
-
-            'codetree.EndUpdate()
-            'error_window.list_load_error.EndUpdate()
-
         End If
     End Sub
 
@@ -493,6 +477,11 @@ Public Class MERGE
         Button1.Enabled = False
         Button2.Enabled = False
         Button3.Enabled = False
+
+
+        ftpcmf.Enabled = False
+        ftpscm.Enabled = False
+        ftptab.Enabled = False
 
         If PSX = False Then
             saveas_cwcheat.Enabled = True
@@ -546,12 +535,18 @@ Public Class MERGE
             CMFexport.Enabled = True
             SCMexport.Enabled = True
             TABexport.Enabled = True
+            ftpcmf.Enabled = True
+            ftpscm.Enabled = True
+            ftptab.Enabled = True
         ElseIf PSX = True Then
             saveas_cwcheat.Enabled = False
             saveas_psx.Enabled = True
             CMFexport.Enabled = False
             SCMexport.Enabled = False
             TABexport.Enabled = False
+            ftpcmf.Enabled = False
+            ftpscm.Enabled = False
+            ftptab.Enabled = False
         End If
 
 
@@ -2362,7 +2357,6 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         s.clipboad("CLIP")
     End Sub
 
-
     Private Sub CMF出力ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CMFexport.Click
         Dim s As New save_db
         s.clipboad("CMF")
@@ -2375,6 +2369,50 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 
     Private Sub TAB出力ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TABexport.Click
         Dim s As New save_db
-        s.save_tab("")
+        s.save_tab("TAB")
+    End Sub
+
+    Private Sub ToolStripMenuItem2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles FTPDsetting.Click
+        Dim f As New ftp
+        f.ShowDialog()
+    End Sub
+
+    Private Function FTPMODE(ByVal MODE As String) As Boolean
+        Dim s As New save_db
+        Dim f As New ftp
+        Dim id As String = ""
+        Dim lv As Integer = codetree.SelectedNode.Level
+        If lv > 0 Then
+            If lv = 1 Then
+                id = codetree.SelectedNode.Tag.ToString
+            Else
+                id = codetree.SelectedNode.Parent.Tag.ToString
+            End If
+
+            If MODE <> "TAB" Then
+                s.clipboad(MODE)
+            Else
+                s.save_tab("TAB")
+            End If
+            f.SENDDB_PSPFTPD(Application.StartupPath & "\" & id & "." & MODE)
+        End If
+        Return True
+    End Function
+
+    Private Sub SCM転送ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ftpscm.Click
+        FTPMODE("SCM")
+    End Sub
+
+    Private Sub TAB転送ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ftptab.Click
+        FTPMODE("TAB")
+    End Sub
+
+    Private Sub 編集DBを転送ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ftpdb.Click
+        Dim f As New ftp
+        f.SENDDB_PSPFTPD(database)
+    End Sub
+
+    Private Sub CMF転送ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ftpcmf.Click
+        FTPMODE("CMF")
     End Sub
 End Class

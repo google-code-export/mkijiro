@@ -80,5 +80,26 @@
     <Setting Name="updater" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="dhcpstart" Type="System.String" Scope="User">
+      <Value Profile="(Default)">192.168.1.10</Value>
+    </Setting>
+    <Setting Name="dhcpend" Type="System.String" Scope="User">
+      <Value Profile="(Default)">192.168.1.100</Value>
+    </Setting>
+    <Setting Name="ftpdaemon" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ftpdir" Type="System.String" Scope="User">
+      <Value Profile="(Default)">/PICTURE/CWC</Value>
+    </Setting>
+    <Setting Name="staticip" Type="System.String" Scope="User">
+      <Value Profile="(Default)">192.168.1.18</Value>
+    </Setting>
+    <Setting Name="customwait" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="customsecond" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">100</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -588,6 +588,8 @@ Public Class save_db
         Dim hex As UInteger = 0
         Dim address As ULong = 0
         Dim real As ULong = &H8800000
+        Dim dummy() As Byte = {&HFF, &HFF, &H7F, &H8}
+        Dim dummy2() As Byte = {&HFF, &HFF, &HFF, &HFF}
         Dim bs() As Byte = Nothing
         Dim header(35) As Byte
         Dim gametitle() As Byte = Nothing
@@ -630,6 +632,8 @@ Public Class save_db
                             If s.Length = 1 Then
                                 If s = "0" Or s = "1" Then
                                     If nullcode = True Then
+                                        Array.ConstrainedCopy(dummy, 0, codetotal, i * 16, 4)
+                                        Array.ConstrainedCopy(dummy2, 0, codetotal, i * 16 + 4, 4)
                                         i += 1
                                     End If
                                     Array.Clear(name, 0, 10)
@@ -678,6 +682,12 @@ Public Class save_db
 
                 Next
 
+                If nullcode = True Then
+                    Array.ConstrainedCopy(dummy, 0, codetotal, i * 16, 4)
+                    Array.ConstrainedCopy(dummy2, 0, codetotal, i * 16 + 4, 4)
+                    i += 1
+                End If
+
                 Array.Resize(nametotal, 10 * i)
                 Array.Resize(codetotal, 16 * i)
                 code = BitConverter.GetBytes(i)
@@ -696,11 +706,6 @@ Public Class save_db
         Catch ex As Exception
             MessageBox.Show(ex.Message)
         End Try
-
-        If nullcode = True Then
-            i += 1
-        End If
-
 
     End Sub
 End Class
