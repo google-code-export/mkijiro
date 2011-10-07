@@ -628,9 +628,9 @@ System.IO.FileAccess.Read)
         Dim trans As String = ""
         'FTP警告
         If My.Application.Culture.Name = "ja-JP" Then
-            trans = My.Resources.s15
+            trans = My.Resources.s14
         Else
-            trans = My.Resources.s15_e
+            trans = My.Resources.s14_e
         End If
 
         If ftpdeamon.Checked = True AndAlso langupdate.Checked = True _

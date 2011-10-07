@@ -151,12 +151,11 @@ classB:172.16.0.0-172.31.255.255
 classC:192.168.0.0-192.168.255.255</value>
   </data>
   <data name="s14" xml:space="preserve">
-    <value>PSP3000本体以外ではPSPFTPDの仕様のため、ディレクトリが2階層以上だと上手くインスールできない可能性が高いです。
-パスを変更しますか？</value>
+    <value>FTP転送を使う場合同時接続数が多い場合ルーターの性能不足で処理できない、もしくは設定次第では上手くいかないことがあります。
+設定を変える/接続数を減らすと改善されるかもしれません。</value>
   </data>
   <data name="s14_e" xml:space="preserve">
-    <value>if your psp is not model3000,pspftpd seemed not to copy to more than 2 level directory...
-change path?　</value>
+    <value>if use PSPFTPD,depends on wif router spec/setting.if not work,please change setting</value>
   </data>
   <data name="s15" xml:space="preserve">
     <value>PSP3000本体以外ではPSPFTPDの仕様のため、言語ファイルは上手くインスールできない可能性が高いです。
