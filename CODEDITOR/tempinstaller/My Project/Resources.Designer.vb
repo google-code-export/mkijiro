@@ -157,8 +157,8 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  PSP3000本体以外ではPSPFTPDの仕様のため、ディレクトリが2階層以上だと上手くインスールできない可能性が高いです。
-        '''パスを変更しますか？ に類似しているローカライズされた文字列を検索します。
+        '''  FTP転送を使う場合同時接続数が多い場合ルーターの性能不足で処理できない、もしくは設定次第では上手くいかないことがあります。
+        '''設定を変える/接続数を減らすと改善されるかもしれません。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property s14() As String
             Get
@@ -167,8 +167,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  if your psp is not model3000,pspftpd seemed not to copy to more than 2 level directory...
-        '''change path?　 に類似しているローカライズされた文字列を検索します。
+        '''  if use PSPFTPD,depends on wif router spec/setting.if not work,please change setting に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property s14_e() As String
             Get
