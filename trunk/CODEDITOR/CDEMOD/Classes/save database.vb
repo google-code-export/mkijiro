@@ -220,35 +220,81 @@ Public Class save_db
         Dim m As MERGE = MERGE
         Dim i As Integer = 0
         Dim buffer As String()
-        Dim fs As New System.IO.FileStream(filename, _
-                                           System.IO.FileMode.Create, _
-                                            System.IO.FileAccess.Write)
+        Dim fs As New System.IO.FileStream(filename, FileMode.Create, FileAccess.Write)
         Dim cp1201len As Integer = 0
         Dim bs(3 * 1024 * 1024) As Byte '３Mばいとぐらい
         Dim cfutf16be(34) As Byte
+        Dim nullcode As Boolean = False
+        Dim dummy As Byte() = System.Text.Encoding.GetEncoding(1201).GetBytes("0000000000000000")
+        Dim z As Integer = 0
+
+
+        Dim gname As String = ""
+        Dim ccname As String = ""
+        Dim name() As Byte = Nothing
+        Dim cname() As Byte = Nothing
+        Dim mode As String = ""
+        Dim gid As String = ""
+        Dim bytesData(3) As Byte
+        Dim sce(3) As Integer
 
         Try
+            If m.codetree.Nodes(0).Nodes.Count = 0 Then
+                Dim newgame As New TreeNode
+                With newgame
+                    .Name = "新規ゲーム"
+                    .Text = "新規ゲーム"
+                    .ImageIndex = 1
+                    .Tag = "ULJS-00000"
+                End With
+                m.codetree.Nodes(0).Nodes.Insert(0, newgame)
+            End If
 
             For Each n As TreeNode In m.codetree.Nodes(0).Nodes
-                Dim gname As String = n.Name.ToString
-                Dim gid As String = n.Tag.ToString.Remove(4, 1)
-                Dim bytesData As Byte()
+
+                If m.codetree.Nodes(0).Nodes(z).Nodes.Count = 0 Then
+                    Dim newcode As New TreeNode
+                    With newcode
+                        .ImageIndex = 2
+                        .SelectedImageIndex = 3
+                        .Name = "新規コード"
+                        .Text = "新規コード"
+                        .Tag = "0"
+                    End With
+                    m.codetree.Nodes(0).Nodes(z).Nodes.Insert(0, newcode)
+                End If
+                z += 1
+                gname = n.Text
+                gid = n.Tag.ToString.Remove(4, 1)
                 'Shift JISとして文字列に変換
-                bytesData = System.Text.Encoding.GetEncoding(932).GetBytes(gid)
-                Dim s1 As Integer = CType(bytesData(0), Integer)
-                Dim s2 As Integer = CType(bytesData(1), Integer)
-                Dim s3 As Integer = CType(bytesData(2), Integer)
-                Dim s4 As Integer = CType(bytesData(3), Integer)
-                gid = (s1 \ &H10).ToString("X") & (s1 And &HF).ToString("X")
-                gid &= (s2 \ &H10).ToString("X") & (s2 And &HF).ToString("X")
-                gid &= (s3 \ &H10).ToString("X") & (s3 And &HF).ToString("X")
-                gid &= (s4 \ &H10).ToString("X") & (s4 And &HF).ToString("X")
+                bytesData = System.Text.Encoding.GetEncoding(0).GetBytes(gid)
+                sce(0) = CType(bytesData(0), Integer)
+                sce(1) = CType(bytesData(1), Integer)
+                sce(2) = CType(bytesData(2), Integer)
+                sce(3) = CType(bytesData(3), Integer)
+                gid = (sce(0) >> 4).ToString("X") & (sce(0) And &HF).ToString("X")
+                gid &= (sce(1) >> 4).ToString("X") & (sce(1) And &HF).ToString("X")
+                gid &= (sce(2) >> 4).ToString("X") & (sce(2) And &HF).ToString("X")
+                gid &= (sce(3) >> 4).ToString("X") & (sce(3) And &HF).ToString("X")
                 gid &= n.Tag.ToString.Remove(0, 5) & "820" 'CWC生コードモード
+
+                If nullcode = True Then
+                    bs(i) = &H43 'C コード内容
+                    bs(i + 1) = &H20
+                    i += 2
+                    Array.ConstrainedCopy(dummy, 0, bs, i, 32)
+                    i += 32
+                    bs(i) = 10
+                    bs(i + 1) = 10
+                    i += 2
+                    nullcode = False
+                End If
+
                 bs(i) = &H47 'G ゲームタイトル
                 bs(i + 1) = &H20
                 i += 2
                 cp1201len = gname.Length * 2
-                Dim name(cp1201len + 1) As Byte
+                Array.Resize(name, cp1201len)
                 name = System.Text.Encoding.GetEncoding(1201).GetBytes(gname)
                 Array.ConstrainedCopy(name, 0, bs, i, cp1201len)
                 i += cp1201len
@@ -259,7 +305,7 @@ Public Class save_db
                 bs(i + 1) = &H20
                 i += 2
                 cp1201len = gid.Length * 2
-                cfutf16be = System.Text.Encoding.GetEncoding(1201).GetBytes(gid)
+                cfutf16be = Encoding.GetEncoding(1201).GetBytes(gid)
                 Array.ConstrainedCopy(cfutf16be, 0, bs, i, cp1201len)
                 i += cp1201len
                 bs(i) = 10
@@ -268,43 +314,78 @@ Public Class save_db
 
                 For Each n1 As TreeNode In n.Nodes
 
+                    If nullcode = True Then
+                        bs(i) = &H43 'C コード内容
+                        bs(i + 1) = &H20
+                        i += 2
+                        Array.ConstrainedCopy(dummy, 0, bs, i, 32)
+                        i += 32
+                        bs(i) = 10
+                        bs(i + 1) = 10
+                        i += 2
+                    End If
+
                     bs(i) = &H44 'D コード名
                     bs(i + 1) = &H20
                     i += 2
-                    Dim ccname As String = n1.Text.Trim
+                    mode = n1.Tag.ToString.Substring(0, 1)
+                    If mode = "2" Or mode = "3" Then
+
+                    ElseIf mode = "4" Or mode = "5" Then
+
+                    End If
+                    ccname = n1.Text.Trim
                     cp1201len = ccname.Length * 2
-                    Dim cname(cp1201len + 1) As Byte
-                    cname = System.Text.Encoding.GetEncoding(1201).GetBytes(ccname)
+                    Array.Resize(cname, cp1201len)
+                    cname = Encoding.GetEncoding(1201).GetBytes(ccname)
                     Array.ConstrainedCopy(cname, 0, bs, i, cp1201len)
                     i += cp1201len
                     bs(i) = 10
                     bs(i + 1) = 10
                     i += 2
+                    nullcode = True
 
-                    buffer = n1.Tag.ToString.Split(CChar(vbCrLf))
+                    If mode = "0" Or mode = "1" Then
+                        buffer = n1.Tag.ToString.Split(CChar(vbCrLf))
 
-                    For Each s As String In buffer
-                        If s.Contains("0x") Then
-                            bs(i) = &H43 'C コード内容
-                            bs(i + 1) = &H20
-                            i += 2
-                            s = s.Replace("0x", "")
-                            s = s.Replace(" ", "")
-                            s = s.Remove(0, 1)
-                            cp1201len = s.Length * 2
-                            cfutf16be = System.Text.Encoding.GetEncoding(1201).GetBytes(s)
-                            Array.ConstrainedCopy(cfutf16be, 0, bs, i, cp1201len)
-                            i += cp1201len
-                            bs(i) = 10
-                            bs(i + 1) = 10
-                            i += 2
-                        End If
-                    Next
+                        For Each s As String In buffer
+
+                            If s.Contains("0x") Then
+                                nullcode = False
+                                bs(i) = &H43 'C コード内容
+                                bs(i + 1) = &H20
+                                i += 2
+                                s = s.Replace("0x", "")
+                                s = s.Replace(" ", "")
+                                s = s.Remove(0, 1)
+                                cp1201len = s.Length * 2
+                                cfutf16be = Encoding.GetEncoding(1201).GetBytes(s)
+                                Array.ConstrainedCopy(cfutf16be, 0, bs, i, cp1201len)
+                                i += cp1201len
+                                bs(i) = 10
+                                bs(i + 1) = 10
+                                i += 2
+                            End If
+                        Next
+                    End If
 
                 Next
 
 
             Next
+
+
+            If nullcode = True Then
+                bs(i) = &H43 'C コード内容
+                bs(i + 1) = &H20
+                i += 2
+                Array.ConstrainedCopy(dummy, 0, bs, i, 32)
+                i += 32
+                bs(i) = 10
+                bs(i + 1) = 10
+                i += 2
+            End If
+
 
         Catch ex As Exception
             MessageBox.Show(ex.Message)
@@ -314,8 +395,6 @@ Public Class save_db
         fs.Close()
 
     End Sub
-
-
 
     Private Sub reset_errors()
 

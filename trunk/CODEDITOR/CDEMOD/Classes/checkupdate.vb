@@ -12,7 +12,7 @@ Public Class checkupdate
             '保存先のファイル名
             Dim fileName As String = "CDEMOD.exe"
             Dim check As New checkupdate
-            Dim f As Form2 = Form2
+            Dim f As version = version
             Dim b1 As String = check.getweb(fileName, tx, 0)
             Dim b2 As String = StrConv(f.Label2.Text, VbStrConv.Narrow)
             Dim dd As String = b2.Substring(6, 10)
