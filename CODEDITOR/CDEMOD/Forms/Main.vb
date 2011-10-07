@@ -816,7 +816,7 @@ Public Class MERGE
     End Sub
 
     Private Sub URL8ToolStripMenuItem1_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles URL8custom.Click
-        Dim f As New Form3
+        Dim f As New url
         f.TextBox1.Text = My.Settings.url8
         f.ShowDialog(Me)
         My.Settings.url8 = f.TextBox1.Text
@@ -826,7 +826,7 @@ Public Class MERGE
     End Sub
 
     Private Sub URL9ToolStripMenuItem1_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles URL9custom.Click
-        Dim f As New Form3
+        Dim f As New url
         f.TextBox1.Text = My.Settings.url9
         f.ShowDialog(Me)
         My.Settings.url9 = f.TextBox1.Text
@@ -836,7 +836,7 @@ Public Class MERGE
     End Sub
 
     Private Sub URL10ToolStripMenuItem1_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles URL10custom.Click
-        Dim f As New Form3
+        Dim f As New url
         f.TextBox1.Text = My.Settings.url10
         f.ShowDialog(Me)
         My.Settings.url10 = f.TextBox1.Text
@@ -1358,7 +1358,7 @@ Public Class MERGE
     End Sub
 
     Private Sub バージョン情報ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles バージョン情報ToolStripMenuItem.Click
-        Dim f As New Form2
+        Dim f As New version
         f.ShowDialog(Me)
         f.Dispose()
     End Sub
@@ -2347,7 +2347,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 #End Region
     'ぐっりど値えｄぃた
     Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DATAGRID.Click
-        Dim f As New Form1
+        Dim f As New datagrid
         f.ShowDialog(Me)
         f.Dispose()
     End Sub
@@ -2414,5 +2414,66 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 
     Private Sub CMF転送ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ftpcmf.Click
         FTPMODE("CMF")
+    End Sub
+
+    Private Sub gameid_dragendter(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles GID_tb.DragEnter
+        'コントロール内にドラッグされたとき実行される
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            'ドラッグされたデータ形式を調べ、ファイルのときはコピーとする
+            e.Effect = DragDropEffects.Copy
+        Else
+            'ファイル以外は受け付けない
+            e.Effect = DragDropEffects.None
+        End If
+    End Sub
+
+    Private Sub gameid_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles GID_tb.DragDrop
+        'コントロール内にドロップされたとき実行される
+        'ドロップされたすべてのファイル名を取得する
+        Dim fileName As String() = CType( _
+            e.Data.GetData(DataFormats.FileDrop, False), _
+            String())
+        Dim psf As New psf
+        Dim str As String = psf.GETID(fileName(0))
+        If str.Contains("HB") Then
+            GID_tb.Text = str
+            changed.Text = "ゲームIDが変更されました"
+        ElseIf str = "ISO" Then
+            changed.Text = "イメージファイルは対応してません"
+        Else
+            changed.Text = "PBPではありません,ISOならバッドダンプです"
+        End If
+
+    End Sub
+
+
+    Private Sub gametitle_dragendter(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles GT_tb.DragEnter
+        'コントロール内にドラッグされたとき実行される
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            'ドラッグされたデータ形式を調べ、ファイルのときはコピーとする
+            e.Effect = DragDropEffects.Copy
+        Else
+            'ファイル以外は受け付けない
+            e.Effect = DragDropEffects.None
+        End If
+    End Sub
+
+    Private Sub gametitle_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles GT_tb.DragDrop
+        'コントロール内にドロップされたとき実行される
+        'ドロップされたすべてのファイル名を取得する
+        Dim fileName As String() = CType( _
+            e.Data.GetData(DataFormats.FileDrop, False), _
+            String())
+        Dim psf As New psf
+        Dim str As String = psf.GETNAME(fileName(0))
+        If str <> "ISO" AndAlso str <> "" Then
+            GT_tb.Text = str
+            changed.Text = "ゲームタイトルが変更されました"
+        ElseIf str = "ISO" Then
+            changed.Text = "イメージファイルは対応してません"
+        Else
+            changed.Text = "PBPではありません,ISOならバッドダンプです"
+        End If
+
     End Sub
 End Class

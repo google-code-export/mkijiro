@@ -120,6 +120,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\checkupdate.vb" />
+    <Compile Include="Classes\psf.vb" />
     <Compile Include="Classes\codecheck.vb" />
     <Compile Include="Classes\joker.vb" />
     <Compile Include="Classes\load database.vb" />
@@ -132,22 +133,22 @@
     <Compile Include="Forms\error list.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Form1.Designer.vb">
-      <DependentUpon>Form1.vb</DependentUpon>
+    <Compile Include="Forms\datagrid.Designer.vb">
+      <DependentUpon>datagrid.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Form1.vb">
+    <Compile Include="Forms\datagrid.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Form2.Designer.vb">
-      <DependentUpon>Form2.vb</DependentUpon>
+    <Compile Include="Forms\version.Designer.vb">
+      <DependentUpon>version.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Form2.vb">
+    <Compile Include="Forms\version.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Form3.Designer.vb">
-      <DependentUpon>Form3.vb</DependentUpon>
+    <Compile Include="Forms\url.Designer.vb">
+      <DependentUpon>url.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Form3.vb">
+    <Compile Include="Forms\url.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ftp.Designer.vb">
@@ -195,14 +196,14 @@
     <EmbeddedResource Include="Forms\error list.resx">
       <DependentUpon>error list.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Form1.resx">
-      <DependentUpon>Form1.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\datagrid.resx">
+      <DependentUpon>datagrid.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Form2.resx">
-      <DependentUpon>Form2.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\version.resx">
+      <DependentUpon>version.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Form3.resx">
-      <DependentUpon>Form3.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\url.resx">
+      <DependentUpon>url.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ftp.resx">
       <DependentUpon>ftp.vb</DependentUpon>

@@ -906,25 +906,25 @@ Partial Class MERGE
         'ftpdb
         '
         Me.ftpdb.Name = "ftpdb"
-        Me.ftpdb.Size = New System.Drawing.Size(152, 22)
+        Me.ftpdb.Size = New System.Drawing.Size(143, 22)
         Me.ftpdb.Text = "編集DBを転送"
         '
         'ftpcmf
         '
         Me.ftpcmf.Name = "ftpcmf"
-        Me.ftpcmf.Size = New System.Drawing.Size(152, 22)
+        Me.ftpcmf.Size = New System.Drawing.Size(143, 22)
         Me.ftpcmf.Text = "CMF転送"
         '
         'ftpscm
         '
         Me.ftpscm.Name = "ftpscm"
-        Me.ftpscm.Size = New System.Drawing.Size(152, 22)
+        Me.ftpscm.Size = New System.Drawing.Size(143, 22)
         Me.ftpscm.Text = "SCM転送"
         '
         'ftptab
         '
         Me.ftptab.Name = "ftptab"
-        Me.ftptab.Size = New System.Drawing.Size(152, 22)
+        Me.ftptab.Size = New System.Drawing.Size(143, 22)
         Me.ftptab.Text = "TAB転送"
         '
         'iconset
@@ -938,6 +938,7 @@ Partial Class MERGE
         '
         'GID_tb
         '
+        Me.GID_tb.AllowDrop = True
         Me.GID_tb.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.GID_tb.Enabled = False
@@ -951,6 +952,7 @@ Partial Class MERGE
         '
         'GT_tb
         '
+        Me.GT_tb.AllowDrop = True
         Me.GT_tb.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
