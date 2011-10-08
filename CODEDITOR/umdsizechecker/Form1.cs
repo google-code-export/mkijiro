@@ -61,7 +61,7 @@ namespace WindowsFormsApplication1
 
             label1.Text = "ファイルサイズ:";
             label2.Text = "セクター算出　:";
-            if (fs.Length > 0x8050)
+            if (fs.Length > 0x8060)
             {
                 byte[] bs = new byte[8];
                 byte[] big = new byte[8];
@@ -85,11 +85,7 @@ namespace WindowsFormsApplication1
                 isosize *= 2048;
                 label1.Text +=  Convert.ToString(fsize);
                 label2.Text += Convert.ToString(isosize);
-                if (isosize == fsize)
-                {
-                    return "正常なサイズです";
-                }
-                else if (isosize - fsize == 2048)
+                 if (isosize - fsize == 2048)
                 {
                     return "M33USBマウントのみで発生する-2048サイズ欠けです\nPSPFILER/ISOTOOL/TEMPARなどを使ってください";
                 }
@@ -97,6 +93,43 @@ namespace WindowsFormsApplication1
                 {
                     return "オーバーダンプです";
                 }
+                 else if (isosize == fsize)
+                 {
+                     FileStream sector = new FileStream(filepath, FileMode.Open, FileAccess.Read);
+                     byte[] beforefinal = new byte[2048];
+                     byte[] finalsector = new byte[2048];
+                     byte[] hash = new byte[32];
+                     sector.Seek(isosize - 4096, SeekOrigin.Begin);
+                     sector.Read(beforefinal, 0, 2048);
+                     sector.Read(finalsector, 0, 2048);
+                     sector.Close();
+
+                     System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create();
+                     Array.ConstrainedCopy(beforefinal,2016,hash,0,32);
+                     byte[] b = md5.ComputeHash(hash);
+                     string result = BitConverter.ToString(b).ToUpper().Replace("-", "");
+                     Array.ConstrainedCopy(finalsector, 0, hash, 0, 32);
+                     byte[] c = md5.ComputeHash(hash);
+                     string result2 = BitConverter.ToString(c).ToUpper().Replace("-", "");
+                     string NU = "70BC8F4B72A86921468BF8E8441DCE51";//null
+                     string FF = "0D7DC4266497100E4831F5B31B6B274F";//FF
+                     if (result == result2)
+                     {//FILLED wiht NULL
+                         return "正常なサイズです";
+                     }
+                     else if (result2 == NU && result != NU)
+                     {
+                         return "サイズは正常ですが,バッドダンプの可能性があります";
+                     }
+                     else if (result2 == FF && result != NU)
+                     {
+                         return "サイズは正常ですが,バッドダンプの可能性があります";
+                     }
+                     else
+                     {
+                         return "正常なサイズです";
+                     }
+                 }
                 else
                 {
                     return "サイズが合いません";
