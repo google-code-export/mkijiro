@@ -12,6 +12,8 @@ namespace WindowsFormsApplication1
 {
     public partial class Form1 : Form
     {
+        string isofile = ""; 
+
         public Form1()
         {
             InitializeComponent();
@@ -37,6 +39,7 @@ namespace WindowsFormsApplication1
         private void textBox1_DragDrop(object sender, System.Windows.Forms.DragEventArgs e)
         {
             string[] s = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+            isofile = s[0];
             textBox1.Text = getsize(s[0]);
         }
         private void button1_DragEnter(object sender, System.Windows.Forms.DragEventArgs e)
@@ -50,6 +53,7 @@ namespace WindowsFormsApplication1
         private void button1_DragDrop(object sender, System.Windows.Forms.DragEventArgs e)
         {
             string[] s = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+            isofile = s[0];
             textBox1.Text = getsize(s[0]);
         }
 
@@ -137,6 +141,158 @@ namespace WindowsFormsApplication1
             }
             fs.Close();
             return "ISOではありません";
+        }
+
+        private void button2_Click(object sender, EventArgs e)//gid
+        {
+            if (System.IO.File.Exists(isofile))
+            {
+                byte[] gid = new byte[10];
+                FileStream fs = new FileStream(isofile, FileMode.Open, FileAccess.Read);
+                fs.Seek(0x8373, SeekOrigin.Begin);
+                fs.Read(gid, 0, 10);
+                fs.Close();
+                string rpname = Encoding.GetEncoding(0).GetString(gid) + ".ISO";
+                textBox1.Text = rpname + "にリネームしました";
+                int last = isofile.LastIndexOf("\\") + 1;
+                rpname = isofile.Substring(0, last) + rpname;
+                if (System.IO.File.Exists(rpname))
+                {
+                    textBox1.Text = "同じ名前が存在します";
+                }
+                else
+                {
+                    File.Move(isofile, rpname);
+                    isofile = rpname;
+                }
+            }
+            else
+            {
+                textBox1.Text = "ファイルが存在しません";
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)//isohead
+        {
+
+            if (System.IO.File.Exists(isofile))
+            {
+                byte[] isohead = new byte[32];
+                FileStream fs = new FileStream(isofile, FileMode.Open, FileAccess.Read);
+                fs.Seek(0x8028, SeekOrigin.Begin);
+                fs.Read(isohead, 0, 32);
+                fs.Close();
+                string rpname = Encoding.GetEncoding(0).GetString(isohead).Trim();
+                if (rpname != "")
+                {
+                    rpname += ".ISO";
+                    textBox1.Text = rpname + "にリネームしました";
+                    int last = isofile.LastIndexOf("\\") + 1;
+                    rpname = isofile.Substring(0, last) + rpname;
+                    if (System.IO.File.Exists(rpname))
+                    {
+                        textBox1.Text = "同じ名前が存在します";
+                    }
+                    else
+                    {
+                        File.Move(isofile, rpname);
+                        isofile = rpname;
+                    }
+                }
+                else
+                {
+                    textBox1.Text = "ISOヘッダにタイトル名が有りませんでした";
+                }
+            }
+            else
+            {
+                textBox1.Text = "ファイルが存在しません";
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)//psfname
+        {
+
+            if (System.IO.File.Exists(isofile))
+            {
+                byte[] lba = new byte[4];
+                byte[] size = new byte[8];
+                byte[] psfname = new byte[64];
+                byte[] sector = new byte[2048];
+                int i =0,z=0;
+                FileStream fs = new FileStream(isofile, FileMode.Open, FileAccess.Read);                
+                fs.Seek(0x8050, SeekOrigin.Begin);
+                fs.Read(size, 0, 5);
+                long lbatotal = BitConverter.ToInt64(size, 0);
+                if (lbatotal - fs.Length <= 2048)
+                {
+                    fs.Seek(0x80A5, SeekOrigin.Begin);
+                    fs.Read(lba, 0, 2);
+                    z = BitConverter.ToInt32(lba, 0);
+                    fs.Seek(z * 2048, SeekOrigin.Begin);
+                    fs.Read(sector, 0, 2048);
+                    //PSP_GAME
+                    while (true)
+                    {
+                        if (sector[i] == 0x50 && sector[i + 1] == 0x53 && sector[i + 2] == 0x50) break;
+                        i++;
+                    }
+                    Array.ConstrainedCopy(sector, i - 31, lba, 0, 2);
+                    z = BitConverter.ToInt32(lba, 0);
+                    fs.Seek(z * 2048, SeekOrigin.Begin);
+                    fs.Read(sector, 0, 2048);
+                    i = 0;
+                    //PARAM.SFO
+                    while (true)
+                    {
+                        if (sector[i] == 0x50 && sector[i + 1] == 0x41 && sector[i + 2] == 0x52 && sector[i + 3] == 0x41) break;
+                        i++;
+                    }
+                    Array.ConstrainedCopy(sector, i - 31, lba, 0, 2);
+                    z = BitConverter.ToInt32(lba, 0);
+                    fs.Seek(z * 2048, SeekOrigin.Begin);
+                    fs.Read(sector, 0, 2048);
+                    Array.ConstrainedCopy(sector, 12, lba, 0, 2);
+                    i = BitConverter.ToInt32(lba, 0);
+                    z = 12 + 16;
+                    while (sector[z] != 0x80)
+                    {
+                        z += 16;
+                    }
+                    Array.ConstrainedCopy(sector, z + 4, lba, 0, 2);
+                    z = BitConverter.ToInt32(lba, 0);
+                    Array.ConstrainedCopy(sector, z + i, psfname, 0, 64);
+                    fs.Close();
+                    string rpname = Encoding.GetEncoding(65001).GetString(psfname);
+                    i = 0;
+                    while (rpname[i] != 0)
+                    {
+                        i++;
+                    }
+                    rpname = rpname.Substring(0, i) + ".ISO";
+                    textBox1.Text = rpname + "にリネームしました";
+                    int last = isofile.LastIndexOf("\\") + 1;
+                    rpname = isofile.Substring(0, last) + rpname;
+                    if (System.IO.File.Exists(rpname))
+                    {
+                        textBox1.Text = "同じ名前が存在します";
+                    }
+                    else
+                    {
+                        File.Move(isofile, rpname);
+                        isofile = rpname;
+                    }
+                }
+                else
+                {
+                    fs.Close();
+                    textBox1.Text ="2k以上欠けてるためPARAM.SFO取得を停止しました";
+                }
+            }
+            else
+            {
+                textBox1.Text = "ファイルが存在しません";
+            }
         }
     }
 }
