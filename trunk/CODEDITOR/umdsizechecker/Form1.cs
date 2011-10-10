@@ -224,6 +224,7 @@ namespace WindowsFormsApplication1
                 fs.Seek(0x8050, SeekOrigin.Begin);
                 fs.Read(size, 0, 5);
                 long lbatotal = BitConverter.ToInt64(size, 0);
+                lbatotal *= 2048;
                 if (lbatotal - fs.Length <= 2048)
                 {
                     fs.Seek(0x80A5, SeekOrigin.Begin);
