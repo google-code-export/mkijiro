@@ -105,6 +105,7 @@ Partial Class MERGE
         Me.grided_use = New System.Windows.Forms.ToolStripMenuItem()
         Me.fixedform = New System.Windows.Forms.ToolStripMenuItem()
         Me.FTPDsetting = New System.Windows.Forms.ToolStripMenuItem()
+        Me.PBPHBHASH = New System.Windows.Forms.ToolStripMenuItem()
         Me.update_save_filepass = New System.Windows.Forms.ToolStripMenuItem()
         Me.autoupdater = New System.Windows.Forms.ToolStripMenuItem()
         Me.ヘルプHToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -180,7 +181,6 @@ Partial Class MERGE
         Me.Button3 = New System.Windows.Forms.Button()
         Me.DATAGRID = New System.Windows.Forms.Button()
         Me.PSF = New System.Windows.Forms.Button()
-        Me.PBPHBHASH = New System.Windows.Forms.ToolStripMenuItem()
         Me.treeopen.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.tool_menu.SuspendLayout()
@@ -192,7 +192,7 @@ Partial Class MERGE
         Me.treeopen.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menu_file, Me.menu_sort, Me.codepage_select, Me.codetreeview, Me.browsecodesite, Me.EXE起動ToolStripMenuItem, Me.menu_options, Me.ヘルプHToolStripMenuItem})
         Me.treeopen.Location = New System.Drawing.Point(0, 0)
         Me.treeopen.Name = "treeopen"
-        Me.treeopen.Size = New System.Drawing.Size(647, 24)
+        Me.treeopen.Size = New System.Drawing.Size(652, 24)
         Me.treeopen.TabIndex = 0
         Me.treeopen.Text = "MenuStrip1"
         '
@@ -743,6 +743,13 @@ Partial Class MERGE
         Me.FTPDsetting.Text = "FTP設定"
         Me.FTPDsetting.ToolTipText = "ツリービューのコンテキストでFTP転送するIPアドレスの設定をします" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "PSP側でPSPFTPDやPSPWIFILETRANSERの起動が必要"
         '
+        'PBPHBHASH
+        '
+        Me.PBPHBHASH.Name = "PBPHBHASH"
+        Me.PBPHBHASH.Size = New System.Drawing.Size(194, 22)
+        Me.PBPHBHASH.Text = "常にHBハッシュを計算する"
+        Me.PBPHBHASH.ToolTipText = "PSF取得でゲームIDを常にCWCHEATのHBハッシュにします"
+        '
         'update_save_filepass
         '
         Me.update_save_filepass.Name = "update_save_filepass"
@@ -962,7 +969,7 @@ Partial Class MERGE
         Me.GT_tb.Location = New System.Drawing.Point(320, 95)
         Me.GT_tb.MaxLength = 64
         Me.GT_tb.Name = "GT_tb"
-        Me.GT_tb.Size = New System.Drawing.Size(328, 19)
+        Me.GT_tb.Size = New System.Drawing.Size(327, 19)
         Me.GT_tb.TabIndex = 2
         '
         'gtitle_lbl
@@ -1001,7 +1008,7 @@ Partial Class MERGE
         Me.CT_tb.Location = New System.Drawing.Point(320, 169)
         Me.CT_tb.MaxLength = 72
         Me.CT_tb.Name = "CT_tb"
-        Me.CT_tb.Size = New System.Drawing.Size(328, 19)
+        Me.CT_tb.Size = New System.Drawing.Size(327, 19)
         Me.CT_tb.TabIndex = 4
         '
         'codetitle_lbl
@@ -1077,7 +1084,7 @@ Partial Class MERGE
         Me.cmt_tb.Multiline = True
         Me.cmt_tb.Name = "cmt_tb"
         Me.cmt_tb.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.cmt_tb.Size = New System.Drawing.Size(330, 101)
+        Me.cmt_tb.Size = New System.Drawing.Size(335, 101)
         Me.cmt_tb.TabIndex = 5
         '
         'cm_lbl
@@ -1095,7 +1102,7 @@ Partial Class MERGE
         Me.tool_menu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.add_game, Me.rem_game, Me.ToolStripSeparator2, Me.Add_cd, Me.rem_cd, Me.ToolStripSeparator1, Me.save_gc, Me.save_cc, Me.move_up, Me.move_down, Me.merge_codes})
         Me.tool_menu.Location = New System.Drawing.Point(0, 24)
         Me.tool_menu.Name = "tool_menu"
-        Me.tool_menu.Size = New System.Drawing.Size(647, 54)
+        Me.tool_menu.Size = New System.Drawing.Size(652, 54)
         Me.tool_menu.TabIndex = 14
         Me.tool_menu.Text = "ToolStrip1"
         '
@@ -1240,7 +1247,7 @@ Partial Class MERGE
         Me.button_list.Items.AddRange(New Object() {"セレクト", "スタート", "↑", "→", "↓", "←", "Lトリガー", "Rトリガー", "△", "○", "Ｘ", "□", "HOME", "HOLD", "ミュート", "スクリーン", "音量+", "音量-", "WLAN UP", "REMOTE HOLD"})
         Me.button_list.Location = New System.Drawing.Point(519, 206)
         Me.button_list.Name = "button_list"
-        Me.button_list.Size = New System.Drawing.Size(128, 228)
+        Me.button_list.Size = New System.Drawing.Size(133, 228)
         Me.button_list.TabIndex = 9
         '
         'inverse_chk
@@ -1414,19 +1421,12 @@ Partial Class MERGE
         Me.PSF.Text = "PSF取得"
         Me.PSF.UseVisualStyleBackColor = True
         '
-        'PBPHBHASH
-        '
-        Me.PBPHBHASH.Name = "PBPHBHASH"
-        Me.PBPHBHASH.Size = New System.Drawing.Size(194, 22)
-        Me.PBPHBHASH.Text = "常にHBハッシュを計算する"
-        Me.PBPHBHASH.ToolTipText = "PSF取得でゲームIDを常にCWCHEATのHBハッシュにします"
-        '
         'MERGE
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
-        Me.ClientSize = New System.Drawing.Size(647, 562)
+        Me.ClientSize = New System.Drawing.Size(652, 562)
         Me.Controls.Add(Me.PSF)
         Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.Button2)
