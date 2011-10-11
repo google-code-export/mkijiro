@@ -85,7 +85,10 @@ namespace WindowsFormsApplication1
             {
                 byte[] bs = new byte[8];
                 byte[] big = new byte[8];
+                byte[] str = new byte[5];
                 byte[] x = new byte[3];
+                fs.Seek(0x8001, SeekOrigin.Begin);
+                fs.Read(str, 0, 5);
                 fs.Seek(0x8050, SeekOrigin.Begin);
                 fs.Read(bs, 0, 3);
                 fs.Seek(0x8055, SeekOrigin.Begin);
@@ -96,9 +99,10 @@ namespace WindowsFormsApplication1
                 {
                     Array.ConstrainedCopy(x, 2-i, big, i, 1);
                 }
+                string iso = Encoding.GetEncoding(0).GetString(str);
                 isosize = BitConverter.ToInt64(bs, 0);
                 isobig = BitConverter.ToInt64(big, 0);
-                if (isosize != isobig)
+                if (isosize != isobig && iso == "CD001")
                 {
                     return "ISOではありません";
                 }
@@ -233,7 +237,7 @@ namespace WindowsFormsApplication1
             {
                 byte[] lba = new byte[4];
                 byte[] size = new byte[8];
-                byte[] psfname = new byte[64];
+                byte[] psfname = new byte[129];
                 byte[] sector = new byte[2048];
                 int i =0,z=0;
                 FileStream fs = new FileStream(isofile, FileMode.Open, FileAccess.Read);                
@@ -252,8 +256,10 @@ namespace WindowsFormsApplication1
                     while (true)
                     {
                         if (sector[i] == 0x50 && sector[i + 1] == 0x53 && sector[i + 2] == 0x50) break;
+                        if (i > 2048) {fs.Close(); return; }
                         i++;
                     }
+
                     Array.ConstrainedCopy(sector, i - 31, lba, 0, 2);
                     z = BitConverter.ToInt32(lba, 0);
                     fs.Seek(z * 2048, SeekOrigin.Begin);
@@ -263,6 +269,7 @@ namespace WindowsFormsApplication1
                     while (true)
                     {
                         if (sector[i] == 0x50 && sector[i + 1] == 0x41 && sector[i + 2] == 0x52 && sector[i + 3] == 0x41) break;
+                        if (i > 2048) { fs.Close(); return; }
                         i++;
                     }
                     Array.ConstrainedCopy(sector, i - 31, lba, 0, 2);
@@ -274,18 +281,15 @@ namespace WindowsFormsApplication1
                     z = 12 + 16;
                     while (sector[z] != 0x80)
                     {
+                        if (z > 2048) { fs.Close(); return; }
                         z += 16;
                     }
                     Array.ConstrainedCopy(sector, z + 4, lba, 0, 2);
                     z = BitConverter.ToInt32(lba, 0);
-                    Array.ConstrainedCopy(sector, z + i, psfname, 0, 64);
+                    Array.ConstrainedCopy(sector, z + i, psfname, 0, 129);
                     fs.Close();
                     string rpname = Encoding.GetEncoding(65001).GetString(psfname);
-                    i = 0;
-                    while (rpname[i] != 0)
-                    {
-                        i++;
-                    }
+                    i = rpname.IndexOf("\x0");
                     rpname = rpname.Substring(0, i) + ".ISO";
                     textBox1.Text = rpname + "にリネームしました";
                     int last = isofile.LastIndexOf("\\") + 1;
