@@ -100,7 +100,7 @@ PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 #endif
 
 //Globals
-unsigned char *MKVER="  MKIJIRO SRC:20111001";
+unsigned char *MKVER="  MKIJIRO20111012";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -7409,6 +7409,8 @@ else{
 		 	for(i=0;i<addresscode;i++){
 		addresstmp=*(unsigned int *)(&fileBuffer[0x44+(0x10*i)]);
 		 		if(addresstmp==0x80 || addresstmp==0x14 || addresstmp==0x18) break;
+
+		 		if(addresstmp==0x10 && i>4 ) break;
 			}
 		addresscode=*(unsigned int *)(&fileBuffer[0x48+(0x10*i)]);
 		memcpy(&gameId[0],&fileBuffer[0x28]+counteraddress+addresscode,10);
