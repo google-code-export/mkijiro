@@ -47,6 +47,11 @@ Public Class MERGE
             autoupdater.Checked = False
         End If
 
+        If My.Settings.hbhash = False Then
+            PBPHBHASH.Checked = False
+        Else
+            PBPHBHASH.Checked = True
+        End If
 
         If showerror = True Then
             error_window.Show()
@@ -219,6 +224,7 @@ Public Class MERGE
     End Sub
 
 #End Region
+
 #Region "Menubar procedures"
 
 #Region "Open Database/Save Database"
@@ -292,6 +298,10 @@ Public Class MERGE
         Me.open_file.Filter = "対応ファイル(*.db;*ar;*.cmf;*.txt;*.dat;*.bin)|*.db;*.ar;*.cmf;*.txt;*.dat;*.bin|CWcheat (*.db)|*.d" & _
             "b|ACTIONREPLAY(*.ar;*.bin)|*.ar;*.bin|CMFUSION (*.cmf)|*.cmf|FreeCheat (*.txt)|*.txt|CodeFre" & _
             "ak (*.dat)|*.dat|全てのファイル (*.*)|*.*"
+        If My.Settings.lastcodepath <> "" Then
+            Dim z As Integer = My.Settings.lastcodepath.LastIndexOf("\")
+            open_file.InitialDirectory = My.Settings.lastcodepath.Substring(0, z)
+        End If
 
         If open_file.ShowDialog = Windows.Forms.DialogResult.OK And open_file.FileName <> Nothing Then
 
@@ -473,6 +483,7 @@ Public Class MERGE
         NodeConvert.Visible = False
         Panel1.Enabled = False
         DATAGRID.Enabled = False
+        PSF.Enabled = False
 
         Button1.Enabled = False
         Button2.Enabled = False
@@ -524,6 +535,7 @@ Public Class MERGE
         DATAGRID.Enabled = False
         NodeConvert.Visible = True
 
+        PSF.Enabled = True
         Button1.Enabled = False
         Button2.Enabled = False
         Button3.Enabled = False
@@ -577,6 +589,7 @@ Public Class MERGE
 
         NodeConvert.Visible = True
         DATAGRID.Enabled = True
+        PSF.Enabled = True
 
         If PSX = False Then
             button_list.Enabled = True
@@ -2435,13 +2448,15 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
             String())
         Dim psf As New psf
         Dim str As String = psf.GETID(fileName(0))
-        If str.Contains("HB") Then
-            GID_tb.Text = str
-            changed.Text = "ゲームIDが変更されました"
-        ElseIf str = "ISO" Then
-            changed.Text = "イメージファイルは対応してません"
+        If str <> "" Then
+            If str <> "NOID" Then
+                GID_tb.Text = str
+                changed.Text = "ゲームIDが変更されました"
+            Else
+                changed.Text = "ID情報がないHBです"
+            End If
         Else
-            changed.Text = "PBPではありません,ISOならバッドダンプです"
+            changed.Text = "PBP/ISOではありません"
         End If
 
     End Sub
@@ -2466,14 +2481,47 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
             String())
         Dim psf As New psf
         Dim str As String = psf.GETNAME(fileName(0))
-        If str <> "ISO" AndAlso str <> "" Then
+        If str <> "" Then
             GT_tb.Text = str
             changed.Text = "ゲームタイトルが変更されました"
-        ElseIf str = "ISO" Then
-            changed.Text = "イメージファイルは対応してません"
         Else
-            changed.Text = "PBPではありません,ISOならバッドダンプです"
+            changed.Text = "PBP/ISOではありません"
         End If
 
+    End Sub
+
+    Private Sub PSF_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PSF.Click
+
+        Me.open_file.Filter = "PBP/ISOファイル(*.pbp;*iso)|*.pbp;*.iso"
+        Me.open_file.Title = "PBP/ISOファイルを選んでください"
+
+        If open_file.ShowDialog = Windows.Forms.DialogResult.OK And open_file.FileName <> Nothing Then
+
+            Dim psf As New psf
+            Dim str As String = psf.GETNAME(open_file.FileName)
+            Dim gid As String = psf.GETID(open_file.FileName)
+            If str <> "" AndAlso gid <> "" Then
+                If gid <> "NOID" Then
+                    GID_tb.Text = gid
+                    changed.Text = "ゲームタイトル/IDが変更されました"
+                Else
+                    changed.Text = "ID情報がないHBです"
+                End If
+                GT_tb.Text = str
+            Else
+                changed.Text = "PBP/ISOではありません"
+            End If
+        End If
+    End Sub
+
+    Private Sub PBPHBHASH_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PBPHBHASH.Click
+
+        If PBPHBHASH.Checked = True Then
+            My.Settings.hbhash = False
+            PBPHBHASH.Checked = False
+        Else
+            My.Settings.hbhash = True
+            PBPHBHASH.Checked = True
+        End If
     End Sub
 End Class

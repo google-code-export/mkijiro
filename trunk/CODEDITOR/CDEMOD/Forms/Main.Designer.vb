@@ -179,8 +179,8 @@ Partial Class MERGE
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.DATAGRID = New System.Windows.Forms.Button()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.CFMODE = New System.Windows.Forms.TextBox()
+        Me.PSF = New System.Windows.Forms.Button()
+        Me.PBPHBHASH = New System.Windows.Forms.ToolStripMenuItem()
         Me.treeopen.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.tool_menu.SuspendLayout()
@@ -585,7 +585,7 @@ Partial Class MERGE
         '
         'menu_options
         '
-        Me.menu_options.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.options_ontop, Me.options_error, Me.ブラウザ変更ToolStripMenuItem, Me.menu_font, Me.ToolStripMenuItem1, Me.grided_use, Me.fixedform, Me.FTPDsetting, Me.update_save_filepass, Me.autoupdater})
+        Me.menu_options.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.options_ontop, Me.options_error, Me.ブラウザ変更ToolStripMenuItem, Me.menu_font, Me.ToolStripMenuItem1, Me.grided_use, Me.fixedform, Me.FTPDsetting, Me.PBPHBHASH, Me.update_save_filepass, Me.autoupdater})
         Me.menu_options.Name = "menu_options"
         Me.menu_options.Size = New System.Drawing.Size(76, 20)
         Me.menu_options.Text = "オプション(&O)"
@@ -595,14 +595,14 @@ Partial Class MERGE
         '
         Me.options_ontop.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.alwaystop
         Me.options_ontop.Name = "options_ontop"
-        Me.options_ontop.Size = New System.Drawing.Size(192, 22)
+        Me.options_ontop.Size = New System.Drawing.Size(194, 22)
         Me.options_ontop.Text = "常に前面表示"
         '
         'options_error
         '
         Me.options_error.Image = CType(resources.GetObject("options_error.Image"), System.Drawing.Image)
         Me.options_error.Name = "options_error"
-        Me.options_error.Size = New System.Drawing.Size(192, 22)
+        Me.options_error.Size = New System.Drawing.Size(194, 22)
         Me.options_error.Text = "エラー画面を表示"
         Me.options_error.ToolTipText = "エラー画面の表示の設定"
         '
@@ -611,7 +611,7 @@ Partial Class MERGE
         Me.ブラウザ変更ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.codesite_browser, Me.nichannel_browser})
         Me.ブラウザ変更ToolStripMenuItem.Image = CType(resources.GetObject("ブラウザ変更ToolStripMenuItem.Image"), System.Drawing.Image)
         Me.ブラウザ変更ToolStripMenuItem.Name = "ブラウザ変更ToolStripMenuItem"
-        Me.ブラウザ変更ToolStripMenuItem.Size = New System.Drawing.Size(192, 22)
+        Me.ブラウザ変更ToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
         Me.ブラウザ変更ToolStripMenuItem.Text = "ブラウザ変更"
         '
         'codesite_browser
@@ -633,7 +633,7 @@ Partial Class MERGE
         Me.menu_font.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.font_treeview, Me.font_gtitle, Me.font_gid, Me.font_codename, Me.font_codetxt, Me.font_cmt})
         Me.menu_font.Image = CType(resources.GetObject("menu_font.Image"), System.Drawing.Image)
         Me.menu_font.Name = "menu_font"
-        Me.menu_font.Size = New System.Drawing.Size(192, 22)
+        Me.menu_font.Size = New System.Drawing.Size(194, 22)
         Me.menu_font.Text = "フォント"
         Me.menu_font.ToolTipText = "メニューのフォントを指定します"
         '
@@ -677,7 +677,7 @@ Partial Class MERGE
         '
         Me.ToolStripMenuItem1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.URL8custom, Me.URL9custom, Me.URL10custom, Me.ToolStripSeparator8, Me.APP8custom, Me.APP9custom, Me.APP10custom})
         Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(192, 22)
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(194, 22)
         Me.ToolStripMenuItem1.Text = "URL/APPカスタム枠"
         '
         'URL8custom
@@ -724,7 +724,7 @@ Partial Class MERGE
         'grided_use
         '
         Me.grided_use.Name = "grided_use"
-        Me.grided_use.Size = New System.Drawing.Size(192, 22)
+        Me.grided_use.Size = New System.Drawing.Size(194, 22)
         Me.grided_use.Text = "グリッド編集有効"
         Me.grided_use.ToolTipText = "データグリッドでコードの値を編集可能にします" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "DEC；32bit10進数" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "OR；32bit論理和" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "AND；32bit論理積" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "XOR；32bit排他的論理和" & _
             "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "BINARY32；単精度浮動小数点数" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "BINARY32(16bit)；単精度浮動小数点数の16bit右シフト" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "BINARY16；半精度浮動小数点"
@@ -732,27 +732,28 @@ Partial Class MERGE
         'fixedform
         '
         Me.fixedform.Name = "fixedform"
-        Me.fixedform.Size = New System.Drawing.Size(192, 22)
+        Me.fixedform.Size = New System.Drawing.Size(194, 22)
         Me.fixedform.Text = "フォームサイズ固定"
         Me.fixedform.ToolTipText = "再起動した際フォームがリサイズできなくなります" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "メインフォームのサイズは終了すると保存されます"
         '
         'FTPDsetting
         '
         Me.FTPDsetting.Name = "FTPDsetting"
-        Me.FTPDsetting.Size = New System.Drawing.Size(192, 22)
+        Me.FTPDsetting.Size = New System.Drawing.Size(194, 22)
         Me.FTPDsetting.Text = "FTP設定"
+        Me.FTPDsetting.ToolTipText = "ツリービューのコンテキストでFTP転送するIPアドレスの設定をします" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "PSP側でPSPFTPDやPSPWIFILETRANSERの起動が必要"
         '
         'update_save_filepass
         '
         Me.update_save_filepass.Name = "update_save_filepass"
-        Me.update_save_filepass.Size = New System.Drawing.Size(192, 22)
+        Me.update_save_filepass.Size = New System.Drawing.Size(194, 22)
         Me.update_save_filepass.Text = "起動時DB読み込み設定"
         Me.update_save_filepass.ToolTipText = "チェック有りの場合、起動時に最後に保存したデータベースを読み込むようになります。" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "チェックなしの場合、起動時に最後に読み込んだデータベースを読み込みます。"
         '
         'autoupdater
         '
         Me.autoupdater.Name = "autoupdater"
-        Me.autoupdater.Size = New System.Drawing.Size(192, 22)
+        Me.autoupdater.Size = New System.Drawing.Size(194, 22)
         Me.autoupdater.Text = "起動時最新版チェック"
         Me.autoupdater.ToolTipText = "起動時にCDEの最新版があるかどうかをチェックします。"
         '
@@ -1403,25 +1404,22 @@ Partial Class MERGE
         Me.DATAGRID.UseVisualStyleBackColor = False
         Me.DATAGRID.Visible = False
         '
-        'Label2
+        'PSF
         '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(578, 117)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(48, 12)
-        Me.Label2.TabIndex = 32
-        Me.Label2.Text = "CFモード"
-        Me.Label2.Visible = False
+        Me.PSF.Enabled = False
+        Me.PSF.Location = New System.Drawing.Point(578, 129)
+        Me.PSF.Name = "PSF"
+        Me.PSF.Size = New System.Drawing.Size(69, 23)
+        Me.PSF.TabIndex = 32
+        Me.PSF.Text = "PSF取得"
+        Me.PSF.UseVisualStyleBackColor = True
         '
-        'CFMODE
+        'PBPHBHASH
         '
-        Me.CFMODE.ImeMode = System.Windows.Forms.ImeMode.Alpha
-        Me.CFMODE.Location = New System.Drawing.Point(580, 131)
-        Me.CFMODE.MaxLength = 3
-        Me.CFMODE.Name = "CFMODE"
-        Me.CFMODE.Size = New System.Drawing.Size(46, 19)
-        Me.CFMODE.TabIndex = 33
-        Me.CFMODE.Visible = False
+        Me.PBPHBHASH.Name = "PBPHBHASH"
+        Me.PBPHBHASH.Size = New System.Drawing.Size(194, 22)
+        Me.PBPHBHASH.Text = "常にHBハッシュを計算する"
+        Me.PBPHBHASH.ToolTipText = "PSF取得でゲームIDを常にCWCHEATのHBハッシュにします"
         '
         'MERGE
         '
@@ -1429,8 +1427,7 @@ Partial Class MERGE
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
         Me.ClientSize = New System.Drawing.Size(647, 562)
-        Me.Controls.Add(Me.CFMODE)
-        Me.Controls.Add(Me.Label2)
+        Me.Controls.Add(Me.PSF)
         Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Button1)
@@ -1619,8 +1616,6 @@ Partial Class MERGE
     Friend WithEvents ToolStripSeparator10 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents gname_country As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents autoupdater As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents CFMODE As System.Windows.Forms.TextBox
     Friend WithEvents ToolStripSeparator11 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents NodeConvert As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents clipboad As System.Windows.Forms.ToolStripMenuItem
@@ -1633,5 +1628,7 @@ Partial Class MERGE
     Friend WithEvents ftpscm As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ftptab As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents FTPDsetting As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents PSF As System.Windows.Forms.Button
+    Friend WithEvents PBPHBHASH As System.Windows.Forms.ToolStripMenuItem
 
 End Class
