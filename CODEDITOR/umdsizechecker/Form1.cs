@@ -41,6 +41,14 @@ namespace WindowsFormsApplication1
             string[] s = (string[])e.Data.GetData(DataFormats.FileDrop, false);
             isofile = s[0];
             textBox1.Text = getsize(s[0]);
+            if (textBox1.Text.Contains("ません"))
+            {
+                groupBox1.Enabled = false;
+            }
+            else
+            {
+                groupBox1.Enabled = true;
+            }
         }
         private void button1_DragEnter(object sender, System.Windows.Forms.DragEventArgs e)
         {
@@ -55,6 +63,14 @@ namespace WindowsFormsApplication1
             string[] s = (string[])e.Data.GetData(DataFormats.FileDrop, false);
             isofile = s[0];
             textBox1.Text = getsize(s[0]);
+            if (textBox1.Text.Contains("ません"))
+            {
+                groupBox1.Enabled = false;
+            }
+            else
+            {
+                groupBox1.Enabled = true;
+            }
         }
 
         private string getsize(string filepath){
