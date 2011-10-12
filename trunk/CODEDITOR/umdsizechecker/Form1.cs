@@ -291,6 +291,14 @@ namespace WindowsFormsApplication1
                     string rpname = Encoding.GetEncoding(65001).GetString(psfname);
                     i = rpname.IndexOf("\x0");
                     rpname = rpname.Substring(0, i) + ".ISO";
+                    string[] dosmoji;
+                    dosmoji = new string[9] {"\\","/",":","*","?","\"","<",">","|"};
+                    for (i = 0; i < 9; i++)
+                    {
+                        if (rpname.Contains(dosmoji[i])){
+                            rpname = rpname.Replace(dosmoji[i], " ");
+                        }
+                    }
                     textBox1.Text = rpname + "にリネームしました";
                     int last = isofile.LastIndexOf("\\") + 1;
                     rpname = isofile.Substring(0, last) + rpname;
