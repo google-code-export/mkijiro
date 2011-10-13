@@ -87,6 +87,30 @@ namespace WindowsFormsApplication1
                 byte[] big = new byte[8];
                 byte[] str = new byte[5];
                 byte[] x = new byte[3];
+                string iso ="";
+                fs.Read(str, 0, 4);
+                iso = Encoding.GetEncoding(0).GetString(str);
+                iso = iso.Replace("\x0", "");
+                if (iso == "DAX")
+                {
+                    fs.Close();
+                    return "LZ圧縮ISO,DAXには対応してません";
+                }
+                else if (iso == "CISO")
+                {
+                    fs.Close();
+                    return "LZ圧縮ISO,CSOには対応してません";
+                }
+                else if (iso == "JISO")
+                {
+                    fs.Close();
+                    return "LZO圧縮ISO,JSOには対応してません";
+                }
+                else if (iso != "")
+                {
+                    fs.Close();
+                    return "ISOではありません";                
+                }
                 fs.Seek(0x8001, SeekOrigin.Begin);
                 fs.Read(str, 0, 5);
                 fs.Seek(0x8050, SeekOrigin.Begin);
@@ -99,10 +123,10 @@ namespace WindowsFormsApplication1
                 {
                     Array.ConstrainedCopy(x, 2-i, big, i, 1);
                 }
-                string iso = Encoding.GetEncoding(0).GetString(str);
+                iso = Encoding.GetEncoding(0).GetString(str);
                 isosize = BitConverter.ToInt64(bs, 0);
                 isobig = BitConverter.ToInt64(big, 0);
-                if (isosize != isobig && iso == "CD001")
+                if (isosize != isobig || iso != "CD001")
                 {
                     return "ISOではありません";
                 }
@@ -111,7 +135,7 @@ namespace WindowsFormsApplication1
                 label2.Text += Convert.ToString(isosize);
                  if (isosize - fsize == 2048)
                 {
-                    return "M33USBマウントのみで発生する-2048サイズ欠けです\nPSPFILER/ISOTOOL/TEMPARなどを使ってください";
+                    return "M33USBマウントのみで発生する-2048サイズ欠けです\nPSPFILER/ISOTOOL/TEMPARなどを使ってください\nまたUSBマウントは修正版がでているのでそちらをインストールしてください";
                 }
                 else if (isosize < fsize)
                 {
@@ -239,7 +263,7 @@ namespace WindowsFormsApplication1
                 byte[] size = new byte[8];
                 byte[] psfname = new byte[129];
                 byte[] sector = new byte[2048];
-                int i =0,z=0;
+                int i =0,k=0,z=0;
                 FileStream fs = new FileStream(isofile, FileMode.Open, FileAccess.Read);                
                 fs.Seek(0x8050, SeekOrigin.Begin);
                 fs.Read(size, 0, 5);
@@ -256,12 +280,12 @@ namespace WindowsFormsApplication1
                     while (true)
                     {
                         if (sector[i] == 0x50 && sector[i + 1] == 0x53 && sector[i + 2] == 0x50) break;
-                        if (i > 2048) {fs.Close(); return; }
+                        if (i > 2048) { fs.Close(); textBox1.Text = "PSF取得に失敗しました"; return; }
                         i++;
                     }
-
                     Array.ConstrainedCopy(sector, i - 31, lba, 0, 2);
                     z = BitConverter.ToInt32(lba, 0);
+                    if (z * 2048 > fs.Length) { fs.Close(); textBox1.Text = "PSF取得に失敗しました"; return; }
                     fs.Seek(z * 2048, SeekOrigin.Begin);
                     fs.Read(sector, 0, 2048);
                     i = 0;
@@ -269,22 +293,35 @@ namespace WindowsFormsApplication1
                     while (true)
                     {
                         if (sector[i] == 0x50 && sector[i + 1] == 0x41 && sector[i + 2] == 0x52 && sector[i + 3] == 0x41) break;
-                        if (i > 2048) { fs.Close(); return; }
+                        if (i > 2048) { fs.Close(); textBox1.Text = "PSF取得に失敗しました"; return; }
                         i++;
                     }
                     Array.ConstrainedCopy(sector, i - 31, lba, 0, 2);
                     z = BitConverter.ToInt32(lba, 0);
+                    if (z * 2048 > fs.Length) { fs.Close(); textBox1.Text = "PSF取得に失敗しました"; return; }
                     fs.Seek(z * 2048, SeekOrigin.Begin);
                     fs.Read(sector, 0, 2048);
                     Array.ConstrainedCopy(sector, 12, lba, 0, 2);
                     i = BitConverter.ToInt32(lba, 0);
-                    z = 12 + 16;
-                    while (sector[z] != 0x80)
+                    Array.ConstrainedCopy(sector, 8, lba, 0, 2);
+                    k = BitConverter.ToInt32(lba, 0);
+                    Array.ConstrainedCopy(sector, 16, lba, 0, 2);
+                    z = BitConverter.ToInt32(lba, 0);
+                    byte[] tmp = new byte[200];
+                    Array.ConstrainedCopy(sector, k, tmp, 0, 200);
+                    string strs = Encoding.GetEncoding(65001).GetString(tmp); 
+                    string[] name = strs.Split('\x0');
+                    for (k = 0; ; k++)
                     {
-                        if (z > 2048) { fs.Close(); return; }
-                        z += 16;
+                        if (name[k] == "TITLE") break;
+                        if (k == z)
+                        {
+                            fs.Close();textBox1.Text ="PSF取得に失敗しました";
+                            return;
+                        }
                     }
-                    Array.ConstrainedCopy(sector, z + 4, lba, 0, 2);
+                    z = (k+2) * 16;
+                    Array.ConstrainedCopy(sector, z , lba, 0, 2);
                     z = BitConverter.ToInt32(lba, 0);
                     Array.ConstrainedCopy(sector, z + i, psfname, 0, 129);
                     fs.Close();
