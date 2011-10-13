@@ -2448,13 +2448,15 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
             String())
         Dim psf As New psf
         Dim str As String = psf.GETID(fileName(0))
-        If str <> "" Then
-            If str <> "NOID" Then
-                GID_tb.Text = str
-                changed.Text = "ゲームIDが変更されました"
-            Else
-                changed.Text = "ID情報がないHBです"
-            End If
+        If str = "DAX" Then
+            changed.Text = "LZ圧縮イメージDAXは対応してません"
+        ElseIf str = "CSO" Then
+            changed.Text = "LZ圧縮イメージCSOは対応してません"
+        ElseIf str = "JSO" Then
+            changed.Text = "LZ0圧縮イメージJSOは対応してません"
+        ElseIf str <> "" Then
+            GID_tb.Text = str
+            changed.Text = "ゲームIDが変更されました"
         Else
             changed.Text = "PBP/ISOではありません"
         End If
@@ -2481,7 +2483,18 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
             String())
         Dim psf As New psf
         Dim str As String = psf.GETNAME(fileName(0))
-        If str <> "" Then
+
+        If str = "NOTILE" Then
+            changed.Text = "PSFにTITLEがありません"
+        ElseIf str = "NULL" Then
+            changed.Text = "PSFにTITLEはありますが空文字のようです"
+        ElseIf str = "DAX" Then
+            changed.Text = "LZ圧縮イメージDAXは対応してません"
+        ElseIf str = "CSO" Then
+            changed.Text = "LZ圧縮イメージCSOは対応してません"
+        ElseIf str = "JSO" Then
+            changed.Text = "LZ0圧縮イメージJSOは対応してません"
+        ElseIf str <> "" Then
             GT_tb.Text = str
             changed.Text = "ゲームタイトルが変更されました"
         Else
@@ -2500,14 +2513,25 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
             Dim psf As New psf
             Dim str As String = psf.GETNAME(open_file.FileName)
             Dim gid As String = psf.GETID(open_file.FileName)
+
             If str <> "" AndAlso gid <> "" Then
-                If gid <> "NOID" Then
+                If str = "NOTILE" Then
+                    changed.Text = "PSFにTITLEがありません"
                     GID_tb.Text = gid
-                    changed.Text = "ゲームタイトル/IDが変更されました"
+                ElseIf str = "NULL" Then
+                    changed.Text = "PSFにTITLEはありますが空文字のようです"
+                    GID_tb.Text = gid
+                ElseIf str = "DAX" Then
+                    changed.Text = "LZ圧縮イメージDAXは対応してません"
+                ElseIf str = "CSO" Then
+                    changed.Text = "LZ圧縮イメージCSOは対応してません"
+                ElseIf str = "JSO" Then
+                    changed.Text = "LZ0圧縮イメージJSOは対応してません"
                 Else
-                    changed.Text = "ID情報がないHBです"
+                    changed.Text = "ゲームタイトル/IDが変更されました"
+                    GT_tb.Text = str
+                    GID_tb.Text = gid
                 End If
-                GT_tb.Text = str
             Else
                 changed.Text = "PBP/ISOではありません"
             End If

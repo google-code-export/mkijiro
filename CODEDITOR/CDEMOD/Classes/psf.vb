@@ -10,6 +10,7 @@ Public Class psf
         Dim bs(2047) As Byte
         Dim result As String = ""
         Dim m As MERGE = MERGE
+        Dim NOID As Boolean = False
 
         If fs.Length > 2048 + 40 Then
             fs.Read(bs, 0, 2048)
@@ -23,80 +24,94 @@ Public Class psf
                 If bs(0) = &H0 AndAlso bs(1) = &H50 AndAlso bs(2) = &H53 AndAlso bs(3) = &H46 Then
 
                     Dim offset(3) As Byte
+                    Array.ConstrainedCopy(bs, 8, offset, 0, 4)
+                    Dim i As Integer = BitConverter.ToInt32(offset, 0)
                     Array.ConstrainedCopy(bs, 12, offset, 0, 4)
+                    Dim k As Integer = BitConverter.ToInt32(offset, 0)
+                    Array.ConstrainedCopy(bs, 16, offset, 0, 4)
                     Dim z As Integer = BitConverter.ToInt32(offset, 0)
-                    Dim k As Integer = 0
-                    While True
-                        If bs(28 + 16 * k) = &H10 Or bs(28 + 16 * k) = &HC Then
-                            Exit While
-                        ElseIf bs(28 + 16 * k) = &H80 Then
-                            fs.Close()
-                            Return "NOID"
-                        ElseIf k = 20 Then
-                            fs.Close()
-                            Return ""
+                    Dim psfbyte(200) As Byte
+                    Array.ConstrainedCopy(bs, i, psfbyte, 0, 200)
+                    Dim pname As String = Encoding.GetEncoding(65001).GetString(psfbyte)
+                    pname = pname.Substring(0, pname.IndexOf(Chr(0) & Chr(0)))
+                    Dim psfst As String() = pname.Split(Chr(0))
+                    For i = 0 To z - 1
+                        If psfst(i) = "DISC_ID" Then
+                            Exit For
                         End If
-                        k += 1
-                    End While
-                        Dim gidpsf(8) As Byte
-                        k = CInt(bs(32 + 16 * k))
-                        Array.ConstrainedCopy(bs, z + k, gidpsf, 0, 9)
+                    Next
+                    If i = z Then
+                        NOID = True
+                    End If
+
+                    Dim gidpsf(8) As Byte
+                    k += CInt(bs(32 + 16 * i))
+                    Array.ConstrainedCopy(bs, k, gidpsf, 0, 9)
                         result = Encoding.GetEncoding(0).GetString(gidpsf)
 
-                        If result = "UCJS10041" Or My.Settings.hbhash = True Then
-                            fs.Seek(0, SeekOrigin.Begin)
-                            fs.Read(bs, 0, 2048)
-                            Dim md5 As MD5 = md5.Create()
-                            'ハッシュ値を計算する 
-                            Dim b As Byte() = md5.ComputeHash(bs)
+                    If result = "UCJS10041" Or NOID = True Or My.Settings.hbhash = True Then
+                        fs.Seek(0, SeekOrigin.Begin)
+                        fs.Read(bs, 0, 2048)
+                        Dim md5 As MD5 = md5.Create()
+                        'ハッシュ値を計算する 
+                        Dim b As Byte() = md5.ComputeHash(bs)
 
-                            'ファイルを閉じる 
-                            fs.Close()
+                        'ファイルを閉じる 
+                        fs.Close()
 
-                            Dim hex(4) As UInteger
-                            Dim code(3) As Byte
-                            For i = 0 To 3
-                                Array.ConstrainedCopy(b, i << 2, code, 0, 4)
-                                hex(i) = BitConverter.ToUInt32(code, 0)
-                            Next
-                            hex(4) = hex(0) Xor hex(1)
-                            hex(4) = hex(4) Xor hex(2)
-                            hex(4) = hex(4) Xor hex(3)
+                        Dim hex(4) As UInteger
+                        Dim code(3) As Byte
+                        For i = 0 To 3
+                            Array.ConstrainedCopy(b, i << 2, code, 0, 4)
+                            hex(i) = BitConverter.ToUInt32(code, 0)
+                        Next
+                        hex(4) = hex(0) Xor hex(1)
+                        hex(4) = hex(4) Xor hex(2)
+                        hex(4) = hex(4) Xor hex(3)
 
-                            result = "HB" & hex(4).ToString("X")
+                        result = "HB" & hex(4).ToString("X")
 
-                            Return result
+                        Return result
+                    Else
+                        If m.PSX = True Then
+                            result = result.Insert(4, "_")
                         Else
-                            If m.PSX = True Then
-                                result = result.Insert(4, "_")
-                            Else
-                                result = result.Insert(4, "-")
-                            End If
-                            fs.Close()
-                            Return result
+                            result = result.Insert(4, "-")
                         End If
-                    End If
-                End If
-
-                If fs.Length > &H8060 AndAlso m.PSX = False Then
-                    fs.Seek(&H8000, SeekOrigin.Begin)
-                    fs.Read(bs, 0, 2048)
-                    '.CD001
-                    If bs(0) = &H1 AndAlso bs(1) = &H43 AndAlso bs(2) = &H44 AndAlso bs(3) = &H30 _
-                        AndAlso bs(4) = &H30 AndAlso bs(5) = &H31 Then
-                        Dim gid(10) As Byte
-
-                        Array.ConstrainedCopy(bs, &H373, gid, 0, 10)
-                        result = Encoding.GetEncoding(0).GetString(gid)
-
                         fs.Close()
                         Return result
                     End If
                 End If
+                'DAX
+            ElseIf bs(0) = &H44 AndAlso bs(1) = &H41 AndAlso bs(2) = &H58 AndAlso bs(3) = &H0 Then
+                result = "DAX"
+                'CISO
+            ElseIf bs(0) = &H43 AndAlso bs(1) = &H49 AndAlso bs(2) = &H53 AndAlso bs(3) = &H4F Then
+                result = "CSO"
+                'JISO
+            ElseIf bs(0) = &H4A AndAlso bs(1) = &H49 AndAlso bs(2) = &H53 AndAlso bs(3) = &H4F Then
+                result = "JSO"
             End If
 
-            fs.Close()
-            Return ""
+            If fs.Length > &H8060 AndAlso m.PSX = False AndAlso result = "" Then
+                fs.Seek(&H8000, SeekOrigin.Begin)
+                fs.Read(bs, 0, 2048)
+                '.CD001
+                If bs(0) = &H1 AndAlso bs(1) = &H43 AndAlso bs(2) = &H44 AndAlso bs(3) = &H30 _
+                    AndAlso bs(4) = &H30 AndAlso bs(5) = &H31 Then
+                    Dim gid(10) As Byte
+
+                    Array.ConstrainedCopy(bs, &H373, gid, 0, 10)
+                    result = Encoding.GetEncoding(0).GetString(gid)
+
+                    fs.Close()
+                    Return result
+                End If
+            End If
+        End If
+
+        fs.Close()
+        Return result
 
     End Function
 
@@ -120,26 +135,32 @@ Public Class psf
                 'PSF
                 If bs(0) = &H0 AndAlso bs(1) = &H50 AndAlso bs(2) = &H53 AndAlso bs(3) = &H46 Then
                     Dim offset(3) As Byte
+                    Array.ConstrainedCopy(bs, 8, offset, 0, 4)
+                    Dim i As Integer = BitConverter.ToInt32(offset, 0)
                     Array.ConstrainedCopy(bs, 12, offset, 0, 4)
+                    Dim k As Integer = BitConverter.ToInt32(offset, 0)
+                    Array.ConstrainedCopy(bs, 16, offset, 0, 4)
                     Dim z As Integer = BitConverter.ToInt32(offset, 0)
-                    Dim i As Integer = 0
-                    While True
-                        If bs(28 + i * 16) = &H80 Then
-                            Exit While
-                        ElseIf bs(28 + i * 16) = &H14 Then
-                            Exit While
-                        ElseIf bs(28 + i * 16) = &H18 Then
-                            Exit While
-                        ElseIf bs(28 + i * 16) = &H10 AndAlso i > 4 Then
-                            Exit While
+                    Dim psfbyte(200) As Byte
+                    Array.ConstrainedCopy(bs, i, psfbyte, 0, 200)
+                    Dim pname As String = Encoding.GetEncoding(65001).GetString(psfbyte)
+                    pname = pname.Substring(0, pname.IndexOf(Chr(0) & Chr(0)))
+                    Dim psfst As String() = pname.Split(Chr(0))
+                    For i = 0 To z - 1
+                        If psfst(i) = "TITLE" Then
+                            Exit For
                         End If
-                        i += 1
-                    End While
+                    Next
+                    If i = z Then
+                        fs.Close()
+                        Return "NOTITLE"
+                    End If
+
                     Array.ConstrainedCopy(bs, 32 + i * 16, offset, 0, 4)
                     i = BitConverter.ToInt32(offset, 0)
-                    z += i
+                    k += i
                     Dim name(128) As Byte
-                    Array.ConstrainedCopy(bs, z, name, 0, 128)
+                    Array.ConstrainedCopy(bs, k, name, 0, 128)
                     result = Encoding.GetEncoding(65001).GetString(name)
                     i = result.IndexOf(vbNullChar)
                     result = result.Substring(0, i)
@@ -152,9 +173,18 @@ Public Class psf
                     fs.Close()
                     Return ""
                 End If
+                'DAX
+            ElseIf bs(0) = &H44 AndAlso bs(1) = &H41 AndAlso bs(2) = &H58 AndAlso bs(3) = &H0 Then
+                result = "DAX"
+                'CISO
+            ElseIf bs(0) = &H43 AndAlso bs(1) = &H49 AndAlso bs(2) = &H53 AndAlso bs(3) = &H4F Then
+                result = "CSO"
+                'JISO
+            ElseIf bs(0) = &H4A AndAlso bs(1) = &H49 AndAlso bs(2) = &H53 AndAlso bs(3) = &H4F Then
+                result = "JSO"
             End If
 
-            If fs.Length > &H8060 AndAlso m.PSX = False Then
+            If fs.Length > &H8060 AndAlso m.PSX = False AndAlso result = "" Then
                 fs.Seek(&H8000, SeekOrigin.Begin)
                 fs.Read(bs, 0, 2048)
                 '.CD001
@@ -162,6 +192,7 @@ Public Class psf
                     AndAlso bs(4) = &H30 AndAlso bs(5) = &H31 Then
                     Dim lba(3) As Byte
                     Dim i As Integer = 0
+                    Dim k As Integer = 0
                     Dim z As Integer = 0
                     Dim size(7) As Byte
 
@@ -220,30 +251,33 @@ Public Class psf
                         'PSF
                         If bs(0) = &H0 AndAlso bs(1) = &H50 AndAlso bs(2) = &H53 AndAlso bs(3) = &H46 Then
                             Dim offset(3) As Byte
+                            Array.ConstrainedCopy(bs, 8, offset, 0, 4)
+                            i = BitConverter.ToInt32(offset, 0)
                             Array.ConstrainedCopy(bs, 12, offset, 0, 4)
+                            k = BitConverter.ToInt32(offset, 0)
+                            Array.ConstrainedCopy(bs, 16, offset, 0, 4)
                             z = BitConverter.ToInt32(offset, 0)
-
-                            i = 0
-                            While True
-                                If bs(28 + i * 16) = &H80 Then
-                                    Exit While
-                                ElseIf bs(28 + i * 16) = &H14 Then
-                                    Exit While
-                                ElseIf bs(28 + i * 16) = &H18 Then
-                                    Exit While
-                                ElseIf bs(28 + i * 16) = &H10 AndAlso i > 4 Then
-                                    Exit While
-                                ElseIf i = 20 Then
-                                    fs.Close()
-                                    Return ""
+                            Dim psfbyte(200) As Byte
+                            Array.ConstrainedCopy(bs, i, psfbyte, 0, 200)
+                            Dim pname As String = Encoding.GetEncoding(65001).GetString(psfbyte)
+                            pname = pname.Substring(0, pname.IndexOf(Chr(0) & Chr(0)))
+                            Dim psfst As String() = pname.Split(Chr(0))
+                            For i = 0 To z - 1
+                                If psfst(i) = "TITLE" Then
+                                    Exit For
                                 End If
-                                i += 1
-                            End While
+                            Next
+                            If i = z Then
+                                fs.Close()
+                                Return "NOTITLE"
+                            End If
+
                             Array.ConstrainedCopy(bs, 32 + i * 16, offset, 0, 4)
                             i = BitConverter.ToInt32(offset, 0)
-                            z += i
+                            k += i
+
                             Dim name(128) As Byte
-                            Array.ConstrainedCopy(bs, z, name, 0, 128)
+                            Array.ConstrainedCopy(bs, k, name, 0, 128)
                             result = Encoding.GetEncoding(65001).GetString(name)
                             i = result.IndexOf(vbNullChar)
                             result = result.Substring(0, i)
@@ -261,11 +295,10 @@ Public Class psf
                     End If
                 End If
             End If
-
         End If
 
-            fs.Close()
-            Return ""
+        fs.Close()
+        Return result
 
     End Function
 
