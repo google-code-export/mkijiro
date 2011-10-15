@@ -2450,6 +2450,8 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         Dim str As String = psf.GETID(fileName(0))
         If str = "DAX" Then
             changed.Text = "LZ圧縮イメージDAXは対応してません"
+        ElseIf str = "UMDVIDEO" Then
+            changed.Text = "UMDVIDEOイメージなので取得しませんでした"
         ElseIf str = "CSO" Then
             changed.Text = "LZ圧縮イメージCSOは対応してません"
         ElseIf str = "JSO" Then
@@ -2488,6 +2490,8 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
             changed.Text = "PSFにTITLEがありません"
         ElseIf str = "NULL" Then
             changed.Text = "PSFにTITLEはありますが空文字のようです"
+        ElseIf str = "UMDVIDEO" Then
+            changed.Text = "UMDVIDEOイメージなので取得しませんでした"
         ElseIf str = "DAX" Then
             changed.Text = "LZ圧縮イメージDAXは対応してません"
         ElseIf str = "CSO" Then
@@ -2521,6 +2525,8 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                 ElseIf str = "NULL" Then
                     changed.Text = "PSFにTITLEはありますが空文字のようです"
                     GID_tb.Text = gid
+                ElseIf str = "UMDVIDEO" Then
+                    changed.Text = "UMDVIDEOイメージなので取得しませんでした"
                 ElseIf str = "DAX" Then
                     changed.Text = "LZ圧縮イメージDAXは対応してません"
                 ElseIf str = "CSO" Then
