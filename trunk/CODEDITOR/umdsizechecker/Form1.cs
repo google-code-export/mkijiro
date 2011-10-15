@@ -86,8 +86,9 @@ namespace WindowsFormsApplication1
                 byte[] bs = new byte[8];
                 byte[] big = new byte[8];
                 byte[] str = new byte[5];
+                byte[] str2 = new byte[9];
                 byte[] x = new byte[3];
-                string iso ="";
+                string iso = "",iso2 = "";
                 fs.Read(str, 0, 4);
                 iso = Encoding.GetEncoding(0).GetString(str);
                 iso = iso.Replace("\x0", "");
@@ -113,6 +114,8 @@ namespace WindowsFormsApplication1
                 }
                 fs.Seek(0x8001, SeekOrigin.Begin);
                 fs.Read(str, 0, 5);
+                fs.Seek(0x8008, SeekOrigin.Begin);
+                fs.Read(str2, 0, 9);
                 fs.Seek(0x8050, SeekOrigin.Begin);
                 fs.Read(bs, 0, 3);
                 fs.Seek(0x8055, SeekOrigin.Begin);
@@ -124,9 +127,16 @@ namespace WindowsFormsApplication1
                     Array.ConstrainedCopy(x, 2-i, big, i, 1);
                 }
                 iso = Encoding.GetEncoding(0).GetString(str);
+                iso2 = Encoding.GetEncoding(0).GetString(str2);
                 isosize = BitConverter.ToInt64(bs, 0);
                 isobig = BitConverter.ToInt64(big, 0);
                 if (isosize != isobig || iso != "CD001")
+                {
+                    return "ISOではありません";
+                }
+                if (iso2.Contains("PSP GAME") || iso2.Contains("UMD VIDEO"))
+                {}
+                else
                 {
                     return "ISOではありません";
                 }
@@ -135,7 +145,7 @@ namespace WindowsFormsApplication1
                 label2.Text += Convert.ToString(isosize);
                  if (isosize - fsize == 2048)
                 {
-                    return "M33USBマウントのみで発生する-2048サイズ欠けです\nPSPFILER/ISOTOOL/TEMPARなどを使ってください\nまたUSBマウントは修正版がでているのでそちらをインストールしてください";
+                    return "M33USBマウントのみで発生する-2048サイズ欠けです\nPSPFILER/ISOTOOL/TEMPARなどを使ってください\r\nまたUSBマウントは修正版がでているのでそちらをインストールしてください";
                 }
                 else if (isosize < fsize)
                 {
@@ -245,7 +255,7 @@ namespace WindowsFormsApplication1
                 }
                 else
                 {
-                    textBox1.Text = "ISOヘッダにタイトル名が有りませんでした";
+                    textBox1.Text = "ISOラベル名が有りませんでした";
                 }
             }
             else
@@ -263,24 +273,30 @@ namespace WindowsFormsApplication1
                 byte[] size = new byte[8];
                 byte[] psfname = new byte[129];
                 byte[] sector = new byte[2048];
+                byte[] str = new byte[9];
                 int i =0,k=0,z=0;
-                FileStream fs = new FileStream(isofile, FileMode.Open, FileAccess.Read);                
+                FileStream fs = new FileStream(isofile, FileMode.Open, FileAccess.Read);
+
+                fs.Seek(0x8008, SeekOrigin.Begin);
+                fs.Read(str, 0, 9);
+                string iso = Encoding.GetEncoding(0).GetString(str);
                 fs.Seek(0x8050, SeekOrigin.Begin);
                 fs.Read(size, 0, 5);
                 long lbatotal = BitConverter.ToInt64(size, 0);
                 lbatotal *= 2048;
-                if (lbatotal - fs.Length <= 2048)
+                if (lbatotal - fs.Length <= 2048 && (iso.Contains("PSP GAME") || iso.Contains("UMD VIDEO")))
                 {
                     fs.Seek(0x80A5, SeekOrigin.Begin);
                     fs.Read(lba, 0, 2);
                     z = BitConverter.ToInt32(lba, 0);
                     fs.Seek(z * 2048, SeekOrigin.Begin);
                     fs.Read(sector, 0, 2048);
-                    //PSP_GAME
+                    //PSP_GAME,UMD_VIDEO
                     while (true)
                     {
-                        if (sector[i] == 0x50 && sector[i + 1] == 0x53 && sector[i + 2] == 0x50) break;
-                        if (i > 2048) { fs.Close(); textBox1.Text = "PSF取得に失敗しました"; return; }
+                        if (iso.Contains("PSP GAME") && sector[i] == 0x50 && sector[i + 1] == 0x53 && sector[i + 2] == 0x50 && sector[i + 3] == 0x5f && sector[i + 4] == 0x47) break;
+                        if (iso.Contains("UMD VIDEO") && sector[i] == 0x55 && sector[i + 1] == 0x4D && sector[i + 2] == 0x44 && sector[i + 3] == 0x5f && sector[i + 4] == 0x56) break;
+                        if (i > 2038) { fs.Close(); textBox1.Text = "PSF取得に失敗しました"; return; }
                         i++;
                     }
                     Array.ConstrainedCopy(sector, i - 31, lba, 0, 2);
@@ -293,19 +309,19 @@ namespace WindowsFormsApplication1
                     while (true)
                     {
                         if (sector[i] == 0x50 && sector[i + 1] == 0x41 && sector[i + 2] == 0x52 && sector[i + 3] == 0x41) break;
-                        if (i > 2048) { fs.Close(); textBox1.Text = "PSF取得に失敗しました"; return; }
+                        if (i > 2038) { fs.Close(); textBox1.Text = "PSF取得に失敗しました"; return; }
                         i++;
                     }
-                    Array.ConstrainedCopy(sector, i - 31, lba, 0, 2);
+                    Array.ConstrainedCopy(sector, i - 31, lba, 0, 3);
                     z = BitConverter.ToInt32(lba, 0);
                     if (z * 2048 > fs.Length) { fs.Close(); textBox1.Text = "PSF取得に失敗しました"; return; }
                     fs.Seek(z * 2048, SeekOrigin.Begin);
                     fs.Read(sector, 0, 2048);
-                    Array.ConstrainedCopy(sector, 12, lba, 0, 2);
+                    Array.ConstrainedCopy(sector, 12, lba, 0, 4);
                     i = BitConverter.ToInt32(lba, 0);
-                    Array.ConstrainedCopy(sector, 8, lba, 0, 2);
+                    Array.ConstrainedCopy(sector, 8, lba, 0, 4);
                     k = BitConverter.ToInt32(lba, 0);
-                    Array.ConstrainedCopy(sector, 16, lba, 0, 2);
+                    Array.ConstrainedCopy(sector, 16, lba, 0, 4);
                     z = BitConverter.ToInt32(lba, 0);
                     byte[] tmp = new byte[200];
                     Array.ConstrainedCopy(sector, k, tmp, 0, 200);

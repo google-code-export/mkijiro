@@ -99,13 +99,23 @@ Public Class psf
                 '.CD001
                 If bs(0) = &H1 AndAlso bs(1) = &H43 AndAlso bs(2) = &H44 AndAlso bs(3) = &H30 _
                     AndAlso bs(4) = &H30 AndAlso bs(5) = &H31 Then
-                    Dim gid(10) As Byte
+                    'PSP GAME
+                    If bs(8) = &H50 AndAlso bs(9) = &H53 AndAlso bs(10) = &H50 AndAlso bs(11) = &H20 _
+                        AndAlso bs(12) = &H47 AndAlso bs(13) = &H41 AndAlso bs(14) = &H4D AndAlso bs(15) = &H45 Then
 
-                    Array.ConstrainedCopy(bs, &H373, gid, 0, 10)
-                    result = Encoding.GetEncoding(0).GetString(gid)
+                        Dim gid(10) As Byte
 
-                    fs.Close()
-                    Return result
+                        Array.ConstrainedCopy(bs, &H373, gid, 0, 10)
+                        result = Encoding.GetEncoding(0).GetString(gid)
+
+                        fs.Close()
+                        Return result
+
+                    ElseIf bs(8) = &H55 AndAlso bs(9) = &H4D AndAlso bs(10) = &H44 AndAlso bs(11) = &H20 _
+                            AndAlso bs(12) = &H56 AndAlso bs(13) = &H49 AndAlso bs(14) = &H44 AndAlso bs(15) = &H45 AndAlso bs(16) = &H4F Then
+                        fs.Close()
+                        Return "UMDVIDEO"
+                    End If
                 End If
             End If
         End If
@@ -190,108 +200,118 @@ Public Class psf
                 '.CD001
                 If bs(0) = &H1 AndAlso bs(1) = &H43 AndAlso bs(2) = &H44 AndAlso bs(3) = &H30 _
                     AndAlso bs(4) = &H30 AndAlso bs(5) = &H31 Then
-                    Dim lba(3) As Byte
-                    Dim i As Integer = 0
-                    Dim k As Integer = 0
-                    Dim z As Integer = 0
-                    Dim size(7) As Byte
+                    'PSP GAME
+                    If bs(8) = &H50 AndAlso bs(9) = &H53 AndAlso bs(10) = &H50 AndAlso bs(11) = &H20 _
+                        AndAlso bs(12) = &H47 AndAlso bs(13) = &H41 AndAlso bs(14) = &H4D AndAlso bs(15) = &H45 Then
 
-                    fs.Seek(&H8050, SeekOrigin.Begin)
-                    fs.Read(size, 0, 5)
-                    Dim lbatotal As Int64 = BitConverter.ToInt64(size, 0)
-                    lbatotal *= 2048
-                    If lbatotal - fs.Length <= 2048 Then
+                        Dim lba(3) As Byte
+                        Dim i As Integer = 0
+                        Dim k As Integer = 0
+                        Dim z As Integer = 0
+                        Dim size(7) As Byte
 
-                        fs.Seek(&H80A5, SeekOrigin.Begin)
-                        fs.Read(lba, 0, 2)
-                        z = BitConverter.ToInt32(lba, 0)
-                        If z * 2048 > fs.Length Then
-                            fs.Close()
-                            Return ""
-                        End If
-                        fs.Seek(z * 2048, SeekOrigin.Begin)
-                        fs.Read(bs, 0, 2048)
-                        'PSP_GAME
-                        While True
-                            If bs(i) = &H50 AndAlso bs(i + 1) = &H53 AndAlso bs(i + 2) = &H50 Then
-                                Exit While
-                            ElseIf i = 2048 Then
+                        fs.Seek(&H8050, SeekOrigin.Begin)
+                        fs.Read(size, 0, 5)
+                        Dim lbatotal As Int64 = BitConverter.ToInt64(size, 0)
+                        lbatotal *= 2048
+                        If lbatotal - fs.Length <= 2048 Then
+
+                            fs.Seek(&H80A5, SeekOrigin.Begin)
+                            fs.Read(lba, 0, 2)
+                            z = BitConverter.ToInt32(lba, 0)
+                            If z * 2048 > fs.Length Then
                                 fs.Close()
                                 Return ""
                             End If
-                            i += 1
-                        End While
-                        Array.ConstrainedCopy(bs, i - 31, lba, 0, 2)
-                        z = BitConverter.ToInt32(lba, 0)
-                        If z * 2048 > fs.Length Then
-                            fs.Close()
-                            Return ""
-                        End If
-                        fs.Seek(z * 2048, SeekOrigin.Begin)
-                        fs.Read(bs, 0, 2048)
-                        i = 0
-                        'PARAM.SFO
-                        While True
-                            If bs(i) = &H50 AndAlso bs(i + 1) = &H41 AndAlso bs(i + 2) = &H52 AndAlso bs(i + 3) = &H41 Then
-                                Exit While
-                            ElseIf i = 2048 Then
-                                fs.Close()
-                                Return ""
-                            End If
-                            i += 1
-                        End While
-                        Array.ConstrainedCopy(bs, i - 31, lba, 0, 2)
-                        z = BitConverter.ToInt32(lba, 0)
-                        If z * 2048 > fs.Length Then
-                            fs.Close()
-                            Return ""
-                        End If
-                        fs.Seek(z * 2048, SeekOrigin.Begin)
-                        fs.Read(bs, 0, 2048)
-                        'PSF
-                        If bs(0) = &H0 AndAlso bs(1) = &H50 AndAlso bs(2) = &H53 AndAlso bs(3) = &H46 Then
-                            Dim offset(3) As Byte
-                            Array.ConstrainedCopy(bs, 8, offset, 0, 4)
-                            i = BitConverter.ToInt32(offset, 0)
-                            Array.ConstrainedCopy(bs, 12, offset, 0, 4)
-                            k = BitConverter.ToInt32(offset, 0)
-                            Array.ConstrainedCopy(bs, 16, offset, 0, 4)
-                            z = BitConverter.ToInt32(offset, 0)
-                            Dim psfbyte(200) As Byte
-                            Array.ConstrainedCopy(bs, i, psfbyte, 0, 200)
-                            Dim pname As String = Encoding.GetEncoding(65001).GetString(psfbyte)
-                            pname = pname.Substring(0, pname.IndexOf(Chr(0) & Chr(0)))
-                            Dim psfst As String() = pname.Split(Chr(0))
-                            For i = 0 To z - 1
-                                If psfst(i) = "TITLE" Then
-                                    Exit For
+                            fs.Seek(z * 2048, SeekOrigin.Begin)
+                            fs.Read(bs, 0, 2048)
+                            'PSP_GAME
+                            While True
+                                If bs(i) = &H50 AndAlso bs(i + 1) = &H53 AndAlso bs(i + 2) = &H50 Then
+                                    Exit While
+                                ElseIf i = 2048 Then
+                                    fs.Close()
+                                    Return ""
                                 End If
-                            Next
-                            If i = z Then
+                                i += 1
+                            End While
+                            Array.ConstrainedCopy(bs, i - 31, lba, 0, 2)
+                            z = BitConverter.ToInt32(lba, 0)
+                            If z * 2048 > fs.Length Then
                                 fs.Close()
-                                Return "NOTITLE"
+                                Return ""
                             End If
-
-                            Array.ConstrainedCopy(bs, 32 + i * 16, offset, 0, 4)
-                            i = BitConverter.ToInt32(offset, 0)
-                            k += i
-
-                            Dim name(128) As Byte
-                            Array.ConstrainedCopy(bs, k, name, 0, 128)
-                            result = Encoding.GetEncoding(65001).GetString(name)
-                            i = result.IndexOf(vbNullChar)
-                            result = result.Substring(0, i)
-
-                            If result = "" Then
-                                result = "NULL"
+                            fs.Seek(z * 2048, SeekOrigin.Begin)
+                            fs.Read(bs, 0, 2048)
+                            i = 0
+                            'PARAM.SFO
+                            While True
+                                If bs(i) = &H50 AndAlso bs(i + 1) = &H41 AndAlso bs(i + 2) = &H52 AndAlso bs(i + 3) = &H41 Then
+                                    Exit While
+                                ElseIf i = 2048 Then
+                                    fs.Close()
+                                    Return ""
+                                End If
+                                i += 1
+                            End While
+                            Array.ConstrainedCopy(bs, i - 31, lba, 0, 3)
+                            z = BitConverter.ToInt32(lba, 0)
+                            If z * 2048 > fs.Length Then
+                                fs.Close()
+                                Return ""
                             End If
+                            fs.Seek(z * 2048, SeekOrigin.Begin)
+                            fs.Read(bs, 0, 2048)
+                            'PSF
+                            If bs(0) = &H0 AndAlso bs(1) = &H50 AndAlso bs(2) = &H53 AndAlso bs(3) = &H46 Then
+                                Dim offset(3) As Byte
+                                Array.ConstrainedCopy(bs, 8, offset, 0, 4)
+                                i = BitConverter.ToInt32(offset, 0)
+                                Array.ConstrainedCopy(bs, 12, offset, 0, 4)
+                                k = BitConverter.ToInt32(offset, 0)
+                                Array.ConstrainedCopy(bs, 16, offset, 0, 4)
+                                z = BitConverter.ToInt32(offset, 0)
+                                Dim psfbyte(200) As Byte
+                                Array.ConstrainedCopy(bs, i, psfbyte, 0, 200)
+                                Dim pname As String = Encoding.GetEncoding(65001).GetString(psfbyte)
+                                pname = pname.Substring(0, pname.IndexOf(Chr(0) & Chr(0)))
+                                Dim psfst As String() = pname.Split(Chr(0))
+                                For i = 0 To z - 1
+                                    If psfst(i) = "TITLE" Then
+                                        Exit For
+                                    End If
+                                Next
+                                If i = z Then
+                                    fs.Close()
+                                    Return "NOTITLE"
+                                End If
 
-                            fs.Close()
-                            Return result
-                        Else
-                            fs.Close()
-                            Return ""
+                                Array.ConstrainedCopy(bs, 32 + i * 16, offset, 0, 4)
+                                i = BitConverter.ToInt32(offset, 0)
+                                k += i
+
+                                Dim name(128) As Byte
+                                Array.ConstrainedCopy(bs, k, name, 0, 128)
+                                result = Encoding.GetEncoding(65001).GetString(name)
+                                i = result.IndexOf(vbNullChar)
+                                result = result.Substring(0, i)
+
+                                If result = "" Then
+                                    result = "NULL"
+                                End If
+
+                                fs.Close()
+                                Return result
+                            Else
+                                fs.Close()
+                                Return ""
+                            End If
                         End If
+
+                    ElseIf bs(8) = &H55 AndAlso bs(9) = &H4D AndAlso bs(10) = &H44 AndAlso bs(11) = &H20 _
+                            AndAlso bs(12) = &H56 AndAlso bs(13) = &H49 AndAlso bs(14) = &H44 AndAlso bs(15) = &H45 AndAlso bs(16) = &H4F Then
+                        fs.Close()
+                        Return "UMDVIDEO"
                     End If
                 End If
             End If
