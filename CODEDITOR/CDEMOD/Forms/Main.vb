@@ -1247,7 +1247,7 @@ Public Class MERGE
 
     Public Function ConvCH(ByVal moto As String) As String
         Dim st As String() = {"ー", "∋", "⊆", "⊇", "⊂", "⊃", "￢", "⇒", "⇔", "∃", "∂", "∇", "≪", "≫", "∬", "Å", "♯", "♭", "♪", "†", "‡", "¶", "⑪", "⑫", "⑬", "⑭", "⑮", "⑯", "⑰", "⑱", "⑲", "⑳", "㍉", "㌔", "㌢", "㍍", "㌘", "㌧", "㌃", "㌶", "㍑", "㍗", "㌍", "㌦", "㌣", "㌫", "㍊", "㌻", "㍻", "〝", "〟", "㏍", "㊤", "㊥", "㊦", "㊧", "㊨", "㍾", "㍽", "㍼"}
-        Dim sr As String() = {"-", " ", " ", " ", " ", " ", " ", "→", "↔", "ヨ", "", "", "<<", ">>", "ダブルインテグラル", "オングストローム", "シャ-プ", "フラット", "8分音符", "ダガー", "ダブルダガー", "パラグラフ", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "ミリ", "キロ", "センチ", "メ-トル", "グラム", "トン", "ア-ル", "ヘクタ-ル", "リットル", "ワｯト", "カロリ-", "ドル", "セント", "パ-セント", "ミリバ-ル", "ペ-ジ", "平成", " ", " ", "KK", "上", "中", "下", "左", "右", "明治", "大正", "昭和"}
+        Dim sr As String() = {"-", " ", " ", " ", " ", " ", " ", "→", "竊鐀", "ヨ", "", "", "<<", ">>", "ダブルインテグラル", "オングストローム", "シャ-プ", "フラット", "8分音符", "ダガー", "ダブルダガー", "パラグラフ", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "ミリ", "キロ", "センチ", "メ-トル", "グラム", "トン", "ア-ル", "ヘクタ-ル", "リットル", "ワｯト", "カロリ-", "ドル", "セント", "パ-セント", "ミリバ-ル", "ペ-ジ", "平成", " ", " ", "KK", "上", "中", "下", "左", "右", "明治", "大正", "昭和"}
         Dim i As Integer = 0
         For i = 0 To 59
             If moto.Contains(st(i)) Then
@@ -2493,9 +2493,9 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         ElseIf str = "UMDVIDEO" Then
             changed.Text = "UMDVIDEOイメージなので取得しませんでした"
         ElseIf str = "DAX" Then
-            changed.Text = "LZ圧縮イメージDAXは対応してません"
+            changed.Text = "Deflate圧縮イメージDAXは対応してません"
         ElseIf str = "CSO" Then
-            changed.Text = "LZ圧縮イメージCSOは対応してません"
+            changed.Text = "Deflate圧縮イメージCSOは対応してません"
         ElseIf str = "JSO" Then
             changed.Text = "LZ0圧縮イメージJSOは対応してません"
         ElseIf str <> "" Then
@@ -2528,9 +2528,9 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                 ElseIf str = "UMDVIDEO" Then
                     changed.Text = "UMDVIDEOイメージなので取得しませんでした"
                 ElseIf str = "DAX" Then
-                    changed.Text = "LZ圧縮イメージDAXは対応してません"
+                    changed.Text = "Deflate圧縮イメージDAXは対応してません"
                 ElseIf str = "CSO" Then
-                    changed.Text = "LZ圧縮イメージCSOは対応してません"
+                    changed.Text = "Deflate圧縮イメージCSOは対応してません"
                 ElseIf str = "JSO" Then
                     changed.Text = "LZ0圧縮イメージJSOは対応してません"
                 Else
