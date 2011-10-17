@@ -1,0 +1,17 @@
+いわゆるただのFizzBuzzねたです。面白くないどうでもいいけど
+ぐぐっても数学ねたがマイナーなのが悲しいところ
+ふぃぼなっち公式があったが浮動小数の限界をこえたので70以上はどうも無理らしい
+M$が将来BINERY128対応するかしらんけど
+
+FizzBuzz
+http://www004.upp.so-net.ne.jp/s_honma/number/multiple.htm
+倍数判定法
+
+FibBuzz
+コードNETAサイト　http://golf.shinh.org/　でみたので作成
+ふぃぼなっちばんらしい、一般公式つかうと有効桁足らず＼(^o^)／ｵﾜﾀっぽい
+
+FizzSq~5jou
+ただの斬蚊屍鬼ぶっこんだけ
+
+BY (ﾟ∀ﾟ)

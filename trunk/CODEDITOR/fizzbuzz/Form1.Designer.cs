@@ -35,6 +35,9 @@
             this.Fibonacci_number = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.SQ = new System.Windows.Forms.RadioButton();
+            this.Cube = new System.Windows.Forms.RadioButton();
+            this.fourthpow = new System.Windows.Forms.RadioButton();
+            this.fifthpow = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -81,7 +84,7 @@
             // Fibonacci_number
             // 
             this.Fibonacci_number.AutoSize = true;
-            this.Fibonacci_number.Location = new System.Drawing.Point(12, 49);
+            this.Fibonacci_number.Location = new System.Drawing.Point(12, 40);
             this.Fibonacci_number.Name = "Fibonacci_number";
             this.Fibonacci_number.Size = new System.Drawing.Size(63, 16);
             this.Fibonacci_number.TabIndex = 4;
@@ -90,12 +93,15 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.fifthpow);
+            this.groupBox1.Controls.Add(this.fourthpow);
+            this.groupBox1.Controls.Add(this.Cube);
             this.groupBox1.Controls.Add(this.SQ);
             this.groupBox1.Controls.Add(this.Fibonacci_number);
             this.groupBox1.Controls.Add(this.Plus1);
             this.groupBox1.Location = new System.Drawing.Point(17, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(227, 71);
+            this.groupBox1.Size = new System.Drawing.Size(239, 71);
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "groupBox1";
@@ -103,13 +109,46 @@
             // SQ
             // 
             this.SQ.AutoSize = true;
-            this.SQ.Location = new System.Drawing.Point(100, 19);
+            this.SQ.Location = new System.Drawing.Point(81, 18);
             this.SQ.Name = "SQ";
             this.SQ.Size = new System.Drawing.Size(78, 16);
             this.SQ.TabIndex = 5;
             this.SQ.TabStop = true;
             this.SQ.Text = "FizzSquare";
             this.SQ.UseVisualStyleBackColor = true;
+            // 
+            // Cube
+            // 
+            this.Cube.AutoSize = true;
+            this.Cube.Location = new System.Drawing.Point(81, 41);
+            this.Cube.Name = "Cube";
+            this.Cube.Size = new System.Drawing.Size(69, 16);
+            this.Cube.TabIndex = 6;
+            this.Cube.TabStop = true;
+            this.Cube.Text = "FizzCube";
+            this.Cube.UseVisualStyleBackColor = true;
+            // 
+            // fourthpow
+            // 
+            this.fourthpow.AutoSize = true;
+            this.fourthpow.Location = new System.Drawing.Point(159, 18);
+            this.fourthpow.Name = "fourthpow";
+            this.fourthpow.Size = new System.Drawing.Size(70, 16);
+            this.fourthpow.TabIndex = 7;
+            this.fourthpow.TabStop = true;
+            this.fourthpow.Text = "Fizz4Pow";
+            this.fourthpow.UseVisualStyleBackColor = true;
+            // 
+            // fifthpow
+            // 
+            this.fifthpow.AutoSize = true;
+            this.fifthpow.Location = new System.Drawing.Point(159, 40);
+            this.fifthpow.Name = "fifthpow";
+            this.fifthpow.Size = new System.Drawing.Size(70, 16);
+            this.fifthpow.TabIndex = 8;
+            this.fifthpow.TabStop = true;
+            this.fifthpow.Text = "Fizz5Pow";
+            this.fifthpow.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -138,6 +177,9 @@
         private System.Windows.Forms.RadioButton Fibonacci_number;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.RadioButton SQ;
+        private System.Windows.Forms.RadioButton Cube;
+        private System.Windows.Forms.RadioButton fourthpow;
+        private System.Windows.Forms.RadioButton fifthpow;
     }
 }
 
