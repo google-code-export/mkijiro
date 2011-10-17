@@ -45,10 +45,19 @@ namespace WindowsFormsApplication1
                     {
                         fn = i * i;//Math.Pow(i, i);
                     }
-                    //else if (Cube.Checked == true)
-                    //{
-                    //        fn = i*i*i;
-                    //}
+                    else if (Cube.Checked == true)
+                    {
+                            fn = i*i*i;
+                    }
+                    else if (fourthpow.Checked == true)
+                    {
+                        fn = i*i*i*i;
+                    }
+                    else if (fifthpow.Checked == true)
+                    {
+                        //i*i*i*i*iだとバグるっぽい？？
+                        fn = Convert.ToDecimal(Math.Pow(i, 5));
+                    }
 
                     if (fn % 3 == 0 && fn % 5 == 0) { textBox1.Text += fb[0]; }
                     else if (fn % 3 == 0) { textBox1.Text += fb[1]; }
@@ -58,13 +67,13 @@ namespace WindowsFormsApplication1
         }
 
 
-        //FizzBuzzNETA MATHEMATIC MANIA STYLE
+        //FizzBuzzNETA MATHEMATIC STYLE?
         private void button2_Click(object sender, EventArgs e)
         {
 
             textBox1.Text = "";
             int mode = 0,goukei = 0;
-            decimal f1 = 0, f2 = 1, fn = 0;
+            decimal  f2 = 1, fn = 0;
             string suuji = "",ikketame ="";
             string[] fb;
             fb = new string[4] { "(ﾟ∀ﾟ)すうがくねた", "Fizz\r\n", "Buzz\r\n", "FizzBuzz\r\n" };
@@ -85,7 +94,7 @@ namespace WindowsFormsApplication1
                         fn = Convert.ToDecimal(Math.Floor(Math.Pow(goldenrate, i) / rootfive + 0.5));
                         if (i == 70)
                         {
-                            textBox1.Text += "Binary64限界,＼(^o^)／ｵﾜﾀ"; break;
+                            textBox1.Text += "Binary64限界de＼(^o^)／ｵﾜﾀ?"; break;
                         }
                     }
                     else if (SQ.Checked == true)
@@ -96,8 +105,47 @@ namespace WindowsFormsApplication1
                         }
                         else
                         {
-                            //斬蚊屍鬼（ ＾ω＾）
-                            fn = f2 + 2 * i - 1;
+                            //斬蚊屍鬼(( ＾ω＾))
+                            fn = f2 + 2 * i - 1;//fn-f2=n^2-(n-1)^2
+                            f2 = fn;
+                        }
+                    }
+                    else if (Cube.Checked == true)
+                    {
+                        if (i == 1)
+                        {
+                            fn = f2;
+                        }
+                        else
+                        {
+                            //斬蚊屍鬼((( ＾ω＾)))
+                            fn = f2 + 3*i*(i-1)+ 1;////fn-f2=n^3-(n-1)^3
+                            f2 = fn;
+                        }
+                    }
+                    else if (fourthpow.Checked == true)
+                    {
+                        if (i == 1)
+                        {
+                            fn = f2;
+                        }
+                        else
+                        {
+                            //斬蚊屍鬼(((( ＾ω＾))))
+                            fn = f2 + 2*i*(2*i*i-3*i+2)-1;//fn-f2=n^4-(n-1)^4
+                            f2 = fn;
+                        }
+                    }
+                    else if (fifthpow.Checked == true)
+                    {
+                        if (i == 1)
+                        {
+                            fn = f2;
+                        }
+                        else
+                        {
+                            //斬蚊屍鬼((((( ＾ω＾)))))
+                            fn = f2 + 5*i*(i*i*i-2*i*i+2*i-1)+ 1;//fn-f2=n^5-(n-1)^5
                             f2 = fn;
                         }
                     }
