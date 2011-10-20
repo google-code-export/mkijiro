@@ -76,12 +76,12 @@ Public Class parser
             RegexOptions.IgnoreCase)
                     Dim w As Match = t.Match(s)
                     If w.Success Then
-                        b2 &= "_CW cwcwiki用,最後にある場合は消さないでください" & vbCrLf
+                        b2 &= "_CW cwcwiki用" & vbCrLf
                         s = ""
                         'g = 0
                         wikiend = 1
                     ElseIf s.Substring(0, 6) = "抽出レス数：" Then
-                        b2 &= "_CJ JANE2CH用,最後にある場合は消さないでください" & vbCrLf
+                        b2 &= "_CJ JANE2CH用" & vbCrLf
                         jane2ch = 1
                     End If
                 End If
@@ -169,7 +169,7 @@ Public Class parser
             End If
         Next
         If jane2ch = 0 And wikiend = 0 Then
-            b2 &= "_CD パーサー用ダミー,最後にある場合は消さないでください" & vbCrLf
+            b2 &= "_CD パーサー用ダミー" & vbCrLf
         End If
         TX.Text = b2
     End Sub
@@ -186,7 +186,7 @@ Public Class parser
     RegexOptions.IgnoreCase)
                 Dim mp As Match = p.Match(s)
                 Dim cf As New Regex( _
-    "[0-9A-Fa-f]{8} [0-9A-Za-z]{8}", _
+    "[0-9A-Fa-f]{8} [0-9A-Fa-f]{8}", _
     RegexOptions.IgnoreCase)
                 Dim mc As Match = cf.Match(s)
                 Dim ar As New Regex( _
@@ -273,5 +273,15 @@ Public Class parser
             End If
         Next
         TX.Text = b2
+    End Sub
+
+    Private Sub 置換ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles 置換ToolStripMenuItem.Click
+        Dim f As New replace
+        f.ShowDialog()
+        f.Dispose()
+    End Sub
+
+    Private Sub 検索ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles 検索ToolStripMenuItem.Click
+
     End Sub
 End Class

@@ -181,6 +181,8 @@ Partial Class MERGE
         Me.Button3 = New System.Windows.Forms.Button()
         Me.DATAGRID = New System.Windows.Forms.Button()
         Me.PSF = New System.Windows.Forms.Button()
+        Me.releasedate = New System.Windows.Forms.ToolStripMenuItem()
+        Me.samename = New System.Windows.Forms.ToolStripMenuItem()
         Me.treeopen.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.tool_menu.SuspendLayout()
@@ -759,6 +761,7 @@ Partial Class MERGE
         '
         'autoupdater
         '
+        Me.autoupdater.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.releasedate, Me.samename})
         Me.autoupdater.Name = "autoupdater"
         Me.autoupdater.Size = New System.Drawing.Size(194, 22)
         Me.autoupdater.Text = "起動時最新版チェック"
@@ -1421,6 +1424,18 @@ Partial Class MERGE
         Me.PSF.Text = "PSF取得"
         Me.PSF.UseVisualStyleBackColor = True
         '
+        'releasedate
+        '
+        Me.releasedate.Name = "releasedate"
+        Me.releasedate.Size = New System.Drawing.Size(183, 22)
+        Me.releasedate.Text = "リリース日付で保存"
+        '
+        'samename
+        '
+        Me.samename.Name = "samename"
+        Me.samename.Size = New System.Drawing.Size(183, 22)
+        Me.samename.Text = "同じ名前(再起動必要)"
+        '
         'MERGE
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
@@ -1630,5 +1645,7 @@ Partial Class MERGE
     Friend WithEvents FTPDsetting As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents PSF As System.Windows.Forms.Button
     Friend WithEvents PBPHBHASH As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents releasedate As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents samename As System.Windows.Forms.ToolStripMenuItem
 
 End Class

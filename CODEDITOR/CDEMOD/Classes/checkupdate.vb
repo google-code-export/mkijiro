@@ -9,6 +9,8 @@ Public Class checkupdate
         If My.Computer.Network.IsAvailable Then
             Dim tx As String = "http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/CDEMOD/bin/Release/version"
             Dim exe As String = "http://unzu127xp.pa.land.to/mogura/writelog.php?dl=http://unzu127xp.pa.land.to/data/IJIRO/CDEMOD/bin/Release/CDE_CP932_FM4.exe"
+            Dim up As String = "http://unzu127xp.pa.land.to/mogura/writelog.php?dl=http://unzu127xp.pa.land.to/data/IJIRO/CDEMOD/bin/Release/APP/updater.exe"
+
             '保存先のファイル名
             Dim fileName As String = "CDEMOD.exe"
             Dim check As New checkupdate
@@ -49,7 +51,7 @@ Public Class checkupdate
                     If exeupdate = True Then
                         Dim result As DialogResult = MessageBox.Show("最新版が見つかりました、ダウンロードしますか？", "更新の確認", _
                         MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
-                        If result = DialogResult.Yes Then
+                        If result = DialogResult.Yes AndAlso My.Settings.updatemode = False Then
                             Dim save As String = fileName.Insert(fileName.LastIndexOf("."), rr)
                             save = save.Replace(":", "")
                             save = save.Replace("/", "")
@@ -57,9 +59,27 @@ Public Class checkupdate
                             If ok = "OK" Then
                                 MessageBox.Show(save & vbCrLf & "BUID:" & m.Value & "のダウンロードが完了しました" _
                                  & vbCrLf & "設定を引き継ぎたい場合は起動しているEXE名と同じ名前にしてください", "ダウンロード完了")
+                                If mode = "start" Then
+                                    MERGE.Close()
+                                    error_window.Close()
+                                    Exit Sub
+                                End If
                             Else
                                 MessageBox.Show("ダウンロードに失敗しました", "ダウンロード失敗")
                             End If
+                        ElseIf result = DialogResult.Yes AndAlso My.Settings.updatemode = True Then
+                            Dim txt As String = Application.StartupPath & "\APP\updater.txt"
+                            Dim boot As String = Application.StartupPath & "\APP\updater.exe"
+                            Dim tw As New StreamWriter(txt, False, _
+                                                       System.Text.Encoding.GetEncoding(65001))
+
+                            tw.Write(Application.ExecutablePath)
+                            tw.Close()
+                            If File.Exists(boot) = False Then
+                                check.getweb(boot, up, 1)
+                            End If
+                            Process.Start(boot)
+                            MERGE.Close()
                         End If
 
                     ElseIf mode = "help" Then

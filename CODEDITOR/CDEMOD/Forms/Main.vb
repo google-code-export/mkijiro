@@ -53,6 +53,13 @@ Public Class MERGE
             PBPHBHASH.Checked = True
         End If
 
+
+        If My.Settings.updatemode = False Then
+            releasedate.Checked = True
+        Else
+            samename.Checked = True
+        End If
+
         If showerror = True Then
             error_window.Show()
             options_error.Checked = True
@@ -2553,5 +2560,30 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
             My.Settings.hbhash = True
             PBPHBHASH.Checked = True
         End If
+    End Sub
+
+    Private Sub 同名でToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles samename.Click
+        If samename.Checked = True Then
+            samename.Checked = False
+            releasedate.Checked = True
+            My.Settings.updatemode = False
+        Else
+            releasedate.Checked = False
+            samename.Checked = True
+            My.Settings.updatemode = True
+        End If
+    End Sub
+
+    Private Sub 別名で保存ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles releasedate.Click
+        If releasedate.Checked = False Then
+            samename.Checked = False
+            releasedate.Checked = True
+            My.Settings.updatemode = False
+        Else
+            releasedate.Checked = False
+            samename.Checked = True
+            My.Settings.updatemode = True
+        End If
+
     End Sub
 End Class
