@@ -31,6 +31,11 @@ Partial Class parser
         Me.Button3 = New System.Windows.Forms.Button()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.MenuStrip2 = New System.Windows.Forms.MenuStrip()
+        Me.MenuStrip3 = New System.Windows.Forms.MenuStrip()
+        Me.MenuStrip4 = New System.Windows.Forms.MenuStrip()
+        Me.検索ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.置換ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuStrip4.SuspendLayout()
         Me.SuspendLayout()
         '
         'TX
@@ -99,7 +104,7 @@ Partial Class parser
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Location = New System.Drawing.Point(0, 24)
+        Me.MenuStrip1.Location = New System.Drawing.Point(0, 72)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Size = New System.Drawing.Size(284, 24)
         Me.MenuStrip1.TabIndex = 7
@@ -107,11 +112,42 @@ Partial Class parser
         '
         'MenuStrip2
         '
-        Me.MenuStrip2.Location = New System.Drawing.Point(0, 0)
+        Me.MenuStrip2.Location = New System.Drawing.Point(0, 48)
         Me.MenuStrip2.Name = "MenuStrip2"
         Me.MenuStrip2.Size = New System.Drawing.Size(284, 24)
         Me.MenuStrip2.TabIndex = 8
         Me.MenuStrip2.Text = "MenuStrip2"
+        '
+        'MenuStrip3
+        '
+        Me.MenuStrip3.Location = New System.Drawing.Point(0, 24)
+        Me.MenuStrip3.Name = "MenuStrip3"
+        Me.MenuStrip3.Size = New System.Drawing.Size(284, 24)
+        Me.MenuStrip3.TabIndex = 9
+        Me.MenuStrip3.Text = "MenuStrip3"
+        '
+        'MenuStrip4
+        '
+        Me.MenuStrip4.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.検索ToolStripMenuItem, Me.置換ToolStripMenuItem})
+        Me.MenuStrip4.Location = New System.Drawing.Point(0, 0)
+        Me.MenuStrip4.Name = "MenuStrip4"
+        Me.MenuStrip4.Size = New System.Drawing.Size(284, 24)
+        Me.MenuStrip4.TabIndex = 10
+        Me.MenuStrip4.Text = "MenuStrip4"
+        '
+        '検索ToolStripMenuItem
+        '
+        Me.検索ToolStripMenuItem.Name = "検索ToolStripMenuItem"
+        Me.検索ToolStripMenuItem.Size = New System.Drawing.Size(41, 20)
+        Me.検索ToolStripMenuItem.Text = "検索"
+        Me.検索ToolStripMenuItem.Visible = False
+        '
+        '置換ToolStripMenuItem
+        '
+        Me.置換ToolStripMenuItem.Name = "置換ToolStripMenuItem"
+        Me.置換ToolStripMenuItem.Size = New System.Drawing.Size(41, 20)
+        Me.置換ToolStripMenuItem.Text = "置換"
+        Me.置換ToolStripMenuItem.Visible = False
         '
         'parser
         '
@@ -127,10 +163,14 @@ Partial Class parser
         Me.Controls.Add(Me.TX)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Controls.Add(Me.MenuStrip2)
+        Me.Controls.Add(Me.MenuStrip3)
+        Me.Controls.Add(Me.MenuStrip4)
         Me.MainMenuStrip = Me.MenuStrip1
         Me.Name = "parser"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "一括パーサー"
+        Me.MenuStrip4.ResumeLayout(False)
+        Me.MenuStrip4.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -144,4 +184,8 @@ Partial Class parser
     Friend WithEvents Button3 As System.Windows.Forms.Button
     Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
     Friend WithEvents MenuStrip2 As System.Windows.Forms.MenuStrip
+    Friend WithEvents MenuStrip3 As System.Windows.Forms.MenuStrip
+    Friend WithEvents MenuStrip4 As System.Windows.Forms.MenuStrip
+    Friend WithEvents 検索ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents 置換ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 End Class

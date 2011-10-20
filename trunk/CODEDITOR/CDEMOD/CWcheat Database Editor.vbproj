@@ -142,6 +142,12 @@
     <Compile Include="Forms\datagrid.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\replace.Designer.vb">
+      <DependentUpon>replace.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\replace.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\version.Designer.vb">
       <DependentUpon>version.vb</DependentUpon>
     </Compile>
@@ -201,6 +207,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\datagrid.resx">
       <DependentUpon>datagrid.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\replace.resx">
+      <DependentUpon>replace.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\version.resx">
       <DependentUpon>version.vb</DependentUpon>
