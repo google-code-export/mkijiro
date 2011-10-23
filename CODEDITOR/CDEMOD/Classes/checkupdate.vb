@@ -70,17 +70,20 @@ Public Class checkupdate
                         ElseIf result = DialogResult.Yes AndAlso My.Settings.updatemode = True Then
                             Dim txt As String = Application.StartupPath & "\APP\updater.txt"
                             Dim boot As String = Application.StartupPath & "\APP\updater.exe"
+                            If My.Computer.FileSystem.DirectoryExists(Application.StartupPath & "\APP") = False Then
+                                System.IO.Directory.CreateDirectory(Application.StartupPath & "\APP")
+                            End If
                             Dim tw As New StreamWriter(txt, False, _
                                                        System.Text.Encoding.GetEncoding(65001))
-
                             tw.Write(Application.ExecutablePath)
                             tw.Close()
                             If File.Exists(boot) = False Then
                                 check.getweb(boot, up, 1)
                             End If
+                            My.Settings.updatecomp = True
                             Process.Start(boot)
                             MERGE.Close()
-                        End If
+                            End If
 
                     ElseIf mode = "help" Then
                         MessageBox.Show("最新版です", "更新の確認")

@@ -95,12 +95,12 @@ namespace WindowsFormsApplication1
                 if (iso == "DAX")
                 {
                     fs.Close();
-                    return "LZ圧縮ISO,DAXには対応してません";
+                    return "Deflate圧縮ISO,DAXには対応してません";
                 }
                 else if (iso == "CISO")
                 {
                     fs.Close();
-                    return "LZ圧縮ISO,CSOには対応してません";
+                    return "Deflate圧縮ISO,CSOには対応してません";
                 }
                 else if (iso == "JISO")
                 {
@@ -286,12 +286,14 @@ namespace WindowsFormsApplication1
                 lbatotal *= 2048;
                 if (lbatotal - fs.Length <= 2048 && (iso.Contains("PSP GAME") || iso.Contains("UMD VIDEO")))
                 {
-                    fs.Seek(0x80A5, SeekOrigin.Begin);
+                    fs.Seek(0x808C, SeekOrigin.Begin);//0x809E root
                     fs.Read(lba, 0, 2);
                     z = BitConverter.ToInt32(lba, 0);
                     fs.Seek(z * 2048, SeekOrigin.Begin);
                     fs.Read(sector, 0, 2048);
-                    //PSP_GAME,UMD_VIDEO
+                    //PSP_GAME,UMD_VIDEO,LPATHTABLE
+                    //http://euc.jp/periphs/iso9660.ja.html#preface
+                    i = 6;
                     while (true)
                     {
                         if (iso.Contains("PSP GAME") && sector[i] == 0x50 && sector[i + 1] == 0x53 && sector[i + 2] == 0x50 && sector[i + 3] == 0x5f && sector[i + 4] == 0x47) break;
@@ -299,12 +301,12 @@ namespace WindowsFormsApplication1
                         if (i > 2038) { fs.Close(); textBox1.Text = "PSF取得に失敗しました"; return; }
                         i++;
                     }
-                    Array.ConstrainedCopy(sector, i - 31, lba, 0, 2);
+                    Array.ConstrainedCopy(sector, i - 6, lba, 0, 2);//-31 0x809E rootdir
                     z = BitConverter.ToInt32(lba, 0);
                     if (z * 2048 > fs.Length) { fs.Close(); textBox1.Text = "PSF取得に失敗しました"; return; }
                     fs.Seek(z * 2048, SeekOrigin.Begin);
                     fs.Read(sector, 0, 2048);
-                    i = 0;
+                    i = 31;
                     //PARAM.SFO
                     while (true)
                     {
@@ -325,7 +327,8 @@ namespace WindowsFormsApplication1
                     z = BitConverter.ToInt32(lba, 0);
                     byte[] tmp = new byte[200];
                     Array.ConstrainedCopy(sector, k, tmp, 0, 200);
-                    string strs = Encoding.GetEncoding(65001).GetString(tmp); 
+                    string strs = Encoding.GetEncoding(65001).GetString(tmp);
+                    strs = strs.Substring(0, strs.IndexOf("\x0\x0"));
                     string[] name = strs.Split('\x0');
                     for (k = 0; ; k++)
                     {
