@@ -73,7 +73,7 @@ namespace WindowsFormsApplication1
 
             textBox1.Text = "";
             int mode = 0,goukei = 0;
-            decimal  f2 = 1, fn = 0;
+            decimal f1=0, f2 = 1, fn = 0;
             string suuji = "",ikketame ="";
             string[] fb;
             fb = new string[4] { "(ﾟ∀ﾟ)すうがくねた", "Fizz\r\n", "Buzz\r\n", "FizzBuzz\r\n" };
@@ -81,20 +81,31 @@ namespace WindowsFormsApplication1
                 {
 
                     if (Plus1.Checked == true)
-                    {   fn=i;
+                    {
+
+                        //斬蚊屍鬼＾ω＾
+                        fn  += 1;
                     }
                     else if (Fibonacci_number.Checked == true)
                     {
                         //fn=1/√5*((１＋√５)/2)^n-1/√5((１－√５)/2)^n　らすい？
                         //http://ja.wikipedia.org/wiki/%E3%83%95%E3%82%A3%E3%83%9C%E3%83%8A%E3%83%83%E3%83%81%E6%95%B0
-                        double goldenrate = (1+ Math.Sqrt(5))*0.5;
+                        double goldenrate = (1 + Math.Sqrt(5)) * 0.5;
                         double rootfive = Math.Sqrt(5);
 
-                        //fn = Convert.ToDecimal(Math.Floor((Math.Pow((iti + root)*0.5, i) - Math.Pow((iti - root)*0.5, i))/root));
-                        fn = Convert.ToDecimal(Math.Floor(Math.Pow(goldenrate, i) / rootfive + 0.5));
-                        if (i == 70)
+                        if (i < 70)
                         {
-                            textBox1.Text += "Binary64限界de＼(^o^)／ｵﾜﾀ?"; break;
+                            //fn = Convert.ToDecimal((Math.Pow((iti + root)*0.5, i) - Math.Pow((iti - root)*0.5, i))/root);
+                            fn = Convert.ToDecimal(Math.Floor(Math.Pow(goldenrate, i) / rootfive + 0.5));
+                            f1 = f2;
+                            f2 = fn;
+                        }
+                        else
+                        {
+                            fn = f2 + f1;
+                            f1 = f2;
+                            f2 = fn;
+                            //textBox1.Text += "Binary64限界de＼(^o^)／ｵﾜﾀ?"; break;
                         }
                     }
                     else if (SQ.Checked == true)
