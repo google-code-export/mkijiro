@@ -54,7 +54,7 @@ PSP_MODULE_INFO("nitePRmod", 0x3007, 1, 2); //0x3007
 PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 
 //Globals
-unsigned char *NPRVER="nitePRhorizon20111012";
+unsigned char *NPRVER="nitePRhorizon20111024";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -5528,11 +5528,8 @@ int mainThread()
   searchHistory[15].flags|=FLAG_DWORD;*/
 
   //Wait for the kernel to boot
-  sceKernelDelayThread(100000);
-  while(!sceKernelFindModuleByName("sceKernelLibrary"))
-		sceKernelDelayThread(100000);
-	sceKernelDelayThread(100000);
-  
+  while(!sceKernelFindModuleByName("sceKernelLibrary")){
+		sceKernelDelayThread(100000);}
   
 #ifdef _SCREENSHOT_
   //Find which screen directory to use
@@ -5921,10 +5918,16 @@ else{
 		 	for(i=0;i<addresscode;i++){
 		addresstmp=*(unsigned int *)(&fileBuffer[0x44+(0x10*i)]);
 		 		if(addresstmp==0x80 || addresstmp==0x14 || addresstmp==0x18) break;
-		 		if(addresstmp==0x10 || i>4) break;
+		 		if(addresstmp==0x10 && i>4) break;
 			}
+				if (i==addresscode){
+				strcpy(buffer, "FAIL-GETID");
+				memcpy(&gameId[0],&buffer[0],10);
+				}
+				else{
 		addresscode=*(unsigned int *)(&fileBuffer[0x48+(0x10*i)]);
 		memcpy(&gameId[0],&fileBuffer[0x28]+counteraddress+addresscode,10);
+				}
 	    HBFLAG=strcmp(gameId, "Prometheus");//prometheus
 	    if(HBFLAG!=0){
 	    HBFLAG=strcmp(gameId, "Template");//635custom_prometheus
@@ -5984,22 +5987,6 @@ else{
 		  /*sceIoRead(fd, fileBuffer, 0x800); old ASM DEADCOPY
 	          sceIoClose(fd);
 		__asm__ volatile (
-		"nop\n"
-		"nop\n"
-		"nop\n"
-		"nop\n"
-		"nop\n"
-		"nop\n"
-		"nop\n"
-		"nop\n"
-		"nop\n"
-		"nop\n"
-		"nop\n"
-		"nop\n"
-		"nop\n"
-		"nop\n"
-		"nop\n"
-		/*
 		"lui a0,$8818\n"  //fileBuffer address  this DMA
 		"ori  a0,a0,$A100\n"  /fileBuffer address this DMA
 		"jal $0800e844\n" //this unknow SCE/SDK???

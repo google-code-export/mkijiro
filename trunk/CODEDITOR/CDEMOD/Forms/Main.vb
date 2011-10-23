@@ -204,6 +204,12 @@ Public Class MERGE
         cl_tb.Font = My.Settings.cl_tb
         codetree.Font = My.Settings.codetree
 
+
+        If My.Settings.updatecomp = True Then
+            MessageBox.Show("アップデートが完了しました", "アップデート完了")
+            My.Settings.updatecomp = False
+        End If
+
     End Sub
 
     'BeforeLabelEditイベントハンドラ

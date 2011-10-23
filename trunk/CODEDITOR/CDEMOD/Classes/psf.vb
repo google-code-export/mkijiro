@@ -156,15 +156,17 @@ Public Class psf
                     Dim pname As String = Encoding.GetEncoding(65001).GetString(psfbyte)
                     pname = pname.Substring(0, pname.IndexOf(Chr(0) & Chr(0)))
                     Dim psfst As String() = pname.Split(Chr(0))
-                    For i = 0 To z - 1
+                    i=0
+                    while true
                         If psfst(i) = "TITLE" Then
-                            Exit For
+                            Exit While
                         End If
-                    Next
                     If i = z Then
                         fs.Close()
                         Return "NOTITLE"
                     End If
+                    i+=1
+                    end while
 
                     Array.ConstrainedCopy(bs, 32 + i * 16, offset, 0, 4)
                     i = BitConverter.ToInt32(offset, 0)
@@ -216,7 +218,9 @@ Public Class psf
                         lbatotal *= 2048
                         If lbatotal - fs.Length <= 2048 Then
 
-                            fs.Seek(&H80A5, SeekOrigin.Begin)
+                    'PSP_GAME,UMD_VIDEO,LPATHTABLE
+                    'http://euc.jp/periphs/iso9660.ja.html#preface
+                            fs.Seek(&H808C, SeekOrigin.Begin) '0x809E rootdir
                             fs.Read(lba, 0, 2)
                             z = BitConverter.ToInt32(lba, 0)
                             If z * 2048 > fs.Length Then
@@ -225,17 +229,19 @@ Public Class psf
                             End If
                             fs.Seek(z * 2048, SeekOrigin.Begin)
                             fs.Read(bs, 0, 2048)
+                            i=6
                             'PSP_GAME
                             While True
                                 If bs(i) = &H50 AndAlso bs(i + 1) = &H53 AndAlso bs(i + 2) = &H50 Then
                                     Exit While
-                                ElseIf i = 2048 Then
+                                ElseIf i > 2038 Then
                                     fs.Close()
                                     Return ""
                                 End If
                                 i += 1
                             End While
-                            Array.ConstrainedCopy(bs, i - 31, lba, 0, 2)
+                            'Array.ConstrainedCopy(bs, i - 31, lba, 0, 2) 'rootdir for 0x809E
+                            Array.ConstrainedCopy(bs, i - 6, lba, 0, 2)
                             z = BitConverter.ToInt32(lba, 0)
                             If z * 2048 > fs.Length Then
                                 fs.Close()
@@ -243,12 +249,12 @@ Public Class psf
                             End If
                             fs.Seek(z * 2048, SeekOrigin.Begin)
                             fs.Read(bs, 0, 2048)
-                            i = 0
+                            i = 31
                             'PARAM.SFO
                             While True
                                 If bs(i) = &H50 AndAlso bs(i + 1) = &H41 AndAlso bs(i + 2) = &H52 AndAlso bs(i + 3) = &H41 Then
                                     Exit While
-                                ElseIf i = 2048 Then
+                                ElseIf i > 2038 Then
                                     fs.Close()
                                     Return ""
                                 End If
@@ -276,15 +282,17 @@ Public Class psf
                                 Dim pname As String = Encoding.GetEncoding(65001).GetString(psfbyte)
                                 pname = pname.Substring(0, pname.IndexOf(Chr(0) & Chr(0)))
                                 Dim psfst As String() = pname.Split(Chr(0))
-                                For i = 0 To z - 1
+                                i=0
+                                while True
                                     If psfst(i) = "TITLE" Then
-                                        Exit For
+                                        Exit While
                                     End If
-                                Next
                                 If i = z Then
                                     fs.Close()
                                     Return "NOTITLE"
                                 End If
+                                    i+=1
+                                end while
 
                                 Array.ConstrainedCopy(bs, 32 + i * 16, offset, 0, 4)
                                 i = BitConverter.ToInt32(offset, 0)
