@@ -8,8 +8,13 @@ Public Class checkupdate
 
         If My.Computer.Network.IsAvailable Then
             Dim tx As String = "http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/CDEMOD/bin/Release/version"
-            Dim exe As String = "http://unzu127xp.pa.land.to/mogura/writelog.php?dl=http://unzu127xp.pa.land.to/data/IJIRO/CDEMOD/bin/Release/CDE_CP932_FM4.exe"
-            Dim up As String = "http://unzu127xp.pa.land.to/mogura/writelog.php?dl=http://unzu127xp.pa.land.to/data/IJIRO/CDEMOD/bin/Release/APP/updater.exe"
+            Dim exe As String = "http://unzu127xp.pa.land.to/data/IJIRO/CDEMOD/bin/Release/CDE_CP932_FM4.exe"
+            Dim up As String = "http://unzu127xp.pa.land.to/data/IJIRO/CDEMOD/bin/Release/APP/updater.exe"
+
+            If My.Settings.updatesever = False Then
+                exe = "http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/CDEMOD/bin/Release/CDE_CP932_FM4.exe"
+                up = "http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/CODEDITOR/CDEMOD/updater/bin\Release\updater.exe"
+            End If
 
             '保存先のファイル名
             Dim fileName As String = "CDEMOD.exe"
