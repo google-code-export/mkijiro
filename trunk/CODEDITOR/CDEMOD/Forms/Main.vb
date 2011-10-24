@@ -205,6 +205,14 @@ Public Class MERGE
         codetree.Font = My.Settings.codetree
 
 
+        If My.Settings.updatesever = False Then
+            GOOGLESVN.Checked = True
+            LANDMIRROR.Checked = False
+        Else
+            GOOGLESVN.Checked = False
+            LANDMIRROR.Checked = True
+        End If
+
         If My.Settings.updatecomp = True Then
             MessageBox.Show("アップデートが完了しました", "アップデート完了")
             My.Settings.updatecomp = False
@@ -2591,5 +2599,33 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
             My.Settings.updatemode = True
         End If
 
+    End Sub
+
+    Private Sub GOOGLE_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GOOGLESVN.Click
+
+        If GOOGLESVN.Checked = False Then
+            GOOGLESVN.Checked = True
+            LANDMIRROR.Checked = False
+            My.Settings.updatesever = False
+        Else
+            GOOGLESVN.Checked = False
+            LANDMIRROR.Checked = True
+            My.Settings.updatesever = True
+        End If
+
+
+    End Sub
+
+    Private Sub LAND_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LANDMIRROR.Click
+
+        If LANDMIRROR.Checked = True Then
+            GOOGLESVN.Checked = True
+            LANDMIRROR.Checked = False
+            My.Settings.updatesever = False
+        Else
+            GOOGLESVN.Checked = False
+            LANDMIRROR.Checked = True
+            My.Settings.updatesever = True
+        End If
     End Sub
 End Class

@@ -108,6 +108,8 @@ Partial Class MERGE
         Me.PBPHBHASH = New System.Windows.Forms.ToolStripMenuItem()
         Me.update_save_filepass = New System.Windows.Forms.ToolStripMenuItem()
         Me.autoupdater = New System.Windows.Forms.ToolStripMenuItem()
+        Me.releasedate = New System.Windows.Forms.ToolStripMenuItem()
+        Me.samename = New System.Windows.Forms.ToolStripMenuItem()
         Me.ヘルプHToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.オンラインヘルプToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.バージョン情報ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -181,8 +183,9 @@ Partial Class MERGE
         Me.Button3 = New System.Windows.Forms.Button()
         Me.DATAGRID = New System.Windows.Forms.Button()
         Me.PSF = New System.Windows.Forms.Button()
-        Me.releasedate = New System.Windows.Forms.ToolStripMenuItem()
-        Me.samename = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator12 = New System.Windows.Forms.ToolStripSeparator()
+        Me.GOOGLESVN = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LANDMIRROR = New System.Windows.Forms.ToolStripMenuItem()
         Me.treeopen.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.tool_menu.SuspendLayout()
@@ -761,11 +764,23 @@ Partial Class MERGE
         '
         'autoupdater
         '
-        Me.autoupdater.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.releasedate, Me.samename})
+        Me.autoupdater.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.releasedate, Me.samename, Me.ToolStripSeparator12, Me.GOOGLESVN, Me.LANDMIRROR})
         Me.autoupdater.Name = "autoupdater"
         Me.autoupdater.Size = New System.Drawing.Size(194, 22)
         Me.autoupdater.Text = "起動時最新版チェック"
         Me.autoupdater.ToolTipText = "起動時にCDEの最新版があるかどうかをチェックします。"
+        '
+        'releasedate
+        '
+        Me.releasedate.Name = "releasedate"
+        Me.releasedate.Size = New System.Drawing.Size(183, 22)
+        Me.releasedate.Text = "リリース日付で保存"
+        '
+        'samename
+        '
+        Me.samename.Name = "samename"
+        Me.samename.Size = New System.Drawing.Size(183, 22)
+        Me.samename.Text = "同じ名前(再起動必要)"
         '
         'ヘルプHToolStripMenuItem
         '
@@ -805,7 +820,7 @@ Partial Class MERGE
         '
         Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cntparser, Me.ToolStripSeparator4, Me.cntclose, Me.cntexpand, Me.ToolStripSeparator5, Me.hankaku, Me.CNchar, Me.ToolStripSeparator6, Me.cntexe, Me.ToolStripSeparator11, Me.NodeConvert, Me.useFTP})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(177, 226)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(177, 204)
         '
         'cntparser
         '
@@ -1424,17 +1439,22 @@ Partial Class MERGE
         Me.PSF.Text = "PSF取得"
         Me.PSF.UseVisualStyleBackColor = True
         '
-        'releasedate
+        'ToolStripSeparator12
         '
-        Me.releasedate.Name = "releasedate"
-        Me.releasedate.Size = New System.Drawing.Size(183, 22)
-        Me.releasedate.Text = "リリース日付で保存"
+        Me.ToolStripSeparator12.Name = "ToolStripSeparator12"
+        Me.ToolStripSeparator12.Size = New System.Drawing.Size(180, 6)
         '
-        'samename
+        'GOOGLESVN
         '
-        Me.samename.Name = "samename"
-        Me.samename.Size = New System.Drawing.Size(183, 22)
-        Me.samename.Text = "同じ名前(再起動必要)"
+        Me.GOOGLESVN.Name = "GOOGLESVN"
+        Me.GOOGLESVN.Size = New System.Drawing.Size(183, 22)
+        Me.GOOGLESVN.Text = "GOOGLE使用"
+        '
+        'LANDMIRROR
+        '
+        Me.LANDMIRROR.Name = "LANDMIRROR"
+        Me.LANDMIRROR.Size = New System.Drawing.Size(183, 22)
+        Me.LANDMIRROR.Text = "LAND使用"
         '
         'MERGE
         '
@@ -1647,5 +1667,8 @@ Partial Class MERGE
     Friend WithEvents PBPHBHASH As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents releasedate As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents samename As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator12 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents GOOGLESVN As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents LANDMIRROR As System.Windows.Forms.ToolStripMenuItem
 
 End Class

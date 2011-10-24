@@ -486,6 +486,18 @@ Namespace My
                 Me("updatecomp") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property updatesever() As Boolean
+            Get
+                Return CType(Me("updatesever"),Boolean)
+            End Get
+            Set
+                Me("updatesever") = value
+            End Set
+        End Property
     End Class
 End Namespace
 
