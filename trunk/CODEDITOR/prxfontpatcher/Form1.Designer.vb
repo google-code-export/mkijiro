@@ -24,12 +24,13 @@ Partial Class Form1
     Private Sub InitializeComponent()
         Me.RadioButton2 = New System.Windows.Forms.RadioButton()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.font5 = New System.Windows.Forms.RadioButton()
         Me.font4 = New System.Windows.Forms.RadioButton()
         Me.font3 = New System.Windows.Forms.RadioButton()
         Me.font2 = New System.Windows.Forms.RadioButton()
         Me.font1 = New System.Windows.Forms.RadioButton()
         Me.Button1 = New System.Windows.Forms.Button()
-        Me.font5 = New System.Windows.Forms.RadioButton()
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -51,11 +52,23 @@ Partial Class Form1
         Me.GroupBox1.Controls.Add(Me.font3)
         Me.GroupBox1.Controls.Add(Me.font2)
         Me.GroupBox1.Controls.Add(Me.font1)
-        Me.GroupBox1.Location = New System.Drawing.Point(24, 13)
+        Me.GroupBox1.Location = New System.Drawing.Point(24, 12)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(152, 138)
         Me.GroupBox1.TabIndex = 2
         Me.GroupBox1.TabStop = False
+        Me.GroupBox1.Text = "ふぉんと選択"
+        '
+        'font5
+        '
+        Me.font5.AutoSize = True
+        Me.font5.Location = New System.Drawing.Point(7, 110)
+        Me.font5.Name = "font5"
+        Me.font5.Size = New System.Drawing.Size(139, 16)
+        Me.font5.TabIndex = 4
+        Me.font5.TabStop = True
+        Me.font5.Text = "acorn_bold(日本語なし)"
+        Me.font5.UseVisualStyleBackColor = True
         '
         'font4
         '
@@ -110,22 +123,22 @@ Partial Class Form1
         Me.Button1.Text = "ぱっち"
         Me.Button1.UseVisualStyleBackColor = True
         '
-        'font5
+        'CheckBox1
         '
-        Me.font5.AutoSize = True
-        Me.font5.Location = New System.Drawing.Point(7, 110)
-        Me.font5.Name = "font5"
-        Me.font5.Size = New System.Drawing.Size(76, 16)
-        Me.font5.TabIndex = 4
-        Me.font5.TabStop = True
-        Me.font5.Text = "acorn_bold"
-        Me.font5.UseVisualStyleBackColor = True
+        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.Location = New System.Drawing.Point(31, 157)
+        Me.CheckBox1.Name = "CheckBox1"
+        Me.CheckBox1.Size = New System.Drawing.Size(256, 16)
+        Me.CheckBox1.TabIndex = 4
+        Me.CheckBox1.Text = "PRO/MEの翻訳TXTをflash0:/から読むようにする"
+        Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(292, 163)
+        Me.ClientSize = New System.Drawing.Size(292, 189)
+        Me.Controls.Add(Me.CheckBox1)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.RadioButton2)
@@ -145,5 +158,6 @@ Partial Class Form1
     Friend WithEvents font1 As System.Windows.Forms.RadioButton
     Friend WithEvents Button1 As System.Windows.Forms.Button
     Friend WithEvents font5 As System.Windows.Forms.RadioButton
+    Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
 
 End Class
