@@ -4,6 +4,7 @@ Imports System.Text.RegularExpressions
 Imports System.Globalization
 Imports System.Threading
 Imports System.Net.Sockets
+Imports System.Net
 
 Public Class ftp
 
@@ -45,6 +46,17 @@ Public Class ftp
         SECOND.Text = My.Settings.customsecond.ToString
 
     End Sub
+
+    Public Declare Function InternetOpen Lib "Wininet.DLL" Alias "InternetOpenA" _
+(ByVal lpszAgent As String, ByVal dwAccessType As Long, ByVal lpszProxyName As String, _
+ByVal lpszProxyBypass As String, ByVal dwFlags As Long) As Long
+
+
+    Public Declare Function InternetConnect Lib "Wininet.DLL" Alias "InternetConnectA" _
+(ByVal hInternet As Long, ByVal lpszServerName As String, ByVal nServerPort As Integer, _
+ByVal lpszUsername As String, ByVal lpszPassword As String, ByVal dwService As Long, _
+ByVal dwFlags As Long, ByVal dwContext As Long) As Long
+
 
     Public Sub SENDDB_PSPFTPD(ByVal filepath As String)
 
@@ -96,23 +108,39 @@ Public Class ftp
                 shost = shost.Substring(0, shost.LastIndexOf("."))
                 shost = shost.Substring(0, shost.LastIndexOf(".") + 1)
 
+
+
+                Dim hostname As String = Dns.GetHostName()
+
+                ' ホスト名からIPアドレスを取得する
+                Dim adrList As IPAddress() = Dns.GetHostAddresses(hostname)
+                For Each address As IPAddress In adrList
+                    Console.WriteLine(address.ToString())
+                Next
+
+
                 Dim i As Integer = CInt(sta(2)) * 256 + CInt(sta(3))
                 Dim z As Integer = CInt(en(2)) * 256 + CInt(en(3)) + 1
+
                 While i < z
-                    Dim tcp_dhcp As New TcpClient
+
                     host = shost & (i \ 256).ToString & "." & (i And &HFF).ToString
+                    Dim tcp_dhcp As New TcpClient
                     tcp_dhcp.Connect(host, port)
                     ns = tcp_dhcp.GetStream
                     'NetworkStreamを取得する
+                    host = shost & (i \ 256).ToString & "." & (i And &HFF).ToString
                     IPbox.Text = host
                     '待ち時間
                     Thread.Sleep(time)
+
                     If ns.DataAvailable = True Then
                         data = True
                         Exit While
                     Else
                         tcp_dhcp.Close()
                     End If
+
                     i += 1
                 End While
             End If
