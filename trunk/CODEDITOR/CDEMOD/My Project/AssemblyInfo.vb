@@ -36,4 +36,4 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyVersion("1.0.0.0")> 
 <Assembly: AssemblyFileVersion("0.9.9.0")> 
 
-<Assembly: NeutralResourcesLanguageAttribute("ja-JP")> 
+<Assembly: NeutralResourcesLanguageAttribute("")> 

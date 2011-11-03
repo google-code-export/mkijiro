@@ -31,6 +31,7 @@ Public Class Form1
         lockdriveletter.Checked = My.Settings.drivelock
         ftpdeamon.Checked = My.Settings.useftp
 
+        Me.Text = "tempar update checker"
         Me.FormBorderStyle = FormBorderStyle.FixedToolWindow
 
     End Sub
@@ -654,6 +655,8 @@ System.IO.FileAccess.Read)
         Else
             My.Settings.lang = False
         End If
+
+
     End Sub
 
     Private Sub TextBox2_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles IPBox.TextChanged

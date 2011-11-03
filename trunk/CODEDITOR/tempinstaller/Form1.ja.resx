@@ -122,13 +122,13 @@
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="Label1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>29, 12</value>
+    <value>37, 15</value>
   </data>
   <data name="Label1.Text" xml:space="preserve">
     <value>進歩</value>
   </data>
   <data name="langupdate.Size" type="System.Drawing.Size, System.Drawing">
-    <value>134, 16</value>
+    <value>166, 19</value>
   </data>
   <data name="langupdate.Text" xml:space="preserve">
     <value>言語ファイルも更新する</value>
@@ -137,19 +137,19 @@
     <value>MD5チェック</value>
   </data>
   <data name="lockdriveletter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>156, 16</value>
+    <value>192, 19</value>
   </data>
   <data name="lockdriveletter.Text" xml:space="preserve">
     <value>転送先のドライブレター固定</value>
   </data>
   <data name="ftpdeamon.Size" type="System.Drawing.Size, System.Drawing">
-    <value>102, 16</value>
+    <value>127, 19</value>
   </data>
   <data name="ftpdeamon.Text" xml:space="preserve">
     <value>PSPFTPDを使う</value>
   </data>
   <data name="customdir.Size" type="System.Drawing.Size, System.Drawing">
-    <value>187, 22</value>
+    <value>254, 28</value>
   </data>
   <data name="customdir.Text" xml:space="preserve">
     <value>いんすとーるぱす変更(&amp;C)</value>
@@ -169,7 +169,7 @@ ms0:/TempAR/tempar.prx　game.txt記述パス
 /TempAR　game.txt記述パスからms0,/tempar.prxを抜いたもの</value>
   </data>
   <data name="DHCPRangeToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>187, 22</value>
+    <value>254, 28</value>
   </data>
   <data name="DHCPRangeToolStripMenuItem.Text" xml:space="preserve">
     <value>でーもんふぁいんだ(&amp;D)</value>
@@ -180,22 +180,22 @@ ms0:/TempAR/tempar.prx　game.txt記述パス
 ここで指定しておくと範囲内IPアドレスを探します。</value>
   </data>
   <data name="tool.Size" type="System.Drawing.Size, System.Drawing">
-    <value>76, 20</value>
+    <value>122, 27</value>
   </data>
   <data name="tool.Text" xml:space="preserve">
     <value>オプション(&amp;O)</value>
   </data>
   <data name="toolStripSeparator5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>134, 6</value>
+    <value>191, 6</value>
   </data>
   <data name="verinfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>137, 22</value>
+    <value>194, 28</value>
   </data>
   <data name="verinfo.Text" xml:space="preserve">
     <value>バージョン(&amp;A)...</value>
   </data>
   <data name="help.Size" type="System.Drawing.Size, System.Drawing">
-    <value>62, 20</value>
+    <value>92, 27</value>
   </data>
   <data name="help.Text" xml:space="preserve">
     <value>ヘルプ(&amp;H)</value>
