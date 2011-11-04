@@ -498,6 +498,18 @@ Namespace My
                 Me("updatesever") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("100, 100")>  _
+        Public Property mylocation() As Global.System.Drawing.Point
+            Get
+                Return CType(Me("mylocation"),Global.System.Drawing.Point)
+            End Get
+            Set
+                Me("mylocation") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

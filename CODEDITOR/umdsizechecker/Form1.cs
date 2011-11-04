@@ -10,9 +10,10 @@ using System.IO;
 
 namespace WindowsFormsApplication1
 {
+   
     public partial class Form1 : Form
     {
-        string isofile = ""; 
+        string isofile = "";
 
         public Form1()
         {
@@ -78,6 +79,7 @@ namespace WindowsFormsApplication1
             long isosize = 0;
             long isobig = 0;
             long fsize = fs.Length;
+
 
             label1.Text = "ファイルサイズ:";
             label2.Text = "セクター算出　:";

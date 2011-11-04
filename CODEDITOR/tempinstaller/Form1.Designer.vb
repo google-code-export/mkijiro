@@ -84,9 +84,9 @@ Partial Class Form1
         '
         'GroupBox1
         '
-        resources.ApplyResources(Me.GroupBox1, "GroupBox1")
         Me.GroupBox1.Controls.Add(Me.temp163)
         Me.GroupBox1.Controls.Add(Me.temp162)
+        resources.ApplyResources(Me.GroupBox1, "GroupBox1")
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.TabStop = False
         '
@@ -153,42 +153,42 @@ Partial Class Form1
         '
         'MenuStrip1
         '
-        resources.ApplyResources(Me.MenuStrip1, "MenuStrip1")
         Me.MenuStrip1.BackColor = System.Drawing.SystemColors.MenuBar
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tool, Me.help})
+        resources.ApplyResources(Me.MenuStrip1, "MenuStrip1")
         Me.MenuStrip1.Name = "MenuStrip1"
         '
         'tool
         '
-        resources.ApplyResources(Me.tool, "tool")
         Me.tool.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.customdir, Me.DHCPRangeToolStripMenuItem})
         Me.tool.Name = "tool"
+        resources.ApplyResources(Me.tool, "tool")
         '
         'customdir
         '
-        resources.ApplyResources(Me.customdir, "customdir")
         Me.customdir.Name = "customdir"
+        resources.ApplyResources(Me.customdir, "customdir")
         '
         'DHCPRangeToolStripMenuItem
         '
-        resources.ApplyResources(Me.DHCPRangeToolStripMenuItem, "DHCPRangeToolStripMenuItem")
         Me.DHCPRangeToolStripMenuItem.Name = "DHCPRangeToolStripMenuItem"
+        resources.ApplyResources(Me.DHCPRangeToolStripMenuItem, "DHCPRangeToolStripMenuItem")
         '
         'help
         '
-        resources.ApplyResources(Me.help, "help")
         Me.help.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.toolStripSeparator5, Me.verinfo})
         Me.help.Name = "help"
+        resources.ApplyResources(Me.help, "help")
         '
         'toolStripSeparator5
         '
-        resources.ApplyResources(Me.toolStripSeparator5, "toolStripSeparator5")
         Me.toolStripSeparator5.Name = "toolStripSeparator5"
+        resources.ApplyResources(Me.toolStripSeparator5, "toolStripSeparator5")
         '
         'verinfo
         '
-        resources.ApplyResources(Me.verinfo, "verinfo")
         Me.verinfo.Name = "verinfo"
+        resources.ApplyResources(Me.verinfo, "verinfo")
         '
         'Form1
         '
@@ -208,6 +208,8 @@ Partial Class Form1
         Me.Controls.Add(Me.TextBox1)
         Me.Controls.Add(Me.INSTALL)
         Me.Controls.Add(Me.MenuStrip1)
+        Me.DataBindings.Add(New System.Windows.Forms.Binding("Location", Global.temparchecker.My.MySettings.Default, "mylocation", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
+        Me.Location = Global.temparchecker.My.MySettings.Default.mylocation
         Me.MainMenuStrip = Me.MenuStrip1
         Me.Name = "Form1"
         Me.GroupBox1.ResumeLayout(False)

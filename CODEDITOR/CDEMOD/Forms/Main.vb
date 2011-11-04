@@ -218,6 +218,7 @@ Public Class MERGE
             My.Settings.updatecomp = False
         End If
 
+
     End Sub
 
     'BeforeLabelEditイベントハンドラ
