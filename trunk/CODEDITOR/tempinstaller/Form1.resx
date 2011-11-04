@@ -117,456 +117,512 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="IPBox.Text" xml:space="preserve">
-    <value>192.168.1.10</value>
+  <data name="INSTALL.ImageKey" xml:space="preserve">
+    <value>前回インストールしたｐｒｘ</value>
   </data>
-  <data name="&gt;&gt;Label3.Parent" xml:space="preserve">
-    <value>$this</value>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="INSTALL.Location" type="System.Drawing.Point, System.Drawing">
+    <value>195, 90</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="INSTALL.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
+  <data name="INSTALL.Size" type="System.Drawing.Size, System.Drawing">
+    <value>131, 29</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="INSTALL.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
   </data>
   <data name="INSTALL.Text" xml:space="preserve">
     <value>INSTALL</value>
   </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="langupdate.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
+  <data name="&gt;&gt;INSTALL.Name" xml:space="preserve">
+    <value>INSTALL</value>
   </data>
-  <data name="temp162.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="MenuStrip1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="DHCPRangeToolStripMenuItem.ToolTipText" xml:space="preserve">
-    <value>if you use DHCP on PSP,FTPDaemon ipaddress changed.
-this can setting ipaddress range,automatic find..</value>
-  </data>
-  <data name="&gt;&gt;lockdriveletter.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;MD5HASH.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;GroupBox1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;INSTALL.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;INSTALL.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="lockdriveletter.TabIndex" type="System.Int32, mscorlib">
-    <value>10</value>
+  <data name="&gt;&gt;INSTALL.ZOrder" xml:space="preserve">
+    <value>11</value>
   </data>
-  <data name="ftpdeamon.Location" type="System.Drawing.Point, System.Drawing">
-    <value>19, 195</value>
+  <data name="temp162.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
-  <data name="temp163.Size" type="System.Drawing.Size, System.Drawing">
-    <value>137, 19</value>
-  </data>
-  <data name="lockdriveletter.ImageKey" xml:space="preserve">
+  <data name="temp162.ImageKey" xml:space="preserve">
     <value>前回インストールしたｐｒｘ</value>
   </data>
-  <data name="tool.Size" type="System.Drawing.Size, System.Drawing">
-    <value>93, 27</value>
+  <data name="temp162.Location" type="System.Drawing.Point, System.Drawing">
+    <value>13, 16</value>
   </data>
-  <data name="&gt;&gt;temp163.Name" xml:space="preserve">
-    <value>temp163</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="drivelettter.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="temp162.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
   </data>
-  <data name="ftpdeamon.Text" xml:space="preserve">
-    <value>use PSPFTP deamon</value>
+  <data name="temp162.Size" type="System.Drawing.Size, System.Drawing">
+    <value>126, 19</value>
   </data>
-  <data name="IPBox.TabIndex" type="System.Int32, mscorlib">
-    <value>15</value>
-  </data>
-  <data name="&gt;&gt;DHCPRangeToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;TextBox1.ZOrder" xml:space="preserve">
-    <value>10</value>
-  </data>
-  <data name="drivelettter.Items8" xml:space="preserve">
-    <value>L:</value>
-  </data>
-  <data name="&gt;&gt;MenuStrip1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.MenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="temp163.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;temp163.Parent" xml:space="preserve">
-    <value>GroupBox1</value>
-  </data>
-  <data name="drivelettter.Items16" xml:space="preserve">
-    <value>T:</value>
-  </data>
-  <data name="GroupBox1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
-  </data>
-  <data name="langupdate.Location" type="System.Drawing.Point, System.Drawing">
-    <value>19, 134</value>
-  </data>
-  <data name="&gt;&gt;temp163.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;drivelettter.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="MenuStrip1.Text" xml:space="preserve">
-    <value>MenuStrip1</value>
-  </data>
-  <data name="drivelettter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>44, 22</value>
-  </data>
-  <data name="Label1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>16, 225</value>
-  </data>
-  <data name="$this.Text" xml:space="preserve">
-    <value>tempar update checker</value>
-  </data>
-  <data name="drivelettter.Items19" xml:space="preserve">
-    <value>W:</value>
-  </data>
-  <data name="MenuStrip1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>8, 2, 0, 2</value>
-  </data>
-  <data name="GroupBox1.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="&gt;&gt;temp162.Parent" xml:space="preserve">
-    <value>GroupBox1</value>
-  </data>
-  <data name="&gt;&gt;IPBox.Name" xml:space="preserve">
-    <value>IPBox</value>
-  </data>
-  <data name="drivelettter.Items2" xml:space="preserve">
-    <value>F:</value>
-  </data>
-  <data name="&gt;&gt;verinfo.Name" xml:space="preserve">
-    <value>verinfo</value>
-  </data>
-  <data name="&gt;&gt;ProgressBar1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ProgressBar, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Label1.Name" xml:space="preserve">
-    <value>Label1</value>
-  </data>
-  <data name="Label3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>231, 170</value>
-  </data>
-  <data name="&gt;&gt;lockdriveletter.Name" xml:space="preserve">
-    <value>lockdriveletter</value>
-  </data>
-  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
-  </data>
-  <data name="&gt;&gt;help.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="TextBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>319, 122</value>
-  </data>
-  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>8, 15</value>
-  </data>
-  <data name="langupdate.Text" xml:space="preserve">
-    <value>update language files</value>
+  <data name="temp162.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
   </data>
   <data name="temp162.Text" xml:space="preserve">
     <value>TEMPAR1.62-3</value>
   </data>
+  <data name="&gt;&gt;temp162.Name" xml:space="preserve">
+    <value>temp162</value>
+  </data>
+  <data name="&gt;&gt;temp162.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;temp162.Parent" xml:space="preserve">
+    <value>GroupBox1</value>
+  </data>
+  <data name="&gt;&gt;temp162.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="temp163.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="temp163.ImageKey" xml:space="preserve">
+    <value>前回インストールしたｐｒｘ</value>
+  </data>
+  <data name="temp163.Location" type="System.Drawing.Point, System.Drawing">
+    <value>13, 55</value>
+  </data>
+  <data name="temp163.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
+  <data name="temp163.Size" type="System.Drawing.Size, System.Drawing">
+    <value>137, 19</value>
+  </data>
+  <data name="temp163.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
   <data name="temp163.Text" xml:space="preserve">
     <value>TEMPAR1.63beta</value>
   </data>
-  <data name="drivelettter.Items7" xml:space="preserve">
-    <value>K:</value>
+  <data name="&gt;&gt;temp163.Name" xml:space="preserve">
+    <value>temp163</value>
   </data>
-  <data name="Label3.AutoSize" type="System.Boolean, mscorlib">
+  <data name="&gt;&gt;temp163.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;temp163.Parent" xml:space="preserve">
+    <value>GroupBox1</value>
+  </data>
+  <data name="&gt;&gt;temp163.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="TextBox1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 244</value>
+  </data>
+  <data name="TextBox1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
+  <data name="TextBox1.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="TextBox1.ScrollBars" type="System.Windows.Forms.ScrollBars, System.Windows.Forms">
     <value>Vertical</value>
   </data>
-  <data name="temp163.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 55</value>
+  <data name="TextBox1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>319, 122</value>
   </data>
-  <data name="&gt;&gt;IPBox.ZOrder" xml:space="preserve">
-    <value>0</value>
+  <data name="TextBox1.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
   </data>
-  <data name="INSTALL.Location" type="System.Drawing.Point, System.Drawing">
-    <value>195, 90</value>
+  <data name="&gt;&gt;TextBox1.Name" xml:space="preserve">
+    <value>TextBox1</value>
   </data>
-  <data name="&gt;&gt;drivelettter.Name" xml:space="preserve">
-    <value>drivelettter</value>
+  <data name="&gt;&gt;TextBox1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="drivelettter.Items17" xml:space="preserve">
-    <value>U:</value>
+  <data name="&gt;&gt;TextBox1.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
-  <data name="drivelettter.Location" type="System.Drawing.Point, System.Drawing">
-    <value>253, 164</value>
+  <data name="&gt;&gt;TextBox1.ZOrder" xml:space="preserve">
+    <value>10</value>
   </data>
-  <data name="temp162.ImageKey" xml:space="preserve">
+  <data name="Label1.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="Label1.ImageKey" xml:space="preserve">
     <value>前回インストールしたｐｒｘ</value>
   </data>
-  <data name="ftpdeamon.Size" type="System.Drawing.Size, System.Drawing">
-    <value>164, 19</value>
+  <data name="Label1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 225</value>
   </data>
-  <data name="MD5HASH.Location" type="System.Drawing.Point, System.Drawing">
-    <value>195, 51</value>
-  </data>
-  <data name="drivelettter.Items14" xml:space="preserve">
-    <value>R:</value>
-  </data>
-  <data name="drivelettter.TabIndex" type="System.Int32, mscorlib">
-    <value>8</value>
-  </data>
-  <data name="INSTALL.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
-  </data>
-  <data name="drivelettter.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Alpha</value>
-  </data>
-  <data name="&gt;&gt;drivelettter.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DomainUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Label3.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="Label1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 0, 4, 0</value>
   </data>
-  <data name="INSTALL.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="drivelettter.Items1" xml:space="preserve">
-    <value>E:</value>
-  </data>
-  <data name="&gt;&gt;DHCPRangeToolStripMenuItem.Name" xml:space="preserve">
-    <value>DHCPRangeToolStripMenuItem</value>
-  </data>
-  <data name="ProgressBar1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
-  </data>
-  <data name="customdir.Text" xml:space="preserve">
-    <value>change installpath(&amp;C)</value>
-  </data>
-  <data name="verinfo.Text" xml:space="preserve">
-    <value>version(&amp;A)...</value>
-  </data>
-  <data name="&gt;&gt;Label1.ZOrder" xml:space="preserve">
-    <value>9</value>
-  </data>
-  <data name="drivelettter.Items4" xml:space="preserve">
-    <value>H:</value>
-  </data>
-  <data name="&gt;&gt;tool.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;MD5HASH.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="&gt;&gt;Label3.Name" xml:space="preserve">
-    <value>Label3</value>
+  <data name="Label1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>61, 15</value>
   </data>
   <data name="Label1.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
   </data>
-  <data name="DHCPRangeToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>238, 28</value>
+  <data name="Label1.Text" xml:space="preserve">
+    <value>progress</value>
   </data>
-  <data name="INSTALL.ImageKey" xml:space="preserve">
+  <data name="&gt;&gt;Label1.Name" xml:space="preserve">
+    <value>Label1</value>
+  </data>
+  <data name="&gt;&gt;Label1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Label1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;Label1.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="langupdate.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="langupdate.ImageKey" xml:space="preserve">
+    <value>前回インストールしたｐｒｘ</value>
+  </data>
+  <data name="langupdate.Location" type="System.Drawing.Point, System.Drawing">
+    <value>19, 134</value>
+  </data>
+  <data name="langupdate.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
+  <data name="langupdate.Size" type="System.Drawing.Size, System.Drawing">
+    <value>162, 19</value>
+  </data>
+  <data name="langupdate.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="langupdate.Text" xml:space="preserve">
+    <value>update language files</value>
+  </data>
+  <data name="&gt;&gt;langupdate.Name" xml:space="preserve">
+    <value>langupdate</value>
+  </data>
+  <data name="&gt;&gt;langupdate.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;langupdate.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;langupdate.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="GroupBox1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 39</value>
+  </data>
+  <data name="GroupBox1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
+  <data name="GroupBox1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
+  <data name="GroupBox1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>181, 88</value>
+  </data>
+  <data name="GroupBox1.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="GroupBox1.Text" xml:space="preserve">
+    <value>tempar version</value>
+  </data>
+  <data name="&gt;&gt;GroupBox1.Name" xml:space="preserve">
+    <value>GroupBox1</value>
+  </data>
+  <data name="&gt;&gt;GroupBox1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;GroupBox1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;GroupBox1.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="MD5HASH.ImageKey" xml:space="preserve">
+    <value>前回インストールしたｐｒｘ</value>
+  </data>
+  <data name="MD5HASH.Location" type="System.Drawing.Point, System.Drawing">
+    <value>195, 51</value>
+  </data>
+  <data name="MD5HASH.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
+  <data name="MD5HASH.Size" type="System.Drawing.Size, System.Drawing">
+    <value>131, 29</value>
+  </data>
+  <data name="MD5HASH.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="MD5HASH.Text" xml:space="preserve">
+    <value>MD5 CHECK</value>
+  </data>
+  <data name="&gt;&gt;MD5HASH.Name" xml:space="preserve">
+    <value>MD5HASH</value>
+  </data>
+  <data name="&gt;&gt;MD5HASH.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;MD5HASH.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;MD5HASH.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="drivelettter.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Alpha</value>
+  </data>
+  <data name="drivelettter.Items" xml:space="preserve">
+    <value>D:</value>
+  </data>
+  <data name="drivelettter.Items1" xml:space="preserve">
+    <value>E:</value>
+  </data>
+  <data name="drivelettter.Items2" xml:space="preserve">
+    <value>F:</value>
+  </data>
+  <data name="drivelettter.Items3" xml:space="preserve">
+    <value>G:</value>
+  </data>
+  <data name="drivelettter.Items4" xml:space="preserve">
+    <value>H:</value>
+  </data>
+  <data name="drivelettter.Items5" xml:space="preserve">
+    <value>I:</value>
+  </data>
+  <data name="drivelettter.Items6" xml:space="preserve">
+    <value>J:</value>
+  </data>
+  <data name="drivelettter.Items7" xml:space="preserve">
+    <value>K:</value>
+  </data>
+  <data name="drivelettter.Items8" xml:space="preserve">
+    <value>L:</value>
+  </data>
+  <data name="drivelettter.Items9" xml:space="preserve">
+    <value>M:</value>
+  </data>
+  <data name="drivelettter.Items10" xml:space="preserve">
+    <value>N:</value>
+  </data>
+  <data name="drivelettter.Items11" xml:space="preserve">
+    <value>O:</value>
+  </data>
+  <data name="drivelettter.Items12" xml:space="preserve">
+    <value>P:</value>
+  </data>
+  <data name="drivelettter.Items13" xml:space="preserve">
+    <value>Q:</value>
+  </data>
+  <data name="drivelettter.Items14" xml:space="preserve">
+    <value>R:</value>
+  </data>
+  <data name="drivelettter.Items15" xml:space="preserve">
+    <value>S:</value>
+  </data>
+  <data name="drivelettter.Items16" xml:space="preserve">
+    <value>T:</value>
+  </data>
+  <data name="drivelettter.Items17" xml:space="preserve">
+    <value>U:</value>
+  </data>
+  <data name="drivelettter.Items18" xml:space="preserve">
+    <value>V:</value>
+  </data>
+  <data name="drivelettter.Items19" xml:space="preserve">
+    <value>W:</value>
+  </data>
+  <data name="drivelettter.Items20" xml:space="preserve">
+    <value>X:</value>
+  </data>
+  <data name="drivelettter.Items21" xml:space="preserve">
+    <value>Y:</value>
+  </data>
+  <data name="drivelettter.Items22" xml:space="preserve">
+    <value>Z:</value>
+  </data>
+  <data name="drivelettter.Location" type="System.Drawing.Point, System.Drawing">
+    <value>253, 164</value>
+  </data>
+  <data name="drivelettter.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
+  <data name="drivelettter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>44, 22</value>
+  </data>
+  <data name="drivelettter.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="drivelettter.Text" xml:space="preserve">
+    <value>D:</value>
+  </data>
+  <data name="&gt;&gt;drivelettter.Name" xml:space="preserve">
+    <value>drivelettter</value>
+  </data>
+  <data name="&gt;&gt;drivelettter.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DomainUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;drivelettter.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;drivelettter.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="lockdriveletter.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lockdriveletter.ImageKey" xml:space="preserve">
     <value>前回インストールしたｐｒｘ</value>
   </data>
   <data name="lockdriveletter.Location" type="System.Drawing.Point, System.Drawing">
     <value>19, 165</value>
   </data>
-  <data name="IPBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>123, 22</value>
+  <data name="lockdriveletter.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
   </data>
-  <data name="ProgressBar1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>228, 16</value>
+  <data name="lockdriveletter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>210, 19</value>
   </data>
-  <data name="INSTALL.Size" type="System.Drawing.Size, System.Drawing">
-    <value>131, 29</value>
+  <data name="lockdriveletter.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
   </data>
-  <data name="ftpdeamon.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
+  <data name="lockdriveletter.Text" xml:space="preserve">
+    <value>only copy to this drive letter</value>
   </data>
-  <data name="DHCPRangeToolStripMenuItem.Text" xml:space="preserve">
-    <value>daemon finder(&amp;D)</value>
+  <data name="&gt;&gt;lockdriveletter.Name" xml:space="preserve">
+    <value>lockdriveletter</value>
   </data>
-  <data name="&gt;&gt;ftpdeamon.ZOrder" xml:space="preserve">
-    <value>1</value>
+  <data name="&gt;&gt;lockdriveletter.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="MenuStrip1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>341, 31</value>
+  <data name="&gt;&gt;lockdriveletter.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
   <data name="&gt;&gt;lockdriveletter.ZOrder" xml:space="preserve">
     <value>4</value>
   </data>
-  <data name="&gt;&gt;langupdate.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="Label3.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
-  <data name="customdir.Size" type="System.Drawing.Size, System.Drawing">
-    <value>238, 28</value>
+  <data name="Label3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>231, 170</value>
   </data>
-  <data name="&gt;&gt;ProgressBar1.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="Label3.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
   </data>
-  <data name="temp162.Size" type="System.Drawing.Size, System.Drawing">
-    <value>126, 19</value>
+  <data name="Label3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>0, 15</value>
   </data>
-  <data name="&gt;&gt;INSTALL.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="Label3.TabIndex" type="System.Int32, mscorlib">
+    <value>12</value>
   </data>
-  <data name="IPBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>201, 192</value>
-  </data>
-  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
-    <value>CenterScreen</value>
-  </data>
-  <data name="&gt;&gt;langupdate.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;langupdate.Name" xml:space="preserve">
-    <value>langupdate</value>
+  <data name="&gt;&gt;Label3.Name" xml:space="preserve">
+    <value>Label3</value>
   </data>
   <data name="&gt;&gt;Label3.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="langupdate.ImageKey" xml:space="preserve">
-    <value>前回インストールしたｐｒｘ</value>
-  </data>
-  <data name="&gt;&gt;MenuStrip1.ZOrder" xml:space="preserve">
-    <value>12</value>
-  </data>
-  <data name="&gt;&gt;GroupBox1.Parent" xml:space="preserve">
+  <data name="&gt;&gt;Label3.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;MD5HASH.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;Label3.ZOrder" xml:space="preserve">
+    <value>3</value>
   </data>
-  <data name="temp162.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
+  <data name="ProgressBar1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>97, 224</value>
   </data>
-  <data name="drivelettter.Items" xml:space="preserve">
-    <value>D:</value>
+  <data name="ProgressBar1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
   </data>
-  <data name="help.Size" type="System.Drawing.Size, System.Drawing">
-    <value>80, 27</value>
+  <data name="ProgressBar1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>228, 16</value>
   </data>
   <data name="ProgressBar1.TabIndex" type="System.Int32, mscorlib">
     <value>13</value>
   </data>
-  <data name="MD5HASH.Size" type="System.Drawing.Size, System.Drawing">
-    <value>131, 29</value>
+  <data name="&gt;&gt;ProgressBar1.Name" xml:space="preserve">
+    <value>ProgressBar1</value>
   </data>
-  <data name="&gt;&gt;tool.Name" xml:space="preserve">
-    <value>tool</value>
+  <data name="&gt;&gt;ProgressBar1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ProgressBar, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;Label1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;customdir.Name" xml:space="preserve">
-    <value>customdir</value>
-  </data>
-  <data name="MD5HASH.ImageKey" xml:space="preserve">
-    <value>前回インストールしたｐｒｘ</value>
-  </data>
-  <data name="&gt;&gt;INSTALL.Name" xml:space="preserve">
-    <value>INSTALL</value>
-  </data>
-  <data name="verinfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>171, 28</value>
-  </data>
-  <data name="langupdate.Size" type="System.Drawing.Size, System.Drawing">
-    <value>162, 19</value>
-  </data>
-  <data name="&gt;&gt;MD5HASH.Name" xml:space="preserve">
-    <value>MD5HASH</value>
-  </data>
-  <data name="drivelettter.Items18" xml:space="preserve">
-    <value>V:</value>
-  </data>
-  <data name="temp163.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="&gt;&gt;GroupBox1.Name" xml:space="preserve">
-    <value>GroupBox1</value>
-  </data>
-  <data name="&gt;&gt;ftpdeamon.Parent" xml:space="preserve">
+  <data name="&gt;&gt;ProgressBar1.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;Label1.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="&gt;&gt;ProgressBar1.ZOrder" xml:space="preserve">
+    <value>2</value>
   </data>
-  <data name="&gt;&gt;TextBox1.Name" xml:space="preserve">
-    <value>TextBox1</value>
-  </data>
-  <data name="MenuStrip1.TabIndex" type="System.Int32, mscorlib">
-    <value>16</value>
-  </data>
-  <data name="drivelettter.Items3" xml:space="preserve">
-    <value>G:</value>
-  </data>
-  <data name="&gt;&gt;GroupBox1.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
-  <data name="&gt;&gt;langupdate.ZOrder" xml:space="preserve">
-    <value>8</value>
-  </data>
-  <data name="drivelettter.Items22" xml:space="preserve">
-    <value>Z:</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator5.Name" xml:space="preserve">
-    <value>toolStripSeparator5</value>
-  </data>
-  <data name="MD5HASH.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
-  </data>
-  <data name="GroupBox1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
-  </data>
-  <data name="langupdate.AutoSize" type="System.Boolean, mscorlib">
+  <data name="ftpdeamon.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
+  </data>
+  <data name="ftpdeamon.Location" type="System.Drawing.Point, System.Drawing">
+    <value>19, 195</value>
+  </data>
+  <data name="ftpdeamon.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
+  <data name="ftpdeamon.Size" type="System.Drawing.Size, System.Drawing">
+    <value>164, 19</value>
+  </data>
+  <data name="ftpdeamon.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
+  </data>
+  <data name="ftpdeamon.Text" xml:space="preserve">
+    <value>use PSPFTP deamon</value>
+  </data>
+  <data name="&gt;&gt;ftpdeamon.Name" xml:space="preserve">
+    <value>ftpdeamon</value>
   </data>
   <data name="&gt;&gt;ftpdeamon.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="Label1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>61, 15</value>
-  </data>
-  <data name="temp162.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
-  </data>
-  <data name="MD5HASH.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
-  </data>
-  <data name="&gt;&gt;MenuStrip1.Parent" xml:space="preserve">
+  <data name="&gt;&gt;ftpdeamon.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="drivelettter.Items5" xml:space="preserve">
-    <value>I:</value>
+  <data name="&gt;&gt;ftpdeamon.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
-  <data name="Label1.Text" xml:space="preserve">
-    <value>progress</value>
+  <data name="IPBox.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Alpha</value>
   </data>
-  <data name="&gt;&gt;MenuStrip1.Name" xml:space="preserve">
-    <value>MenuStrip1</value>
-  </data>
-  <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="temp163.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
+  <data name="IPBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>201, 192</value>
   </data>
   <data name="IPBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
   </data>
-  <data name="&gt;&gt;temp162.Name" xml:space="preserve">
-    <value>temp162</value>
+  <data name="IPBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>123, 22</value>
   </data>
-  <data name="&gt;&gt;ProgressBar1.ZOrder" xml:space="preserve">
-    <value>2</value>
+  <data name="IPBox.TabIndex" type="System.Int32, mscorlib">
+    <value>15</value>
+  </data>
+  <data name="IPBox.Text" xml:space="preserve">
+    <value>192.168.1.10</value>
+  </data>
+  <data name="&gt;&gt;IPBox.Name" xml:space="preserve">
+    <value>IPBox</value>
+  </data>
+  <data name="&gt;&gt;IPBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;IPBox.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;IPBox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <metadata name="MenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <data name="customdir.Size" type="System.Drawing.Size, System.Drawing">
+    <value>238, 28</value>
+  </data>
+  <data name="customdir.Text" xml:space="preserve">
+    <value>change installpath(&amp;C)</value>
   </data>
   <data name="customdir.ToolTipText" xml:space="preserve">
     <value>change install path via USB/FTP
@@ -582,178 +638,122 @@ ms0:/TempAR/tempar.prx　game.txt　decription
 /TempAR　remove ms0,/tempar.prx 
 </value>
   </data>
-  <data name="GroupBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 39</value>
+  <data name="DHCPRangeToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>238, 28</value>
   </data>
-  <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>Form1</value>
+  <data name="DHCPRangeToolStripMenuItem.Text" xml:space="preserve">
+    <value>daemon finder(&amp;D)</value>
   </data>
-  <data name="drivelettter.Items13" xml:space="preserve">
-    <value>Q:</value>
+  <data name="DHCPRangeToolStripMenuItem.ToolTipText" xml:space="preserve">
+    <value>if you use DHCP on PSP,FTPDaemon ipaddress changed.
+this can setting ipaddress range,automatic find..</value>
   </data>
-  <data name="drivelettter.Items12" xml:space="preserve">
-    <value>P:</value>
-  </data>
-  <data name="lockdriveletter.Text" xml:space="preserve">
-    <value>only copy to this drive letter</value>
-  </data>
-  <data name="Label1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 0, 4, 0</value>
-  </data>
-  <data name="&gt;&gt;help.Name" xml:space="preserve">
-    <value>help</value>
-  </data>
-  <data name="&gt;&gt;customdir.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Label3.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;temp162.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;ftpdeamon.Name" xml:space="preserve">
-    <value>ftpdeamon</value>
-  </data>
-  <data name="&gt;&gt;TextBox1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="ProgressBar1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>97, 224</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator5.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="temp163.ImageKey" xml:space="preserve">
-    <value>前回インストールしたｐｒｘ</value>
-  </data>
-  <data name="drivelettter.Items20" xml:space="preserve">
-    <value>X:</value>
-  </data>
-  <data name="&gt;&gt;IPBox.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;TextBox1.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="MD5HASH.Text" xml:space="preserve">
-    <value>MD5 CHECK</value>
-  </data>
-  <data name="&gt;&gt;verinfo.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Label1.ImageKey" xml:space="preserve">
-    <value>前回インストールしたｐｒｘ</value>
-  </data>
-  <data name="&gt;&gt;INSTALL.ZOrder" xml:space="preserve">
-    <value>11</value>
-  </data>
-  <data name="&gt;&gt;lockdriveletter.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;temp162.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;IPBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="drivelettter.Items9" xml:space="preserve">
-    <value>M:</value>
-  </data>
-  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>341, 369</value>
-  </data>
-  <data name="drivelettter.Items21" xml:space="preserve">
-    <value>Y:</value>
-  </data>
-  <data name="ftpdeamon.TabIndex" type="System.Int32, mscorlib">
-    <value>14</value>
-  </data>
-  <data name="langupdate.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
-  </data>
-  <data name="TextBox1.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="drivelettter.Text" xml:space="preserve">
-    <value>D:</value>
-  </data>
-  <data name="GroupBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>181, 88</value>
-  </data>
-  <data name="drivelettter.Items15" xml:space="preserve">
-    <value>S:</value>
-  </data>
-  <data name="Label3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>0, 15</value>
-  </data>
-  <data name="ftpdeamon.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
-  </data>
-  <data name="drivelettter.Items6" xml:space="preserve">
-    <value>J:</value>
-  </data>
-  <data name="lockdriveletter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>210, 19</value>
-  </data>
-  <data name="lockdriveletter.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
-  </data>
-  <data name="lockdriveletter.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="IPBox.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Alpha</value>
-  </data>
-  <data name="TextBox1.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="help.Text" xml:space="preserve">
-    <value>Help(&amp;H)</value>
+  <data name="tool.Size" type="System.Drawing.Size, System.Drawing">
+    <value>93, 27</value>
   </data>
   <data name="tool.Text" xml:space="preserve">
     <value>option(&amp;O)</value>
   </data>
-  <data name="TextBox1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
-  </data>
-  <data name="drivelettter.Items10" xml:space="preserve">
-    <value>N:</value>
-  </data>
-  <data name="drivelettter.Items11" xml:space="preserve">
-    <value>O:</value>
-  </data>
-  <data name="Label1.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="&gt;&gt;drivelettter.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="temp162.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 16</value>
-  </data>
-  <data name="&gt;&gt;ProgressBar1.Name" xml:space="preserve">
-    <value>ProgressBar1</value>
-  </data>
   <data name="toolStripSeparator5.Size" type="System.Drawing.Size, System.Drawing">
     <value>168, 6</value>
   </data>
-  <data name="TextBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 244</value>
+  <data name="verinfo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>171, 28</value>
   </data>
-  <data name="GroupBox1.Text" xml:space="preserve">
-    <value>tempar version</value>
+  <data name="verinfo.Text" xml:space="preserve">
+    <value>version(&amp;A)...</value>
   </data>
-  <data name="Label3.TabIndex" type="System.Int32, mscorlib">
+  <data name="help.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 27</value>
+  </data>
+  <data name="help.Text" xml:space="preserve">
+    <value>Help(&amp;H)</value>
+  </data>
+  <data name="MenuStrip1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="MenuStrip1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>8, 2, 0, 2</value>
+  </data>
+  <data name="MenuStrip1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>341, 31</value>
+  </data>
+  <data name="MenuStrip1.TabIndex" type="System.Int32, mscorlib">
+    <value>16</value>
+  </data>
+  <data name="MenuStrip1.Text" xml:space="preserve">
+    <value>MenuStrip1</value>
+  </data>
+  <data name="&gt;&gt;MenuStrip1.Name" xml:space="preserve">
+    <value>MenuStrip1</value>
+  </data>
+  <data name="&gt;&gt;MenuStrip1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.MenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;MenuStrip1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;MenuStrip1.ZOrder" xml:space="preserve">
     <value>12</value>
   </data>
-  <data name="&gt;&gt;temp163.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <metadata name="MenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>8, 15</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>341, 369</value>
+  </data>
+  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
+  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
+    <value>CenterScreen</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>tempar update checker</value>
+  </data>
+  <data name="&gt;&gt;tool.Name" xml:space="preserve">
+    <value>tool</value>
+  </data>
+  <data name="&gt;&gt;tool.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;customdir.Name" xml:space="preserve">
+    <value>customdir</value>
+  </data>
+  <data name="&gt;&gt;customdir.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;DHCPRangeToolStripMenuItem.Name" xml:space="preserve">
+    <value>DHCPRangeToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;DHCPRangeToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;help.Name" xml:space="preserve">
+    <value>help</value>
+  </data>
+  <data name="&gt;&gt;help.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator5.Name" xml:space="preserve">
+    <value>toolStripSeparator5</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator5.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;verinfo.Name" xml:space="preserve">
+    <value>verinfo</value>
+  </data>
+  <data name="&gt;&gt;verinfo.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>Form1</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>
