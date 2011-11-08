@@ -40,7 +40,7 @@ char ISOFS_UMDDATA[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )
 char ISOFS_SFO[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) ="disc0:/PSP_GAME/PARAM.SFO";
 
 //mem.c
-char MODULE_DIR[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )="ms0:/CheatMaster";
+char MODULE_DIR[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )="ms0:/PICTURE/CWC";
 char TAB_DIR [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "ms0:/PICTURE/CWC/TAB";
 char CMF_DIR [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "ms0:/PICTURE/CWC/CMF";
 char MEM_DIR [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "ms0:/CheatMaster/MEM";
