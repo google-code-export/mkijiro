@@ -18,12 +18,13 @@
         ListView1.View = View.Details
 
         'ヘッダーを追加する（ヘッダー名、幅、アライメント）
-        ListView1.Columns.Add("値", 60, HorizontalAlignment.Left)
-        ListView1.Columns.Add("説明", 200, HorizontalAlignment.Left)
+        ListView1.Columns.Add("値", -1, HorizontalAlignment.Left)
+        ListView1.Columns.Add("説明", -1, HorizontalAlignment.Left)
         ListView1.GridLines = My.Settings.gridview
         If ListView1.GridLines = True Then
             CheckBox1.Checked = True
         End If
+
 
         Button(1)
 
@@ -31,6 +32,8 @@
 
         RadioButton1.Checked = True
         matchno = 1
+
+        ListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize)
     End Sub
 
     '適用ボタン
@@ -59,7 +62,7 @@
     End Sub
 
     Private Sub lsclose_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lsclose.Click
-        Me.Close()
+         Me.Close()
     End Sub
 
     '差し替える場所の特定
@@ -191,6 +194,9 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
             l = l.NextMatch()
         End While
         matchno = z
+
+        ListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize)
+
         Return True
     End Function
 #End Region

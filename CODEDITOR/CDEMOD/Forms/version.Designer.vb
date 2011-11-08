@@ -58,12 +58,12 @@ Partial Class version
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(172, 15)
         Me.Label2.TabIndex = 2
-        Me.Label2.Text = "BUILD:2011/11/04 13:08"
+        Me.Label2.Text = "BUILD:2011/11/08 20:54"
         '
         'CDEupdate
         '
         Me.CDEupdate.Location = New System.Drawing.Point(79, 155)
-        Me.CDEupdate.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.CDEupdate.Margin = New System.Windows.Forms.Padding(4)
         Me.CDEupdate.Name = "CDEupdate"
         Me.CDEupdate.Size = New System.Drawing.Size(100, 29)
         Me.CDEupdate.TabIndex = 3
@@ -79,7 +79,7 @@ Partial Class version
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.LinkLabel1)
         Me.Controls.Add(Me.Label1)
-        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "version"
         Me.Text = "バージョン情報"
         Me.ResumeLayout(False)
