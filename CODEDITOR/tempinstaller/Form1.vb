@@ -551,7 +551,7 @@ System.IO.FileAccess.Read)
             Else
                 drivelettter.Text = PSP.Substring(0, 2)
             End If
-            If My.Computer.FileSystem.DirectoryExists(PSP) AndAlso File.Exists(PSP.Substring(0, 2) & "MEMSTICK.IND") Then
+            If My.Computer.FileSystem.DirectoryExists(PSP) AndAlso File.Exists(PSP.Substring(0, 2) & "\MEMSTICK.IND") Then
                 PSP = PSP.Substring(0, 2)
                 Dim prxpath As String = My.Settings.usbpath.Replace("/", "\")
                 Dim langpath As String = prxpath & "\languages"
