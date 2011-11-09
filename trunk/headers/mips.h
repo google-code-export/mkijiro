@@ -3344,10 +3344,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 
 
 void mipsSpecial(unsigned int addresscode,unsigned int addresstmp,unsigned int counteraddress){
-							if(((addresscode >= 0x10000000) && (addresscode <= 0x1FFFFFFF)) || ((addresscode >= 0x50000000) && (addresscode <= 0x5FFFFFFF))
-							|| ((addresscode >= 0x45000000) && (addresscode <= 0x4503FFFF)) || ((addresscode >= 0x49000000) && (addresscode <= 0x491FFFFF))
-							|| (((addresscode & 0xFC1F0000) >= 0x04000000) && ((addresscode & 0xFC1F0000) <= 0x04030000))
-							||  (((addresscode & 0xFC1F0000) >= 0x04100000) && ((addresscode & 0xFC1F0000) <= 0x04130000)) )
+							if(mips_branch(addresscode))
 							{
 							addresstmp=addresscode & 0xFFFF;
 							addresscode=4*(addresstmp + 1);
@@ -3427,7 +3424,18 @@ void mipsSpecial(unsigned int addresscode,unsigned int addresstmp,unsigned int c
 		f_cvt(&float2int, buffer, sizeof(buffer), 6, MODE_GENERIC);
 		pspDebugScreenPuts(buffer);
         }
-							}
+	}
 
 }
 
+int mips_branch(int addressvalue){
+
+	if(((addressvalue >= 0x10000000) && (addressvalue <= 0x1FFFFFFF)) || ((addressvalue >= 0x50000000) && (addressvalue <= 0x5FFFFFFF))
+							|| ((addressvalue >= 0x45000000) && (addressvalue <= 0x4503FFFF)) || ((addressvalue >= 0x49000000) && (addressvalue <= 0x491FFFFF))
+							|| (((addressvalue & 0xFC1F0000) >= 0x04000000) && ((addressvalue & 0xFC1F0000) <= 0x04030000))
+							||  (((addressvalue & 0xFC1F0000) >= 0x04100000) && ((addressvalue & 0xFC1F0000) <= 0x04130000)) )
+							{
+								return 1;
+							}
+	return 0;
+}
