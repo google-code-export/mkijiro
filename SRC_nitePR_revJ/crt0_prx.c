@@ -5223,10 +5223,7 @@ void menuInput()
 						*((unsigned int*)(logstart+4*logcounter))=storedAddress[logcounter] & 0xFFFFFFC;
 						logcounter++;
 					}//branch jump
-					else if(((foobar >= 0x10000000) && (foobar <= 0x1FFFFFFF)) || ((foobar >= 0x50000000) && (foobar <= 0x5FFFFFFF))
-						|| ((foobar >= 0x45000000) && (foobar <= 0x4503FFFF)) || ((foobar >= 0x49000000) && (foobar <= 0x491FFFFF))
-						|| (((foobar & 0xFC1F0000) >= 0x04000000) && ((foobar & 0xFC1F0000) <= 0x04030000))
-						||  (((foobar & 0xFC1F0000) >= 0x04100000) && ((foobar & 0xFC1F0000) <= 0x04130000)) )
+					else if(mips_branch(foobar)){
 						{ //handle branches
 						storedAddress[logcounter]=decodeAddress+(decodeY*4);
 						foobar&=0xFFFF;

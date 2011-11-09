@@ -100,7 +100,7 @@ PSP_MAIN_THREAD_ATTR(0); //0 for kernel mode too
 #endif
 
 //Globals
-unsigned char *MKVER="  MKIJIRO20111024";
+unsigned char *MKVER="  MKIJIRO20111109";
 unsigned char *gameDir="ms0:/seplugins/nitePR/POPS/__________.txt";
 unsigned char gameId[10];
 unsigned char running=0;
@@ -187,10 +187,10 @@ unsigned int searchAddress[500]; //サーチアドレス表示用
 
 //Globals
 SceCtrlData pad;
-unsigned short blockTotal=0;
 unsigned short cheatTotal=0;
-Block block[BLOCK_MAX]; //メモリ消費 16*BLCKMAX
+unsigned short blockTotal=0;
 Cheat cheat[NAME_MAX];  //メモリ消費 38*NAMEMAX
+Block block[BLOCK_MAX]; //メモリ消費 16*BLOCKMAX
 unsigned char buffer[64];
 unsigned char cheatStatus=0;
 unsigned char cheatSaved=0;
@@ -2761,7 +2761,14 @@ void menuDraw(){
 					}
 					switch(counter){
 						case 0: pspDebugScreenPuts("  Pause game? "); if(cheatPause) { pspDebugScreenPuts("True\n"); } else { pspDebugScreenPuts("False\n"); } break;
-						case 1: sprintf(buffer, "  Add new cheat #%d line(s) long.\n", cheatLength); pspDebugScreenPuts(buffer); break;
+						case 1:
+						 if((cheatTotal + 1 < NAME_MAX) && (blockTotal + 1 < BLOCK_MAX)){
+						sprintf(buffer, "  Add new cheat #%d line(s) long.\n", cheatLength);
+						}
+						else{
+						sprintf(buffer, "  cannot add over MAXCHEAT #%d\n",NAME_MAX);
+						}
+						pspDebugScreenPuts(buffer); break;
 						case 2: sprintf(buffer, "  Dump Codeformat #%d\n", codedumpNo); pspDebugScreenPuts(buffer); break;
 						case 3: sprintf(buffer, "  Dump RAM? Slot #%d\n", dumpNo); pspDebugScreenPuts(buffer); break;
 						case 4: pspDebugScreenPuts("  Dump Kmem\n"); break;
@@ -5821,13 +5828,17 @@ void menuInput(){
 					pspDebugKbInit(cheat[cheatSelected].name);
 					sceKernelDelayThread(150000);keyboard=0;
 				}
-				if(pad.Buttons & PSP_CTRL_SELECT){ //copy cheat to new 
+				if(pad.Buttons & PSP_CTRL_SELECT){ //copy cheat to new
+				  if((cheatTotal < NAME_MAX) && (blockTotal + cheat[cheatSelected].len < BLOCK_MAX)){
+					cheat[cheatTotal].block=cheat[cheatTotal-1].block+cheat[cheatTotal-1].len;
+					cheat[cheatTotal].len=cheat[cheatSelected].len;
+					cheat[cheatTotal].flags=cheat[cheatSelected].flags;
+					strcpy(cheat[cheatTotal].name, cheat[cheatSelected].name);
+					memcpy(&block[cheat[cheatTotal].block].flags,&block[cheat[cheatSelected].block].flags,cheat[cheatSelected].len*16);
 					cheatTotal+=1;
-					cheat[cheatTotal-1].block=cheat[cheatSelected].block;
-					cheat[cheatTotal-1].len=cheat[cheatSelected].len;
-					cheat[cheatTotal-1].flags=cheat[cheatSelected].flags;
-					strcpy(cheat[cheatTotal-1].name, cheat[cheatSelected].name);
+					blockTotal+=cheat[cheatSelected].len;
 					sceKernelDelayThread(150000);
+				}
 				}
 				
 				//regular controls
@@ -6594,10 +6605,7 @@ void menuInput(){
 						*((unsigned int*)(logstart+4*logcounter))=storedAddress[logcounter] & 0xFFFFFFF;
 						logcounter++;
 					}//branch jump
-					else if(((foobar >= 0x10000000) && (foobar <= 0x1FFFFFFF)) || ((foobar >= 0x50000000) && (foobar <= 0x5FFFFFFF))
-						|| ((foobar >= 0x45000000) && (foobar <= 0x4503FFFF)) || ((foobar >= 0x49000000) && (foobar <= 0x491FFFFF))
-						|| (((foobar & 0xFC1F0000) >= 0x04000000) && ((foobar & 0xFC1F0000) <= 0x04030000))
-						||  (((foobar & 0xFC1F0000) >= 0x04100000) && ((foobar & 0xFC1F0000) <= 0x04130000)) )
+					else if(mips_branch(foobar))
 						{ //handle branches
 						storedAddress[logcounter]=decodeAddress[bdNo]+(decodeY[bdNo]*4);
 						foobar&=0xFFFF;
