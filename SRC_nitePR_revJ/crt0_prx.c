@@ -270,7 +270,7 @@ unsigned int char2hex(unsigned char *a_data, unsigned int *a_type)
 
 unsigned int cheatNew(unsigned char a_size, unsigned int a_address, unsigned int a_value, unsigned int a_length, unsigned int mode){
   
-  if((cheatTotal + 1 < NAME_MAX) && (blockTotal + 1 < BLOCK_MAX)){
+  if((cheatTotal < NAME_MAX) && (blockTotal< BLOCK_MAX)){
     
     cheat[cheatTotal].block=blockTotal;
    	cheat[cheatTotal].flags=0;
@@ -3275,6 +3275,7 @@ void menuInput()
             else
             {
               //Add the single cheat
+  if((cheatTotal < NAME_MAX) && (blockTotal< BLOCK_MAX)){
               switch(searchHistory[0].flags & FLAG_DWORD)
               {
               	case FLAG_DWORD:
@@ -3301,7 +3302,7 @@ void menuInput()
             	menuDraw();
             	sceKernelDelayThread(150000);
             }
-            
+            }
             //Load the file again, get the sample numbers
             if(searchNo > 0)
             {      
@@ -3948,6 +3949,7 @@ void menuInput()
             else
             {
               //Add the single cheat
+  if((cheatTotal < NAME_MAX) && (blockTotal< BLOCK_MAX)){
               switch(searchHistory[0].flags & FLAG_DWORD)
               {
               	case FLAG_DWORD:
@@ -3973,7 +3975,7 @@ void menuInput()
               extOpt=2;
             	menuDraw();
             	sceKernelDelayThread(150000);
-            }
+            }}
             
             //Load the file again, get the sample numbers
             if(searchNo > 0)
@@ -4793,6 +4795,7 @@ void menuInput()
             }
             else if(cheatSelected == 1)
             {
+  if((cheatTotal < NAME_MAX) && (blockTotal< BLOCK_MAX)){
                cheatNew(4, 0x0000, 0, cheatLength, 0);
               
               //Switch to the cheat editor
@@ -4804,7 +4807,7 @@ void menuInput()
               extOpt=-1;
             	menuDraw();
             	sceKernelDelayThread(150000);
-            }
+            }}
             else if(cheatSelected == 2)
             {
             /*

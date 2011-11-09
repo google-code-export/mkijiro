@@ -401,7 +401,7 @@ void decToCheat(){
   a_length=BLOCK_MAX-blockTotal;
   }
 
-  if((cheatTotal + 1 < NAME_MAX) && (blockTotal + 1 < BLOCK_MAX)){
+  if((cheatTotal < NAME_MAX) && (blockTotal < BLOCK_MAX)){
 
     cheat[cheatTotal].block=blockTotal;
    	cheat[cheatTotal].flags=0;
@@ -513,7 +513,7 @@ void decToText(){
 
 unsigned int cheatNew(unsigned char a_size, unsigned int a_address, unsigned int a_value, unsigned int a_length, unsigned int mode){
   
-  if((cheatTotal + 1 < NAME_MAX) && (blockTotal + 1 < BLOCK_MAX)){
+  if((cheatTotal < NAME_MAX) && (blockTotal< BLOCK_MAX)){
     
     cheat[cheatTotal].block=blockTotal;
     cheat[cheatTotal].flags=0;
@@ -2762,11 +2762,11 @@ void menuDraw(){
 					switch(counter){
 						case 0: pspDebugScreenPuts("  Pause game? "); if(cheatPause) { pspDebugScreenPuts("True\n"); } else { pspDebugScreenPuts("False\n"); } break;
 						case 1:
-						 if((cheatTotal + 1 < NAME_MAX) && (blockTotal + 1 < BLOCK_MAX)){
+						 if((cheatTotal < NAME_MAX) && (blockTotal < BLOCK_MAX)){
 						sprintf(buffer, "  Add new cheat #%d line(s) long.\n", cheatLength);
 						}
 						else{
-						sprintf(buffer, "  cannot add over MAXCHEAT #%d\n",NAME_MAX);
+						sprintf(buffer, "  cannot add over MAXNAME %d,MAXBLOCK %d\n",NAME_MAX,BLOCK_MAX);
 						}
 						pspDebugScreenPuts(buffer); break;
 						case 2: sprintf(buffer, "  Dump Codeformat #%d\n", codedumpNo); pspDebugScreenPuts(buffer); break;
@@ -2822,16 +2822,18 @@ void menuDraw(){
 
 				pspDebugScreenSetTextColor(color01);
 				lineClear(32);
-				//char dumpC=0;
 				switch(cheatSelected){
 					case 0: pspDebugScreenPuts("Pauses the game while MKIJIRO's menu is showing"); break;
-					case 1: pspDebugScreenPuts(">< To create new cheat;"); break;
+					case 1: 
+					if((cheatTotal < NAME_MAX) && (blockTotal < BLOCK_MAX)){
+					pspDebugScreenPuts(">< To create new cheat;");
+					}
+					else{
+					pspDebugScreenPuts("reached maximum name&code number;");
+					 }
+					break;
 					case 2:
 						pspDebugScreenPuts("0:nitePR,1:CWCheat,2:ACTIONREPLAY,3:PMETAN,4:AR 0xE");
-					//while(dumpC<5){
-					//sprintf(buffer,"%d:%s ",dumpC,dumptype[dumpC]);
-					//pspDebugScreenPuts(buffer);dumpC++;
-					//}
 					break;
 					case 3: pspDebugScreenPuts("Saves the Game's RAM to MemoryStick"); break;
 					case 4: pspDebugScreenPuts("Dump kernel memory and boot memory"); break;
@@ -4222,6 +4224,7 @@ void menuInput(){
 				}
 				else
 				{
+				  	if((cheatTotal < NAME_MAX) && (blockTotal < BLOCK_MAX)){
 				  //Add the single cheat
 				  switch(searchHistory[0].flags & FLAG_DWORD)
 				  {
@@ -4248,6 +4251,7 @@ void menuInput(){
 				extOpt=1;
 				menuDraw();
 				sceKernelDelayThread(150000);
+				}
 				}
 				
 				//Load the file again, get the sample numbers
@@ -4957,6 +4961,7 @@ void menuInput(){
 				else
 				{
 				  //Add the single cheat
+				  	if((cheatTotal < NAME_MAX) && (blockTotal < BLOCK_MAX)){
 				  switch(searchHistory[0].flags & FLAG_DWORD)
 				  {
 					case FLAG_DWORD:
@@ -4982,6 +4987,7 @@ void menuInput(){
 				  extOpt=2;
 				  menuDraw();
 				  sceKernelDelayThread(150000);
+				    }
 				}
 				
 				//Load the file again, get the sample numbers
@@ -6193,6 +6199,7 @@ void menuInput(){
 				  }
 				}
 				else if(cheatSelected == 1){
+					if((cheatTotal < NAME_MAX) && (blockTotal < BLOCK_MAX)){
 				  cheatNew(4, 0, 0, cheatLength, 0);
 				  
 				  //Switch to the cheat editor
@@ -6204,6 +6211,7 @@ void menuInput(){
 				  extOpt=-1;
 				  menuDraw();
 				  sceKernelDelayThread(150000);
+				    }
 				}
 				// delete reset code
 				else if(cheatSelected == 3){
