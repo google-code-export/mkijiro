@@ -41,6 +41,7 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -63,6 +64,7 @@
             this.textBox1.Margin = new System.Windows.Forms.Padding(4);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
+            this.textBox1.ShortcutsEnabled = false;
             this.textBox1.Size = new System.Drawing.Size(229, 75);
             this.textBox1.TabIndex = 2;
             // 
@@ -155,12 +157,13 @@
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(75, 23);
             this.button5.TabIndex = 9;
-            this.button5.Text = "トリム";
+            this.button5.Text = "開始";
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.textBox2);
             this.groupBox2.Controls.Add(this.button5);
@@ -169,7 +172,7 @@
             this.groupBox2.Size = new System.Drawing.Size(215, 49);
             this.groupBox2.TabIndex = 10;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "サイズ調整";
+            this.groupBox2.Text = "余剰サイズトリム";
             // 
             // label3
             // 
@@ -183,12 +186,22 @@
             // textBox2
             // 
             this.textBox2.ImeMode = System.Windows.Forms.ImeMode.Alpha;
-            this.textBox2.Location = new System.Drawing.Point(55, 20);
-            this.textBox2.MaxLength = 8;
+            this.textBox2.Location = new System.Drawing.Point(55, 21);
+            this.textBox2.MaxLength = 4;
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(73, 22);
+            this.textBox2.ShortcutsEnabled = false;
+            this.textBox2.Size = new System.Drawing.Size(42, 22);
             this.textBox2.TabIndex = 10;
-            this.textBox2.Text = "8192";
+            this.textBox2.Text = "32";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(102, 24);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(31, 15);
+            this.label4.TabIndex = 12;
+            this.label4.Text = "MiB";
             // 
             // Form1
             // 
@@ -232,6 +245,7 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
     }
 }
 
