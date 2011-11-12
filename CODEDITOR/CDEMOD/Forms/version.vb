@@ -10,7 +10,7 @@ Public Class version
         Me.Location = New Point(m.Location.X + 500, m.Location.Y + 40)
 
         If m.fixedform.Checked = True Then
-            Me.FormBorderStyle = FormBorderStyle.FixedToolWindow
+            Me.AutoSize = True
         End If
 
     End Sub

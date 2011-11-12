@@ -12,7 +12,7 @@
 
 
         If m.fixedform.Checked = True Then
-            Me.FormBorderStyle = FormBorderStyle.FixedToolWindow
+            Me.AutoSize = True
         End If
 
         ListView1.View = View.Details
