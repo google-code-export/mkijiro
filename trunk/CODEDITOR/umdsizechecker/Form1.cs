@@ -2,18 +2,31 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Media;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using Microsoft.VisualBasic;
+using System.Runtime.InteropServices;
 
 namespace WindowsFormsApplication1
 {
-   
+
     public partial class Form1 : Form
     {
         string isofile = "";
+        long trimsize = 0;
+
+        [DllImport("libmecab.dll", CallingConvention = CallingConvention.Cdecl)]
+        private extern static IntPtr mecab_new2(string arg);
+        [DllImport("libmecab.dll", CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.AnsiBStr)]
+        private extern static string mecab_sparse_tostr(IntPtr m, string str);
+        [DllImport("libmecab.dll", CallingConvention = CallingConvention.Cdecl)]
+        private extern static void mecab_destroy(IntPtr m);
+        
 
         public Form1()
         {
@@ -28,6 +41,10 @@ namespace WindowsFormsApplication1
             System.Windows.Forms.DragEventHandler(this.textBox1_DragEnter);
         }
 
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+
+        }
 
         private void textBox1_DragEnter(object sender, System.Windows.Forms.DragEventArgs e)
         {
@@ -39,6 +56,8 @@ namespace WindowsFormsApplication1
 
         private void textBox1_DragDrop(object sender, System.Windows.Forms.DragEventArgs e)
         {
+
+            button5.Enabled = false;
             string[] s = (string[])e.Data.GetData(DataFormats.FileDrop, false);
             isofile = s[0];
             textBox1.Text = getsize(s[0]);
@@ -61,6 +80,8 @@ namespace WindowsFormsApplication1
 
         private void button1_DragDrop(object sender, System.Windows.Forms.DragEventArgs e)
         {
+
+            button5.Enabled = false;
             string[] s = (string[])e.Data.GetData(DataFormats.FileDrop, false);
             isofile = s[0];
             textBox1.Text = getsize(s[0]);
@@ -79,8 +100,7 @@ namespace WindowsFormsApplication1
             long isosize = 0;
             long isobig = 0;
             long fsize = fs.Length;
-
-
+            
             label1.Text = "ファイルサイズ:";
             label2.Text = "セクター算出　:";
             if (fs.Length > 0x8060)
@@ -151,7 +171,10 @@ namespace WindowsFormsApplication1
                 }
                 else if (isosize < fsize)
                 {
+                    trimsize = isosize;
+                    button5.Enabled = true;
                     return "オーバーダンプです";
+
                 }
                  else if (isosize == fsize)
                  {
@@ -350,13 +373,49 @@ namespace WindowsFormsApplication1
                     i = rpname.IndexOf("\x0");
                     rpname = rpname.Substring(0, i) + ".ISO";
                     string[] dosmoji;
-                    dosmoji = new string[9] {"\\","/",":","*","?","\"","<",">","|"};
-                    for (i = 0; i < 9; i++)
+                    dosmoji = new string[10] {"\\","/",":","*","?","\"","<",">","|","\n"};
+                    for (i = 0; i < 10; i++)
                     {
                         if (rpname.Contains(dosmoji[i])){
                             rpname = rpname.Replace(dosmoji[i], " ");
                         }
                     }
+
+                    if(checkBox1.Checked == true) {
+                        rpname = rpname.Replace("　", " ");
+                        IntPtr mecab = mecab_new2("-Oyomi");
+                        rpname = mecab_sparse_tostr(mecab, rpname);
+                        mecab_destroy(mecab);
+                        
+                        string[] kana = { "ー","ァ","ィ","ゥ","ェ","ォ","ヶ","ア", "イ", "ウ", "エ", "オ", "カ", "キ", "ク", "ケ", "コ", "サ", "シ", "ス", "セ", "ソ", "タ", "チ", "ツ", "テ", "ト", "ナ", "ニ", "ヌ", "ネ", "ノ", "ハ", "ヒ", "フ", "ヘ", "ホ", "マ", "ミ", "ム", "メ", "モ", "ヤ", "ユ", "ヨ", "ラ", "リ", "ル", "レ", "ロ", "ワ", "ヰ", "ヱ", "ヲ", "ン", "ガ", "ギ", "グ", "ゲ", "ゴ", "ザ", "ジ", "ズ", "ゼ", "ゾ", "ダ", "ヂ", "ヅ", "デ", "ド", "バ", "ビ", "ブ", "ベ", "ボ", "パ", "ピ", "プ", "ペ", "ポ", "キャ", "キュ", "キョ", "シャ", "シュ", "ショ", "チャ", "チュ", "チョ", "ニャ", "ニュ", "ニョ", "ヒャ", "ヒュ", "ヒョ", "ミャ", "ミュ", "ミョ", "リャ", "リュ", "リョ", "ギャ", "ギュ", "ギョ", "ジャ", "ジュ", "ジョ", "ビャ", "ビュ", "ビョ", "ピャ", "ピュ", "ピョ", "ファ", "フィ", "フェ", "フォ", "ヴァ", "ヴィ", "ヴ", "ヴェ", "ヴォ"};
+                        string[] roma = {"-","a","i","u","e","o","ke", "A", "I", "U", "E", "O", "KA", "KI", "KU", "KE", "KO", "SA", "SHI", "SU", "SE", "SO", "TA", "CHI", "TSU", "TE", "TO", "NA", "NI", "NU", "NE", "NO", "HA", "HI", "FU", "HE", "HO", "MA", "MI", "MU", "ME", "MO", "YA", "YU", "YO", "RA", "RI", "RU", "RE", "RO", "WA", "I", "E", "O", "N", "GA", "GI", "GU", "GE", "GO", "ZA", "JI", "ZU", "ZE", "ZO", "DA", "JI", "ZU", "DE", "DO", "BA", "BI", "BU", "BE", "BO", "PA", "PI", "PU", "PE", "PO", "KYA", "KYU", "KYO", "SHA", "SHU", "SHO", "CHA", "CHU", "CHO", "NYA", "NYU", "NYO", "HYA", "HYU", "HYO", "MYA", "MYU", "MYO", "RYA", "RYU", "RYO", "GYA", "GYU", "GYO", "JA", "JU", "JO", "BYA", "BYU", "BYO", "PYA", "PYU", "PYO", "FA", "FI", "FE", "FO", "VA", "VI", "VU", "VE", "VO" };
+
+                        string cp = "";
+                        string rp2 = rpname;
+                        for(i=0;i<rp2.Length-4;i++){
+                            cp = rp2.Substring(i, 1);
+                            char x = Convert.ToChar(cp);
+                            if(hankaku_zenkana(x)==false){
+                                rpname = rpname.Replace(cp, "");
+                            }
+                        }
+
+                        for (i = 121; i>=0 ; i--) {
+                            if (rpname.Contains(kana[i]) == true) {
+                                rpname = rpname.Replace(kana[i],roma[i]);
+                            }
+                        }
+                        int tu = 0;
+                        while(true){
+                            tu = rpname.LastIndexOf("ッ");
+                            if (tu == -1) break;
+                            cp = rpname.Substring(tu + 1, 1);
+                            rpname = rpname.Substring(0, tu) + cp + rpname.Substring(tu+2, rpname.Length-tu-2);
+                        }
+                        rpname = Strings.StrConv(rpname, VbStrConv.Narrow, 0x0411);
+                        rpname = rpname.Replace("\n", "");
+                    }
+
                     textBox1.Text = rpname + "にリネームしました";
                     int last = isofile.LastIndexOf("\\") + 1;
                     rpname = isofile.Substring(0, last) + rpname;
@@ -380,6 +439,45 @@ namespace WindowsFormsApplication1
             {
                 textBox1.Text = "ファイルが存在しません";
             }
+        }
+        
+        public static bool hankaku_zenkana(char c)
+        {
+            return ('\u0020' <= c && c <= '\u007E')
+                || ('\u30A0' <= c && c <= '\u30FF')
+                || ('\u31F0' <= c && c <= '\u31FF')
+                || ('\u3099' <= c && c <= '\u309C');
+        }
+
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+
+            int bufsize = Convert.ToInt32(textBox2.Text);
+            byte[] bs = new byte[bufsize];
+            File.Delete(isofile + ".trim");
+            for( long z = 0; z < trimsize; z+=bufsize)
+            {
+            FileStream fs = new FileStream(isofile,FileMode.Open,FileAccess.Read);
+            fs.Seek(z, SeekOrigin.Begin);
+
+            if (z + bufsize > trimsize) {
+                bufsize= Convert.ToInt32(trimsize - z);
+            }
+            fs.Read(bs, 0, bufsize);
+            fs.Close();
+            FileStream wr =  new FileStream(isofile + ".trim", FileMode.Append, FileAccess.Write);
+            wr.Write(bs, 0, bufsize);
+                wr.Close();
+            }
+            textBox1.Text = "トリムが完了しました";
+            SystemSounds.Asterisk.Play();
+            button5.Enabled = false;
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

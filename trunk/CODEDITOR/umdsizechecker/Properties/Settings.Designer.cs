@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace umdsizecheck.Properties {
+namespace WindowsFormsApplication1.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -20,6 +20,42 @@ namespace umdsizecheck.Properties {
         public static Settings Default {
             get {
                 return defaultInstance;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200, 200")]
+        public global::System.Drawing.Point mylocation {
+            get {
+                return ((global::System.Drawing.Point)(this["mylocation"]));
+            }
+            set {
+                this["mylocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("8192")]
+        public int buf {
+            get {
+                return ((int)(this["buf"]));
+            }
+            set {
+                this["buf"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool mecab {
+            get {
+                return ((bool)(this["mecab"]));
+            }
+            set {
+                this["mecab"] = value;
             }
         }
     }
