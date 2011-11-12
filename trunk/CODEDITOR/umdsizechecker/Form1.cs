@@ -13,7 +13,7 @@ using System.Runtime.InteropServices;
 
 namespace WindowsFormsApplication1
 {
-
+    
     public partial class Form1 : Form
     {
         string isofile = "";
@@ -26,7 +26,15 @@ namespace WindowsFormsApplication1
         private extern static string mecab_sparse_tostr(IntPtr m, string str);
         [DllImport("libmecab.dll", CallingConvention = CallingConvention.Cdecl)]
         private extern static void mecab_destroy(IntPtr m);
-        
+
+        private void TextBox2_KeyPress(object sender,System.Windows.Forms.KeyPressEventArgs e)
+        {
+            if (e.KeyChar < '0' || e.KeyChar > '9')
+            {
+                e.Handled = true;
+            }
+        }
+
 
         public Form1()
         {
@@ -453,7 +461,7 @@ namespace WindowsFormsApplication1
         private void button5_Click(object sender, EventArgs e)
         {
 
-            int bufsize = Convert.ToInt32(textBox2.Text);
+            int bufsize = Convert.ToInt32(textBox2.Text)<<20;
             byte[] bs = new byte[bufsize];
             File.Delete(isofile + ".trim");
             for( long z = 0; z < trimsize; z+=bufsize)
