@@ -25,11 +25,15 @@ Public Class MERGE
         'TreeView1へのドラッグを受け入れる
         codetree.AllowDrop = True
 
-        Me.Width = My.Settings.mainyoko
-        Me.Height = My.Settings.maintate
+
         If My.Settings.fixedform = True Then
-            Me.FormBorderStyle = FormBorderStyle.FixedToolWindow
+            Me.AutoSize = True
             fixedform.Checked = True
+        Else
+
+            Me.Width = My.Settings.mainyoko
+            Me.Height = My.Settings.maintate
+
         End If
 
 
@@ -965,9 +969,11 @@ Public Class MERGE
         If fixedform.Checked = True Then
             My.Settings.fixedform = False
             fixedform.Checked = False
+            Me.AutoSize = False
         Else
             My.Settings.fixedform = True
             fixedform.Checked = True
+            Me.AutoSize = True
         End If
     End Sub
 

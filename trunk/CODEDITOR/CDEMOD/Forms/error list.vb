@@ -15,7 +15,8 @@
         Me.Width = MERGE.Width
         Me.Location = point
 
-        Me.FormBorderStyle = FormBorderStyle.FixedToolWindow
+        Me.AutoSize = True
+
     End Sub
 
     Private Sub error_window_visible(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.VisibleChanged

@@ -739,8 +739,8 @@ Partial Class MERGE
         '
         Me.fixedform.Name = "fixedform"
         Me.fixedform.Size = New System.Drawing.Size(266, 28)
-        Me.fixedform.Text = "フォームサイズ固定"
-        Me.fixedform.ToolTipText = "再起動した際フォームがリサイズできなくなります" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "メインフォームのサイズは終了すると保存されます"
+        Me.fixedform.Text = "フォームサイズ自動"
+        Me.fixedform.ToolTipText = "解像度にあわせてUIさいずが変化しますかわりにリサイズできなくなります" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "自動でないときはメインフォームのサイズは終了すると保存されます"
         '
         'FTPDsetting
         '
@@ -765,7 +765,7 @@ Partial Class MERGE
         '
         'autoupdater
         '
-        Me.autoupdater.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.releasedate, Me.samename, Me.ToolStripSeparator12, Me.GOOGLESVN, Me.LANDMIRROR})
+        Me.autoupdater.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.samename, Me.releasedate, Me.ToolStripSeparator12, Me.GOOGLESVN, Me.LANDMIRROR})
         Me.autoupdater.Name = "autoupdater"
         Me.autoupdater.Size = New System.Drawing.Size(266, 28)
         Me.autoupdater.Text = "起動時最新版チェック"

@@ -309,7 +309,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
         Public Property fixedform() As Boolean
             Get
                 Return CType(Me("fixedform"),Boolean)
@@ -508,6 +508,18 @@ Namespace My
             End Get
             Set
                 Me("mylocation") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("100, 100")>  _
+        Public Property listlocation() As Global.System.Drawing.Point
+            Get
+                Return CType(Me("listlocation"),Global.System.Drawing.Point)
+            End Get
+            Set
+                Me("listlocation") = value
             End Set
         End Property
     End Class

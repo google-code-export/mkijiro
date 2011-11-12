@@ -21,6 +21,11 @@ Public Class ftp
             WAIT.Checked = False
         End If
 
+        If My.Settings.fixedform = True Then
+            Me.AutoSize = True
+        End If
+
+
         Dim sta As String() = My.Settings.dhcpstart.Split("."c)
         Dim en As String() = My.Settings.dhcpend.Split("."c)
         Dim k As Integer = 0

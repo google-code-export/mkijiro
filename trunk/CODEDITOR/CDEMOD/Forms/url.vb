@@ -10,7 +10,7 @@
         End If
 
         If m.fixedform.Checked = True Then
-            Me.FormBorderStyle = FormBorderStyle.FixedToolWindow
+                Me.AutoSize = True
         End If
 
     End Sub

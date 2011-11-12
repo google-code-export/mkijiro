@@ -10,7 +10,7 @@ Public Class parser
         f = CType(Me.Owner, MERGE)
 
         If f.fixedform.Checked = True Then
-            Me.FormBorderStyle = FormBorderStyle.FixedToolWindow
+            Me.AutoSize = True
         End If
 
         Dim mode As String = Nothing
