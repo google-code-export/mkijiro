@@ -5,8 +5,8 @@ FASTLOADERとかのダミー埋めによるBADDAUMP判定はあやしいので注意
 更新履歴
 2011/11/13,12
 バッファサイズをMiB単位に変更,でふぉるとを32MiB。メモリがあるだけ設定しておｋ
-DLLが不足していたので追加
 MECABでかな変換したあとローマ字にするオプション追加
+MECABでエラーがでる場合http://sourceforge.net/projects/mecab/files/mecab-win32/のインストールが必要
 オーバーダンプしたイメージのトリムを追加
 トリムはPSPのメモステだと遅い(べんち8MiB/s～)ので書き込みが高速な
 HDD(91MiB/s～),RAMDISK,(3000MiB/s～)上で行ったほうが早いです
