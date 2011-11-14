@@ -39,9 +39,9 @@
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.button5 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -64,6 +64,7 @@
             this.textBox1.Margin = new System.Windows.Forms.Padding(4);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
+            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBox1.ShortcutsEnabled = false;
             this.textBox1.Size = new System.Drawing.Size(229, 75);
             this.textBox1.TabIndex = 2;
@@ -174,6 +175,15 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "余剰サイズトリム";
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(102, 24);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(31, 15);
+            this.label4.TabIndex = 12;
+            this.label4.Text = "MiB";
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -193,15 +203,6 @@
             this.textBox2.Size = new System.Drawing.Size(42, 22);
             this.textBox2.TabIndex = 10;
             this.textBox2.Text = "32";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(102, 24);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(31, 15);
-            this.label4.TabIndex = 12;
-            this.label4.Text = "MiB";
             // 
             // Form1
             // 
