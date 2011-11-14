@@ -175,14 +175,17 @@ namespace WindowsFormsApplication1
                 label2.Text += Convert.ToString(isosize);
                  if (isosize - fsize == 2048)
                 {
-                    return "M33USBマウントのみで発生する-2048サイズ欠けです\nPSPFILER/ISOTOOL/TEMPARなどを使ってください\r\nまたUSBマウントは修正版がでているのでそちらをインストールしてください";
+                    return "M33USBマウントやSSSで発生する-2048サイズ欠けです\nPSPFILER/ISOTOOL/TEMPARなどを使ってください\r\nまたUSBマウントは修正版がでているので使ってください";
                 }
+                 else if (isosize - fsize == 6144)
+                 {
+                     return "SSSで発生する-6144サイズ欠けです,バッドバンプの可能性が高いです\nPSPFILER/ISOTOOL/TEMPARなどを使ってください";
+                 }
                 else if (isosize < fsize)
                 {
                     trimsize = isosize;
                     button5.Enabled = true;
-                    return "オーバーダンプです";
-
+                    return "オーバーダンプです,トリムすると正常になることが多いです\r\nトリムはメモリースティック上だと時間がかかるため、高速なHDD/SSD/RAMDISK上での実行を推奨します";
                 }
                  else if (isosize == fsize)
                  {
@@ -190,10 +193,11 @@ namespace WindowsFormsApplication1
                      byte[] beforefinal = new byte[2048];
                      byte[] finalsector = new byte[2048];
                      byte[] hash = new byte[32];
-                     sector.Seek(isosize - 4096, SeekOrigin.Begin);
+                     string NU = "70BC8F4B72A86921468BF8E8441DCE51";//null
+
+                     sector.Seek(isosize - 8192, SeekOrigin.Begin);
                      sector.Read(beforefinal, 0, 2048);
                      sector.Read(finalsector, 0, 2048);
-                     sector.Close();
 
                      System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create();
                      Array.ConstrainedCopy(beforefinal,2016,hash,0,32);
@@ -202,19 +206,31 @@ namespace WindowsFormsApplication1
                      Array.ConstrainedCopy(finalsector, 0, hash, 0, 32);
                      byte[] c = md5.ComputeHash(hash);
                      string result2 = BitConverter.ToString(c).ToUpper().Replace("-", "");
-                     string NU = "70BC8F4B72A86921468BF8E8441DCE51";//null
-                     string FF = "0D7DC4266497100E4831F5B31B6B274F";//FF
+
+                     sector.Seek(isosize - 4096, SeekOrigin.Begin);
+                     sector.Read(beforefinal, 0, 2048);
+                     sector.Read(finalsector, 0, 2048);
+
+                     Array.ConstrainedCopy(beforefinal, 2016, hash, 0, 32);
+                     byte[] d = md5.ComputeHash(hash);
+                     string result3 = BitConverter.ToString(d).ToUpper().Replace("-", "");
+                     Array.ConstrainedCopy(finalsector, 0, hash, 0, 32);
+                     byte[] e= md5.ComputeHash(hash);
+                     string result4 = BitConverter.ToString(e).ToUpper().Replace("-", "");
+                     
+                     sector.Close();
+                     
                      if (result == result2)
                      {//FILLED wiht NULL
                          return "正常なサイズです";
                      }
-                     else if (result2 == NU && result != NU)
+                     else if (result != NU && result2 == NU)
                      {
-                         return "サイズは正常ですが,バッドダンプの可能性があります";
+                         return "サイズは正常ですが,バッドダンプの可能性があります(最終-6k付近データ連続判定)";
                      }
-                     else if (result2 == FF && result != NU)
+                     else if (result3 != NU && result4 == NU)
                      {
-                         return "サイズは正常ですが,バッドダンプの可能性があります";
+                         return "サイズは正常ですが,バッドダンプの可能性があります(最終-2k付近データ連続判定)";
                      }
                      else
                      {
@@ -381,8 +397,8 @@ namespace WindowsFormsApplication1
                     i = rpname.IndexOf("\x0");
                     rpname = rpname.Substring(0, i) + ".ISO";
                     string[] dosmoji;
-                    dosmoji = new string[10] {"\\","/",":","*","?","\"","<",">","|","\n"};
-                    for (i = 0; i < 10; i++)
+                    dosmoji = new string[11] {"\\","/",":","*","?","\"","<",">","|","\n","\r"};
+                    for (i = 0; i < 11; i++)
                     {
                         if (rpname.Contains(dosmoji[i])){
                             rpname = rpname.Replace(dosmoji[i], " ");
@@ -418,10 +434,16 @@ namespace WindowsFormsApplication1
                             tu = rpname.LastIndexOf("ッ");
                             if (tu == -1) break;
                             cp = rpname.Substring(tu + 1, 1);
-                            rpname = rpname.Substring(0, tu) + cp + rpname.Substring(tu+2, rpname.Length-tu-2);
+                            rpname = rpname.Substring(0, tu) + cp + rpname.Substring(tu+1, rpname.Length-tu-1);
                         }
                         rpname = Strings.StrConv(rpname, VbStrConv.Narrow, 0x0411);
-                        rpname = rpname.Replace("\n", "");
+                        for (i = 0; i < 11; i++)
+                        {
+                            if (rpname.Contains(dosmoji[i]))
+                            {
+                                rpname = rpname.Replace(dosmoji[i], " ");
+                            }
+                        }
                     }
 
                     textBox1.Text = rpname + "にリネームしました";

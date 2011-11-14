@@ -3,13 +3,21 @@ FASTLOADERとかのダミー埋めによるBADDAUMP判定はあやしいので注意
 あんまり需要なさそうだけど作成
 
 更新履歴
+2011/11/14
+FASTLOADER判定を強化-2kか-6k付近データが連続してるかチェックするようにした
+
+//ごっどうぉー1.5GBトリム参考時間,バッファ64MiB
+//UMD Dumper v1.0 by fede94bosss
+ハードディスク	23秒
+ラムディスク	3秒
+
 2011/11/13,12
 バッファサイズをMiB単位に変更,でふぉるとを32MiB。メモリがあるだけ設定しておｋ
 MECABでかな変換したあとローマ字にするオプション追加
 MECABでエラーがでる場合http://sourceforge.net/projects/mecab/files/mecab-win32/のインストールが必要
 オーバーダンプしたイメージのトリムを追加
-トリムはPSPのメモステだと遅い(べんち8MiB/s～)ので書き込みが高速な
-HDD(91MiB/s～),RAMDISK,(3000MiB/s～)上で行ったほうが早いです
+トリムはPSPのメモステだと遅い(べんち8MB/s～)ので書き込みが高速な
+HDD(90MB/s～),RAMDISK(3000MB/s～)上で行ったほうが早いです
 
 //ゆうなま90MBトリム参考時間,バッファ64MiB
 //おーばーだんぷ鶴UMDDumper0.3.0DEV by phonicUK
