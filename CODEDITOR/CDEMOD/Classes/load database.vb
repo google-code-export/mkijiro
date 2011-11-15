@@ -862,6 +862,10 @@ Public Class load_db
                     gnode.Text = str
                     gnode.Name = str
                     k = CInt(bs(i + 4))
+                    l = CInt(bs(i + 5)) + CInt(bs(i + 6)) << 8
+                    If l = 0 Then
+                        Exit While
+                    End If
                     parsemode = True
                 ElseIf parsemode = True Then
                     codeline = CInt(bs(i + k))

@@ -5,6 +5,7 @@ Imports System.Collections
 Imports System.Linq
 Imports System.Net
 Imports System.Text.RegularExpressions
+Imports System.Runtime.InteropServices
 
 Public Class MERGE
     Friend database As String = Nothing
@@ -181,9 +182,9 @@ Public Class MERGE
             file_saveas.Enabled = True
             overwrite_db.Enabled = True
             overwrite_db.ToolTipText = "対象;" & database
-            If DATEL = True Then
-                overwrite_db.ToolTipText &= vbCrLf & "ARMAX用BINは.arテキストに変換されます"
-            End If
+            'If DATEL = True Then
+            '    overwrite_db.ToolTipText &= vbCrLf & "ARMAX用BINは.arテキストに変換されます"
+            'End If
         Else
             codetree.Nodes.Add("NEW_DB").ImageIndex = 0
         End If
@@ -380,9 +381,9 @@ Public Class MERGE
             overwrite_db.Enabled = True
             My.Settings.lastcodepath = database
             overwrite_db.ToolTipText = "対象;" & database
-            If DATEL = True Then
-                overwrite_db.ToolTipText &= vbCrLf & "ARMAX用BINは.arテキストに変換されます"
-            End If
+            'If DATEL = True Then
+            '    overwrite_db.ToolTipText &= vbCrLf & "ARMAX用BINは.arテキストに変換されます"
+            'End If
 
         End If
     End Sub
@@ -396,8 +397,7 @@ Public Class MERGE
             ElseIf PSX = True Then
                 s.save_psx(database, enc1)
             ElseIf DATEL = True Then
-                database &= ".ar"
-                s.save_cwcheat(database, enc1)
+                s.save_ar(database, 932)
             Else
                 s.save_cwcheat(database, enc1)
             End If
@@ -474,6 +474,28 @@ Public Class MERGE
 
         End If
     End Sub
+
+
+    Private Sub ACTONREPLAYToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles saveas_actionreplay.Click
+        Dim open As New load_db
+        Dim s As New save_db
+
+        Me.save_file.Filter = "ACTIONREPLAY (*.bin)|*.bin"
+
+        If save_file.ShowDialog = Windows.Forms.DialogResult.OK And save_file.FileName <> Nothing Then
+
+            database = save_file.FileName
+            s.save_ar(database, 932)
+
+            codetree.Nodes(0).Text = Path.GetFileNameWithoutExtension(database)
+            overwrite_db.ToolTipText = "対象;" & database
+
+            If My.Settings.codepathwhensave = True Then
+                My.Settings.lastcodepath = database
+            End If
+        End If
+    End Sub
+
 
     Private Sub file_exit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles file_exit.Click
         My.Settings.mainyoko = Me.Width
@@ -1204,6 +1226,7 @@ Public Class MERGE
 
     Private Sub すべて閉じるToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tree_collapse.Click, cntclose.Click
         codetree.CollapseAll()
+        codetree.TopNode.Expand()
     End Sub
 
     Private Sub 全て展開するToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tree_expand.Click, cntexpand.Click
@@ -1275,7 +1298,7 @@ Public Class MERGE
 
     Public Function ConvCH(ByVal moto As String) As String
         Dim st As String() = {"ー", "∋", "⊆", "⊇", "⊂", "⊃", "￢", "⇒", "⇔", "∃", "∂", "∇", "≪", "≫", "∬", "Å", "♯", "♭", "♪", "†", "‡", "¶", "⑪", "⑫", "⑬", "⑭", "⑮", "⑯", "⑰", "⑱", "⑲", "⑳", "㍉", "㌔", "㌢", "㍍", "㌘", "㌧", "㌃", "㌶", "㍑", "㍗", "㌍", "㌦", "㌣", "㌫", "㍊", "㌻", "㍻", "〝", "〟", "㏍", "㊤", "㊥", "㊦", "㊧", "㊨", "㍾", "㍽", "㍼"}
-        Dim sr As String() = {"-", " ", " ", " ", " ", " ", " ", "→", "竊鐀", "ヨ", "", "", "<<", ">>", "ダブルインテグラル", "オングストローム", "シャ-プ", "フラット", "8分音符", "ダガー", "ダブルダガー", "パラグラフ", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "ミリ", "キロ", "センチ", "メ-トル", "グラム", "トン", "ア-ル", "ヘクタ-ル", "リットル", "ワｯト", "カロリ-", "ドル", "セント", "パ-セント", "ミリバ-ル", "ペ-ジ", "平成", " ", " ", "KK", "上", "中", "下", "左", "右", "明治", "大正", "昭和"}
+        Dim sr As String() = {"-", " ", " ", " ", " ", " ", " ", "→", "←→", "ヨ", "", "", "<<", ">>", "ダブルインテグラル", "オングストローム", "シャ-プ", "フラット", "8分音符", "ダガー", "ダブルダガー", "パラグラフ", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "ミリ", "キロ", "センチ", "メ-トル", "グラム", "トン", "ア-ル", "ヘクタ-ル", "リットル", "ワｯト", "カロリ-", "ドル", "セント", "パ-セント", "ミリバ-ル", "ペ-ジ", "平成", " ", " ", "KK", "上", "中", "下", "左", "右", "明治", "大正", "昭和"}
         Dim i As Integer = 0
         For i = 0 To 59
             If moto.Contains(st(i)) Then
@@ -1283,6 +1306,61 @@ Public Class MERGE
             End If
         Next
         Return moto
+    End Function
+
+    '<DllImport("libmecab.dll", CallingConvention:=CallingConvention.Cdecl)> _
+    'Overloads Shared Function mecab_new2(ByVal arg As String) As IntPtr
+    'End Function
+    '<DllImport("libmecab.dll", CallingConvention:=CallingConvention.Cdecl)> _
+    'Overloads Shared Function mecab_sparse_tostr(ByVal m As IntPtr, ByVal str As String) As IntPtr
+    'End Function
+    '<DllImport("libmecab.dll", CallingConvention:=CallingConvention.Cdecl)> _
+    'Overloads Shared Function mecab_destroy(ByVal m As IntPtr) As Boolean
+    'End Function
+
+    'Private Sub MECAB半角カナToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MECAB半角カナToolStripMenuItem.Click
+
+    '    codetree.BeginUpdate() ' This will stop the tree view from constantly drawing the changes while we sort the nodes
+
+    '    Dim z As Integer = 0
+    '    Dim i As Integer = 0
+    '    Dim b1 As String = Nothing
+    '    Dim b2 As String = Nothing
+    '    Dim mecab As IntPtr
+    '    Dim s As IntPtr
+    '    For Each n As TreeNode In codetree.Nodes(0).Nodes
+    '        b1 = n.Text
+
+    '        mecab = mecab_new2("-Oyomi")
+    '        s = mecab_sparse_tostr(mecab, b1)
+    '        b1 = Marshal.PtrToStringAnsi(s)
+    '        mecab_destroy(mecab)
+    '        codetree.Nodes(0).Nodes(i).Text = b1
+    '        For Each m As TreeNode In n.Nodes
+    '            mecab = mecab_new2("-Oyomi")
+    '            s = mecab_sparse_tostr(mecab, b2)
+    '            b2 = Marshal.PtrToStringAnsi(s)
+    '            mecab_destroy(mecab)
+    '            codetree.Nodes(0).Nodes(i).Nodes(z).Text = b2
+    '            z += 1
+    '        Next
+    '        i += 1
+    '        z = 0
+    '    Next
+    '    codetree.EndUpdate()
+
+    'End Sub
+
+
+    'Private Sub MECABでローマ字ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MECABでローマ字ToolStripMenuItem.Click
+
+    'End Sub
+
+    Public Function hankaku_zenkana(ByVal c As Char) As Boolean
+        Return (ChrW(&H20) <= c AndAlso c <= ChrW(&H7E)) OrElse _
+        (ChrW(&H30A0) <= c AndAlso c <= ChrW(&H30FF)) OrElse _
+        (ChrW(&H31F0) <= c AndAlso c <= ChrW(&H31FF)) OrElse _
+        (ChrW(&H3099) <= c AndAlso c <= ChrW(&H309C))
     End Function
 
 #End Region
@@ -1337,7 +1415,7 @@ Public Class MERGE
         boot("APP\kakasi.bat")
     End Sub
 
-    Private Sub MECAB_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MECAB.Click
+    Private Sub MECAB_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MECABk.Click
         boot("APP\kanahenkan.bat")
     End Sub
 
@@ -1972,6 +2050,18 @@ Public Class MERGE
         End Select
 
     End Sub
+    Private Sub codetree_DragEnter(ByVal sender As Object, _
+        ByVal e As System.Windows.Forms.DragEventArgs) _
+        Handles codetree.DragEnter
+        'コントロール内にドラッグされたとき実行される
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            'ドラッグされたデータ形式を調べ、ファイルのときはコピーとする
+            e.Effect = DragDropEffects.Copy
+        Else
+            'ファイル以外は受け付けない
+            e.Effect = DragDropEffects.None
+        End If
+    End Sub
 
     'ドラッグ
     Private Sub codetree_ItemDrag(ByVal sender As Object, _
@@ -1985,6 +2075,75 @@ Public Class MERGE
             tv.DoDragDrop(e.Item, DragDropEffects.All)
 
     End Sub
+
+    Private Sub codetree_1DragDrop(ByVal sender As Object, _
+            ByVal e As System.Windows.Forms.DragEventArgs) _
+            Handles codetree.DragDrop
+        'コントロール内にドロップされたとき実行される
+        'ドロップされたすべてのファイル名を取得する
+
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            Dim fileName As String() = CType( _
+                e.Data.GetData(DataFormats.FileDrop, False), _
+                String())
+
+            Dim open As New load_db
+            If codetree.Nodes(0).Nodes.Count > 0 AndAlso MessageBox.Show("ドロップされたデータベースを開くと現在のデータベースが消えてしまいます。このまま開いてもよろしいですか？", "データベース保存の確認", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) = Windows.Forms.DialogResult.Cancel Then
+                Exit Sub
+            End If
+            database = fileName(0)
+
+            error_window.list_save_error.Items.Clear() 'Clear any save errors from a previous database
+            PSX = open.check_db(database, 932) ' Check the file's format
+            CODEFREAK = open.check2_db(database, 1201)
+            DATEL = open.check3_db(database, 932)
+            codetree.Nodes.Clear()
+            codetree.BeginUpdate()
+            error_window.list_load_error.BeginUpdate()
+
+            UTF16BECP1201ToolStripMenuItem.Enabled = False
+            saveas_codefreak.Enabled = False
+
+            If CODEFREAK = True Then
+                reset_PSP()
+                Application.DoEvents()
+                enc1 = 1201
+                open.read_cf(database, 1201)
+            ElseIf DATEL = True Then
+                reset_PSP()
+                Application.DoEvents()
+                enc1 = 932
+                open.read_ar(database, 932)
+                saveas_actionreplay.Enabled = True
+            ElseIf PSX = True Then
+                enc1 = open.check_enc(database)
+                reset_PSX()
+                Application.DoEvents()
+                open.read_PSX(database, enc1)
+                PSX = True
+            Else
+                enc1 = open.check_enc(database)
+                reset_PSP()
+                Application.DoEvents()
+                open.read_PSP(database, enc1)
+            End If
+            If codetree.Nodes.Count >= 1 Then
+                codetree.Nodes(0).Expand()
+            End If
+            If enc1 = 1201 Then
+                UTF16BECP1201ToolStripMenuItem.Enabled = True
+                saveas_codefreak.Enabled = True
+            End If
+            codetree.EndUpdate()
+            error_window.list_load_error.EndUpdate()
+            loaded = True
+            file_saveas.Enabled = True
+            overwrite_db.Enabled = True
+            My.Settings.lastcodepath = database
+            overwrite_db.ToolTipText = "対象;" & database
+        End If
+    End Sub
+
 
     'ドラッグしている時
     Private Sub codetree_DragOver(ByVal sender As Object, _
@@ -2004,13 +2163,16 @@ Public Class MERGE
             Else
                 e.Effect = DragDropEffects.None
             End If
+        ElseIf e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            'ドラッグされたデータ形式を調べ、ファイルのときはコピーとする
+            e.Effect = DragDropEffects.Copy
         Else
             'TreeNodeでなければ受け入れない
             e.Effect = DragDropEffects.None
         End If
 
         'マウス下のNodeを選択する
-        If e.Effect <> DragDropEffects.None Then
+        If e.Effect <> DragDropEffects.None AndAlso e.Effect <> DragDropEffects.Copy Then
             Dim tv As TreeView = CType(sender, TreeView)
             'マウスのあるNodeを取得する
             Dim target As TreeNode = _
@@ -2227,8 +2389,8 @@ Public Class MERGE
         Dim truelist As Boolean = True
         Dim b3 As String = cl_tb.Text
         Dim r As New System.Text.RegularExpressions.Regex( _
-"LIST/.+\.txt\((A|V),([1-9]|[1-9][0-9]),[1-8],[1-8]\)", _
-System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+    "LIST/.+\.txt\((A|V),([1-9]|[1-9][0-9]),[1-8],[1-8]\)", _
+    System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         Dim m As System.Text.RegularExpressions.Match = r.Match(backup)
         Dim len As Integer = 20
         If PSX = True Then
@@ -2635,4 +2797,6 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
             My.Settings.updatesever = True
         End If
     End Sub
+
 End Class
+

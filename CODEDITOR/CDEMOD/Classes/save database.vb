@@ -123,8 +123,7 @@ Public Class save_db
         Dim m As MERGE = MERGE
         Dim i As Integer = 0 ' Error count
         Dim buffer As String()
-        Dim tw As New StreamWriter(filename, False, _
-                                   System.Text.Encoding.GetEncoding(enc1))
+        Dim tw As New StreamWriter(filename, False, Encoding.GetEncoding(enc1))
         Dim ew As error_window = error_window
         Dim errors As Boolean = False
         Dim code As String = Nothing
@@ -225,9 +224,8 @@ Public Class save_db
         Dim bs(3 * 1024 * 1024) As Byte '３Mばいとぐらい
         Dim cfutf16be(34) As Byte
         Dim nullcode As Boolean = False
-        Dim dummy As Byte() = System.Text.Encoding.GetEncoding(1201).GetBytes("0000000000000000")
+        Dim dummy As Byte() = Encoding.GetEncoding(932).GetBytes("0000000000000000")
         Dim z As Integer = 0
-
 
         Dim gname As String = ""
         Dim ccname As String = ""
@@ -267,7 +265,7 @@ Public Class save_db
                 gname = n.Text
                 gid = n.Tag.ToString.Remove(4, 1)
                 'Shift JISとして文字列に変換
-                bytesData = System.Text.Encoding.GetEncoding(0).GetBytes(gid)
+                bytesData = Encoding.GetEncoding(0).GetBytes(gid)
                 sce(0) = CType(bytesData(0), Integer)
                 sce(1) = CType(bytesData(1), Integer)
                 sce(2) = CType(bytesData(2), Integer)
@@ -295,7 +293,7 @@ Public Class save_db
                 i += 2
                 cp1201len = gname.Length * 2
                 Array.Resize(name, cp1201len)
-                name = System.Text.Encoding.GetEncoding(1201).GetBytes(gname)
+                name = Encoding.GetEncoding(1201).GetBytes(gname)
                 Array.ConstrainedCopy(name, 0, bs, i, cp1201len)
                 i += cp1201len
                 bs(i) = 10
@@ -395,6 +393,227 @@ Public Class save_db
         fs.Close()
 
     End Sub
+
+
+    Public Sub save_ar(ByVal filename As String, ByVal enc1 As Integer)
+
+        Dim m As MERGE = MERGE
+        Dim i As Integer = 0
+        Dim back As Integer = 0
+        Dim back2 As Integer = 0
+        Dim buf As String()
+        Dim fs As New System.IO.FileStream(filename, FileMode.Create, FileAccess.Write)
+        Dim bs(3 * 1024 * 1024) As Byte '３Mばいとぐらい
+        Dim nullcode As Boolean = False
+        Dim dummy() As Byte = {0, 0, 0, &HCF, 0, 0, 0, 0}
+        Dim z As Integer = 0
+        Dim cnum As Int16 = 0
+        Dim cend As Integer = 0
+        Dim binend As Integer = 0
+        Dim l As Integer = 0
+        Dim k As Integer = 0
+        Dim t As UInteger = 0
+
+        Dim header() As Byte = Encoding.GetEncoding(932).GetBytes("PSPARC01")
+        Dim nextoffset(1) As Byte
+        Dim beforeoffset(1) As Byte
+        Dim tocodehead(1) As Byte
+        Dim null() As Byte = Nothing
+        Dim codenum(3) As Byte
+        Dim gid As String = ""
+        Dim ggid(9) As Byte
+        Dim gname As String = ""
+        Dim ggname() As Byte = Nothing
+
+        Dim lline() As Byte = Nothing
+        Dim clen() As Byte = Nothing
+        Dim tocheat() As Byte = Nothing
+        Dim nextcode() As Byte = Nothing
+
+        Dim ccname As String = ""
+        Dim cname() As Byte = Nothing
+        Dim code(3) As Byte
+        Dim mode As String = ""
+        Array.Resize(header, &H1C)
+
+        Try
+
+            For Each n As TreeNode In m.codetree.Nodes(0).Nodes
+
+                back2 = i - back
+                back = i
+
+                gid = n.Tag.ToString
+                gname = n.Text
+                ggid = Encoding.GetEncoding(932).GetBytes(gid)
+                Array.Resize(ggname, gname.Length)
+                ggname = Encoding.GetEncoding(932).GetBytes(gname)
+
+                l = 18 + gname.Length
+                If (l Mod 4) = 0 Then
+                    l += 4
+                Else
+                    l += 4 - (l Mod 4)
+                End If
+
+                codenum = BitConverter.GetBytes(n.Nodes.Count)
+                Array.ConstrainedCopy(codenum, 0, bs, i + 5, 2)
+                tocodehead = BitConverter.GetBytes(l)
+                Array.ConstrainedCopy(tocodehead, 0, bs, i + 4, 1)
+                Array.ConstrainedCopy(ggid, 0, bs, i + 7, 10)
+                Array.ConstrainedCopy(ggname, 0, bs, i + 18, gname.Length)
+                i += l
+                cend = 0
+                binend += 1
+
+                For Each n1 As TreeNode In n.Nodes
+
+                    mode = n1.Tag.ToString.Substring(0, 1)
+
+                    If mode = "2" Or mode = "3" Then
+                        ccname = n1.Text.Trim
+                    Else
+                        ccname = n1.Text.Trim & "(CWC/TEMP)"
+                    End If
+                    l = ccname.Length
+                    Array.Resize(cname, l)
+                    cname = Encoding.GetEncoding(932).GetBytes(ccname)
+                    clen = BitConverter.GetBytes(l + 1)
+                    Array.ConstrainedCopy(clen, 0, bs, i + 1, 1)
+                    Array.ConstrainedCopy(cname, 0, bs, i + 4, l)
+                    l += 4
+                    If (l Mod 4) = 0 Then
+                        l += 4
+                    Else
+                        l += 4 - (l Mod 4)
+                    End If
+                    tocheat = BitConverter.GetBytes(l >> 2)
+                    Array.ConstrainedCopy(tocheat, 0, bs, i + 2, 1)
+                    cend += 1
+                    z = 0
+                    nullcode = True
+
+                    If mode = "2" Or mode = "3" Then
+                        buf = n1.Tag.ToString.Split(CChar(vbCrLf))
+
+                        For Each s As String In buf
+
+                            If s.Contains("0x") Then
+
+                                nullcode = False
+                                s = s.Replace("0x", "")
+                                s = s.Replace(" ", "")
+                                s = s.Remove(0, 1)
+                                t = Convert.ToUInt32(s.Substring(0, 8), 16)
+                                code = BitConverter.GetBytes(t)
+                                Array.ConstrainedCopy(code, 0, bs, i + l + 8 * z, 4)
+                                t = Convert.ToUInt32(s.Substring(8, 8), 16)
+                                code = BitConverter.GetBytes(t)
+                                Array.ConstrainedCopy(code, 0, bs, i + l + 4 + 8 * z, 4)
+                                z += 1
+                                If z = 117 Then
+                                    lline = BitConverter.GetBytes(z)
+                                    Array.ConstrainedCopy(lline, 0, bs, i, 1)
+                                    k = (z * 8 + l) >> 2
+                                    nextcode = BitConverter.GetBytes(k)
+                                    Array.ConstrainedCopy(nextcode, 0, bs, i + 3, 1)
+                                    i += (z * 8) + l
+
+                                    Array.ConstrainedCopy(clen, 0, bs, i + 1, 1)
+                                    Array.ConstrainedCopy(cname, 0, bs, i + 4, ccname.Length)
+                                    Array.ConstrainedCopy(tocheat, 0, bs, i + 2, 1)
+
+                                    z = 0
+                                End If
+                            End If
+
+                        Next
+
+                        If nullcode = True Then
+                            z = 1
+                            Array.ConstrainedCopy(dummy, 0, bs, i + l, 8)
+                        End If
+
+                        If z > 0 Then
+                            lline = BitConverter.GetBytes(z)
+                            Array.ConstrainedCopy(lline, 0, bs, i, 1)
+                            k = (z * 8 + l) >> 2
+                            If n.Nodes.Count <> cend Then
+                                nextcode = BitConverter.GetBytes(k)
+                                Array.ConstrainedCopy(nextcode, 0, bs, i + 3, 1)
+                            End If
+                            i += (z * 8) + l
+                        Else
+                            Array.Resize(null, ccname.Length + 8)
+                            Array.ConstrainedCopy(null, 0, bs, i, null.Length)
+                        End If
+                    Else
+
+                        z = 1
+                        Array.ConstrainedCopy(dummy, 0, bs, i + l, 8)
+
+                        lline = BitConverter.GetBytes(z)
+                        Array.ConstrainedCopy(lline, 0, bs, i, 1)
+                        k = (z * 8 + l) >> 2
+                        If n.Nodes.Count <> cend Then
+                            nextcode = BitConverter.GetBytes(k)
+                            Array.ConstrainedCopy(nextcode, 0, bs, i + 3, 1)
+                        End If
+                        i += (z * 8) + l
+
+                    End If
+                Next
+                nextoffset = BitConverter.GetBytes((i - back) >> 2)
+                beforeoffset = BitConverter.GetBytes(back2 >> 2)
+                If binend <> m.codetree.Nodes(0).Nodes.Count Then
+                    Array.ConstrainedCopy(nextoffset, 0, bs, back, 2)
+                End If
+                Array.ConstrainedCopy(beforeoffset, 0, bs, back + 2, 2)
+
+            Next
+
+            code = BitConverter.GetBytes(i)
+            Array.ConstrainedCopy(code, 0, header, 16, 4)
+            Array.Resize(bs, i + 28)
+            Array.ConstrainedCopy(bs, 0, bs, 28, i)
+            Array.ConstrainedCopy(header, 0, bs, 0, 28)
+
+            t = datel_hash(bs, 28, i + 28)
+            code = BitConverter.GetBytes(t)
+            Array.ConstrainedCopy(code, 0, bs, 12, 4)
+            t = datel_hash(bs, 12, 28)
+            code = BitConverter.GetBytes(t)
+            Array.ConstrainedCopy(code, 0, bs, 8, 4)
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+        End Try
+
+        fs.Write(bs, 0, bs.Length)
+        fs.Close()
+
+    End Sub
+
+
+    Public Function datel_hash(ByVal bin() As Byte, ByVal v As Integer, ByVal w As Integer) As UInteger
+
+        'http://www.playarts.co.jp/psptool/download.php　PLAYATRS
+        'http://www.varaneckas.com/jad JADED with playarts tool
+
+        Dim z As UInteger = 0
+        Dim y As UInteger = &H20000000
+        Dim x As UInteger = &H17072008
+        Dim i As Integer = 0
+        For i = v To w - 1
+            z += Convert.ToUInt32(bin(i))
+            If ((z And 1) = 1) Then
+                z += y
+            End If
+            z >>= 1
+        Next
+        z = z Xor x
+        Return z
+    End Function
 
     Private Sub reset_errors()
 
