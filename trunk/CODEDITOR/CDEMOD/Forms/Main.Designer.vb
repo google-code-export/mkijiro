@@ -35,6 +35,7 @@ Partial Class MERGE
         Me.saveas_cwcheat = New System.Windows.Forms.ToolStripMenuItem()
         Me.saveas_psx = New System.Windows.Forms.ToolStripMenuItem()
         Me.saveas_codefreak = New System.Windows.Forms.ToolStripMenuItem()
+        Me.saveas_actionreplay = New System.Windows.Forms.ToolStripMenuItem()
         Me.file_exit = New System.Windows.Forms.ToolStripMenuItem()
         Me.menu_sort = New System.Windows.Forms.ToolStripMenuItem()
         Me.sort_GID = New System.Windows.Forms.ToolStripMenuItem()
@@ -59,6 +60,8 @@ Partial Class MERGE
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.str_wide = New System.Windows.Forms.ToolStripMenuItem()
         Me.str_gbk = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MECAB半角カナToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MECABでローマ字ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.browsecodesite = New System.Windows.Forms.ToolStripMenuItem()
         Me.wikiToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.cwcToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
@@ -72,7 +75,7 @@ Partial Class MERGE
         Me.URL10 = New System.Windows.Forms.ToolStripMenuItem()
         Me.EXE起動ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.KAKASI = New System.Windows.Forms.ToolStripMenuItem()
-        Me.MECAB = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MECABk = New System.Windows.Forms.ToolStripMenuItem()
         Me.pme_cnv = New System.Windows.Forms.ToolStripMenuItem()
         Me.temparutility = New System.Windows.Forms.ToolStripMenuItem()
         Me.Wget = New System.Windows.Forms.ToolStripMenuItem()
@@ -108,8 +111,8 @@ Partial Class MERGE
         Me.PBPHBHASH = New System.Windows.Forms.ToolStripMenuItem()
         Me.update_save_filepass = New System.Windows.Forms.ToolStripMenuItem()
         Me.autoupdater = New System.Windows.Forms.ToolStripMenuItem()
-        Me.releasedate = New System.Windows.Forms.ToolStripMenuItem()
         Me.samename = New System.Windows.Forms.ToolStripMenuItem()
+        Me.releasedate = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator12 = New System.Windows.Forms.ToolStripSeparator()
         Me.GOOGLESVN = New System.Windows.Forms.ToolStripMenuItem()
         Me.LANDMIRROR = New System.Windows.Forms.ToolStripMenuItem()
@@ -248,7 +251,7 @@ Partial Class MERGE
         '
         'file_saveas
         '
-        Me.file_saveas.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.saveas_cwcheat, Me.saveas_psx, Me.saveas_codefreak})
+        Me.file_saveas.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.saveas_cwcheat, Me.saveas_psx, Me.saveas_codefreak, Me.saveas_actionreplay})
         Me.file_saveas.Enabled = False
         Me.file_saveas.Image = CType(resources.GetObject("file_saveas.Image"), System.Drawing.Image)
         Me.file_saveas.Name = "file_saveas"
@@ -259,22 +262,30 @@ Partial Class MERGE
         '
         Me.saveas_cwcheat.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.psp_menu
         Me.saveas_cwcheat.Name = "saveas_cwcheat"
-        Me.saveas_cwcheat.Size = New System.Drawing.Size(217, 28)
+        Me.saveas_cwcheat.Size = New System.Drawing.Size(233, 38)
         Me.saveas_cwcheat.Text = "CWC/PSPAR/TEMP"
         '
         'saveas_psx
         '
         Me.saveas_psx.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.sony_playstation1
         Me.saveas_psx.Name = "saveas_psx"
-        Me.saveas_psx.Size = New System.Drawing.Size(217, 28)
+        Me.saveas_psx.Size = New System.Drawing.Size(233, 38)
         Me.saveas_psx.Text = "PSX"
         '
         'saveas_codefreak
         '
         Me.saveas_codefreak.Image = CType(resources.GetObject("saveas_codefreak.Image"), System.Drawing.Image)
         Me.saveas_codefreak.Name = "saveas_codefreak"
-        Me.saveas_codefreak.Size = New System.Drawing.Size(217, 28)
+        Me.saveas_codefreak.Size = New System.Drawing.Size(233, 38)
         Me.saveas_codefreak.Text = "CODEFREAK"
+        '
+        'saveas_actionreplay
+        '
+        Me.saveas_actionreplay.Image = CType(resources.GetObject("saveas_actionreplay.Image"), System.Drawing.Image)
+        Me.saveas_actionreplay.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.saveas_actionreplay.Name = "saveas_actionreplay"
+        Me.saveas_actionreplay.Size = New System.Drawing.Size(233, 38)
+        Me.saveas_actionreplay.Text = "ACTONREPLAY"
         '
         'file_exit
         '
@@ -396,7 +407,7 @@ Partial Class MERGE
         '
         'codetreeview
         '
-        Me.codetreeview.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.paserToolStripMenuItem, Me.ToolStripSeparator7, Me.tree_collapse, Me.tree_expand, Me.ToolStripSeparator3, Me.str_wide, Me.str_gbk})
+        Me.codetreeview.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.paserToolStripMenuItem, Me.ToolStripSeparator7, Me.tree_collapse, Me.tree_expand, Me.ToolStripSeparator3, Me.str_wide, Me.str_gbk, Me.MECAB半角カナToolStripMenuItem, Me.MECABでローマ字ToolStripMenuItem})
         Me.codetreeview.Name = "codetreeview"
         Me.codetreeview.Size = New System.Drawing.Size(91, 27)
         Me.codetreeview.Text = "ツリー(&T)"
@@ -445,6 +456,20 @@ Partial Class MERGE
         Me.str_gbk.Text = "中国語文字化け対策"
         Me.str_gbk.ToolTipText = "FREECHEAT/CMFUSIONで半角カナ以外の表示できない文字を代替文字かスペースで置換します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "対象；" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "・ー∋⊆⊇⊂⊃￢⇒⇔∀∃∂∇≪≫∬Å♯♭♪†‡¶" & _
             "⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳㍉㌔㌢㍍㌘㌧㌃㌶㍑㍗㌍㌦㌣㌫㍊㌻㍻〝〟㏍㊤㊥㊦㊧㊨㍾㍽㍼"
+        '
+        'MECAB半角カナToolStripMenuItem
+        '
+        Me.MECAB半角カナToolStripMenuItem.Name = "MECAB半角カナToolStripMenuItem"
+        Me.MECAB半角カナToolStripMenuItem.Size = New System.Drawing.Size(245, 28)
+        Me.MECAB半角カナToolStripMenuItem.Text = "MECABで半角カナ"
+        Me.MECAB半角カナToolStripMenuItem.Visible = False
+        '
+        'MECABでローマ字ToolStripMenuItem
+        '
+        Me.MECABでローマ字ToolStripMenuItem.Name = "MECABでローマ字ToolStripMenuItem"
+        Me.MECABでローマ字ToolStripMenuItem.Size = New System.Drawing.Size(245, 28)
+        Me.MECABでローマ字ToolStripMenuItem.Text = "MECABでローマ字"
+        Me.MECABでローマ字ToolStripMenuItem.Visible = False
         '
         'browsecodesite
         '
@@ -517,7 +542,7 @@ Partial Class MERGE
         '
         'EXE起動ToolStripMenuItem
         '
-        Me.EXE起動ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.KAKASI, Me.MECAB, Me.pme_cnv, Me.temparutility, Me.Wget, Me.nichanbrowser, Me.copy_to_psp, Me.APP8, Me.APP9, Me.APP10})
+        Me.EXE起動ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.KAKASI, Me.MECABk, Me.pme_cnv, Me.temparutility, Me.Wget, Me.nichanbrowser, Me.copy_to_psp, Me.APP8, Me.APP9, Me.APP10})
         Me.EXE起動ToolStripMenuItem.Name = "EXE起動ToolStripMenuItem"
         Me.EXE起動ToolStripMenuItem.Size = New System.Drawing.Size(73, 27)
         Me.EXE起動ToolStripMenuItem.Text = "EXE(&E)"
@@ -529,12 +554,12 @@ Partial Class MERGE
         Me.KAKASI.Text = "KAKASI変換"
         Me.KAKASI.ToolTipText = "kakasiエンジンで全角文字を半角カナに変換する" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "対象cheat.sjis.db"
         '
-        'MECAB
+        'MECABk
         '
-        Me.MECAB.Name = "MECAB"
-        Me.MECAB.Size = New System.Drawing.Size(229, 28)
-        Me.MECAB.Text = "MECAB+KAKASI変換"
-        Me.MECAB.ToolTipText = "MECABエンジンで全角文字をカナカナにしたあとkakasiで半角カナに変更する" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "対象cheatsjis.db"
+        Me.MECABk.Name = "MECABk"
+        Me.MECABk.Size = New System.Drawing.Size(229, 28)
+        Me.MECABk.Text = "MECAB+KAKASI変換"
+        Me.MECABk.ToolTipText = "MECABエンジンで全角文字をカナカナにしたあとkakasiで半角カナに変更する" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "対象cheatsjis.db"
         '
         'pme_cnv
         '
@@ -771,17 +796,17 @@ Partial Class MERGE
         Me.autoupdater.Text = "起動時最新版チェック"
         Me.autoupdater.ToolTipText = "起動時にCDEの最新版があるかどうかをチェックします。"
         '
-        'releasedate
-        '
-        Me.releasedate.Name = "releasedate"
-        Me.releasedate.Size = New System.Drawing.Size(229, 28)
-        Me.releasedate.Text = "リリース日付で保存"
-        '
         'samename
         '
         Me.samename.Name = "samename"
         Me.samename.Size = New System.Drawing.Size(229, 28)
         Me.samename.Text = "同じ名前(再起動必要)"
+        '
+        'releasedate
+        '
+        Me.releasedate.Name = "releasedate"
+        Me.releasedate.Size = New System.Drawing.Size(229, 28)
+        Me.releasedate.Text = "リリース日付で保存"
         '
         'ToolStripSeparator12
         '
@@ -821,6 +846,7 @@ Partial Class MERGE
         '
         'codetree
         '
+        Me.codetree.AllowDrop = True
         Me.codetree.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.codetree.ContextMenuStrip = Me.ContextMenuStrip1
@@ -1597,7 +1623,7 @@ Partial Class MERGE
     Friend WithEvents OHGToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents HAXToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents EXE起動ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents MECAB As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MECABk As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents pme_cnv As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents temparutility As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Wget As System.Windows.Forms.ToolStripMenuItem
@@ -1705,5 +1731,8 @@ Partial Class MERGE
     Friend WithEvents ToolStripSeparator12 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents GOOGLESVN As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents LANDMIRROR As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MECAB半角カナToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MECABでローマ字ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents saveas_actionreplay As System.Windows.Forms.ToolStripMenuItem
 
 End Class
