@@ -407,8 +407,8 @@ Public Class save_db
         Dim nullcode As Boolean = False
         Dim dummy() As Byte = {0, 0, 0, &HCF, 0, 0, 0, 0}
         Dim z As Integer = 0
-        Dim cnum As Int16 = 0
         Dim cend As Integer = 0
+        Dim cendplus As Integer = 0
         Dim binend As Integer = 0
         Dim l As Integer = 0
         Dim k As Integer = 0
@@ -456,14 +456,13 @@ Public Class save_db
                     l += 4 - (l Mod 4)
                 End If
 
-                codenum = BitConverter.GetBytes(n.Nodes.Count)
-                Array.ConstrainedCopy(codenum, 0, bs, i + 5, 2)
                 tocodehead = BitConverter.GetBytes(l)
                 Array.ConstrainedCopy(tocodehead, 0, bs, i + 4, 1)
                 Array.ConstrainedCopy(ggid, 0, bs, i + 7, 10)
                 Array.ConstrainedCopy(ggname, 0, bs, i + 18, gname.Length)
                 i += l
                 cend = 0
+                cendplus = 0
                 binend += 1
 
                 For Each n1 As TreeNode In n.Nodes
@@ -522,7 +521,7 @@ Public Class save_db
                                     Array.ConstrainedCopy(clen, 0, bs, i + 1, 1)
                                     Array.ConstrainedCopy(cname, 0, bs, i + 4, ccname.Length)
                                     Array.ConstrainedCopy(tocheat, 0, bs, i + 2, 1)
-
+                                    cendplus += 1
                                     z = 0
                                 End If
                             End If
@@ -544,6 +543,7 @@ Public Class save_db
                             End If
                             i += (z * 8) + l
                         Else
+                            cendplus -= 1
                             Array.Resize(null, ccname.Length + 8)
                             Array.ConstrainedCopy(null, 0, bs, i, null.Length)
                         End If
@@ -563,6 +563,8 @@ Public Class save_db
 
                     End If
                 Next
+                codenum = BitConverter.GetBytes(cend + cendplus)
+                Array.ConstrainedCopy(codenum, 0, bs, back + 5, 2)
                 nextoffset = BitConverter.GetBytes((i - back) >> 2)
                 beforeoffset = BitConverter.GetBytes(back2 >> 2)
                 If binend <> m.codetree.Nodes(0).Nodes.Count Then
