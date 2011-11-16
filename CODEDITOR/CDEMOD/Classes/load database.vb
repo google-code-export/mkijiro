@@ -1144,7 +1144,7 @@ Public Class load_db
             arheader = Encoding.GetEncoding(0).GetString(Code)
             arheader = arheader.Substring(0, 8)
             Array.ConstrainedCopy(Code, 16, binsize, 0, 4)
-            size = BitConverter.ToInt32(binsize, 0) + 28
+            size = BitConverter.ToInt32(binsize, 0)
             If arheader = "PSPARC01" Then 'AndAlso size = file.Length Then
                 'ARCを抜いたへっだのはっしゅ
                 Array.ConstrainedCopy(Code, 8, binstr, 0, 4)
@@ -1157,17 +1157,16 @@ Public Class load_db
                 digit(0) = hex.ToString("X")
 
                 'JADでおｋ
-                z = datel_hash(Code, 12, 28)
+                z = datel_hash(Code, 12, 16)
                 hash(1) = Convert.ToString(z, 16).ToUpper
 
                 z = datel_hash(Code, 28, size)
                 hash(0) = Convert.ToString(z, 16).ToUpper
-                'z = datel_hash(Code, &H60, &H64)
-                'Dim s = Convert.ToString(z, 16).ToUpper
-                'Dim a As UInteger = &H17072008
-                'z = datel_hash(Code, &H60, &H66)
-                'Dim s1 = Convert.ToString(z, 16).ToUpper
-                ''PAPARX01有りがあわないようなのでチェック修正
+
+                'z = datel_hash(Code, &HF9B4 + 16 + &HB4, &HB4)
+                'Dim h As String = Convert.ToString(z, 16).ToUpper
+
+                'PAPARX01有りがあわないようなのでチェック修正
                 If hash(0) = digit(0) AndAlso hash(1) = digit(1) Then
                     DATEL_AR = True
                 End If
@@ -1179,24 +1178,60 @@ Public Class load_db
         Return DATEL_AR
     End Function
 
-    Public Function datel_hash(ByVal bin() As Byte, ByVal v As Integer, ByVal w As Integer) As UInteger
+    Public Function datel_hash(ByVal bin() As Byte, ByVal s As Integer, ByVal w As Integer) As UInteger
 
-        'http://www.playarts.co.jp/psptool/download.php　PLAYATRS
-        'http://www.varaneckas.com/jad JADED with playarts tool
+        'FNC_00010400:					# int datelhash(int fileaddress_a0,int hashrange_a1)
+        '	beq		a1, zero, $00010440	# 00010400:10a0000f	▼__00010440:DATELHASH
+        '	addu	v1, zero, zero		# 00010404:00001821	
+        '	lui		t0, $1000	    	# 00010408:3c081000	t0=$10000000
+        '	lbu		v0, $0000(a0)		# 0001040c:90820000	値をロード
+        '__00010410:					# 
+        '	addiu	a0, a0, $0001		# 00010410:24840001	アドレス+1*
+        '	addu	a3, v0, v1		    # 00010414:00433821	a3=値+前の計算結果v1
+        '	srl		v1, a3, 1		    # 00010418:00071842	v1=a3>>1
+        '	andi	v0, a3, $0001		# 0001041c:30e20001	a3奇数偶数判定
+        '	bne		v0, zero, $0001042c	# 00010420:14400002	▼__0001042c
+        '	or		v1, v1, t0		    # 00010424:00681825	a3が奇数の時はv1=(a3>>1) | 0x10000000
+        '	srl		v1, a3, 1		    # 00010428:00071842	a3が偶数の時はv1=a3>>1
+        '__0001042c:					# 
+        '	addiu	a1, a1, $ffff   	# 0001042c:24a5ffff	範囲回数-1
+        '	bnel	a1, zero, $00010410	# 00010430:54a0fff7	▲__00010410
+        '	lbu		v0, $0000(a0)		# 00010434:90820000	*+1hの値をロード
+        '	jr		r       a			# 00010438:03e00008	
+        '	xor		v0, a2, v1  		# 0001043c:00c31026	
 
-        Dim z As UInteger = 0
-        Dim y As UInteger = &H20000000
-        Dim x As UInteger = &H17072008
+        Dim v1 As UInteger = 0
+        Dim v0 As UInteger = 0
+        Dim a3 As UInteger = 0
+        Dim t0 As UInteger = &H10000000
+        Dim a2 As UInteger = &H17072008
         Dim i As Integer = 0
-        For i = v To w - 1
-            z += Convert.ToUInt32(bin(i))
-            If ((z And 1) = 1) Then
-                z += y
+        For i = 0 To w - 1
+            v0 = Convert.ToUInt32(bin(s + i))
+            a3 = v0 + v1
+            v1 = a3 >> 1
+            If ((a3 And 1) <> 0) Then
+                v1 = v1 Or t0
             End If
-            z >>= 1
         Next
-        z = z Xor x
-        Return z
+        v0 = a2 Xor v1
+        Return v0
+
+        'http://www.playarts.co.jp/psptool/download.php　PLAYATRS one
+        'http://www.varaneckas.com/jad JADED with playarts tool
+        'Dim z As UInteger = 0
+        'Dim y As UInteger = &H20000000
+        'Dim x As UInteger = &H17072008
+        'Dim i As Integer = 0
+        'For i = 0 To w-1
+        '    z += Convert.ToUInt32(bin(s+i))
+        '    If ((z And 1) = 1) Then
+        '        z += y
+        '    End If
+        '    z >>= 1
+        'next
+        'z = z Xor x
+        'Return z
     End Function
 
 End Class
