@@ -413,6 +413,7 @@ Public Class save_db
         Dim l As Integer = 0
         Dim k As Integer = 0
         Dim t As UInteger = 0
+        Dim tmp As Integer = 0
 
         Dim header() As Byte = Encoding.GetEncoding(932).GetBytes("PSPARC01")
         Dim nextoffset(1) As Byte
@@ -510,12 +511,13 @@ Public Class save_db
                                 code = BitConverter.GetBytes(t)
                                 Array.ConstrainedCopy(code, 0, bs, i + l + 4 + 8 * z, 4)
                                 z += 1
-                                If z = 117 Then
+                                If z = 118 Then
                                     lline = BitConverter.GetBytes(z)
                                     Array.ConstrainedCopy(lline, 0, bs, i, 1)
                                     k = (z * 8 + l) >> 2
                                     nextcode = BitConverter.GetBytes(k)
                                     Array.ConstrainedCopy(nextcode, 0, bs, i + 3, 1)
+                                    tmp = i
                                     i += (z * 8) + l
 
                                     Array.ConstrainedCopy(clen, 0, bs, i + 1, 1)
@@ -545,6 +547,9 @@ Public Class save_db
                         Else
                             cendplus -= 1
                             Array.Resize(null, ccname.Length + 8)
+                            If n.Nodes.Count = cend Then
+                                Array.ConstrainedCopy(null, 0, bs, tmp + 3, 1)
+                            End If
                             Array.ConstrainedCopy(null, 0, bs, i, null.Length)
                         End If
                     Else
