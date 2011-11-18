@@ -32,7 +32,6 @@ Public Class Form1
         ftpdeamon.Checked = My.Settings.useftp
 
         Me.Text = "tempar update checker"
-        Me.FormBorderStyle = FormBorderStyle.FixedToolWindow
 
     End Sub
 
@@ -381,12 +380,12 @@ System.IO.FileAccess.Read)
                     temptxt = temptxt.Replace("/", "\")
 
                     If My.Application.Culture.Name = "ja-JP" Then
-                        File.Copy(Application.StartupPath & "\seplugins\TempAR\languages\ja_font.bin", installpath & temptxt & "ja_font.bin", True)
-                        File.Copy(Application.StartupPath & "\seplugins\TempAR\languages\ja_strings.bin", installpath & temptxt & "ja_strings.bin", True)
+                        File.Copy(Application.StartupPath & "\seplugins\TempAR\languages\ja.bin", installpath & temptxt & "ja.bin", True)
+                        'File.Copy(Application.StartupPath & "\seplugins\TempAR\languages\ja_strings.bin", installpath & temptxt & "ja_strings.bin", True)
                     Else
-                        File.Copy(Application.StartupPath & "\seplugins\TempAR\languages\language1_font.bin", installpath & temptxt & "language1_font.bin", True)
-                        File.Copy(Application.StartupPath & "\seplugins\TempAR\languages\language1_strings.bin", installpath & temptxt & "language1_strings.bin", True)
-                        File.Copy(Application.StartupPath & "\seplugins\TempAR\languages\language2_strings.bin", installpath & temptxt & "language2_strings.bin", True)
+                        File.Copy(Application.StartupPath & "\seplugins\TempAR\languages\fr.bin", installpath & temptxt & "fr.bin", True)
+                        File.Copy(Application.StartupPath & "\seplugins\TempAR\languages\language1.bin", installpath & temptxt & "language1.bin", True)
+                        File.Copy(Application.StartupPath & "\seplugins\TempAR\languages\language2.bin", installpath & temptxt & "language2.bin", True)
                     End If
 
                 End If

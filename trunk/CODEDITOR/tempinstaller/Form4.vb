@@ -38,7 +38,6 @@
         Dim z As Integer = My.Settings.second
         wait.Text = My.Settings.second.ToString
 
-        Me.FormBorderStyle = FormBorderStyle.FixedToolWindow
 
     End Sub
 
