@@ -82,7 +82,7 @@ Partial Class Form3
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(164, 15)
         Me.Label4.TabIndex = 4
-        Me.Label4.Text = "BUILD:2011/11/19 4:58"
+        Me.Label4.Text = "BUILD:2011/11/20 0:51"
         Me.Label4.UseWaitCursor = True
         '
         'Form3
