@@ -37,6 +37,8 @@ Partial Class Form1
         Me.AUTOPSP = New System.Windows.Forms.RadioButton()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.Label1 = New System.Windows.Forms.Label()
+        Me.cfont = New System.Windows.Forms.RadioButton()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
@@ -46,7 +48,7 @@ Partial Class Form1
         '
         Me.INSTALL.Enabled = False
         Me.INSTALL.ImageKey = "前回インストールしたｐｒｘ"
-        Me.INSTALL.Location = New System.Drawing.Point(48, 353)
+        Me.INSTALL.Location = New System.Drawing.Point(48, 380)
         Me.INSTALL.Margin = New System.Windows.Forms.Padding(4)
         Me.INSTALL.Name = "INSTALL"
         Me.INSTALL.Size = New System.Drawing.Size(131, 29)
@@ -180,12 +182,14 @@ Partial Class Form1
         '
         'GroupBox2
         '
+        Me.GroupBox2.Controls.Add(Me.Button1)
+        Me.GroupBox2.Controls.Add(Me.cfont)
         Me.GroupBox2.Controls.Add(Me.HIRA)
         Me.GroupBox2.Controls.Add(Me.KANA)
         Me.GroupBox2.Enabled = False
         Me.GroupBox2.Location = New System.Drawing.Point(15, 132)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(200, 86)
+        Me.GroupBox2.Size = New System.Drawing.Size(200, 105)
         Me.GroupBox2.TabIndex = 19
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "2.フォント選択"
@@ -218,7 +222,7 @@ Partial Class Form1
         Me.GroupBox3.Controls.Add(Me.lockdriveletter)
         Me.GroupBox3.Controls.Add(Me.AUTOPSP)
         Me.GroupBox3.Enabled = False
-        Me.GroupBox3.Location = New System.Drawing.Point(15, 224)
+        Me.GroupBox3.Location = New System.Drawing.Point(15, 243)
         Me.GroupBox3.Name = "GroupBox3"
         Me.GroupBox3.Size = New System.Drawing.Size(200, 100)
         Me.GroupBox3.TabIndex = 22
@@ -228,18 +232,38 @@ Partial Class Form1
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(21, 327)
+        Me.Label1.Location = New System.Drawing.Point(24, 346)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(191, 15)
         Me.Label1.TabIndex = 23
         Me.Label1.Text = "4.PSPをUSBモードにして下さい"
+        '
+        'cfont
+        '
+        Me.cfont.AutoSize = True
+        Me.cfont.Location = New System.Drawing.Point(15, 76)
+        Me.cfont.Name = "cfont"
+        Me.cfont.Size = New System.Drawing.Size(114, 19)
+        Me.cfont.TabIndex = 19
+        Me.cfont.TabStop = True
+        Me.cfont.Text = "カスタムフォント"
+        Me.cfont.UseVisualStyleBackColor = True
+        '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(125, 74)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(23, 23)
+        Me.Button1.TabIndex = 20
+        Me.Button1.Text = "..."
+        Me.Button1.UseVisualStyleBackColor = True
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.ClientSize = New System.Drawing.Size(227, 389)
+        Me.ClientSize = New System.Drawing.Size(227, 422)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.GroupBox2)
@@ -279,5 +303,7 @@ Partial Class Form1
     Friend WithEvents GroupBox3 As System.Windows.Forms.GroupBox
     Friend WithEvents CFWPROGO As System.Windows.Forms.RadioButton
     Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents cfont As System.Windows.Forms.RadioButton
 
 End Class

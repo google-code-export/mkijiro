@@ -166,8 +166,19 @@
         fontpath = System.AppDomain.CurrentDomain.BaseDirectory & "font\acorn_bold"
     End Sub
 
-    Private Sub CheckBox1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox1.CheckedChanged
-
+    Private Sub fontcustom_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles fontcustom.CheckedChanged
+        fontpath = My.Settings.customfont
     End Sub
 
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+        Dim ofd As New OpenFileDialog()
+
+        ofd.Filter = "すべてのファイル(*.*)|*.*"
+        ofd.Title = "開くファイルを選択してください"
+        ofd.RestoreDirectory = True
+
+        If ofd.ShowDialog() = DialogResult.OK Then
+            My.Settings.customfont = ofd.FileName
+        End If
+    End Sub
 End Class

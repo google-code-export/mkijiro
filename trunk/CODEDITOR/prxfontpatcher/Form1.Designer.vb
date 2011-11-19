@@ -24,6 +24,8 @@ Partial Class Form1
     Private Sub InitializeComponent()
         Me.RadioButton2 = New System.Windows.Forms.RadioButton()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.Button2 = New System.Windows.Forms.Button()
+        Me.fontcustom = New System.Windows.Forms.RadioButton()
         Me.font5 = New System.Windows.Forms.RadioButton()
         Me.font4 = New System.Windows.Forms.RadioButton()
         Me.font3 = New System.Windows.Forms.RadioButton()
@@ -37,9 +39,10 @@ Partial Class Form1
         'RadioButton2
         '
         Me.RadioButton2.AutoSize = True
-        Me.RadioButton2.Location = New System.Drawing.Point(24, 45)
+        Me.RadioButton2.Location = New System.Drawing.Point(32, 56)
+        Me.RadioButton2.Margin = New System.Windows.Forms.Padding(4)
         Me.RadioButton2.Name = "RadioButton2"
-        Me.RadioButton2.Size = New System.Drawing.Size(92, 16)
+        Me.RadioButton2.Size = New System.Drawing.Size(114, 19)
         Me.RadioButton2.TabIndex = 1
         Me.RadioButton2.TabStop = True
         Me.RadioButton2.Text = "RadioButton2"
@@ -47,24 +50,49 @@ Partial Class Form1
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.Button2)
+        Me.GroupBox1.Controls.Add(Me.fontcustom)
         Me.GroupBox1.Controls.Add(Me.font5)
         Me.GroupBox1.Controls.Add(Me.font4)
         Me.GroupBox1.Controls.Add(Me.font3)
         Me.GroupBox1.Controls.Add(Me.font2)
         Me.GroupBox1.Controls.Add(Me.font1)
-        Me.GroupBox1.Location = New System.Drawing.Point(24, 12)
+        Me.GroupBox1.Location = New System.Drawing.Point(32, 15)
+        Me.GroupBox1.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(152, 138)
+        Me.GroupBox1.Padding = New System.Windows.Forms.Padding(4)
+        Me.GroupBox1.Size = New System.Drawing.Size(203, 190)
         Me.GroupBox1.TabIndex = 2
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "ふぉんと選択"
         '
+        'Button2
+        '
+        Me.Button2.Location = New System.Drawing.Point(121, 162)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(27, 23)
+        Me.Button2.TabIndex = 6
+        Me.Button2.Text = "..."
+        Me.Button2.UseVisualStyleBackColor = True
+        '
+        'fontcustom
+        '
+        Me.fontcustom.AutoSize = True
+        Me.fontcustom.Location = New System.Drawing.Point(10, 164)
+        Me.fontcustom.Name = "fontcustom"
+        Me.fontcustom.Size = New System.Drawing.Size(107, 19)
+        Me.fontcustom.TabIndex = 5
+        Me.fontcustom.TabStop = True
+        Me.fontcustom.Text = "かすたむ指定"
+        Me.fontcustom.UseVisualStyleBackColor = True
+        '
         'font5
         '
         Me.font5.AutoSize = True
-        Me.font5.Location = New System.Drawing.Point(7, 110)
+        Me.font5.Location = New System.Drawing.Point(9, 138)
+        Me.font5.Margin = New System.Windows.Forms.Padding(4)
         Me.font5.Name = "font5"
-        Me.font5.Size = New System.Drawing.Size(139, 16)
+        Me.font5.Size = New System.Drawing.Size(173, 19)
         Me.font5.TabIndex = 4
         Me.font5.TabStop = True
         Me.font5.Text = "acorn_bold(日本語なし)"
@@ -73,9 +101,10 @@ Partial Class Form1
         'font4
         '
         Me.font4.AutoSize = True
-        Me.font4.Location = New System.Drawing.Point(7, 88)
+        Me.font4.Location = New System.Drawing.Point(9, 110)
+        Me.font4.Margin = New System.Windows.Forms.Padding(4)
         Me.font4.Name = "font4"
-        Me.font4.Size = New System.Drawing.Size(83, 16)
+        Me.font4.Size = New System.Drawing.Size(102, 19)
         Me.font4.TabIndex = 3
         Me.font4.TabStop = True
         Me.font4.Text = "美咲カタカナ"
@@ -84,9 +113,10 @@ Partial Class Form1
         'font3
         '
         Me.font3.AutoSize = True
-        Me.font3.Location = New System.Drawing.Point(7, 65)
+        Me.font3.Location = New System.Drawing.Point(9, 81)
+        Me.font3.Margin = New System.Windows.Forms.Padding(4)
         Me.font3.Name = "font3"
-        Me.font3.Size = New System.Drawing.Size(85, 16)
+        Me.font3.Size = New System.Drawing.Size(105, 19)
         Me.font3.TabIndex = 2
         Me.font3.TabStop = True
         Me.font3.Text = "美咲ひらがな"
@@ -95,9 +125,10 @@ Partial Class Form1
         'font2
         '
         Me.font2.AutoSize = True
-        Me.font2.Location = New System.Drawing.Point(7, 42)
+        Me.font2.Location = New System.Drawing.Point(9, 52)
+        Me.font2.Margin = New System.Windows.Forms.Padding(4)
         Me.font2.Name = "font2"
-        Me.font2.Size = New System.Drawing.Size(135, 16)
+        Me.font2.Size = New System.Drawing.Size(168, 19)
         Me.font2.TabIndex = 1
         Me.font2.TabStop = True
         Me.font2.Text = "telazorn＋美咲カタカナ"
@@ -106,9 +137,10 @@ Partial Class Form1
         'font1
         '
         Me.font1.AutoSize = True
-        Me.font1.Location = New System.Drawing.Point(7, 19)
+        Me.font1.Location = New System.Drawing.Point(9, 24)
+        Me.font1.Margin = New System.Windows.Forms.Padding(4)
         Me.font1.Name = "font1"
-        Me.font1.Size = New System.Drawing.Size(137, 16)
+        Me.font1.Size = New System.Drawing.Size(171, 19)
         Me.font1.TabIndex = 0
         Me.font1.TabStop = True
         Me.font1.Text = "telazorn＋美咲ひらがな"
@@ -116,9 +148,10 @@ Partial Class Form1
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(196, 66)
+        Me.Button1.Location = New System.Drawing.Point(261, 82)
+        Me.Button1.Margin = New System.Windows.Forms.Padding(4)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
+        Me.Button1.Size = New System.Drawing.Size(100, 29)
         Me.Button1.TabIndex = 3
         Me.Button1.Text = "ぱっち"
         Me.Button1.UseVisualStyleBackColor = True
@@ -126,22 +159,24 @@ Partial Class Form1
         'CheckBox1
         '
         Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(31, 157)
+        Me.CheckBox1.Location = New System.Drawing.Point(41, 213)
+        Me.CheckBox1.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(256, 16)
+        Me.CheckBox1.Size = New System.Drawing.Size(319, 19)
         Me.CheckBox1.TabIndex = 4
         Me.CheckBox1.Text = "PRO/MEの翻訳TXTをflash0:/から読むようにする"
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'Form1
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(292, 189)
+        Me.ClientSize = New System.Drawing.Size(389, 248)
         Me.Controls.Add(Me.CheckBox1)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.RadioButton2)
+        Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "Form1"
         Me.Text = "ｐｒｘふぉんとぱっちゃー"
         Me.GroupBox1.ResumeLayout(False)
@@ -159,5 +194,7 @@ Partial Class Form1
     Friend WithEvents Button1 As System.Windows.Forms.Button
     Friend WithEvents font5 As System.Windows.Forms.RadioButton
     Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
+    Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents fontcustom As System.Windows.Forms.RadioButton
 
 End Class
