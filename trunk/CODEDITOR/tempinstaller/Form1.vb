@@ -88,9 +88,11 @@ Public Class Form1
         Return True
     End Function
 
-    Function unzip(ByVal zippath As String) As Boolean
+    Function unzip(ByVal zippath As String) As String()
         '展開先のフォルダのパス
         Dim extractDir As String = Application.StartupPath
+        Dim s(255) As String
+        Dim stcounter As Integer = 0
 
         'ZIP書庫を読み込む 
         Dim fs As New System.IO.FileStream( _
@@ -109,6 +111,17 @@ Public Class Form1
                 Exit While
             End If
             If Not ze.IsDirectory Then
+
+                If ze.Name.Contains("/languages/") AndAlso ze.Name.Contains(".bin") Then
+                    s(stcounter) = "\" & ze.Name
+                    s(stcounter) = s(stcounter).Replace("/", "\")
+                    stcounter += 1
+                ElseIf ze.Name.Contains(".prx") Then
+                    s(stcounter) = "\" & ze.Name
+                    s(stcounter) = s(stcounter).Replace("/", "\")
+                    stcounter += 1
+                End If
+
                 '展開先のファイル名を決定 
                 Dim fileName As String = System.IO.Path.GetFileName(ze.Name)
                 '展開先のフォルダを決定 
@@ -147,7 +160,8 @@ Public Class Form1
         '閉じる 
         zis.Close()
         fs.Close()
-        Return True
+        Array.Resize(s, stcounter)
+        Return s
     End Function
 
     Function getdate(ByVal path As String) As String
@@ -191,55 +205,54 @@ System.IO.FileAccess.Read)
         Return builddate.Replace(vbNullChar, "") & vbCrLf & "MD5;" & md5hash
     End Function
 
-    'ZIPアーカイブからパスだけ抽出
-    Function analyzlanguagepath(ByVal path As String) As String()
-        Dim s(255) As String
-        Dim fs As New System.IO.FileStream(path, System.IO.FileMode.Open, System.IO.FileAccess.Read)
-        Dim bs(CInt(fs.Length - 1)) As Byte
-        fs.Read(bs, 0, bs.Length)
-        fs.Close()
-        Dim i As Integer = 0
-        Dim cmpsize(3) As Byte
-        Dim dirlen(3) As Byte
-        Dim exlen(3) As Byte
-        Dim name As Byte() = Nothing
-        Dim stcounter As Integer = 0
-        Dim namelen As Integer = 0
-        Dim cmplen As Integer = 0
-        Dim extra As Integer = 0
-        Dim buffer As String
-        Dim skip As Integer = 0
+    'ZIPアーカイブからパスだけ抽出,ライブラリーなしNETA
+    'Function analyzlanguagepath(ByVal path As String) As String()
+    '    Dim s(255) As String
+    '    Dim fs As New System.IO.FileStream(path, System.IO.FileMode.Open, System.IO.FileAccess.Read)
+    '    Dim bs(CInt(fs.Length - 1)) As Byte
+    '    fs.Read(bs, 0, bs.Length)
+    '    fs.Close()
+    '    Dim i As Integer = 0
+    '    Dim cmpsize(3) As Byte
+    '    Dim dirlen(3) As Byte
+    '    Dim exlen(3) As Byte
+    '    Dim name As Byte() = Nothing
+    '    Dim stcounter As Integer = 0
+    '    Dim namelen As Integer = 0
+    '    Dim cmplen As Integer = 0
+    '    Dim extra As Integer = 0
+    '    Dim buffer As String
+    '    Dim skip As Integer = 0
 
-        While i < bs.Length
+    '    While i < bs.Length
 
-            'セントラルDIRでフィニッシュです
-            If bs(i) = &H50 AndAlso bs(i + 1) = &H4B AndAlso bs(i + 2) = 1 AndAlso bs(i + 3) = 2 Then
-                Exit While
-            End If
+    '        'セントラルDIRでフィニッシュです
+    '        If bs(i) = &H50 AndAlso bs(i + 1) = &H4B AndAlso bs(i + 2) = 1 AndAlso bs(i + 3) = 2 Then
+    '            Exit While
+    '        End If
 
-            Array.ConstrainedCopy(bs, i + 18, cmpsize, 0, 4)
-            Array.ConstrainedCopy(bs, i + 26, dirlen, 0, 2)
-            Array.ConstrainedCopy(bs, i + 28, exlen, 0, 2)
-            cmplen = BitConverter.ToInt32(cmpsize, 0)
-            namelen = BitConverter.ToInt32(dirlen, 0)
-            extra = BitConverter.ToInt32(exlen, 0)
-            skip = 30 + namelen + cmplen + extra
-            Array.Resize(name, namelen)
-            Array.ConstrainedCopy(bs, i + 30, name, 0, namelen)
-            buffer = System.Text.Encoding.GetEncoding(932).GetString(name)
+    '        Array.ConstrainedCopy(bs, i + 18, cmpsize, 0, 4)
+    '        Array.ConstrainedCopy(bs, i + 26, dirlen, 0, 2)
+    '        Array.ConstrainedCopy(bs, i + 28, exlen, 0, 2)
+    '        cmplen = BitConverter.ToInt32(cmpsize, 0)
+    '        namelen = BitConverter.ToInt32(dirlen, 0)
+    '        extra = BitConverter.ToInt32(exlen, 0)
+    '        skip = 30 + namelen + cmplen + extra
+    '        Array.Resize(name, namelen)
+    '        Array.ConstrainedCopy(bs, i + 30, name, 0, namelen)
+    '        buffer = System.Text.Encoding.GetEncoding(932).GetString(name)
 
 
-            If buffer.Contains("/languages/") AndAlso buffer.Contains(".bin") Then
-                s(stcounter) = buffer
-                stcounter += 1
-            End If
-            i += skip
+    '        If buffer.Contains("/languages/") AndAlso buffer.Contains(".bin") Then
+    '            s(stcounter) = buffer
+    '            stcounter += 1
+    '        End If
+    '        i += skip
 
-        End While
-        Array.Resize(s, stcounter)
-        Return s
-    End Function
-
+    '    End While
+    '    Array.Resize(s, stcounter)
+    '    Return s
+    'End Function
 
 
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles INSTALL.Click
@@ -247,7 +260,7 @@ System.IO.FileAccess.Read)
         Dim trans As String = ""
         If My.Computer.Network.IsAvailable Then
             Dim installpath As String = findpsp()
-            Dim temp() As String = {"\seplugins\TempAR\tempar.prx", "\seplugins\TempAR\tempar_lite.prx", "\seplugins\TempAR\tempar_autooff.prx"}
+            'Dim temp() As String = {"\seplugins\TempAR\tempar.prx", "\seplugins\TempAR\tempar_lite.prx", "\seplugins\TempAR\tempar_autooff.prx"}
             Dim builddate As String = Nothing
 
             'サーバーのホスト名とポート番号
@@ -316,8 +329,27 @@ System.IO.FileAccess.Read)
                 If data = True Then
                     Dim fileName As String = "tmp.zip"
                     getweb(fileName, My.Settings.tempar)
-                    Dim s As String() = analyzlanguagepath(fileName)
-                    unzip(fileName)
+                    'Dim s As String() = analyzlanguagepath(fileName)
+                    Dim s As String() = unzip(fileName)
+                    If s.Length = 0 Then
+                        TextBox1.Text = "TEMPARの取得に失敗しました"
+                        Exit Sub
+                    End If
+                    Dim temp(s.Length - 1) As String
+                    Dim lang(s.Length - 1) As String
+                    Dim t As Integer = 0, l As Integer = 0
+                    For i = 0 To s.Length - 1
+                        If s(i).Contains(".prx") Then
+                            temp(t) = s(i)
+                            t += 1
+                        ElseIf s(i).Contains(".bin") Then
+                            lang(l) = s(i)
+                            l += 1
+                        End If
+                    Next
+                    Array.Resize(temp, t)
+                    Array.Resize(lang, l)
+
                     builddate = getdate(Application.StartupPath & temp(0))
                     '"から応答がありました、送信を開始します"
                     If My.Application.Culture.Name = "ja-JP" Then
@@ -351,56 +383,53 @@ System.IO.FileAccess.Read)
                     SendData(ns, "TYPE I" & vbCrLf)
                     TextBox1.Text &= ReceiveData(ns)
 
-                    upload(ns, temp(0))
-                    upload(ns, temp(1))
-                    If temp162.Checked = True Then
-                        upload(ns, temp(2))
-                    End If
+                    For i = 0 To t - 1
+                        upload(ns, temp(i))
+                    Next
+
                     If langupdate.Checked = True Then
                         SendData(ns, "CWD " & ftpdir & "/languages" & vbCrLf)
                         TextBox1.Text &= ReceiveData(ns)
 
-                        For i = 0 To s.Length - 1
+                        For i = 0 To l - 1
                             If My.Application.Culture.Name = "ja-JP" Then
-                                If s(i).Contains("ja") Then
-                                    s(i) = s(i).Replace("/", "\")
-                                    upload(ns, "\" & s(i))
+                                If lang(i).Contains("ja") Then
+                                    upload(ns, lang(i))
                                 End If
                             Else
-                                If Not s(i).Contains("ja") Then
-                                    s(i) = s(i).Replace("/", "\")
-                                    upload(ns, "\" & s(i))
+                                If Not lang(i).Contains("ja") Then
+                                    upload(ns, lang(i))
                                 End If
                             End If
                         Next
 
-                End If
+                    End If
 
-                SendData(ns, "QUIT" + vbCrLf)
-                ns.Close()
-                tcp.Close()
-                My.Settings.lastprx = builddate
+                    SendData(ns, "QUIT" + vbCrLf)
+                    ns.Close()
+                    tcp.Close()
+                    My.Settings.lastprx = builddate
 
-                '"アップロードが完了しました"
-                If My.Application.Culture.Name = "ja-JP" Then
-                    trans = My.Resources.s11
+                    '"アップロードが完了しました"
+                    If My.Application.Culture.Name = "ja-JP" Then
+                        trans = My.Resources.s11
+                    Else
+                        trans = My.Resources.s11_e
+                    End If
+                    TextBox1.Text &= trans & vbCrLf
+                    System.Media.SystemSounds.Asterisk.Play()
                 Else
-                    trans = My.Resources.s11_e
+                    ns.Close()
+                    tcp.Close()
+                    'デーモンじゃない
+                    If My.Application.Culture.Name = "ja-JP" Then
+                        trans = My.Resources.s12
+                    Else
+                        trans = My.Resources.s12_e
+                    End If
+                    TextBox1.Text = IPBox.Text & trans & vbCrLf
+                    System.Media.SystemSounds.Exclamation.Play()
                 End If
-                TextBox1.Text &= trans & vbCrLf
-                System.Media.SystemSounds.Asterisk.Play()
-            Else
-                ns.Close()
-                tcp.Close()
-                'デーモンじゃない
-                If My.Application.Culture.Name = "ja-JP" Then
-                    trans = My.Resources.s12
-                Else
-                    trans = My.Resources.s12_e
-                End If
-                TextBox1.Text = IPBox.Text & trans & vbCrLf
-                System.Media.SystemSounds.Exclamation.Play()
-            End If
 
         ElseIf installpath <> "" Then
             'PSPが見つかりました,temparのダウンロードを開始します
@@ -412,8 +441,27 @@ System.IO.FileAccess.Read)
             TextBox1.Text = trans & vbCrLf
             Dim fileName As String = "tmp.zip"
             getweb(fileName, My.Settings.tempar)
-            Dim s As String() = analyzlanguagepath(fileName)
-            unzip(fileName)
+                'Dim s As String() = analyzlanguagepath(fileName)
+                Dim s As String() = unzip(fileName)
+                If s.Length = 0 Then
+                    TextBox1.Text = "TEMPARの取得に失敗しました"
+                    Exit Sub
+                End If
+                Dim temp(s.Length - 1) As String
+                Dim lang(s.Length - 1) As String
+                Dim t As Integer = 0, l As Integer = 0
+                For i = 0 To s.Length - 1
+                    If s(i).Contains(".prx") Then
+                        temp(t) = s(i)
+                        t += 1
+                    ElseIf s(i).Contains(".bin") Then
+                        lang(l) = s(i)
+                        l += 1
+                    End If
+                Next
+                Array.Resize(temp, t)
+                Array.Resize(lang, l)
+
             builddate = getdate(Application.StartupPath & temp(0))
 
             'をPSPにコピーしています...
@@ -422,13 +470,17 @@ System.IO.FileAccess.Read)
             Else
                 trans = My.Resources.s3_e
             End If
-            TextBox1.Text &= "TEMPAR " & builddate & trans & vbCrLf
-            For i = 0 To 1
-                File.Copy(Application.StartupPath & temp(i), installpath & My.Settings.usbpath & temp(i).Replace("\seplugins\TempAR", ""), True)
-            Next
-            If My.Settings.tempar.Contains("1.62") Then
-                File.Copy(Application.StartupPath & temp(2), installpath & My.Settings.usbpath & temp(2).Replace("\seplugins\TempAR", ""), True)
-            End If
+                TextBox1.Text &= "TEMPAR " & builddate & trans & vbCrLf
+                Dim z As Integer = 0
+                Dim ss As String = ""
+                For i = 0 To t - 1
+                    z = temp(i).LastIndexOf("\")
+                    If z > 0 Then
+                        ss = temp(i).Substring(z, temp(i).Length - z)
+                        File.Copy(Application.StartupPath & temp(i), installpath & My.Settings.usbpath & ss, True)
+                    End If
+                Next
+
             If My.Settings.tempar.Contains("1.63") AndAlso langupdate.Checked = True Then
                 '"ランゲージファイルをコピーしています"
                 If My.Application.Culture.Name = "ja-JP" Then
@@ -439,27 +491,25 @@ System.IO.FileAccess.Read)
                 TextBox1.Text &= trans & vbCrLf
                 Dim temptxt As String = My.Settings.usbpath & "\languages\"
                 temptxt = temptxt.Replace("/", "\")
-                Dim z As Integer
-                Dim ss As String
-                For i = 0 To s.Length - 1
-                    If My.Application.Culture.Name = "ja-JP" Then
-                        If s(i).Contains("ja") Then
-                            z = s(i).LastIndexOf("/") + 1
-                            If z > 0 Then
-                                ss = s(i).Substring(z, s(i).Length - z)
-                                File.Copy(Application.StartupPath & "\" & s(i), installpath & temptxt & ss, True)
+                    For i = 0 To l - 1
+                        If My.Application.Culture.Name = "ja-JP" Then
+                            If lang(i).Contains("ja") Then
+                                z = lang(i).LastIndexOf("\")
+                                If z > 0 Then
+                                    ss = lang(i).Substring(z, lang(i).Length - z)
+                                    File.Copy(Application.StartupPath & lang(i), installpath & temptxt & ss, True)
+                                End If
+                            End If
+                        Else
+                            If Not lang(i).Contains("ja") Then
+                                z = lang(i).LastIndexOf("\")
+                                If z > 0 Then
+                                    ss = lang(i).Substring(z, lang(i).Length - z)
+                                    File.Copy(Application.StartupPath & lang(i), installpath & temptxt & ss, True)
+                                End If
                             End If
                         End If
-                    Else
-                        If Not s(i).Contains("ja") Then
-                                z = s(i).LastIndexOf("\")
-                            If z > 0 Then
-                                ss = s(i).Substring(z, s(i).Length - z)
-                                File.Copy(Application.StartupPath & "\" & s(i), installpath & temptxt & ss, True)
-                            End If
-                        End If
-                    End If
-                Next
+                    Next
             End If
             '"インストールが完了しました"
             If My.Application.Culture.Name = "ja-JP" Then
@@ -657,8 +707,12 @@ System.IO.FileAccess.Read)
         End If
         Dim fileName As String = "tmp.zip"
         getweb(fileName, My.Settings.tempar)
-        analyzlanguagepath(fileName)
-        unzip(fileName)
+        'analyzlanguagepath(fileName)
+        Dim s As String() = unzip(fileName)
+        If s.Length = 0 Then
+            TextBox1.Text &= "の取得に失敗しました"
+            Exit Sub
+        End If
         Dim trans As String
         '" がリリースされてます"
         If My.Application.Culture.Name = "ja-JP" Then
@@ -666,8 +720,18 @@ System.IO.FileAccess.Read)
         Else
             trans = My.Resources.s9_e
         End If
-        Dim s As String = getdate(Application.StartupPath & "\seplugins\TempAR\tempar.prx")
-        TextBox1.Text &= s & trans
+        Dim temp(s.Length - 1) As String
+        Dim t As Integer = 0, l As Integer = 0
+        For i = 0 To s.Length - 1
+            If s(i).Contains(".prx") Then
+                temp(t) = s(i)
+                t += 1
+            End If
+        Next
+        Array.Resize(temp, t)
+
+        Dim ss As String = getdate(Application.StartupPath & temp(0))
+        TextBox1.Text &= ss & trans
         System.Media.SystemSounds.Asterisk.Play()
     End Sub
 
