@@ -4,6 +4,7 @@ Imports System.Text.RegularExpressions
 Imports System.Globalization
 Imports System.Threading
 Imports System.Net.Sockets
+Imports Microsoft.VisualBasic
 
 Public Class Form1
     Friend Shared back As String = My.Settings.pspipaddress
@@ -190,6 +191,57 @@ System.IO.FileAccess.Read)
         Return builddate.Replace(vbNullChar, "") & vbCrLf & "MD5;" & md5hash
     End Function
 
+    'ZIPアーカイブからパスだけ抽出
+    Function analyzlanguagepath(ByVal path As String) As String()
+        Dim s(255) As String
+        Dim fs As New System.IO.FileStream(path, System.IO.FileMode.Open, System.IO.FileAccess.Read)
+        Dim bs(CInt(fs.Length - 1)) As Byte
+        fs.Read(bs, 0, bs.Length)
+        fs.Close()
+        Dim i As Integer = 0
+        Dim cmpsize(3) As Byte
+        Dim dirlen(3) As Byte
+        Dim exlen(3) As Byte
+        Dim name As Byte() = Nothing
+        Dim stcounter As Integer = 0
+        Dim namelen As Integer = 0
+        Dim cmplen As Integer = 0
+        Dim extra As Integer = 0
+        Dim buffer As String
+        Dim skip As Integer = 0
+
+        While i < bs.Length
+
+            'セントラルDIRでフィニッシュです
+            If bs(i) = &H50 AndAlso bs(i + 1) = &H4B AndAlso bs(i + 2) = 1 AndAlso bs(i + 3) = 2 Then
+                Exit While
+            End If
+
+            Array.ConstrainedCopy(bs, i + 18, cmpsize, 0, 4)
+            Array.ConstrainedCopy(bs, i + 26, dirlen, 0, 2)
+            Array.ConstrainedCopy(bs, i + 28, exlen, 0, 2)
+            cmplen = BitConverter.ToInt32(cmpsize, 0)
+            namelen = BitConverter.ToInt32(dirlen, 0)
+            extra = BitConverter.ToInt32(exlen, 0)
+            skip = 30 + namelen + cmplen + extra
+            Array.Resize(name, namelen)
+            Array.ConstrainedCopy(bs, i + 30, name, 0, namelen)
+            buffer = System.Text.Encoding.GetEncoding(932).GetString(name)
+
+
+            If buffer.Contains("/languages/") AndAlso buffer.Contains(".bin") Then
+                s(stcounter) = buffer
+                stcounter += 1
+            End If
+            i += skip
+
+        End While
+        Array.Resize(s, stcounter)
+        Return s
+    End Function
+
+
+
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles INSTALL.Click
         TextBox1.Text = ""
         Dim trans As String = ""
@@ -264,6 +316,7 @@ System.IO.FileAccess.Read)
                 If data = True Then
                     Dim fileName As String = "tmp.zip"
                     getweb(fileName, My.Settings.tempar)
+                    Dim s As String() = analyzlanguagepath(fileName)
                     unzip(fileName)
                     builddate = getdate(Application.StartupPath & temp(0))
                     '"から応答がありました、送信を開始します"
@@ -306,128 +359,147 @@ System.IO.FileAccess.Read)
                     If langupdate.Checked = True Then
                         SendData(ns, "CWD " & ftpdir & "/languages" & vbCrLf)
                         TextBox1.Text &= ReceiveData(ns)
-                        If My.Application.Culture.Name = "ja-JP" Then
-                            upload(ns, "\seplugins\TempAR\languages\ja_font.bin")
-                            upload(ns, "\seplugins\TempAR\languages\ja_strings.bin")
-                        Else
-                            upload(ns, "\seplugins\TempAR\languages\language1_font.bin")
-                            upload(ns, "\seplugins\TempAR\languages\language1_strings.bin")
-                            upload(ns, "\seplugins\TempAR\languages\language2_strings.bin")
-                        End If
-                    End If
 
-                        SendData(ns, "QUIT" + vbCrLf)
-                        ns.Close()
-                        tcp.Close()
-                        My.Settings.lastprx = builddate
-
-                        '"アップロードが完了しました"
-                        If My.Application.Culture.Name = "ja-JP" Then
-                            trans = My.Resources.s11
-                        Else
-                            trans = My.Resources.s11_e
-                        End If
-                        TextBox1.Text &= trans & vbCrLf
-                        System.Media.SystemSounds.Asterisk.Play()
-                    Else
-                        ns.Close()
-                        tcp.Close()
-                        'デーモンじゃない
-                        If My.Application.Culture.Name = "ja-JP" Then
-                            trans = My.Resources.s12
-                        Else
-                            trans = My.Resources.s12_e
-                        End If
-                        TextBox1.Text = IPBox.Text & trans & vbCrLf
-                        System.Media.SystemSounds.Exclamation.Play()
-                    End If
-
-                ElseIf installpath <> "" Then
-                    'PSPが見つかりました,temparのダウンロードを開始します
-                    If My.Application.Culture.Name = "ja-JP" Then
-                        trans = My.Resources.s2
-                    Else
-                        trans = My.Resources.s2_e
-                    End If
-                    TextBox1.Text = trans & vbCrLf
-                    Dim fileName As String = "tmp.zip"
-                    getweb(fileName, My.Settings.tempar)
-                    unzip(fileName)
-                    builddate = getdate(Application.StartupPath & temp(0))
-
-                    'をPSPにコピーしています...
-                    If My.Application.Culture.Name = "ja-JP" Then
-                        trans = My.Resources.s3
-                    Else
-                        trans = My.Resources.s3_e
-                    End If
-                    TextBox1.Text &= "TEMPAR " & builddate & trans & vbCrLf
-                    For i = 0 To 1
-                        File.Copy(Application.StartupPath & temp(i), installpath & My.Settings.usbpath & temp(i).Replace("\seplugins\TempAR", ""), True)
-                    Next
-                    If My.Settings.tempar.Contains("1.62") Then
-                        File.Copy(Application.StartupPath & temp(2), installpath & My.Settings.usbpath & temp(2).Replace("\seplugins\TempAR", ""), True)
-                    End If
-                    If My.Settings.tempar.Contains("1.63") AndAlso langupdate.Checked = True Then
-                        '"ランゲージファイルをコピーしています"
-                        If My.Application.Culture.Name = "ja-JP" Then
-                            trans = My.Resources.s4
-                        Else
-                            trans = My.Resources.s4_e
-                        End If
-                        TextBox1.Text &= trans & vbCrLf
-                        Dim temptxt As String = My.Settings.usbpath & "\languages\"
-                    temptxt = temptxt.Replace("/", "\")
-
-                    If My.Application.Culture.Name = "ja-JP" Then
-                        File.Copy(Application.StartupPath & "\seplugins\TempAR\languages\ja.bin", installpath & temptxt & "ja.bin", True)
-                        'File.Copy(Application.StartupPath & "\seplugins\TempAR\languages\ja_strings.bin", installpath & temptxt & "ja_strings.bin", True)
-                    Else
-                        File.Copy(Application.StartupPath & "\seplugins\TempAR\languages\fr.bin", installpath & temptxt & "fr.bin", True)
-                        File.Copy(Application.StartupPath & "\seplugins\TempAR\languages\language1.bin", installpath & temptxt & "language1.bin", True)
-                        File.Copy(Application.StartupPath & "\seplugins\TempAR\languages\language2.bin", installpath & temptxt & "language2.bin", True)
-                    End If
+                        For i = 0 To s.Length - 1
+                            If My.Application.Culture.Name = "ja-JP" Then
+                                If s(i).Contains("ja") Then
+                                    s(i) = s(i).Replace("/", "\")
+                                    upload(ns, "\" & s(i))
+                                End If
+                            Else
+                                If Not s(i).Contains("ja") Then
+                                    s(i) = s(i).Replace("/", "\")
+                                    upload(ns, "\" & s(i))
+                                End If
+                            End If
+                        Next
 
                 End If
-                    '"インストールが完了しました"
-                    If My.Application.Culture.Name = "ja-JP" Then
-                        trans = My.Resources.s5
-                    Else
-                        trans = My.Resources.s5_e
-                    End If
-                    TextBox1.Text &= trans
-                    My.Settings.lastprx = builddate
-                    System.Media.SystemSounds.Asterisk.Play()
-                Else
-                    '"メモリースティックフォーマット時自動生成されるPSPフォルダとMEMSTICK.INDが見つかりませんでした"
-                    If My.Application.Culture.Name = "ja-JP" Then
-                        trans = My.Resources.s6
-                    Else
-                        trans = My.Resources.s6_e
-                    End If
-                    TextBox1.Text = trans & vbCrLf
 
-                    '"隠しファイルMEMSTICK.INDがない場合はメモリースティックのルートに作成してください"
-                    If My.Application.Culture.Name = "ja-JP" Then
-                        trans = My.Resources.s7
-                    Else
-                        trans = My.Resources.s7_e
-                    End If
-                    TextBox1.Text &= trans
-                    ProgressBar1.Value = 0
-                    System.Media.SystemSounds.Exclamation.Play()
-                End If
-            Else
-                '"インターネットに接続されてません"
+                SendData(ns, "QUIT" + vbCrLf)
+                ns.Close()
+                tcp.Close()
+                My.Settings.lastprx = builddate
+
+                '"アップロードが完了しました"
                 If My.Application.Culture.Name = "ja-JP" Then
-                    trans = My.Resources.s8
+                    trans = My.Resources.s11
                 Else
-                    trans = My.Resources.s8_e
+                    trans = My.Resources.s11_e
                 End If
-                TextBox1.Text = trans
-                ProgressBar1.Value = 0
-
+                TextBox1.Text &= trans & vbCrLf
+                System.Media.SystemSounds.Asterisk.Play()
+            Else
+                ns.Close()
+                tcp.Close()
+                'デーモンじゃない
+                If My.Application.Culture.Name = "ja-JP" Then
+                    trans = My.Resources.s12
+                Else
+                    trans = My.Resources.s12_e
+                End If
+                TextBox1.Text = IPBox.Text & trans & vbCrLf
                 System.Media.SystemSounds.Exclamation.Play()
+            End If
+
+        ElseIf installpath <> "" Then
+            'PSPが見つかりました,temparのダウンロードを開始します
+            If My.Application.Culture.Name = "ja-JP" Then
+                trans = My.Resources.s2
+            Else
+                trans = My.Resources.s2_e
+            End If
+            TextBox1.Text = trans & vbCrLf
+            Dim fileName As String = "tmp.zip"
+            getweb(fileName, My.Settings.tempar)
+            Dim s As String() = analyzlanguagepath(fileName)
+            unzip(fileName)
+            builddate = getdate(Application.StartupPath & temp(0))
+
+            'をPSPにコピーしています...
+            If My.Application.Culture.Name = "ja-JP" Then
+                trans = My.Resources.s3
+            Else
+                trans = My.Resources.s3_e
+            End If
+            TextBox1.Text &= "TEMPAR " & builddate & trans & vbCrLf
+            For i = 0 To 1
+                File.Copy(Application.StartupPath & temp(i), installpath & My.Settings.usbpath & temp(i).Replace("\seplugins\TempAR", ""), True)
+            Next
+            If My.Settings.tempar.Contains("1.62") Then
+                File.Copy(Application.StartupPath & temp(2), installpath & My.Settings.usbpath & temp(2).Replace("\seplugins\TempAR", ""), True)
+            End If
+            If My.Settings.tempar.Contains("1.63") AndAlso langupdate.Checked = True Then
+                '"ランゲージファイルをコピーしています"
+                If My.Application.Culture.Name = "ja-JP" Then
+                    trans = My.Resources.s4
+                Else
+                    trans = My.Resources.s4_e
+                End If
+                TextBox1.Text &= trans & vbCrLf
+                Dim temptxt As String = My.Settings.usbpath & "\languages\"
+                temptxt = temptxt.Replace("/", "\")
+                Dim z As Integer
+                Dim ss As String
+                For i = 0 To s.Length - 1
+                    If My.Application.Culture.Name = "ja-JP" Then
+                        If s(i).Contains("ja") Then
+                            z = s(i).LastIndexOf("/") + 1
+                            If z > 0 Then
+                                ss = s(i).Substring(z, s(i).Length - z)
+                                File.Copy(Application.StartupPath & "\" & s(i), installpath & temptxt & ss, True)
+                            End If
+                        End If
+                    Else
+                        If Not s(i).Contains("ja") Then
+                                z = s(i).LastIndexOf("\")
+                            If z > 0 Then
+                                ss = s(i).Substring(z, s(i).Length - z)
+                                File.Copy(Application.StartupPath & "\" & s(i), installpath & temptxt & ss, True)
+                            End If
+                        End If
+                    End If
+                Next
+            End If
+            '"インストールが完了しました"
+            If My.Application.Culture.Name = "ja-JP" Then
+                trans = My.Resources.s5
+            Else
+                trans = My.Resources.s5_e
+            End If
+            TextBox1.Text &= trans
+            My.Settings.lastprx = builddate
+            System.Media.SystemSounds.Asterisk.Play()
+        Else
+            '"メモリースティックフォーマット時自動生成されるPSPフォルダとMEMSTICK.INDが見つかりませんでした"
+            If My.Application.Culture.Name = "ja-JP" Then
+                trans = My.Resources.s6
+            Else
+                trans = My.Resources.s6_e
+            End If
+            TextBox1.Text = trans & vbCrLf
+
+            '"隠しファイルMEMSTICK.INDがない場合はメモリースティックのルートに作成してください"
+            If My.Application.Culture.Name = "ja-JP" Then
+                trans = My.Resources.s7
+            Else
+                trans = My.Resources.s7_e
+            End If
+            TextBox1.Text &= trans
+            ProgressBar1.Value = 0
+            System.Media.SystemSounds.Exclamation.Play()
+        End If
+            Else
+        '"インターネットに接続されてません"
+        If My.Application.Culture.Name = "ja-JP" Then
+            trans = My.Resources.s8
+        Else
+            trans = My.Resources.s8_e
+        End If
+        TextBox1.Text = trans
+        ProgressBar1.Value = 0
+
+        System.Media.SystemSounds.Exclamation.Play()
             End If
     End Sub
 
@@ -585,6 +657,7 @@ System.IO.FileAccess.Read)
         End If
         Dim fileName As String = "tmp.zip"
         getweb(fileName, My.Settings.tempar)
+        analyzlanguagepath(fileName)
         unzip(fileName)
         Dim trans As String
         '" がリリースされてます"
@@ -597,6 +670,7 @@ System.IO.FileAccess.Read)
         TextBox1.Text &= s & trans
         System.Media.SystemSounds.Asterisk.Play()
     End Sub
+
 
     Private Sub CheckBox2_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lockdriveletter.CheckedChanged
 
