@@ -30,6 +30,12 @@ Public Class Form1
             hiragana = hiragana.Insert(7, "GO")
         End If
 
+        If cfont.Checked = True AndAlso File.Exists(My.Settings.cfont) = False Then
+            System.Media.SystemSounds.Beep.Play()
+            MessageBox.Show("カスタムフォントが存在しません", "エラー")
+        End If
+
+
         If installpath <> "" Then
 
             If My.Computer.FileSystem.DirectoryExists(installpath & "seplugins") = False Then
@@ -40,18 +46,36 @@ Public Class Form1
                 For i = 0 To 1
                     File.Copy(Application.StartupPath & mode & meinst(i), installpath & "seplugins\" & meinst(i), True)
                 Next
-                File.Copy(Application.StartupPath & mode & hiragana & meinst(2), installpath & "seplugins\" & meinst(2), True)
+                If cfont.Checked = True Then
+                    File.Copy(My.Settings.cfont, installpath & "seplugins\" & meinst(2), True)
+                Else
+                    File.Copy(Application.StartupPath & mode & hiragana & meinst(2), installpath & "seplugins\" & meinst(2), True)
+                End If
             Else
                 For i = 0 To 1
                     File.Copy(Application.StartupPath & mode & proinst(i), installpath & "seplugins\" & proinst(i), True)
                 Next
-                File.Copy(Application.StartupPath & mode & hiragana & proinst(2), installpath & "seplugins\" & proinst(2), True)
+
+                If cfont.Checked = True Then
+                    Dim sw As New System.IO.StreamWriter(Application.StartupPath & "\tmp.txt", False, System.Text.Encoding.GetEncoding(0))
+                    Dim psp As String = "ms0:/"
+                    If CFWPROGO.Checked = True Then
+                        psp = "ef0:/"
+                    End If
+                    sw.Write(psp & "seplugins/fonts/" & Path.GetFileNameWithoutExtension(My.Settings.cfont) & ".pf")
+                    sw.Close()
+                    File.Copy(Application.StartupPath & "\tmp.txt", installpath & "seplugins\" & proinst(2), True)
+                Else
+                    File.Copy(Application.StartupPath & mode & hiragana & proinst(2), installpath & "seplugins\" & proinst(2), True)
+                End If
 
                 If My.Computer.FileSystem.DirectoryExists(installpath & "seplugins\fonts") = False Then
                     My.Computer.FileSystem.CreateDirectory(installpath & "seplugins\fonts")
                 End If
 
-                If HIRA.Checked = True Then
+                If cfont.Checked = True Then
+                    File.Copy(My.Settings.cfont, installpath & "seplugins\fonts\" & Path.GetFileNameWithoutExtension(My.Settings.cfont) & ".pf", True)
+                ElseIf HIRA.Checked = True Then
                     File.Copy(Application.StartupPath & mode & proinst(3), installpath & "seplugins\fonts\" & proinst(3), True)
                 Else
                     File.Copy(Application.StartupPath & mode & proinst(4), installpath & "seplugins\fonts\" & proinst(4), True)
@@ -131,7 +155,26 @@ Public Class Form1
         GroupBox3.Enabled = True
     End Sub
 
+    Private Sub cf_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cfont.CheckedChanged
+        If HIRA.Checked = False AndAlso KANA.Checked = False AndAlso cfont.Checked = True AndAlso File.Exists(My.Settings.cfont) = False Then
+            System.Media.SystemSounds.Beep.Play()
+            MessageBox.Show("指定されたフォントファイルが存在しません", "ファイルエラー")
+            GroupBox3.Enabled = False
+        End If
+    End Sub
+
     Private Sub AUTOPSP_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AUTOPSP.CheckedChanged, lockdriveletter.CheckedChanged
         INSTALL.Enabled = True
+    End Sub
+
+    Private Sub Button1_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        Dim ofd As New OpenFileDialog
+        ofd.Filter = "すべてのファイル|*.*"
+        ofd.Title = "開くファイルを選択してください"
+        If ofd.ShowDialog = Windows.Forms.DialogResult.OK Then
+            My.Settings.cfont = ofd.FileName
+            GroupBox3.Enabled = True
+        End If
+
     End Sub
 End Class
