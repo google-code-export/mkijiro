@@ -1,0 +1,350 @@
+<script language="JavaScript">
+	var hexDigits = new Array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'a', 'b', 'c', 'd', 'e', 'f');
+
+	function pad(text, len)
+	{
+		var textLen=text.length;
+		if(textLen  < len)
+		{
+			len-=textLen;
+			while(len > 0)
+			{
+				text='0'+text;
+				len--;
+			}
+		}
+		return text;
+	}
+
+	function decDigi(d, len)
+	{
+		var a=(d>>24) & 0xFF;
+		var b=(d>>16) & 0xFF;
+		var g=(d>>8) & 0xFF;
+		var r=d & 0xFF;
+		var text=pad(a.toString(16), 2) + pad(b.toString(16), 2) + pad(g.toString(16), 2) + pad(r.toString(16), 2);
+		text=text.toUpperCase();
+		text=text.substr(8-len, len);
+		text='0x'+text;
+		return text;
+	}
+
+	function charDigi(c)
+	{
+		var counter=0;
+		while(hexDigits[counter] != c) {
+			counter++;
+			if(counter > 21)
+			{
+				return 0;
+			}
+		}
+		if(counter > 15) {
+			counter-=6;
+		}
+		return counter;
+	}
+
+	function doHex(text) {
+		text=text + '\n_X';
+		var counter = 0;
+		var size = text.length;
+		var commentMode=0;
+		var nameMode=0;
+		var headMode=0;
+		var addressMode=0;
+		var valueMode=0;
+		var funcOut="";
+		var funcOutSect="";
+		var header=0;
+		var address=0;
+		var value=0;
+		var pointerct=0;
+		var pointerct2=0;
+		var bittype=0;
+		var mode=0;
+		var multipt="";
+		var swap=0;
+		var mask=0;
+		var cwc="";
+		var ar="";
+		var nameback="";
+		var bitField=0;
+		var bkAddress=0;
+		var bkValue=0;
+		var bkDecompress=0;
+		var errorMode=0;
+
+		//Convert what's given
+		while (counter < size) {
+			letC = text.substr(counter,1);
+			letN = text.substr(counter+1,1);
+			letF = text.substr(counter+2,1);
+
+			if((letC == '_') && (letN == 'C') && (letF == 'N') && (nameMode==0) && (commentMode==0) && (addressMode==0)  && (valueMode==0))
+			{
+				errorMode=0;
+			}
+			if((letC == '_') && (letN == 'X') && (counter == size-2))
+			{
+				funcOut=funcOut + funcOutSect;
+				counter++;
+			}
+
+			if(((letC == '\r') || (letC == '\n')) || (errorMode==1))
+			{
+				if(nameMode == 1)
+				{
+					funcOut=funcOut +nameback+ '(CWCheat)\n';
+					ar="_C0 "+nameback+ '(PSPAR)\n';
+				}
+				commentMode=0;
+				nameMode=0;
+				addressMode=0;
+				valueMode=0;
+			}
+			else if((letC == '_') && (letN == 'C') && (letF == 'N')  && (nameMode==0) && (commentMode==0) && (addressMode==0)  && (valueMode==0))
+			{
+				errorMode=0;
+				nameMode=1;
+				if(letF == '0')
+				{
+					counter+=3;
+				}
+				else
+				{
+					counter+=4;
+				}
+				if(funcOut != "")
+				{
+					funcOut=funcOut + funcOutSect + '\n_C0 ';
+				}
+				else
+				{
+					funcOut='_C0 ';
+				}
+				funcOutSect="";
+			}
+			else if(nameMode == 1)
+			{
+				if((letC != '!') && (letC != '#')) {
+					//funcOut=funcOut + letC;
+					nameback = nameback + letC;
+				}
+			}
+			else if((letC == '_') && (letN == 'P')&& (letF == 'I')  && (nameMode==0) && (commentMode==0) && (addressMode==0)  && (valueMode==0))
+			{
+				headMode=1;
+				header=0;
+				address=0;
+				value=0;
+				pointerct++;
+				mode=1;
+			}
+			else if((letC == '_') && (letN == 'P')&& (letF == 'T')  && (nameMode==0) && (commentMode==0) && (addressMode==0)  && (valueMode==0))
+			{
+				headMode=1;
+				header=0;
+				address=0;
+				value=0;
+				pointerct++;
+				mode=3;
+			}
+			else if((letC == '_') && (letN == 'P')&& (letF == 'W')  && (nameMode==0) && (commentMode==0) && (addressMode==0)  && (valueMode==0))
+			{
+				headMode=1;
+				header=0;
+				address=0;
+				value=0;
+				mode=2;
+			}
+			else if(headMode == 1)
+			{
+				if((letC == '0') && (letN == 'x'))
+				{
+					headMode =2;
+					bitField=0;
+					counter++;
+				}
+			}
+			else if(headMode == 2)
+			{
+				if(letC == ' ')
+				{
+					headMode = 0;
+					addressMode=1;
+					valueMode=0;
+					value=0;
+				}
+				else
+				{
+					header|=charDigi(letC) * (1 << (4*(7-bitField)));
+					bitField++;
+				}
+			}
+			else if(addressMode == 1)
+			{
+				if((letC == '0') && (letN == 'x'))
+				{
+					addressMode=2;
+					bitField=0;
+					counter++;
+				}
+			}
+			else if(addressMode == 2)
+			{
+				if(letC == ' ')
+				{
+					addressMode=0;
+					valueMode=1;
+					value=0;
+				}
+				else
+				{
+					address|=charDigi(letC) * (1 << (4*(7-bitField)));
+					bitField++;
+				}
+			}
+			else if(valueMode == 1)
+			{
+				if((letC == '0') && (letN == 'x'))
+				{
+					valueMode=2;
+					bitField=0;
+					counter++;
+				}
+			}
+			else if(valueMode == 2)
+			{
+				value|=charDigi(letC) * (1 << (4*(7-bitField)));
+				bitField++;
+				if(bitField == 8)
+				{
+					if(mode==1)
+					{
+							pointerct2=0;
+							address&=0x0FFFFFFF;
+							if(address <0x8800000){
+							address += 0x8800000;
+							}
+							ar=ar+ '_M ' +decDigi(address| 0x60000000, 8) +' 0x00000000\n';
+							ar=ar+ '_M ' +decDigi(address| 0xB0000000, 8)+' 0x00000000\n';
+							address -= 0x8800000;
+							value&=0xFFFFFFFF;
+							cwc=cwc+ '_L ' +decDigi(address| 0x60000000, 8)+' 0xVVVVVVVV\n';
+							valueMode=0;
+					}
+					if(mode==2 && pointerct==1)
+					{
+							address&=0x0FFFFFFF;
+							if((header>>>30)==0){
+							swap= 0x20000000;
+							mask=0xFF;
+							}
+							else if((header>>>30)==1){
+							swap= 0x10000000;
+							mask=0xFFFF;
+							}
+							else{//if((header>>>30)==2){
+							swap= 0;
+							mask=0xFFFFFFFF;
+							}
+							
+							if(((header>>>24)&0xF)!=0){
+							ar=ar+ '_M 0xDC000000 '+decDigi(0x100000000-address, 8) +'\n';
+							ar=ar+ '_M '+decDigi(swap, 8) +' '+decDigi(value&mask, 8) +'\n';
+							pointerct +=0x30000;
+							}
+							else{
+							ar=ar+ '_M ' +decDigi(address|swap, 8)+' '+decDigi(value&mask, 8) +'\n';
+							}
+					ar=ar+ '_M 0xD2000000 0x00000000\n';
+							header = ((header>>>30)<<16)+pointerct;
+							cwc=cwc+'_L ' + decDigi(header, 8)+' '+decDigi(address, 8)+'\n';
+							cwc=cwc.replace("0xVVVVVVVV",decDigi(value&mask, 8));
+							funcOutSect=funcOutSect+cwc+ar
+							valueMode=0;
+							mode=0;
+							cwc="";ar="";multipt="";
+							nameback="";
+							pointerct=0;
+					}
+					if(mode==2 && pointerct>1)
+					{
+							address&=0x0FFFFFFF;
+							if((header>>>30)==0){
+							swap= 0x20000000;
+							mask=0xFF;
+							}
+							else if((header>>>30)==1){
+							swap= 0x10000000;
+							mask=0xFFFF;
+							}
+							else{//if((header>>>30)==2){
+							swap= 0;
+							mask=0xFFFFFFFF;
+							}
+							
+							if(((header>>>24)&0xF)!=0){
+							ar=ar+ '_M 0xDC000000 '+decDigi(0x100000000-address, 8) +'\n';
+							ar=ar+ '_M '+decDigi(swap, 8) +' '+decDigi(value&mask, 8) +'\n';
+							pointerct +=0x30000;
+							}
+							else{
+							ar=ar+ '_M ' +decDigi(address|swap, 8)+' '+decDigi(value&mask, 8) +'\n';
+							}
+					ar=ar+ '_M 0xD2000000 0x00000000\n';
+							header = ((header>>>30)<<16)+pointerct;
+							cwc=cwc+'_L ' + decDigi(header, 8)+' '+decDigi(address, 8)+'\n';
+							cwc=cwc.replace("0xVVVVVVVV",decDigi(value&mask, 8));
+							cwc=cwc+multipt;
+							cwc=cwc.replace("0xJJJJJJJJ","0x00000000");
+							funcOutSect=funcOutSect+cwc+ar
+							valueMode=0;
+							mode=0;
+							cwc="";ar="";multipt="";
+							nameback="";
+							pointerct=0;
+					}
+					if(mode==3)
+					{
+							address&=0x0FFFFFFF;
+						if(((header>>>24)&0xF)==0){
+					ar=ar+ '_M ' +decDigi(address| 0xB0000000, 8) +' 0x00000000\n';
+						address= 0x20000000 | address;
+						}
+						else{
+					ar=ar+ '_M 0xDC000000 ' +decDigi(0x100000000-address, 8) +'\n';
+					ar=ar+ '_M 0xB0000000 0x00000000\n';
+						address= 0x30000000 | address;
+						}
+						if((pointerct2&1)==0){
+					multipt = multipt + '_L 0xIIIIIIII 0xJJJJJJJJ\n';
+					multipt = multipt.replace("0xIIIIIIII",decDigi(address, 8));
+						}
+						if((pointerct2&1)==1){
+					multipt = multipt.replace("0xJJJJJJJJ",decDigi(address, 8));
+						}
+						pointerct2++;
+					}
+				}
+			}
+			counter++;
+		}
+
+		document.cvcode.elements[0].value = funcOut;
+
+		return false;
+	}
+</script>
+
+<center><font size="5" color="#C0F060"><b>SANiK's CVT_MOD;PEMTAN→CWC/PSPARぽいんた変換<br></b></font>
+<form name="asc2hex">
+PMETANぽいんたコード:<br><textarea name="text" rows="10" cols="50"></textarea><br>
+<input type="Submit" value="Convert" Generate" onclick="doHex(document.asc2hex.text.value);return false"><br>
+</form>
+CWC/PSPARぽいんたこーど:<br>
+<form name="cvcode">
+<textarea name="text" rows="10" cols="50"></textarea>
+</form>
+</center>
