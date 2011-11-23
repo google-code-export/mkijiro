@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="WindowsApplication1">
+</Property><Property Name="ソリューション ファイル" Value="G:\PSP\MPS+\Code\MPSE_SRC\MPSE\WindowsApplication1\WindowsApplication1.sln">
+</Property><Property Name="ユーザー オプション ファイル" Value="G:\PSP\MPS+\Code\MPSE_SRC\MPSE\WindowsApplication1\WindowsApplication1.suo">
+</Property><Property Name="Date" Value="2011年11月21日">
+</Property><Property Name="Time" Value="23:33">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="WindowsApplication1.sln" Description="ファイルは正常に G:\PSP\MPS+\Code\MPSE_SRC\MPSE\WindowsApplication1\Backup\WindowsApplication1.sln としてバックアップされました。">
+</Event><Event ErrorLevel="0" Project="" Source="WindowsApplication1.suo" Description="ファイルは正常に G:\PSP\MPS+\Code\MPSE_SRC\MPSE\WindowsApplication1\Backup\WindowsApplication1.suo としてバックアップされました。">
+</Event><Event ErrorLevel="0" Project="WindowsApplication1" Source="WindowsApplication1.vbproj" Description="プロジェクト ファイルは正常に G:\PSP\MPS+\Code\MPSE_SRC\MPSE\WindowsApplication1\Backup\WindowsApplication1.vbproj としてバックアップされました。">
+</Event><Event ErrorLevel="0" Project="WindowsApplication1" Source="WindowsApplication1.vbproj.user" Description="プロジェクト ユーザー ファイルは正常に G:\PSP\MPS+\Code\MPSE_SRC\MPSE\WindowsApplication1\Backup\WindowsApplication1.vbproj.user としてバックアップされました。">
+</Event><Event ErrorLevel="0" Project="WindowsApplication1" Source="CODE_SET.Designer.vb" Description="ファイルは正常に G:\PSP\MPS+\Code\MPSE_SRC\MPSE\WindowsApplication1\Backup\CODE_SET.Designer.vb としてバックアップされました。">
+</Event><Event ErrorLevel="0" Project="WindowsApplication1" Source="CODE_SET.vb" Description="ファイルは正常に G:\PSP\MPS+\Code\MPSE_SRC\MPSE\WindowsApplication1\Backup\CODE_SET.vb としてバックアップされました。">
+</Event><Event ErrorLevel="0" Project="WindowsApplication1" Source="MSG_RST.Designer.vb" Description="ファイルは正常に G:\PSP\MPS+\Code\MPSE_SRC\MPSE\WindowsApplication1\Backup\MSG_RST.Designer.vb としてバックアップされました。">
+</Event><Event ErrorLevel="0" Project="WindowsApplication1" Source="MSG_RST.vb" Description="ファイルは正常に G:\PSP\MPS+\Code\MPSE_SRC\MPSE\WindowsApplication1\Backup\MSG_RST.vb としてバックアップされました。">
+</Event><Event ErrorLevel="0" Project="WindowsApplication1" Source="MAIN.vb" Description="ファイルは正常に G:\PSP\MPS+\Code\MPSE_SRC\MPSE\WindowsApplication1\Backup\MAIN.vb としてバックアップされました。">
+</Event><Event ErrorLevel="0" Project="WindowsApplication1" Source="MAIN.Designer.vb" Description="ファイルは正常に G:\PSP\MPS+\Code\MPSE_SRC\MPSE\WindowsApplication1\Backup\MAIN.Designer.vb としてバックアップされました。">
+</Event><Event ErrorLevel="0" Project="WindowsApplication1" Source="My Project\AssemblyInfo.vb" Description="ファイルは正常に G:\PSP\MPS+\Code\MPSE_SRC\MPSE\WindowsApplication1\Backup\My Project\AssemblyInfo.vb としてバックアップされました。">
+</Event><Event ErrorLevel="0" Project="WindowsApplication1" Source="My Project\Application.Designer.vb" Description="ファイルは正常に G:\PSP\MPS+\Code\MPSE_SRC\MPSE\WindowsApplication1\Backup\My Project\Application.Designer.vb としてバックアップされました。">
+</Event><Event ErrorLevel="0" Project="WindowsApplication1" Source="My Project\Resources.Designer.vb" Description="ファイルは正常に G:\PSP\MPS+\Code\MPSE_SRC\MPSE\WindowsApplication1\Backup\My Project\Resources.Designer.vb としてバックアップされました。">
+</Event><Event ErrorLevel="0" Project="WindowsApplication1" Source="My Project\Settings.Designer.vb" Description="ファイルは正常に G:\PSP\MPS+\Code\MPSE_SRC\MPSE\WindowsApplication1\Backup\My Project\Settings.Designer.vb としてバックアップされました。">
+</Event><Event ErrorLevel="0" Project="WindowsApplication1" Source="app.config" Description="ファイルは正常に G:\PSP\MPS+\Code\MPSE_SRC\MPSE\WindowsApplication1\Backup\app.config としてバックアップされました。">
+</Event><Event ErrorLevel="0" Project="WindowsApplication1" Source="My Project\app.manifest" Description="ファイルは正常に G:\PSP\MPS+\Code\MPSE_SRC\MPSE\WindowsApplication1\Backup\My Project\app.manifest としてバックアップされました。">
+</Event><Event ErrorLevel="0" Project="WindowsApplication1" Source="My Project\Application.myapp" Description="ファイルは正常に G:\PSP\MPS+\Code\MPSE_SRC\MPSE\WindowsApplication1\Backup\My Project\Application.myapp としてバックアップされました。">
+</Event><Event ErrorLevel="0" Project="WindowsApplication1" Source="My Project\Settings.settings" Description="ファイルは正常に G:\PSP\MPS+\Code\MPSE_SRC\MPSE\WindowsApplication1\Backup\My Project\Settings.settings としてバックアップされました。">
+</Event><Event ErrorLevel="0" Project="WindowsApplication1" Source="logo.ico" Description="ファイルは正常に G:\PSP\MPS+\Code\MPSE_SRC\MPSE\WindowsApplication1\Backup\logo.ico としてバックアップされました。">
+</Event><Event ErrorLevel="0" Project="WindowsApplication1" Source="CODE_SET.resx" Description="ファイルは正常に G:\PSP\MPS+\Code\MPSE_SRC\MPSE\WindowsApplication1\Backup\CODE_SET.resx としてバックアップされました。">
+</Event><Event ErrorLevel="0" Project="WindowsApplication1" Source="MSG_RST.resx" Description="ファイルは正常に G:\PSP\MPS+\Code\MPSE_SRC\MPSE\WindowsApplication1\Backup\MSG_RST.resx としてバックアップされました。">
+</Event><Event ErrorLevel="0" Project="WindowsApplication1" Source="MAIN.resx" Description="ファイルは正常に G:\PSP\MPS+\Code\MPSE_SRC\MPSE\WindowsApplication1\Backup\MAIN.resx としてバックアップされました。">
+</Event><Event ErrorLevel="0" Project="WindowsApplication1" Source="My Project\Resources.resx" Description="ファイルは正常に G:\PSP\MPS+\Code\MPSE_SRC\MPSE\WindowsApplication1\Backup\My Project\Resources.resx としてバックアップされました。">
+</Event><Event ErrorLevel="0" Project="WindowsApplication1" Source="WindowsApplication1.vbproj" Description="プロジェクトは正常に変換されました。">
+</Event><Event ErrorLevel="3" Project="WindowsApplication1" Source="WindowsApplication1.vbproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="WindowsApplication1.sln" Description="ソリューションは正常に変換されました">
+</Event><Event ErrorLevel="3" Project="" Source="WindowsApplication1.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="WindowsApplication1" Source="WindowsApplication1.vbproj" Description="スキャンが完了しました: プロジェクト ファイルにアップグレードは必要ありません。">
+</Event></UpgradeLog>
