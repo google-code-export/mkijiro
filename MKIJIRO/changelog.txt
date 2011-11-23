@@ -21,6 +21,10 @@ certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
 0x8838DBF0 moviezone,pspfat should freeze after search/save...slim user use extraram setting
 
+2011/11/23
+ポインタ幸子/MPS用ダンプパス出力に対応
+□押しRAMDUMPでコピーアドレスのぱすになります
+
 2011/11/09
 コピーのオーバーフロー修正
 

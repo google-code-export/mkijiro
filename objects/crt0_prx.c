@@ -2770,8 +2770,15 @@ void menuDraw(){
 						}
 						pspDebugScreenPuts(buffer); break;
 						case 2: sprintf(buffer, "  Dump Codeformat #%d\n", codedumpNo); pspDebugScreenPuts(buffer); break;
-						case 3: sprintf(buffer, "  Dump RAM? Slot #%d\n", dumpNo); pspDebugScreenPuts(buffer); break;
-						case 4: pspDebugScreenPuts("  Dump Kmem\n"); break;
+						case 3: 
+					if(pad.Buttons & SWAPBUTTON3){
+					sprintf(buffer, "  dump for sachiko/mps;0x%07X.ram\n", copyData);
+					}
+					else{
+					sprintf(buffer, "  Dump RAM? Slot #%d\n", dumpNo);
+					}
+					pspDebugScreenPuts(buffer); break;
+						case 4:	pspDebugScreenPuts("  Dump Kmem\n"); break;
 						case 5: sprintf(buffer, "  Bytes per line in browser? %d\n", browseLines); pspDebugScreenPuts(buffer); break;
 						case 6: 
 						#ifdef _SWAPBUTTON_
@@ -6215,7 +6222,13 @@ void menuInput(){
 				}
 				// delete reset code
 				else if(cheatSelected == 3){
+				if(pad.Buttons & SWAPBUTTON3){
+				  sprintf(buffer, "ms0:/0x%07X.ram", copyData);
+				}
+			  else{
 				  sprintf(buffer, "ms0:/dump%d.ram", dumpNo);
+				  }
+				  				  
 				  fd=sceIoOpen(buffer, PSP_O_WRONLY | PSP_O_CREAT, 0777);
 				  if(fd>0){
 					if(sceIoWrite(fd, (void*)0x08800000, 0x1800000) == 0x1800000){
