@@ -1,0 +1,82 @@
+これはオリジナルMPSを改造したものです
+
+強化点として
+#3重まで
+アクションリプレイ
+フリーチート
+ぷろせすめもりえでぃたん
+埋込み用アセンブラ(最大オフセット0x7FFFまで)
+CMFUSIONASM
+TEMPARASM
+
+#単体ポインタのみ
+コードフリーク(CF用RAMダンプ*.binファイル読み込み可)
+ナイトプロ
+
+用のコードも出力されます。アセンブラコードは下を参考にフックを探してください
+http://unzu127fm.hp.infoseek.co.jp/data/npr_mps_port.html
+
+---------------------------
+this is modded DMA(pointer) searcher "MPS".(poor translation)
+support to output CWC/ActionReplay/CodeFreak/NitePR/PMETAN/ASM type code.
+as asm code,you need hook.find good hook to search HEX value "0x03e00008" range 0x4000～0x8000.
+visit HAX/OHG,there are better turtrial.
+
+BY HAROTURBO
+
+2011/11/24
+翻訳統合中、とりあえず見た目だけ
+
+2011/11/23
+メモリダンプファイル名にアドレス(0x～.bin)が含まれてる場合,アドレス枠に入れるようにした
+アドレス枠に絶対アドレスをコピペしても相対アドレスに変換するようにした
+
+2011/11/22
+ポインタ候補のフィルターがおかしかったのか飛ばしてるものがでたので修正
+CMF/TEMPARasm出力対応
+コード化に10進数変換を追加
+fixed to kill fake pointer,old code wrong way,pointer "08" "09"
+bs(i-1)>7だと下までヒットしてしまう
+00 00 00 08 ～　00 00 00 FF
+
+2010/01/31
+changed PMETAN pointercode format,add ASM code(max offset 0x7FFF)
+2010/01/20
+support PMETAN pointercode
+2009～
+support FREECHEAT,NITEPR,CODEFREAK,ACTIONREPLAY pointercode
+
+original version
+http://psptool.konjiki.jp/
+
+
+ASM貼付け用さんぷる
+_C0 OLD CWC/CODEFREAK
+_L 0x2000HOOK 0x0A200800
+_L 0x20002000 0x3C0808AA
+_L 0x20002004 0x35088920
+_L 0x20002008 0x3C090000
+_L 0x2000200C 0x35290101
+_L 0x20002010 0x8D080000
+_L 0x20002014 0x11000004
+_L 0x20002018 0x00000000
+_L 0x2000201C 0x8D0800BC
+_L 0x20002020 0x00000000
+_L 0x20002024 0xA5090070
+_L 0x20002030 0x03E00008
+
+#ALT.HOOK
+0x00006FD4 0x0A200800
+#NITEPR
+0x00004D64 0x0A200800
+0x00002000 0x3C0808AA
+0x00002004 0x35088920
+0x00002008 0x3C090000
+0x0000200C 0x35290101
+0x00002010 0x8D080000
+0x00002014 0x11000004
+0x00002018 0x00000000
+0x0000201C 0x8D0800BC
+0x00002020 0x00000000
+0x00002024 0xA5090070
+0x00002030 0x03E00008
