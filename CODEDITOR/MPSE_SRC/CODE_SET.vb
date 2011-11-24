@@ -1,4 +1,5 @@
 ﻿Imports System.Text.RegularExpressions
+Imports System.Media
 
 Public Class CODE_SET
 
@@ -123,10 +124,12 @@ Public Class CODE_SET
 
     End Sub
 
-    Private Sub val_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles value.KeyPress
-        If (e.KeyChar < "0"c Or e.KeyChar > "9"c) AndAlso e.KeyChar <> vbBack Then
+    Private Sub val_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles value.KeyPress 'input only 0123456789 ABCDEF abcdef x BACKSPACE=0x08
+        If (System.Text.RegularExpressions.Regex.IsMatch(e.KeyChar, "[^0-9a-fA-F\x08]")) Then
             e.Handled = True
+            SystemSounds.Beep.Play()
         End If
+
     End Sub
 
     Private Sub decval_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles dec2hex.KeyPress
@@ -135,10 +138,12 @@ Public Class CODE_SET
             Case 3
                 If (e.KeyChar < "0"c Or e.KeyChar > "9"c) AndAlso e.KeyChar <> "-"c AndAlso e.KeyChar <> "."c AndAlso e.KeyChar <> vbBack Then
                     e.Handled = True
+                    SystemSounds.Beep.Play()
                 End If
             Case Else
                 If (e.KeyChar < "0"c Or e.KeyChar > "9"c) AndAlso e.KeyChar <> "-"c AndAlso e.KeyChar <> vbBack Then
                     e.Handled = True
+                    SystemSounds.Beep.Play()
                 End If
         End Select
     End Sub
@@ -185,4 +190,18 @@ Public Class CODE_SET
         Return True
     End Function
 
+    Private Sub TextBox1_KeyPress(ByVal sender As Object, _
+        ByVal e As System.Windows.Forms.KeyPressEventArgs)
+
+        'input only 0123456789 ABCDEF abcdef x BACKSPACE=0x08
+        Dim r As New System.Text.RegularExpressions.Regex("[^0-9a-fA-Fx\x08]")
+
+        If r.IsMatch(e.KeyChar) Then
+            e.Handled = True
+        End If
+    End Sub
+
+    Private Sub TextBox1_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
+    End Sub
 End Class
