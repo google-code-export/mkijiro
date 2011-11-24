@@ -14,7 +14,7 @@ TEMPARASM
 ナイトプロ
 
 用のコードも出力されます。アセンブラコードは下を参考にフックを探してください
-http://unzu127fm.hp.infoseek.co.jp/data/npr_mps_port.html
+http://unzu127xp.pa.land.to/data/npr_mps_port.html
 
 ---------------------------
 this is modded DMA(pointer) searcher "MPS".(poor translation)
@@ -23,6 +23,10 @@ as asm code,you need hook.find good hook to search HEX value "0x03e00008" range 
 visit HAX/OHG,there are better turtrial.
 
 BY HAROTURBO
+
+2011/11/25
+コード化の16進数が10進だけ入力かになっていたので修正
+32bitで桁が足らないときASM出力で落ちていたので修正
 
 2011/11/24
 翻訳統合中、とりあえず見た目だけ

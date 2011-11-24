@@ -2600,8 +2600,8 @@ Public Class MAIN
 
                                         tmp &= ASM3.Substring(0, 10)
                                     Case Else '32bit (入力文字数制限は最大32bitまでなのでそのまま）
-                                        luival = Replace(CODE_SET.value.Text, "0x", "").Remove(4, 4)
-                                        orival = Replace(CODE_SET.value.Text, "0x", "").Remove(0, 4)
+                                        luival = Replace(CODE_SET.value.Text, "0x", "").PadLeft(8, "0").Remove(4, 4)
+                                        orival = Replace(CODE_SET.value.Text, "0x", "").PadLeft(8, "0").Remove(0, 4)
                                         ASM8 = Replace(ASM8, "VVVV", luival)
                                         ASM9 = Replace(ASM9, "VVVV", orival)
                                         ASM7 = Replace(ASM7, "T", "D")
@@ -2747,8 +2747,8 @@ Public Class MAIN
                                         tmp &= ASM3.Substring(0, 10)
 
                                     Case Else '32bit (入力文字数制限は最大32bitまでなのでそのまま）
-                                        luival = Replace(CODE_SET.value.Text, "0x", "").Remove(4, 4)
-                                        orival = Replace(CODE_SET.value.Text, "0x", "").Remove(0, 4)
+                                        luival = Replace(CODE_SET.value.Text, "0x", "").PadLeft(8, "0").Remove(4, 4)
+                                        orival = Replace(CODE_SET.value.Text, "0x", "").PadLeft(8, "0").Remove(0, 4)
                                         ASM8 = Replace(ASM8, "VVVV", luival)
                                         ASM9 = Replace(ASM9, "VVVV", orival)
                                         ASM7 = Replace(ASM7, "T", "D")
@@ -2909,8 +2909,8 @@ Public Class MAIN
                                         tmp &= ASM3.Substring(0, 10)
 
                                     Case Else '32bit (入力文字数制限は最大32bitまでなのでそのまま）
-                                        luival = Replace(CODE_SET.value.Text, "0x", "").Remove(4, 4)
-                                        orival = Replace(CODE_SET.value.Text, "0x", "").Remove(0, 4)
+                                        luival = Replace(CODE_SET.value.Text, "0x", "").PadLeft(8, "0").Remove(4, 4)
+                                        orival = Replace(CODE_SET.value.Text, "0x", "").PadLeft(8, "0").Remove(0, 4)
                                         ASM8 = Replace(ASM8, "VVVV", luival)
                                         ASM9 = Replace(ASM9, "VVVV", orival)
                                         ASM7 = Replace(ASM7, "T", "D")
