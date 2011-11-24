@@ -147,11 +147,14 @@ static const char * menu_yesno[] __attribute__(   (  aligned( 1 ), section( ".da
 
 static char layout_menu_mem1 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "メモリパッチ";
 static char layout_menu_mem2 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "メモリダンプ";
+static char layout_menu_mem3 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "侑徨/MPSダンプ";
+
 
 static const char * layout_menu_mem[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) =
 {
 	layout_menu_mem1,
-	layout_menu_mem2
+	layout_menu_mem2,
+	layout_menu_mem3
 };
 
 static char layout_menu_etc1 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "鮫中の苧るさ";

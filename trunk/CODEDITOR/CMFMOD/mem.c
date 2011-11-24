@@ -663,7 +663,12 @@ extern void mem_dump(u32 low, u32 high)
 	sceIoMkdir(MEM_DIR, 0777);
 	do {
 		++ mem_fcount;
+	if (high==0xFFFFFFFF){
+	sprintf(fn, "%s/0x%07X.mem", MEM_DIR, (unsigned int)low);
+	}
+	else{
 		sprintf(fn, "%s/0x%07X_0x%07X_%02d.mem", MEM_DIR, (unsigned int)low, (unsigned int)high, mem_fcount);
+	}
 		fd = sceIoOpen(fn, PSP_O_RDONLY, 0777);
 		if(fd >= 0)
 			sceIoClose(fd);
@@ -671,7 +676,12 @@ extern void mem_dump(u32 low, u32 high)
 			break;
 	} while(1);
 	fd = sceIoOpen(fn, PSP_O_CREAT | PSP_O_WRONLY | PSP_O_TRUNC, 0777);
+	if (high==0xFFFFFFFF){
+	sceIoWrite(fd, (void *)(0x08800000),0x1800000);
+	}
+	else{
 	sceIoWrite(fd, (void *)(0x08800000+low), high-low);
+	}
 	sceIoClose(fd);
 }
 
