@@ -88,6 +88,7 @@ typedef struct _layout_gv{
 	int table_idx;
 	int search_res_idx;
 	int search_fuzzy_idx;
+	unsigned int dmaaddress;
 }t_layout_gv;
 
 static t_layout_gv layout_gv __attribute__(   (  aligned( 4 ), section( ".bss" )  )   );
@@ -317,7 +318,7 @@ static void layout_view(int flag)
 		y1 = y12+88;
 		y2 = y12+90;
 		
-		switch(ctrl_waitmask(PSP_ANA_UP|PSP_ANA_LEFT|PSP_ANA_RIGHT|PSP_CTRL_TRIANGLE | PSP_CTRL_SQUARE | PSP_CTRL_LTRIGGER | PSP_CTRL_RTRIGGER | PSP_CTRL_UP | PSP_CTRL_DOWN | PSP_CTRL_LEFT | PSP_CTRL_RIGHT | PSP_CTRL_CIRCLE | PSP_CTRL_CROSS | PSP_CTRL_SELECT | PSP_CTRL_START))
+		switch(ctrl_waitmask(PSP_ANA_UP|PSP_ANA_LEFT|PSP_ANA_RIGHT|PSP_CTRL_TRIANGLE | PSP_CTRL_SQUARE | PSP_CTRL_LTRIGGER | PSP_CTRL_RTRIGGER | PSP_CTRL_UP | PSP_CTRL_DOWN | PSP_CTRL_LEFT | PSP_CTRL_RIGHT | PSP_CTRL_CIRCLE | PSP_CTRL_CROSS | PSP_CTRL_SELECT | PSP_CTRL_START | PSP_CTRL_NOTE))
 		{
 		case PSP_CTRL_CROSS:
 			if(!config.swap){
@@ -496,6 +497,9 @@ static void layout_view(int flag)
 				ramsa = addr2 + tempadr;
 			}
 			rp = 2;
+			break;
+		case PSP_CTRL_NOTE:
+			layout_gv.dmaaddress=tempadr;
 			break;
 		}
 	}
@@ -2754,7 +2758,7 @@ static void layout_mem()
 	int idx;
 	while(1)
 	{
-		idx = ui_menu(110+12*6, 56+12*4, layout_menu_mem, 2, 2, 0, NULL);
+		idx = ui_menu(110+12*6, 56+12*4, layout_menu_mem, 3, 3, 0, NULL);
 		switch(idx)
 		{
 		case 0:
@@ -2762,6 +2766,9 @@ static void layout_mem()
 			return;
 		case 1:
 			mem_dump(layout_gv.lowaddr, layout_gv.highaddr);
+			return;
+		case 2:
+			mem_dump(layout_gv.dmaaddress,0xFFFFFFFF);
 			return;
 		default:
 			return;
