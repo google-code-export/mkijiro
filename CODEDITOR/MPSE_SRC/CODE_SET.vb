@@ -134,14 +134,14 @@ Public Class CODE_SET
 
     Private Sub decval_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles dec2hex.KeyPress
 
-        Select ComboBox1.SelectedIndex
+        Select Case ComboBox1.SelectedIndex
             Case 3
-                If (e.KeyChar < "0"c Or e.KeyChar > "9"c) AndAlso e.KeyChar <> "-"c AndAlso e.KeyChar <> "."c AndAlso e.KeyChar <> vbBack Then
+                If (System.Text.RegularExpressions.Regex.IsMatch(e.KeyChar, "[^\-.0-9\x08]")) Then
                     e.Handled = True
                     SystemSounds.Beep.Play()
                 End If
             Case Else
-                If (e.KeyChar < "0"c Or e.KeyChar > "9"c) AndAlso e.KeyChar <> "-"c AndAlso e.KeyChar <> vbBack Then
+                If (System.Text.RegularExpressions.Regex.IsMatch(e.KeyChar, "[^\-0-9\x08]")) Then
                     e.Handled = True
                     SystemSounds.Beep.Play()
                 End If
@@ -168,6 +168,7 @@ Public Class CODE_SET
             If y = 0 Then
                 dec2hex.Text = "-" & dec2hex.Text
             End If
+            SystemSounds.Beep.Play()
         End If
 
         Select Case ComboBox1.SelectedIndex
@@ -181,8 +182,10 @@ Public Class CODE_SET
                     End If
                     If y > 0 Then
                         dec2hex.Text = dec2hex.Text.Substring(0, z) & dec2hex.Text.Substring(z + 1, dec2hex.Text.Length - z - 1).Replace(".", "")
+                        SystemSounds.Beep.Play()
                     Else
                         dec2hex.Text = dec2hex.Text.Substring(0, y).Replace(".", "") & dec2hex.Text.Substring(y + 1, dec2hex.Text.Length - y - 1)
+                        SystemSounds.Beep.Play()
                     End If
                 End While
         End Select
@@ -190,18 +193,33 @@ Public Class CODE_SET
         Return True
     End Function
 
-    Private Sub TextBox1_KeyPress(ByVal sender As Object, _
-        ByVal e As System.Windows.Forms.KeyPressEventArgs)
+    'Private Sub TextBox1_KeyPress(ByVal sender As Object, _
+    '    ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles TextBox2.KeyPress
+    '    'input only 0123456789 ABCDEF abcdef x BACKSPACE=0x08
+    '    Dim r As New System.Text.RegularExpressions.Regex("[^0-9a-fA-F\x08]")
+    '    If r.IsMatch(e.KeyChar) Then
+    '        e.Handled = True
+    '        SystemSounds.Beep.Play()
+    '    End If
+    'End Sub
 
-        'input only 0123456789 ABCDEF abcdef x BACKSPACE=0x08
-        Dim r As New System.Text.RegularExpressions.Regex("[^0-9a-fA-Fx\x08]")
-
-        If r.IsMatch(e.KeyChar) Then
-            e.Handled = True
-        End If
-    End Sub
-
-    Private Sub TextBox1_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
-
-    End Sub
+    'Private Sub TextBox1_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox2.TextChanged
+    '    Dim caret As Integer = TextBox2.SelectionStart
+    '    Dim s As String = TextBox2.Text
+    '    Dim hex As New System.Text.RegularExpressions.Regex("^0x")
+    '    Dim degit As New System.Text.RegularExpressions.Regex("[0-9a-fA-F]+")
+    '    Dim m As System.Text.RegularExpressions.Match = hex.Match(s)
+    '    Dim n As System.Text.RegularExpressions.Match = degit.Match(s.Replace("0x", ""))
+    '    s = n.Value
+    '    If n.Value.Length + 2 <> TextBox2.Text.Length AndAlso s <> "" AndAlso caret > 0 Then
+    '        s = s.Substring(1, s.Length - 1)
+    '    End If
+    '    TextBox2.Text = "0x" & s.ToUpper
+    '    If Not m.Success Then
+    '        TextBox2.SelectionStart = 2
+    '        SystemSounds.Beep.Play()
+    '    Else
+    '        TextBox2.SelectionStart = caret
+    '    End If
+    'End Sub
 End Class

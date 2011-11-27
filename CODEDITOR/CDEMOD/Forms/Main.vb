@@ -2619,7 +2619,7 @@ Public Class MERGE
         FTPMODE("CMF")
     End Sub
 
-    Private Sub gameid_dragendter(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles GID_tb.DragEnter
+    Private Sub gameid_dragendter(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles GID_tb.DragEnter, PSF.DragEnter, GT_tb.DragEnter
         'コントロール内にドラッグされたとき実行される
         If e.Data.GetDataPresent(DataFormats.FileDrop) Then
             'ドラッグされたデータ形式を調べ、ファイルのときはコピーとする
@@ -2630,72 +2630,15 @@ Public Class MERGE
         End If
     End Sub
 
-    Private Sub gameid_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles GID_tb.DragDrop
+    Private Sub gameid_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles GID_tb.DragDrop, PSF.DragDrop, GT_tb.DragDrop
         'コントロール内にドロップされたとき実行される
         'ドロップされたすべてのファイル名を取得する
         Dim fileName As String() = CType( _
             e.Data.GetData(DataFormats.FileDrop, False), _
             String())
-        Dim psf As New psf
-        Dim str As String = psf.GETID(fileName(0))
-        If str = "DAX" Then
-            changed.Text = "LZ圧縮イメージDAXは対応してません"
-        ElseIf str = "UMDVIDEO" Then
-            changed.Text = "UMDVIDEOイメージなので取得しませんでした"
-        ElseIf str = "CSO" Then
-            changed.Text = "LZ圧縮イメージCSOは対応してません"
-        ElseIf str = "JSO" Then
-            changed.Text = "LZ0圧縮イメージJSOは対応してません"
-        ElseIf str <> "" Then
-            GID_tb.Text = str
-            changed.Text = "ゲームIDが変更されました"
-        Else
-            changed.Text = "PBP/ISOではありません"
-        End If
-
+        GETPSF(fileName(0))
     End Sub
 
-
-    Private Sub gametitle_dragendter(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles GT_tb.DragEnter
-        'コントロール内にドラッグされたとき実行される
-        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
-            'ドラッグされたデータ形式を調べ、ファイルのときはコピーとする
-            e.Effect = DragDropEffects.Copy
-        Else
-            'ファイル以外は受け付けない
-            e.Effect = DragDropEffects.None
-        End If
-    End Sub
-
-    Private Sub gametitle_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles GT_tb.DragDrop
-        'コントロール内にドロップされたとき実行される
-        'ドロップされたすべてのファイル名を取得する
-        Dim fileName As String() = CType( _
-            e.Data.GetData(DataFormats.FileDrop, False), _
-            String())
-        Dim psf As New psf
-        Dim str As String = psf.GETNAME(fileName(0))
-
-        If str = "NOTILE" Then
-            changed.Text = "PSFにTITLEがありません"
-        ElseIf str = "NULL" Then
-            changed.Text = "PSFにTITLEはありますが空文字のようです"
-        ElseIf str = "UMDVIDEO" Then
-            changed.Text = "UMDVIDEOイメージなので取得しませんでした"
-        ElseIf str = "DAX" Then
-            changed.Text = "Deflate圧縮イメージDAXは対応してません"
-        ElseIf str = "CSO" Then
-            changed.Text = "Deflate圧縮イメージCSOは対応してません"
-        ElseIf str = "JSO" Then
-            changed.Text = "LZ0圧縮イメージJSOは対応してません"
-        ElseIf str <> "" Then
-            GT_tb.Text = str
-            changed.Text = "ゲームタイトルが変更されました"
-        Else
-            changed.Text = "PBP/ISOではありません"
-        End If
-
-    End Sub
 
     Private Sub PSF_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PSF.Click
 
@@ -2704,35 +2647,42 @@ Public Class MERGE
 
         If open_file.ShowDialog = Windows.Forms.DialogResult.OK And open_file.FileName <> Nothing Then
 
-            Dim psf As New psf
-            Dim str As String = psf.GETNAME(open_file.FileName)
-            Dim gid As String = psf.GETID(open_file.FileName)
+            GETPSF(open_file.FileName)
 
-            If str <> "" AndAlso gid <> "" Then
-                If str = "NOTILE" Then
-                    changed.Text = "PSFにTITLEがありません"
-                    GID_tb.Text = gid
-                ElseIf str = "NULL" Then
-                    changed.Text = "PSFにTITLEはありますが空文字のようです"
-                    GID_tb.Text = gid
-                ElseIf str = "UMDVIDEO" Then
-                    changed.Text = "UMDVIDEOイメージなので取得しませんでした"
-                ElseIf str = "DAX" Then
-                    changed.Text = "Deflate圧縮イメージDAXは対応してません"
-                ElseIf str = "CSO" Then
-                    changed.Text = "Deflate圧縮イメージCSOは対応してません"
-                ElseIf str = "JSO" Then
-                    changed.Text = "LZ0圧縮イメージJSOは対応してません"
-                Else
-                    changed.Text = "ゲームタイトル/IDが変更されました"
-                    GT_tb.Text = str
-                    GID_tb.Text = gid
-                End If
-            Else
-                changed.Text = "PBP/ISOではありません"
-            End If
         End If
     End Sub
+
+    Function GETPSF(ByVal fn As String) As Boolean
+
+        Dim psf As New psf
+        Dim str As String = psf.GETNAME(fn)
+        Dim gid As String = psf.GETID(fn)
+
+        If str <> "" AndAlso gid <> "" Then
+            If str = "NOTILE" Then
+                changed.Text = "PSFにTITLEがありません"
+                GID_tb.Text = gid
+            ElseIf str = "NULL" Then
+                changed.Text = "PSFにTITLEはありますが空文字のようです"
+                GID_tb.Text = gid
+            ElseIf str = "UMDVIDEO" Then
+                changed.Text = "UMDVIDEOイメージなので取得しませんでした"
+            ElseIf str = "DAX" Then
+                changed.Text = "Deflate圧縮イメージDAXは対応してません"
+            ElseIf str = "CSO" Then
+                changed.Text = "Deflate圧縮イメージCSOは対応してません"
+            ElseIf str = "JSO" Then
+                changed.Text = "LZ0圧縮イメージJSOは対応してません"
+            Else
+                changed.Text = "ゲームタイトル/IDが変更されました"
+                GT_tb.Text = str
+                GID_tb.Text = gid
+            End If
+        Else
+            changed.Text = "PBP/ISOではありません"
+        End If
+        Return True
+    End Function
 
     Private Sub PBPHBHASH_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PBPHBHASH.Click
 

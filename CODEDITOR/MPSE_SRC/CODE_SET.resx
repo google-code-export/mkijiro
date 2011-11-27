@@ -519,6 +519,9 @@
   <data name="&gt;&gt;Button1.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
+  <data name="TextBox1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Alpha</value>
+  </data>
   <data name="TextBox1.Location" type="System.Drawing.Point, System.Drawing">
     <value>147, 9</value>
   </data>
