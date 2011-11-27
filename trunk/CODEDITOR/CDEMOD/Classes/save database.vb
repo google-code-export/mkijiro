@@ -235,6 +235,8 @@ Public Class save_db
         Dim gid As String = ""
         Dim bytesData(3) As Byte
         Dim sce(3) As Integer
+        Dim cfmax As Integer = 0
+        Dim namebak As Integer = 0
 
         Try
             If m.codetree.Nodes(0).Nodes.Count = 0 Then
@@ -338,10 +340,12 @@ Public Class save_db
                     cname = Encoding.GetEncoding(1201).GetBytes(ccname)
                     Array.ConstrainedCopy(cname, 0, bs, i, cp1201len)
                     i += cp1201len
+                    namebak = cp1201len
                     bs(i) = 10
                     bs(i + 1) = 10
                     i += 2
                     nullcode = True
+                    cfmax = 0
 
                     If mode = "0" Or mode = "1" Then
                         buffer = n1.Tag.ToString.Split(CChar(vbCrLf))
@@ -350,6 +354,18 @@ Public Class save_db
 
                             If s.Contains("0x") Then
                                 nullcode = False
+                                If cfmax = 100 Then
+                                    bs(i) = &H44 'D コード名
+                                    bs(i + 1) = &H20
+                                    i += 2
+                                    Array.ConstrainedCopy(cname, 0, bs, i, namebak)
+                                    i += namebak
+                                    bs(i) = 10
+                                    bs(i + 1) = 10
+                                    i += 2
+                                    cfmax = 0
+                                End If
+                                cfmax += 1
                                 bs(i) = &H43 'C コード内容
                                 bs(i + 1) = &H20
                                 i += 2

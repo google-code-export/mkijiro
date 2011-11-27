@@ -1505,6 +1505,7 @@ Partial Class MERGE
         '
         'PSF
         '
+        Me.PSF.AllowDrop = True
         Me.PSF.Enabled = False
         Me.PSF.Location = New System.Drawing.Point(771, 161)
         Me.PSF.Margin = New System.Windows.Forms.Padding(4)
