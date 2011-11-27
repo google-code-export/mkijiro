@@ -54,7 +54,7 @@
                         DataGridView1.Rows(d).Cells(3).Value = m.Value
                         Dim b1 As String = m.Value
                         Dim max As Int64 = Convert.ToInt64(b1)
-                        If f.PSX = True Then
+                        If f.PSX = False Then
                             If max > 2147483647 Then
                                 Label1.Text = "2147483647を超えてます"
                                 e.Cancel = True
