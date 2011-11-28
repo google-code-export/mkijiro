@@ -3,19 +3,25 @@
     Friend rmlen As Integer = 1
     Friend matchno As Integer = 1
 
+
     '初期化
     Public Sub listview1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
         Dim m As MERGE
         m = CType(Me.Owner, MERGE)
-        Me.Location = New Point(m.Location.X + 460, m.Location.Y + 190)
+        Me.Location = New Point(m.Location.X + My.Settings.listlocation_X, m.Location.Y + My.Settings.listlocation_Y)
 
+
+        If My.Settings.listsave = True Then
+            ls_save.Checked = True
+        End If
 
         If m.fixedform.Checked = True Then
             Me.AutoSize = True
         End If
 
         ListView1.View = View.Details
+        ListView1.HideSelection = True
 
         'ヘッダーを追加する（ヘッダー名、幅、アライメント）
         ListView1.Columns.Add("値", -1, HorizontalAlignment.Left)
@@ -37,7 +43,7 @@
     End Sub
 
     '適用ボタン
-    Private Sub APPLY_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles APPLY.Click
+    Private Sub APPLY_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles APPLY.Click, ListView1.DoubleClick
         Dim f As MERGE
         f = CType(Me.Owner, MERGE)
         If ListView1.SelectedItems.Count = 0 Then
@@ -47,9 +53,9 @@
 
         Dim itemx As New ListViewItem
         itemx = ListView1.SelectedItems(0)
-        Dim b4 = itemx.ToString
-        b4 = b4.Replace("ListViewItem: {", "")
-        b4 = b4.Replace("}", "")
+        Dim b4 = itemx.Text
+        'b4 = b4.Replace("ListViewItem: {", "")
+        'b4 = b4.Replace("}", "")
         getpositions(matchno)
         Dim b3 As String = f.cl_tb.Text
         b3 = b3.Remove(rplen, rmlen)
@@ -58,11 +64,25 @@
         End If
         b3 = b3.Insert(rplen, b4.Substring(b4.Length - rmlen, rmlen))
         f.cl_tb.Text = b3
-        f.changed.Text = "リストデータが反映されました。"
+
+        If My.Settings.listsave = True Then
+            f.save_cc_Click(sender, e)
+        Else
+            f.changed.Text = "リストデータが反映されました。"
+        End If
+
+        ListView1.Focus()
+    End Sub
+
+    Private Sub meclose(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Me.FormClosing
+        Dim m As MERGE
+        m = CType(Me.Owner, MERGE)
+        My.Settings.listlocation_X = Me.Location.X - m.Location.X
+        My.Settings.listlocation_Y = Me.Location.Y - m.Location.Y
     End Sub
 
     Private Sub lsclose_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lsclose.Click
-         Me.Close()
+        Me.Close()
     End Sub
 
     '差し替える場所の特定
@@ -133,7 +153,7 @@
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton1.CheckedChanged
         buttonfunc(1)
     End Sub
-    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton2.CheckedChanged        
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton2.CheckedChanged
         buttonfunc(2)
     End Sub
     Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton3.CheckedChanged
@@ -160,6 +180,7 @@
     Private Sub Button10_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton10.CheckedChanged
         buttonfunc(10)
     End Sub
+
     Function buttonfunc(ByVal t As Integer) As Boolean
         Dim z As Integer = CInt(NumericUpDown1.Value) * 10 + t
         Dim m As MERGE
@@ -167,6 +188,7 @@
         Button(z)
         Return True
     End Function
+
     'ラジオでリスト読み込み
     Function Button(ByVal z As Integer) As Boolean
         Dim m As MERGE
@@ -185,9 +207,21 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                 b1 = My.Application.Info.DirectoryPath.ToString() & "\" & b1
                 If System.IO.File.Exists(b1) Then
                     listtextadd(b1, z)
-                Else
-                    MessageBox.Show("'" + b1 + "'が見つかりませんでした。")
-                End If
+                    getpositions(z)
+                    Dim itemindex = ListView1.Items.Count
+                    Dim b3 As String = m.cl_tb.Text
+                    b3 = b3.Substring(rplen, rmlen)
+                    For i = 0 To itemindex - 1
+                        If ListView1.Items(i).Text = b3 Then
+                            ListView1.Items(i).Selected = True
+                            ListView1.TopItem = ListView1.SelectedItems(0)
+                            ListView1.Focus()
+                            Exit For
+                        End If
+                    next
+            Else
+                MessageBox.Show("'" + b1 + "'が見つかりませんでした。")
+            End If
                 Exit While
             End If
             i += 1
@@ -195,7 +229,6 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         End While
         matchno = z
 
-        ListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize)
 
         Return True
     End Function
@@ -258,6 +291,8 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         Next
         '再描画するようにする
         ListView1.EndUpdate()
+
+        ListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize)
 
         Return True
     End Function
@@ -393,4 +428,13 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         NumericUpDown1.Maximum = Convert.ToDecimal(k)
         Return True
     End Function
+
+    Private Sub CheckBox2_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ls_save.CheckedChanged
+        If ls_save.Checked = True Then
+            My.Settings.listsave = True
+        Else
+            My.Settings.listsave = False
+        End If
+
+    End Sub
 End Class

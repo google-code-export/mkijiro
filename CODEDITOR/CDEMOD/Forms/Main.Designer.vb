@@ -184,9 +184,9 @@ Partial Class MERGE
         Me.CWC = New System.Windows.Forms.RadioButton()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.changed = New System.Windows.Forms.Label()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.Button2 = New System.Windows.Forms.Button()
-        Me.Button3 = New System.Windows.Forms.Button()
+        Me.USELIST = New System.Windows.Forms.Button()
+        Me.SHIFLIST = New System.Windows.Forms.Button()
+        Me.SELECTLIST = New System.Windows.Forms.Button()
         Me.DATAGRID = New System.Windows.Forms.Button()
         Me.PSF = New System.Windows.Forms.Button()
         Me.treeopen.SuspendLayout()
@@ -1147,6 +1147,7 @@ Partial Class MERGE
         '
         'cmt_tb
         '
+        Me.cmt_tb.AllowDrop = True
         Me.cmt_tb.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -1453,40 +1454,43 @@ Partial Class MERGE
         Me.changed.TabIndex = 27
         Me.changed.Text = "　　　　　　　　　　　　　　　　　　　　　　　　　　"
         '
-        'Button1
+        'USELIST
         '
-        Me.Button1.Enabled = False
-        Me.Button1.Font = New System.Drawing.Font("MS UI Gothic", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Button1.Location = New System.Drawing.Point(792, 549)
-        Me.Button1.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(55, 22)
-        Me.Button1.TabIndex = 28
-        Me.Button1.Text = "リスト"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.USELIST.AllowDrop = True
+        Me.USELIST.Enabled = False
+        Me.USELIST.Font = New System.Drawing.Font("MS UI Gothic", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.USELIST.Location = New System.Drawing.Point(792, 549)
+        Me.USELIST.Margin = New System.Windows.Forms.Padding(4)
+        Me.USELIST.Name = "USELIST"
+        Me.USELIST.Size = New System.Drawing.Size(55, 22)
+        Me.USELIST.TabIndex = 28
+        Me.USELIST.Text = "リスト"
+        Me.USELIST.UseVisualStyleBackColor = True
         '
-        'Button2
+        'SHIFLIST
         '
-        Me.Button2.Enabled = False
-        Me.Button2.Location = New System.Drawing.Point(740, 550)
-        Me.Button2.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(40, 21)
-        Me.Button2.TabIndex = 29
-        Me.Button2.Text = "<<"
-        Me.Button2.UseVisualStyleBackColor = True
+        Me.SHIFLIST.AllowDrop = True
+        Me.SHIFLIST.Enabled = False
+        Me.SHIFLIST.Location = New System.Drawing.Point(740, 550)
+        Me.SHIFLIST.Margin = New System.Windows.Forms.Padding(4)
+        Me.SHIFLIST.Name = "SHIFLIST"
+        Me.SHIFLIST.Size = New System.Drawing.Size(40, 21)
+        Me.SHIFLIST.TabIndex = 29
+        Me.SHIFLIST.Text = "<<"
+        Me.SHIFLIST.UseVisualStyleBackColor = True
         '
-        'Button3
+        'SELECTLIST
         '
-        Me.Button3.Enabled = False
-        Me.Button3.Font = New System.Drawing.Font("MS UI Gothic", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Button3.Location = New System.Drawing.Point(692, 549)
-        Me.Button3.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(33, 22)
-        Me.Button3.TabIndex = 30
-        Me.Button3.Text = "・・"
-        Me.Button3.UseVisualStyleBackColor = True
+        Me.SELECTLIST.AllowDrop = True
+        Me.SELECTLIST.Enabled = False
+        Me.SELECTLIST.Font = New System.Drawing.Font("MS UI Gothic", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.SELECTLIST.Location = New System.Drawing.Point(692, 549)
+        Me.SELECTLIST.Margin = New System.Windows.Forms.Padding(4)
+        Me.SELECTLIST.Name = "SELECTLIST"
+        Me.SELECTLIST.Size = New System.Drawing.Size(33, 22)
+        Me.SELECTLIST.TabIndex = 30
+        Me.SELECTLIST.Text = "・・"
+        Me.SELECTLIST.UseVisualStyleBackColor = True
         '
         'DATAGRID
         '
@@ -1522,9 +1526,9 @@ Partial Class MERGE
         Me.AutoScroll = True
         Me.ClientSize = New System.Drawing.Size(869, 702)
         Me.Controls.Add(Me.PSF)
-        Me.Controls.Add(Me.Button3)
-        Me.Controls.Add(Me.Button2)
-        Me.Controls.Add(Me.Button1)
+        Me.Controls.Add(Me.SELECTLIST)
+        Me.Controls.Add(Me.SHIFLIST)
+        Me.Controls.Add(Me.USELIST)
         Me.Controls.Add(Me.changed)
         Me.Controls.Add(Me.DATAGRID)
         Me.Controls.Add(Me.Label1)
@@ -1643,9 +1647,9 @@ Partial Class MERGE
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents changed As System.Windows.Forms.Label
     Friend WithEvents UTF16BECP1201ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents Button1 As System.Windows.Forms.Button
-    Friend WithEvents Button2 As System.Windows.Forms.Button
-    Friend WithEvents Button3 As System.Windows.Forms.Button
+    Friend WithEvents USELIST As System.Windows.Forms.Button
+    Friend WithEvents SHIFLIST As System.Windows.Forms.Button
+    Friend WithEvents SELECTLIST As System.Windows.Forms.Button
     Friend WithEvents cmf_decript As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents merge_codes As System.Windows.Forms.ToolStripButton
     Friend WithEvents name_sort As System.Windows.Forms.ToolStripMenuItem

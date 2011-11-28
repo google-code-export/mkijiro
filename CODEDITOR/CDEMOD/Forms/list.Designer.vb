@@ -38,6 +38,7 @@ Partial Class list
         Me.RadioButton1 = New System.Windows.Forms.RadioButton()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.NumericUpDown1 = New System.Windows.Forms.NumericUpDown()
+        Me.ls_save = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -57,17 +58,17 @@ Partial Class list
         Me.APPLY.Location = New System.Drawing.Point(16, 302)
         Me.APPLY.Margin = New System.Windows.Forms.Padding(4)
         Me.APPLY.Name = "APPLY"
-        Me.APPLY.Size = New System.Drawing.Size(100, 29)
+        Me.APPLY.Size = New System.Drawing.Size(75, 29)
         Me.APPLY.TabIndex = 5
         Me.APPLY.Text = "適用"
         Me.APPLY.UseVisualStyleBackColor = True
         '
         'lsclose
         '
-        Me.lsclose.Location = New System.Drawing.Point(155, 302)
+        Me.lsclose.Location = New System.Drawing.Point(99, 302)
         Me.lsclose.Margin = New System.Windows.Forms.Padding(4)
         Me.lsclose.Name = "lsclose"
-        Me.lsclose.Size = New System.Drawing.Size(100, 29)
+        Me.lsclose.Size = New System.Drawing.Size(78, 29)
         Me.lsclose.TabIndex = 6
         Me.lsclose.Text = "閉じる"
         Me.lsclose.UseVisualStyleBackColor = True
@@ -205,7 +206,7 @@ Partial Class list
         'CheckBox1
         '
         Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(307, 305)
+        Me.CheckBox1.Location = New System.Drawing.Point(312, 308)
         Me.CheckBox1.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(67, 19)
@@ -222,19 +223,29 @@ Partial Class list
         Me.NumericUpDown1.Size = New System.Drawing.Size(41, 22)
         Me.NumericUpDown1.TabIndex = 11
         '
+        'ls_save
+        '
+        Me.ls_save.AutoSize = True
+        Me.ls_save.Location = New System.Drawing.Point(184, 308)
+        Me.ls_save.Name = "ls_save"
+        Me.ls_save.Size = New System.Drawing.Size(104, 19)
+        Me.ls_save.TabIndex = 12
+        Me.ls_save.Text = "適用時保存"
+        Me.ls_save.UseVisualStyleBackColor = True
+        '
         'list
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(443, 336)
+        Me.Controls.Add(Me.ls_save)
         Me.Controls.Add(Me.NumericUpDown1)
         Me.Controls.Add(Me.CheckBox1)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.lsclose)
         Me.Controls.Add(Me.APPLY)
         Me.Controls.Add(Me.ListView1)
-        Me.DataBindings.Add(New System.Windows.Forms.Binding("Location", Global.CWcheat_Database_Editor.My.MySettings.Default, "listlocation", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
-        Me.Location = Global.CWcheat_Database_Editor.My.MySettings.Default.listlocation
+        Me.Location = New System.Drawing.Point(100, 100)
         Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "list"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
@@ -263,4 +274,5 @@ Partial Class list
     Friend WithEvents RadioButton1 As System.Windows.Forms.RadioButton
     Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
     Friend WithEvents NumericUpDown1 As System.Windows.Forms.NumericUpDown
+    Friend WithEvents ls_save As System.Windows.Forms.CheckBox
 End Class
