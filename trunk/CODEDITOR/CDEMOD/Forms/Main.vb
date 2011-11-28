@@ -533,9 +533,9 @@ Public Class MERGE
         DATAGRID.Enabled = False
         PSF.Enabled = False
 
-        Button1.Enabled = False
-        Button2.Enabled = False
-        Button3.Enabled = False
+        USELIST.Enabled = False
+        SHIFLIST.Enabled = False
+        SELECTLIST.Enabled = False
 
 
         ftpcmf.Enabled = False
@@ -584,9 +584,9 @@ Public Class MERGE
         NodeConvert.Visible = True
 
         PSF.Enabled = True
-        Button1.Enabled = False
-        Button2.Enabled = False
-        Button3.Enabled = False
+        USELIST.Enabled = False
+        SHIFLIST.Enabled = False
+        SELECTLIST.Enabled = False
 
 
         If PSX = False Then
@@ -631,9 +631,9 @@ Public Class MERGE
         off_rd.Enabled = True
         on_rd.Enabled = True
         Panel1.Enabled = True
-        Button1.Enabled = True
-        Button2.Enabled = True
-        Button3.Enabled = True
+        USELIST.Enabled = True
+        SHIFLIST.Enabled = True
+        SELECTLIST.Enabled = True
 
         NodeConvert.Visible = True
         DATAGRID.Enabled = True
@@ -1645,7 +1645,7 @@ Public Class MERGE
 
     End Sub
 
-    Private Sub save_cc_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles save_cc.Click
+    Public Sub save_cc_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles save_cc.Click
 
         changed.Text = ""
         Try
@@ -2248,8 +2248,6 @@ Public Class MERGE
         End If
     End Function
 
-
-
 #End Region
 
     'パッドボタン
@@ -2376,7 +2374,7 @@ Public Class MERGE
 
     'リスト連携
 #Region "LISTVIEW"
-    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles USELIST.Click
         Dim f As New list
         Dim backup As String = cmt_tb.Text
         Dim line As Integer = 1
@@ -2462,7 +2460,7 @@ Public Class MERGE
         cmt_tb.Text = backup
     End Sub
 
-    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SHIFLIST.Click
         Dim len As Integer = 20
         If PSX = True Then
             Exit Sub
@@ -2480,7 +2478,7 @@ Public Class MERGE
         End If
     End Sub
 
-    Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
+    Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SELECTLIST.Click
 
         Dim len As Integer = 20
         If PSX = True Then
@@ -2619,7 +2617,7 @@ Public Class MERGE
         FTPMODE("CMF")
     End Sub
 
-    Private Sub gameid_dragendter(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles GID_tb.DragEnter, PSF.DragEnter, GT_tb.DragEnter
+    Private Sub gameid_dragendter(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles GID_tb.DragEnter, PSF.DragEnter, GT_tb.DragEnter, cmt_tb.DragEnter, USELIST.DragEnter, SHIFLIST.DragEnter, SELECTLIST.DragEnter
         'コントロール内にドラッグされたとき実行される
         If e.Data.GetDataPresent(DataFormats.FileDrop) Then
             'ドラッグされたデータ形式を調べ、ファイルのときはコピーとする
@@ -2630,13 +2628,37 @@ Public Class MERGE
         End If
     End Sub
 
-    Private Sub gameid_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles GID_tb.DragDrop, PSF.DragDrop, GT_tb.DragDrop
+    Private Sub get_filepath_filedropped(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles GID_tb.DragDrop, PSF.DragDrop, GT_tb.DragDrop
         'コントロール内にドロップされたとき実行される
         'ドロップされたすべてのファイル名を取得する
         Dim fileName As String() = CType( _
             e.Data.GetData(DataFormats.FileDrop, False), _
             String())
         GETPSF(fileName(0))
+    End Sub
+
+    Private Sub get_listpath_filedropped(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles cmt_tb.DragDrop, USELIST.DragDrop, SHIFLIST.DragDrop, SELECTLIST.DragDrop
+        'コントロール内にドロップされたとき実行される
+        'ドロップされたすべてのファイル名を取得する
+        Dim fileName As String() = CType( _
+            e.Data.GetData(DataFormats.FileDrop, False), _
+            String())
+        Dim sb As New StringBuilder
+        Dim s As String() = {"LIST/", "", "(V,1,1,8)", ""}
+        s(3) = Application.StartupPath & "\LIST\"
+        For i = 0 To fileName.Length - 1
+            If fileName(i).Contains(s(3)) Then
+                s(1) = fileName(i).Replace(s(3), "")
+                s(1) = s(1).Replace("\", "/")
+                sb.Append(s(0))
+                sb.Append(s(1))
+                sb.AppendLine(s(2))
+            Else
+                sb.AppendLine("LISTディレクトリに入ってません")
+            End If
+        Next
+        sb.Append(cmt_tb.Text)
+        cmt_tb.Text = sb.ToString
     End Sub
 
 

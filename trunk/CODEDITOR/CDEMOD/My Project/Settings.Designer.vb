@@ -513,13 +513,49 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("100, 100")>  _
-        Public Property listlocation() As Global.System.Drawing.Point
+         Global.System.Configuration.DefaultSettingValueAttribute("490")>  _
+        Public Property listlocation_X() As Integer
             Get
-                Return CType(Me("listlocation"),Global.System.Drawing.Point)
+                Return CType(Me("listlocation_X"),Integer)
             End Get
             Set
-                Me("listlocation") = value
+                Me("listlocation_X") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property gridsave() As Boolean
+            Get
+                Return CType(Me("gridsave"),Boolean)
+            End Get
+            Set(ByVal value As Boolean)
+                Me("gridsave") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property listsave() As Boolean
+            Get
+                Return CType(Me("listsave"),Boolean)
+            End Get
+            Set
+                Me("listsave") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("190")>  _
+        Public Property listlocation_Y() As Integer
+            Get
+                Return CType(Me("listlocation_Y"),Integer)
+            End Get
+            Set
+                Me("listlocation_Y") = value
             End Set
         End Property
     End Class
