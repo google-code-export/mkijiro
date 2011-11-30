@@ -1,12 +1,75 @@
-﻿Public Class datagrid
+﻿Imports System
+Imports System.Windows.Forms
 
+Public Class datagrid
 
-    Private Sub main_Load(ByVal sender As Object, ByVal e As EventArgs) Handles MyBase.Load
+    Private Sub datagrid_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        Dim m As MERGE
+        m = CType(Me.Owner, MERGE)
+
+        If m.fixedform.Checked = True Then
+            Me.AutoSize = True
+        End If
+
         If My.Settings.gridsave = True Then
             gridsave.Checked = True
         Else
             gridsave.Checked = False
         End If
+
+        Dim b1 As String = m.cl_tb.Text
+        Dim i As Integer = 0
+        Dim mask As String
+        If m.PSX = False Then
+            mask = "0x[0-9A-F]{8} 0x[0-9A-F]{8}"
+            DirectCast(DataGridView1.Columns(1), DataGridViewTextBoxColumn).MaxInputLength = 10
+        Else
+            DirectCast(DataGridView1.Columns(0), DataGridViewTextBoxColumn).MaxInputLength = 8
+            DirectCast(DataGridView1.Columns(1), DataGridViewTextBoxColumn).MaxInputLength = 4
+            mask = "[0-9A-F]{8} [0-9A-F]{4}"
+        End If
+
+        Dim r As New System.Text.RegularExpressions.Regex( _
+mask, _
+System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+        Dim ed As System.Text.RegularExpressions.Match = r.Match(b1)
+
+        While ed.Success
+            DataGridView1.Rows.Add()
+            If m.PSX = False Then
+                DataGridView1.Rows(i).Cells(0).Value = ed.Value.Substring(0, 10)
+                DataGridView1.Rows(i).Cells(1).Value = ed.Value.Substring(11, 10)
+            Else
+                DataGridView1.Rows(i).Cells(0).Value = ed.Value.Substring(0, 8)
+                DataGridView1.Rows(i).Cells(1).Value = ed.Value.Substring(9, 4)
+            End If
+            DataGridView1.Rows(i).Cells(2).Value = "DEC"
+            ed = ed.NextMatch()
+            i += 1
+        End While
+
+        mask = "<DGLINE[0-9]{1,3}='.*?'>"
+
+        Dim q As New System.Text.RegularExpressions.Regex( _
+mask, _
+System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+        Dim dg_comment As System.Text.RegularExpressions.Match = q.Match(m.dgtext.Text)
+        Dim k, l, z, zz As Integer
+        zz = i
+        i = 0
+        While dg_comment.Success Or i < zz
+            k = dg_comment.Value.IndexOf("'") + 1
+            z = dg_comment.Value.LastIndexOf("'")
+            b1 = dg_comment.Value.Substring(0, k - 2)
+            b1 = b1.Replace("<DGLINE", "")
+            l = CInt(b1) - 1
+            If l < zz AndAlso l <> -1 AndAlso k < z Then
+                DataGridView1.Rows(l).Cells(4).Value = dg_comment.Value.Substring(k, z - k)
+            End If
+            dg_comment = dg_comment.NextMatch()
+            i += 1
+        End While
+
     End Sub
 
     'CellValidatingイベントハンドラ 
@@ -141,9 +204,9 @@
             If f.PSX = False Then
                 mask = "^0x[0-9a-fA-F]{8}"
             ElseIf dgv.Columns(e.ColumnIndex).Name = "アドレス" Then
-                mask = "^0x[0-9A-F]{8}"
+                mask = "[0-9A-F]{8}"
             ElseIf dgv.Columns(e.ColumnIndex).Name = "値" Then
-                mask = "^0x[0-9a-fA-F]{4}"
+                mask = "[0-9a-fA-F]{4}"
             End If
             Dim r As New System.Text.RegularExpressions.Regex( _
              mask, _
@@ -154,7 +217,9 @@
             Else
                 '行にエラーテキストを設定 
                 If f.PSX = True AndAlso dgv.Columns(e.ColumnIndex).Name = "値" Then
-                    Label1.Text = "必ず0x(4桁)で入力してください"
+                    Label1.Text = "必ず(4桁)で入力してください"
+                ElseIf f.PSX = True AndAlso dgv.Columns(e.ColumnIndex).Name = "アドレス" Then
+                    Label1.Text = "必ず(8桁)で入力してください"
                 Else
                     Label1.Text = "必ず0x(8桁)で入力してください"
                 End If
@@ -210,6 +275,8 @@
                 'KeyPressイベントハンドラを追加
                 AddHandler tb.KeyPress, AddressOf dataGridViewTextBox_KeyPress
             End If
+
+
         End If
     End Sub
 
@@ -219,6 +286,10 @@
         '数字しか入力できないようにする
         Dim d As Integer = DataGridView1.CurrentCell.RowIndex
         Dim c As Integer = DataGridView1.CurrentCell.ColumnIndex
+
+        If e.KeyChar <> "x"c Then
+            e.KeyChar = Char.ToUpper(e.KeyChar)
+        End If
 
         If Not DataGridView1.Rows(d).Cells(2).Value Is Nothing Then
             Dim check As String = DataGridView1.Rows(d).Cells(2).Value.ToString
@@ -248,66 +319,7 @@
         End If
     End Sub
 
-    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        Dim m As MERGE
-        m = CType(Me.Owner, MERGE)
-
-        If m.fixedform.Checked = True Then
-            Me.FormBorderStyle = FormBorderStyle.FixedToolWindow
-        End If
-
-        Dim b1 As String = m.cl_tb.Text
-        Dim i As Integer = 0
-        Dim mask As String
-        If m.PSX = False Then
-            mask = "0x[0-9A-F]{8} 0x[0-9A-F]{8}"
-            DirectCast(DataGridView1.Columns(1), DataGridViewTextBoxColumn).MaxInputLength = 10
-        Else
-            DirectCast(DataGridView1.Columns(0), DataGridViewTextBoxColumn).MaxInputLength = 8
-            DirectCast(DataGridView1.Columns(1), DataGridViewTextBoxColumn).MaxInputLength = 4
-            mask = "[0-9A-F]{8} [0-9A-F]{4}"
-        End If
-
-        Dim r As New System.Text.RegularExpressions.Regex( _
-mask, _
-System.Text.RegularExpressions.RegexOptions.IgnoreCase)
-        Dim ed As System.Text.RegularExpressions.Match = r.Match(b1)
-
-        Dim column As New DataGridViewComboBoxColumn()
-        'ComboBoxのリストに表示する項目を指定する
-        column.Items.Add("DEC")
-        If m.PSX = False Then
-            column.Items.Add("BINARY32")
-        End If
-        column.Items.Add("BIN32(>>16)")
-        column.Items.Add("BINARY16")
-        column.Items.Add("OR")
-        column.Items.Add("AND")
-        column.Items.Add("XOR")
-        '"Week"列にバインドされているデータを表示する
-        column.DataPropertyName = "編集タイプ"
-        '"Week"列の代わりにComboBox列を表示する
-        DataGridView1.Columns.Insert(DataGridView1.Columns("編集タイプ").Index, column)
-        DataGridView1.Columns.Remove("編集タイプ")
-        column.Name = "編集タイプ"
-
-        While ed.Success
-            DataGridView1.Rows.Add()
-            If m.PSX = False Then
-                DataGridView1.Rows(i).Cells(0).Value = ed.Value.Substring(0, 10)
-                DataGridView1.Rows(i).Cells(1).Value = ed.Value.Substring(11, 10)
-            Else
-                DataGridView1.Rows(i).Cells(0).Value = ed.Value.Substring(0, 8)
-                DataGridView1.Rows(i).Cells(1).Value = ed.Value.Substring(9, 4)
-            End If
-            DataGridView1.Rows(i).Cells(2).Value = "DEC"
-            ed = ed.NextMatch()
-            i += 1
-        End While
-
-    End Sub
-
-    Private Sub edival(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+    Private Sub edival(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click, appy.Click
         Dim m As MERGE
         m = CType(Me.Owner, MERGE)
         Dim mask As String = ""
@@ -425,19 +437,24 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                     Label1.Text = "不正な値です"
                 End If
             End If
-            Dim gridtx As String = Nothing
-            Dim k As Integer = 0
-            While Not DataGridView1.Rows(k).Cells(0).Value Is Nothing
-                gridtx &= DataGridView1.Rows(k).Cells(0).Value.ToString & " "
-                gridtx &= DataGridView1.Rows(k).Cells(1).Value.ToString & vbCrLf
-                k += 1
-            End While
-            m.cl_tb.Text = gridtx
-            If My.Settings.gridsave = True Then
-                m.save_cc_Click(sender, e)
-            Else
-                m.changed.Text = "データグリッドでコードが変更されてます"
+        End If
+        Dim gridtx As String = Nothing
+        Dim comment As String = ""
+        Dim k As Integer = 0
+        While Not DataGridView1.Rows(k).Cells(0).Value Is Nothing AndAlso Not DataGridView1.Rows(k).Cells(1).Value Is Nothing
+            gridtx &= DataGridView1.Rows(k).Cells(0).Value.ToString & " "
+            gridtx &= DataGridView1.Rows(k).Cells(1).Value.ToString & vbCrLf
+            If Not DataGridView1.Rows(k).Cells(4).Value Is Nothing Then
+                comment &= "<DGLINE" & Convert.ToString(k + 1) & "='" & DataGridView1.Rows(k).Cells(4).Value.ToString & "'>"
             End If
+            k += 1
+        End While
+        m.cl_tb.Text = gridtx
+        m.dgtext.Text = comment
+        If My.Settings.gridsave = True Then
+            m.save_cc_Click(sender, e)
+        Else
+            m.changed.Text = "データグリッドでコードが変更されてます"
         End If
     End Sub
 
@@ -493,6 +510,25 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         Return hf
     End Function
 
+    Private Sub DataGridView1_CellEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles DataGridView1.CellEnter
+
+        Dim dgv As DataGridView = CType(sender, DataGridView)
+
+        Dim Header As String = dgv.Columns(e.ColumnIndex).HeaderText
+
+
+        If "備考".Equals(Header) Then
+
+            DataGridView1.ImeMode = Windows.Forms.ImeMode.NoControl
+
+        Else
+
+            DataGridView1.ImeMode = Windows.Forms.ImeMode.Alpha
+
+        End If
+
+    End Sub
+
     Private Sub CheckBox1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles gridsave.CheckedChanged
 
         If gridsave.Checked = True Then
@@ -501,5 +537,188 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
             My.Settings.gridsave = False
         End If
 
+    End Sub
+
+    Private Sub 備考変換ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles notetag.Click
+        Dim f As New gnote
+        Dim k = 0
+        Dim note As String = ""
+        For k = 0 To DataGridView1.RowCount - 1
+            If Not DataGridView1.Rows(k).Cells(4).Value Is Nothing Then
+                note &= "<DGLINE" & Convert.ToString(k + 1) & "='" & DataGridView1.Rows(k).Cells(4).Value.ToString & "'>"
+            End If
+        Next
+        f.TextBox2.Text = note
+        f.ShowDialog()
+
+
+        Dim mask As String = "<DGLINE[0-9]{1,3}='.*?'>"
+        Dim q As New System.Text.RegularExpressions.Regex( _
+mask, _
+System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+        Dim dg_comment As System.Text.RegularExpressions.Match = q.Match(f.TextBox2.Text)
+        Dim b1 As String = ""
+        Dim i, l, z, zz As Integer
+        zz = DataGridView1.RowCount - 1
+        While dg_comment.Success AndAlso i < zz
+            k = dg_comment.Value.IndexOf("'") + 1
+            z = dg_comment.Value.LastIndexOf("'")
+            b1 = dg_comment.Value.Substring(0, k - 2)
+            b1 = b1.Replace("<DGLINE", "")
+            l = CInt(b1) - 1
+            If l < zz AndAlso l <> -1 AndAlso k <= z Then
+                DataGridView1.Rows(l).Cells(4).Value = dg_comment.Value.Substring(k, z - k)
+            End If
+            dg_comment = dg_comment.NextMatch()
+            i += 1
+        End While
+
+        f.Dispose()
+    End Sub
+
+    Private Sub TextBox1_KeyDown(ByVal sender As Object, _
+        ByVal e As KeyEventArgs) Handles DataGridView1.KeyDown
+
+        If (e.KeyData And Keys.Control) = Keys.Control Then
+            If Not movedown.Text.Contains("☆") Then
+                movedown.Text &= "☆"
+                moveup.Text &= "☆"
+            End If
+        Else
+            movedown.Text = movedown.Text.Replace("☆", "")
+            moveup.Text = moveup.Text.Replace("☆", "")
+        End If
+
+    End Sub
+
+    Private Sub TextBoxm_KeyDown(ByVal sender As Object, _
+        ByVal e As KeyEventArgs) Handles DataGridView1.KeyUp
+
+        movedown.Text = movedown.Text.Replace("☆", "")
+        moveup.Text = moveup.Text.Replace("☆", "")
+    End Sub
+
+
+    Private Sub 上に移動ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles moveup.Click
+
+        Dim d As Integer = DataGridView1.CurrentCell.RowIndex
+        Dim row As DataGridViewRow = DataGridView1.Rows(d)
+        Dim CloneWithValues = CType(row.Clone(), DataGridViewRow)
+        Dim destination As Integer = d - 1
+        If movedown.Text.Contains("☆") = True Then
+            destination = 0
+            DataGridView1.Rows.Insert(0)
+        End If
+
+        If d > 0 AndAlso d < DataGridView1.RowCount - 1 Then
+            Dim row2 As DataGridViewRow = DataGridView1.Rows(destination)
+            Dim CloneWithValues2 = CType(row2.Clone(), DataGridViewRow)
+            For index As Int32 = 0 To row.Cells.Count - 1
+                If movedown.Text.Contains("☆") = True Then
+                    CloneWithValues.Cells(index).Value = row.Cells(index).Value
+                    DataGridView1.Rows(destination).Cells(index).Value = CloneWithValues2.Cells(index).Value
+                Else
+                    CloneWithValues.Cells(index).Value = row.Cells(index).Value
+                    CloneWithValues2.Cells(index).Value = row2.Cells(index).Value
+                    DataGridView1.Rows(d).Cells(index).Value = CloneWithValues2.Cells(index).Value
+                End If
+                DataGridView1.Rows(destination).Cells(index).Value = CloneWithValues.Cells(index).Value
+                DataGridView1.Rows(d).Selected = False
+                DataGridView1.Rows(destination).Selected = True
+                DataGridView1.CurrentCell = DataGridView1.Rows(destination).Cells(0)
+                DataGridView1.Focus()
+            Next
+            
+            If movedown.Text.Contains("☆") = True Then
+                DataGridView1.Rows.RemoveAt(d + 1)
+            End If
+
+        End If
+
+
+    End Sub
+
+    Private Sub 下に移動ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles movedown.Click
+
+        Dim d As Integer = DataGridView1.CurrentCell.RowIndex
+        Dim row As DataGridViewRow = DataGridView1.Rows(d)
+        Dim CloneWithValues = CType(row.Clone(), DataGridViewRow)
+        Dim destination As Integer = d + 1
+
+        If movedown.Text.Contains("☆") = True Then
+            destination = DataGridView1.RowCount - 1
+            DataGridView1.Rows.Insert(DataGridView1.RowCount - 1)
+        End If
+
+        If d < DataGridView1.RowCount - 2 Then
+            Dim row2 As DataGridViewRow = DataGridView1.Rows(destination)
+            Dim CloneWithValues2 = CType(row2.Clone(), DataGridViewRow)
+            For index As Int32 = 0 To row.Cells.Count - 1
+                If movedown.Text.Contains("☆") = True Then
+                    CloneWithValues.Cells(index).Value = row.Cells(index).Value
+                    DataGridView1.Rows(destination).Cells(index).Value = CloneWithValues2.Cells(index).Value
+                Else
+                    CloneWithValues.Cells(index).Value = row.Cells(index).Value
+                    CloneWithValues2.Cells(index).Value = row2.Cells(index).Value
+                    DataGridView1.Rows(d).Cells(index).Value = CloneWithValues2.Cells(index).Value
+                End If
+                DataGridView1.Rows(destination).Cells(index).Value = CloneWithValues.Cells(index).Value
+                DataGridView1.Rows(d).Selected = False
+                DataGridView1.Rows(destination).Selected = True
+                DataGridView1.CurrentCell = DataGridView1.Rows(destination).Cells(0)
+                DataGridView1.Focus()
+            Next
+            
+            If movedown.Text.Contains("☆") = True Then
+                DataGridView1.Rows.RemoveAt(d)
+            End If
+        End If
+    End Sub
+
+    Private Sub 行コード追加ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles addline.Click
+
+        Dim d As Integer = DataGridView1.CurrentCell.RowIndex
+
+        If d < DataGridView1.RowCount - 1 Then
+            DataGridView1.Rows.Insert(d + 1)
+            For index As Int32 = 0 To 1
+                DataGridView1.Rows(d + 1).Cells(index).Value = "0x00000000"
+                DataGridView1.Rows(d).Selected = False
+                DataGridView1.Rows(d + 1).Selected = True
+                DataGridView1.CurrentCell = DataGridView1.Rows(d + 1).Cells(0)
+                DataGridView1.Focus()
+            Next
+        End If
+    End Sub
+
+    Private Sub コピーToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles copy.Click
+
+        Dim d As Integer = DataGridView1.CurrentCell.RowIndex
+        Dim row As DataGridViewRow = DataGridView1.Rows(d)
+        Dim CloneWithValues = CType(row.Clone(), DataGridViewRow)
+
+        If d < DataGridView1.RowCount - 1 Then
+            DataGridView1.RowCount += 1
+            For index As Int32 = 0 To row.Cells.Count - 1
+                CloneWithValues.Cells(index).Value = row.Cells(index).Value
+                DataGridView1.Rows(DataGridView1.RowCount - 2).Cells(index).Value = CloneWithValues.Cells(index).Value
+                DataGridView1.Rows(d).Selected = False
+                DataGridView1.Rows(DataGridView1.RowCount - 2).Selected = True
+                DataGridView1.CurrentCell = DataGridView1.Rows(DataGridView1.RowCount - 2).Cells(0)
+                DataGridView1.Focus()
+            Next
+        End If
+    End Sub
+
+    Private Sub 行削除ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles delline.Click
+
+        Dim d As Integer = DataGridView1.CurrentCell.RowIndex
+        DataGridView1.Rows.RemoveAt(d)
+        If d = DataGridView1.RowCount - 1 Then
+            d -= 1
+        End If
+        DataGridView1.Rows(d).Selected = True
+        DataGridView1.CurrentCell = DataGridView1.Rows(d).Cells(0)
+        DataGridView1.Focus()
     End Sub
 End Class

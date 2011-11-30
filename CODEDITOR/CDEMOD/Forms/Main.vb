@@ -1746,6 +1746,7 @@ Public Class MERGE
                     Next
                 End If
 
+                buffer &= "#" & dgtext.Text.Trim & vbCrLf
 
                 codetree.SelectedNode.Tag = buffer
                 codetree.EndUpdate()
@@ -1767,28 +1768,50 @@ Public Class MERGE
             If codetree.SelectedNode.Level = 1 Then
                 codetree.BeginUpdate()
                 Dim cln As TreeNode = CType(codetree.SelectedNode.Clone(), TreeNode)
-                codetree.SelectedNode.Parent.Nodes.Insert(codetree.SelectedNode.Index - 1, cln)
+                If move_up.Text.Contains("☆") = True Then
+                    codetree.SelectedNode.Parent.Nodes.Insert(0, cln)
+                Else
+                    codetree.SelectedNode.Parent.Nodes.Insert(codetree.SelectedNode.Index - 1, cln)
+                End If
                 codetree.SelectedNode.Remove()
                 codetree.SelectedNode = cln
                 codetree.EndUpdate()
+                Dim z As Integer = codetree.SelectedNode.Index - 15
+                If z < 0 Then
+                    codetree.TopNode = codetree.SelectedNode.Parent
+                Else
+                    codetree.TopNode = codetree.SelectedNode.Parent.Nodes(z)
+                End If
+                codetree.Focus()
             End If
 
-            If codetree.SelectedNode.Level = 2 Then
+                If codetree.SelectedNode.Level = 2 Then
 
-                With newcode
-                    .ImageIndex = 2
-                    .SelectedImageIndex = 3
-                    .Name = codetree.SelectedNode.Name
-                    .Text = codetree.SelectedNode.Text
-                    .Tag = codetree.SelectedNode.Tag
-                End With
+                    With newcode
+                        .ImageIndex = 2
+                        .SelectedImageIndex = 3
+                        .Name = codetree.SelectedNode.Name
+                        .Text = codetree.SelectedNode.Text
+                        .Tag = codetree.SelectedNode.Tag
+                    End With
 
-                codetree.BeginUpdate()
-                codetree.SelectedNode.Parent.Nodes.Insert(codetree.SelectedNode.Index - 1, newcode)
-                codetree.SelectedNode.Remove()
+                    codetree.BeginUpdate()
+                    If move_up.Text.Contains("☆") = True Then
+                    codetree.SelectedNode.Parent.Nodes.Insert(0, newcode)
+                    Else
+                        codetree.SelectedNode.Parent.Nodes.Insert(codetree.SelectedNode.Index - 1, newcode)
+                    End If
+                    codetree.SelectedNode.Remove()
                 codetree.SelectedNode = newcode
                 codetree.EndUpdate()
-            End If
+                Dim z As Integer = codetree.SelectedNode.Index - 15
+                If z < 0 Then
+                    codetree.TopNode = codetree.SelectedNode.Parent
+                Else
+                    codetree.TopNode = codetree.SelectedNode.Parent.Nodes(z)
+                End If
+                codetree.Focus()
+                End If
 
         Catch ex As Exception
 
@@ -1805,10 +1828,21 @@ Public Class MERGE
             If codetree.SelectedNode.Level = 1 Then
                 codetree.BeginUpdate()
                 Dim cln As TreeNode = CType(codetree.SelectedNode.Clone(), TreeNode)
-                codetree.SelectedNode.Parent.Nodes.Insert(codetree.SelectedNode.Index + 2, cln)
+                If move_up.Text.Contains("☆") = True Then
+                    codetree.SelectedNode.Parent.Nodes.Add(cln)
+                Else
+                    codetree.SelectedNode.Parent.Nodes.Insert(codetree.SelectedNode.Index + 2, cln)
+                End If
                 codetree.SelectedNode.Remove()
                 codetree.SelectedNode = cln
                 codetree.EndUpdate()
+                Dim z As Integer = codetree.SelectedNode.Index - 15
+                If z < 0 Then
+                    codetree.TopNode = codetree.SelectedNode.Parent
+                Else
+                    codetree.TopNode = codetree.SelectedNode.Parent.Nodes(z)
+                End If
+                codetree.Focus()
             End If
 
             If codetree.SelectedNode.Level = 2 Then
@@ -1822,16 +1856,49 @@ Public Class MERGE
                 End With
 
                 codetree.BeginUpdate()
-                codetree.SelectedNode.Parent.Nodes.Insert(codetree.SelectedNode.Index + 2, newcode)
+                If move_up.Text.Contains("☆") = True Then
+                    codetree.SelectedNode.Parent.Nodes.Add(newcode)
+                Else
+                    codetree.SelectedNode.Parent.Nodes.Insert(codetree.SelectedNode.Index + 2, newcode)
+                End If
                 codetree.SelectedNode.Remove()
                 codetree.SelectedNode = newcode
                 codetree.EndUpdate()
+                Dim z As Integer = codetree.SelectedNode.Index - 15
+                If z < 0 Then
+                    codetree.TopNode = codetree.SelectedNode.Parent
+                Else
+                    codetree.TopNode = codetree.SelectedNode.Parent.Nodes(z)
+                End If
+                codetree.Focus()
             End If
 
         Catch ex As Exception
 
         End Try
 
+    End Sub
+
+
+    Private Sub TextBox1_KeyDown(ByVal sender As Object, _
+        ByVal e As KeyEventArgs) Handles Me.KeyDown
+
+        If (e.KeyData And Keys.Control) = Keys.Control Then
+            If Not move_down.Text.Contains("☆") Then
+                move_down.Text &= "☆"
+                move_up.Text &= "☆"
+            End If
+        Else
+            move_down.Text = move_down.Text.Replace("☆", "")
+            move_up.Text = move_up.Text.Replace("☆", "")
+        End If
+
+    End Sub
+
+    Private Sub TextBoxm_KeyDown(ByVal sender As Object, _
+        ByVal e As KeyEventArgs) Handles Me.KeyUp
+        move_down.Text = move_down.Text.Replace("☆", "")
+        move_up.Text = move_up.Text.Replace("☆", "")
     End Sub
 
     Private Sub ToolStripButton3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles merge_codes.Click
@@ -1958,6 +2025,7 @@ Public Class MERGE
         Dim j As New joker
 
         changed.Text = ""
+        dgtext.Text = ""
         move_up.Enabled = True
         move_down.Enabled = True
         merge_codes.Enabled = True
@@ -2031,7 +2099,9 @@ Public Class MERGE
 
                             If s.Length >= 2 Then
 
-                                If s.Contains("#") Then
+                                If s.Contains("#<DGLINE") Then
+                                    dgtext.Text &= s.Substring(1, s.Length - 1) & vbCrLf
+                                ElseIf s.Contains("#") Then
                                     cmt_tb.Text &= s.Substring(1, s.Length - 1) & vbCrLf
                                 Else
                                     cl_tb.Text &= s & vbCrLf
