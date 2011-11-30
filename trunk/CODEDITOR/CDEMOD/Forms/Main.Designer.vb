@@ -189,6 +189,7 @@ Partial Class MERGE
         Me.SELECTLIST = New System.Windows.Forms.Button()
         Me.DATAGRID = New System.Windows.Forms.Button()
         Me.PSF = New System.Windows.Forms.Button()
+        Me.dgtext = New System.Windows.Forms.TextBox()
         Me.treeopen.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.tool_menu.SuspendLayout()
@@ -1275,7 +1276,7 @@ Partial Class MERGE
         Me.move_up.Size = New System.Drawing.Size(77, 56)
         Me.move_up.Text = "上に移動"
         Me.move_up.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.move_up.ToolTipText = "選択しているタイトル/コードを1つ上に移動します"
+        Me.move_up.ToolTipText = "選択しているタイトル/コードを1つ上に移動します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "CTRLを押していると☆が付き一番上まで移動できます" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'move_down
         '
@@ -1287,7 +1288,7 @@ Partial Class MERGE
         Me.move_down.Size = New System.Drawing.Size(77, 56)
         Me.move_down.Text = "下に移動"
         Me.move_down.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.move_down.ToolTipText = "選択しているタイトル/コードを1つ下へ移動します"
+        Me.move_down.ToolTipText = "選択しているタイトル/コードを1つ下へ移動します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "CTRLを押していると☆が付き一番下まで移動できます" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'merge_codes
         '
@@ -1519,12 +1520,22 @@ Partial Class MERGE
         Me.PSF.Text = "PSF取得"
         Me.PSF.UseVisualStyleBackColor = True
         '
+        'dgtext
+        '
+        Me.dgtext.Location = New System.Drawing.Point(847, 549)
+        Me.dgtext.Multiline = True
+        Me.dgtext.Name = "dgtext"
+        Me.dgtext.Size = New System.Drawing.Size(10, 22)
+        Me.dgtext.TabIndex = 33
+        Me.dgtext.Visible = False
+        '
         'MERGE
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
         Me.ClientSize = New System.Drawing.Size(869, 702)
+        Me.Controls.Add(Me.dgtext)
         Me.Controls.Add(Me.PSF)
         Me.Controls.Add(Me.SELECTLIST)
         Me.Controls.Add(Me.SHIFLIST)
@@ -1739,5 +1750,6 @@ Partial Class MERGE
     Friend WithEvents MECAB半角カナToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MECABでローマ字ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents saveas_actionreplay As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents dgtext As System.Windows.Forms.TextBox
 
 End Class

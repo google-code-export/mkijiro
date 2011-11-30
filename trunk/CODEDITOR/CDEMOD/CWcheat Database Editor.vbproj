@@ -132,6 +132,12 @@
     <Compile Include="Classes\memflush.vb" />
     <Compile Include="Classes\save database.vb" />
     <Compile Include="Classes\sort.vb" />
+    <Compile Include="Forms\gnote.Designer.vb">
+      <DependentUpon>gnote.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\gnote.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\error list.Designer.vb">
       <DependentUpon>error list.vb</DependentUpon>
     </Compile>
@@ -204,6 +210,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\gnote.resx">
+      <DependentUpon>gnote.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\error list.resx">
       <DependentUpon>error list.vb</DependentUpon>
     </EmbeddedResource>
