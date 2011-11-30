@@ -60,11 +60,13 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         While dg_comment.Success Or i < zz
             k = dg_comment.Value.IndexOf("'") + 1
             z = dg_comment.Value.LastIndexOf("'")
-            b1 = dg_comment.Value.Substring(0, k - 2)
-            b1 = b1.Replace("<DGLINE", "")
-            l = CInt(b1) - 1
-            If l < zz AndAlso l <> -1 AndAlso k < z Then
-                DataGridView1.Rows(l).Cells(4).Value = dg_comment.Value.Substring(k, z - k)
+            If k > 0 Then
+                b1 = dg_comment.Value.Substring(0, k - 2)
+                b1 = b1.Replace("<DGLINE", "")
+                l = CInt(b1) - 1
+                If l < zz AndAlso l >= 0 AndAlso k < z Then
+                    DataGridView1.Rows(l).Cells(4).Value = dg_comment.Value.Substring(k, z - k)
+                End If
             End If
             dg_comment = dg_comment.NextMatch()
             i += 1
