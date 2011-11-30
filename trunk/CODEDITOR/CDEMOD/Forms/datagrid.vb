@@ -295,22 +295,24 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 
         If Not DataGridView1.Rows(d).Cells(2).Value Is Nothing Then
             Dim check As String = DataGridView1.Rows(d).Cells(2).Value.ToString
-            If check = "OR" Or check = "AND" Or check = "XOR" Then
-                If (e.KeyChar < "0"c Or e.KeyChar > "9"c) And (e.KeyChar < "A"c Or e.KeyChar > "F"c) And (e.KeyChar < "a"c Or e.KeyChar > "f"c) And e.KeyChar <> vbBack And e.KeyChar <> "x"c Then
-                    e.Handled = True
-                End If
-                DirectCast(DataGridView1.Columns(3), DataGridViewTextBoxColumn).MaxInputLength = 10
-            ElseIf check = "DEC" Then
-                If (e.KeyChar < "0"c Or e.KeyChar > "9"c) And e.KeyChar <> "-"c And e.KeyChar <> vbBack Then
-                    e.Handled = True
-                End If
+            If c = 3 Then
+                If check = "OR" Or check = "AND" Or check = "XOR" Then
+                    If (e.KeyChar < "0"c Or e.KeyChar > "9"c) And (e.KeyChar < "A"c Or e.KeyChar > "F"c) And (e.KeyChar < "a"c Or e.KeyChar > "f"c) And e.KeyChar <> vbBack And e.KeyChar <> "x"c Then
+                        e.Handled = True
+                    End If
+                    DirectCast(DataGridView1.Columns(3), DataGridViewTextBoxColumn).MaxInputLength = 10
+                ElseIf check = "DEC" Then
+                    If (e.KeyChar < "0"c Or e.KeyChar > "9"c) And e.KeyChar <> "-"c And e.KeyChar <> vbBack Then
+                        e.Handled = True
+                    End If
 
-                DirectCast(DataGridView1.Columns(3), DataGridViewTextBoxColumn).MaxInputLength = 11
-            Else
-                If (e.KeyChar < "0"c Or e.KeyChar > "9"c) And e.KeyChar <> "."c And e.KeyChar <> "-"c And e.KeyChar <> vbBack Then
-                    e.Handled = True
+                    DirectCast(DataGridView1.Columns(3), DataGridViewTextBoxColumn).MaxInputLength = 11
+                Else
+                    If (e.KeyChar < "0"c Or e.KeyChar > "9"c) And e.KeyChar <> "."c And e.KeyChar <> "-"c And e.KeyChar <> vbBack Then
+                        e.Handled = True
+                    End If
+                    DirectCast(DataGridView1.Columns(3), DataGridViewTextBoxColumn).MaxInputLength = 11
                 End If
-                DirectCast(DataGridView1.Columns(3), DataGridViewTextBoxColumn).MaxInputLength = 11
             End If
         End If
 
