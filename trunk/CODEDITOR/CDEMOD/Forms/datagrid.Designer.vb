@@ -31,13 +31,17 @@ Partial Class datagrid
         Me.備考 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.CNVbikou = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.addline = New System.Windows.Forms.ToolStripMenuItem()
-        Me.delline = New System.Windows.Forms.ToolStripMenuItem()
+        Me.addmacro = New System.Windows.Forms.ToolStripMenuItem()
+        Me.cut = New System.Windows.Forms.ToolStripMenuItem()
         Me.copy = New System.Windows.Forms.ToolStripMenuItem()
+        Me.paste = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.moveup = New System.Windows.Forms.ToolStripMenuItem()
         Me.movedown = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.notetag = New System.Windows.Forms.ToolStripMenuItem()
         Me.appy = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Button2 = New System.Windows.Forms.Button()
+        Me.APPLY = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.gridsave = New System.Windows.Forms.CheckBox()
         Me.g_address = New System.Windows.Forms.RadioButton()
@@ -48,6 +52,7 @@ Partial Class datagrid
         '
         'DataGridView1
         '
+        Me.DataGridView1.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.アドレス, Me.値, Me.編集タイプ, Me.入力値, Me.備考})
         Me.DataGridView1.ContextMenuStrip = Me.CNVbikou
@@ -56,6 +61,7 @@ Partial Class datagrid
         Me.DataGridView1.Margin = New System.Windows.Forms.Padding(4)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.RowTemplate.Height = 21
+        Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridView1.Size = New System.Drawing.Size(591, 300)
         Me.DataGridView1.TabIndex = 0
         '
@@ -101,28 +107,47 @@ Partial Class datagrid
         '
         'CNVbikou
         '
-        Me.CNVbikou.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.addline, Me.delline, Me.copy, Me.moveup, Me.movedown, Me.notetag, Me.appy})
+        Me.CNVbikou.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.addline, Me.cut, Me.copy, Me.paste, Me.ToolStripSeparator1, Me.moveup, Me.movedown, Me.ToolStripSeparator2, Me.notetag, Me.appy})
         Me.CNVbikou.Name = "CNVbikou"
-        Me.CNVbikou.Size = New System.Drawing.Size(180, 222)
+        Me.CNVbikou.Size = New System.Drawing.Size(180, 240)
         Me.CNVbikou.Text = "備考変換"
         '
         'addline
         '
+        Me.addline.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.addmacro})
         Me.addline.Name = "addline"
         Me.addline.Size = New System.Drawing.Size(179, 28)
         Me.addline.Text = "1行コード追加"
         '
-        'delline
+        'addmacro
         '
-        Me.delline.Name = "delline"
-        Me.delline.Size = New System.Drawing.Size(179, 28)
-        Me.delline.Text = "1行削除"
+        Me.addmacro.Enabled = False
+        Me.addmacro.Name = "addmacro"
+        Me.addmacro.Size = New System.Drawing.Size(200, 28)
+        Me.addmacro.Text = "コードマクロ挿入"
+        '
+        'cut
+        '
+        Me.cut.Name = "cut"
+        Me.cut.Size = New System.Drawing.Size(179, 28)
+        Me.cut.Text = "カット"
         '
         'copy
         '
         Me.copy.Name = "copy"
         Me.copy.Size = New System.Drawing.Size(179, 28)
         Me.copy.Text = "コピー"
+        '
+        'paste
+        '
+        Me.paste.Name = "paste"
+        Me.paste.Size = New System.Drawing.Size(179, 28)
+        Me.paste.Text = "貼付け"
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(176, 6)
         '
         'moveup
         '
@@ -138,6 +163,11 @@ Partial Class datagrid
         Me.movedown.Text = "下に移動"
         Me.movedown.ToolTipText = "コードを1行下に移動します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "CTRL押しながらメニューを表示すると☆マークが付き" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "一番下まで一気に移動します"
         '
+        'ToolStripSeparator2
+        '
+        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(176, 6)
+        '
         'notetag
         '
         Me.notetag.Name = "notetag"
@@ -152,15 +182,15 @@ Partial Class datagrid
         Me.appy.Size = New System.Drawing.Size(179, 28)
         Me.appy.Text = "適用"
         '
-        'Button2
+        'APPLY
         '
-        Me.Button2.Location = New System.Drawing.Point(348, 9)
-        Me.Button2.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(100, 29)
-        Me.Button2.TabIndex = 2
-        Me.Button2.Text = "APPLY"
-        Me.Button2.UseVisualStyleBackColor = True
+        Me.APPLY.Location = New System.Drawing.Point(348, 9)
+        Me.APPLY.Margin = New System.Windows.Forms.Padding(4)
+        Me.APPLY.Name = "APPLY"
+        Me.APPLY.Size = New System.Drawing.Size(100, 29)
+        Me.APPLY.TabIndex = 2
+        Me.APPLY.Text = "適用"
+        Me.APPLY.UseVisualStyleBackColor = True
         '
         'Label1
         '
@@ -177,9 +207,9 @@ Partial Class datagrid
         Me.gridsave.AutoSize = True
         Me.gridsave.Location = New System.Drawing.Point(455, 15)
         Me.gridsave.Name = "gridsave"
-        Me.gridsave.Size = New System.Drawing.Size(145, 19)
+        Me.gridsave.Size = New System.Drawing.Size(140, 19)
         Me.gridsave.TabIndex = 4
-        Me.gridsave.Text = "APPLY同時に保存"
+        Me.gridsave.Text = "適用と同時に保存"
         Me.gridsave.UseVisualStyleBackColor = True
         '
         'g_address
@@ -214,7 +244,7 @@ Partial Class datagrid
         Me.Controls.Add(Me.g_address)
         Me.Controls.Add(Me.gridsave)
         Me.Controls.Add(Me.Label1)
-        Me.Controls.Add(Me.Button2)
+        Me.Controls.Add(Me.APPLY)
         Me.Controls.Add(Me.DataGridView1)
         Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "datagrid"
@@ -227,7 +257,7 @@ Partial Class datagrid
 
     End Sub
     Friend WithEvents DataGridView1 As System.Windows.Forms.DataGridView
-    Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents APPLY As System.Windows.Forms.Button
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents gridsave As System.Windows.Forms.CheckBox
     Friend WithEvents g_address As System.Windows.Forms.RadioButton
@@ -244,5 +274,9 @@ Partial Class datagrid
     Friend WithEvents movedown As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents addline As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents copy As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents delline As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents cut As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents paste As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents addmacro As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
 End Class

@@ -137,6 +137,7 @@ Partial Class MERGE
         Me.clipboad = New System.Windows.Forms.ToolStripMenuItem()
         Me.CMFexport = New System.Windows.Forms.ToolStripMenuItem()
         Me.SCMexport = New System.Windows.Forms.ToolStripMenuItem()
+        Me.FCTXT = New System.Windows.Forms.ToolStripMenuItem()
         Me.TABexport = New System.Windows.Forms.ToolStripMenuItem()
         Me.useFTP = New System.Windows.Forms.ToolStripMenuItem()
         Me.ftpdb = New System.Windows.Forms.ToolStripMenuItem()
@@ -190,6 +191,7 @@ Partial Class MERGE
         Me.DATAGRID = New System.Windows.Forms.Button()
         Me.PSF = New System.Windows.Forms.Button()
         Me.dgtext = New System.Windows.Forms.TextBox()
+        Me.dgedit = New System.Windows.Forms.ToolStripMenuItem()
         Me.treeopen.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.tool_menu.SuspendLayout()
@@ -864,9 +866,9 @@ Partial Class MERGE
         '
         'ContextMenuStrip1
         '
-        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cntparser, Me.ToolStripSeparator4, Me.cntclose, Me.cntexpand, Me.ToolStripSeparator5, Me.hankaku, Me.CNchar, Me.ToolStripSeparator6, Me.cntexe, Me.ToolStripSeparator11, Me.NodeConvert, Me.useFTP})
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cntparser, Me.dgedit, Me.ToolStripSeparator4, Me.cntclose, Me.cntexpand, Me.ToolStripSeparator5, Me.hankaku, Me.CNchar, Me.ToolStripSeparator6, Me.cntexe, Me.ToolStripSeparator11, Me.NodeConvert, Me.useFTP})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(216, 252)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(216, 302)
         '
         'cntparser
         '
@@ -939,7 +941,7 @@ Partial Class MERGE
         '
         'NodeConvert
         '
-        Me.NodeConvert.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.clipboad, Me.CMFexport, Me.SCMexport, Me.TABexport})
+        Me.NodeConvert.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.clipboad, Me.CMFexport, Me.SCMexport, Me.FCTXT, Me.TABexport})
         Me.NodeConvert.Name = "NodeConvert"
         Me.NodeConvert.Size = New System.Drawing.Size(215, 28)
         Me.NodeConvert.Text = "変換"
@@ -961,6 +963,12 @@ Partial Class MERGE
         Me.SCMexport.Name = "SCMexport"
         Me.SCMexport.Size = New System.Drawing.Size(185, 28)
         Me.SCMexport.Text = "SCM出力"
+        '
+        'FCTXT
+        '
+        Me.FCTXT.Name = "FCTXT"
+        Me.FCTXT.Size = New System.Drawing.Size(185, 28)
+        Me.FCTXT.Text = "FCTXT出力"
         '
         'TABexport
         '
@@ -1529,6 +1537,12 @@ Partial Class MERGE
         Me.dgtext.TabIndex = 33
         Me.dgtext.Visible = False
         '
+        'dgedit
+        '
+        Me.dgedit.Name = "dgedit"
+        Me.dgedit.Size = New System.Drawing.Size(215, 28)
+        Me.dgedit.Text = "DGエディター"
+        '
         'MERGE
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 15.0!)
@@ -1751,5 +1765,7 @@ Partial Class MERGE
     Friend WithEvents MECABでローマ字ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents saveas_actionreplay As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents dgtext As System.Windows.Forms.TextBox
+    Friend WithEvents FCTXT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents dgedit As System.Windows.Forms.ToolStripMenuItem
 
 End Class

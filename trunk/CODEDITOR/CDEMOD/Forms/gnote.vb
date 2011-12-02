@@ -38,7 +38,7 @@
                             While dg_comment3.Success
                                 counter += 1
                                 If (counter And 1) = 0 Then
-                                    note &= "<DGLINE" & Convert.ToString(line + 1) & "='" & freecheat.Trim & "'>"
+                                    note &= "<DGLINE" & Convert.ToString(line + 1) & "='" & freecheat.Trim & "'>" & vbCrLf
                                     line += 1
                                 End If
                                 dg_comment3 = dg_comment3.NextMatch
@@ -51,7 +51,7 @@
                 ElseIf head = "_L " Or head = "_M" Or head = "_N " Then
                     dg_comment = q.Match(s)
                     If dg_comment.Success Then
-                        note &= "<DGLINE" & Convert.ToString(line + 1) & "='" & freecheat & s.Substring(24, s.Length - 24).Trim & "'>"
+                        note &= "<DGLINE" & Convert.ToString(line + 1) & "='" & freecheat.Trim & s.Substring(24, s.Length - 24).Trim & "'>" & vbCrLf
                     End If
                     line += 1
                     freecheat = ""

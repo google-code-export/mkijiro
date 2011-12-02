@@ -92,6 +92,7 @@ Public Class MERGE
         If My.Settings.gridvalueedit = True Then
             grided_use.Checked = True
             DATAGRID.Visible = True
+            dgedit.Visible = True
         End If
 
         If System.IO.File.Exists(browser) Then
@@ -300,12 +301,14 @@ Public Class MERGE
             codetree.Nodes.Add("新規データベース").ImageIndex = 0 ' Add the root node and set its icon
             codetree.EndUpdate()
             loaded = True
+            ok = True
         ElseIf MessageBox.Show("新規データベースを作成すると現在のデータベースが消えてしまいます。このまま新規データベースを作成してもよろしいですか？", "データベース保存の確認", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) = Windows.Forms.DialogResult.OK Then
             codetree.BeginUpdate()
             reset_PSX()
             codetree.Nodes.Clear()
             codetree.Nodes.Add("新規データベース").ImageIndex = 0 ' Add the root node and set its icon
             codetree.EndUpdate()
+            ok = True
         End If
         If ok = True Then
             file_saveas.Enabled = True
@@ -342,9 +345,6 @@ Public Class MERGE
             codetree.BeginUpdate()
             error_window.list_load_error.BeginUpdate()
 
-            UTF16BECP1201ToolStripMenuItem.Enabled = False
-            saveas_codefreak.Enabled = False
-
             If CODEFREAK = True Then
                 reset_PSP()
                 Application.DoEvents()
@@ -360,7 +360,6 @@ Public Class MERGE
                 reset_PSX()
                 Application.DoEvents()
                 open.read_PSX(database, enc1)
-                PSX = True
             Else
                 enc1 = open.check_enc(database)
                 reset_PSP()
@@ -370,10 +369,6 @@ Public Class MERGE
             If codetree.Nodes.Count >= 1 Then
                 codetree.Nodes(0).Expand()
             End If
-            If enc1 = 1201 Then
-                UTF16BECP1201ToolStripMenuItem.Enabled = True
-                saveas_codefreak.Enabled = True
-            End If
             codetree.EndUpdate()
             error_window.list_load_error.EndUpdate()
             loaded = True
@@ -381,9 +376,6 @@ Public Class MERGE
             overwrite_db.Enabled = True
             My.Settings.lastcodepath = database
             overwrite_db.ToolTipText = "対象;" & database
-            'If DATEL = True Then
-            '    overwrite_db.ToolTipText &= vbCrLf & "ARMAX用BINは.arテキストに変換されます"
-            'End If
 
         End If
     End Sub
@@ -394,10 +386,10 @@ Public Class MERGE
 
             If CODEFREAK = True Then
                 s.save_cf(database, 1201)
-            ElseIf PSX = True Then
-                s.save_psx(database, enc1)
             ElseIf DATEL = True Then
                 s.save_ar(database, 932)
+            ElseIf PSX = True Then
+                s.save_psx(database, enc1)
             Else
                 s.save_cwcheat(database, enc1)
             End If
@@ -427,6 +419,7 @@ Public Class MERGE
             overwrite_db.ToolTipText = "対象;" & database
 
             DATEL = False
+            CODEFREAK = False
             If My.Settings.codepathwhensave = True Then
                 My.Settings.lastcodepath = database
             End If
@@ -447,6 +440,8 @@ Public Class MERGE
             codetree.Nodes(0).Text = Path.GetFileNameWithoutExtension(database)
             overwrite_db.ToolTipText = "対象;" & database
 
+
+            PSX = True
             If My.Settings.codepathwhensave = True Then
                 My.Settings.lastcodepath = database
             End If
@@ -468,6 +463,8 @@ Public Class MERGE
             codetree.Nodes(0).Text = Path.GetFileNameWithoutExtension(database)
             overwrite_db.ToolTipText = "対象;" & database
 
+            DATEL = False
+            CODEFREAK = True
             If My.Settings.codepathwhensave = True Then
                 My.Settings.lastcodepath = database
             End If
@@ -490,6 +487,8 @@ Public Class MERGE
             codetree.Nodes(0).Text = Path.GetFileNameWithoutExtension(database)
             overwrite_db.ToolTipText = "対象;" & database
 
+            DATEL = True
+            CODEFREAK = False
             If My.Settings.codepathwhensave = True Then
                 My.Settings.lastcodepath = database
             End If
@@ -498,15 +497,15 @@ Public Class MERGE
 
 
     Private Sub file_exit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles file_exit.Click
-        My.Settings.mainyoko = Me.Width
-        My.Settings.maintate = Me.Height
         Close()
     End Sub
 
     Private Sub MainForm_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
 
-        My.Settings.mainyoko = Me.Width
-        My.Settings.maintate = Me.Height
+        If Me.AutoSize = False Then
+            My.Settings.mainyoko = Me.Width
+            My.Settings.maintate = Me.Height
+        End If
 
     End Sub
 
@@ -531,6 +530,7 @@ Public Class MERGE
         NodeConvert.Visible = False
         Panel1.Enabled = False
         DATAGRID.Enabled = False
+        dgedit.Enabled = False
         PSF.Enabled = False
 
         USELIST.Enabled = False
@@ -544,16 +544,22 @@ Public Class MERGE
 
         If PSX = False Then
             saveas_cwcheat.Enabled = True
+            saveas_actionreplay.Enabled = True
+            saveas_codefreak.Enabled = True
             saveas_psx.Enabled = False
             CMFexport.Enabled = True
             SCMexport.Enabled = True
             TABexport.Enabled = True
+            FCTXT.Enabled = True
         ElseIf PSX = True Then
             saveas_cwcheat.Enabled = False
+            saveas_actionreplay.Enabled = False
+            saveas_codefreak.Enabled = False
             saveas_psx.Enabled = True
             CMFexport.Enabled = False
             SCMexport.Enabled = False
             TABexport.Enabled = False
+            FCTXT.Enabled = False
         End If
 
         button_list.Enabled = False
@@ -581,6 +587,7 @@ Public Class MERGE
         on_rd.Enabled = False
         Panel1.Enabled = False
         DATAGRID.Enabled = False
+        dgedit.Enabled = False
         NodeConvert.Visible = True
 
         PSF.Enabled = True
@@ -591,15 +598,20 @@ Public Class MERGE
 
         If PSX = False Then
             saveas_cwcheat.Enabled = True
+            saveas_actionreplay.Enabled = True
+            saveas_codefreak.Enabled = True
             saveas_psx.Enabled = False
             CMFexport.Enabled = True
             SCMexport.Enabled = True
             TABexport.Enabled = True
+            FCTXT.Enabled = True
             ftpcmf.Enabled = True
             ftpscm.Enabled = True
             ftptab.Enabled = True
         ElseIf PSX = True Then
             saveas_cwcheat.Enabled = False
+            saveas_actionreplay.Enabled = False
+            saveas_codefreak.Enabled = False
             saveas_psx.Enabled = True
             CMFexport.Enabled = False
             SCMexport.Enabled = False
@@ -637,6 +649,7 @@ Public Class MERGE
 
         NodeConvert.Visible = True
         DATAGRID.Enabled = True
+        dgedit.Enabled = True
         PSF.Enabled = True
 
         If PSX = False Then
@@ -977,9 +990,11 @@ Public Class MERGE
 
         If DATAGRID.Visible = False Then
             DATAGRID.Visible = True
+            dgedit.Visible = True
             grided_use.Checked = True
         Else
             DATAGRID.Visible = False
+            dgedit.Visible = False
             grided_use.Checked = False
         End If
         My.Settings.gridvalueedit = DATAGRID.Visible
@@ -2617,8 +2632,18 @@ Public Class MERGE
     End Sub
 #End Region
     'ぐっりど値えｄぃた
-    Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DATAGRID.Click
+    Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DATAGRID.Click, dgedit.Click
         Dim f As New datagrid
+
+
+        If TEMP.Checked = True Then
+            f.edmode = "_N "
+        ElseIf PSPAR.Checked = True Then
+            f.edmode = "_M "
+        ElseIf CWC.Checked = True Then
+            f.edmode = "_L "
+        End If
+
         f.ShowDialog(Me)
         f.Dispose()
     End Sub
@@ -2631,6 +2656,12 @@ Public Class MERGE
     Private Sub CMF出力ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CMFexport.Click
         Dim s As New save_db
         s.clipboad("CMF")
+    End Sub
+
+
+    Private Sub txt出力ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles FCTXT.Click
+        Dim s As New save_db
+        s.clipboad("TXT")
     End Sub
 
     Private Sub SCM出力ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SCMexport.Click

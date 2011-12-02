@@ -1,7 +1,10 @@
 ﻿Imports System
 Imports System.Windows.Forms
+Imports System.Text
 
 Public Class datagrid
+
+    Friend edmode As String
 
     Private Sub datagrid_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Dim m As MERGE
@@ -80,6 +83,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         Handles DataGridView1.CellValidating
 
         Dim f As New MERGE
+        f = CType(Me.Owner, MERGE)
         Dim dgv As DataGridView = DirectCast(sender, DataGridView)
 
         Dim mask As String = ""
@@ -206,7 +210,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
             If f.PSX = False Then
                 mask = "^0x[0-9a-fA-F]{8}"
             ElseIf dgv.Columns(e.ColumnIndex).Name = "アドレス" Then
-                mask = "[0-9A-F]{8}"
+                mask = "[0-9a-fA-F]{8}"
             ElseIf dgv.Columns(e.ColumnIndex).Name = "値" Then
                 mask = "[0-9a-fA-F]{4}"
             End If
@@ -323,7 +327,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         End If
     End Sub
 
-    Private Sub edival(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click, appy.Click
+    Private Sub edival(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles APPLY.Click, appy.Click
         Dim m As MERGE
         m = CType(Me.Owner, MERGE)
         Dim mask As String = ""
@@ -445,11 +449,13 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         Dim gridtx As String = Nothing
         Dim comment As String = ""
         Dim k As Integer = 0
-        While Not DataGridView1.Rows(k).Cells(0).Value Is Nothing AndAlso Not DataGridView1.Rows(k).Cells(1).Value Is Nothing
+        While k < DataGridView1.RowCount - 1 AndAlso DataGridView1.Rows(k).Cells(0).Value IsNot Nothing AndAlso DataGridView1.Rows(k).Cells(1).Value IsNot Nothing
             gridtx &= DataGridView1.Rows(k).Cells(0).Value.ToString & " "
             gridtx &= DataGridView1.Rows(k).Cells(1).Value.ToString & vbCrLf
             If Not DataGridView1.Rows(k).Cells(4).Value Is Nothing Then
-                comment &= "<DGLINE" & Convert.ToString(k + 1) & "='" & DataGridView1.Rows(k).Cells(4).Value.ToString & "'>"
+                If DataGridView1.Rows(k).Cells(4).Value.ToString <> "" Then
+                    comment &= "<DGLINE" & Convert.ToString(k + 1) & "='" & DataGridView1.Rows(k).Cells(4).Value.ToString & "'>"
+                End If
             End If
             k += 1
         End While
@@ -533,6 +539,33 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 
     End Sub
 
+
+
+    Private Sub DataGridView1_Cellch(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles DataGridView1.CellValueChanged
+        If DataGridView1.CurrentCell IsNot Nothing Then
+            Dim d As Integer = DataGridView1.CurrentRow.Index
+            Dim m As MERGE
+            m = CType(Me.Owner, MERGE)
+            If DataGridView1.Rows(d).Cells(0).Value Is Nothing Then
+                If m.PSX = False Then
+                    DataGridView1.Rows(d).Cells(0).Value = "0x00000000"
+                Else
+                    DataGridView1.Rows(d).Cells(0).Value = "00000000"
+                End If
+            End If
+            If DataGridView1.Rows(d).Cells(1).Value Is Nothing Then
+                If m.PSX = False Then
+                    DataGridView1.Rows(d).Cells(1).Value = "0x00000000"
+                Else
+                    DataGridView1.Rows(d).Cells(1).Value = "0000"
+                End If
+            End If
+            If DataGridView1.Rows(d).Cells(2).Value Is Nothing Then
+                DataGridView1.Rows(d).Cells(2).Value = "DEC"
+            End If
+        End If
+    End Sub
+
     Private Sub CheckBox1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles gridsave.CheckedChanged
 
         If gridsave.Checked = True Then
@@ -549,7 +582,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         Dim note As String = ""
         For k = 0 To DataGridView1.RowCount - 1
             If Not DataGridView1.Rows(k).Cells(4).Value Is Nothing Then
-                note &= "<DGLINE" & Convert.ToString(k + 1) & "='" & DataGridView1.Rows(k).Cells(4).Value.ToString & "'>"
+                note &= "<DGLINE" & Convert.ToString(k + 1) & "='" & DataGridView1.Rows(k).Cells(4).Value.ToString & "'>" & vbCrLf
             End If
         Next
         f.TextBox2.Text = note
@@ -682,11 +715,19 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
     Private Sub 行コード追加ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles addline.Click
 
         Dim d As Integer = DataGridView1.CurrentCell.RowIndex
+        Dim m As MERGE
+        m = CType(Me.Owner, MERGE)
 
         If d < DataGridView1.RowCount - 1 Then
             DataGridView1.Rows.Insert(d + 1)
             For index As Int32 = 0 To 1
-                DataGridView1.Rows(d + 1).Cells(index).Value = "0x00000000"
+                If m.PSX = False Then
+                    DataGridView1.Rows(d + 1).Cells(index).Value = "0x00000000"
+                Else
+                    DataGridView1.Rows(d + 1).Cells(0).Value = "00000000"
+                    DataGridView1.Rows(d + 1).Cells(1).Value = "0000"
+                End If
+                DataGridView1.Rows(d + 1).Cells(2).Value = "DEC"
                 DataGridView1.Rows(d).Selected = False
                 DataGridView1.Rows(d + 1).Selected = True
                 DataGridView1.CurrentCell = DataGridView1.Rows(d + 1).Cells(0)
@@ -695,29 +736,12 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         End If
     End Sub
 
-    Private Sub コピーToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles copy.Click
+    Private Sub 行削除ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
         Dim d As Integer = DataGridView1.CurrentCell.RowIndex
-        Dim row As DataGridViewRow = DataGridView1.Rows(d)
-        Dim CloneWithValues = CType(row.Clone(), DataGridViewRow)
-
         If d < DataGridView1.RowCount - 1 Then
-            DataGridView1.RowCount += 1
-            For index As Int32 = 0 To row.Cells.Count - 1
-                CloneWithValues.Cells(index).Value = row.Cells(index).Value
-                DataGridView1.Rows(DataGridView1.RowCount - 2).Cells(index).Value = CloneWithValues.Cells(index).Value
-                DataGridView1.Rows(d).Selected = False
-                DataGridView1.Rows(DataGridView1.RowCount - 2).Selected = True
-                DataGridView1.CurrentCell = DataGridView1.Rows(DataGridView1.RowCount - 2).Cells(0)
-                DataGridView1.Focus()
-            Next
+            DataGridView1.Rows.RemoveAt(d)
         End If
-    End Sub
-
-    Private Sub 行削除ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles delline.Click
-
-        Dim d As Integer = DataGridView1.CurrentCell.RowIndex
-        DataGridView1.Rows.RemoveAt(d)
         If d = DataGridView1.RowCount - 1 Then
             d -= 1
         End If
@@ -725,4 +749,178 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         DataGridView1.CurrentCell = DataGridView1.Rows(d).Cells(0)
         DataGridView1.Focus()
     End Sub
+
+    Private Sub cut_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cut.Click
+
+        Dim d As Integer = DataGridView1.CurrentCell.RowIndex
+        Dim row As DataGridViewRow
+        Dim st As New StringBuilder
+        Dim stc As New StringBuilder
+        stc.Append("#")
+        Dim cursor(0) As String
+        Dim i As Integer = 0
+        Dim jj As Integer = 0
+
+        If d < DataGridView1.RowCount Then
+            For Each r As DataGridViewRow In DataGridView1.SelectedRows
+                If r.Index < DataGridView1.RowCount - 1 Then
+                    If jj = 0 Then
+                        jj = r.Index
+                    End If
+                    row = DataGridView1.Rows(r.Index)
+                    st.Append("<DGLINE")
+                    st.Append((r.Index + 1).ToString.PadLeft(3, "0"c))
+                    st.Append("='")
+                    If Not row.Cells(4).Value Is Nothing Then
+                        st.Append(row.Cells(4).Value.ToString)
+                    End If
+                    st.Append("'>")
+                    st.Append(vbCrLf)
+                    st.Append(edmode)
+                    st.Append(row.Cells(0).Value.ToString)
+                    st.Append(" ")
+                    st.Append(row.Cells(1).Value.ToString)
+                    st.Append(vbCrLf)
+                    Array.Resize(cursor, i + 1)
+                    cursor(i) = st.ToString
+                    st.Clear()
+                    i += 1
+                End If
+            Next r
+
+        Array.Sort(cursor)
+
+            Dim k = 0
+            Dim del = 0
+            For Each s As String In cursor
+                If s <> "" Then
+                    st.Append(s)
+                    del = CInt(s.Substring(7, 3)) - k - 1
+                    DataGridView1.Rows.RemoveAt(del)
+                    k += 1
+                End If
+            Next
+        If st.ToString <> "" Then
+                Clipboard.SetText(st.ToString)
+        End If
+
+            If cursor(0) <> Nothing Then
+                If d - i >= 0 Then
+                    d = d - i
+                Else
+                    d = jj
+                End If
+                If d >= DataGridView1.RowCount Then
+                    d = DataGridView1.RowCount - 1
+                End If
+                DataGridView1.Rows(d).Selected = True
+                DataGridView1.CurrentCell = DataGridView1.Rows(d).Cells(0)
+                DataGridView1.Focus()
+            End If
+        End If
+
+    End Sub
+
+
+    Private Sub コピーToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles copy.Click
+
+        Dim d As Integer = DataGridView1.CurrentCell.RowIndex
+        Dim row As DataGridViewRow
+        Dim st As New StringBuilder
+        Dim stc As New StringBuilder
+        stc.Append("#")
+        Dim cursor(0) As String
+        Dim cursor2(0) As String
+        Dim i As Integer = 0
+        Dim jj As Integer = 0
+
+        If d < DataGridView1.RowCount Then
+            For Each r As DataGridViewRow In DataGridView1.SelectedRows
+                If r.Index < DataGridView1.RowCount - 1 Then
+                    If jj = 0 Then
+                        jj = r.Index
+                    End If
+                    row = DataGridView1.Rows(r.Index)
+                    st.Append("<DGLINE")
+                    st.Append((r.Index + 1).ToString.PadLeft(3, "0"c))
+                    st.Append("='")
+                    If Not row.Cells(4).Value Is Nothing Then
+                        st.Append(row.Cells(4).Value.ToString)
+                    End If
+                    st.Append("'>")
+                    st.Append(vbCrLf)
+                    st.Append(edmode)
+                    st.Append(row.Cells(0).Value.ToString)
+                    st.Append(" ")
+                    st.Append(row.Cells(1).Value.ToString)
+                    st.Append(vbCrLf)
+                    Array.Resize(cursor, i + 1)
+                    cursor(i) = st.ToString
+                    st.Clear()
+                    i += 1
+                End If
+            Next r
+
+            Array.Sort(cursor)
+
+            For Each s As String In cursor
+                If s <> "" Then
+                    st.Append(s)
+                End If
+            Next
+            If st.ToString <> "" Then
+                Clipboard.SetText(st.ToString)
+            End If
+
+            DataGridView1.Focus()
+        End If
+    End Sub
+
+
+    Private Sub paste_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles paste.Click
+
+        Dim m As MERGE
+        m = CType(Me.Owner, MERGE)
+        Dim d As Integer = DataGridView1.CurrentCell.RowIndex
+        Dim i As Integer = 0
+        Dim r As New System.Text.RegularExpressions.Regex("[0-9a-fA-F]{8}", RegularExpressions.RegexOptions.ECMAScript)
+        Dim hex As System.Text.RegularExpressions.Match = r.Match(Clipboard.GetText)
+        Dim psx As New System.Text.RegularExpressions.Regex("[0-9a-fA-F]\x20[0-9a-fA-F]{4}", RegularExpressions.RegexOptions.ECMAScript)
+        Dim phex As System.Text.RegularExpressions.Match = psx.Match(Clipboard.GetText)
+        Dim dg As New System.Text.RegularExpressions.Regex("<DGLINE[0-9]?[0-9]?[0-9]?='.*?'>", RegularExpressions.RegexOptions.ECMAScript)
+        Dim line As System.Text.RegularExpressions.Match = dg.Match(Clipboard.GetText)
+        If d < DataGridView1.RowCount AndAlso (hex.Success Or (m.PSX = True AndAlso phex.Success AndAlso hex.Success = True)) Then
+            While hex.Success
+                DataGridView1.Rows.Insert(d + i)
+                If m.PSX = False Then
+                    DataGridView1.Rows(d + i).Cells(0).Value = "0x" & hex.Value
+                    hex = hex.NextMatch
+                    DataGridView1.Rows(d + i).Cells(1).Value = "0x" & hex.Value
+                Else
+                    DataGridView1.Rows(d + i).Cells(0).Value = hex.Value
+                    DataGridView1.Rows(d + i).Cells(1).Value = phex.Value.Remove(0, 2)
+                    phex = phex.NextMatch
+                End If
+                hex = hex.NextMatch
+
+                DataGridView1.Rows(d + i).Cells(2).Value = "DEC"
+
+                Dim k = line.Value.IndexOf("'") + 1
+                Dim z = line.Value.LastIndexOf("'")
+                If k <= z Then
+                    DataGridView1.Rows(d + i).Cells(4).Value = line.Value.Substring(k, z - k)
+                End If
+                line = line.NextMatch
+                i += 1
+            End While
+            DataGridView1.Rows(d).Selected = True
+            DataGridView1.CurrentCell = DataGridView1.Rows(d).Cells(0)
+            DataGridView1.Focus()
+        End If
+    End Sub
+
+    Private Sub addmacro_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles addmacro.Click
+
+    End Sub
+
 End Class
