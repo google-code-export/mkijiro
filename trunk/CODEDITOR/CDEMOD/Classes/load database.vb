@@ -181,7 +181,7 @@ Public Class load_db
                                 buffer(0) = buffer(0).ToUpper
                                 buffer(0) = buffer(0).Replace(" 0A", " 0x")
                                 buffer(3) &= buffer(0).Substring(3, 21).Trim & vbCrLf
-                            ElseIf NULLCODE = False AndAlso buffer(0).Substring(0, 1) = "#" Then
+                            ElseIf buffer(0).Substring(0, 1) = "#" Then
                                 b4 &= buffer(0) & vbCrLf
                             Else ' If it is incorrectly formed, ignore it.
 
@@ -250,7 +250,7 @@ Public Class load_db
 
                                         End If
 
-                                    ElseIf NULLCODE = False AndAlso buffer(0).Substring(0, 1) = "#" Then
+                                    ElseIf buffer(0).Substring(0, 1) = "#" Then
                                         b4 &= buffer(0) & vbCrLf
 
                                     ElseIf buffer(0).Substring(0, 2) = "_C" Or buffer(0).Substring(0, 2) = "_S" Then
@@ -275,7 +275,7 @@ Public Class load_db
 
                         Case Else ' This will catch anything that is out of place
 
-                            If NULLCODE = False AndAlso buffer(0).Substring(0, 1) = "#" Then
+                            If buffer(0).Substring(0, 1) = "#" Then
                                 b4 &= buffer(0) & vbCrLf
 
                             ElseIf counts(0) = 1 AndAlso buffer(0).Contains("[CP") AndAlso buffer(0).Contains("]") Then
@@ -567,7 +567,7 @@ Public Class load_db
                         Case Else ' This will catch anything that is out of place
                             If buffer(0).Length >= 2 Then
 
-                                If nullcode = False AndAlso buffer(0).Substring(0, 1) = "#" Then
+                                If buffer(0).Substring(0, 1) = "#" Then
 
                                     b4 &= buffer(0).Trim & vbCrLf
 
@@ -604,7 +604,7 @@ Public Class load_db
 
                     If buffer(0).Length >= 2 Then
 
-                        If nullcode = False AndAlso buffer(0).Substring(0, 1) = "#" Then
+                        If buffer(0).Substring(0, 1) = "#" Then
                             b4 &= buffer(0).Trim & vbCrLf
                         Else
                             ' This is set if there is a garbage line or blank line in the database and
