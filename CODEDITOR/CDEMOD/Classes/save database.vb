@@ -176,12 +176,12 @@ Public Class save_db
                     buffer = n1.Tag.ToString.Split(CChar(vbCrLf))
 
                     For Each s As String In buffer
-
+                        s = s.Trim
                         If s.Length > 1 Then
 
                             If s.Contains("#") Then
 
-                                tw.Write(s.Trim & vbCrLf)
+                                tw.Write(s & vbCrLf)
 
                             Else
                                 If System.Text.RegularExpressions.Regex.IsMatch( _
@@ -189,7 +189,7 @@ Public Class save_db
     "[0-9A-Fa-f]{8} [0-9A-Fa-f?]{4}", _
     System.Text.RegularExpressions.RegexOptions.ECMAScript) Then
 
-                                    tw.Write("_L " & s.Trim & vbCrLf)
+                                    tw.Write("_L " & s & vbCrLf)
 
                                 Else
                                     ' Error, code length was incorrect
@@ -606,6 +606,8 @@ Public Class save_db
             code = BitConverter.GetBytes(t)
             Array.ConstrainedCopy(code, 0, header, 8, 4)
 
+            't = datel_hash(bs, &HF00, 4)
+
         Catch ex As Exception
             MessageBox.Show(ex.Message)
         End Try
@@ -646,8 +648,11 @@ Public Class save_db
         Dim a2 As UInteger = &H17072008
         Dim i As Integer = 0
         For i = 0 To w - 1
+
+            'Dim stt As String = v1.ToString("X")
             v0 = Convert.ToUInt32(bin(s + i))
             a3 = v0 + v1
+            'Dim st As String = a3.ToString("X")
             v1 = a3 >> 1
             If ((a3 And 1) <> 0) Then
                 v1 = v1 Or t0
@@ -714,11 +719,22 @@ Public Class save_db
         Dim gid As String = ""
         Dim scm As String = ""
         Dim cmf As String = ""
+        Dim fctxt As String = ""
+        Dim fcc As String = ""
+        Dim fcode As String = ""
         Dim scmclose As Boolean = False
         Dim out As Boolean = False
         Dim nullcode As Boolean = False
         Dim line As Integer = 0
         Dim nnnn As Integer = 0
+        Dim sb As New StringBuilder
+        Dim ss(2) As String
+        Dim sss As String() = Nothing
+
+        Dim r As New System.Text.RegularExpressions.Regex("0x[0-9a-fA-F]{8}", RegularExpressions.RegexOptions.ECMAScript)
+        Dim hex As System.Text.RegularExpressions.Match
+        Dim dg As New System.Text.RegularExpressions.Regex("<DGLINE[0-9]?[0-9]?[0-9]?='.*?'>", RegularExpressions.RegexOptions.ECMAScript)
+        Dim gdline As System.Text.RegularExpressions.Match
         reset_errors() ' Clear prior save errors if any
 
         Try
@@ -738,6 +754,7 @@ Public Class save_db
                 scm &= "NAME:" & n.Text.Trim & vbCrLf
                 scm &= "$START" & vbCrLf
                 cmf = b1
+                fctxt = b1
 
                 If m.codetree.SelectedNode.Level = 2 Then
                         b1 = ""
@@ -757,6 +774,7 @@ Public Class save_db
                         scm &= "$" & n1.Text.Trim & "{" & vbCrLf
                         scm &= "$ $2 $(FFFFFFFF FFFFFFFF)}" & vbCrLf
                         cmf &= "_C0 " & n1.Text.Trim & vbCrLf
+                        fctxt &= "_C0 " & n1.Text.Trim & vbCrLf
                         line = 0
                     Else
 
@@ -782,6 +800,7 @@ Public Class save_db
                                         End If
                                         scm &= "$" & n1.Text.Trim & "{" & vbCrLf
                                         cmf &= "_C0 " & n1.Text.Trim & vbCrLf
+                                        fctxt &= "_C0 " & n1.Text.Trim & vbCrLf
                                         line = 0
                                         out = True
                                         nullcode = True
@@ -806,6 +825,7 @@ Public Class save_db
                                         End If
                                         scm &= "$" & n1.Text.Trim & "{" & vbCrLf
                                         cmf &= "_C1 " & n1.Text.Trim & vbCrLf
+                                        fctxt &= "_C1 " & n1.Text.Trim & vbCrLf
                                         line = 0
                                         nullcode = True
                                         out = True
@@ -818,6 +838,7 @@ Public Class save_db
 
                                 If s.Contains("#") AndAlso MODE <> "SCM" Then
                                     b1 &= s.Trim & vbCrLf
+                                    fcc &= s.Trim & vbCrLf
                                 ElseIf m.PSX = True Then
                                     b1 &= cwcar & s.Trim & vbCrLf
                                 Else
@@ -879,7 +900,9 @@ Public Class save_db
                                             Else
                                                 scm &= "$ $2 $(" & s.Trim.Replace("0x", "") & ")" & vbCrLf
                                             End If
+
                                             cmf &= cwcar & s.Trim & vbCrLf
+                                            fcode &= s.Trim & vbCrLf
                                         End If
                                     Else
                                         ' Error, code length was incorrect
@@ -892,7 +915,48 @@ Public Class save_db
 
                             End If
 
+
                         Next
+
+                        If MODE = "TXT" Then
+                            Dim ls As Integer = 1
+                            hex = r.Match(fcode)
+                            gdline = dg.Match(fcc)
+                            Array.Resize(sss, 1)
+                            Array.Resize(sss, 2)
+                            While hex.Success
+                                Dim l = gdline.Value.IndexOf("'") + 1
+                                Dim z = gdline.Value.LastIndexOf("'")
+                                If l <> -1 AndAlso z - l > 0 AndAlso l - 9 > 0 Then
+                                    ss(0) = gdline.Value.Substring(l, z - l)
+                                    ss(1) = gdline.Value.Substring(7, l - 9)
+                                    Array.Resize(sss, CInt(ss(1)) + 1)
+                                    Array.ConstrainedCopy(ss, 0, sss, CInt(ss(1)), 1)
+                                End If
+                                gdline = gdline.NextMatch
+                                If ls >= sss.Length Then
+                                    Array.Resize(sss, ls + 1)
+                                End If
+                                If sss(ls) <> "" Then
+                                    sb.Append("_N2 ")
+                                    sb.Append(sss(ls))
+                                    sb.Append(vbCrLf)
+                                End If
+                                sb.Append("_L ")
+                                sb.Append(hex.Value)
+                                hex = hex.NextMatch
+                                sb.Append(" ")
+                                sb.Append(hex.Value)
+                                hex = hex.NextMatch
+                                sb.Append(vbCrLf)
+                                ls += 1
+                            End While
+                            fctxt &= sb.ToString
+                            sb.Clear()
+                        End If
+
+                        fcc = ""
+                        fcode = ""
 
                         End If
 
@@ -915,6 +979,11 @@ Public Class save_db
 
                 If MODE = "CLIP" Then
                     Clipboard.SetText(b1)
+                ElseIf MODE = "TXT" Then
+                    filename &= ".txt"
+                    Dim tw As New StreamWriter(filename, False, System.Text.Encoding.GetEncoding(936))
+                    tw.Write(fctxt)
+                    tw.Close()
                 ElseIf MODE = "CMF" Then
                     filename &= ".cmf"
                     Dim tw As New StreamWriter(filename, False, System.Text.Encoding.GetEncoding(936))

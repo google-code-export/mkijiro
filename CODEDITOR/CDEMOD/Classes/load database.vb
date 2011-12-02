@@ -95,12 +95,13 @@ Public Class load_db
                     If NULLCODE = True Then
                         buffer(3) &= "" & vbCrLf
                     End If
-                    If buffer(0).Length > 1 And buffer(0).Substring(0, 1) = "#" Then
+                    If buffer(0).Length > 1 AndAlso buffer(0).Substring(0, 1) = "#" Then
                         b4 &= buffer(0) & vbCrLf
                     End If
                     cnode.Tag = buffer(3) & b4
                     Exit Do
                 End If
+
 
                 If buffer(0).Length >= 4 Then
 
@@ -180,11 +181,12 @@ Public Class load_db
                                 buffer(0) = buffer(0).ToUpper
                                 buffer(0) = buffer(0).Replace(" 0A", " 0x")
                                 buffer(3) &= buffer(0).Substring(3, 21).Trim & vbCrLf
-                            ElseIf buffer(0).Substring(0, 1) = "#" Then
+                            ElseIf NULLCODE = False AndAlso buffer(0).Substring(0, 1) = "#" Then
                                 b4 &= buffer(0) & vbCrLf
                             Else ' If it is incorrectly formed, ignore it.
 
                                 counts(2) += 1
+
                                 If buffer(0).Trim = Nothing Then 'If the line is blank
                                     write_errors(counts(0), counts(2), "<!!空白しかない行です>", gnode.Text, cnode.Text)
                                 Else
@@ -248,7 +250,7 @@ Public Class load_db
 
                                         End If
 
-                                    ElseIf buffer(0).Substring(0, 1) = "#" Then
+                                    ElseIf NULLCODE = False AndAlso buffer(0).Substring(0, 1) = "#" Then
                                         b4 &= buffer(0) & vbCrLf
 
                                     ElseIf buffer(0).Substring(0, 2) = "_C" Or buffer(0).Substring(0, 2) = "_S" Then
@@ -273,7 +275,7 @@ Public Class load_db
 
                         Case Else ' This will catch anything that is out of place
 
-                            If buffer(0).Substring(0, 1) = "#" Then
+                            If NULLCODE = False AndAlso buffer(0).Substring(0, 1) = "#" Then
                                 b4 &= buffer(0) & vbCrLf
 
                             ElseIf counts(0) = 1 AndAlso buffer(0).Contains("[CP") AndAlso buffer(0).Contains("]") Then
@@ -307,7 +309,7 @@ Public Class load_db
 
                 Else
                     buffer(0) = buffer(0).PadRight(2)
-                    If buffer(0).Substring(0, 1) = "#" Then
+                    If NULLCODE = False AndAlso buffer(0).Substring(0, 1) = "#" Then
                         b4 &= buffer(0).Trim & vbCrLf
                     Else
                         ' This is set if there is a garbage line in the database and
@@ -446,9 +448,11 @@ Public Class load_db
                             nullcode = False
                             buffer(0) = buffer(0).Trim
                             '_L 12345678 1234
-                            If buffer(0).Length = 16 And buffer(0).Substring(11, 1) = " " Then 'If it is a correctly formed code record it
-                                buffer(0) = buffer(0).Replace("?", "A")
-                                buffer(3) &= buffer(0).Substring(3, 13) & vbCrLf
+                            If buffer(0).Length = 16 Then
+                                If buffer(0).Substring(11, 1) = " " Then 'If it is a correctly formed code record it
+                                    buffer(0) = buffer(0).Replace("?", "A")
+                                    buffer(3) &= buffer(0).Substring(3, 13) & vbCrLf
+                                End If
                             Else
 
                                 buffer(4) = clean_PSX(buffer(0))
@@ -495,51 +499,58 @@ Public Class load_db
 
                                     Exit Do
 
-                                ElseIf buffer.Length = 1 Then
+                                ElseIf buffer(0).Length >= 4 Then
 
-                                ElseIf buffer(0).Substring(0, 2) = "_L" Then
-                                    buffer(0) = buffer(0).Trim
+                                    If buffer(0).Substring(0, 2) = "_L" Then
+                                        buffer(0) = buffer(0).Trim
 
-                                    If buffer(0).Length = 16 And buffer(0).Substring(11, 1) = " " Then
-                                        buffer(0) = buffer(0).Replace("?", "A")
-                                        buffer(3) &= buffer(0).Substring(3, 13) & vbCrLf
-                                    Else
-
-                                        buffer(4) = clean_PSX(buffer(0).Trim)
-
-                                        If buffer(4).Length = 16 And buffer(0).Substring(11, 1) = " " Then 'Attempt to remove white spaces and re-check
-                                            buffer(3) &= buffer(4).Substring(3, 13) & vbCrLf
-
-                                        Else ' If it is incorrectly formed, ignore it.
-
-                                            counts(2) += 1
-                                            If buffer(0).Replace(" ", "") = Nothing Then 'If the line is blank
-                                                write_errors(counts(0), counts(2), "<空白しかない行です>", gnode.Text, cnode.Text)
-                                            Else
-                                                write_errors(counts(0), counts(2), buffer(0) & " <追加されませんでした>", gnode.Text, cnode.Text) ' Write the ignored line to the error list
+                                        If buffer(0).Length = 16 Then
+                                            If buffer(0).Substring(11, 1) = " " Then
+                                                buffer(0) = buffer(0).Replace("?", "A")
+                                                buffer(3) &= buffer(0).Substring(3, 13) & vbCrLf
                                             End If
+                                        Else
 
-                                            If ew.Visible = False Then
-                                                ew.Visible = True
-                                                ew.Show()
-                                                ew.tab_error.SelectedIndex = 0 ' Give focus to the "Load Error" tab
-                                                m.Focus()
-                                                reset_toolbar()
+                                            buffer(4) = clean_PSX(buffer(0).Trim)
+
+                                            If buffer(4).Length = 16 Then
+                                                If buffer(0).Substring(11, 1) = " " Then 'Attempt to remove white spaces and re-check
+                                                    buffer(3) &= buffer(4).Substring(3, 13) & vbCrLf
+                                                End If
+                                            Else ' If it is incorrectly formed, ignore it.
+
+                                                counts(2) += 1
+                                                If buffer(0).Replace(" ", "") = Nothing Then 'If the line is blank
+                                                    write_errors(counts(0), counts(2), "<空白しかない行です>", gnode.Text, cnode.Text)
+                                                Else
+                                                    write_errors(counts(0), counts(2), buffer(0) & " <追加されませんでした>", gnode.Text, cnode.Text) ' Write the ignored line to the error list
+                                                End If
+
+                                                If ew.Visible = False Then
+                                                    ew.Visible = True
+                                                    ew.Show()
+                                                    ew.tab_error.SelectedIndex = 0 ' Give focus to the "Load Error" tab
+                                                    m.Focus()
+                                                    reset_toolbar()
+
+                                                End If
 
                                             End If
 
                                         End If
 
+                                    ElseIf buffer(0).Substring(0, 2) = "_S" Or buffer(0).Substring(0, 2) = "_C" Then
+                                        cnode.Tag = buffer(3) & b4 ' Store all collected codes in the nodes 'tag'
+                                        buffer(3) = Nothing
+                                        b4 = Nothing
+                                        skip = True ' If a new game or code is found, skip the initial read so it is processed
+
                                     End If
-                                ElseIf buffer(0).Substring(0, 1) = "#" Then
-                                    b4 &= buffer(0) & vbCrLf
-
-                                ElseIf buffer(0).Substring(0, 2) = "_S" Or buffer(0).Substring(0, 2) = "_C" Then
-                                    cnode.Tag = buffer(3) & b4 ' Store all collected codes in the nodes 'tag'
-                                    buffer(3) = Nothing
-                                    b4 = Nothing
-                                    skip = True ' If a new game or code is found, skip the initial read so it is processed
-
+                                End If
+                                If buffer(0).Length >= 2 Then
+                                    If nullcode = False AndAlso buffer(0).Substring(0, 1) = "#" Then
+                                        b4 &= buffer(0) & vbCrLf
+                                    End If
                                 End If
 
                                 If counts(1) >= 20 Then
@@ -554,57 +565,63 @@ Public Class load_db
                             Loop
 
                         Case Else ' This will catch anything that is out of place
-                            If buffer(0).Substring(0, 1) = "#" Then
-                                b4 &= buffer(0).Trim & vbCrLf
+                            If buffer(0).Length >= 2 Then
 
-                            ElseIf counts(0) = 1 AndAlso buffer(0).Contains("[CP") AndAlso buffer(0).Contains("]") Then
-                            Else ' what we found isn't a comment, ignore it
+                                If nullcode = False AndAlso buffer(0).Substring(0, 1) = "#" Then
 
-                                counts(2) += 1
-                                If buffer(0).Trim = Nothing Then 'If the line is blank
-                                    write_errors(counts(0), counts(2), "<空白しかない行です>", gnode.Text, cnode.Text)
-                                Else
-                                    write_errors(counts(0), counts(2), buffer(0) & " <追加されませんでした>", gnode.Text, cnode.Text) ' Write the ignored line to the error list
+                                    b4 &= buffer(0).Trim & vbCrLf
+
+                                ElseIf counts(0) = 1 AndAlso buffer(0).Contains("[CP") AndAlso buffer(0).Contains("]") Then
+
+                                Else ' what we found isn't a comment, ignore it
+
+                                    counts(2) += 1
+                                    If buffer(0).Trim = Nothing Then 'If the line is blank
+                                        write_errors(counts(0), counts(2), "<空白しかない行です>", gnode.Text, cnode.Text)
+                                    Else
+                                        write_errors(counts(0), counts(2), buffer(0) & " <追加されませんでした>", gnode.Text, cnode.Text) ' Write the ignored line to the error list
+                                    End If
+
+                                    If ew.Visible = False Then
+
+                                        ew.Show()
+                                        ew.tab_error.SelectedIndex = 0 ' Give focus to the "Load Error" tab
+                                        m.Focus()
+                                        reset_toolbar()
+
+                                    End If
+
+                                    buffer(0) = sr.ReadLine
+                                    counts(0) += 1
+                                    counts(1) += 1
+                                    skip = True
+
                                 End If
-
-                                If ew.Visible = False Then
-
-                                    ew.Show()
-                                    ew.tab_error.SelectedIndex = 0 ' Give focus to the "Load Error" tab
-                                    m.Focus()
-                                    reset_toolbar()
-
-                                End If
-
-                                buffer(0) = sr.ReadLine
-                                counts(0) += 1
-                                counts(1) += 1
-                                skip = True
-
                             End If
-
                     End Select
 
                 Else
-                    buffer(0) = buffer(0).PadRight(2)
-                    If buffer(0).Substring(0, 1) = "#" Then
-                        b4 &= buffer(0).Trim & vbCrLf
-                    Else
-                        ' This is set if there is a garbage line or blank line in the database and
-                        ' will write the line to the error window and try to continue loading
-                        counts(2) += 1
-                        'Determine if it's a blank line
 
-                        If buffer(0).Trim = Nothing Then
-                            write_errors(counts(0), counts(2), "<!空白しかない行です>", gnode.Text, cnode.Text)
+                    If buffer(0).Length >= 2 Then
+
+                        If nullcode = False AndAlso buffer(0).Substring(0, 1) = "#" Then
+                            b4 &= buffer(0).Trim & vbCrLf
                         Else
-                            write_errors(counts(0), counts(2), buffer(0) & " <!追加されませんでした>", gnode.Text, cnode.Text)
+                            ' This is set if there is a garbage line or blank line in the database and
+                            ' will write the line to the error window and try to continue loading
+                            counts(2) += 1
+                            'Determine if it's a blank line
+
+                            If buffer(0).Trim = Nothing Then
+                                write_errors(counts(0), counts(2), "<!空白しかない行です>", gnode.Text, cnode.Text)
+                            Else
+                                write_errors(counts(0), counts(2), buffer(0) & " <!追加されませんでした>", gnode.Text, cnode.Text)
+                            End If
+
+                            skip = False
+
                         End If
-
-                        skip = False
-
                     End If
-                End If
 
                 If counts(1) >= 100 Then
 
@@ -615,12 +632,12 @@ Public Class load_db
                     Application.DoEvents()
                     counts(1) = 0
 
+                    End If
                 End If
             Loop
 
         Catch ex As Exception
-
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.Message & vbCrLf , "エラー")
 
         End Try
 
@@ -678,115 +695,122 @@ Public Class load_db
         Dim sb As New System.Text.StringBuilder()
         counts(0) = cfdatlen \ 36
 
-        While i < cfdatlen - 3
+        Try
+            While i < cfdatlen - 3
 
-            If (i And 1) = 0 Then
-                If bs(i) = &H47 AndAlso bs(i + 1) = &H20 Then 'G ゲーム名
-                    If b6 <> Nothing Then
-                        cnode.Tag = b6
-                        b6 = Nothing
+                If (i And 1) = 0 Then
+                    If bs(i) = &H47 AndAlso bs(i + 1) = &H20 Then 'G ゲーム名
+                        If b6 <> Nothing Then
+                            cnode.Tag = b6
+                            b6 = Nothing
+                        End If
+                        i += 2
+                        'ヽ|・∀・|ノCP1201　上=0x\4E0A
+                        '　|＿＿＿|
+                        '　　|　|
+                        Do Until bs(i) = 10 AndAlso bs(i + 1) = 10 AndAlso (i And 1) = 0 '0A0A
+                            n += 1
+                            i += 1
+                        Loop
+                        Array.Resize(gname, n)
+                        Array.ConstrainedCopy(bs, i - n, gname, 0, n)
+                        str = System.Text.Encoding.GetEncoding(1201).GetString(gname)
+                        n = 0
+                        gnode = New TreeNode(str.Trim)
+                        With gnode
+                            .Name = str.Trim
+                            .Tag = Nothing
+                            .ImageIndex = 1
+                        End With
+                        m.codetree.Nodes(0).Nodes.Add(gnode)
+                        counts(1) += 1
+
+                    ElseIf bs(i) = &H4D AndAlso bs(i + 1) = &H20 Then 'M ゲームID
+                        i += 34
+                        Array.ConstrainedCopy(bs, i - 32, cf_utf16, 0, 32)
+                        str = System.Text.Encoding.GetEncoding(1201).GetString(cf_utf16)
+                        sb.Clear()
+                        s1 = Chr(Convert.ToInt32(str.Substring(0, 2), 16))
+                        s2 = Chr(Convert.ToInt32(str.Substring(2, 2), 16))
+                        s3 = Chr(Convert.ToInt32(str.Substring(4, 2), 16))
+                        s4 = Chr(Convert.ToInt32(str.Substring(6, 2), 16))
+                        s5 = str.Substring(8, 5)
+                        sb.Append(s1)
+                        sb.Append(s2)
+                        sb.Append(s3)
+                        sb.Append(s4)
+                        sb.Append("-")
+                        sb.Append(s5)
+                        b3 = sb.ToString()
+                        b3 = b3.Replace(CChar(Chr(0)), "0")
+                        gnode.Tag = b3
+                        counts(1) += 1
+
+                    ElseIf bs(i) = &H44 AndAlso bs(i + 1) = &H20 Then 'D コード名
+
+                        If b6 <> Nothing Then
+                            cnode.Tag = b6
+                            b6 = Nothing
+                        End If
+                        i += 2
+                        'ヽ|・∀・|ノCP1201　上=0x\4E0A
+                        '　|＿＿＿|
+                        '　　|　|
+                        Do Until bs(i) = 10 AndAlso bs(i + 1) = 10 AndAlso (i And 1) = 0  '0A0A
+                            n += 1
+                            i += 1
+                        Loop
+                        Array.Resize(cname, n)
+                        Array.ConstrainedCopy(bs, i - n, cname, 0, n)
+                        str = System.Text.Encoding.GetEncoding(1201).GetString(cname)
+                        n = 0
+                        cnode = New TreeNode(str.Trim)
+                        cnode.Name = str.Trim
+                        cnode.ImageIndex = 2
+                        gnode.Nodes.Add(cnode)
+                        b6 = "0" & vbCrLf
+                        counts(1) += 1
+
+                    ElseIf bs(i) = &H43 AndAlso bs(i + 1) = &H20 Then 'C コード内容
+                        b5 = Nothing
+                        i += 34
+                        Array.ConstrainedCopy(bs, i - 32, cf_utf16, 0, 32)
+                        str = System.Text.Encoding.GetEncoding(1201).GetString(cf_utf16)
+                        sb.Clear()
+                        sb.Append("0x")
+                        sb.Append(str.Substring(0, 8))
+                        sb.Append(" 0x")
+                        sb.Append(str.Substring(8, 8))
+                        sb.Append(vbCrLf)
+                        b5 = sb.ToString
+                        b6 &= b5
+                        counts(1) += 1
                     End If
-                    i += 2
-                    'ヽ|・∀・|ノCP1201　上=0x\4E0A
-                    '　|＿＿＿|
-                    '　　|　|
-                    Do Until bs(i) = 10 AndAlso bs(i + 1) = 10 AndAlso (i And 1) = 0 '0A0A
-                        n += 1
-                        i += 1
-                    Loop
-                    Array.Resize(gname, n)
-                    Array.ConstrainedCopy(bs, i - n, gname, 0, n)
-                    str = System.Text.Encoding.GetEncoding(1201).GetString(gname)
-                    n = 0
-                    gnode = New TreeNode(str.Trim)
-                    With gnode
-                        .Name = str.Trim
-                        .Tag = Nothing
-                        .ImageIndex = 1
-                    End With
-                    m.codetree.Nodes(0).Nodes.Add(gnode)
-                    counts(1) += 1
-
-                ElseIf bs(i) = &H4D AndAlso bs(i + 1) = &H20 Then 'M ゲームID
-                    i += 34
-                    Array.ConstrainedCopy(bs, i - 32, cf_utf16, 0, 32)
-                    str = System.Text.Encoding.GetEncoding(1201).GetString(cf_utf16)
-                    sb.Clear()
-                    s1 = Chr(Convert.ToInt32(str.Substring(0, 2), 16))
-                    s2 = Chr(Convert.ToInt32(str.Substring(2, 2), 16))
-                    s3 = Chr(Convert.ToInt32(str.Substring(4, 2), 16))
-                    s4 = Chr(Convert.ToInt32(str.Substring(6, 2), 16))
-                    s5 = str.Substring(8, 5)
-                    sb.Append(s1)
-                    sb.Append(s2)
-                    sb.Append(s3)
-                    sb.Append(s4)
-                    sb.Append("-")
-                    sb.Append(s5)
-                    b3 = sb.ToString()
-                    b3 = b3.Replace(CChar(Chr(0)), "0")
-                    gnode.Tag = b3
-                    counts(1) += 1
-
-                ElseIf bs(i) = &H44 AndAlso bs(i + 1) = &H20 Then 'D コード名
-
-                    If b6 <> Nothing Then
-                        cnode.Tag = b6
-                        b6 = Nothing
-                    End If
-                    i += 2
-                    'ヽ|・∀・|ノCP1201　上=0x\4E0A
-                    '　|＿＿＿|
-                    '　　|　|
-                    Do Until bs(i) = 10 AndAlso bs(i + 1) = 10 AndAlso (i And 1) = 0  '0A0A
-                        n += 1
-                        i += 1
-                    Loop
-                    Array.Resize(cname, n)
-                    Array.ConstrainedCopy(bs, i - n, cname, 0, n)
-                    str = System.Text.Encoding.GetEncoding(1201).GetString(cname)
-                    n = 0
-                    cnode = New TreeNode(str.Trim)
-                    cnode.Name = str.Trim
-                    cnode.ImageIndex = 2
-                    gnode.Nodes.Add(cnode)
-                    b6 = "0" & vbCrLf
-                    counts(1) += 1
-
-                ElseIf bs(i) = &H43 AndAlso bs(i + 1) = &H20 Then 'C コード内容
-                    b5 = Nothing
-                    i += 34
-                    Array.ConstrainedCopy(bs, i - 32, cf_utf16, 0, 32)
-                    str = System.Text.Encoding.GetEncoding(1201).GetString(cf_utf16)
-                    sb.Clear()
-                    sb.Append("0x")
-                    sb.Append(str.Substring(0, 8))
-                    sb.Append(" 0x")
-                    sb.Append(str.Substring(8, 8))
-                    sb.Append(vbCrLf)
-                    b5 = sb.ToString
-                    b6 &= b5
-                    counts(1) += 1
                 End If
+                i += 1
+
+                If counts(1) = counts(0) Then
+
+                    ' Update the progressbar every 20 repetitions otherwise the program 
+                    ' will slow to a crawl from the constant re-draw of the progress bar
+                    percent = (i * 100) / cfdatlen
+                    m.progbar.Value = Convert.ToInt32(percent)
+                    m.progbar.PerformStep()
+                    Application.DoEvents()
+                    counts(1) = 0
+                End If
+
+            End While
+
+            If b6 <> Nothing Then
+                cnode.Tag = b6
             End If
-            i += 1
 
-            If counts(1) = counts(0) Then
+        Catch ex As Exception
 
-                ' Update the progressbar every 20 repetitions otherwise the program 
-                ' will slow to a crawl from the constant re-draw of the progress bar
-                percent = (i * 100) / cfdatlen
-                m.progbar.Value = Convert.ToInt32(percent)
-                m.progbar.PerformStep()
-                Application.DoEvents()
-                counts(1) = 0
-            End If
+            MessageBox.Show(ex.Message)
 
-        End While
-
-        If b6 <> Nothing Then
-            cnode.Tag = b6
-        End If
+        End Try
 
         If ew.list_load_error.Items.Count = 0 And ew.list_save_error.Items.Count > 0 Then
             ew.Show()
@@ -836,92 +860,98 @@ Public Class load_db
         Dim nextcode As Integer = 0
         Dim sb As New System.Text.StringBuilder()
         counts(0) = datellen \ 32
+        Try
 
-        While i < datellen
-            blocklen = (CInt(bs(i)) + (CInt(bs(i + 1)) << 8)) << 2
-            If blocklen = 0 Then
-                blocklen = datellen - i
-            End If
-            While k < blocklen
-                If parsemode = False Then
-                    Array.ConstrainedCopy(bs, i + 7, id, 0, 10)
-                    str = Encoding.GetEncoding(932).GetString(id)
-                    str = str.PadRight(10, " "c)
-                    gnode = New TreeNode(str)
-                    With gnode
-                        .Name = Nothing
-                        .Tag = str
-                        .ImageIndex = 1
-                    End With
-                    m.codetree.Nodes(0).Nodes.Add(gnode)
-                    k = CInt(bs(i + 4)) - 18
-                    Array.Resize(gname, k)
-                    Array.ConstrainedCopy(bs, i + 18, gname, 0, k)
-                    str = Encoding.GetEncoding(932).GetString(gname)
-                    str = str.Replace(vbNullChar, "")
-                    gnode.Text = str
-                    gnode.Name = str
-                    k = CInt(bs(i + 4))
-                    l = CInt(bs(i + 5)) + CInt(bs(i + 6)) << 8
-                    If l = 0 Then
-                        Exit While
-                    End If
-                    parsemode = True
-                ElseIf parsemode = True Then
-                    codeline = CInt(bs(i + k))
-                    l = CInt(bs(i + k + 1)) - 1
-                    Array.Resize(cname, l)
-                    Array.ConstrainedCopy(bs, i + k + 4, cname, 0, l)
-                    str = Encoding.GetEncoding(932).GetString(cname)
-                    cnode = New TreeNode(str.Trim)
-                    cnode.Name = str.Trim
-                    cnode.ImageIndex = 2
-                    gnode.Nodes.Add(cnode)
-                    sb.Clear()
-                    sb.Append("2")
-                    sb.Append(vbCrLf)
-                    l = CInt(bs(i + k + 2)) << 2
-                    While codeline > 0
-                        Array.ConstrainedCopy(bs, i + k + l, code, 0, 4)
-                        str = Convert.ToString(BitConverter.ToInt32(code, 0), 16)
-                        str = str.ToUpper.PadLeft(8, "0"c)
-                        sb.Append("0x")
-                        sb.Append(str)
-                        sb.Append(" 0x")
-                        Array.ConstrainedCopy(bs, i + k + l + 4, code, 0, 4)
-                        str = Convert.ToString(BitConverter.ToInt32(code, 0), 16)
-                        str = str.ToUpper.PadLeft(8, "0"c)
-                        sb.Append(str)
-                        sb.Append(vbCrLf)
-                        l += 8
-                        codeline -= 1
-                    End While
-                    cnode.Tag = sb.ToString
-                    nextcode = CInt(bs(i + k + 3)) << 2
-                    k += nextcode
-                    counts(1) += 1
-                    If nextcode = 0 Then
-                        Exit While
-                    End If
+            While i < datellen
+                blocklen = (CInt(bs(i)) + (CInt(bs(i + 1)) << 8)) << 2
+                If blocklen = 0 Then
+                    blocklen = datellen - i
                 End If
+                While k < blocklen
+                    If parsemode = False Then
+                        Array.ConstrainedCopy(bs, i + 7, id, 0, 10)
+                        str = Encoding.GetEncoding(932).GetString(id)
+                        str = str.PadRight(10, " "c)
+                        gnode = New TreeNode(str)
+                        With gnode
+                            .Name = Nothing
+                            .Tag = str
+                            .ImageIndex = 1
+                        End With
+                        m.codetree.Nodes(0).Nodes.Add(gnode)
+                        k = CInt(bs(i + 4)) - 18
+                        Array.Resize(gname, k)
+                        Array.ConstrainedCopy(bs, i + 18, gname, 0, k)
+                        str = Encoding.GetEncoding(932).GetString(gname)
+                        str = str.Replace(vbNullChar, "")
+                        gnode.Text = str
+                        gnode.Name = str
+                        k = CInt(bs(i + 4))
+                        l = CInt(bs(i + 5)) + CInt(bs(i + 6)) << 8
+                        If l = 0 Then
+                            Exit While
+                        End If
+                        parsemode = True
+                    ElseIf parsemode = True Then
+                        codeline = CInt(bs(i + k))
+                        l = CInt(bs(i + k + 1)) - 1
+                        Array.Resize(cname, l)
+                        Array.ConstrainedCopy(bs, i + k + 4, cname, 0, l)
+                        str = Encoding.GetEncoding(932).GetString(cname)
+                        cnode = New TreeNode(str.Trim)
+                        cnode.Name = str.Trim
+                        cnode.ImageIndex = 2
+                        gnode.Nodes.Add(cnode)
+                        sb.Clear()
+                        sb.Append("2")
+                        sb.Append(vbCrLf)
+                        l = CInt(bs(i + k + 2)) << 2
+                        While codeline > 0
+                            Array.ConstrainedCopy(bs, i + k + l, code, 0, 4)
+                            str = Convert.ToString(BitConverter.ToInt32(code, 0), 16)
+                            str = str.ToUpper.PadLeft(8, "0"c)
+                            sb.Append("0x")
+                            sb.Append(str)
+                            sb.Append(" 0x")
+                            Array.ConstrainedCopy(bs, i + k + l + 4, code, 0, 4)
+                            str = Convert.ToString(BitConverter.ToInt32(code, 0), 16)
+                            str = str.ToUpper.PadLeft(8, "0"c)
+                            sb.Append(str)
+                            sb.Append(vbCrLf)
+                            l += 8
+                            codeline -= 1
+                        End While
+                        cnode.Tag = sb.ToString
+                        nextcode = CInt(bs(i + k + 3)) << 2
+                        k += nextcode
+                        counts(1) += 1
+                        If nextcode = 0 Then
+                            Exit While
+                        End If
+                    End If
+                End While
+                i += blocklen
+                k = 0
+                parsemode = False
+
+                If counts(1) = counts(0) Then
+
+                    ' Update the progressbar every 20 repetitions otherwise the program 
+                    ' will slow to a crawl from the constant re-draw of the progress bar
+                    percent = (i * 100) / datellen
+                    m.progbar.Value = Convert.ToInt32(percent)
+                    m.progbar.PerformStep()
+                    Application.DoEvents()
+                    counts(1) = 0
+                End If
+
             End While
-            i += blocklen
-            k = 0
-            parsemode = False
 
-            If counts(1) = counts(0) Then
+        Catch ex As Exception
 
-                ' Update the progressbar every 20 repetitions otherwise the program 
-                ' will slow to a crawl from the constant re-draw of the progress bar
-                percent = (i * 100) / datellen
-                m.progbar.Value = Convert.ToInt32(percent)
-                m.progbar.PerformStep()
-                Application.DoEvents()
-                counts(1) = 0
-            End If
+            MessageBox.Show(ex.Message)
 
-        End While
-
+        End Try
         If ew.list_load_error.Items.Count = 0 And ew.list_save_error.Items.Count > 0 Then
             ew.Show()
             ew.tab_error.SelectedIndex = 1
@@ -939,16 +969,17 @@ Public Class load_db
                              ByVal game_t As String, ByVal code_t As String)
 
         Dim ew As error_window = error_window
+        If error_n - 1 > 0 AndAlso game_t <> "" AndAlso code_t <> "" Then
+            With ew.list_load_error
+                .Items.Add(error_n.ToString)
+                .Items(error_n - 1).SubItems.Add(line.ToString)
+                .Items(error_n - 1).SubItems.Add(game_t)
+                .Items(error_n - 1).SubItems.Add(code_t)
+                .Items(error_n - 1).SubItems.Add(error_t.Trim)
+            End With
 
-        With ew.list_load_error
-            .Items.Add(error_n.ToString)
-            .Items(error_n - 1).SubItems.Add(line.ToString)
-            .Items(error_n - 1).SubItems.Add(game_t)
-            .Items(error_n - 1).SubItems.Add(code_t)
-            .Items(error_n - 1).SubItems.Add(error_t.Trim)
-        End With
-
-        Application.DoEvents()
+            Application.DoEvents()
+        End If
 
     End Sub
 
