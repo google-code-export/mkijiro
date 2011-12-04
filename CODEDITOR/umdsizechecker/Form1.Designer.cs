@@ -42,6 +42,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
+            this.sectorview = new System.Windows.Forms.Button();
+            this.textBox3 = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -49,7 +51,7 @@
             // button1
             // 
             this.button1.AllowDrop = true;
-            this.button1.Location = new System.Drawing.Point(49, 13);
+            this.button1.Location = new System.Drawing.Point(19, 13);
             this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(137, 23);
@@ -149,7 +151,6 @@
             this.checkBox1.TabIndex = 8;
             this.checkBox1.Text = "mecab使用";
             this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // button5
             // 
@@ -204,12 +205,32 @@
             this.textBox2.TabIndex = 10;
             this.textBox2.Text = "32";
             // 
+            // sectorview
+            // 
+            this.sectorview.Enabled = false;
+            this.sectorview.Location = new System.Drawing.Point(163, 12);
+            this.sectorview.Name = "sectorview";
+            this.sectorview.Size = new System.Drawing.Size(82, 23);
+            this.sectorview.TabIndex = 11;
+            this.sectorview.Text = "セクタビュー";
+            this.sectorview.UseVisualStyleBackColor = true;
+            this.sectorview.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(227, 138);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(10, 22);
+            this.textBox3.TabIndex = 12;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(255, 345);
+            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.sectorview);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label2);
@@ -247,6 +268,8 @@
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button sectorview;
+        private System.Windows.Forms.TextBox textBox3;
     }
 }
 
