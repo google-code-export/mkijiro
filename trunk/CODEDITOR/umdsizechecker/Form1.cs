@@ -13,9 +13,10 @@ using System.Runtime.InteropServices;
 
 namespace WindowsFormsApplication1
 {
-    
+
     public partial class Form1 : Form
     {
+        
         string isofile = "";
         long trimsize = 0;
 
@@ -27,6 +28,7 @@ namespace WindowsFormsApplication1
         [DllImport("libmecab.dll", CallingConvention = CallingConvention.Cdecl)]
         private extern static void mecab_destroy(IntPtr m);
 
+
         private void TextBox2_KeyPress(object sender,System.Windows.Forms.KeyPressEventArgs e)
         {
             if (e.KeyChar < '0' || e.KeyChar > '9')
@@ -34,7 +36,6 @@ namespace WindowsFormsApplication1
                 e.Handled = true;
             }
         }
-
 
         public Form1()
         {
@@ -49,10 +50,6 @@ namespace WindowsFormsApplication1
             System.Windows.Forms.DragEventHandler(this.textBox1_DragEnter);
         }
 
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
-
-        }
 
         private void textBox1_DragEnter(object sender, System.Windows.Forms.DragEventArgs e)
         {
@@ -72,10 +69,12 @@ namespace WindowsFormsApplication1
             if (textBox1.Text.Contains("ません"))
             {
                 groupBox1.Enabled = false;
+                sectorview.Enabled = false;
             }
             else
             {
                 groupBox1.Enabled = true;
+                sectorview.Enabled = true;
             }
         }
         private void button1_DragEnter(object sender, System.Windows.Forms.DragEventArgs e)
@@ -96,10 +95,12 @@ namespace WindowsFormsApplication1
             if (textBox1.Text.Contains("ません"))
             {
                 groupBox1.Enabled = false;
+                sectorview.Enabled = false;
             }
             else
             {
                 groupBox1.Enabled = true;
+                sectorview.Enabled = true;
             }
         }
 
@@ -159,6 +160,7 @@ namespace WindowsFormsApplication1
                 iso = Encoding.GetEncoding(0).GetString(str);
                 iso2 = Encoding.GetEncoding(0).GetString(str2);
                 isosize = BitConverter.ToInt64(bs, 0);
+                trimsize = isosize;
                 isobig = BitConverter.ToInt64(big, 0);
                 if (isosize != isobig || iso != "CD001")
                 {
@@ -174,7 +176,7 @@ namespace WindowsFormsApplication1
                 label1.Text +=  Convert.ToString(fsize);
                 label2.Text += Convert.ToString(isosize);
                  if (isosize - fsize == 2048)
-                {
+                 {
                     return "M33USBマウントやSSSで発生する-2048サイズ欠けです\nPSPFILER/ISOTOOL/TEMPARなどを使ってください\r\nまたUSBマウントは修正版がでているので使ってください";
                 }
                  else if (isosize - fsize == 6144)
@@ -183,8 +185,6 @@ namespace WindowsFormsApplication1
                  }
                 else if (isosize < fsize)
                 {
-                    trimsize = isosize;
-                    button5.Enabled = true;
                     return "オーバーダンプです,トリムすると正常になることが多いです\r\nトリムはメモリースティック上だと時間がかかるため、高速なHDD/SSD/RAMDISK上での実行を推奨します";
                 }
                  else if (isosize == fsize)
@@ -194,6 +194,7 @@ namespace WindowsFormsApplication1
                      byte[] finalsector = new byte[2048];
                      byte[] hash = new byte[32];
                      string NU = "70BC8F4B72A86921468BF8E8441DCE51";//null
+                     string FF = "0D7DC4266497100E4831F5B31B6B274F";//FF
 
                      sector.Seek(isosize - 8192, SeekOrigin.Begin);
                      sector.Read(beforefinal, 0, 2048);
@@ -224,13 +225,21 @@ namespace WindowsFormsApplication1
                      {//FILLED wiht NULL
                          return "正常なサイズです";
                      }
+                     else if (result == FF && result2 == NU)
+                     {
+                         return "サイズは正常です,0xFF埋めのあと0x00埋めになってます(最終-6k付近不連続ダミー判定)\r\nセクタービューで確認してください";
+                     }
                      else if (result != NU && result2 == NU)
                      {
-                         return "サイズは正常ですが,バッドダンプの可能性があります(最終-6k付近データ連続判定)";
+                         return "サイズは正常ですが,バッドダンプの可能性があります(最終-6k付近データ連続判定)\r\nセクタービューで確認してください";
+                     }
+                     else if (result3 == FF && result4 == NU)
+                     {
+                         return "サイズは正常です,0xFF埋めのあと0x00埋めになってます(最終-2k付近不連続ダミー判定)\r\nヴァルキリープロファイルなどが該当しますが正常なイメージだと確認済みです\r\nセクタービューで確認してください";
                      }
                      else if (result3 != NU && result4 == NU)
                      {
-                         return "サイズは正常ですが,バッドダンプの可能性があります(最終-2k付近データ連続判定)";
+                         return "サイズは正常ですが,バッドダンプの可能性があります(最終-2k付近データ連続判定)\r\nセクタービューで確認してください";
                      }
                      else
                      {
@@ -238,7 +247,7 @@ namespace WindowsFormsApplication1
                      }
                  }
                 else
-                {
+                 {
                     return "サイズが合いません";
                 }
             }
@@ -505,9 +514,24 @@ namespace WindowsFormsApplication1
             button5.Enabled = false;
         }
 
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        public string Form1Text
         {
+            get
+            {
+                return textBox3.Text;
+            }
+            set
+            {
+                textBox3.Text = value;
+            }
+        }
 
+        private void button6_Click(object sender, EventArgs e)
+        {
+            Form2 f = new Form2();
+            f.Text = isofile;
+            f.ShowDialog(this);
+            f.Dispose();
         }
     }
 }
