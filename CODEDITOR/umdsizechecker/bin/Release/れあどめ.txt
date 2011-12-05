@@ -3,6 +3,12 @@ FASTLOADERとかのダミー埋めによるBADDAUMP判定はあやしいので注意
 あんまり需要なさそうだけど作成
 
 更新履歴
+2011/12/06
+トリムサイズが変になってたので修正
+1セクタの区切りに☆★マークを付けるようにした
+-6欠けの場合,-2kをみるで落ちるので修正
+MECABあるふぁべっとで全角アルファベット/漢数字がとんでたので修正
+
 2011/12/05
 ヴァルキリープロファイルで誤爆があったので修正
 セクタービューを追加した,-2k-6k周辺をすぐ見られるようにした
@@ -66,4 +72,7 @@ CDEから分離して作成
 by (ﾟ∀ﾟ)
 
 謝辞;MECAB.DLL
+http://sourceforge.net/projects/mecab/files/mecab-win32/
 http://ja.wikipedia.org/wiki/MeCab
+ISO9660フォーマット
+http://euc.jp/periphs/iso9660.ja.html#preface
