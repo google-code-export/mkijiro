@@ -1,0 +1,22 @@
+いろいろあれど、いまいちきにらなかったりするので自分用に作成
+圧縮イメージはサイズ取得できなくないのであつかわない
+そのかわりPARAM.SFOのタイトルになるからいちいちリネームする必要がない
+ゲームCRC32での画像検索ははOFFLINEりすとをのXML.DBを流用してるので、exeはOFFLINEと同じとこにおくこと
+
+2011/12/06
+とりあえず作成
+
+仕様
+ファイルドロップで一括追加可能(GAMEID重複チェックあるので同じものは防止)
+生ISOなのでサイズが正しいかどうかわかる,OFFLINEの画像を流用可能(ゲームCRCで検索する)
+ツリーなので項目のドラッグ移動可能
+
+PATH.TXT　CWC風、_P パス名,_I イメージ名(番号a.b抜き),_H ハッシュ
+_S NPJH-50465
+_G 初音ミク -Project DIVA- extend
+_P G:\PSP\ISO\ISOs\HATSUNEMIKU -Project DIVA- extend.ISO
+_I G:\PSP\IJIRO\CODEDITOR\psp_iso_manage\bin\Debug\imgs\ADVANsCEne Sony PSP Collection\2501-3000\2754.png
+_H CRC32;463D7382
+
+
+BY (ﾟ∀ﾟ)
