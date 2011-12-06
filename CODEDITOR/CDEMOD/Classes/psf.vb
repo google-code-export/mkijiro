@@ -103,7 +103,7 @@ Public Class psf
                     If bs(8) = &H50 AndAlso bs(9) = &H53 AndAlso bs(10) = &H50 AndAlso bs(11) = &H20 _
                         AndAlso bs(12) = &H47 AndAlso bs(13) = &H41 AndAlso bs(14) = &H4D AndAlso bs(15) = &H45 Then
 
-                        Dim gid(10) As Byte
+                        Dim gid(9) As Byte
 
                         Array.ConstrainedCopy(bs, &H373, gid, 0, 10)
                         result = Encoding.GetEncoding(0).GetString(gid)
