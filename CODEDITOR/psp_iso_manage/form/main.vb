@@ -961,7 +961,12 @@ Public Class umdisomanger
 
     Private Sub version_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles version.Click
         Dim f As New ver
+
+        Me.TopMost = False
         f.ShowDialog()
+        If My.Settings.topmost = True Then
+            Me.TopMost = True
+        End If
         f.Dispose()
     End Sub
 
