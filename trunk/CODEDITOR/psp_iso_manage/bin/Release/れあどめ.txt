@@ -1,7 +1,7 @@
 いろいろあれど、いまいちきにらなかったりするので自分用に作成
-圧縮イメージはサイズ取得できなくないのであつかわない
+圧縮イメージはサイズ取得できないのであつかわない
 そのかわりPARAM.SFOのタイトルになるからいちいちリネームする必要がない
-ゲームCRC32での画像検索ははOFFLINEりすとをのXML.DBを流用してるので、exeはOFFLINEと同じとこにおくこと
+ゲームCRC32での画像検索はOFFLINEりすとをのXML.DBを流用してるので、exeはOFFLINEと同じとこにおくこと
 
 2011/12/06
 とりあえず作成
@@ -12,11 +12,10 @@
 ツリーなので項目のドラッグ移動可能
 
 PATH.TXT　CWC風、_P パス名,_I イメージ名(番号a.b抜き),_H ハッシュ
-_S NPJH-50465
-_G 初音ミク -Project DIVA- extend
-_P G:\PSP\ISO\ISOs\HATSUNEMIKU -Project DIVA- extend.ISO
-_I G:\PSP\IJIRO\CODEDITOR\psp_iso_manage\bin\Debug\imgs\ADVANsCEne Sony PSP Collection\2501-3000\2754.png
-_H CRC32;463D7382
-
+_S UCJS-10108
+_G 100万トンのバラバラ 
+_P G:\PSP\ISO\ISOs\100MANTONNOBARABARA .ISO
+_I G:\PSP\IJIRO\CODEDITOR\psp_iso_manage\bin\Debug\imgs\ADVANsCEne Sony PSP Collection\2001-2500\2120.png
+_H CRC32: 9EC21B68,MD5: F9DDDF857DA7B37E56845E9991BE6ACD,SHA-1: 7D48A727CE3C45DF89C7D438BA8567B9AB77AEE6
 
 BY (ﾟ∀ﾟ)
