@@ -48,28 +48,33 @@ Partial Class umdisomanger
         Me.isosize = New System.Windows.Forms.TextBox()
         Me.isolba = New System.Windows.Forms.TextBox()
         Me.crc = New System.Windows.Forms.TextBox()
-        Me.md5 = New System.Windows.Forms.TextBox()
+        Me.md5hash = New System.Windows.Forms.TextBox()
         Me.sha = New System.Windows.Forms.TextBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.gid = New System.Windows.Forms.TextBox()
         Me.calc_crc = New System.Windows.Forms.Button()
         Me.calc_md5 = New System.Windows.Forms.Button()
-        Me.計算 = New System.Windows.Forms.Button()
+        Me.calc_sha = New System.Windows.Forms.Button()
         Me.all_hash = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
+        Me.ファイルToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ADD = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SAVELS = New System.Windows.Forms.ToolStripMenuItem()
         Me.sort = New System.Windows.Forms.ToolStripMenuItem()
-        Me.version = New System.Windows.Forms.ToolStripMenuItem()
         Me.GAMEIDToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.昇順ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.降順ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.管理名ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.昇順ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.降順ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ファイル名ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.昇順ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.降順ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.昇順ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.降順ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.昇順ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.降順ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.設定ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.GUITOP = New System.Windows.Forms.ToolStripMenuItem()
+        Me.version = New System.Windows.Forms.ToolStripMenuItem()
+        Me.del_psp = New System.Windows.Forms.Button()
         Me.ContextMenuStrip2.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -90,9 +95,9 @@ Partial Class umdisomanger
         Me.TreeView1.AllowDrop = True
         Me.TreeView1.ContextMenuStrip = Me.ContextMenuStrip2
         Me.TreeView1.LabelEdit = True
-        Me.TreeView1.Location = New System.Drawing.Point(10, 41)
+        Me.TreeView1.Location = New System.Drawing.Point(12, 41)
         Me.TreeView1.Name = "TreeView1"
-        Me.TreeView1.Size = New System.Drawing.Size(276, 400)
+        Me.TreeView1.Size = New System.Drawing.Size(276, 426)
         Me.TreeView1.TabIndex = 1
         '
         'ContextMenuStrip2
@@ -157,6 +162,7 @@ Partial Class umdisomanger
         '
         'PictureBox2
         '
+        Me.PictureBox2.Cursor = System.Windows.Forms.Cursors.Default
         Me.PictureBox2.Location = New System.Drawing.Point(409, 70)
         Me.PictureBox2.Name = "PictureBox2"
         Me.PictureBox2.Size = New System.Drawing.Size(328, 180)
@@ -289,19 +295,17 @@ Partial Class umdisomanger
         Me.crc.Size = New System.Drawing.Size(100, 22)
         Me.crc.TabIndex = 20
         '
-        'md5
+        'md5hash
         '
-        Me.md5.Enabled = False
-        Me.md5.ImeMode = System.Windows.Forms.ImeMode.Disable
-        Me.md5.Location = New System.Drawing.Point(361, 352)
-        Me.md5.MaxLength = 32
-        Me.md5.Name = "md5"
-        Me.md5.Size = New System.Drawing.Size(211, 22)
-        Me.md5.TabIndex = 21
+        Me.md5hash.ImeMode = System.Windows.Forms.ImeMode.Disable
+        Me.md5hash.Location = New System.Drawing.Point(361, 352)
+        Me.md5hash.MaxLength = 32
+        Me.md5hash.Name = "md5hash"
+        Me.md5hash.Size = New System.Drawing.Size(211, 22)
+        Me.md5hash.TabIndex = 21
         '
         'sha
         '
-        Me.sha.Enabled = False
         Me.sha.ImeMode = System.Windows.Forms.ImeMode.Disable
         Me.sha.Location = New System.Drawing.Point(361, 386)
         Me.sha.MaxLength = 40
@@ -338,7 +342,6 @@ Partial Class umdisomanger
         '
         'calc_md5
         '
-        Me.calc_md5.Enabled = False
         Me.calc_md5.Location = New System.Drawing.Point(578, 352)
         Me.calc_md5.Name = "calc_md5"
         Me.calc_md5.Size = New System.Drawing.Size(59, 23)
@@ -346,20 +349,18 @@ Partial Class umdisomanger
         Me.calc_md5.Text = "計算"
         Me.calc_md5.UseVisualStyleBackColor = True
         '
-        '計算
+        'calc_sha
         '
-        Me.計算.Enabled = False
-        Me.計算.Location = New System.Drawing.Point(650, 385)
-        Me.計算.Name = "計算"
-        Me.計算.Size = New System.Drawing.Size(56, 23)
-        Me.計算.TabIndex = 27
-        Me.計算.Text = "計算"
-        Me.計算.UseVisualStyleBackColor = True
+        Me.calc_sha.Location = New System.Drawing.Point(650, 385)
+        Me.calc_sha.Name = "calc_sha"
+        Me.calc_sha.Size = New System.Drawing.Size(56, 23)
+        Me.calc_sha.TabIndex = 27
+        Me.calc_sha.Text = "計算"
+        Me.calc_sha.UseVisualStyleBackColor = True
         '
         'all_hash
         '
-        Me.all_hash.Enabled = False
-        Me.all_hash.Location = New System.Drawing.Point(661, 352)
+        Me.all_hash.Location = New System.Drawing.Point(650, 352)
         Me.all_hash.Name = "all_hash"
         Me.all_hash.Size = New System.Drawing.Size(75, 23)
         Me.all_hash.TabIndex = 28
@@ -369,27 +370,42 @@ Partial Class umdisomanger
         'Button2
         '
         Me.Button2.Enabled = False
-        Me.Button2.Location = New System.Drawing.Point(636, 414)
+        Me.Button2.Location = New System.Drawing.Point(643, 256)
         Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(100, 23)
+        Me.Button2.Size = New System.Drawing.Size(94, 23)
         Me.Button2.TabIndex = 29
         Me.Button2.Text = "ツリー反映"
         Me.Button2.UseVisualStyleBackColor = True
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ADD, Me.sort, Me.version})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ファイルToolStripMenuItem, Me.sort, Me.設定ToolStripMenuItem, Me.version})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Size = New System.Drawing.Size(748, 31)
         Me.MenuStrip1.TabIndex = 30
         Me.MenuStrip1.Text = "MenuStrip1"
         '
+        'ファイルToolStripMenuItem
+        '
+        Me.ファイルToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ADD, Me.SAVELS})
+        Me.ファイルToolStripMenuItem.Name = "ファイルToolStripMenuItem"
+        Me.ファイルToolStripMenuItem.Size = New System.Drawing.Size(82, 27)
+        Me.ファイルToolStripMenuItem.Text = "ファイル"
+        '
         'ADD
         '
         Me.ADD.Name = "ADD"
-        Me.ADD.Size = New System.Drawing.Size(52, 27)
-        Me.ADD.Text = "追加"
+        Me.ADD.Size = New System.Drawing.Size(170, 28)
+        Me.ADD.Text = "いめーじ追加"
+        Me.ADD.ToolTipText = "管理したいイメージを追加します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "複数まとめて追加したい場合はエクスプローラーから選択してツリーにドロップして下さい"
+        '
+        'SAVELS
+        '
+        Me.SAVELS.Name = "SAVELS"
+        Me.SAVELS.Size = New System.Drawing.Size(170, 28)
+        Me.SAVELS.Text = "リスト保存"
+        Me.SAVELS.ToolTipText = "編集リストを保存します"
         '
         'sort
         '
@@ -399,12 +415,6 @@ Partial Class umdisomanger
         Me.sort.Size = New System.Drawing.Size(52, 27)
         Me.sort.Text = "整列"
         '
-        'version
-        '
-        Me.version.Name = "version"
-        Me.version.Size = New System.Drawing.Size(97, 27)
-        Me.version.Text = "バージョン"
-        '
         'GAMEIDToolStripMenuItem
         '
         Me.GAMEIDToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.昇順ToolStripMenuItem2, Me.降順ToolStripMenuItem2})
@@ -412,12 +422,36 @@ Partial Class umdisomanger
         Me.GAMEIDToolStripMenuItem.Size = New System.Drawing.Size(155, 28)
         Me.GAMEIDToolStripMenuItem.Text = "GAMEID"
         '
+        '昇順ToolStripMenuItem2
+        '
+        Me.昇順ToolStripMenuItem2.Name = "昇順ToolStripMenuItem2"
+        Me.昇順ToolStripMenuItem2.Size = New System.Drawing.Size(110, 28)
+        Me.昇順ToolStripMenuItem2.Text = "昇順"
+        '
+        '降順ToolStripMenuItem2
+        '
+        Me.降順ToolStripMenuItem2.Name = "降順ToolStripMenuItem2"
+        Me.降順ToolStripMenuItem2.Size = New System.Drawing.Size(110, 28)
+        Me.降順ToolStripMenuItem2.Text = "降順"
+        '
         '管理名ToolStripMenuItem
         '
         Me.管理名ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.昇順ToolStripMenuItem1, Me.降順ToolStripMenuItem1})
         Me.管理名ToolStripMenuItem.Name = "管理名ToolStripMenuItem"
         Me.管理名ToolStripMenuItem.Size = New System.Drawing.Size(155, 28)
         Me.管理名ToolStripMenuItem.Text = "管理名"
+        '
+        '昇順ToolStripMenuItem1
+        '
+        Me.昇順ToolStripMenuItem1.Name = "昇順ToolStripMenuItem1"
+        Me.昇順ToolStripMenuItem1.Size = New System.Drawing.Size(110, 28)
+        Me.昇順ToolStripMenuItem1.Text = "昇順"
+        '
+        '降順ToolStripMenuItem1
+        '
+        Me.降順ToolStripMenuItem1.Name = "降順ToolStripMenuItem1"
+        Me.降順ToolStripMenuItem1.Size = New System.Drawing.Size(110, 28)
+        Me.降順ToolStripMenuItem1.Text = "降順"
         '
         'ファイル名ToolStripMenuItem
         '
@@ -429,51 +463,56 @@ Partial Class umdisomanger
         '昇順ToolStripMenuItem
         '
         Me.昇順ToolStripMenuItem.Name = "昇順ToolStripMenuItem"
-        Me.昇順ToolStripMenuItem.Size = New System.Drawing.Size(152, 28)
+        Me.昇順ToolStripMenuItem.Size = New System.Drawing.Size(110, 28)
         Me.昇順ToolStripMenuItem.Text = "昇順"
         '
         '降順ToolStripMenuItem
         '
         Me.降順ToolStripMenuItem.Name = "降順ToolStripMenuItem"
-        Me.降順ToolStripMenuItem.Size = New System.Drawing.Size(152, 28)
+        Me.降順ToolStripMenuItem.Size = New System.Drawing.Size(110, 28)
         Me.降順ToolStripMenuItem.Text = "降順"
         '
-        '昇順ToolStripMenuItem1
+        '設定ToolStripMenuItem
         '
-        Me.昇順ToolStripMenuItem1.Name = "昇順ToolStripMenuItem1"
-        Me.昇順ToolStripMenuItem1.Size = New System.Drawing.Size(152, 28)
-        Me.昇順ToolStripMenuItem1.Text = "昇順"
+        Me.設定ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GUITOP})
+        Me.設定ToolStripMenuItem.Name = "設定ToolStripMenuItem"
+        Me.設定ToolStripMenuItem.Size = New System.Drawing.Size(52, 27)
+        Me.設定ToolStripMenuItem.Text = "設定"
         '
-        '降順ToolStripMenuItem1
+        'GUITOP
         '
-        Me.降順ToolStripMenuItem1.Name = "降順ToolStripMenuItem1"
-        Me.降順ToolStripMenuItem1.Size = New System.Drawing.Size(152, 28)
-        Me.降順ToolStripMenuItem1.Text = "降順"
+        Me.GUITOP.Name = "GUITOP"
+        Me.GUITOP.Size = New System.Drawing.Size(170, 28)
+        Me.GUITOP.Text = "常に前面表示"
         '
-        '昇順ToolStripMenuItem2
+        'version
         '
-        Me.昇順ToolStripMenuItem2.Name = "昇順ToolStripMenuItem2"
-        Me.昇順ToolStripMenuItem2.Size = New System.Drawing.Size(152, 28)
-        Me.昇順ToolStripMenuItem2.Text = "昇順"
+        Me.version.Name = "version"
+        Me.version.Size = New System.Drawing.Size(97, 27)
+        Me.version.Text = "バージョン"
         '
-        '降順ToolStripMenuItem2
+        'del_psp
         '
-        Me.降順ToolStripMenuItem2.Name = "降順ToolStripMenuItem2"
-        Me.降順ToolStripMenuItem2.Size = New System.Drawing.Size(152, 28)
-        Me.降順ToolStripMenuItem2.Text = "降順"
+        Me.del_psp.Location = New System.Drawing.Point(292, 447)
+        Me.del_psp.Name = "del_psp"
+        Me.del_psp.Size = New System.Drawing.Size(109, 23)
+        Me.del_psp.TabIndex = 31
+        Me.del_psp.Text = "PSPから削除"
+        Me.del_psp.UseVisualStyleBackColor = True
         '
         'umdisomanger
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(748, 453)
+        Me.ClientSize = New System.Drawing.Size(748, 479)
+        Me.Controls.Add(Me.del_psp)
         Me.Controls.Add(Me.MenuStrip1)
-        Me.Controls.Add(Me.Button2)
-        Me.Controls.Add(Me.計算)
+        Me.Controls.Add(Me.calc_sha)
         Me.Controls.Add(Me.gid)
-        Me.Controls.Add(Me.all_hash)
-        Me.Controls.Add(Me.md5)
+        Me.Controls.Add(Me.Button2)
+        Me.Controls.Add(Me.md5hash)
         Me.Controls.Add(Me.calc_md5)
+        Me.Controls.Add(Me.all_hash)
         Me.Controls.Add(Me.sha)
         Me.Controls.Add(Me.crc)
         Me.Controls.Add(Me.calc_crc)
@@ -532,13 +571,13 @@ Partial Class umdisomanger
     Friend WithEvents isosize As System.Windows.Forms.TextBox
     Friend WithEvents isolba As System.Windows.Forms.TextBox
     Friend WithEvents crc As System.Windows.Forms.TextBox
-    Friend WithEvents md5 As System.Windows.Forms.TextBox
+    Friend WithEvents md5hash As System.Windows.Forms.TextBox
     Friend WithEvents sha As System.Windows.Forms.TextBox
     Friend WithEvents Label7 As System.Windows.Forms.Label
     Friend WithEvents gid As System.Windows.Forms.TextBox
     Friend WithEvents calc_crc As System.Windows.Forms.Button
     Friend WithEvents calc_md5 As System.Windows.Forms.Button
-    Friend WithEvents 計算 As System.Windows.Forms.Button
+    Friend WithEvents calc_sha As System.Windows.Forms.Button
     Friend WithEvents all_hash As System.Windows.Forms.Button
     Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents ContextMenuStrip1 As System.Windows.Forms.ContextMenuStrip
@@ -548,7 +587,6 @@ Partial Class umdisomanger
     Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
     Friend WithEvents sort As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents version As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ADD As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents GAMEIDToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents 昇順ToolStripMenuItem2 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents 管理名ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
@@ -558,5 +596,11 @@ Partial Class umdisomanger
     Friend WithEvents 昇順ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents 降順ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents 降順ToolStripMenuItem2 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents 設定ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents del_psp As System.Windows.Forms.Button
+    Friend WithEvents ファイルToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ADD As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents SAVELS As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents GUITOP As System.Windows.Forms.ToolStripMenuItem
 
 End Class
