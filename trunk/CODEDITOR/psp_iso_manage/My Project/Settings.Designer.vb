@@ -89,6 +89,18 @@ Namespace My
                 Me("hbhash") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property topmost() As Boolean
+            Get
+                Return CType(Me("topmost"),Boolean)
+            End Get
+            Set
+                Me("topmost") = value
+            End Set
+        End Property
     End Class
 End Namespace
 
