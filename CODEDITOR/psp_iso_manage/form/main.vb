@@ -739,6 +739,9 @@ Public Class umdisomanger
                     Next
                     crc.Text = hash
                     Beep()
+                    TreeView1.SelectedNode = treenode.Parent
+                    TreeView1.Focus()
+
                 Catch ex As Exception
                     MessageBox.Show(ex.Message, "例外")
                 End Try
@@ -789,6 +792,8 @@ Public Class umdisomanger
                     Next
                     md5hash.Text = hash
                     Beep()
+                    TreeView1.SelectedNode = treenode.Parent
+                    TreeView1.Focus()
 
 
                 Catch ex As Exception
@@ -839,6 +844,8 @@ Public Class umdisomanger
                     Next
                     sha.Text = hash
                     Beep()
+                    TreeView1.SelectedNode = treenode.Parent
+                    TreeView1.Focus()
 
                 Catch ex As Exception
                     MessageBox.Show(ex.Message, "例外")
