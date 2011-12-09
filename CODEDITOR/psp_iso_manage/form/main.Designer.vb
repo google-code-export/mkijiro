@@ -145,7 +145,7 @@ Partial Class umdisomanger
         Me.PFS.Name = "PFS"
         Me.PFS.Size = New System.Drawing.Size(75, 23)
         Me.PFS.TabIndex = 4
-        Me.PFS.Text = "PFS取得"
+        Me.PFS.Text = "PSF取得"
         Me.PFS.UseVisualStyleBackColor = True
         '
         'PictureBox1
@@ -204,7 +204,7 @@ Partial Class umdisomanger
         '
         Me.drivelettter.ContextMenuStrip = Me.ContextMenuStrip1
         Me.drivelettter.ImeMode = System.Windows.Forms.ImeMode.Disable
-        Me.drivelettter.Location = New System.Drawing.Point(570, 416)
+        Me.drivelettter.Location = New System.Drawing.Point(575, 416)
         Me.drivelettter.MaxLength = 2
         Me.drivelettter.Name = "drivelettter"
         Me.drivelettter.Size = New System.Drawing.Size(29, 22)
@@ -273,19 +273,19 @@ Partial Class umdisomanger
         'isosize
         '
         Me.isosize.ContextMenuStrip = Me.ContextMenuStrip1
-        Me.isosize.Location = New System.Drawing.Point(637, 289)
+        Me.isosize.Location = New System.Drawing.Point(643, 289)
         Me.isosize.MaxLength = 10
         Me.isosize.Name = "isosize"
-        Me.isosize.Size = New System.Drawing.Size(100, 22)
+        Me.isosize.Size = New System.Drawing.Size(94, 22)
         Me.isosize.TabIndex = 18
         '
         'isolba
         '
         Me.isolba.ContextMenuStrip = Me.ContextMenuStrip1
-        Me.isolba.Location = New System.Drawing.Point(637, 320)
+        Me.isolba.Location = New System.Drawing.Point(643, 320)
         Me.isolba.MaxLength = 10
         Me.isolba.Name = "isolba"
-        Me.isolba.Size = New System.Drawing.Size(100, 22)
+        Me.isolba.Size = New System.Drawing.Size(94, 22)
         Me.isolba.TabIndex = 19
         '
         'crc
@@ -540,6 +540,7 @@ Partial Class umdisomanger
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoSize = True
         Me.ClientSize = New System.Drawing.Size(756, 479)
         Me.Controls.Add(Me.free)
         Me.Controls.Add(Me.t_gid)
@@ -561,13 +562,13 @@ Partial Class umdisomanger
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.Label3)
-        Me.Controls.Add(Me.drivelettter)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.lockdriveletter)
-        Me.Controls.Add(Me.isosize)
+        Me.Controls.Add(Me.drivelettter)
         Me.Controls.Add(Me.movepsp)
-        Me.Controls.Add(Me.isolba)
+        Me.Controls.Add(Me.isosize)
         Me.Controls.Add(Me.PictureBox2)
+        Me.Controls.Add(Me.isolba)
         Me.Controls.Add(Me.managename)
         Me.Controls.Add(Me.PFS)
         Me.Controls.Add(Me.TreeView1)
