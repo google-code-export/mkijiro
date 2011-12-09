@@ -71,7 +71,7 @@ Public Class umdisomanger
             My.Settings.xml = Application.StartupPath & "\datas\ADVANsCEne_PSP.xml"
         End If
 
-        If File.Exists(My.Settings.imgdir) = False Then
+        If Directory.Exists(My.Settings.imgdir) = False Then
             My.Settings.imgdir = Application.StartupPath & "\imgs\ADVANsCEne Sony PSP Collection\"
         End If
 
