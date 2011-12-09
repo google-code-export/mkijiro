@@ -56,7 +56,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("D:")>  _
         Public Property drivepath() As String
             Get
                 Return CType(Me("drivepath"),String)
@@ -99,6 +99,54 @@ Namespace My
             End Get
             Set
                 Me("topmost") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property xml() As String
+            Get
+                Return CType(Me("xml"),String)
+            End Get
+            Set
+                Me("xml") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property imgdir() As String
+            Get
+                Return CType(Me("imgdir"),String)
+            End Get
+            Set
+                Me("imgdir") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property lockdrive() As Boolean
+            Get
+                Return CType(Me("lockdrive"),Boolean)
+            End Get
+            Set
+                Me("lockdrive") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property pspgid() As Boolean
+            Get
+                Return CType(Me("pspgid"),Boolean)
+            End Get
+            Set
+                Me("pspgid") = value
             End Set
         End Property
     End Class

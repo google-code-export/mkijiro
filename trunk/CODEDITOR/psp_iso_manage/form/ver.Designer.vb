@@ -25,6 +25,7 @@ Partial Class ver
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'Label1
@@ -50,15 +51,25 @@ Partial Class ver
         Me.Label3.AutoSize = True
         Me.Label3.Location = New System.Drawing.Point(36, 110)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(164, 15)
+        Me.Label3.Size = New System.Drawing.Size(156, 15)
         Me.Label3.TabIndex = 2
-        Me.Label3.Text = "BUID:2011/12/07 23:14" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        Me.Label3.Text = "BUID:2011/12/09 5:46" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(57, 145)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(120, 15)
+        Me.Label4.TabIndex = 3
+        Me.Label4.Text = "LICENCE: GPL v3"
         '
         'ver
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(257, 161)
+        Me.ClientSize = New System.Drawing.Size(257, 184)
+        Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
@@ -72,4 +83,5 @@ Partial Class ver
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents Label3 As System.Windows.Forms.Label
+    Friend WithEvents Label4 As System.Windows.Forms.Label
 End Class

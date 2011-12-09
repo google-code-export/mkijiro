@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="drivepath" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">D:</Value>
     </Setting>
     <Setting Name="isobase" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
@@ -12,6 +12,18 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="topmost" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="xml" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="imgdir" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="lockdrive" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="pspgid" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>

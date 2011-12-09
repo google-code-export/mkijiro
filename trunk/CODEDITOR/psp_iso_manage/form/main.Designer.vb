@@ -73,8 +73,12 @@ Partial Class umdisomanger
         Me.降順ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.設定ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GUITOP = New System.Windows.Forms.ToolStripMenuItem()
+        Me.xmlselect = New System.Windows.Forms.ToolStripMenuItem()
         Me.version = New System.Windows.Forms.ToolStripMenuItem()
         Me.del_psp = New System.Windows.Forms.Button()
+        Me.t_gid = New System.Windows.Forms.CheckBox()
+        Me.crc_xml = New System.Windows.Forms.Button()
+        Me.free = New System.Windows.Forms.Label()
         Me.ContextMenuStrip2.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -128,7 +132,7 @@ Partial Class umdisomanger
         '
         'GAMEID
         '
-        Me.GAMEID.Location = New System.Drawing.Point(482, 288)
+        Me.GAMEID.Location = New System.Drawing.Point(469, 288)
         Me.GAMEID.Name = "GAMEID"
         Me.GAMEID.Size = New System.Drawing.Size(55, 23)
         Me.GAMEID.TabIndex = 3
@@ -200,12 +204,11 @@ Partial Class umdisomanger
         '
         Me.drivelettter.ContextMenuStrip = Me.ContextMenuStrip1
         Me.drivelettter.ImeMode = System.Windows.Forms.ImeMode.Disable
-        Me.drivelettter.Location = New System.Drawing.Point(543, 415)
+        Me.drivelettter.Location = New System.Drawing.Point(570, 416)
         Me.drivelettter.MaxLength = 2
         Me.drivelettter.Name = "drivelettter"
         Me.drivelettter.Size = New System.Drawing.Size(29, 22)
         Me.drivelettter.TabIndex = 11
-        Me.drivelettter.Text = "D:"
         '
         'ContextMenuStrip1
         '
@@ -215,8 +218,7 @@ Partial Class umdisomanger
         'lockdriveletter
         '
         Me.lockdriveletter.AutoSize = True
-        Me.lockdriveletter.Enabled = False
-        Me.lockdriveletter.Location = New System.Drawing.Point(391, 418)
+        Me.lockdriveletter.Location = New System.Drawing.Point(423, 418)
         Me.lockdriveletter.Name = "lockdriveletter"
         Me.lockdriveletter.Size = New System.Drawing.Size(146, 19)
         Me.lockdriveletter.TabIndex = 12
@@ -333,7 +335,7 @@ Partial Class umdisomanger
         '
         'calc_crc
         '
-        Me.calc_crc.Location = New System.Drawing.Point(483, 319)
+        Me.calc_crc.Location = New System.Drawing.Point(469, 319)
         Me.calc_crc.Name = "calc_crc"
         Me.calc_crc.Size = New System.Drawing.Size(54, 23)
         Me.calc_crc.TabIndex = 25
@@ -370,7 +372,7 @@ Partial Class umdisomanger
         'Button2
         '
         Me.Button2.Enabled = False
-        Me.Button2.Location = New System.Drawing.Point(643, 256)
+        Me.Button2.Location = New System.Drawing.Point(643, 418)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(94, 23)
         Me.Button2.TabIndex = 29
@@ -382,7 +384,7 @@ Partial Class umdisomanger
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ファイルToolStripMenuItem, Me.sort, Me.設定ToolStripMenuItem, Me.version})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(748, 31)
+        Me.MenuStrip1.Size = New System.Drawing.Size(756, 31)
         Me.MenuStrip1.TabIndex = 30
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -474,7 +476,7 @@ Partial Class umdisomanger
         '
         '設定ToolStripMenuItem
         '
-        Me.設定ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GUITOP})
+        Me.設定ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GUITOP, Me.xmlselect})
         Me.設定ToolStripMenuItem.Name = "設定ToolStripMenuItem"
         Me.設定ToolStripMenuItem.Size = New System.Drawing.Size(52, 27)
         Me.設定ToolStripMenuItem.Text = "設定"
@@ -482,8 +484,14 @@ Partial Class umdisomanger
         'GUITOP
         '
         Me.GUITOP.Name = "GUITOP"
-        Me.GUITOP.Size = New System.Drawing.Size(170, 28)
+        Me.GUITOP.Size = New System.Drawing.Size(215, 28)
         Me.GUITOP.Text = "常に前面表示"
+        '
+        'xmlselect
+        '
+        Me.xmlselect.Name = "xmlselect"
+        Me.xmlselect.Size = New System.Drawing.Size(215, 28)
+        Me.xmlselect.Text = "画像検索用XML指定"
         '
         'version
         '
@@ -500,31 +508,62 @@ Partial Class umdisomanger
         Me.del_psp.Text = "PSPから削除"
         Me.del_psp.UseVisualStyleBackColor = True
         '
+        't_gid
+        '
+        Me.t_gid.AutoSize = True
+        Me.t_gid.Location = New System.Drawing.Point(423, 448)
+        Me.t_gid.Name = "t_gid"
+        Me.t_gid.Size = New System.Drawing.Size(121, 19)
+        Me.t_gid.TabIndex = 32
+        Me.t_gid.Text = "ゲームIDで転送"
+        Me.t_gid.UseVisualStyleBackColor = True
+        '
+        'crc_xml
+        '
+        Me.crc_xml.Location = New System.Drawing.Point(643, 255)
+        Me.crc_xml.Name = "crc_xml"
+        Me.crc_xml.Size = New System.Drawing.Size(75, 23)
+        Me.crc_xml.TabIndex = 33
+        Me.crc_xml.Text = "XML検索"
+        Me.crc_xml.UseVisualStyleBackColor = True
+        '
+        'free
+        '
+        Me.free.AutoSize = True
+        Me.free.Location = New System.Drawing.Point(581, 455)
+        Me.free.Name = "free"
+        Me.free.Size = New System.Drawing.Size(86, 15)
+        Me.free.TabIndex = 34
+        Me.free.Text = "MS空き;不明"
+        '
         'umdisomanger
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(748, 479)
+        Me.ClientSize = New System.Drawing.Size(756, 479)
+        Me.Controls.Add(Me.free)
+        Me.Controls.Add(Me.t_gid)
+        Me.Controls.Add(Me.crc_xml)
         Me.Controls.Add(Me.del_psp)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Controls.Add(Me.calc_sha)
         Me.Controls.Add(Me.gid)
-        Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.md5hash)
+        Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.calc_md5)
         Me.Controls.Add(Me.all_hash)
         Me.Controls.Add(Me.sha)
         Me.Controls.Add(Me.crc)
-        Me.Controls.Add(Me.calc_crc)
         Me.Controls.Add(Me.Label6)
+        Me.Controls.Add(Me.calc_crc)
         Me.Controls.Add(Me.Label7)
         Me.Controls.Add(Me.Label4)
-        Me.Controls.Add(Me.drivelettter)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.Label3)
-        Me.Controls.Add(Me.lockdriveletter)
+        Me.Controls.Add(Me.drivelettter)
         Me.Controls.Add(Me.Label2)
+        Me.Controls.Add(Me.lockdriveletter)
         Me.Controls.Add(Me.isosize)
         Me.Controls.Add(Me.movepsp)
         Me.Controls.Add(Me.isolba)
@@ -602,5 +641,9 @@ Partial Class umdisomanger
     Friend WithEvents ADD As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents SAVELS As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents GUITOP As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents xmlselect As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents t_gid As System.Windows.Forms.CheckBox
+    Friend WithEvents crc_xml As System.Windows.Forms.Button
+    Friend WithEvents free As System.Windows.Forms.Label
 
 End Class

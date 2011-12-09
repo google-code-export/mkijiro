@@ -1,20 +1,30 @@
 いろいろあれど、いまいちきにらなかったりするので自分用に作成
 圧縮イメージはサイズ取得できないのであつかわない
 そのかわりPARAM.SFOのタイトルになるからいちいちリネームする必要がない
-ゲームCRC32での画像検索はOFFLINEりすとをのXML.DBを流用してるので、exeはOFFLINEと同じとこにおくこと
+ゲームCRC32での画像検索はOFFLINEりすとのXML.DBを流用してるので、exeはOFFLINEと同じとこにおくこと
+
+2011/12/09
+ドライブレター固定追加
+設定からCRC検索用XMLを選択できるようにした
+ZIP書庫のXMLに対応
+読み取り専用属性があるばあいCRCが計算出来なかったので修正
+削除できないので読取属性を解除するようした
+正方形の画像はすくないほうの長さに合わせるようにした
+メモリースティックの空き容量を計算するようした、足りない場合は赤字
+CFWによっては全角ファイル名だとイメージを認識できないので,ゲームIDオプションを追加
 
 2011/12/07
 MD5/SHA1計算を追加
 右画面のピクチャー部をクリック/ドラッグアンドドロップして画像ファイルを指定できるようにした
 (ドラッグアンドドロップ画像はブラウザからも可能,画像優先順位はUSER>>OFFLINE>>だみーのリッジ)
-PSPからイメージ削除を追加
+メモステにあるイメージ削除を追加
 UMDVIDEOの名前取得をUSCより移植
 転送時UMDVIDEOのときはISO\VIDEOフォルダに送るようにした,PBPはPSP\GAME
 サイズが合わない画像でもリサイズして表示するようにした
 
-//ユーザー画像はいかのとおり
-\imgs\(ゲームID)a.png
-\imgs\(ゲームID)b.png
+//ユーザー画像のぱす
+\imgs\user\(ゲームID)a.png
+\imgs\user\(ゲームID)b.png
 
 
 2011/12/06
@@ -33,3 +43,6 @@ _I G:\PSP\IJIRO\CODEDITOR\psp_iso_manage\bin\Debug\imgs\ADVANsCEne Sony PSP Coll
 _H CRC32: 9EC21B68,MD5: F9DDDF857DA7B37E56845E9991BE6ACD,SHA-1: 7D48A727CE3C45DF89C7D438BA8567B9AB77AEE6
 
 BY (ﾟ∀ﾟ)
+
+ZIB
+http://www.icsharpcode.net/OpenSource/SharpZipLib/Default.aspx
