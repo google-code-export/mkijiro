@@ -67,10 +67,30 @@ Public Class umdisomanger
             Directory.CreateDirectory(Application.StartupPath & "\imgs\user")
         End If
 
+        If File.Exists(My.Settings.xml) = False Then
+            My.Settings.xml = Application.StartupPath & "\datas\ADVANsCEne_PSP.xml"
+        End If
+
+        If File.Exists(My.Settings.imgdir) = False Then
+            My.Settings.imgdir = Application.StartupPath & "\imgs\ADVANsCEne Sony PSP Collection\"
+        End If
+
         If My.Settings.topmost = True Then
             Me.TopMost = True
             GUITOP.Checked = True
         End If
+
+
+        If My.Settings.lockdrive = True Then
+            lockdriveletter.Checked = True
+        End If
+
+
+        If My.Settings.pspgid = True Then
+            t_gid.Checked = True
+        End If
+
+        drivelettter.Text = My.Settings.drivepath
 
         PictureBox1.AllowDrop = True
         PictureBox2.AllowDrop = True
@@ -83,9 +103,9 @@ Public Class umdisomanger
 
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CRCimage.Click
         Try
-            If File.Exists(Application.StartupPath & "\datas\ADVANsCEne_PSP.xml") = True Then
-                Dim xml As String = Application.StartupPath & "\datas\ADVANsCEne_PSP.xml"
-                Dim img As String = Application.StartupPath & "\imgs\ADVANsCEne Sony PSP Collection\"
+            If File.Exists(My.Settings.xml) = True Then
+                Dim xml As String = My.Settings.xml
+                Dim img As String = My.Settings.imgdir
                 Dim treenode As TreeNode = TreeView1.SelectedNode
                 If treenode IsNot Nothing Then
                     If treenode.Level = 0 Then
@@ -95,14 +115,14 @@ Public Class umdisomanger
                     End If
                     Dim path As String = treenode.Tag.ToString
 
-                    Dim hash As String = crc.Text
+                    Dim hash As String = crc.Text.ToUpper
 
                     If crc.Text = "" Then
 
                         If File.Exists(path) = True Then
                             Dim crc32 As New CRC32()
 
-                            Using fs As FileStream = File.Open(path, FileMode.Open)
+                            Using fs As FileStream = File.OpenRead(path)
                                 For Each b As Byte In crc32.ComputeHash(fs)
                                     hash += b.ToString("x2").ToLower()
                                 Next
@@ -110,18 +130,82 @@ Public Class umdisomanger
 
                             hash = hash.ToUpper
                         Else
+                            MessageBox.Show(path & "が見つかりません", "エラー")
                             Exit Sub
                         End If
                     End If
+                    
+                    Dim ffs As New FileStream(xml, System.IO.FileMode.Open, System.IO.FileAccess.Read)
+                    'ファイルを読み込むバイト型配列を作成する
+                    Dim bs(CInt(ffs.Length - 1)) As Byte
+                    'ファイルの内容をすべて読み込む
+                    ffs.Read(bs, 0, bs.Length)
+                    '閉じる
+                    ffs.Close()
+                    'ZIPHEAD
+                    If bs(0) = &H50 AndAlso bs(1) = &H4B AndAlso bs(2) = &H3 AndAlso bs(3) = &H4 Then
+                        '展開するZIP書庫のパス
+                        Dim zipPath As String = xml
+                        'ZIP書庫を読み込む 
+                        Dim zfs As New System.IO.FileStream( _
+                            zipPath, _
+                            System.IO.FileMode.Open, _
+                            System.IO.FileAccess.Read)
+                        'ZipInputStreamオブジェクトの作成 
+                        Dim zis As New ICSharpCode.SharpZipLib.Zip.ZipInputStream(zfs)
 
-                    Dim sr As New System.IO.StreamReader(xml, System.Text.Encoding.GetEncoding(65001))
-                    Dim s As String = sr.ReadToEnd()
-                    sr.Close()
+                        'ZIP内のエントリを列挙 
+                        Dim ze As ICSharpCode.SharpZipLib.Zip.ZipEntry
+                        Dim xmll As Boolean = False
+                        While True
+                            'ZipEntryを取得
+                            ze = zis.GetNextEntry()
+                            If ze Is Nothing Then
+                                Exit While
+                            End If
+                            If Not ze.IsDirectory Then
+                                '展開先のファイル名を決定 
+                                Dim fileName As String = System.IO.Path.GetFileName(ze.Name)
+
+                                If ze.Name.Contains(".xml") = True Then
+                                    '展開するファイルを読み込む
+                                    Dim buffer As Byte() = New Byte(2047) {}
+                                    Dim len As Integer = 0
+                                    Dim i As Integer = 0
+                                    While True
+                                        len = zis.Read(buffer, 0, buffer.Length)
+                                        If len = 0 Then
+                                            Exit While
+                                        End If
+                                        'ファイルに書き込む
+                                        Array.Resize(bs, i + buffer.Length)
+                                        Array.ConstrainedCopy(buffer, 0, bs, i, buffer.Length)
+                                        i += buffer.Length
+                                    End While
+                                    xmll = True
+                                End If
+                            End If
+                        End While
+
+                        '閉じる 
+                        zis.Close()
+                        zfs.Close()
+                    End If
+                    Dim s As String = System.Text.Encoding.GetEncoding(65001).GetString(bs)
+                    Dim hash2 As String = StrConv(hash, VbStrConv.Lowercase)
+
                     Dim mask As String = "<romCRC extension="".iso"">" & hash & "</romCRC>"
+                    Dim mask2 As String = "<romCRC extension="".iso"">" & hash2 & "</romCRC>"
                     Dim r As New Regex(mask, RegexOptions.ECMAScript)
                     Dim m As Match = r.Match(s)
-                    If m.Success Then
-                        s = s.Remove(m.Index + m.Length, s.Length - (m.Index + m.Length))
+                    Dim q As New Regex(mask2, RegexOptions.ECMAScript)
+                    Dim n As Match = q.Match(s)
+                    If m.Success Or n.Success Then
+                        If m.Success Then
+                            s = s.Remove(m.Index + m.Length, s.Length - (m.Index + m.Length))
+                        ElseIf n.Success Then
+                            s = s.Remove(n.Index + n.Length, s.Length - (n.Index + n.Length))
+                        End If
                         s = s.Remove(0, s.LastIndexOf("<game>"))
                         mask = "<imageNumber>\d+</imageNumber>"
                         Dim imgnum As New Regex(mask, RegexOptions.ECMAScript)
@@ -132,20 +216,20 @@ Public Class umdisomanger
                         Dim st, en As Integer
                         st = 500 * (num \ 500) + 1
                         en = 500 * (num \ 500 + 1)
-                        img &= st.ToString & "-" & en.ToString
+                        img &= st.ToString & "-" & en.ToString & "\"
 
-                        bitmap_resize(PictureBox1, img & "\" & num.ToString & "a.png", 104, 181)
-                        bitmap_resize(PictureBox2, img & "\" & num.ToString & "b.png", 382, 181)
-                        treenode.Name = img & "\" & num.ToString & ".png"
+                        bitmap_resize(PictureBox1, img & num.ToString & "a.png", 104, 181)
+                        bitmap_resize(PictureBox2, img & num.ToString & "b.png", 382, 181)
+                        treenode.Name = img & num.ToString & ".png"
 
                         If crc.Text = "" Then
 
                             Dim k As Integer = treenode.Parent.Nodes.Count
-                            For Each n As TreeNode In treenode.Parent.Nodes
-                                If n.Text.Contains("CRC32") Then
-                                    n.Text = "CRC32: " & hash
+                            For Each nn As TreeNode In treenode.Parent.Nodes
+                                If nn.Text.Contains("CRC32") Then
+                                    nn.Text = "CRC32: " & hash
                                     Exit For
-                                ElseIf k = n.Index + 1 Then
+                                ElseIf k = nn.Index + 1 Then
                                     Dim isoinfo As New TreeNode
                                     isoinfo.Text = "CRC32: " & hash
                                     treenode.Parent.Nodes.Add(isoinfo)
@@ -160,7 +244,7 @@ Public Class umdisomanger
                         MessageBox.Show("ISOと同じCRC32;" & hash & "がみつかりませんでした", "CRC不一致")
                     End If
 
-                End If
+                    End If
             Else
                 MessageBox.Show("画像検索用のoffline用XMLがみつかりません", "XMLエラー")
             End If
@@ -168,6 +252,155 @@ Public Class umdisomanger
         Catch ex As Exception
             MessageBox.Show(ex.Message, "例外")
         End Try
+    End Sub
+
+
+    Private Sub crc_xml_Click(sender As System.Object, e As System.EventArgs) Handles crc_xml.Click
+
+        Try
+            If File.Exists(My.Settings.xml) = True Then
+                Dim xml As String = My.Settings.xml
+                Dim treenode As TreeNode = TreeView1.SelectedNode
+                If treenode IsNot Nothing Then
+                    If treenode.Level = 0 Then
+                        treenode = treenode.Nodes(0)
+                    Else
+                        treenode = treenode.Parent.Nodes(0)
+                    End If
+                    Dim path As String = treenode.Tag.ToString
+
+                    Dim hash As String = crc.Text.ToUpper
+
+                    If crc.Text = "" Then
+
+                        If File.Exists(path) = True Then
+                            Dim crc32 As New CRC32()
+
+                            Using fs As FileStream = File.OpenRead(path)
+                                For Each b As Byte In crc32.ComputeHash(fs)
+                                    hash += b.ToString("x2").ToLower()
+                                Next
+                            End Using
+
+                            hash = hash.ToUpper
+                        Else
+                            MessageBox.Show(path & "が見つかりません", "エラー")
+                            Exit Sub
+                        End If
+                    End If
+
+                    Dim ffs As New FileStream(xml, System.IO.FileMode.Open, System.IO.FileAccess.Read)
+                    'ファイルを読み込むバイト型配列を作成する
+                    Dim bs(CInt(ffs.Length - 1)) As Byte
+                    'ファイルの内容をすべて読み込む
+                    ffs.Read(bs, 0, bs.Length)
+                    '閉じる
+                    ffs.Close()
+                    'ZIPHEAD
+                    If bs(0) = &H50 AndAlso bs(1) = &H4B AndAlso bs(2) = &H3 AndAlso bs(3) = &H4 Then
+                        '展開するZIP書庫のパス
+                        Dim zipPath As String = xml
+                        'ZIP書庫を読み込む 
+                        Dim zfs As New System.IO.FileStream( _
+                            zipPath, _
+                            System.IO.FileMode.Open, _
+                            System.IO.FileAccess.Read)
+                        'ZipInputStreamオブジェクトの作成 
+                        Dim zis As New ICSharpCode.SharpZipLib.Zip.ZipInputStream(zfs)
+
+                        'ZIP内のエントリを列挙 
+                        Dim ze As ICSharpCode.SharpZipLib.Zip.ZipEntry
+                        Dim xmll As Boolean = False
+                        While True
+                            'ZipEntryを取得
+                            ze = zis.GetNextEntry()
+                            If ze Is Nothing Then
+                                Exit While
+                            End If
+                            If Not ze.IsDirectory Then
+                                '展開先のファイル名を決定 
+                                Dim fileName As String = System.IO.Path.GetFileName(ze.Name)
+
+                                If ze.Name.Contains(".xml") = True Then
+                                    '展開するファイルを読み込む
+                                    Dim buffer As Byte() = New Byte(2047) {}
+                                    Dim len As Integer = 0
+                                    Dim i As Integer = 0
+                                    While True
+                                        len = zis.Read(buffer, 0, buffer.Length)
+                                        If len = 0 Then
+                                            Exit While
+                                        End If
+                                        'ファイルに書き込む
+                                        Array.Resize(bs, i + buffer.Length)
+                                        Array.ConstrainedCopy(buffer, 0, bs, i, buffer.Length)
+                                        i += buffer.Length
+                                    End While
+                                    xmll = True
+                                End If
+                            End If
+                        End While
+
+                        '閉じる 
+                        zis.Close()
+                        zfs.Close()
+                    End If
+                    Dim s As String = System.Text.Encoding.GetEncoding(65001).GetString(bs)
+                    Dim hash2 As String = StrConv(hash, VbStrConv.Lowercase)
+
+                    Dim mask As String = "<romCRC extension="".iso"">" & hash & "</romCRC>"
+                    Dim mask2 As String = "<romCRC extension="".iso"">" & hash2 & "</romCRC>"
+                    Dim r As New Regex(mask, RegexOptions.ECMAScript)
+                    Dim m As Match = r.Match(s)
+                    Dim q As New Regex(mask2, RegexOptions.ECMAScript)
+                    Dim n As Match = q.Match(s)
+                    If m.Success Or n.Success Then
+                        If m.Success Then
+                            s = s.Remove(m.Index + m.Length, s.Length - (m.Index + m.Length))
+                        ElseIf n.Success Then
+                            s = s.Remove(n.Index + n.Length, s.Length - (n.Index + n.Length))
+                        End If
+                        s = s.Remove(0, s.LastIndexOf("<game>"))
+                        mask = "<title>.+</title>"
+                        Dim imgnum As New Regex(mask, RegexOptions.ECMAScript)
+                        Dim z As Match = imgnum.Match(s)
+                        s = z.Value.Replace("<title>", "")
+                        s = s.Replace("</title>", "")
+                        If s <> "" Then
+                            managename.Text = s
+                            treenode.Parent.Text = s
+                        End If
+
+                        If crc.Text = "" Then
+
+                            Dim k As Integer = treenode.Parent.Nodes.Count
+                            For Each nn As TreeNode In treenode.Parent.Nodes
+                                If nn.Text.Contains("CRC32") Then
+                                    nn.Text = "CRC32: " & hash
+                                    Exit For
+                                ElseIf k = nn.Index + 1 Then
+                                    Dim isoinfo As New TreeNode
+                                    isoinfo.Text = "CRC32: " & hash
+                                    treenode.Parent.Nodes.Add(isoinfo)
+                                End If
+                            Next
+                            crc.Text = hash
+                        End If
+                    Else
+                        Beep()
+                        MessageBox.Show("ISOと同じCRC32;" & hash & "がみつかりませんでした", "CRC不一致")
+                    End If
+
+                End If
+            Else
+                MessageBox.Show("検索用のoffline用XMLがみつかりません", "XMLエラー")
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "例外")
+        End Try
+
+
     End Sub
 
     Private Sub TreeView1_drop(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles TreeView1.DragEnter, PictureBox1.DragEnter, PictureBox2.DragEnter
@@ -240,7 +473,7 @@ Public Class umdisomanger
 
     Private Sub TreeView1_AfterSelect(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles TreeView1.AfterSelect
         Try
-            If File.Exists(Application.StartupPath & "\imgs\ADVANsCEne Sony PSP Collection\\1-500\1a.png") Then
+            If File.Exists(My.Settings.imgdir & "1-500\1a.png") = True Then
 
                 Dim treenode As TreeNode = TreeView1.SelectedNode
 
@@ -278,13 +511,13 @@ Public Class umdisomanger
                     If File.Exists(isopath) = True Then
                         Dim fs As New System.IO.FileStream(isopath, System.IO.FileMode.Open, System.IO.FileAccess.Read)
                         Dim size(3) As Byte
-                        isosize.Text = fs.Length.ToString
+                        isosize.Text = fs.Length.ToString("0,0,0")
                         fs.Seek(&H8050, SeekOrigin.Begin)
                         fs.Read(size, 0, 4)
                         If psf.video(isopath) = "PBP" Then
                             isolba.Text = "PBPファイルです"
                         Else
-                            isolba.Text = (BitConverter.ToInt32(size, 0) << 11).ToString
+                            isolba.Text = (BitConverter.ToInt32(size, 0) << 11).ToString("0,0,0")
                         End If
                         fs.Close()
                     End If
@@ -314,8 +547,31 @@ Public Class umdisomanger
 
                     'なにもないときはりっじダミー表示
                     If p1 = False AndAlso p2 = False Then
-                        PictureBox1.Image = System.Drawing.Image.FromFile(Application.StartupPath & "\imgs\ADVANsCEne Sony PSP Collection\1-500\1a.png")
-                        PictureBox2.Image = System.Drawing.Image.FromFile(Application.StartupPath & "\imgs\ADVANsCEne Sony PSP Collection\1-500\1b.png")
+                        PictureBox1.Image = System.Drawing.Image.FromFile(My.Settings.imgdir & "1-500\1a.png")
+                        PictureBox2.Image = System.Drawing.Image.FromFile(My.Settings.imgdir & "1-500\1b.png")
+                    End If
+                    Dim psp As String = findpsp()
+                    If psp <> "" Then
+                        Dim drive As New System.IO.DriveInfo(psp)
+                        Dim ms As Single = drive.TotalFreeSpace
+                        'ドライブの準備ができているか調べる
+                        If drive.IsReady Then
+                            If CInt(ms) - CInt(isosize.Text) > 0 Then
+                                free.ForeColor = Color.Black
+                            Else
+                                free.ForeColor = Color.Red
+                            End If
+
+                            If ms > 1 << 30 Then
+                                free.Text = "空き容量;" & (ms / (1 << 30)).ToString("N") & "GiB"
+                            ElseIf ms > 1 << 20 Then
+                                free.Text = "空き容量;" & (ms / (1 << 20)).ToString("N") & "MiB"
+                            ElseIf ms > 1 << 10 Then
+                                free.Text = "空き容量;" & (ms / (1 << 10)).ToString("N") & "KiB"
+                            End If
+                        End If
+                    Else
+                        free.Text = "空き容量;不明"
                     End If
                 End If
             Else
@@ -355,13 +611,13 @@ Public Class umdisomanger
 
         Try
             If TreeView1.SelectedNode.Level = 0 Then
-                If MessageBox.Show("選択しているゲームを削除しますか？", "削除の確認", _
+                If MessageBox.Show("選択している情報を削除しますか？", "削除の確認", _
                    MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
                     TreeView1.SelectedNode.Remove()
                 End If
             End If
             If TreeView1.SelectedNode.Level = 1 Then
-                If MessageBox.Show("選択しているゲームを削除しますか？", "削除の確認", _
+                If MessageBox.Show("選択している情報を削除しますか？", "削除の確認", _
                    MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
                     TreeView1.SelectedNode.Parent.Remove()
                 End If
@@ -559,58 +815,92 @@ Public Class umdisomanger
     Private Sub move_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles movepsp.Click
         Try
             Dim psp As String = findpsp()
-            Dim treenode As TreeNode = TreeView1.SelectedNode
-            If treenode IsNot Nothing Then
-                If treenode.Level = 0 Then
-                    treenode = treenode.Nodes(0)
-                Else
-                    treenode = treenode.Parent.Nodes(0)
-                End If
-                Dim cp As String = treenode.Tag.ToString
 
-                Dim cp2 As String = psp & "\ISO\" & Path.GetFileName(cp)
-                Dim UMD As String = "UMDGAME"
-                Dim dir As String = ""
-                Dim files As String() = Nothing
-                Dim psf As New psf
-                If psf.video(cp) = "VIDEO" Then
-                    cp2 = psp & "\ISO\VIDEO\" & Path.GetFileName(cp)
-                    UMD = "UMDVIDEO"
-                End If
-                If psf.video(cp) = "PBP" Then
-                    cp2 = psp & "\PSP\GAME\" & psf.GETID(cp) & "\EBOOT.PBP"
-                    dir = psp & "\PSP\GAME\" & psf.GETID(cp)
-                    If Directory.Exists(dir) = False Then
-                        Directory.CreateDirectory(dir)
-                    End If
-                    files = System.IO.Directory.GetFiles( _
-        Path.GetDirectoryName(cp), "*", System.IO.SearchOption.AllDirectories)
-
-                    UMD = "PBP"
-                End If
-
-                If psp <> "" AndAlso File.Exists(cp2) = False Then
-                    If UMD = "PBP" Then
-                        For Each s In files
-                            If File.Exists(dir & s) = False Then
-                                File.Copy(s, dir & s.Replace(Path.GetDirectoryName(cp), ""))
-                            End If
-                        Next
+            If psp <> "" Then
+                Dim treenode As TreeNode = TreeView1.SelectedNode
+                If treenode IsNot Nothing Then
+                    If treenode.Level = 0 Then
+                        treenode = treenode.Nodes(0)
                     Else
-                        File.Copy(cp, cp2)
+                        treenode = treenode.Parent.Nodes(0)
                     End If
-                    Beep()
-                    MessageBox.Show(UMD & "の転送が完了しました", "転送成功")
-                ElseIf psp = "" Then
-                    Beep()
-                    MessageBox.Show("PSPが見つかりません,USB接続していないかメモステフォーマット時に作成されるMEMSTICK.INDがないようです", "PSP接続エラー")
-                Else
-                    Beep()
-                    MessageBox.Show("すでにPSPに転送されてます", "ファイル重複")
-                End If
-            End If
+                    Dim cp As String = treenode.Tag.ToString
 
+                    Dim cp2 As String = psp & "\ISO\" & Path.GetFileName(cp)
+                    If My.Settings.pspgid = True Then
+                        cp2 = psp & "\ISO\" & treenode.Parent.Tag.ToString & ".ISO"
+                    End If
+
+                    Dim UMD As String = "UMDGAME"
+                    Dim dir As String = ""
+                    Dim files As String() = Nothing
+                    Dim psf As New psf
+                    If psf.video(cp) = "VIDEO" Then
+                        cp2 = psp & "\ISO\VIDEO\" & Path.GetFileName(cp)
+                        UMD = "UMDVIDEO"
+                    End If
+                    If psf.video(cp) = "PBP" Then
+                        cp2 = psp & "\PSP\GAME\" & psf.GETID(cp) & "\EBOOT.PBP"
+                        dir = psp & "\PSP\GAME\" & psf.GETID(cp)
+                        If Directory.Exists(dir) = False Then
+                            Directory.CreateDirectory(dir)
+                        End If
+                        files = System.IO.Directory.GetFiles( _
+            Path.GetDirectoryName(cp), "*", System.IO.SearchOption.AllDirectories)
+
+                        UMD = "PBP"
+                    End If
+
+                    If psp <> "" AndAlso File.Exists(cp2) = False Then
+                        If UMD = "PBP" Then
+                            For Each s In files
+                                If File.Exists(dir & s) = False Then
+                                    File.Copy(s, dir & s.Replace(Path.GetDirectoryName(cp), ""))
+                                End If
+                            Next
+                        Else
+                            File.Copy(cp, cp2)
+                        End If
+                        Beep()
+                        MessageBox.Show(UMD & "の転送が完了しました", "転送成功")
+                    ElseIf psp = "" Then
+                        Beep()
+                        MessageBox.Show("PSPが見つかりません,USB接続していないかメモステフォーマット時に作成されるMEMSTICK.INDがないようです", "PSP接続エラー")
+                    Else
+                        Beep()
+                        MessageBox.Show("すでにPSPに転送されてます", "ファイル重複")
+                    End If
+                End If
+
+                If psp <> "" Then
+                    Dim drive As New System.IO.DriveInfo(psp)
+                    Dim ms As Single = drive.TotalFreeSpace
+                    'ドライブの準備ができているか調べる
+                    If drive.IsReady Then
+                        If CInt(ms) - CInt(isosize.Text) > 0 Then
+                            free.ForeColor = Color.Black
+                        Else
+                            free.ForeColor = Color.Red
+                        End If
+
+                        If ms > 1 << 30 Then
+                            free.Text = "空き容量;" & (ms / (1 << 30)).ToString("N") & "GiB"
+                        ElseIf ms > 1 << 20 Then
+                            free.Text = "空き容量;" & (ms / (1 << 20)).ToString("N") & "MiB"
+                        ElseIf ms > 1 << 10 Then
+                            free.Text = "空き容量;" & (ms / (1 << 10)).ToString("N") & "KiB"
+                        End If
+                    End If
+                Else
+                    free.Text = "空き容量;不明"
+                End If
+
+            Else
+                Beep()
+                MessageBox.Show("PSPが見つかりません,USB接続していないかメモステフォーマット時に作成されるMEMSTICK.INDがないようです", "PSP接続エラー")
+            End If
         Catch ex As Exception
+            Beep()
             MessageBox.Show(ex.Message, "エラー")
         End Try
     End Sub
@@ -631,6 +921,9 @@ Public Class umdisomanger
                     End If
                     Dim cp As String = treenode.Tag.ToString
                     Dim cp2 As String = psp & "\ISO\" & Path.GetFileName(cp)
+                    If My.Settings.pspgid = True Then
+                        cp2 = psp & "\ISO\" & treenode.Parent.Tag.ToString & ".ISO"
+                    End If
                     Dim UMD As String = "UMDGAME"
                     Dim files As String() = Nothing
                     Dim dir As String = ""
@@ -652,22 +945,55 @@ Public Class umdisomanger
                         If UMD = "PBP" Then
                             For Each s In files
                                 If File.Exists(s) Then
+                                    Dim cFileInfo As New System.IO.FileInfo(s)
+                                    If (cFileInfo.Attributes And System.IO.FileAttributes.ReadOnly) = System.IO.FileAttributes.ReadOnly Then
+                                        cFileInfo.Attributes = System.IO.FileAttributes.Normal
+                                    End If
                                     File.Delete(s)
                                 End If
                             Next
                             Directory.Delete(dir)
                         Else
+                            Dim cFileInfo As New System.IO.FileInfo(cp2)
+                            If (cFileInfo.Attributes And System.IO.FileAttributes.ReadOnly) = System.IO.FileAttributes.ReadOnly Then
+                                cFileInfo.Attributes = System.IO.FileAttributes.Normal
+                            End If
                             File.Delete(cp2)
                         End If
                         Beep()
                         MessageBox.Show(UMD & "を削除しました" & vbCrLf & cp2, "削除")
                     End If
                 End If
+
+                If psp <> "" Then
+                    Dim drive As New System.IO.DriveInfo(psp)
+                    Dim ms As Single = drive.TotalFreeSpace
+                    'ドライブの準備ができているか調べる
+                    If drive.IsReady Then
+                        If CInt(ms) - CInt(isosize.Text) > 0 Then
+                            free.ForeColor = Color.Black
+                        Else
+                            free.ForeColor = Color.Red
+                        End If
+
+                        If ms > 1 << 30 Then
+                            free.Text = "空き容量;" & (ms / (1 << 30)).ToString("N") & "GiB"
+                        ElseIf ms > 1 << 20 Then
+                            free.Text = "空き容量;" & (ms / (1 << 20)).ToString("N") & "MiB"
+                        ElseIf ms > 1 << 10 Then
+                            free.Text = "空き容量;" & (ms / (1 << 10)).ToString("N") & "KiB"
+                        End If
+                    End If
+                Else
+                    free.Text = "空き容量;不明"
+                End If
+
             Else
                 Beep()
                 MessageBox.Show("PSPが見つかりません,USB接続していないかメモステフォーマット時に作成されるMEMSTICK.INDがないようです", "PSP接続エラー")
             End If
-                Catch ex As Exception
+        Catch ex As Exception
+            Beep()
             MessageBox.Show(ex.Message, "エラー")
         End Try
     End Sub
@@ -719,7 +1045,7 @@ Public Class umdisomanger
                     Dim crc32 As New CRC32()
                     Dim hash As [String] = [String].Empty
 
-                    Using fs As FileStream = File.Open(path, FileMode.Open)
+                    Using fs As FileStream = File.OpenRead(path)
                         For Each b As Byte In crc32.ComputeHash(fs)
                             hash += b.ToString("x2").ToLower()
                         Next
@@ -745,7 +1071,8 @@ Public Class umdisomanger
                 Catch ex As Exception
                     MessageBox.Show(ex.Message, "例外")
                 End Try
-
+            Else
+                MessageBox.Show(path & "がみつかりません", "エラー")
             End If
         End If
     End Sub
@@ -799,6 +1126,8 @@ Public Class umdisomanger
                 Catch ex As Exception
                     MessageBox.Show(ex.Message, "例外")
                 End Try
+            Else
+                MessageBox.Show(path & "がみつかりません", "エラー")
             End If
         End If
     End Sub
@@ -850,6 +1179,8 @@ Public Class umdisomanger
                 Catch ex As Exception
                     MessageBox.Show(ex.Message, "例外")
                 End Try
+            Else
+                MessageBox.Show(path & "がみつかりません", "エラー")
             End If
         End If
     End Sub
@@ -857,9 +1188,24 @@ Public Class umdisomanger
 
     Private Sub all_hash_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles all_hash.Click
         Try
-            calc_crc_Click(sender, e)
-            calc_md5_Click(sender, e)
-            calc_sha_Click(sender, e)
+            Dim treenode As TreeNode = TreeView1.SelectedNode
+            If treenode IsNot Nothing Then
+                If treenode.Level = 0 Then
+                    treenode = treenode.Nodes(0)
+                Else
+                    treenode = treenode.Parent.Nodes(0)
+                End If
+
+                Dim path As String = treenode.Tag.ToString
+
+                If File.Exists(path) = True Then
+                    calc_crc_Click(sender, e)
+                    calc_md5_Click(sender, e)
+                    calc_sha_Click(sender, e)
+                Else
+                    MessageBox.Show(path & "がみつかりません", "エラー")
+                End If
+            End If
         Catch ex As Exception
             MessageBox.Show(ex.Message, "例外")
         End Try
@@ -885,6 +1231,8 @@ Public Class umdisomanger
                         treenode.Text = id
                     End If
 
+                Else
+                    MessageBox.Show(path & "がみつかりません", "エラー")
                 End If
             End If
         Catch ex As Exception
@@ -911,6 +1259,8 @@ Public Class umdisomanger
                         treenode.Parent.Text = id
                     End If
 
+                Else
+                    MessageBox.Show(path & "がみつかりません", "エラー")
                 End If
             End If
         Catch ex As Exception
@@ -962,7 +1312,11 @@ Public Class umdisomanger
         Dim mask As New Regex("[D-Zd-z]", RegexOptions.ECMAScript)
         Dim m As Match = mask.Match(drivelettter.Text)
         If m.Success Then
-            drivelettter.Text = m.Value & ":"
+            drivelettter.Text = m.Value.ToUpper & ":"
+            My.Settings.drivepath = drivelettter.Text
+        Else
+            drivelettter.Text = "Z:"
+            My.Settings.drivepath = drivelettter.Text
         End If
     End Sub
 
@@ -1138,6 +1492,100 @@ Public Class umdisomanger
         End Try
     End Sub
 
+    Private Sub xmlselect_Click(sender As System.Object, e As System.EventArgs) Handles xmlselect.Click
+        Dim ofd As New OpenFileDialog()
+        ofd.InitialDirectory = Application.StartupPath & "\datas"
+        ofd.Filter = "xml/zipファイル(*.xml;*.zip)|*xml;*.zip"
+        ofd.Title = "XML/ZIPファイルを選択してください"
+        ofd.RestoreDirectory = True
+
+        If ofd.ShowDialog() = DialogResult.OK Then
+
+            My.Settings.xml = ofd.FileName
+
+            Dim fs As New FileStream(ofd.FileName, System.IO.FileMode.Open, System.IO.FileAccess.Read)
+            'ファイルを読み込むバイト型配列を作成する
+            Dim bs(CInt(fs.Length - 1)) As Byte
+            'ファイルの内容をすべて読み込む
+            fs.Read(bs, 0, bs.Length)
+            '閉じる
+            fs.Close()
+            'ZIPHEAD
+            If bs(0) = &H50 AndAlso bs(1) = &H4B AndAlso bs(2) = &H3 AndAlso bs(3) = &H4 Then
+                '展開するZIP書庫のパス
+                Dim zipPath As String = ofd.FileName
+                'ZIP書庫を読み込む 
+                Dim zfs As New System.IO.FileStream( _
+                    zipPath, _
+                    System.IO.FileMode.Open, _
+                    System.IO.FileAccess.Read)
+                'ZipInputStreamオブジェクトの作成 
+                Dim zis As New ICSharpCode.SharpZipLib.Zip.ZipInputStream(zfs)
+
+                'ZIP内のエントリを列挙 
+                Dim ze As ICSharpCode.SharpZipLib.Zip.ZipEntry
+                Dim xmll As Boolean = False
+                While True
+                    'ZipEntryを取得
+                    ze = zis.GetNextEntry()
+                    If ze Is Nothing Then
+                        Exit While
+                    End If
+                    If Not ze.IsDirectory Then
+                        '展開先のファイル名を決定 
+                        Dim fileName As String = System.IO.Path.GetFileName(ze.Name)
+
+                        If ze.Name.Contains(".xml") = True Then
+                            '展開するファイルを読み込む
+                            Dim buffer As Byte() = New Byte(2047) {}
+                            Dim len As Integer = 0
+                            Dim i As Integer = 0
+                            While True
+                                len = zis.Read(buffer, 0, buffer.Length)
+                                If len = 0 Then
+                                    Exit While
+                                End If
+                                'ファイルに書き込む
+                                Array.Resize(bs, i + buffer.Length)
+                                Array.ConstrainedCopy(buffer, 0, bs, i, buffer.Length)
+                                i += buffer.Length
+                            End While
+                            xmll = True
+                        End If
+                    End If
+                End While
+
+                '閉じる 
+                zis.Close()
+                zfs.Close()
+            End If
+
+            Dim s As String = System.Text.Encoding.GetEncoding(65001).GetString(bs)
+            Dim maskim As String = "<imFolder>.+</imFolder>"
+            Dim maskdat As String = "<datName>.+</datName>"
+            Dim r As New Regex(maskim, RegexOptions.ECMAScript)
+            Dim im As Match = r.Match(s)
+            Dim q As New Regex(maskdat, RegexOptions.ECMAScript)
+            Dim dat As Match = q.Match(s)
+            Dim ss As String = dat.Value
+            ss = ss.Replace("<datName>", "")
+            ss = ss.Replace("</datName>", "")
+            If Directory.Exists(Application.StartupPath & "\imgs\" & ss & "\") Then
+                My.Settings.imgdir = Application.StartupPath & "\imgs\" & ss & "\"
+            End If
+            ss = im.Value
+            ss = ss.Replace("<imFolder>", "")
+            ss = ss.Replace("</imFolder>", "")
+            If ss <> "" AndAlso Directory.Exists(Application.StartupPath & "\imgs\" & ss) Then
+                My.Settings.imgdir = Application.StartupPath & "\imgs\" & ss & "\"
+            End If
+
+            If dat.Value = "" Then
+                MessageBox.Show("OFFLINE用のXMLではありません", "不明XML")
+            End If
+        End If
+    End Sub
+
     Function bitmap_resize(ByRef pc As PictureBox, ByVal path As String, ByVal width As Integer, ByVal height As Integer) As Boolean
 
         Dim image = New Bitmap(path)
@@ -1146,8 +1594,16 @@ Public Class umdisomanger
         '補間方法として最近傍補間を指定する
         g.InterpolationMode = _
             System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor
+        g.Clear(Color.White)
         '画像を縮小表示
-        g.DrawImage(image, 0, 0, width, height)
+        If image.Width = image.Height AndAlso pc Is PictureBox1 Then
+            g.DrawImage(image, 0, 40, width, width)
+        ElseIf image.Width = image.Height AndAlso pc Is PictureBox2 Then
+            g.DrawImage(image, 80, 0, height, height)
+        Else
+
+            g.DrawImage(image, 0, 0, width, height)
+        End If
         '補間方法として高品質双三次補間を指定する
         g.InterpolationMode = _
             System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic
@@ -1169,4 +1625,22 @@ Public Class umdisomanger
         My.Settings.topmost = Me.TopMost
     End Sub
 
+    Private Sub lockdriveletter_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles lockdriveletter.CheckedChanged
+
+        If lockdriveletter.Checked = False Then
+            My.Settings.lockdrive = False
+        Else
+            My.Settings.lockdrive = True
+        End If
+
+    End Sub
+
+    Private Sub CheckBox1_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles t_gid.CheckedChanged
+
+        If t_gid.Checked = False Then
+            My.Settings.pspgid = False
+        Else
+            My.Settings.pspgid = True
+        End If
+    End Sub
 End Class
