@@ -87,6 +87,7 @@ Partial Class umdisomanger
         '
         'CRCimage
         '
+        Me.CRCimage.Font = New System.Drawing.Font("MS UI Gothic", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.CRCimage.Location = New System.Drawing.Point(409, 41)
         Me.CRCimage.Name = "CRCimage"
         Me.CRCimage.Size = New System.Drawing.Size(110, 23)
@@ -123,6 +124,7 @@ Partial Class umdisomanger
         '
         'SAVE
         '
+        Me.SAVE.Font = New System.Drawing.Font("MS UI Gothic", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.SAVE.Location = New System.Drawing.Point(298, 41)
         Me.SAVE.Name = "SAVE"
         Me.SAVE.Size = New System.Drawing.Size(82, 23)
@@ -132,6 +134,7 @@ Partial Class umdisomanger
         '
         'GAMEID
         '
+        Me.GAMEID.Font = New System.Drawing.Font("MS UI Gothic", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.GAMEID.Location = New System.Drawing.Point(469, 288)
         Me.GAMEID.Name = "GAMEID"
         Me.GAMEID.Size = New System.Drawing.Size(55, 23)
@@ -141,6 +144,7 @@ Partial Class umdisomanger
         '
         'PFS
         '
+        Me.PFS.Font = New System.Drawing.Font("MS UI Gothic", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.PFS.Location = New System.Drawing.Point(562, 255)
         Me.PFS.Name = "PFS"
         Me.PFS.Size = New System.Drawing.Size(75, 23)
@@ -184,6 +188,7 @@ Partial Class umdisomanger
         '
         'movepsp
         '
+        Me.movepsp.Font = New System.Drawing.Font("MS UI Gothic", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.movepsp.Location = New System.Drawing.Point(292, 418)
         Me.movepsp.Name = "movepsp"
         Me.movepsp.Size = New System.Drawing.Size(93, 23)
@@ -193,6 +198,7 @@ Partial Class umdisomanger
         '
         'Button1
         '
+        Me.Button1.Font = New System.Drawing.Font("MS UI Gothic", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button1.Location = New System.Drawing.Point(541, 41)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(103, 23)
@@ -204,7 +210,7 @@ Partial Class umdisomanger
         '
         Me.drivelettter.ContextMenuStrip = Me.ContextMenuStrip1
         Me.drivelettter.ImeMode = System.Windows.Forms.ImeMode.Disable
-        Me.drivelettter.Location = New System.Drawing.Point(575, 416)
+        Me.drivelettter.Location = New System.Drawing.Point(578, 416)
         Me.drivelettter.MaxLength = 2
         Me.drivelettter.Name = "drivelettter"
         Me.drivelettter.Size = New System.Drawing.Size(29, 22)
@@ -335,6 +341,7 @@ Partial Class umdisomanger
         '
         'calc_crc
         '
+        Me.calc_crc.Font = New System.Drawing.Font("MS UI Gothic", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.calc_crc.Location = New System.Drawing.Point(469, 319)
         Me.calc_crc.Name = "calc_crc"
         Me.calc_crc.Size = New System.Drawing.Size(54, 23)
@@ -344,6 +351,7 @@ Partial Class umdisomanger
         '
         'calc_md5
         '
+        Me.calc_md5.Font = New System.Drawing.Font("MS UI Gothic", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.calc_md5.Location = New System.Drawing.Point(578, 352)
         Me.calc_md5.Name = "calc_md5"
         Me.calc_md5.Size = New System.Drawing.Size(59, 23)
@@ -353,6 +361,7 @@ Partial Class umdisomanger
         '
         'calc_sha
         '
+        Me.calc_sha.Font = New System.Drawing.Font("MS UI Gothic", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.calc_sha.Location = New System.Drawing.Point(650, 385)
         Me.calc_sha.Name = "calc_sha"
         Me.calc_sha.Size = New System.Drawing.Size(56, 23)
@@ -362,6 +371,7 @@ Partial Class umdisomanger
         '
         'all_hash
         '
+        Me.all_hash.Font = New System.Drawing.Font("MS UI Gothic", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.all_hash.Location = New System.Drawing.Point(650, 352)
         Me.all_hash.Name = "all_hash"
         Me.all_hash.Size = New System.Drawing.Size(75, 23)
@@ -372,6 +382,7 @@ Partial Class umdisomanger
         'Button2
         '
         Me.Button2.Enabled = False
+        Me.Button2.Font = New System.Drawing.Font("MS UI Gothic", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button2.Location = New System.Drawing.Point(643, 418)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(94, 23)
@@ -501,6 +512,7 @@ Partial Class umdisomanger
         '
         'del_psp
         '
+        Me.del_psp.Font = New System.Drawing.Font("MS UI Gothic", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.del_psp.Location = New System.Drawing.Point(292, 447)
         Me.del_psp.Name = "del_psp"
         Me.del_psp.Size = New System.Drawing.Size(109, 23)
@@ -520,6 +532,7 @@ Partial Class umdisomanger
         '
         'crc_xml
         '
+        Me.crc_xml.Font = New System.Drawing.Font("MS UI Gothic", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.crc_xml.Location = New System.Drawing.Point(643, 255)
         Me.crc_xml.Name = "crc_xml"
         Me.crc_xml.Size = New System.Drawing.Size(75, 23)
@@ -564,9 +577,9 @@ Partial Class umdisomanger
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.lockdriveletter)
-        Me.Controls.Add(Me.drivelettter)
         Me.Controls.Add(Me.movepsp)
         Me.Controls.Add(Me.isosize)
+        Me.Controls.Add(Me.drivelettter)
         Me.Controls.Add(Me.PictureBox2)
         Me.Controls.Add(Me.isolba)
         Me.Controls.Add(Me.managename)
