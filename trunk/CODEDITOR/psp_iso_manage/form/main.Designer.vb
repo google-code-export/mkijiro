@@ -26,8 +26,9 @@ Partial Class umdisomanger
         Me.CRCimage = New System.Windows.Forms.Button()
         Me.TreeView1 = New System.Windows.Forms.TreeView()
         Me.ContextMenuStrip2 = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.削除ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.rg_add = New System.Windows.Forms.ToolStripMenuItem()
+        Me.rg_edit = New System.Windows.Forms.ToolStripMenuItem()
+        Me.rg_del = New System.Windows.Forms.ToolStripMenuItem()
         Me.SAVE = New System.Windows.Forms.Button()
         Me.GAMEID = New System.Windows.Forms.Button()
         Me.PFS = New System.Windows.Forms.Button()
@@ -56,24 +57,31 @@ Partial Class umdisomanger
         Me.calc_md5 = New System.Windows.Forms.Button()
         Me.calc_sha = New System.Windows.Forms.Button()
         Me.all_hash = New System.Windows.Forms.Button()
-        Me.Button2 = New System.Windows.Forms.Button()
+        Me.tree_apply = New System.Windows.Forms.Button()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ファイルToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ADD = New System.Windows.Forms.ToolStripMenuItem()
         Me.SAVELS = New System.Windows.Forms.ToolStripMenuItem()
         Me.sort = New System.Windows.Forms.ToolStripMenuItem()
-        Me.GAMEIDToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.昇順ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.降順ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.管理名ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.昇順ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.降順ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ファイル名ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.昇順ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.降順ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mane_sort_up = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mane_sort_down = New System.Windows.Forms.ToolStripMenuItem()
+        Me.GAMEIDToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.gid_sort_up = New System.Windows.Forms.ToolStripMenuItem()
+        Me.gid_sort_down = New System.Windows.Forms.ToolStripMenuItem()
+        Me.sort_jp = New System.Windows.Forms.ToolStripMenuItem()
+        Me.PSFタイトルToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.psf_sort_up = New System.Windows.Forms.ToolStripMenuItem()
+        Me.psf_sort_down = New System.Windows.Forms.ToolStripMenuItem()
+        Me.file_sort = New System.Windows.Forms.ToolStripMenuItem()
+        Me.file_sort_up = New System.Windows.Forms.ToolStripMenuItem()
+        Me.file_sort_down = New System.Windows.Forms.ToolStripMenuItem()
         Me.設定ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GUITOP = New System.Windows.Forms.ToolStripMenuItem()
         Me.xmlselect = New System.Windows.Forms.ToolStripMenuItem()
+        Me.転用先リスト編集ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ヘルプToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.オンラインヘルプToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.version = New System.Windows.Forms.ToolStripMenuItem()
         Me.del_psp = New System.Windows.Forms.Button()
         Me.t_gid = New System.Windows.Forms.CheckBox()
@@ -107,20 +115,27 @@ Partial Class umdisomanger
         '
         'ContextMenuStrip2
         '
-        Me.ContextMenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.削除ToolStripMenuItem, Me.ToolStripSeparator1})
+        Me.ContextMenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.rg_add, Me.rg_edit, Me.rg_del})
         Me.ContextMenuStrip2.Name = "ContextMenuStrip2"
-        Me.ContextMenuStrip2.Size = New System.Drawing.Size(111, 38)
+        Me.ContextMenuStrip2.Size = New System.Drawing.Size(141, 88)
         '
-        '削除ToolStripMenuItem
+        'rg_add
         '
-        Me.削除ToolStripMenuItem.Name = "削除ToolStripMenuItem"
-        Me.削除ToolStripMenuItem.Size = New System.Drawing.Size(110, 28)
-        Me.削除ToolStripMenuItem.Text = "削除"
+        Me.rg_add.Name = "rg_add"
+        Me.rg_add.Size = New System.Drawing.Size(140, 28)
+        Me.rg_add.Text = "登録追加"
         '
-        'ToolStripSeparator1
+        'rg_edit
         '
-        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(107, 6)
+        Me.rg_edit.Name = "rg_edit"
+        Me.rg_edit.Size = New System.Drawing.Size(140, 28)
+        Me.rg_edit.Text = "登録編集"
+        '
+        'rg_del
+        '
+        Me.rg_del.Name = "rg_del"
+        Me.rg_del.Size = New System.Drawing.Size(140, 28)
+        Me.rg_del.Text = "登録削除"
         '
         'SAVE
         '
@@ -379,20 +394,19 @@ Partial Class umdisomanger
         Me.all_hash.Text = "全ハッシュ"
         Me.all_hash.UseVisualStyleBackColor = True
         '
-        'Button2
+        'tree_apply
         '
-        Me.Button2.Enabled = False
-        Me.Button2.Font = New System.Drawing.Font("MS UI Gothic", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Button2.Location = New System.Drawing.Point(643, 418)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(94, 23)
-        Me.Button2.TabIndex = 29
-        Me.Button2.Text = "ツリー反映"
-        Me.Button2.UseVisualStyleBackColor = True
+        Me.tree_apply.Font = New System.Drawing.Font("MS UI Gothic", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.tree_apply.Location = New System.Drawing.Point(643, 418)
+        Me.tree_apply.Name = "tree_apply"
+        Me.tree_apply.Size = New System.Drawing.Size(94, 23)
+        Me.tree_apply.TabIndex = 29
+        Me.tree_apply.Text = "ツリー反映"
+        Me.tree_apply.UseVisualStyleBackColor = True
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ファイルToolStripMenuItem, Me.sort, Me.設定ToolStripMenuItem, Me.version})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ファイルToolStripMenuItem, Me.sort, Me.設定ToolStripMenuItem, Me.ヘルプToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Size = New System.Drawing.Size(756, 31)
@@ -422,72 +436,96 @@ Partial Class umdisomanger
         '
         'sort
         '
-        Me.sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GAMEIDToolStripMenuItem, Me.管理名ToolStripMenuItem, Me.ファイル名ToolStripMenuItem})
-        Me.sort.Enabled = False
+        Me.sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.管理名ToolStripMenuItem, Me.GAMEIDToolStripMenuItem, Me.PSFタイトルToolStripMenuItem, Me.file_sort})
         Me.sort.Name = "sort"
         Me.sort.Size = New System.Drawing.Size(52, 27)
         Me.sort.Text = "整列"
         '
-        'GAMEIDToolStripMenuItem
-        '
-        Me.GAMEIDToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.昇順ToolStripMenuItem2, Me.降順ToolStripMenuItem2})
-        Me.GAMEIDToolStripMenuItem.Name = "GAMEIDToolStripMenuItem"
-        Me.GAMEIDToolStripMenuItem.Size = New System.Drawing.Size(155, 28)
-        Me.GAMEIDToolStripMenuItem.Text = "GAMEID"
-        '
-        '昇順ToolStripMenuItem2
-        '
-        Me.昇順ToolStripMenuItem2.Name = "昇順ToolStripMenuItem2"
-        Me.昇順ToolStripMenuItem2.Size = New System.Drawing.Size(110, 28)
-        Me.昇順ToolStripMenuItem2.Text = "昇順"
-        '
-        '降順ToolStripMenuItem2
-        '
-        Me.降順ToolStripMenuItem2.Name = "降順ToolStripMenuItem2"
-        Me.降順ToolStripMenuItem2.Size = New System.Drawing.Size(110, 28)
-        Me.降順ToolStripMenuItem2.Text = "降順"
-        '
         '管理名ToolStripMenuItem
         '
-        Me.管理名ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.昇順ToolStripMenuItem1, Me.降順ToolStripMenuItem1})
+        Me.管理名ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mane_sort_up, Me.mane_sort_down})
         Me.管理名ToolStripMenuItem.Name = "管理名ToolStripMenuItem"
-        Me.管理名ToolStripMenuItem.Size = New System.Drawing.Size(155, 28)
+        Me.管理名ToolStripMenuItem.Size = New System.Drawing.Size(168, 28)
         Me.管理名ToolStripMenuItem.Text = "管理名"
         '
-        '昇順ToolStripMenuItem1
+        'mane_sort_up
         '
-        Me.昇順ToolStripMenuItem1.Name = "昇順ToolStripMenuItem1"
-        Me.昇順ToolStripMenuItem1.Size = New System.Drawing.Size(110, 28)
-        Me.昇順ToolStripMenuItem1.Text = "昇順"
+        Me.mane_sort_up.Name = "mane_sort_up"
+        Me.mane_sort_up.Size = New System.Drawing.Size(110, 28)
+        Me.mane_sort_up.Text = "昇順"
         '
-        '降順ToolStripMenuItem1
+        'mane_sort_down
         '
-        Me.降順ToolStripMenuItem1.Name = "降順ToolStripMenuItem1"
-        Me.降順ToolStripMenuItem1.Size = New System.Drawing.Size(110, 28)
-        Me.降順ToolStripMenuItem1.Text = "降順"
+        Me.mane_sort_down.Name = "mane_sort_down"
+        Me.mane_sort_down.Size = New System.Drawing.Size(110, 28)
+        Me.mane_sort_down.Text = "降順"
         '
-        'ファイル名ToolStripMenuItem
+        'GAMEIDToolStripMenuItem
         '
-        Me.ファイル名ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.昇順ToolStripMenuItem, Me.降順ToolStripMenuItem})
-        Me.ファイル名ToolStripMenuItem.Name = "ファイル名ToolStripMenuItem"
-        Me.ファイル名ToolStripMenuItem.Size = New System.Drawing.Size(155, 28)
-        Me.ファイル名ToolStripMenuItem.Text = "ファイル名"
+        Me.GAMEIDToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.gid_sort_up, Me.gid_sort_down, Me.sort_jp})
+        Me.GAMEIDToolStripMenuItem.Name = "GAMEIDToolStripMenuItem"
+        Me.GAMEIDToolStripMenuItem.Size = New System.Drawing.Size(168, 28)
+        Me.GAMEIDToolStripMenuItem.Text = "GAMEID"
         '
-        '昇順ToolStripMenuItem
+        'gid_sort_up
         '
-        Me.昇順ToolStripMenuItem.Name = "昇順ToolStripMenuItem"
-        Me.昇順ToolStripMenuItem.Size = New System.Drawing.Size(110, 28)
-        Me.昇順ToolStripMenuItem.Text = "昇順"
+        Me.gid_sort_up.Name = "gid_sort_up"
+        Me.gid_sort_up.Size = New System.Drawing.Size(140, 28)
+        Me.gid_sort_up.Text = "昇順"
         '
-        '降順ToolStripMenuItem
+        'gid_sort_down
         '
-        Me.降順ToolStripMenuItem.Name = "降順ToolStripMenuItem"
-        Me.降順ToolStripMenuItem.Size = New System.Drawing.Size(110, 28)
-        Me.降順ToolStripMenuItem.Text = "降順"
+        Me.gid_sort_down.Name = "gid_sort_down"
+        Me.gid_sort_down.Size = New System.Drawing.Size(140, 28)
+        Me.gid_sort_down.Text = "降順"
+        '
+        'sort_jp
+        '
+        Me.sort_jp.Name = "sort_jp"
+        Me.sort_jp.Size = New System.Drawing.Size(140, 28)
+        Me.sort_jp.Text = "日本優先"
+        '
+        'PSFタイトルToolStripMenuItem
+        '
+        Me.PSFタイトルToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.psf_sort_up, Me.psf_sort_down})
+        Me.PSFタイトルToolStripMenuItem.Name = "PSFタイトルToolStripMenuItem"
+        Me.PSFタイトルToolStripMenuItem.Size = New System.Drawing.Size(168, 28)
+        Me.PSFタイトルToolStripMenuItem.Text = "PSFタイトル"
+        '
+        'psf_sort_up
+        '
+        Me.psf_sort_up.Name = "psf_sort_up"
+        Me.psf_sort_up.Size = New System.Drawing.Size(110, 28)
+        Me.psf_sort_up.Text = "昇順"
+        '
+        'psf_sort_down
+        '
+        Me.psf_sort_down.Name = "psf_sort_down"
+        Me.psf_sort_down.Size = New System.Drawing.Size(110, 28)
+        Me.psf_sort_down.Text = "降順"
+        '
+        'file_sort
+        '
+        Me.file_sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.file_sort_up, Me.file_sort_down})
+        Me.file_sort.Name = "file_sort"
+        Me.file_sort.Size = New System.Drawing.Size(168, 28)
+        Me.file_sort.Text = "ファイル名"
+        '
+        'file_sort_up
+        '
+        Me.file_sort_up.Name = "file_sort_up"
+        Me.file_sort_up.Size = New System.Drawing.Size(110, 28)
+        Me.file_sort_up.Text = "昇順"
+        '
+        'file_sort_down
+        '
+        Me.file_sort_down.Name = "file_sort_down"
+        Me.file_sort_down.Size = New System.Drawing.Size(110, 28)
+        Me.file_sort_down.Text = "降順"
         '
         '設定ToolStripMenuItem
         '
-        Me.設定ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GUITOP, Me.xmlselect})
+        Me.設定ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GUITOP, Me.xmlselect, Me.転用先リスト編集ToolStripMenuItem})
         Me.設定ToolStripMenuItem.Name = "設定ToolStripMenuItem"
         Me.設定ToolStripMenuItem.Size = New System.Drawing.Size(52, 27)
         Me.設定ToolStripMenuItem.Text = "設定"
@@ -503,11 +541,32 @@ Partial Class umdisomanger
         Me.xmlselect.Name = "xmlselect"
         Me.xmlselect.Size = New System.Drawing.Size(215, 28)
         Me.xmlselect.Text = "画像検索用XML指定"
+        Me.xmlselect.ToolTipText = "OFFLINE用XMLを選択します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "CRC32と一致する管理名,画像が検索ボタンで適用されます"
+        '
+        '転用先リスト編集ToolStripMenuItem
+        '
+        Me.転用先リスト編集ToolStripMenuItem.Name = "転用先リスト編集ToolStripMenuItem"
+        Me.転用先リスト編集ToolStripMenuItem.Size = New System.Drawing.Size(215, 28)
+        Me.転用先リスト編集ToolStripMenuItem.Text = "転送先リスト編集"
+        Me.転用先リスト編集ToolStripMenuItem.ToolTipText = "PSPに転送するディレクトリーを編集します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ツリービューの右クリックから変更できるようになります" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "//例" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "X:\PSP\GAME\"
+        '
+        'ヘルプToolStripMenuItem
+        '
+        Me.ヘルプToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.オンラインヘルプToolStripMenuItem, Me.version})
+        Me.ヘルプToolStripMenuItem.Name = "ヘルプToolStripMenuItem"
+        Me.ヘルプToolStripMenuItem.Size = New System.Drawing.Size(67, 27)
+        Me.ヘルプToolStripMenuItem.Text = "ヘルプ"
+        '
+        'オンラインヘルプToolStripMenuItem
+        '
+        Me.オンラインヘルプToolStripMenuItem.Name = "オンラインヘルプToolStripMenuItem"
+        Me.オンラインヘルプToolStripMenuItem.Size = New System.Drawing.Size(200, 28)
+        Me.オンラインヘルプToolStripMenuItem.Text = "オンラインヘルプ"
         '
         'version
         '
         Me.version.Name = "version"
-        Me.version.Size = New System.Drawing.Size(97, 27)
+        Me.version.Size = New System.Drawing.Size(200, 28)
         Me.version.Text = "バージョン"
         '
         'del_psp
@@ -563,7 +622,7 @@ Partial Class umdisomanger
         Me.Controls.Add(Me.calc_sha)
         Me.Controls.Add(Me.gid)
         Me.Controls.Add(Me.md5hash)
-        Me.Controls.Add(Me.Button2)
+        Me.Controls.Add(Me.tree_apply)
         Me.Controls.Add(Me.calc_md5)
         Me.Controls.Add(Me.all_hash)
         Me.Controls.Add(Me.sha)
@@ -632,23 +691,21 @@ Partial Class umdisomanger
     Friend WithEvents calc_md5 As System.Windows.Forms.Button
     Friend WithEvents calc_sha As System.Windows.Forms.Button
     Friend WithEvents all_hash As System.Windows.Forms.Button
-    Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents tree_apply As System.Windows.Forms.Button
     Friend WithEvents ContextMenuStrip1 As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents ContextMenuStrip2 As System.Windows.Forms.ContextMenuStrip
-    Friend WithEvents 削除ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents rg_del As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
     Friend WithEvents sort As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents version As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents GAMEIDToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents 昇順ToolStripMenuItem2 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents gid_sort_up As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents 管理名ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents 昇順ToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents 降順ToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ファイル名ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents 昇順ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents 降順ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents 降順ToolStripMenuItem2 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents mane_sort_up As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents mane_sort_down As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents file_sort As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents file_sort_up As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents file_sort_down As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents gid_sort_down As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents 設定ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents del_psp As System.Windows.Forms.Button
     Friend WithEvents ファイルToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
@@ -659,5 +716,15 @@ Partial Class umdisomanger
     Friend WithEvents t_gid As System.Windows.Forms.CheckBox
     Friend WithEvents crc_xml As System.Windows.Forms.Button
     Friend WithEvents free As System.Windows.Forms.Label
+    Friend WithEvents rg_add As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents rg_edit As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents PSFタイトルToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents psf_sort_up As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents psf_sort_down As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents 転用先リスト編集ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ヘルプToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents オンラインヘルプToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents version As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents sort_jp As System.Windows.Forms.ToolStripMenuItem
 
 End Class
