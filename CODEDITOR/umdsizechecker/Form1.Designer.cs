@@ -53,7 +53,7 @@
             this.button1.Location = new System.Drawing.Point(19, 13);
             this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(137, 23);
+            this.button1.Size = new System.Drawing.Size(122, 30);
             this.button1.TabIndex = 1;
             this.button1.Text = "ファイルをドロップ";
             this.button1.UseVisualStyleBackColor = true;
@@ -69,7 +69,6 @@
             this.textBox1.ShortcutsEnabled = false;
             this.textBox1.Size = new System.Drawing.Size(229, 75);
             this.textBox1.TabIndex = 2;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // label1
             // 
@@ -155,9 +154,9 @@
             // button5
             // 
             this.button5.Enabled = false;
-            this.button5.Location = new System.Drawing.Point(134, 20);
+            this.button5.Location = new System.Drawing.Point(134, 15);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(75, 23);
+            this.button5.Size = new System.Drawing.Size(75, 28);
             this.button5.TabIndex = 9;
             this.button5.Text = "開始";
             this.button5.UseVisualStyleBackColor = true;
@@ -208,9 +207,9 @@
             // sectorview
             // 
             this.sectorview.Enabled = false;
-            this.sectorview.Location = new System.Drawing.Point(163, 12);
+            this.sectorview.Location = new System.Drawing.Point(148, 12);
             this.sectorview.Name = "sectorview";
-            this.sectorview.Size = new System.Drawing.Size(82, 23);
+            this.sectorview.Size = new System.Drawing.Size(97, 31);
             this.sectorview.TabIndex = 11;
             this.sectorview.Text = "セクタビュー";
             this.sectorview.UseVisualStyleBackColor = true;
