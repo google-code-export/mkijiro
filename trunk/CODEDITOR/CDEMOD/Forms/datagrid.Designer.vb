@@ -24,11 +24,6 @@ Partial Class datagrid
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
-        Me.アドレス = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.値 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.編集タイプ = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.入力値 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.備考 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.CNVbikou = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.addline = New System.Windows.Forms.ToolStripMenuItem()
         Me.addmacro = New System.Windows.Forms.ToolStripMenuItem()
@@ -46,6 +41,11 @@ Partial Class datagrid
         Me.gridsave = New System.Windows.Forms.CheckBox()
         Me.g_address = New System.Windows.Forms.RadioButton()
         Me.g_value = New System.Windows.Forms.RadioButton()
+        Me.アドレス = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.値 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.編集タイプ = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.入力値 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.備考 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.CNVbikou.SuspendLayout()
         Me.SuspendLayout()
@@ -64,46 +64,6 @@ Partial Class datagrid
         Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridView1.Size = New System.Drawing.Size(591, 300)
         Me.DataGridView1.TabIndex = 0
-        '
-        'アドレス
-        '
-        Me.アドレス.Frozen = True
-        Me.アドレス.HeaderText = "アドレス"
-        Me.アドレス.MaxInputLength = 10
-        Me.アドレス.Name = "アドレス"
-        Me.アドレス.Resizable = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.アドレス.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        '
-        '値
-        '
-        Me.値.Frozen = True
-        Me.値.HeaderText = "値"
-        Me.値.MaxInputLength = 10
-        Me.値.Name = "値"
-        Me.値.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        '
-        '編集タイプ
-        '
-        Me.編集タイプ.AutoComplete = False
-        Me.編集タイプ.Frozen = True
-        Me.編集タイプ.HeaderText = "編集タイプ"
-        Me.編集タイプ.Items.AddRange(New Object() {"DEC", "BINARY32", "BIN32(>>16)", "BINARY16", "OR", "AND", "XOR"})
-        Me.編集タイプ.Name = "編集タイプ"
-        Me.編集タイプ.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        '
-        '入力値
-        '
-        Me.入力値.Frozen = True
-        Me.入力値.HeaderText = "入力値"
-        Me.入力値.MaxInputLength = 11
-        Me.入力値.Name = "入力値"
-        Me.入力値.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        '
-        '備考
-        '
-        Me.備考.HeaderText = "備考"
-        Me.備考.Name = "備考"
-        Me.備考.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         '
         'CNVbikou
         '
@@ -174,7 +134,7 @@ Partial Class datagrid
         Me.notetag.Size = New System.Drawing.Size(179, 28)
         Me.notetag.Text = "備考タグ変換"
         Me.notetag.ToolTipText = "CWCコード横の説明部分/FREECHEATの_N2、SCMをタグに変換します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "//CWC" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "_L 0x... 0x....(説明)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "//FREECHEA" & _
-            "T" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "_N2 (説明)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "_L 0x... 0x...." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "$SCM{" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "$(説明)$2 $ (0123...)"
+    "T" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "_N2 (説明)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "_L 0x... 0x...." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "$SCM{" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "$(説明)$2 $ (0123...)"
         '
         'appy
         '
@@ -235,6 +195,58 @@ Partial Class datagrid
         Me.g_value.Text = "value"
         Me.g_value.UseVisualStyleBackColor = True
         '
+        'アドレス
+        '
+        Me.アドレス.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
+        Me.アドレス.Frozen = True
+        Me.アドレス.HeaderText = "アドレス"
+        Me.アドレス.MaxInputLength = 10
+        Me.アドレス.Name = "アドレス"
+        Me.アドレス.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.アドレス.Width = 57
+        '
+        '値
+        '
+        Me.値.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
+        Me.値.Frozen = True
+        Me.値.HeaderText = "値"
+        Me.値.MaxInputLength = 10
+        Me.値.Name = "値"
+        Me.値.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.値.Width = 28
+        '
+        '編集タイプ
+        '
+        Me.編集タイプ.AutoComplete = False
+        Me.編集タイプ.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
+        Me.編集タイプ.Frozen = True
+        Me.編集タイプ.HeaderText = "編集タイプ"
+        Me.編集タイプ.Items.AddRange(New Object() {"DEC", "DEC16BIT", "BINARY32", "BIN32>>16", "BINARY16", "OR", "AND", "XOR"})
+        Me.編集タイプ.Name = "編集タイプ"
+        Me.編集タイプ.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.編集タイプ.Width = 75
+        '
+        '入力値
+        '
+        Me.入力値.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
+        Me.入力値.Frozen = True
+        Me.入力値.HeaderText = "入力値　　　 "
+        Me.入力値.MaxInputLength = 11
+        Me.入力値.MinimumWidth = 88
+        Me.入力値.Name = "入力値"
+        Me.入力値.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.入力値.Width = 93
+        '
+        '備考
+        '
+        Me.備考.FillWeight = 200.0!
+        Me.備考.HeaderText = "備考　　　　"
+        Me.備考.MaxInputLength = 64
+        Me.備考.MinimumWidth = 80
+        Me.備考.Name = "備考"
+        Me.備考.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.備考.Width = 83
+        '
         'datagrid
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 15.0!)
@@ -262,11 +274,6 @@ Partial Class datagrid
     Friend WithEvents gridsave As System.Windows.Forms.CheckBox
     Friend WithEvents g_address As System.Windows.Forms.RadioButton
     Friend WithEvents g_value As System.Windows.Forms.RadioButton
-    Friend WithEvents アドレス As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents 値 As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents 編集タイプ As System.Windows.Forms.DataGridViewComboBoxColumn
-    Friend WithEvents 入力値 As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents 備考 As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents CNVbikou As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents notetag As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents appy As System.Windows.Forms.ToolStripMenuItem
@@ -279,4 +286,9 @@ Partial Class datagrid
     Friend WithEvents paste As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents addmacro As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents アドレス As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents 値 As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents 編集タイプ As System.Windows.Forms.DataGridViewComboBoxColumn
+    Friend WithEvents 入力値 As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents 備考 As System.Windows.Forms.DataGridViewTextBoxColumn
 End Class

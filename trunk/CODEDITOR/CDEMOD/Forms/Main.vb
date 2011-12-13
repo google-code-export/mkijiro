@@ -31,7 +31,6 @@ Public Class MERGE
             Me.AutoSize = True
             fixedform.Checked = True
         Else
-
             Me.Width = My.Settings.mainyoko
             Me.Height = My.Settings.maintate
 
@@ -249,6 +248,10 @@ Public Class MERGE
         ElseIf (e.Label.Trim = "") Then
             e.CancelEdit = True
         End If
+        If (e.Label.Length > 74) Then
+            codetree.SelectedNode.Text = e.Label.Substring(0, 74)
+        End If
+
     End Sub
 
 #End Region
@@ -2039,12 +2042,12 @@ Public Class MERGE
     Private Sub codetree_AfterSelect(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles codetree.AfterSelect
         Dim j As New joker
 
+        Me.AutoSize = False
         changed.Text = ""
         dgtext.Text = ""
         move_up.Enabled = True
         move_down.Enabled = True
         merge_codes.Enabled = True
-
 
         Select Case codetree.SelectedNode.Level
 
@@ -2176,6 +2179,7 @@ Public Class MERGE
             If codetree.Nodes(0).Nodes.Count > 0 AndAlso MessageBox.Show("ドロップされたデータベースを開くと現在のデータベースが消えてしまいます。このまま開いてもよろしいですか？", "データベース保存の確認", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) = Windows.Forms.DialogResult.Cancel Then
                 Exit Sub
             End If
+            Me.AutoSize = False
             database = fileName(0)
 
             error_window.list_save_error.Items.Clear() 'Clear any save errors from a previous database
@@ -2184,6 +2188,7 @@ Public Class MERGE
             DATEL = open.check3_db(database, 932)
             codetree.Nodes.Clear()
             codetree.BeginUpdate()
+
             error_window.list_load_error.BeginUpdate()
 
             UTF16BECP1201ToolStripMenuItem.Enabled = False
@@ -2226,6 +2231,8 @@ Public Class MERGE
             overwrite_db.Enabled = True
             My.Settings.lastcodepath = database
             overwrite_db.ToolTipText = "対象;" & database
+
+
         End If
     End Sub
 
