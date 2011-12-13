@@ -5,9 +5,11 @@ Imports System.Text.RegularExpressions
 Imports System.IO
 Imports System.Media
 Imports System.Drawing
+Imports System.Globalization
 
 Public Class umdisomanger
     Friend psx As Boolean = False
+    Friend lang(40) As String
 
     Private Sub load_list(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         If File.Exists(Application.StartupPath & "\path.txt") = True Then
@@ -100,6 +102,35 @@ Public Class umdisomanger
             t_gid.Checked = True
         End If
 
+
+        'System.Threading.Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
+
+        If CultureInfo.CurrentCulture.ToString.Contains("ja") Then
+            ADD.ToolTipText = My.Resources.fileadd
+            SAVELS.ToolTipText = My.Resources.filesave
+            editpspdir.ToolTipText = My.Resources.pspdir
+            xmlselect.ToolTipText = My.Resources.xml
+            If File.Exists(Application.StartupPath & "\ja\ja.txt") = True Then
+                Dim lw As New System.IO.StreamReader(Application.StartupPath & "\ja\ja.txt", System.Text.Encoding.GetEncoding(932))
+                Dim i As Integer
+                While lw.Peek() > -1
+                    lang(i) = lw.ReadLine
+                    i += 1
+                End While
+                lw.Close()
+            End If
+        Else
+            If File.Exists(Application.StartupPath & "\ja\en.txt") = True Then
+                Dim lw As New System.IO.StreamReader(Application.StartupPath & "\ja\en.txt", System.Text.Encoding.GetEncoding(0))
+                Dim i As Integer
+                While lw.Peek() > -1
+                    lang(i) = lw.ReadLine
+                    i += 1
+                End While
+                lw.Close()
+            End If
+        End If
+
         drivelettter.Text = My.Settings.drivepath
 
         PictureBox1.AllowDrop = True
@@ -140,11 +171,12 @@ Public Class umdisomanger
 
                             hash = hash.ToUpper
                         Else
-                            MessageBox.Show(path & "が見つかりません", "エラー")
+                            '"が見つかりません", "エラー")
+                            MessageBox.Show(path & lang(0), lang(1))
                             Exit Sub
                         End If
                     End If
-                    
+
                     Dim ffs As New FileStream(xml, System.IO.FileMode.Open, System.IO.FileAccess.Read)
                     'ファイルを読み込むバイト型配列を作成する
                     Dim bs(CInt(ffs.Length - 1)) As Byte
@@ -251,16 +283,18 @@ Public Class umdisomanger
                         Beep()
                     Else
                         Beep()
-                        MessageBox.Show("ISOと同じCRC32;" & hash & "がみつかりませんでした", "CRC不一致")
+                        'ISOと同じCRC32; "がみつかりませんでした", "CRC不一致")
+                        MessageBox.Show(lang(2) & hash & lang(3), lang(4))
                     End If
 
-                    End If
+                End If
             Else
-                MessageBox.Show("画像検索用のoffline用XMLがみつかりません", "XMLエラー")
+                '"画像検索用のoffline用XMLがみつかりません", "XMLエラー"
+                MessageBox.Show(lang(5), lang(6))
             End If
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message, "例外")
+            MessageBox.Show(ex.Message, lang(7))
         End Try
     End Sub
 
@@ -294,7 +328,7 @@ Public Class umdisomanger
 
                             hash = hash.ToUpper
                         Else
-                            MessageBox.Show(path & "が見つかりません", "エラー")
+                            MessageBox.Show(path & lang(0), lang(1))
                             Exit Sub
                         End If
                     End If
@@ -398,16 +432,16 @@ Public Class umdisomanger
                         End If
                     Else
                         Beep()
-                        MessageBox.Show("ISOと同じCRC32;" & hash & "がみつかりませんでした", "CRC不一致")
+                        MessageBox.Show(lang(2) & hash & lang(3), lang(4))
                     End If
 
                 End If
             Else
-                MessageBox.Show("検索用のoffline用XMLがみつかりません", "XMLエラー")
+                MessageBox.Show(lang(5), lang(6))
             End If
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message, "例外")
+            MessageBox.Show(ex.Message, lang(7))
         End Try
 
 
@@ -471,88 +505,90 @@ Public Class umdisomanger
                     End If
                 Next
                 If beeps = True Then
-                    sb.Insert(0, "同じゲームがすで登録されてます" & vbCrLf)
-                    MessageBox.Show(sb.ToString, "ゲームID重複")
+                    '"同じゲームがすで登録されてます" "ゲームID重複"
+                    sb.Insert(0, lang(8) & vbCrLf)
+                    MessageBox.Show(sb.ToString, lang(9))
                 End If
             End If
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message, "例外")
+            MessageBox.Show(ex.Message, lang(7))
         End Try
     End Sub
 
     Private Sub TreeView1_AfterSelect(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles TreeView1.AfterSelect
         Try
 
-                Dim treenode As TreeNode = TreeView1.SelectedNode
+            Dim treenode As TreeNode = TreeView1.SelectedNode
 
-                If treenode IsNot Nothing Then
-                    Dim isopath As String = ""
-                    If treenode.Level = 0 Then
-                        treenode = treenode.Nodes(0)
+            If treenode IsNot Nothing Then
+                Dim isopath As String = ""
+                If treenode.Level = 0 Then
+                    treenode = treenode.Nodes(0)
+                Else
+                    treenode = treenode.Parent.Nodes(0)
+                End If
+
+                Dim userpic As String = Application.StartupPath & "\imgs\user\" & treenode.Parent.Tag.ToString & "a.png"
+                Dim userpic2 As String = Application.StartupPath & "\imgs\user\" & treenode.Parent.Tag.ToString & "b.png"
+                Dim p1 As Boolean = False
+                Dim p2 As Boolean = False
+                Dim psf As New psf
+
+                managename.Text = treenode.Parent.Text
+                gid.Text = treenode.Parent.Tag.ToString
+                isopath = treenode.Tag.ToString
+                crc.Text = ""
+                md5hash.Text = ""
+                sha.Text = ""
+
+                For Each n As TreeNode In treenode.Parent.Nodes
+                    If n.Text.Contains("CRC32") Then
+                        crc.Text = n.Text.Remove(0, 6).Trim
+                    ElseIf n.Text.Contains("MD5") Then
+                        md5hash.Text = n.Text.Remove(0, 4).Trim
+                    ElseIf n.Text.Contains("SHA-1") Then
+                        sha.Text = n.Text.Remove(0, 6).Trim
+                    End If
+                Next
+
+                If File.Exists(isopath) = True Then
+                    Dim fs As New System.IO.FileStream(isopath, System.IO.FileMode.Open, System.IO.FileAccess.Read)
+                    Dim size(3) As Byte
+                    isosize.Text = fs.Length.ToString("0,0,0")
+                    fs.Seek(&H8050, SeekOrigin.Begin)
+                    fs.Read(size, 0, 4)
+                    If psf.video(isopath) = "PBP" Then
+                        '"PBPファイルです"
+                        isolba.Text = lang(10)
                     Else
-                        treenode = treenode.Parent.Nodes(0)
+                        isolba.Text = (BitConverter.ToInt32(size, 0) << 11).ToString("0,0,0")
                     End If
+                    fs.Close()
+                End If
 
-                    Dim userpic As String = Application.StartupPath & "\imgs\user\" & treenode.Parent.Tag.ToString & "a.png"
-                    Dim userpic2 As String = Application.StartupPath & "\imgs\user\" & treenode.Parent.Tag.ToString & "b.png"
-                    Dim p1 As Boolean = False
-                    Dim p2 As Boolean = False
-                    Dim psf As New psf
+                If File.Exists(userpic) Then
+                    bitmap_resize(PictureBox1, userpic, 104, 181)
+                    p1 = True
+                End If
+                If File.Exists(userpic2) Then
+                    bitmap_resize(PictureBox2, userpic2, 381, 181)
+                    p2 = True
+                End If
 
-                    managename.Text = treenode.Parent.Text
-                    gid.Text = treenode.Parent.Tag.ToString
-                    isopath = treenode.Tag.ToString
-                    crc.Text = ""
-                    md5hash.Text = ""
-                    sha.Text = ""
-
-                    For Each n As TreeNode In treenode.Parent.Nodes
-                        If n.Text.Contains("CRC32") Then
-                            crc.Text = n.Text.Remove(0, 6).Trim
-                        ElseIf n.Text.Contains("MD5") Then
-                            md5hash.Text = n.Text.Remove(0, 4).Trim
-                        ElseIf n.Text.Contains("SHA-1") Then
-                            sha.Text = n.Text.Remove(0, 6).Trim
-                        End If
-                    Next
-
-                    If File.Exists(isopath) = True Then
-                        Dim fs As New System.IO.FileStream(isopath, System.IO.FileMode.Open, System.IO.FileAccess.Read)
-                        Dim size(3) As Byte
-                        isosize.Text = fs.Length.ToString("0,0,0")
-                        fs.Seek(&H8050, SeekOrigin.Begin)
-                        fs.Read(size, 0, 4)
-                        If psf.video(isopath) = "PBP" Then
-                            isolba.Text = "PBPファイルです"
-                        Else
-                            isolba.Text = (BitConverter.ToInt32(size, 0) << 11).ToString("0,0,0")
-                        End If
-                        fs.Close()
-                    End If
-
-                    If File.Exists(userpic) Then
-                        bitmap_resize(PictureBox1, userpic, 104, 181)
+                Dim p As String = treenode.Name
+                If p.Length > 4 Then
+                    Dim path As String = p.Insert(p.Length - 4, "a")
+                    Dim path2 As String = p.Insert(p.Length - 4, "b")
+                    If File.Exists(path) AndAlso p1 = False Then
+                        bitmap_resize(PictureBox1, path, 104, 181)
                         p1 = True
                     End If
-                    If File.Exists(userpic2) Then
-                        bitmap_resize(PictureBox2, userpic2, 381, 181)
+                    If File.Exists(path2) AndAlso p2 = False Then
+                        bitmap_resize(PictureBox2, path2, 381, 181)
                         p2 = True
                     End If
-
-                    Dim p As String = treenode.Name
-                    If p.Length > 4 Then
-                        Dim path As String = p.Insert(p.Length - 4, "a")
-                        Dim path2 As String = p.Insert(p.Length - 4, "b")
-                        If File.Exists(path) AndAlso p1 = False Then
-                            bitmap_resize(PictureBox1, path, 104, 181)
-                            p1 = True
-                        End If
-                        If File.Exists(path2) AndAlso p2 = False Then
-                            bitmap_resize(PictureBox2, path2, 381, 181)
-                            p2 = True
-                        End If
-                    End If
+                End If
 
                 If File.Exists(My.Settings.imgdir & "1-500\1a.png") = True Then
                     'なにもないときはりっじダミー表示
@@ -575,47 +611,54 @@ Public Class umdisomanger
                         End If
 
                         If ms > 1 << 30 Then
-                            free.Text = "空き容量;" & (ms / (1 << 30)).ToString("N") & "GiB"
+                            '"空き容量;不明"
+                            free.Text = lang(11) & (ms / (1 << 30)).ToString("N") & "GiB"
                         ElseIf ms > 1 << 20 Then
-                            free.Text = "空き容量;" & (ms / (1 << 20)).ToString("N") & "MiB"
+                            free.Text = lang(11) & (ms / (1 << 20)).ToString("N") & "MiB"
                         ElseIf ms > 1 << 10 Then
-                            free.Text = "空き容量;" & (ms / (1 << 10)).ToString("N") & "KiB"
+                            free.Text = lang(11) & (ms / (1 << 10)).ToString("N") & "KiB"
                         End If
                     End If
                 Else
-                    free.Text = "空き容量;不明"
+                    free.Text = lang(12)
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message, "例外")
+            MessageBox.Show(ex.Message, lang(7))
         End Try
     End Sub
 
 
     Private Sub codetree_KeyUp(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles TreeView1.KeyUp
         If e.KeyCode = Keys.Delete Then
-            Try
-                If TreeView1.SelectedNode.Level = 0 Then
-                    If MessageBox.Show("選択している情報を削除しますか？", "削除の確認", _
-                       MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
-                        TreeView1.SelectedNode.Remove()
-                    End If
-                End If
-                If TreeView1.SelectedNode.Level = 1 Then
-                    If MessageBox.Show("選択している情報を削除しますか？", "削除の確認", _
-                       MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
-                        TreeView1.SelectedNode.Parent.Remove()
-                    End If
-                End If
-
-            Catch ex As Exception
-                MessageBox.Show(ex.Message, "例外")
-            End Try
-
+            treenode_delete(sender, e)
         End If
     End Sub
 
-    Private Sub 追加ToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles rg_add.Click
+
+    Private Sub treenode_delete(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rg_del.Click
+
+        Try
+            If TreeView1.SelectedNode.Level = 0 Then
+                If MessageBox.Show(lang(13), lang(14), _
+                   MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
+                    TreeView1.SelectedNode.Remove()
+                End If
+            End If
+            If TreeView1.SelectedNode.Level = 1 Then
+                If MessageBox.Show(lang(13), lang(14), _
+                   MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
+                    TreeView1.SelectedNode.Parent.Remove()
+                End If
+            End If
+
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, lang(7))
+        End Try
+    End Sub
+
+    Private Sub tree_add(sender As System.Object, e As System.EventArgs) Handles rg_add.Click
 
         Try
             Dim treenode As TreeNode = TreeView1.SelectedNode
@@ -623,11 +666,12 @@ Public Class umdisomanger
                 If treenode.Level = 1 Then
                     treenode = treenode.Parent
                 End If
-        Dim rg As New editor
+                Dim rg As New editor
                 Me.TopMost = False
                 Dim treenode1 As New TreeNode
-                rg.Text &= "(新規追加)"
-                rg.ShowDialog()
+                '"(新規追加)"
+                rg.Text &= lang(15)
+                rg.ShowDialog(Me)
                 If rg.Text = "APPLY" Then
                     treenode1.Text = rg.gname.Text
                     treenode1.Name = rg.dir.Text.Trim & vbCrLf & rg.note.Text.Trim
@@ -646,11 +690,11 @@ Public Class umdisomanger
                 TreeView1.Focus()
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message, "例外")
+            MessageBox.Show(ex.Message, lang(7))
         End Try
     End Sub
 
-    Private Sub 登録編集ToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles rg_edit.Click
+    Private Sub edit_tree(sender As System.Object, e As System.EventArgs) Handles rg_edit.Click
         Try
             Dim treenode As TreeNode = TreeView1.SelectedNode
             If treenode IsNot Nothing Then
@@ -685,7 +729,7 @@ Public Class umdisomanger
                         rg.note.Text &= s.Trim & vbCrLf
                     End If
                 Next
-                rg.ShowDialog()
+                rg.ShowDialog(Me)
                 If rg.Text = "APPLY" Then
                     treenode.Parent.Text = rg.gname.Text
                     If psf.video(rg.fpath.Text) = "PSP" AndAlso rg.dir.Text = "X:\ISO\" Then
@@ -709,32 +753,9 @@ Public Class umdisomanger
                 TreeView1.Focus()
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message, "例外")
+            MessageBox.Show(ex.Message, lang(7))
         End Try
     End Sub
-
-    Private Sub 削除ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rg_del.Click
-
-        Try
-            If TreeView1.SelectedNode.Level = 0 Then
-                If MessageBox.Show("選択している情報を削除しますか？", "削除の確認", _
-                   MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
-                    TreeView1.SelectedNode.Remove()
-                End If
-            End If
-            If TreeView1.SelectedNode.Level = 1 Then
-                If MessageBox.Show("選択している情報を削除しますか？", "削除の確認", _
-                   MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
-                    TreeView1.SelectedNode.Parent.Remove()
-                End If
-            End If
-
-
-        Catch ex As Exception
-            MessageBox.Show(ex.Message, "例外")
-        End Try
-    End Sub
-
 
 
     'BeforeLabelEditイベントハンドラ
@@ -922,7 +943,7 @@ Public Class umdisomanger
 
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message, "例外")
+            MessageBox.Show(ex.Message, lang(7))
         End Try
     End Sub
 
@@ -996,13 +1017,17 @@ Public Class umdisomanger
                             File.Copy(cp, cp2)
                         End If
                         Beep()
-                        MessageBox.Show(UMD & "の転送が完了しました", "転送成功")
+                        '"の転送が完了しました", "転送成功"
+                        MessageBox.Show(UMD & lang(16), lang(17))
                     ElseIf psp = "" Then
                         Beep()
-                        MessageBox.Show("PSPが見つかりません,USB接続していないかメモステフォーマット時に作成されるMEMSTICK.INDがないようです", "PSP接続エラー")
+                        '"PSPが見つかりません,USB接続していないかメモステフォーマット時に作成されるMEMSTICK.INDがないようです
+                        '"PSP接続エラー
+                        MessageBox.Show(lang(18), lang(19))
                     Else
                         Beep()
-                        MessageBox.Show("すでにPSPに転送されてます", "ファイル重複")
+                        '"すでにPSPに転送されてます", "ファイル重複"
+                        MessageBox.Show(lang(20), lang(21))
                     End If
                 End If
 
@@ -1018,24 +1043,24 @@ Public Class umdisomanger
                         End If
 
                         If ms > 1 << 30 Then
-                            free.Text = "空き容量;" & (ms / (1 << 30)).ToString("N") & "GiB"
+                            free.Text = lang(11) & (ms / (1 << 30)).ToString("N") & "GiB"
                         ElseIf ms > 1 << 20 Then
-                            free.Text = "空き容量;" & (ms / (1 << 20)).ToString("N") & "MiB"
+                            free.Text = lang(11) & (ms / (1 << 20)).ToString("N") & "MiB"
                         ElseIf ms > 1 << 10 Then
-                            free.Text = "空き容量;" & (ms / (1 << 10)).ToString("N") & "KiB"
+                            free.Text = lang(11) & (ms / (1 << 10)).ToString("N") & "KiB"
                         End If
                     End If
                 Else
-                    free.Text = "空き容量;不明"
+                    free.Text = lang(12)
                 End If
 
             Else
                 Beep()
-                MessageBox.Show("PSPが見つかりません,USB接続していないかメモステフォーマット時に作成されるMEMSTICK.INDがないようです", "PSP接続エラー")
+                MessageBox.Show(lang(18), lang(19))
             End If
         Catch ex As Exception
             Beep()
-            MessageBox.Show(ex.Message, "エラー")
+            MessageBox.Show(ex.Message, lang(1))
         End Try
     End Sub
 
@@ -1091,8 +1116,8 @@ Public Class umdisomanger
             Path.GetDirectoryName(cp2), "*", System.IO.SearchOption.AllDirectories)
                         UMD = "PBP"
                     End If
-
-                    If psp <> "" AndAlso File.Exists(cp2) = True AndAlso MessageBox.Show("PSPからファイルを削除してもよろしいですか？", "削除の確認", _
+                    '"PSPからファイルを削除してもよろしいですか？"
+                    If psp <> "" AndAlso File.Exists(cp2) = True AndAlso MessageBox.Show(lang(22), lang(14), _
                                MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
                         If UMD = "PBP" Then
                             For Each s In files
@@ -1113,7 +1138,8 @@ Public Class umdisomanger
                             File.Delete(cp2)
                         End If
                         Beep()
-                        MessageBox.Show(UMD & "を削除しました" & vbCrLf & cp2, "削除")
+                        '"を削除しました" & vbCrLf & cp2, "削除")
+                        MessageBox.Show(UMD & lang(23) & vbCrLf & cp2, lang(24))
                     End If
                 End If
 
@@ -1129,24 +1155,24 @@ Public Class umdisomanger
                         End If
 
                         If ms > 1 << 30 Then
-                            free.Text = "空き容量;" & (ms / (1 << 30)).ToString("N") & "GiB"
+                            free.Text = lang(11) & (ms / (1 << 30)).ToString("N") & "GiB"
                         ElseIf ms > 1 << 20 Then
-                            free.Text = "空き容量;" & (ms / (1 << 20)).ToString("N") & "MiB"
+                            free.Text = lang(11) & (ms / (1 << 20)).ToString("N") & "MiB"
                         ElseIf ms > 1 << 10 Then
-                            free.Text = "空き容量;" & (ms / (1 << 10)).ToString("N") & "KiB"
+                            free.Text = lang(11) & (ms / (1 << 10)).ToString("N") & "KiB"
                         End If
                     End If
                 Else
-                    free.Text = "空き容量;不明"
+                    free.Text = lang(12)
                 End If
 
             Else
                 Beep()
-                MessageBox.Show("PSPが見つかりません,USB接続していないかメモステフォーマット時に作成されるMEMSTICK.INDがないようです", "PSP接続エラー")
+                MessageBox.Show(lang(18), lang(19))
             End If
         Catch ex As Exception
             Beep()
-            MessageBox.Show(ex.Message, "エラー")
+            MessageBox.Show(ex.Message, lang(1))
         End Try
     End Sub
 
@@ -1221,10 +1247,10 @@ Public Class umdisomanger
                     TreeView1.Focus()
 
                 Catch ex As Exception
-                    MessageBox.Show(ex.Message, "例外")
+                    MessageBox.Show(ex.Message, lang(7))
                 End Try
             Else
-                MessageBox.Show(path & "がみつかりません", "エラー")
+                MessageBox.Show(path & lang(0), lang(1))
             End If
         End If
     End Sub
@@ -1276,10 +1302,10 @@ Public Class umdisomanger
 
 
                 Catch ex As Exception
-                    MessageBox.Show(ex.Message, "例外")
+                    MessageBox.Show(ex.Message, lang(7))
                 End Try
             Else
-                MessageBox.Show(path & "がみつかりません", "エラー")
+                MessageBox.Show(path & lang(0), lang(1))
             End If
         End If
     End Sub
@@ -1329,10 +1355,10 @@ Public Class umdisomanger
                     TreeView1.Focus()
 
                 Catch ex As Exception
-                    MessageBox.Show(ex.Message, "例外")
+                    MessageBox.Show(ex.Message, lang(7))
                 End Try
             Else
-                MessageBox.Show(path & "がみつかりません", "エラー")
+                MessageBox.Show(path & lang(0), lang(1))
             End If
         End If
     End Sub
@@ -1355,11 +1381,11 @@ Public Class umdisomanger
                     calc_md5_Click(sender, e)
                     calc_sha_Click(sender, e)
                 Else
-                    MessageBox.Show(path & "がみつかりません", "エラー")
+                    MessageBox.Show(path & lang(0), lang(1))
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message, "例外")
+            MessageBox.Show(ex.Message, lang(7))
         End Try
     End Sub
 
@@ -1384,11 +1410,11 @@ Public Class umdisomanger
                     End If
 
                 Else
-                    MessageBox.Show(path & "がみつかりません", "エラー")
+                    MessageBox.Show(path & lang(0), lang(1))
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message, "例外")
+            MessageBox.Show(ex.Message, lang(7))
         End Try
     End Sub
 
@@ -1412,11 +1438,11 @@ Public Class umdisomanger
                     End If
 
                 Else
-                    MessageBox.Show(path & "がみつかりません", "エラー")
+                    MessageBox.Show(path & lang(0), lang(1))
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message, "例外")
+            MessageBox.Show(ex.Message, lang(7))
         End Try
     End Sub
 
@@ -1487,8 +1513,10 @@ Public Class umdisomanger
         Try
             Dim ofd As New OpenFileDialog()
             ofd.InitialDirectory = Application.StartupPath
-            ofd.Filter = "ISO/PBPファイル(*iso;*.pbp)|*.iso;*.pbp"
-            ofd.Title = "ISO/PBPファイルを選択してください"
+            '"ISO/PBPファイル(*iso;*.pbp)|*.iso;*.pbp"
+            '"ISO/PBPファイルを選択してください"
+            ofd.Filter = lang(25)
+            ofd.Title = lang(26)
             ofd.RestoreDirectory = True
 
             If ofd.ShowDialog() = DialogResult.OK Then
@@ -1535,13 +1563,13 @@ Public Class umdisomanger
 
                 End If
                 If beeps = True Then
-                    sb.Insert(0, "同じゲームがすで登録されてます" & vbCrLf)
-                    MessageBox.Show(sb.ToString, "ゲームID重複")
+                    sb.Insert(0, lang(8) & vbCrLf)
+                    MessageBox.Show(sb.ToString, lang(9))
                 End If
             End If
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message, "例外")
+            MessageBox.Show(ex.Message, lang(7))
         End Try
     End Sub
 
@@ -1563,7 +1591,7 @@ Public Class umdisomanger
                 bitmap_resize(PictureBox1, picture, 104, 181)
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message, "例外")
+            MessageBox.Show(ex.Message, lang(7))
         End Try
     End Sub
 
@@ -1584,7 +1612,7 @@ Public Class umdisomanger
             End If
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message, "例外")
+            MessageBox.Show(ex.Message, lang(7))
         End Try
     End Sub
 
@@ -1598,8 +1626,10 @@ Public Class umdisomanger
                 Dim ofd As New OpenFileDialog()
 
                 ofd.InitialDirectory = My.Settings.imgbase
-                ofd.Filter = "bmp/png/jpgファイル(*bmp;*.png;*.jpg)|*bmp;*.png;*.jpg"
-                ofd.Title = "BMP/PNG/JPGファイルを選択してください"
+                '"bmp/png/jpgファイル(*bmp;*.png;*.jpg)|*bmp;*.png;*.jpg"
+                '"BMP/PNG/JPGファイルを選択してください"
+                ofd.Filter = lang(27)
+                ofd.Title = lang(28)
                 ofd.RestoreDirectory = True
                 Dim picture As String = Application.StartupPath & "\imgs\user\" & treenode.Tag.ToString & "a.png"
 
@@ -1613,7 +1643,7 @@ Public Class umdisomanger
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message, "例外")
+            MessageBox.Show(ex.Message, lang(7))
         End Try
     End Sub
 
@@ -1627,8 +1657,8 @@ Public Class umdisomanger
 
                 Dim ofd As New OpenFileDialog()
                 ofd.InitialDirectory = My.Settings.imgbase
-                ofd.Filter = "bmp/png/jpgファイル(*bmp;*.png;*.jpg)|*bmp;*.png;*.jpg"
-                ofd.Title = "BMP/PNG/JPGファイルを選択してください"
+                ofd.Filter = lang(27)
+                ofd.Title = lang(28)
                 ofd.RestoreDirectory = True
                 Dim picture As String = Application.StartupPath & "\imgs\user\" & treenode.Tag.ToString & "b.png"
 
@@ -1642,15 +1672,17 @@ Public Class umdisomanger
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message, "例外")
+            MessageBox.Show(ex.Message, lang(7))
         End Try
     End Sub
 
     Private Sub xmlselect_Click(sender As System.Object, e As System.EventArgs) Handles xmlselect.Click
         Dim ofd As New OpenFileDialog()
         ofd.InitialDirectory = Application.StartupPath & "\datas"
-        ofd.Filter = "xml/zipファイル(*.xml;*.zip)|*xml;*.zip"
-        ofd.Title = "XML/ZIPファイルを選択してください"
+        '"xml/zipファイル(*.xml;*.zip)|*xml;*.zip"
+        '"XML/ZIPファイルを選択してください"
+        ofd.Filter = lang(29)
+        ofd.Title = lang(30)
         ofd.RestoreDirectory = True
 
         If ofd.ShowDialog() = DialogResult.OK Then
@@ -1735,7 +1767,8 @@ Public Class umdisomanger
             End If
 
             If dat.Value = "" Then
-                MessageBox.Show("OFFLINE用のXMLではありません", "不明XML")
+                '"OFFLINE用のXMLではありません", "不明XML"
+                MessageBox.Show(lang(31), lang(32))
             End If
         End If
     End Sub
@@ -1849,11 +1882,11 @@ Public Class umdisomanger
 
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message, "例外")
+            MessageBox.Show(ex.Message, lang(7))
         End Try
     End Sub
 
-    Private Sub 転用先リスト編集ToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles 転用先リスト編集ToolStripMenuItem.Click
+    Private Sub editpspdirs(sender As System.Object, e As System.EventArgs) Handles editpspdir.Click
         Dim l As New list
         Me.TopMost = False
         l.ShowDialog()
@@ -1863,9 +1896,11 @@ Public Class umdisomanger
         l.Dispose()
     End Sub
 
-    Private Sub オンラインヘルプToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles オンラインヘルプToolStripMenuItem.Click
+    Private Sub html(sender As System.Object, e As System.EventArgs) Handles online.Click
         Process.Start("http://unzu127xp.pa.land.to/data/UMDRAW.html")
     End Sub
+
+#Region "SORT"
 
     Private Sub gid_sort_up_Click(sender As System.Object, e As System.EventArgs) Handles gid_sort_up.Click
         Dim s As New sort
@@ -1914,5 +1949,7 @@ Public Class umdisomanger
         Dim s As New sort
         s.sort_game("GID_UP_JP")
     End Sub
+
+#End Region
 
 End Class
