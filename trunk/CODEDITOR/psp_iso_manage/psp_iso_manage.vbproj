@@ -127,11 +127,20 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="form\editor.ja.resx">
+      <DependentUpon>editor.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="form\editor.resx">
       <DependentUpon>editor.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="form\list.ja.resx">
+      <DependentUpon>list.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="form\list.resx">
       <DependentUpon>list.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form\main.ja.resx">
+      <DependentUpon>main.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="form\ver.resx">
       <DependentUpon>ver.vb</DependentUpon>

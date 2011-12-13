@@ -59,5 +59,46 @@ Namespace My.Resources
                 resourceCulture = value
             End Set
         End Property
+        
+        '''<summary>
+        '''  管理したいイメージを追加します
+        '''複数まとめて追加したい場合はエクスプローラーから選択してツリーにドロップして下さい に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property fileadd() As String
+            Get
+                Return ResourceManager.GetString("fileadd", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  編集リストを保存します に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property filesave() As String
+            Get
+                Return ResourceManager.GetString("filesave", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  PSPに転送するディレクトリーを編集します
+        '''ツリービューの右クリックから変更できるようになります
+        '''//例
+        '''X:\PSP\GAME\ に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property pspdir() As String
+            Get
+                Return ResourceManager.GetString("pspdir", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  OFFLINE用XMLを選択します
+        '''CRC32と一致する管理名,画像が検索ボタンで適用されます に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property xml() As String
+            Get
+                Return ResourceManager.GetString("xml", resourceCulture)
+            End Get
+        End Property
     End Module
 End Namespace
