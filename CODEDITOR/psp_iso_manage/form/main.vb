@@ -87,6 +87,10 @@ Public Class umdisomanger
             My.Settings.imgdir = Application.StartupPath & "\imgs\ADVANsCEne Sony PSP Collection\"
         End If
 
+        If My.Settings.pspinsdir = "" Then
+            My.Settings.pspinsdir = Application.StartupPath & "\"
+        End If
+
         If My.Settings.topmost = True Then
             Me.TopMost = True
             GUITOP.Checked = True
@@ -2019,7 +2023,6 @@ Public Class umdisomanger
             Dim sb As New StringBuilder
             Dim s As String = ""
             Dim iso As Boolean = False
-            Dim insdir As String = "G:\PSP\ISO\"
             Dim impath As String = ""
             Dim fpath As String = ""
             Dim mode As String = ""
@@ -2032,7 +2035,7 @@ Public Class umdisomanger
                 Dim ss As String() = n.Name.Split(CChar(vbLf))
                 For Each str As String In ss
                     If str.Contains("X:\") AndAlso iso = False Then
-                        instdir = str.Replace(insdir, "").Trim
+                        instdir = str.Trim
                         iso = True
                     End If
                 Next
@@ -2052,7 +2055,7 @@ Public Class umdisomanger
                     End If
                 Next
 
-                sb.Append(fpath.Replace(insdir, ""))
+                sb.Append(fpath)
                 sb.Append("|")
                 sb.Append(Path.GetFileName(fpath))
                 sb.Append("|")

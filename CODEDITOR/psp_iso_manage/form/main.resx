@@ -141,6 +141,9 @@
   <data name="Label4.Size" type="System.Drawing.Size, System.Drawing">
     <value>51, 14</value>
   </data>
+  <data name="mane_sort_up.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 26</value>
+  </data>
   <data name="&gt;&gt;HELPToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -171,14 +174,11 @@
   <data name="drivelettter.Location" type="System.Drawing.Point, System.Drawing">
     <value>506, 388</value>
   </data>
-  <data name="MenuStrip1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 2, 0, 2</value>
-  </data>
   <data name="movepsp.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
   </data>
-  <data name="&gt;&gt;EXPORTPSPINS.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="Label2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>481, 273</value>
   </data>
   <data name="&gt;&gt;Label6.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -237,11 +237,14 @@
   <data name="file_sort_down.Size" type="System.Drawing.Size, System.Drawing">
     <value>200, 26</value>
   </data>
+  <data name="&gt;&gt;Label7.Name" xml:space="preserve">
+    <value>Label7</value>
+  </data>
   <data name="menufile.Size" type="System.Drawing.Size, System.Drawing">
     <value>53, 25</value>
   </data>
-  <data name="&gt;&gt;TreeView1.ZOrder" xml:space="preserve">
-    <value>26</value>
+  <data name="crc.TabIndex" type="System.Int32, mscorlib">
+    <value>20</value>
   </data>
   <data name="&gt;&gt;PFS.ZOrder" xml:space="preserve">
     <value>30</value>
@@ -262,14 +265,14 @@
     <value>SELECT OFFLINE XML
 IF MATCH CRC32 IN XML,apply name &amp; iamges</value>
   </data>
-  <data name="del_psp.Text" xml:space="preserve">
-    <value>remove</value>
-  </data>
   <data name="Label1.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
   </data>
   <data name="sha.TabIndex" type="System.Int32, mscorlib">
     <value>22</value>
+  </data>
+  <data name="GAMEID.Font" type="System.Drawing.Font, System.Drawing">
+    <value>MS UI Gothic, 7.8pt</value>
   </data>
   <data name="movepsp.Location" type="System.Drawing.Point, System.Drawing">
     <value>256, 390</value>
@@ -288,9 +291,6 @@ IF MATCH CRC32 IN XML,apply name &amp; iamges</value>
   </data>
   <data name="&gt;&gt;Label4.Name" xml:space="preserve">
     <value>Label4</value>
-  </data>
-  <data name="calc_crc.Size" type="System.Drawing.Size, System.Drawing">
-    <value>47, 21</value>
   </data>
   <data name="&gt;&gt;Label7.ZOrder" xml:space="preserve">
     <value>16</value>
@@ -325,11 +325,14 @@ some japanesechara contain 0x7C( | ),it will replace
   <data name="PFS.Font" type="System.Drawing.Font, System.Drawing">
     <value>MS UI Gothic, 7.8pt</value>
   </data>
-  <data name="managename.MaxLength" type="System.Int32, mscorlib">
-    <value>64</value>
+  <data name="Label7.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
   <data name="del_psp.Font" type="System.Drawing.Font, System.Drawing">
     <value>MS UI Gothic, 7.8pt</value>
+  </data>
+  <data name="file_sort_down.Text" xml:space="preserve">
+    <value>descending order</value>
   </data>
   <data name="&gt;&gt;Label5.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -339,9 +342,6 @@ some japanesechara contain 0x7C( | ),it will replace
   </data>
   <data name="Label5.Location" type="System.Drawing.Point, System.Drawing">
     <value>260, 331</value>
-  </data>
-  <data name="&gt;&gt;crc_xml.Parent" xml:space="preserve">
-    <value>$this</value>
   </data>
   <data name="&gt;&gt;Button1.ZOrder" xml:space="preserve">
     <value>18</value>
@@ -376,6 +376,9 @@ some japanesechara contain 0x7C( | ),it will replace
   <data name="&gt;&gt;CLOSEToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="Button1.Text" xml:space="preserve">
+    <value>GOOGLE</value>
+  </data>
   <data name="SAVELS.Size" type="System.Drawing.Size, System.Drawing">
     <value>228, 26</value>
   </data>
@@ -403,11 +406,11 @@ some japanesechara contain 0x7C( | ),it will replace
   <data name="tree_apply.Text" xml:space="preserve">
     <value>APPLY</value>
   </data>
-  <data name="Label2.TabIndex" type="System.Int32, mscorlib">
-    <value>13</value>
-  </data>
   <data name="&gt;&gt;xmlselect.Name" xml:space="preserve">
     <value>xmlselect</value>
+  </data>
+  <data name="&gt;&gt;calc_crc.ZOrder" xml:space="preserve">
+    <value>15</value>
   </data>
   <data name="&gt;&gt;isolba.Name" xml:space="preserve">
     <value>isolba</value>
@@ -430,6 +433,9 @@ some japanesechara contain 0x7C( | ),it will replace
   <data name="&gt;&gt;GAMEID.Name" xml:space="preserve">
     <value>GAMEID</value>
   </data>
+  <data name="&gt;&gt;EXPORTPSPINS.Name" xml:space="preserve">
+    <value>EXPORTPSPINS</value>
+  </data>
   <data name="name_sort.Size" type="System.Drawing.Size, System.Drawing">
     <value>155, 26</value>
   </data>
@@ -447,6 +453,9 @@ some japanesechara contain 0x7C( | ),it will replace
   </data>
   <data name="Label7.Location" type="System.Drawing.Point, System.Drawing">
     <value>260, 273</value>
+  </data>
+  <data name="Label6.Location" type="System.Drawing.Point, System.Drawing">
+    <value>260, 363</value>
   </data>
   <data name="&gt;&gt;calc_sha.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -469,8 +478,8 @@ some japanesechara contain 0x7C( | ),it will replace
   <data name="t_gid.Text" xml:space="preserve">
     <value>transfer by gameid</value>
   </data>
-  <data name="&gt;&gt;Button1.Name" xml:space="preserve">
-    <value>Button1</value>
+  <data name="online.Size" type="System.Drawing.Size, System.Drawing">
+    <value>195, 26</value>
   </data>
   <data name="&gt;&gt;gid_sort_up.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -487,8 +496,8 @@ some japanesechara contain 0x7C( | ),it will replace
   <data name="&gt;&gt;Button1.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;isosize.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;Button1.Name" xml:space="preserve">
+    <value>Button1</value>
   </data>
   <data name="&gt;&gt;menufile.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -505,6 +514,9 @@ some japanesechara contain 0x7C( | ),it will replace
   <data name="&gt;&gt;Label3.Name" xml:space="preserve">
     <value>Label3</value>
   </data>
+  <data name="crc.Location" type="System.Drawing.Point, System.Drawing">
+    <value>318, 299</value>
+  </data>
   <data name="&gt;&gt;ContextMenuStrip2.Type" xml:space="preserve">
     <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -517,8 +529,14 @@ some japanesechara contain 0x7C( | ),it will replace
   <data name="isolba.Location" type="System.Drawing.Point, System.Drawing">
     <value>563, 299</value>
   </data>
+  <data name="rg_del.Size" type="System.Drawing.Size, System.Drawing">
+    <value>114, 26</value>
+  </data>
   <data name="calc_sha.TabIndex" type="System.Int32, mscorlib">
     <value>27</value>
+  </data>
+  <data name="drivelettter.MaxLength" type="System.Int32, mscorlib">
+    <value>2</value>
   </data>
   <data name="Label4.TabIndex" type="System.Int32, mscorlib">
     <value>15</value>
@@ -568,17 +586,14 @@ X:\PSP\GAME\</value>
   <data name="&gt;&gt;Label2.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;calc_crc.ZOrder" xml:space="preserve">
-    <value>15</value>
+  <data name="&gt;&gt;editpspdir.Name" xml:space="preserve">
+    <value>editpspdir</value>
   </data>
   <data name="all_hash.Size" type="System.Drawing.Size, System.Drawing">
     <value>66, 21</value>
   </data>
   <data name="&gt;&gt;Label6.Name" xml:space="preserve">
     <value>Label6</value>
-  </data>
-  <data name="&gt;&gt;PriorEUToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;GAMEID_sort.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -588,6 +603,9 @@ X:\PSP\GAME\</value>
   </data>
   <data name="GAMEID.Location" type="System.Drawing.Point, System.Drawing">
     <value>410, 269</value>
+  </data>
+  <data name="&gt;&gt;PSPinsディレクトリーToolStripMenuItem.Name" xml:space="preserve">
+    <value>PSPinsディレクトリーToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;CRCimage.ZOrder" xml:space="preserve">
     <value>34</value>
@@ -616,14 +634,8 @@ X:\PSP\GAME\</value>
   <data name="&gt;&gt;online.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="calc_md5.Font" type="System.Drawing.Font, System.Drawing">
-    <value>MS UI Gothic, 7.8pt</value>
-  </data>
   <data name="&gt;&gt;ContextMenuStrip2.Name" xml:space="preserve">
     <value>ContextMenuStrip2</value>
-  </data>
-  <data name="&gt;&gt;file_sort_down.Name" xml:space="preserve">
-    <value>file_sort_down</value>
   </data>
   <data name="sha.MaxLength" type="System.Int32, mscorlib">
     <value>40</value>
@@ -637,17 +649,11 @@ X:\PSP\GAME\</value>
   <data name="&gt;&gt;crc.ZOrder" xml:space="preserve">
     <value>11</value>
   </data>
-  <data name="free.Location" type="System.Drawing.Point, System.Drawing">
-    <value>508, 425</value>
-  </data>
   <data name="MenuStrip1.Text" xml:space="preserve">
     <value>MenuStrip1</value>
   </data>
   <data name="TreeView1.Size" type="System.Drawing.Size, System.Drawing">
     <value>242, 398</value>
-  </data>
-  <data name="Label5.Text" xml:space="preserve">
-    <value>MD5;</value>
   </data>
   <data name="psf_sort_down.Text" xml:space="preserve">
     <value>descending order</value>
@@ -655,20 +661,14 @@ X:\PSP\GAME\</value>
   <data name="gid.Size" type="System.Drawing.Size, System.Drawing">
     <value>88, 21</value>
   </data>
-  <data name="Label3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>71, 14</value>
-  </data>
-  <data name="&gt;&gt;SAVE.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;MenuStrip1.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
   <data name="&gt;&gt;ToolStripSeparator1.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="Label6.Location" type="System.Drawing.Point, System.Drawing">
-    <value>260, 363</value>
+  <data name="Label2.TabIndex" type="System.Int32, mscorlib">
+    <value>13</value>
   </data>
   <data name="&gt;&gt;md5hash.Name" xml:space="preserve">
     <value>md5hash</value>
@@ -686,6 +686,9 @@ X:\PSP\GAME\</value>
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="Label4.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="Label2.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="calc_crc.Location" type="System.Drawing.Point, System.Drawing">
@@ -706,17 +709,11 @@ X:\PSP\GAME\</value>
   <data name="&gt;&gt;drivelettter.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;psf_sort_up.Name" xml:space="preserve">
-    <value>psf_sort_up</value>
-  </data>
   <data name="&gt;&gt;crc_xml.Name" xml:space="preserve">
     <value>crc_xml</value>
   </data>
   <data name="&gt;&gt;managename.Parent" xml:space="preserve">
     <value>$this</value>
-  </data>
-  <data name="online.Size" type="System.Drawing.Size, System.Drawing">
-    <value>195, 26</value>
   </data>
   <data name="&gt;&gt;isosize.Parent" xml:space="preserve">
     <value>$this</value>
@@ -733,14 +730,14 @@ X:\PSP\GAME\</value>
   <data name="&gt;&gt;setting.Name" xml:space="preserve">
     <value>setting</value>
   </data>
-  <data name="&gt;&gt;PictureBox1.ZOrder" xml:space="preserve">
-    <value>32</value>
+  <data name="&gt;&gt;calc_md5.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
   <data name="&gt;&gt;calc_crc.Name" xml:space="preserve">
     <value>calc_crc</value>
   </data>
-  <data name="&gt;&gt;gid_sort_up.Name" xml:space="preserve">
-    <value>gid_sort_up</value>
+  <data name="calc_sha.Size" type="System.Drawing.Size, System.Drawing">
+    <value>49, 21</value>
   </data>
   <data name="version.Text" xml:space="preserve">
     <value>VERSION</value>
@@ -763,9 +760,6 @@ X:\PSP\GAME\</value>
   <data name="lockdriveletter.TabIndex" type="System.Int32, mscorlib">
     <value>12</value>
   </data>
-  <data name="&gt;&gt;ToolStripSeparator3.Name" xml:space="preserve">
-    <value>ToolStripSeparator3</value>
-  </data>
   <data name="ToolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
     <value>197, 6</value>
   </data>
@@ -787,6 +781,9 @@ X:\PSP\GAME\</value>
   <data name="all_hash.Font" type="System.Drawing.Font, System.Drawing">
     <value>MS UI Gothic, 7.8pt</value>
   </data>
+  <data name="Button1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>473, 38</value>
+  </data>
   <data name="&gt;&gt;free.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
@@ -802,20 +799,23 @@ X:\PSP\GAME\</value>
   <data name="&gt;&gt;isolba.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;calc_md5.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
   <data name="&gt;&gt;isosize.Name" xml:space="preserve">
     <value>isosize</value>
   </data>
   <data name="&gt;&gt;lockdriveletter.Name" xml:space="preserve">
     <value>lockdriveletter</value>
   </data>
-  <data name="GAMEID.Size" type="System.Drawing.Size, System.Drawing">
-    <value>48, 21</value>
+  <data name="&gt;&gt;GAMEID.ZOrder" xml:space="preserve">
+    <value>36</value>
+  </data>
+  <data name="SAVE.Font" type="System.Drawing.Font, System.Drawing">
+    <value>MS UI Gothic, 7.8pt</value>
   </data>
   <data name="PriorEUToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>200, 26</value>
-  </data>
-  <data name="&gt;&gt;t_gid.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="HELPToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>57, 25</value>
@@ -828,9 +828,6 @@ X:\PSP\GAME\</value>
   </data>
   <data name="psf_sort_up.Text" xml:space="preserve">
     <value>ascending order</value>
-  </data>
-  <data name="&gt;&gt;calc_crc.Parent" xml:space="preserve">
-    <value>$this</value>
   </data>
   <data name="&gt;&gt;del_psp.Parent" xml:space="preserve">
     <value>$this</value>
@@ -853,8 +850,11 @@ X:\PSP\GAME\</value>
   <data name="&gt;&gt;xmlselect.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="Label2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>481, 273</value>
+  <data name="PSPinsディレクトリーToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>223, 26</value>
+  </data>
+  <data name="managename.MaxLength" type="System.Int32, mscorlib">
+    <value>64</value>
   </data>
   <data name="&gt;&gt;crc.Parent" xml:space="preserve">
     <value>$this</value>
@@ -892,26 +892,17 @@ X:\PSP\GAME\</value>
   <data name="calc_crc.Font" type="System.Drawing.Font, System.Drawing">
     <value>MS UI Gothic, 7.8pt</value>
   </data>
-  <data name="CRCimage.Location" type="System.Drawing.Point, System.Drawing">
-    <value>358, 38</value>
-  </data>
   <data name="md5hash.Size" type="System.Drawing.Size, System.Drawing">
     <value>185, 21</value>
   </data>
   <data name="&gt;&gt;Label2.ZOrder" xml:space="preserve">
     <value>24</value>
   </data>
-  <data name="&gt;&gt;editpspdir.Name" xml:space="preserve">
-    <value>editpspdir</value>
-  </data>
-  <data name="gid_sort_down.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 26</value>
+  <data name="rg_del.Text" xml:space="preserve">
+    <value>DEL</value>
   </data>
   <data name="MenuStrip1.TabIndex" type="System.Int32, mscorlib">
     <value>30</value>
-  </data>
-  <data name="Label6.Text" xml:space="preserve">
-    <value>SHA-1;</value>
   </data>
   <data name="&gt;&gt;t_gid.Parent" xml:space="preserve">
     <value>$this</value>
@@ -925,8 +916,8 @@ X:\PSP\GAME\</value>
   <data name="SAVE.Text" xml:space="preserve">
     <value>SAVELIST</value>
   </data>
-  <data name="&gt;&gt;free.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;Label2.Name" xml:space="preserve">
+    <value>Label2</value>
   </data>
   <data name="movepsp.Size" type="System.Drawing.Size, System.Drawing">
     <value>81, 21</value>
@@ -949,14 +940,11 @@ X:\PSP\GAME\</value>
   <data name="calc_crc.TabIndex" type="System.Int32, mscorlib">
     <value>25</value>
   </data>
-  <data name="GAMEID.Text" xml:space="preserve">
-    <value>GET</value>
+  <data name="&gt;&gt;PSPinsディレクトリーToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="calc_sha.Size" type="System.Drawing.Size, System.Drawing">
-    <value>49, 21</value>
-  </data>
-  <data name="&gt;&gt;drivelettter.Name" xml:space="preserve">
-    <value>drivelettter</value>
+  <data name="del_psp.Text" xml:space="preserve">
+    <value>remove</value>
   </data>
   <data name="EXPORTPSPINS.Size" type="System.Drawing.Size, System.Drawing">
     <value>228, 26</value>
@@ -975,6 +963,9 @@ X:\PSP\GAME\</value>
   </data>
   <data name="managename.Location" type="System.Drawing.Point, System.Drawing">
     <value>316, 239</value>
+  </data>
+  <data name="PpriorUSAToolStripMenuItem.Text" xml:space="preserve">
+    <value>prior USA</value>
   </data>
   <data name="&gt;&gt;Button1.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -1000,6 +991,12 @@ X:\PSP\GAME\</value>
   <data name="Label4.Text" xml:space="preserve">
     <value>CRC32;</value>
   </data>
+  <data name="&gt;&gt;all_hash.Name" xml:space="preserve">
+    <value>all_hash</value>
+  </data>
+  <data name="ToolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>225, 6</value>
+  </data>
   <data name="calc_sha.Location" type="System.Drawing.Point, System.Drawing">
     <value>569, 359</value>
   </data>
@@ -1008,6 +1005,9 @@ X:\PSP\GAME\</value>
   </data>
   <data name="&gt;&gt;file_sort_down.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Label1.Text" xml:space="preserve">
+    <value>NAME</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>umdisomanger</value>
@@ -1021,9 +1021,6 @@ X:\PSP\GAME\</value>
   <data name="&gt;&gt;online.Name" xml:space="preserve">
     <value>online</value>
   </data>
-  <data name="setting.Size" type="System.Drawing.Size, System.Drawing">
-    <value>84, 25</value>
-  </data>
   <data name="ToolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
     <value>225, 6</value>
   </data>
@@ -1032,9 +1029,6 @@ X:\PSP\GAME\</value>
   </data>
   <data name="Label7.TabIndex" type="System.Int32, mscorlib">
     <value>23</value>
-  </data>
-  <data name="&gt;&gt;mane_sort_up.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="Label5.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1048,8 +1042,8 @@ X:\PSP\GAME\</value>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
     <value>7, 14</value>
   </data>
-  <data name="GAMEID_sort.Size" type="System.Drawing.Size, System.Drawing">
-    <value>155, 26</value>
+  <data name="&gt;&gt;isosize.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="Button1.Font" type="System.Drawing.Font, System.Drawing">
     <value>MS UI Gothic, 7.8pt</value>
@@ -1062,6 +1056,9 @@ X:\PSP\GAME\</value>
   </data>
   <data name="ContextMenuStrip2.Size" type="System.Drawing.Size, System.Drawing">
     <value>115, 82</value>
+  </data>
+  <data name="&gt;&gt;drivelettter.Name" xml:space="preserve">
+    <value>drivelettter</value>
   </data>
   <data name="&gt;&gt;MenuStrip1.Parent" xml:space="preserve">
     <value>$this</value>
@@ -1084,8 +1081,11 @@ X:\PSP\GAME\</value>
   <data name="$this.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="file_sort_down.Text" xml:space="preserve">
-    <value>descending order</value>
+  <data name="&gt;&gt;TreeView1.ZOrder" xml:space="preserve">
+    <value>26</value>
+  </data>
+  <data name="&gt;&gt;sort.Name" xml:space="preserve">
+    <value>sort</value>
   </data>
   <data name="psf_sort_up.Size" type="System.Drawing.Size, System.Drawing">
     <value>200, 26</value>
@@ -1093,17 +1093,20 @@ X:\PSP\GAME\</value>
   <data name="&gt;&gt;free.Name" xml:space="preserve">
     <value>free</value>
   </data>
-  <data name="&gt;&gt;GAMEID.ZOrder" xml:space="preserve">
-    <value>36</value>
+  <data name="&gt;&gt;gid.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
-  <data name="PpriorUSAToolStripMenuItem.Text" xml:space="preserve">
-    <value>prior USA</value>
+  <data name="free.Location" type="System.Drawing.Point, System.Drawing">
+    <value>508, 425</value>
   </data>
-  <data name="Label1.Text" xml:space="preserve">
-    <value>NAME</value>
+  <data name="GAMEID_sort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>155, 26</value>
   </data>
-  <data name="&gt;&gt;name_sort.Name" xml:space="preserve">
-    <value>name_sort</value>
+  <data name="GAMEID.Size" type="System.Drawing.Size, System.Drawing">
+    <value>48, 21</value>
+  </data>
+  <data name="isolba.TabIndex" type="System.Int32, mscorlib">
+    <value>19</value>
   </data>
   <data name="PictureBox2.Size" type="System.Drawing.Size, System.Drawing">
     <value>287, 168</value>
@@ -1111,8 +1114,8 @@ X:\PSP\GAME\</value>
   <data name="EXPORTPSPINS.Text" xml:space="preserve">
     <value>EXPORT PSPINS LIST</value>
   </data>
-  <data name="ToolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>225, 6</value>
+  <data name="&gt;&gt;name_sort.Name" xml:space="preserve">
+    <value>name_sort</value>
   </data>
   <data name="sha.Size" type="System.Drawing.Size, System.Drawing">
     <value>248, 21</value>
@@ -1120,8 +1123,8 @@ X:\PSP\GAME\</value>
   <data name="Label6.Size" type="System.Drawing.Size, System.Drawing">
     <value>50, 14</value>
   </data>
-  <data name="&gt;&gt;EXPORTPSPINS.Name" xml:space="preserve">
-    <value>EXPORTPSPINS</value>
+  <data name="&gt;&gt;psf_sort_up.Name" xml:space="preserve">
+    <value>psf_sort_up</value>
   </data>
   <data name="&gt;&gt;ToolStripSeparator2.Name" xml:space="preserve">
     <value>ToolStripSeparator2</value>
@@ -1144,8 +1147,8 @@ X:\PSP\GAME\</value>
   <data name="crc.MaxLength" type="System.Int32, mscorlib">
     <value>8</value>
   </data>
-  <data name="&gt;&gt;Label7.Name" xml:space="preserve">
-    <value>Label7</value>
+  <data name="&gt;&gt;EXPORTPSPINS.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;md5hash.Parent" xml:space="preserve">
     <value>$this</value>
@@ -1174,14 +1177,14 @@ X:\PSP\GAME\</value>
   <data name="MenuStrip1.Size" type="System.Drawing.Size, System.Drawing">
     <value>662, 29</value>
   </data>
-  <data name="&gt;&gt;PriorEUToolStripMenuItem.Name" xml:space="preserve">
-    <value>PriorEUToolStripMenuItem</value>
+  <data name="&gt;&gt;ToolStripSeparator3.Name" xml:space="preserve">
+    <value>ToolStripSeparator3</value>
   </data>
-  <data name="crc.TabIndex" type="System.Int32, mscorlib">
-    <value>20</value>
+  <data name="Label3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>71, 14</value>
   </data>
-  <data name="Label2.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
+  <data name="SAVELS.ToolTipText" xml:space="preserve">
+    <value>save gamelist</value>
   </data>
   <data name="&gt;&gt;Label4.Parent" xml:space="preserve">
     <value>$this</value>
@@ -1192,8 +1195,8 @@ X:\PSP\GAME\</value>
   <data name="file_sort.Size" type="System.Drawing.Size, System.Drawing">
     <value>155, 26</value>
   </data>
-  <data name="&gt;&gt;gid.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="MenuStrip1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 2, 0, 2</value>
   </data>
   <data name="&gt;&gt;tree_apply.Name" xml:space="preserve">
     <value>tree_apply</value>
@@ -1207,26 +1210,26 @@ X:\PSP\GAME\</value>
   <data name="calc_md5.Size" type="System.Drawing.Size, System.Drawing">
     <value>52, 21</value>
   </data>
-  <data name="isolba.TabIndex" type="System.Int32, mscorlib">
-    <value>19</value>
+  <data name="GAMEID.Text" xml:space="preserve">
+    <value>GET</value>
   </data>
-  <data name="crc.Location" type="System.Drawing.Point, System.Drawing">
-    <value>318, 299</value>
+  <data name="&gt;&gt;SAVE.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="Label7.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
+  <data name="gid_sort_down.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 26</value>
   </data>
-  <data name="rg_del.Size" type="System.Drawing.Size, System.Drawing">
-    <value>114, 26</value>
+  <data name="Label6.Text" xml:space="preserve">
+    <value>SHA-1;</value>
   </data>
-  <data name="Button1.Text" xml:space="preserve">
-    <value>GOOGLE</value>
+  <data name="&gt;&gt;free.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;rg_edit.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="isosize.MaxLength" type="System.Int32, mscorlib">
-    <value>10</value>
+  <data name="&gt;&gt;gid_sort_up.Name" xml:space="preserve">
+    <value>gid_sort_up</value>
   </data>
   <data name="&gt;&gt;calc_md5.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -1240,6 +1243,9 @@ if you want to add  many files,drag&amp;drop files from explorer</value>
   </data>
   <data name="&gt;&gt;managename.Name" xml:space="preserve">
     <value>managename</value>
+  </data>
+  <data name="&gt;&gt;mane_sort_down.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="Label2.Text" xml:space="preserve">
     <value>FILESIZE;</value>
@@ -1256,11 +1262,8 @@ if you want to add  many files,drag&amp;drop files from explorer</value>
   <data name="MenuStrip1.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
-  <data name="&gt;&gt;Label2.Name" xml:space="preserve">
-    <value>Label2</value>
-  </data>
-  <data name="rg_del.Text" xml:space="preserve">
-    <value>DEL</value>
+  <data name="&gt;&gt;file_sort_down.Name" xml:space="preserve">
+    <value>file_sort_down</value>
   </data>
   <data name="t_gid.Size" type="System.Drawing.Size, System.Drawing">
     <value>134, 18</value>
@@ -1268,7 +1271,7 @@ if you want to add  many files,drag&amp;drop files from explorer</value>
   <data name="file_sort_up.Text" xml:space="preserve">
     <value>ascending order</value>
   </data>
-  <data name="&gt;&gt;mane_sort_down.Type" xml:space="preserve">
+  <data name="&gt;&gt;PriorEUToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="gid.MaxLength" type="System.Int32, mscorlib">
@@ -1289,14 +1292,14 @@ if you want to add  many files,drag&amp;drop files from explorer</value>
   <data name="&gt;&gt;version.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;all_hash.Name" xml:space="preserve">
-    <value>all_hash</value>
+  <data name="calc_md5.Font" type="System.Drawing.Font, System.Drawing">
+    <value>MS UI Gothic, 7.8pt</value>
   </data>
   <data name="xmlselect.Text" xml:space="preserve">
     <value>select XML</value>
   </data>
-  <data name="&gt;&gt;calc_md5.ZOrder" xml:space="preserve">
-    <value>6</value>
+  <data name="setting.Size" type="System.Drawing.Size, System.Drawing">
+    <value>84, 25</value>
   </data>
   <data name="tree_apply.TabIndex" type="System.Int32, mscorlib">
     <value>29</value>
@@ -1358,20 +1361,20 @@ if you want to add  many files,drag&amp;drop files from explorer</value>
   <data name="&gt;&gt;psf_sort_down.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;calc_md5.Parent" xml:space="preserve">
+  <data name="&gt;&gt;calc_crc.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
   <data name="&gt;&gt;sha.ZOrder" xml:space="preserve">
     <value>12</value>
   </data>
-  <data name="&gt;&gt;crc_xml.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="calc_crc.Size" type="System.Drawing.Size, System.Drawing">
+    <value>47, 21</value>
   </data>
   <data name="menufile.Text" xml:space="preserve">
     <value>FILE</value>
   </data>
-  <data name="SAVELS.ToolTipText" xml:space="preserve">
-    <value>save gamelist</value>
+  <data name="CRCimage.Location" type="System.Drawing.Point, System.Drawing">
+    <value>358, 38</value>
   </data>
   <data name="sort_jp.Size" type="System.Drawing.Size, System.Drawing">
     <value>200, 26</value>
@@ -1397,11 +1400,17 @@ if you want to add  many files,drag&amp;drop files from explorer</value>
   <data name="&gt;&gt;gid_sort_down.Name" xml:space="preserve">
     <value>gid_sort_down</value>
   </data>
+  <data name="&gt;&gt;crc_xml.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;editpspdir.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;Label5.Name" xml:space="preserve">
     <value>Label5</value>
+  </data>
+  <data name="isosize.MaxLength" type="System.Int32, mscorlib">
+    <value>10</value>
   </data>
   <data name="&gt;&gt;Label2.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -1418,8 +1427,8 @@ if you want to add  many files,drag&amp;drop files from explorer</value>
   <data name="sort.Size" type="System.Drawing.Size, System.Drawing">
     <value>61, 25</value>
   </data>
-  <data name="&gt;&gt;sort.Name" xml:space="preserve">
-    <value>sort</value>
+  <data name="&gt;&gt;crc_xml.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
   <data name="&gt;&gt;SAVE.ZOrder" xml:space="preserve">
     <value>33</value>
@@ -1430,8 +1439,8 @@ if you want to add  many files,drag&amp;drop files from explorer</value>
   <data name="&gt;&gt;ToolStripSeparator1.Name" xml:space="preserve">
     <value>ToolStripSeparator1</value>
   </data>
-  <data name="mane_sort_up.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 26</value>
+  <data name="&gt;&gt;PictureBox1.ZOrder" xml:space="preserve">
+    <value>32</value>
   </data>
   <data name="managename.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -1445,8 +1454,8 @@ if you want to add  many files,drag&amp;drop files from explorer</value>
   <data name="&gt;&gt;MenuStrip1.Name" xml:space="preserve">
     <value>MenuStrip1</value>
   </data>
-  <data name="SAVE.Font" type="System.Drawing.Font, System.Drawing">
-    <value>MS UI Gothic, 7.8pt</value>
+  <data name="Label5.Text" xml:space="preserve">
+    <value>MD5;</value>
   </data>
   <data name="Label1.Location" type="System.Drawing.Point, System.Drawing">
     <value>260, 242</value>
@@ -1457,14 +1466,14 @@ if you want to add  many files,drag&amp;drop files from explorer</value>
   <data name="calc_crc.Text" xml:space="preserve">
     <value>CALC</value>
   </data>
-  <data name="drivelettter.MaxLength" type="System.Int32, mscorlib">
-    <value>2</value>
+  <data name="&gt;&gt;t_gid.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;md5hash.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="GAMEID.Font" type="System.Drawing.Font, System.Drawing">
-    <value>MS UI Gothic, 7.8pt</value>
+  <data name="&gt;&gt;mane_sort_up.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="psf_sort_down.Size" type="System.Drawing.Size, System.Drawing">
     <value>200, 26</value>
@@ -1484,8 +1493,8 @@ if you want to add  many files,drag&amp;drop files from explorer</value>
   <data name="&gt;&gt;Label1.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="Button1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>473, 38</value>
+  <data name="&gt;&gt;PriorEUToolStripMenuItem.Name" xml:space="preserve">
+    <value>PriorEUToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;t_gid.Name" xml:space="preserve">
     <value>t_gid</value>
