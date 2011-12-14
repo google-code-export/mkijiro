@@ -80,6 +80,19 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  PSPINS形式のゲームリストを出力します
+        '''INSでは2BYTE目0X7Cが含まれるものを扱えないので置換します
+        '''管理名だけでなく当然ファイル名などにも使えません
+        '''//INSダメ文字
+        '''－ポл榎掛弓芸鋼旨楯酢掃竹倒培怖翻慾處嘶斈忿掟桍毫烟痞窩縹艚蛞諫轎閖驂黥埈蒴僴礰 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property po_gei() As String
+            Get
+                Return ResourceManager.GetString("po_gei", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  PSPに転送するディレクトリーを編集します
         '''ツリービューの右クリックから変更できるようになります
         '''//例

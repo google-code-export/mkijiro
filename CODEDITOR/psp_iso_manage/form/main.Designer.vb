@@ -62,7 +62,11 @@ Partial Class umdisomanger
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.menufile = New System.Windows.Forms.ToolStripMenuItem()
         Me.ADD = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.SAVELS = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EXPORTPSPINS = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
+        Me.CLOSEToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.sort = New System.Windows.Forms.ToolStripMenuItem()
         Me.name_sort = New System.Windows.Forms.ToolStripMenuItem()
         Me.mane_sort_up = New System.Windows.Forms.ToolStripMenuItem()
@@ -72,6 +76,8 @@ Partial Class umdisomanger
         Me.gid_sort_down = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.sort_jp = New System.Windows.Forms.ToolStripMenuItem()
+        Me.PpriorUSAToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.PriorEUToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.PSFtitle_sort = New System.Windows.Forms.ToolStripMenuItem()
         Me.psf_sort_up = New System.Windows.Forms.ToolStripMenuItem()
         Me.psf_sort_down = New System.Windows.Forms.ToolStripMenuItem()
@@ -103,32 +109,32 @@ Partial Class umdisomanger
         '
         'TreeView1
         '
+        resources.ApplyResources(Me.TreeView1, "TreeView1")
         Me.TreeView1.AllowDrop = True
         Me.TreeView1.ContextMenuStrip = Me.ContextMenuStrip2
         Me.TreeView1.LabelEdit = True
-        resources.ApplyResources(Me.TreeView1, "TreeView1")
         Me.TreeView1.Name = "TreeView1"
         '
         'ContextMenuStrip2
         '
+        resources.ApplyResources(Me.ContextMenuStrip2, "ContextMenuStrip2")
         Me.ContextMenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.rg_add, Me.rg_edit, Me.rg_del})
         Me.ContextMenuStrip2.Name = "ContextMenuStrip2"
-        resources.ApplyResources(Me.ContextMenuStrip2, "ContextMenuStrip2")
         '
         'rg_add
         '
-        Me.rg_add.Name = "rg_add"
         resources.ApplyResources(Me.rg_add, "rg_add")
+        Me.rg_add.Name = "rg_add"
         '
         'rg_edit
         '
-        Me.rg_edit.Name = "rg_edit"
         resources.ApplyResources(Me.rg_edit, "rg_edit")
+        Me.rg_edit.Name = "rg_edit"
         '
         'rg_del
         '
-        Me.rg_del.Name = "rg_del"
         resources.ApplyResources(Me.rg_del, "rg_del")
+        Me.rg_del.Name = "rg_del"
         '
         'SAVE
         '
@@ -161,8 +167,8 @@ Partial Class umdisomanger
         '
         'PictureBox2
         '
-        Me.PictureBox2.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.PictureBox2, "PictureBox2")
+        Me.PictureBox2.Cursor = System.Windows.Forms.Cursors.Default
         Me.PictureBox2.Name = "PictureBox2"
         Me.PictureBox2.TabStop = False
         '
@@ -185,14 +191,14 @@ Partial Class umdisomanger
         '
         'drivelettter
         '
-        Me.drivelettter.ContextMenuStrip = Me.ContextMenuStrip1
         resources.ApplyResources(Me.drivelettter, "drivelettter")
+        Me.drivelettter.ContextMenuStrip = Me.ContextMenuStrip1
         Me.drivelettter.Name = "drivelettter"
         '
         'ContextMenuStrip1
         '
-        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
         resources.ApplyResources(Me.ContextMenuStrip1, "ContextMenuStrip1")
+        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
         '
         'lockdriveletter
         '
@@ -227,14 +233,14 @@ Partial Class umdisomanger
         '
         'isosize
         '
-        Me.isosize.ContextMenuStrip = Me.ContextMenuStrip1
         resources.ApplyResources(Me.isosize, "isosize")
+        Me.isosize.ContextMenuStrip = Me.ContextMenuStrip1
         Me.isosize.Name = "isosize"
         '
         'isolba
         '
-        Me.isolba.ContextMenuStrip = Me.ContextMenuStrip1
         resources.ApplyResources(Me.isolba, "isolba")
+        Me.isolba.ContextMenuStrip = Me.ContextMenuStrip1
         Me.isolba.Name = "isolba"
         '
         'crc
@@ -294,142 +300,172 @@ Partial Class umdisomanger
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menufile, Me.sort, Me.setting, Me.HELPToolStripMenuItem})
         resources.ApplyResources(Me.MenuStrip1, "MenuStrip1")
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menufile, Me.sort, Me.setting, Me.HELPToolStripMenuItem})
         Me.MenuStrip1.Name = "MenuStrip1"
         '
         'menufile
         '
-        Me.menufile.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ADD, Me.SAVELS})
-        Me.menufile.Name = "menufile"
         resources.ApplyResources(Me.menufile, "menufile")
+        Me.menufile.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ADD, Me.ToolStripSeparator2, Me.SAVELS, Me.EXPORTPSPINS, Me.ToolStripSeparator3, Me.CLOSEToolStripMenuItem})
+        Me.menufile.Name = "menufile"
         '
         'ADD
         '
-        Me.ADD.Name = "ADD"
         resources.ApplyResources(Me.ADD, "ADD")
+        Me.ADD.Name = "ADD"
+        '
+        'ToolStripSeparator2
+        '
+        resources.ApplyResources(Me.ToolStripSeparator2, "ToolStripSeparator2")
+        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
         '
         'SAVELS
         '
-        Me.SAVELS.Name = "SAVELS"
         resources.ApplyResources(Me.SAVELS, "SAVELS")
+        Me.SAVELS.Name = "SAVELS"
+        '
+        'EXPORTPSPINS
+        '
+        resources.ApplyResources(Me.EXPORTPSPINS, "EXPORTPSPINS")
+        Me.EXPORTPSPINS.Name = "EXPORTPSPINS"
+        '
+        'ToolStripSeparator3
+        '
+        resources.ApplyResources(Me.ToolStripSeparator3, "ToolStripSeparator3")
+        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
+        '
+        'CLOSEToolStripMenuItem
+        '
+        resources.ApplyResources(Me.CLOSEToolStripMenuItem, "CLOSEToolStripMenuItem")
+        Me.CLOSEToolStripMenuItem.Name = "CLOSEToolStripMenuItem"
         '
         'sort
         '
+        resources.ApplyResources(Me.sort, "sort")
         Me.sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.name_sort, Me.GAMEID_sort, Me.PSFtitle_sort, Me.file_sort})
         Me.sort.Name = "sort"
-        resources.ApplyResources(Me.sort, "sort")
         '
         'name_sort
         '
+        resources.ApplyResources(Me.name_sort, "name_sort")
         Me.name_sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mane_sort_up, Me.mane_sort_down})
         Me.name_sort.Name = "name_sort"
-        resources.ApplyResources(Me.name_sort, "name_sort")
         '
         'mane_sort_up
         '
-        Me.mane_sort_up.Name = "mane_sort_up"
         resources.ApplyResources(Me.mane_sort_up, "mane_sort_up")
+        Me.mane_sort_up.Name = "mane_sort_up"
         '
         'mane_sort_down
         '
-        Me.mane_sort_down.Name = "mane_sort_down"
         resources.ApplyResources(Me.mane_sort_down, "mane_sort_down")
+        Me.mane_sort_down.Name = "mane_sort_down"
         '
         'GAMEID_sort
         '
-        Me.GAMEID_sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.gid_sort_up, Me.gid_sort_down, Me.ToolStripSeparator1, Me.sort_jp})
-        Me.GAMEID_sort.Name = "GAMEID_sort"
         resources.ApplyResources(Me.GAMEID_sort, "GAMEID_sort")
+        Me.GAMEID_sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.gid_sort_up, Me.gid_sort_down, Me.ToolStripSeparator1, Me.sort_jp, Me.PpriorUSAToolStripMenuItem, Me.PriorEUToolStripMenuItem})
+        Me.GAMEID_sort.Name = "GAMEID_sort"
         '
         'gid_sort_up
         '
-        Me.gid_sort_up.Name = "gid_sort_up"
         resources.ApplyResources(Me.gid_sort_up, "gid_sort_up")
+        Me.gid_sort_up.Name = "gid_sort_up"
         '
         'gid_sort_down
         '
-        Me.gid_sort_down.Name = "gid_sort_down"
         resources.ApplyResources(Me.gid_sort_down, "gid_sort_down")
+        Me.gid_sort_down.Name = "gid_sort_down"
         '
         'ToolStripSeparator1
         '
-        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
         resources.ApplyResources(Me.ToolStripSeparator1, "ToolStripSeparator1")
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
         '
         'sort_jp
         '
-        Me.sort_jp.Name = "sort_jp"
         resources.ApplyResources(Me.sort_jp, "sort_jp")
+        Me.sort_jp.Name = "sort_jp"
+        '
+        'PpriorUSAToolStripMenuItem
+        '
+        resources.ApplyResources(Me.PpriorUSAToolStripMenuItem, "PpriorUSAToolStripMenuItem")
+        Me.PpriorUSAToolStripMenuItem.Name = "PpriorUSAToolStripMenuItem"
+        '
+        'PriorEUToolStripMenuItem
+        '
+        resources.ApplyResources(Me.PriorEUToolStripMenuItem, "PriorEUToolStripMenuItem")
+        Me.PriorEUToolStripMenuItem.Name = "PriorEUToolStripMenuItem"
         '
         'PSFtitle_sort
         '
+        resources.ApplyResources(Me.PSFtitle_sort, "PSFtitle_sort")
         Me.PSFtitle_sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.psf_sort_up, Me.psf_sort_down})
         Me.PSFtitle_sort.Name = "PSFtitle_sort"
-        resources.ApplyResources(Me.PSFtitle_sort, "PSFtitle_sort")
         '
         'psf_sort_up
         '
-        Me.psf_sort_up.Name = "psf_sort_up"
         resources.ApplyResources(Me.psf_sort_up, "psf_sort_up")
+        Me.psf_sort_up.Name = "psf_sort_up"
         '
         'psf_sort_down
         '
-        Me.psf_sort_down.Name = "psf_sort_down"
         resources.ApplyResources(Me.psf_sort_down, "psf_sort_down")
+        Me.psf_sort_down.Name = "psf_sort_down"
         '
         'file_sort
         '
+        resources.ApplyResources(Me.file_sort, "file_sort")
         Me.file_sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.file_sort_up, Me.file_sort_down})
         Me.file_sort.Name = "file_sort"
-        resources.ApplyResources(Me.file_sort, "file_sort")
         '
         'file_sort_up
         '
-        Me.file_sort_up.Name = "file_sort_up"
         resources.ApplyResources(Me.file_sort_up, "file_sort_up")
+        Me.file_sort_up.Name = "file_sort_up"
         '
         'file_sort_down
         '
-        Me.file_sort_down.Name = "file_sort_down"
         resources.ApplyResources(Me.file_sort_down, "file_sort_down")
+        Me.file_sort_down.Name = "file_sort_down"
         '
         'setting
         '
+        resources.ApplyResources(Me.setting, "setting")
         Me.setting.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GUITOP, Me.xmlselect, Me.editpspdir})
         Me.setting.Name = "setting"
-        resources.ApplyResources(Me.setting, "setting")
         '
         'GUITOP
         '
-        Me.GUITOP.Name = "GUITOP"
         resources.ApplyResources(Me.GUITOP, "GUITOP")
+        Me.GUITOP.Name = "GUITOP"
         '
         'xmlselect
         '
-        Me.xmlselect.Name = "xmlselect"
         resources.ApplyResources(Me.xmlselect, "xmlselect")
+        Me.xmlselect.Name = "xmlselect"
         '
         'editpspdir
         '
-        Me.editpspdir.Name = "editpspdir"
         resources.ApplyResources(Me.editpspdir, "editpspdir")
+        Me.editpspdir.Name = "editpspdir"
         '
         'HELPToolStripMenuItem
         '
+        resources.ApplyResources(Me.HELPToolStripMenuItem, "HELPToolStripMenuItem")
         Me.HELPToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.online, Me.version})
         Me.HELPToolStripMenuItem.Name = "HELPToolStripMenuItem"
-        resources.ApplyResources(Me.HELPToolStripMenuItem, "HELPToolStripMenuItem")
         '
         'online
         '
-        Me.online.Name = "online"
         resources.ApplyResources(Me.online, "online")
+        Me.online.Name = "online"
         '
         'version
         '
-        Me.version.Name = "version"
         resources.ApplyResources(Me.version, "version")
+        Me.version.Name = "version"
         '
         'del_psp
         '
@@ -458,36 +494,36 @@ Partial Class umdisomanger
         '
         resources.ApplyResources(Me, "$this")
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.Controls.Add(Me.MenuStrip1)
         Me.Controls.Add(Me.free)
         Me.Controls.Add(Me.t_gid)
-        Me.Controls.Add(Me.crc_xml)
-        Me.Controls.Add(Me.del_psp)
-        Me.Controls.Add(Me.MenuStrip1)
-        Me.Controls.Add(Me.calc_sha)
         Me.Controls.Add(Me.gid)
-        Me.Controls.Add(Me.md5hash)
-        Me.Controls.Add(Me.tree_apply)
         Me.Controls.Add(Me.calc_md5)
-        Me.Controls.Add(Me.all_hash)
-        Me.Controls.Add(Me.sha)
+        Me.Controls.Add(Me.del_psp)
+        Me.Controls.Add(Me.calc_sha)
+        Me.Controls.Add(Me.md5hash)
+        Me.Controls.Add(Me.crc_xml)
         Me.Controls.Add(Me.crc)
+        Me.Controls.Add(Me.sha)
         Me.Controls.Add(Me.Label6)
+        Me.Controls.Add(Me.tree_apply)
         Me.Controls.Add(Me.calc_crc)
         Me.Controls.Add(Me.Label7)
-        Me.Controls.Add(Me.Label4)
+        Me.Controls.Add(Me.all_hash)
         Me.Controls.Add(Me.Button1)
-        Me.Controls.Add(Me.Label5)
+        Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.Label3)
-        Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.lockdriveletter)
         Me.Controls.Add(Me.movepsp)
-        Me.Controls.Add(Me.isosize)
         Me.Controls.Add(Me.drivelettter)
-        Me.Controls.Add(Me.PictureBox2)
+        Me.Controls.Add(Me.Label2)
+        Me.Controls.Add(Me.Label5)
+        Me.Controls.Add(Me.TreeView1)
+        Me.Controls.Add(Me.isosize)
         Me.Controls.Add(Me.isolba)
         Me.Controls.Add(Me.managename)
         Me.Controls.Add(Me.PFS)
-        Me.Controls.Add(Me.TreeView1)
+        Me.Controls.Add(Me.PictureBox2)
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.SAVE)
         Me.Controls.Add(Me.CRCimage)
@@ -569,5 +605,11 @@ Partial Class umdisomanger
     Friend WithEvents HELPToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents online As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents version As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents EXPORTPSPINS As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents ToolStripSeparator3 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents CLOSEToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents PpriorUSAToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents PriorEUToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class
