@@ -9,7 +9,7 @@ Imports System.Globalization
 
 Public Class umdisomanger
     Friend psx As Boolean = False
-    Friend lang(40) As String
+    Friend lang(45) As String
 
     Private Sub load_list(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         If File.Exists(Application.StartupPath & "\path.txt") = True Then
@@ -110,6 +110,7 @@ Public Class umdisomanger
             SAVELS.ToolTipText = My.Resources.filesave
             editpspdir.ToolTipText = My.Resources.pspdir
             xmlselect.ToolTipText = My.Resources.xml
+            EXPORTPSPINS.ToolTipText = My.Resources.po_gei
             If File.Exists(Application.StartupPath & "\ja\ja.txt") = True Then
                 Dim lw As New System.IO.StreamReader(Application.StartupPath & "\ja\ja.txt", System.Text.Encoding.GetEncoding(932))
                 Dim i As Integer
@@ -572,7 +573,7 @@ Public Class umdisomanger
                     p1 = True
                 End If
                 If File.Exists(userpic2) Then
-                    bitmap_resize(PictureBox2, userpic2, 381, 181)
+                    bitmap_resize(PictureBox2, userpic2, 320, 181)
                     p2 = True
                 End If
 
@@ -585,15 +586,17 @@ Public Class umdisomanger
                         p1 = True
                     End If
                     If File.Exists(path2) AndAlso p2 = False Then
-                        bitmap_resize(PictureBox2, path2, 381, 181)
+                        bitmap_resize(PictureBox2, path2, 320, 181)
                         p2 = True
                     End If
                 End If
 
                 If File.Exists(My.Settings.imgdir & "1-500\1a.png") = True Then
                     'なにもないときはりっじダミー表示
-                    If p1 = False AndAlso p2 = False Then
+                    If p1 = False Then
                         PictureBox1.Image = System.Drawing.Image.FromFile(My.Settings.imgdir & "1-500\1a.png")
+                    End If
+                    If p2 = False Then
                         PictureBox2.Image = System.Drawing.Image.FromFile(My.Settings.imgdir & "1-500\1b.png")
                     End If
                 End If
@@ -1006,28 +1009,32 @@ Public Class umdisomanger
                         UMD = "PBP"
                     End If
 
-                    If psp <> "" AndAlso File.Exists(cp2) = False Then
+                    If psp <> "" AndAlso File.Exists(cp2) = False AndAlso MessageBox.Show(cp & lang(41), lang(42), _
+                   MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
                         If UMD = "PBP" Then
                             For Each s In files
                                 If File.Exists(dir & s) = False Then
-                                    File.Copy(s, dir & s.Replace(Path.GetDirectoryName(cp), ""))
+                                    My.Computer.FileSystem.CopyFile( _
+                                      s, dir & s.Replace(Path.GetDirectoryName(cp), ""), FileIO.UIOption.AllDialogs)
+                                    'File.Copy(s, dir & s.Replace(Path.GetDirectoryName(cp), ""))
                                 End If
                             Next
-                        Else
-                            File.Copy(cp, cp2)
-                        End If
-                        Beep()
-                        '"の転送が完了しました", "転送成功"
-                        MessageBox.Show(UMD & lang(16), lang(17))
+                                Else
+                                    My.Computer.FileSystem.CopyFile( _
+                                      cp, cp2, FileIO.UIOption.AllDialogs)
+                                End If
+                                Beep()
+                                '"の転送が完了しました", "転送成功"
+                                MessageBox.Show(UMD & lang(16), lang(17))
                     ElseIf psp = "" Then
-                        Beep()
-                        '"PSPが見つかりません,USB接続していないかメモステフォーマット時に作成されるMEMSTICK.INDがないようです
-                        '"PSP接続エラー
-                        MessageBox.Show(lang(18), lang(19))
+                                Beep()
+                                '"PSPが見つかりません,USB接続していないかメモステフォーマット時に作成されるMEMSTICK.INDがないようです
+                                '"PSP接続エラー
+                                MessageBox.Show(lang(18), lang(19))
                     Else
-                        Beep()
-                        '"すでにPSPに転送されてます", "ファイル重複"
-                        MessageBox.Show(lang(20), lang(21))
+                                Beep()
+                                '"すでにPSPに転送されてます", "ファイル重複"
+                                MessageBox.Show(lang(20), lang(21))
                     End If
                 End If
 
@@ -1584,11 +1591,23 @@ Public Class umdisomanger
                 End If
                 Dim fileName As String() = CType(e.Data.GetData(DataFormats.FileDrop, False), String())
                 Dim picture As String = Application.StartupPath & "\imgs\user\" & treenode.Tag.ToString & "a.png"
-                If File.Exists(picture) = True Then
+                Me.Focus()
+                If picture = fileName(0) Then
+                    
+                ElseIf File.Exists(picture) = True AndAlso MessageBox.Show(lang(39) & picture & lang(40), lang(14), _
+               MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
                     File.Delete(picture)
+                    File.Copy(fileName(0), picture)
+                Else
+                    File.Copy(fileName(0), picture)
                 End If
-                File.Copy(fileName(0), picture)
                 bitmap_resize(PictureBox1, picture, 104, 181)
+
+                If picture <> fileName(0) Then
+                    Dim bmp As New Bitmap(fileName(0))
+                    bmp.Save(picture, System.Drawing.Imaging.ImageFormat.Png)
+                    bmp.Dispose()
+                End If
             End If
         Catch ex As Exception
             MessageBox.Show(ex.Message, lang(7))
@@ -1604,11 +1623,22 @@ Public Class umdisomanger
                 End If
                 Dim fileName As String() = CType(e.Data.GetData(DataFormats.FileDrop, False), String())
                 Dim picture As String = Application.StartupPath & "\imgs\user\" & treenode.Tag.ToString & "b.png"
-                If File.Exists(picture) = True Then
+                Me.Focus()
+                If picture = fileName(0) Then
+                    
+                ElseIf File.Exists(picture) = True AndAlso MessageBox.Show(lang(39) & picture & lang(40), lang(14), _
+               MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
                     File.Delete(picture)
+                    File.Copy(fileName(0), picture)
+                Else
+                    File.Copy(fileName(0), picture)
                 End If
-                File.Copy(fileName(0), picture)
-                bitmap_resize(PictureBox2, picture, 381, 181)
+                bitmap_resize(PictureBox2, picture, 320, 181)
+                If picture <> fileName(0) Then
+                    Dim bmp As New Bitmap(fileName(0))
+                    bmp.Save(picture, System.Drawing.Imaging.ImageFormat.Png)
+                    bmp.Dispose()
+                End If
             End If
 
         Catch ex As Exception
@@ -1633,13 +1663,24 @@ Public Class umdisomanger
                 ofd.RestoreDirectory = True
                 Dim picture As String = Application.StartupPath & "\imgs\user\" & treenode.Tag.ToString & "a.png"
 
+                Me.Focus()
                 If ofd.ShowDialog() = DialogResult.OK Then
-                    If File.Exists(picture) = True Then
+                    If picture = ofd.FileName Then
+
+                    ElseIf File.Exists(picture) = True AndAlso MessageBox.Show(lang(39) & picture & lang(40), lang(14), _
+                   MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
                         File.Delete(picture)
+                        File.Copy(ofd.FileName, picture)
+                    Else
+                        File.Copy(ofd.FileName, picture)
                     End If
-                    File.Copy(ofd.FileName, picture)
                     bitmap_resize(PictureBox1, picture, 104, 181)
                     My.Settings.imgbase = Path.GetDirectoryName(ofd.FileName)
+                    If picture <> ofd.FileName Then
+                        Dim bmp As New Bitmap(ofd.FileName)
+                        bmp.Save(picture, System.Drawing.Imaging.ImageFormat.Png)
+                        bmp.Dispose()
+                    End If
                 End If
             End If
         Catch ex As Exception
@@ -1662,13 +1703,25 @@ Public Class umdisomanger
                 ofd.RestoreDirectory = True
                 Dim picture As String = Application.StartupPath & "\imgs\user\" & treenode.Tag.ToString & "b.png"
 
+                Me.Focus()
+
                 If ofd.ShowDialog() = DialogResult.OK Then
-                    If File.Exists(picture) = True Then
+                    If picture = ofd.FileName Then
+                        
+                    ElseIf File.Exists(picture) = True AndAlso MessageBox.Show(lang(39) & picture & lang(40), lang(14), _
+                   MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
                         File.Delete(picture)
+                        File.Copy(ofd.FileName, picture)
+                    Else
+                        File.Copy(ofd.FileName, picture)
                     End If
-                    File.Copy(ofd.FileName, picture)
-                    bitmap_resize(PictureBox2, picture, 381, 181)
+                    bitmap_resize(PictureBox2, picture, 320, 181)
                     My.Settings.imgbase = Path.GetDirectoryName(ofd.FileName)
+                    If picture <> ofd.FileName Then
+                        Dim bmp As New Bitmap(ofd.FileName)
+                        bmp.Save(picture, System.Drawing.Imaging.ImageFormat.Png)
+                        bmp.Dispose()
+                    End If
                 End If
             End If
         Catch ex As Exception
@@ -1788,12 +1841,10 @@ Public Class umdisomanger
         ElseIf image.Width = image.Height AndAlso pc Is PictureBox2 Then
             g.DrawImage(image, 80, 0, height, height)
         Else
-
             g.DrawImage(image, 0, 0, width, height)
         End If
         '補間方法として高品質双三次補間を指定する
-        g.InterpolationMode = _
-            System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic
+        g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic
 
         'BitmapとGraphicsオブジェクトを破棄
         image.Dispose()
@@ -1947,9 +1998,106 @@ Public Class umdisomanger
 
     Private Sub sort_jp_Click(sender As System.Object, e As System.EventArgs) Handles sort_jp.Click
         Dim s As New sort
-        s.sort_game("GID_UP_JP")
+        s.sort_game("GID_UP_JP_COUNTRY")
+    End Sub
+
+    Private Sub PriorEUToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles PriorEUToolStripMenuItem.Click
+        Dim s As New sort
+        s.sort_game("GID_UP_US_COUNTRY")
+    End Sub
+
+    Private Sub PpriorUSAToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles PpriorUSAToolStripMenuItem.Click
+        Dim s As New sort
+        s.sort_game("GID_UP_EU_COUNTRY")
     End Sub
 
 #End Region
+
+    Private Sub EXPORTPSPINSToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles EXPORTPSPINS.Click
+        Try
+            Dim sw As New System.IO.StreamWriter(Application.StartupPath & "\games.ini", False, System.Text.Encoding.GetEncoding(932))
+            Dim sb As New StringBuilder
+            Dim s As String = ""
+            Dim iso As Boolean = False
+            Dim insdir As String = "G:\PSP\ISO\"
+            Dim impath As String = ""
+            Dim fpath As String = ""
+            Dim mode As String = ""
+            Dim instdir As String = ""
+            Dim psf As New psf
+
+            For Each n As TreeNode In TreeView1.Nodes
+                sb.Append(po_gei(n.Text))
+                sb.Append("|")
+                Dim ss As String() = n.Name.Split(CChar(vbLf))
+                For Each str As String In ss
+                    If str.Contains("X:\") AndAlso iso = False Then
+                        instdir = str.Replace(insdir, "").Trim
+                        iso = True
+                    End If
+                Next
+
+                For Each m As TreeNode In n.Nodes
+                    If m.Tag IsNot Nothing Then
+                        fpath = po_gei(m.Tag.ToString)
+                        mode = psf.video(m.Tag.ToString)
+                        impath = Application.StartupPath & "\imgs\user\" & n.Tag.ToString & "a.png"
+                        If File.Exists(impath) Then
+                            sb.Append(po_gei(impath))
+                        Else
+                            impath = m.Name.ToString.Insert(m.Name.ToString.Length - 4, "a")
+                            sb.Append(po_gei(impath))
+                        End If
+                        sb.Append("||")
+                    End If
+                Next
+
+                sb.Append(fpath.Replace(insdir, ""))
+                sb.Append("|")
+                sb.Append(Path.GetFileName(fpath))
+                sb.Append("|")
+                If iso = True AndAlso mode <> "VIDEO" Then
+                    sb.Append(instdir)
+                    sb.Append("|")
+                Else
+                    If mode = "PSP" Then
+                        sb.Append("X:\ISO\")
+                    ElseIf mode = "PBP" Then
+                        sb.Append("X:\PSP\GAME\")
+                    Else
+                        sb.Append("X:\ISO\VIDEO\")
+                    End If
+                    sb.Append("|")
+                End If
+
+                Dim fs As New System.IO.FileStream(fpath, System.IO.FileMode.Open, System.IO.FileAccess.Read)
+                sb.Append(fs.Length.ToString)
+                sb.AppendLine("|")
+                fs.Close()
+                iso = False
+            Next
+            sw.Write(sb.ToString)
+            sw.Close()
+
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, lang(7))
+        End Try
+    End Sub
+
+    Function po_gei(ByVal s As String) As String
+        Dim rp As String() = {"－", "ポ", "л", "榎", "掛", "弓", "芸", "鋼", "旨", "楯", "酢", "掃", "竹", "倒", "培", "怖", "翻", "慾", "處", "嘶", "斈", "忿", "掟", "桍", "毫", "烟", "痞", "窩", "縹", "艚", "蛞", "諫", "轎", "閖", "驂", "黥", "埈", "蒴", "僴", "礰"}
+        Dim rp2 As String() = {"-", "ﾎﾟ", "ラムダ", "えのき", "かけ", "ゆみ", "げい", "はがね", "むね", "たて", "す", "そう", "たけ", "とう", "ばい", "ふ", "ほん", "よく", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}
+        For i = 0 To 39
+            If s.Contains(rp(i)) Then
+                s = s.Replace(rp(i), rp2(i))
+            End If
+        Next
+        Return s
+    End Function
+
+    Private Sub CLOSEToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles CLOSEToolStripMenuItem.Click
+        Me.Close()
+    End Sub
 
 End Class
