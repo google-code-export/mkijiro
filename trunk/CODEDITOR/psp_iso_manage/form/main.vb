@@ -1023,22 +1023,23 @@ Public Class umdisomanger
                                     'File.Copy(s, dir & s.Replace(Path.GetDirectoryName(cp), ""))
                                 End If
                             Next
-                                Else
-                                    My.Computer.FileSystem.CopyFile( _
-                                      cp, cp2, FileIO.UIOption.AllDialogs)
-                                End If
-                                Beep()
-                                '"の転送が完了しました", "転送成功"
-                                MessageBox.Show(UMD & lang(16), lang(17))
+
+                        Else
+                            My.Computer.FileSystem.CopyFile( _
+                              cp, cp2, FileIO.UIOption.AllDialogs)
+                        End If
+                        Beep()
+                        '"の転送が完了しました", "転送成功"
+                        MessageBox.Show(UMD & lang(16), lang(17))
                     ElseIf psp = "" Then
-                                Beep()
-                                '"PSPが見つかりません,USB接続していないかメモステフォーマット時に作成されるMEMSTICK.INDがないようです
-                                '"PSP接続エラー
-                                MessageBox.Show(lang(18), lang(19))
-                    Else
-                                Beep()
-                                '"すでにPSPに転送されてます", "ファイル重複"
-                                MessageBox.Show(lang(20), lang(21))
+                        Beep()
+                        '"PSPが見つかりません,USB接続していないかメモステフォーマット時に作成されるMEMSTICK.INDがないようです
+                        '"PSP接続エラー
+                        MessageBox.Show(lang(18), lang(19))
+                    ElseIf File.Exists(cp2) = True Then
+                        Beep()
+                        '"すでにPSPに転送されてます", "ファイル重複"
+                        MessageBox.Show(lang(20), lang(21))
                     End If
                 End If
 
