@@ -31,20 +31,20 @@ Partial Class version
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(16, 11)
+        Me.Label1.Location = New System.Drawing.Point(14, 10)
         Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(238, 75)
+        Me.Label1.Size = New System.Drawing.Size(219, 70)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "CWCDATABASEEDITORMOD" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Original SRC pasky,modded BY (ﾟ∀ﾟ)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "License GNU GPL v3" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'LinkLabel1
         '
         Me.LinkLabel1.AutoSize = True
-        Me.LinkLabel1.Location = New System.Drawing.Point(81, 132)
+        Me.LinkLabel1.Location = New System.Drawing.Point(71, 123)
         Me.LinkLabel1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(93, 15)
+        Me.LinkLabel1.Size = New System.Drawing.Size(89, 14)
         Me.LinkLabel1.TabIndex = 1
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "GOOGLESVN"
@@ -53,28 +53,28 @@ Partial Class version
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(16, 106)
+        Me.Label2.Location = New System.Drawing.Point(14, 99)
         Me.Label2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(172, 15)
+        Me.Label2.Size = New System.Drawing.Size(153, 14)
         Me.Label2.TabIndex = 2
-        Me.Label2.Text = "BUILD:2011/12/13 11:54"
+        Me.Label2.Text = "BUILD:2011/12/15 12:12"
         '
         'CDEupdate
         '
-        Me.CDEupdate.Location = New System.Drawing.Point(79, 155)
+        Me.CDEupdate.Location = New System.Drawing.Point(69, 145)
         Me.CDEupdate.Margin = New System.Windows.Forms.Padding(4)
         Me.CDEupdate.Name = "CDEupdate"
-        Me.CDEupdate.Size = New System.Drawing.Size(100, 29)
+        Me.CDEupdate.Size = New System.Drawing.Size(88, 27)
         Me.CDEupdate.TabIndex = 3
         Me.CDEupdate.Text = "CHECKVER"
         Me.CDEupdate.UseVisualStyleBackColor = True
         '
         'version
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 15.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(285, 190)
+        Me.ClientSize = New System.Drawing.Size(249, 177)
         Me.Controls.Add(Me.CDEupdate)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.LinkLabel1)
