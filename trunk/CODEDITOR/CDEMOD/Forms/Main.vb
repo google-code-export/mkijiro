@@ -243,13 +243,14 @@ Public Class MERGE
                                          ByVal e As NodeLabelEditEventArgs) Handles codetree.AfterLabelEdit
         'ラベルが変更されたか調べる
         'e.LabelがNothingならば、変更されていない
+        Dim treenode As TreeNode = codetree.SelectedNode
+
         If (e.Label = "") Then
             e.CancelEdit = True
         ElseIf (e.Label.Trim = "") Then
             e.CancelEdit = True
-        End If
-        If (e.Label.Length > 74) Then
-            codetree.SelectedNode.Text = e.Label.Substring(0, 74)
+            'ElseIf (e.Label.Length > 74) Then
+            '    treenode.Text = e.Label.Substring(0, 74)
         End If
 
     End Sub
