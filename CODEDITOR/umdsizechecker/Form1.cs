@@ -11,6 +11,9 @@ using System.IO;
 using Microsoft.VisualBasic;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using System;
+using System.IO.Compression;
+
 
 namespace WindowsFormsApplication1
 {
@@ -66,9 +69,12 @@ namespace WindowsFormsApplication1
             button5.Enabled = false;
             string[] s = (string[])e.Data.GetData(DataFormats.FileDrop, false);
             isofile = s[0];
+            groupBox1.Visible = true;
+            groupBox3.Visible = false;
             textBox1.Text = getsize(s[0]);
             if (textBox1.Text.Contains("ません"))
             {
+
                 groupBox1.Enabled = false;
                 sectorview.Enabled = false;
             }
@@ -92,6 +98,8 @@ namespace WindowsFormsApplication1
             button5.Enabled = false;
             string[] s = (string[])e.Data.GetData(DataFormats.FileDrop, false);
             isofile = s[0];
+            groupBox1.Visible = true;
+            groupBox3.Visible = false;
             textBox1.Text = getsize(s[0]);
             if (textBox1.Text.Contains("ません"))
             {
@@ -131,8 +139,10 @@ namespace WindowsFormsApplication1
                 }
                 else if (iso == "CISO")
                 {
+                    groupBox1.Visible = false;
+                    groupBox3.Visible = true;
                     fs.Close();
-                    return "Deflate圧縮ISO,CSOには対応してません";
+                    return "Deflate圧縮ISO,CSOには対応してませんが、リネームで復元時の推定サイズ情報がでます";
                 }
                 else if (iso == "JISO")
                 {
@@ -545,6 +555,7 @@ namespace WindowsFormsApplication1
         }
 
 
+
         private void button6_Click(object sender, EventArgs e)
         {
             Form2 f = new Form2();
@@ -553,5 +564,585 @@ namespace WindowsFormsApplication1
             f.Dispose();
         }
 
+
+        private void button6_Click_1(object sender, EventArgs e)
+        {
+            if (System.IO.File.Exists(isofile))
+            {
+                System.IO.FileStream fs = new System.IO.FileStream(isofile, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+                //System.IO.FileStream wss = new System.IO.FileStream(Application.StartupPath + "\\tmp2", System.IO.FileMode.Create, System.IO.FileAccess.Write);
+                //ファイルを読み込むバイト型配列を作成する
+                byte[] integer = new byte[8];
+                byte[] source = new byte[2048];
+                int k = 0;
+                byte[] bufferw = new byte[1 << 20];
+                fs.Read(source, 0, 2048);
+                fs.Seek(8, System.IO.SeekOrigin.Begin);
+                fs.Read(integer, 0, 4);
+                long size = BitConverter.ToInt64(integer, 0);
+                fs.Seek(0x10, System.IO.SeekOrigin.Begin);
+                fs.Read(integer, 0, 4);
+                long sector = BitConverter.ToInt64(integer, 0);
+                fs.Seek(0x14, System.IO.SeekOrigin.Begin);
+                fs.Read(integer, 0, 4);
+                int align = BitConverter.ToInt32(integer, 0) >> 8;
+                long counter = size / sector;
+                //閉じる
+                int[] offset = new int[counter + 1];
+                for (int i = 0; i < counter + 1; i++)
+                {
+                    fs.Seek(0x18 + 4 * i, System.IO.SeekOrigin.Begin);
+                    fs.Read(integer, 0, 4);
+                    offset[i] = (BitConverter.ToInt32(integer, 0) & 0x7fffffff) << align;
+                }
+
+                fs.Seek(offset[16], System.IO.SeekOrigin.Begin);
+                fs.Read(source, 0, offset[17] - offset[16]);
+
+                if ((offset[17] - offset[16]) != (2048 >> align))
+                {
+                    System.IO.FileStream ws = new System.IO.FileStream(Application.StartupPath + "\\tmp", System.IO.FileMode.Create, System.IO.FileAccess.Write);
+                    ws.Write(source, 0, offset[17] - offset[16]);
+                    ws.Close();//展開する書庫のパス
+                    string gzipFile = Application.StartupPath + "\\tmp";
+
+
+                    System.IO.FileStream gzipFileStrm = new System.IO.FileStream(
+                        gzipFile, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+                    System.IO.Compression.DeflateStream gzipStrm =
+                        new System.IO.Compression.DeflateStream(gzipFileStrm,
+                        System.IO.Compression.CompressionMode.Decompress);
+                    byte[] buffer = new byte[2048];
+                    while (true)
+                    {
+                        int readSize = gzipStrm.Read(buffer, 0, buffer.Length);
+                        if (readSize == 0)
+                            break;
+                        Array.Copy(buffer, 0, source, 0, 2048);
+                    }
+
+                    gzipStrm.Close();
+                    fs.Close();
+                    File.Delete(Application.StartupPath + "\\tmp");
+                }
+
+                byte[] lba = new byte[4];
+                byte[] isize = new byte[8];
+                byte[] psfname = new byte[129];
+
+                Array.Copy(source, 0x50, isize, 0, 5);
+                long lbatotal = BitConverter.ToInt64(isize, 0);
+                lbatotal *= 2048;
+                label1.Text = "推定サイズ　;" + size.ToString();
+                label2.Text = "セクター算出;" + lbatotal.ToString();
+
+
+                byte[] gid = new byte[10];
+                Array.Copy(source, 0x373, gid, 0, 10);
+                string rpname = Encoding.GetEncoding(0).GetString(gid) + ".CSO";
+                textBox1.Text = rpname + "にリネームしました";
+                int last = isofile.LastIndexOf("\\") + 1;
+                rpname = isofile.Substring(0, last) + rpname;
+                if (System.IO.File.Exists(rpname))
+                {
+                    textBox1.Text = "同じ名前が存在します";
+                }
+                else
+                {
+                    File.Move(isofile, rpname);
+                    isofile = rpname;
+                }
+            }
+            else
+            {
+                textBox1.Text = "ファイルが存在しません";
+            }
+        }
+
+        private void button7_Click(object sender, System.EventArgs e)
+        {
+            if (System.IO.File.Exists(isofile))
+            {
+            System.IO.FileStream fs = new System.IO.FileStream(isofile, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+            //System.IO.FileStream wss = new System.IO.FileStream(Application.StartupPath + "\\tmp2", System.IO.FileMode.Create, System.IO.FileAccess.Write);
+            //ファイルを読み込むバイト型配列を作成する
+            byte[] integer = new byte[8];
+            byte[] source = new byte[2048];
+            byte[] bufferw = new byte[1 << 20];
+            fs.Read(source, 0, 2048);
+            fs.Seek(8, System.IO.SeekOrigin.Begin);
+            fs.Read(integer, 0, 4);
+            long size = BitConverter.ToInt64(integer, 0);
+            fs.Seek(0x10, System.IO.SeekOrigin.Begin);
+            fs.Read(integer, 0, 4);
+            long sector = BitConverter.ToInt64(integer, 0);
+            fs.Seek(0x14, System.IO.SeekOrigin.Begin);
+            fs.Read(integer, 0, 4);
+            int align = BitConverter.ToInt32(integer, 0)>>8;
+            long counter = size / sector;
+            //閉じる
+            int[] offset = new int[counter + 1];
+            for (int i = 0; i < counter + 1; i++)
+            {
+                fs.Seek(0x18 + 4 * i, System.IO.SeekOrigin.Begin);
+                fs.Read(integer, 0, 4);
+                offset[i] = (BitConverter.ToInt32(integer, 0) & 0x7fffffff) << align;
+            }
+
+            fs.Seek(offset[16], System.IO.SeekOrigin.Begin);
+            fs.Read(source, 0, offset[17] - offset[16]);
+
+
+
+            if ((offset[17] - offset[16]) != (2048 >> align))
+            {
+                System.IO.FileStream ws = new System.IO.FileStream(Application.StartupPath + "\\tmp", System.IO.FileMode.Create, System.IO.FileAccess.Write);
+                ws.Write(source, 0, offset[17] - offset[16]);
+                ws.Close();//展開する書庫のパス
+                string gzipFile = Application.StartupPath + "\\tmp";
+
+
+                System.IO.FileStream gzipFileStrm = new System.IO.FileStream(
+                    gzipFile, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+                System.IO.Compression.DeflateStream gzipStrm =
+                    new System.IO.Compression.DeflateStream(gzipFileStrm,
+                    System.IO.Compression.CompressionMode.Decompress);
+                byte[] buffer = new byte[2048];
+                while (true)
+                {
+                    int readSize = gzipStrm.Read(buffer, 0, buffer.Length);
+                    if (readSize == 0)
+                        break;
+                    Array.Copy(buffer, 0, source, 0, 2048);
+                }
+
+                gzipStrm.Close();
+                fs.Close();
+                File.Delete(Application.StartupPath + "\\tmp");
+            }
+
+            byte[] lba = new byte[4];
+            byte[] isize = new byte[8];
+            byte[] psfname = new byte[129];
+
+            Array.Copy(source, 0x50, isize, 0, 5);
+            long lbatotal = BitConverter.ToInt64(isize, 0);
+            lbatotal *= 2048;
+            label1.Text = "推定サイズ　;" + (counter << 11).ToString();
+            label2.Text = "セクター算出;" + lbatotal.ToString();
+
+
+            byte[] isohead = new byte[32];
+            Array.Copy(source,0x28, isohead, 0, 32);
+            string rpname = Encoding.GetEncoding(0).GetString(isohead).Trim();
+            rpname += ".CSO";
+            textBox1.Text = rpname + "にリネームしました";
+            int last = isofile.LastIndexOf("\\") + 1;
+            rpname = isofile.Substring(0, last) + rpname;
+             if (System.IO.File.Exists(rpname))
+              {
+                textBox1.Text = "同じ名前が存在します";
+              }
+               else
+              {
+                File.Move(isofile, rpname);
+                isofile = rpname;
+                }
+
+            }
+            else
+            {
+                textBox1.Text = "ファイルが存在しません";
+            }
+        }
+
+
+        private void button8_Click(object sender, System.EventArgs e)
+        {
+
+            if (System.IO.File.Exists(isofile))
+            {
+                System.IO.FileStream fs = new System.IO.FileStream(isofile, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+                //System.IO.FileStream wss = new System.IO.FileStream(Application.StartupPath + "\\tmp2", System.IO.FileMode.Create, System.IO.FileAccess.Write);
+                //ファイルを読み込むバイト型配列を作成する
+                byte[] integer = new byte[8];
+                byte[] source = new byte[2048];
+                byte[] bufferw = new byte[1 << 20];
+                fs.Read(source, 0, 2048);
+                fs.Seek(8, System.IO.SeekOrigin.Begin);
+                fs.Read(integer, 0, 4);
+                long size = BitConverter.ToInt64(integer, 0);
+                fs.Seek(0x10, System.IO.SeekOrigin.Begin);
+                fs.Read(integer, 0, 4);
+                long sector = BitConverter.ToInt64(integer, 0);
+                fs.Seek(0x14, System.IO.SeekOrigin.Begin);
+                fs.Read(integer, 0, 4);
+                int align = BitConverter.ToInt32(integer, 0) >> 8;
+                long counter = size / sector;
+                //閉じる
+                int[] offset = new int[counter + 1];
+                for (int i = 0; i < counter + 1; i++)
+                {
+                    fs.Seek(0x18 + 4 * i, System.IO.SeekOrigin.Begin);
+                    fs.Read(integer, 0, 4);
+                    offset[i] = (BitConverter.ToInt32(integer, 0) & 0x7fffffff) << align;
+                }
+
+                fs.Seek(offset[16], System.IO.SeekOrigin.Begin);
+                fs.Read(source, 0, offset[17] - offset[16]);
+
+
+                if ((offset[17] - offset[16]) != (2048 >> align))
+                {
+                    System.IO.FileStream ws = new System.IO.FileStream(Application.StartupPath + "\\tmp", System.IO.FileMode.Create, System.IO.FileAccess.Write);
+                    ws.Write(source, 0, offset[17] - offset[16]);
+                    ws.Close();//展開する書庫のパス
+                    string gzipFile = Application.StartupPath + "\\tmp";
+
+
+                    System.IO.FileStream gzipFileStrm = new System.IO.FileStream(
+                        gzipFile, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+                    System.IO.Compression.DeflateStream gzipStrm =
+                        new System.IO.Compression.DeflateStream(gzipFileStrm,
+                        System.IO.Compression.CompressionMode.Decompress);
+                    byte[] buffer = new byte[2048];
+                    while (true)
+                    {
+                        int readSize = gzipStrm.Read(buffer, 0, buffer.Length);
+                        if (readSize == 0)
+                            break;
+                        Array.Copy(buffer, 0, source, 0, 2048);
+                    }
+
+                    gzipStrm.Close();
+                    File.Delete(Application.StartupPath + "\\tmp");
+                }
+
+                byte[] lba = new byte[4];
+                byte[] isize = new byte[8];
+                byte[] psfname = new byte[129];
+                byte[] str = new byte[9];
+                int j = 0;
+                int k = 0;
+                int z = 0;
+
+                Array.Copy(source, 8, str, 0, 9);
+
+                string iso = Encoding.GetEncoding(0).GetString(str);
+                Array.Copy(source, 0x50, isize, 0, 5);
+                long lbatotal = BitConverter.ToInt64(isize, 0);
+                lbatotal *= 2048;
+                label1.Text = "推定サイズ　;"+ (counter<<11).ToString();
+                label2.Text = "セクター算出;" + lbatotal.ToString();
+                if (lbatotal - size ==0 && (iso.Contains("PSP GAME") || iso.Contains("UMD VIDEO")))
+                {
+
+                    Array.Copy(source, 0x8C, lba, 0, 2);//0x809E root
+                    z = BitConverter.ToInt32(lba, 0);
+
+                    if (z > counter) { fs.Close(); textBox1.Text = "PSF取得に失敗しました"; return; }
+                    fs.Seek(offset[z], System.IO.SeekOrigin.Begin);
+                    fs.Read(source, 0, offset[z+1] - offset[z]);
+
+
+                    if ((offset[z+1] - offset[z]) != (2048 >> align))
+                    {
+                        System.IO.FileStream ws = new System.IO.FileStream(Application.StartupPath + "\\tmp", System.IO.FileMode.Create, System.IO.FileAccess.Write);
+                        ws.Write(source, 0, offset[z+1] - offset[z]);
+                        ws.Close();//展開する書庫のパス
+                        string gzipFile = Application.StartupPath + "\\tmp";
+
+
+                        System.IO.FileStream gzipFileStrm = new System.IO.FileStream(
+                            gzipFile, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+                        System.IO.Compression.DeflateStream gzipStrm =
+                            new System.IO.Compression.DeflateStream(gzipFileStrm,
+                            System.IO.Compression.CompressionMode.Decompress);
+                        byte[] buffer = new byte[2048];
+                        while (true)
+                        {
+                            int readSize = gzipStrm.Read(buffer, 0, buffer.Length);
+                            if (readSize == 0)
+                                break;
+                            Array.Copy(buffer, 0, source, 0, 2048);
+                        }
+
+                        gzipStrm.Close();
+                        File.Delete(Application.StartupPath + "\\tmp");
+                    }
+
+                    //fs.Seek(z * 2048, SeekOrigin.Begin);
+                    //fs.Read(sector, 0, 2048);
+                    //PSP_GAME,UMD_VIDEO,LPATHTABLE
+                    j = 6;
+                    while (true)
+                    {
+                        if (iso.Contains("PSP GAME")==true && source[j] == 0x50 && source[j + 1] == 0x53 && source[j + 2] == 0x50 && source[j + 3] == 0x5f && source[j + 4] == 0x47) break;
+                        if (iso.Contains("UMD VIDEO")==true && source[j] == 0x55 && source[j + 1] == 0x4D && source[j + 2] == 0x44 && source[j+3] == 0x5f && source[j + 4] == 0x56) break;
+                        if (j > 2038) { fs.Close(); textBox1.Text = "PSF取得に失敗しました"; return; }
+                        j++;
+                    }
+                    Array.ConstrainedCopy(source, (j - 6), lba, 0, 2); //-31 0x809E rootdir
+                    z = BitConverter.ToInt32(lba, 0);
+                    if (z > counter) { fs.Close(); textBox1.Text = "PSF取得に失敗しました"; return; }
+                    fs.Seek(offset[z], System.IO.SeekOrigin.Begin);
+                    fs.Read(source, 0, offset[z + 1] - offset[z]);
+
+
+                    if ((offset[z + 1] - offset[z]) != (2048 >> align))
+                    {
+                        System.IO.FileStream ws = new System.IO.FileStream(Application.StartupPath + "\\tmp", System.IO.FileMode.Create, System.IO.FileAccess.Write);
+                        ws.Write(source, 0, offset[z + 1] - offset[z]);
+                        ws.Close();//展開する書庫のパス
+                        string gzipFile = Application.StartupPath + "\\tmp";
+
+
+                        System.IO.FileStream gzipFileStrm = new System.IO.FileStream(
+                            gzipFile, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+                        System.IO.Compression.DeflateStream gzipStrm =
+                            new System.IO.Compression.DeflateStream(gzipFileStrm,
+                            System.IO.Compression.CompressionMode.Decompress);
+                        byte[] buffer = new byte[2048];
+                        while (true)
+                        {
+                            int readSize = gzipStrm.Read(buffer, 0, buffer.Length);
+                            if (readSize == 0)
+                                break;
+                            Array.Copy(buffer, 0, source, 0, 2048);
+                        }
+
+                        gzipStrm.Close();
+                        File.Delete(Application.StartupPath + "\\tmp");
+                    }
+
+                    //fs.Seek(z * 2048, SeekOrigin.Begin);
+                    //fs.Read(sector, 0, 2048);
+
+                     j = 31;
+                    //PARAM.SFO
+                    while (true)
+                    {
+                        if (source[j] == 0x50 && source[j + 1] == 0x41 && source[j + 2] == 0x52 && source[j + 3] == 0x41) break;
+                        if (j > 2038) { fs.Close(); textBox1.Text = "PSF取得に失敗しました"; return; }
+                        j++;
+                    }
+                    Array.ConstrainedCopy(source, j - 31, lba, 0, 3);
+                    z = BitConverter.ToInt32(lba, 0);
+                    if (z > counter) { fs.Close(); textBox1.Text = "PSF取得に失敗しました"; return; }
+                    fs.Seek(offset[z], System.IO.SeekOrigin.Begin);
+                    fs.Read(source, 0, offset[z + 1] - offset[z]);
+
+
+                    if ((offset[z + 1] - offset[z]) != (2048 >> align))
+                    {
+                        System.IO.FileStream ws = new System.IO.FileStream(Application.StartupPath + "\\tmp", System.IO.FileMode.Create, System.IO.FileAccess.Write);
+                        ws.Write(source, 0, offset[z + 1] - offset[z]);
+                        ws.Close();//展開する書庫のパス
+                        string gzipFile = Application.StartupPath + "\\tmp";
+
+
+                        System.IO.FileStream gzipFileStrm = new System.IO.FileStream(
+                            gzipFile, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+                        System.IO.Compression.DeflateStream gzipStrm =
+                            new System.IO.Compression.DeflateStream(gzipFileStrm,
+                            System.IO.Compression.CompressionMode.Decompress);
+                        byte[] buffer = new byte[2048];
+                        while (true)
+                        {
+                            int readSize = gzipStrm.Read(buffer, 0, buffer.Length);
+                            if (readSize == 0)
+                                break;
+                            Array.Copy(buffer, 0, source, 0, 2048);
+                        }
+
+                        gzipStrm.Close();
+                        File.Delete(Application.StartupPath + "\\tmp");
+                    }
+                    //if (z * 2048 > fs.Length) { fs.Close(); textBox1.Text = "PSF取得に失敗しました"; return; }
+                    //fs.Seek(z * 2048, SeekOrigin.Begin);
+                    //fs.Read(sector, 0, 2048);
+
+                    Array.ConstrainedCopy(source, 12, lba, 0, 4);
+                    j = BitConverter.ToInt32(lba, 0);
+                    Array.ConstrainedCopy(source, 8, lba, 0, 4);
+                    k = BitConverter.ToInt32(lba, 0);
+                    Array.ConstrainedCopy(source, 16, lba, 0, 4);
+                    z = BitConverter.ToInt32(lba, 0);
+                    byte[] tmp = new byte[200];
+                    Array.ConstrainedCopy(source, k, tmp, 0, 200);
+                    string strs = Encoding.GetEncoding(65001).GetString(tmp);
+                    strs = strs.Substring(0, strs.IndexOf("\x0\x0"));
+                    string[] name = strs.Split('\x0');
+                    for (k = 0; ; k++)
+                    {
+                        if (name[k] == "TITLE") break;
+                        if (k == z)
+                        {
+                            fs.Close(); textBox1.Text = "PSF取得に失敗しました";
+                            return;
+                        }
+                    }
+                    z = (k + 2) * 16;
+                    Array.ConstrainedCopy(source, z, lba, 0, 2);
+                    z = BitConverter.ToInt32(lba, 0);
+                    Array.ConstrainedCopy(source, z + j, psfname, 0, 129);
+                    fs.Close();
+                    string rpname = Encoding.GetEncoding(65001).GetString(psfname);
+                    j = rpname.IndexOf("\x0");
+                    rpname = rpname.Substring(0, j) + ".CSO";
+                    string[] dosmoji;
+                    dosmoji = new string[11] { "\\", "/", ":", "*", "?", "\"", "<", ">", "|", "\n", "\r" };
+                    for (j = 0; j < 11; j++)
+                    {
+                        if (rpname.Contains(dosmoji[j]))
+                        {
+                            rpname = rpname.Replace(dosmoji[j], " ");
+                        }
+                    }
+
+                    if (checkBox2.Checked == true)
+                    {
+                        rpname = rpname.Replace("　", " ");
+                        IntPtr mecab = mecab_new2("-Oyomi");
+                        rpname = mecab_sparse_tostr(mecab, rpname);
+                        mecab_destroy(mecab);
+
+                        string[] kana = { "ー", "ァ", "ィ", "ゥ", "ェ", "ォ", "ヶ", "ア", "イ", "ウ", "エ", "オ", "カ", "キ", "ク", "ケ", "コ", "サ", "シ", "ス", "セ", "ソ", "タ", "チ", "ツ", "テ", "ト", "ナ", "ニ", "ヌ", "ネ", "ノ", "ハ", "ヒ", "フ", "ヘ", "ホ", "マ", "ミ", "ム", "メ", "モ", "ヤ", "ユ", "ヨ", "ラ", "リ", "ル", "レ", "ロ", "ワ", "ヰ", "ヱ", "ヲ", "ン", "ガ", "ギ", "グ", "ゲ", "ゴ", "ザ", "ジ", "ズ", "ゼ", "ゾ", "ダ", "ヂ", "ヅ", "デ", "ド", "バ", "ビ", "ブ", "ベ", "ボ", "パ", "ピ", "プ", "ペ", "ポ", "キャ", "キュ", "キョ", "シャ", "シュ", "ショ", "チャ", "チュ", "チョ", "ニャ", "ニュ", "ニョ", "ヒャ", "ヒュ", "ヒョ", "ミャ", "ミュ", "ミョ", "リャ", "リュ", "リョ", "ギャ", "ギュ", "ギョ", "ジャ", "ジュ", "ジョ", "ビャ", "ビュ", "ビョ", "ピャ", "ピュ", "ピョ", "ファ", "フィ", "フェ", "フォ", "ヴァ", "ヴィ", "ヴ", "ヴェ", "ヴォ" };
+                        string[] roma = { "-", "a", "i", "u", "e", "o", "ke", "A", "I", "U", "E", "O", "KA", "KI", "KU", "KE", "KO", "SA", "SHI", "SU", "SE", "SO", "TA", "CHI", "TSU", "TE", "TO", "NA", "NI", "NU", "NE", "NO", "HA", "HI", "FU", "HE", "HO", "MA", "MI", "MU", "ME", "MO", "YA", "YU", "YO", "RA", "RI", "RU", "RE", "RO", "WA", "I", "E", "O", "N", "GA", "GI", "GU", "GE", "GO", "ZA", "JI", "ZU", "ZE", "ZO", "DA", "JI", "ZU", "DE", "DO", "BA", "BI", "BU", "BE", "BO", "PA", "PI", "PU", "PE", "PO", "KYA", "KYU", "KYO", "SHA", "SHU", "SHO", "CHA", "CHU", "CHO", "NYA", "NYU", "NYO", "HYA", "HYU", "HYO", "MYA", "MYU", "MYO", "RYA", "RYU", "RYO", "GYA", "GYU", "GYO", "JA", "JU", "JO", "BYA", "BYU", "BYO", "PYA", "PYU", "PYO", "FA", "FI", "FE", "FO", "VA", "VI", "VU", "VE", "VO" };
+
+
+                        string[] suuji = { "零", "壱", "弐", "参", "廿", "卅", "卌" };
+                        string[] romasuuji = { "ZERO", "ITI", "NI", "SAN", "NIJUU", "SANJUU", "SIJUU" };
+
+                        for (j = 6; j >= 0; j--)
+                        {
+                            if (rpname.Contains(suuji[j]) == true)
+                            {
+                                rpname = rpname.Replace(suuji[j], romasuuji[j]);
+                            }
+                        }
+
+                        rpname = abc123ToHankaku(rpname);
+
+                        string cp = "";
+                        string rp2 = rpname;
+                        for (j = 0; j < rp2.Length - 4; j++)
+                        {
+                            cp = rp2.Substring(j, 1);
+                            char x = Convert.ToChar(cp);
+                            if (hankaku_zenkana(x) == false)
+                            {
+                                rpname = rpname.Replace(cp, "");
+                            }
+                        }
+
+                        for (j = 121; j >= 0; j--)
+                        {
+                            if (rpname.Contains(kana[j]) == true)
+                            {
+                                rpname = rpname.Replace(kana[j], roma[j]);
+                            }
+                        }
+                        int tu = 0;
+                        while (true)
+                        {
+                            tu = rpname.LastIndexOf("ッ");
+                            if (tu == -1) break;
+                            cp = rpname.Substring(tu + 1, 1);
+                            rpname = rpname.Substring(0, tu) + cp + rpname.Substring(tu + 1, rpname.Length - tu - 1);
+                        }
+                        rpname = Strings.StrConv(rpname, VbStrConv.Narrow, 0x0411);
+
+                        for (j = 0; j < 11;j++)
+                        {
+                            if (rpname.Contains(dosmoji[j]))
+                            {
+                                rpname = rpname.Replace(dosmoji[j], " ");
+                            }
+                        }
+                    }
+                    
+                    fs.Close();
+                    textBox1.Text = rpname + "にリネームしました";
+                    int last = isofile.LastIndexOf("\\") + 1;
+                    rpname = isofile.Substring(0, last) + rpname;
+                    if (System.IO.File.Exists(rpname))
+                    {
+                        textBox1.Text = "同じ名前が存在します";
+                    }
+                    else
+                    {
+                        File.Move(isofile, rpname);
+                        isofile = rpname;
+                    }
+                }
+                else
+                {
+                    fs.Close();
+                    textBox1.Text = "ヘッダサイズ情報(=復元時のサイズ)とセクター算出が一致しないCSOです";
+                }
+            }
+            else
+            {
+                textBox1.Text = "ファイルが存在しません";
+            }
+        }
+
+        private void textBox1_TextChanged(object sender, System.EventArgs e)
+        {
+
+        }
+
+        private void Form1_Load(object sender, System.EventArgs e)
+        {
+
+        }
+
     }
 }
+
+//for (int z = 0; z < counter; z++)
+//{
+//    fs.Seek(offset[z], System.IO.SeekOrigin.Begin);
+//    fs.Read(source, 0, offset[z + 1] - offset[z]);
+
+//    if (offset[z + 1] - offset[z] != 2048)
+//    {
+//        System.IO.FileStream ws = new System.IO.FileStream(Application.StartupPath + "\\tmp", System.IO.FileMode.Create, System.IO.FileAccess.Write);
+//        ws.Write(source, 0, offset[z + 1] - offset[z]);
+//        ws.Close();//展開する書庫のパス
+//        string gzipFile = Application.StartupPath + "\\tmp";
+
+
+//        System.IO.FileStream gzipFileStrm = new System.IO.FileStream(
+//            gzipFile, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+//        System.IO.Compression.DeflateStream gzipStrm =
+//            new System.IO.Compression.DeflateStream(gzipFileStrm,
+//            System.IO.Compression.CompressionMode.Decompress);
+//        byte[] buffer = new byte[2048];
+//        while (true)
+//        {
+//            int readSize =
+//            gzipStrm.Read(buffer, 0, buffer.Length);
+//            if (readSize == 0)
+//                break;
+//            Array.Copy(buffer, 0, source, 0, 2048);
+//        }
+
+//        gzipStrm.Close();
+//    }
+//    if (z + 1 == counter)
+//    {
+//        Array.Copy(source, 0, bufferw, k << 11, 2048);
+//        wss.Write(bufferw, 0, k + 1 << 11); break;
+//    }
+//    if (k == 1 << 20)
+//    {
+//        wss.Write(bufferw, 0, 1 << 20);
+//        k = 0;
+//    }
+//    Array.Copy(source, 0, bufferw, k << 11, 2048);
+//    k += 1;
+////}
+//    fs.Close();
+//    wss.Close();
