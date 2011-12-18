@@ -609,9 +609,10 @@ Public Class umdisomanger
                 If psp <> "" Then
                     Dim drive As New System.IO.DriveInfo(psp)
                     Dim ms As Single = drive.TotalFreeSpace
+                    Dim ms2 As Long = drive.TotalFreeSpace
                     'ドライブの準備ができているか調べる
                     If drive.IsReady Then
-                        If CInt(ms) - CInt(isosize.Text) > 0 Then
+                        If ms2 - Convert.ToInt64(isosize.Text.Replace(",", "")) > 0 Then
                             free.ForeColor = Color.Black
                         Else
                             free.ForeColor = Color.Red
@@ -1053,9 +1054,10 @@ Public Class umdisomanger
                 If psp <> "" Then
                     Dim drive As New System.IO.DriveInfo(psp)
                     Dim ms As Single = drive.TotalFreeSpace
+                    Dim ms2 As Long = drive.TotalFreeSpace
                     'ドライブの準備ができているか調べる
                     If drive.IsReady Then
-                        If CInt(ms) - CInt(isosize.Text) > 0 Then
+                        If ms2 - Convert.ToInt64(isosize.Text.Replace(",", "")) > 0 Then
                             free.ForeColor = Color.Black
                         Else
                             free.ForeColor = Color.Red
@@ -1170,9 +1172,10 @@ Public Class umdisomanger
                 If psp <> "" Then
                     Dim drive As New System.IO.DriveInfo(psp)
                     Dim ms As Single = drive.TotalFreeSpace
+                    Dim ms2 As Long = drive.TotalFreeSpace
                     'ドライブの準備ができているか調べる
                     If drive.IsReady Then
-                        If CInt(ms) - CInt(isosize.Text) > 0 Then
+                        If ms2 - Convert.ToInt64(isosize.Text.Replace(",", "")) > 0 Then
                             free.ForeColor = Color.Black
                         Else
                             free.ForeColor = Color.Red
