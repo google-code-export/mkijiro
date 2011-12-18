@@ -95,6 +95,7 @@ Partial Class umdisomanger
         Me.t_gid = New System.Windows.Forms.CheckBox()
         Me.crc_xml = New System.Windows.Forms.Button()
         Me.free = New System.Windows.Forms.Label()
+        Me.Button2 = New System.Windows.Forms.Button()
         Me.ContextMenuStrip2.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -490,45 +491,52 @@ Partial Class umdisomanger
         resources.ApplyResources(Me.free, "free")
         Me.free.Name = "free"
         '
+        'Button2
+        '
+        resources.ApplyResources(Me.Button2, "Button2")
+        Me.Button2.Name = "Button2"
+        Me.Button2.UseVisualStyleBackColor = True
+        '
         'umdisomanger
         '
         resources.ApplyResources(Me, "$this")
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.Controls.Add(Me.MenuStrip1)
         Me.Controls.Add(Me.free)
-        Me.Controls.Add(Me.t_gid)
         Me.Controls.Add(Me.gid)
-        Me.Controls.Add(Me.calc_md5)
+        Me.Controls.Add(Me.t_gid)
+        Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.del_psp)
-        Me.Controls.Add(Me.calc_sha)
-        Me.Controls.Add(Me.md5hash)
         Me.Controls.Add(Me.crc_xml)
+        Me.Controls.Add(Me.md5hash)
+        Me.Controls.Add(Me.calc_sha)
         Me.Controls.Add(Me.crc)
+        Me.Controls.Add(Me.calc_md5)
         Me.Controls.Add(Me.sha)
         Me.Controls.Add(Me.Label6)
         Me.Controls.Add(Me.tree_apply)
         Me.Controls.Add(Me.calc_crc)
         Me.Controls.Add(Me.Label7)
-        Me.Controls.Add(Me.all_hash)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.Label4)
-        Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.lockdriveletter)
-        Me.Controls.Add(Me.movepsp)
         Me.Controls.Add(Me.drivelettter)
-        Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.Label5)
+        Me.Controls.Add(Me.Label3)
+        Me.Controls.Add(Me.all_hash)
+        Me.Controls.Add(Me.movepsp)
         Me.Controls.Add(Me.TreeView1)
-        Me.Controls.Add(Me.isosize)
-        Me.Controls.Add(Me.isolba)
-        Me.Controls.Add(Me.managename)
-        Me.Controls.Add(Me.PFS)
-        Me.Controls.Add(Me.PictureBox2)
+        Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.PictureBox1)
+        Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.SAVE)
+        Me.Controls.Add(Me.isolba)
+        Me.Controls.Add(Me.PictureBox2)
         Me.Controls.Add(Me.CRCimage)
-        Me.Controls.Add(Me.Label1)
+        Me.Controls.Add(Me.isosize)
+        Me.Controls.Add(Me.PFS)
+        Me.Controls.Add(Me.managename)
         Me.Controls.Add(Me.GAMEID)
+        Me.Controls.Add(Me.Label1)
         Me.MainMenuStrip = Me.MenuStrip1
         Me.Name = "umdisomanger"
         Me.ContextMenuStrip2.ResumeLayout(False)
@@ -611,5 +619,6 @@ Partial Class umdisomanger
     Friend WithEvents CLOSEToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents PpriorUSAToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents PriorEUToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents Button2 As System.Windows.Forms.Button
 
 End Class

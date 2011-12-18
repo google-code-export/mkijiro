@@ -68,6 +68,7 @@ Public Class psf
                 If bs(0) = &H0 AndAlso bs(1) = &H50 AndAlso bs(2) = &H53 AndAlso bs(3) = &H46 Then
 
                     Dim offset(3) As Byte
+                    Dim ms As Boolean = False
                     Array.ConstrainedCopy(bs, 8, offset, 0, 4)
                     Dim i As Integer = BitConverter.ToInt32(offset, 0)
                     Array.ConstrainedCopy(bs, 12, offset, 0, 4)
@@ -83,6 +84,9 @@ Public Class psf
                         If psfst(i) = "DISC_ID" Then
                             Exit For
                         End If
+                        If psfst(i) = "UPDATER_VER" Then
+                            ms = True
+                        End If
                     Next
                     If i = z Then
                         NOID = True
@@ -92,8 +96,11 @@ Public Class psf
                     k += CInt(bs(32 + 16 * i))
                     Array.ConstrainedCopy(bs, k, gidpsf, 0, 9)
                     result = Encoding.GetEncoding(0).GetString(gidpsf)
+                    If result.Contains("MSTK") Then
+                        ms = True
+                    End If
 
-                    If result = "UCJS10041" Or NOID = True Or My.Settings.hbhash = True Then
+                    If result = "UCJS10041" Or NOID = True Or My.Settings.hbhash = True Or ms = True Then
                         fs.Seek(0, SeekOrigin.Begin)
                         fs.Read(bs, 0, 2048)
                         Dim md5 As MD5 = md5.Create()
@@ -114,6 +121,11 @@ Public Class psf
                         hex(4) = hex(4) Xor hex(3)
 
                         result = "HB" & hex(4).ToString("X")
+
+
+                        If ms = True Then
+                            result = "UP" & result.Remove(0, 2)
+                        End If
 
                         Return result
                     Else
