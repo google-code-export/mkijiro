@@ -720,12 +720,14 @@ Public Class umdisomanger
                 rg.gid.Text = gid.Text
                 rg.fpath.Text = treenode.Tag.ToString
                 rg.impath.Text = treenode.Name
-                If psf.video(treenode.Tag.ToString) = "PSP" Then
-                    rg.dir.Text = "X:\ISO\"
-                ElseIf psf.video(treenode.Tag.ToString) = "VIDEO" Then
-                    rg.dir.Text = "X:\ISO\VIDEO\"
-                Else
-                    rg.dir.Text = "X:\PSP\GAME\"
+                If File.Exists(treenode.Tag.ToString) Then
+                    If psf.video(treenode.Tag.ToString) = "PSP" Then
+                        rg.dir.Text = "X:\ISO\"
+                    ElseIf psf.video(treenode.Tag.ToString) = "VIDEO" Then
+                        rg.dir.Text = "X:\ISO\VIDEO\"
+                    Else
+                        rg.dir.Text = "X:\PSP\GAME\"
+                    End If
                 End If
 
                 Dim ss As String() = treenode.Parent.Name.Split(CChar(vbLf))
@@ -1005,6 +1007,11 @@ Public Class umdisomanger
                             cp2 = psp & category & psf.GETID(cp) & "\EBOOT.PBP"
                             dir = psp & category & psf.GETID(cp)
                         End If
+                        If treenode.Parent.Tag.ToString.Contains("UP") Then
+                            cp2 = psp & "\PSP\GAME\UPDATE\" & "\EBOOT.PBP"
+                            dir = psp & "\PSP\GAME\UPDATE\"
+                        End If
+
                         If Directory.Exists(dir) = False Then
                             Directory.CreateDirectory(dir)
                         End If
@@ -1123,6 +1130,11 @@ Public Class umdisomanger
                         If m.Success Then
                             cp2 = psp & category & psf.GETID(cp) & "\EBOOT.PBP"
                             dir = psp & category & psf.GETID(cp)
+                        End If
+
+                        If treenode.Parent.Tag.ToString.Contains("UP") Then
+                            cp2 = psp & "\PSP\GAME\UPDATE\" & "\EBOOT.PBP"
+                            dir = psp & "\PSP\GAME\UPDATE\"
                         End If
                         files = System.IO.Directory.GetFiles( _
             Path.GetDirectoryName(cp2), "*", System.IO.SearchOption.AllDirectories)
@@ -1524,7 +1536,7 @@ Public Class umdisomanger
     Private Sub ADD_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ADD.Click
         Try
             Dim ofd As New OpenFileDialog()
-            ofd.InitialDirectory = Application.StartupPath
+            ofd.InitialDirectory = My.Settings.isobase
             '"ISO/PBPファイル(*iso;*.pbp)|*.iso;*.pbp"
             '"ISO/PBPファイルを選択してください"
             ofd.Filter = lang(25)
@@ -1538,7 +1550,6 @@ Public Class umdisomanger
                 Dim add As Boolean = True
                 Dim beeps As Boolean = False
                 Dim sb As New StringBuilder
-
 
                 If System.IO.Directory.Exists(ofd.FileName) = True Or psf.GETID(ofd.FileName) = "" Then
                 Else
@@ -1578,6 +1589,7 @@ Public Class umdisomanger
                     sb.Insert(0, lang(8) & vbCrLf)
                     MessageBox.Show(sb.ToString, lang(9))
                 End If
+                My.Settings.isobase = Path.GetDirectoryName(ofd.FileName)
             End If
 
         Catch ex As Exception
@@ -2103,5 +2115,86 @@ Public Class umdisomanger
     Private Sub CLOSEToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles CLOSEToolStripMenuItem.Click
         Me.Close()
     End Sub
+
+    Private Sub Button2_Click_2(sender As System.Object, e As System.EventArgs) Handles Button2.Click
+        Try
+            Dim treenode As TreeNode = TreeView1.SelectedNode
+            If treenode IsNot Nothing Then
+                If treenode.Level = 1 Then
+                    treenode = treenode.Parent
+                End If
+                Dim s As String = treenode.Tag.ToString
+                s = s.Replace("-", "")
+                s = StrConv(s, VbStrConv.Lowercase)
+                Dim b As Byte() = System.Text.Encoding.UTF8.GetBytes(treenode.Text)
+                Dim ss As String = ""
+                For i = 0 To b.Length - 1
+                    ss &= "%" & b(i).ToString("X")
+                Next
+
+                If s.Contains("us") Then
+                    Process.Start("http://us.playstation.com/search/index.htm?id=" & ss & " psp&section=true")
+                ElseIf s.Contains("es") Then
+                    Process.Start("http://uk.playstation.com/search-results/?searchPattern=" & ss & " psp&_newSearch=true&submit-search=Search")
+                ElseIf s.Contains("np") Then
+                    Process.Start("http://search.jp.playstation.com/search?charset=utf-8&design=2&group=0&query=" & ss & "&submit.x=0&submit.y=0")
+                ElseIf s.Contains("hb") Then
+
+                ElseIf s.Contains("up") Then
+                    Process.Start(" http://www.jp.playstation.com/psp/update/ud_01.html")
+                Else
+                    s = "http://www.jp.playstation.com/software/title/" & s & ".html"
+                    If status(s) = True Then
+                        Process.Start(s)
+                    Else
+                        Process.Start("http://search.jp.playstation.com/search?charset=utf-8&design=2&group=0&query=" & ss & "&submit.x=0&submit.y=0")
+                    End If
+                End If
+
+            End If
+        Catch ex As Exception
+        End Try
+    End Sub
+
+    Function status(ByVal url As String) As Boolean
+
+        'WebRequestの作成
+        Dim webreq As System.Net.HttpWebRequest = _
+            CType(System.Net.WebRequest.Create(url),  _
+            System.Net.HttpWebRequest)
+
+        Dim webres As System.Net.HttpWebResponse = Nothing
+        Try
+            'サーバーからの応答を受信するためのWebResponseを取得
+            webres = CType(webreq.GetResponse(), System.Net.HttpWebResponse)
+
+            '応答ステータスコードを表示する
+            If webres.StatusCode = Net.HttpStatusCode.OK Then
+                Return True
+            Else
+                Return False
+            End If
+        Catch ex As System.Net.WebException
+            'HTTPプロトコルエラーかどうか調べる
+            If ex.Status = System.Net.WebExceptionStatus.ProtocolError Then
+                'HttpWebResponseを取得
+                Dim errres As System.Net.HttpWebResponse = _
+                    CType(ex.Response, System.Net.HttpWebResponse)
+                '応答したURIを表示する
+                Console.WriteLine(errres.ResponseUri)
+                '応答ステータスコードを表示する
+                Console.WriteLine("{0}:{1}", _
+                    errres.StatusCode, errres.StatusDescription)
+            Else
+                Console.WriteLine(ex.Message)
+            End If
+            Return False
+        Finally
+            '閉じる
+            If Not (webres Is Nothing) Then
+                webres.Close()
+            End If
+        End Try
+    End Function
 
 End Class
