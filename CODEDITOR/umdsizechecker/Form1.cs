@@ -417,7 +417,7 @@ namespace WindowsFormsApplication1
                     i = rpname.IndexOf("\x0");
                     rpname = rpname.Substring(0, i) + ".ISO";
                     string[] dosmoji;
-                    dosmoji = new string[11] {"\\","/",":","*","?","\"","<",">","|","\n","\r"};
+                    dosmoji = new string[11] {"\\", "/", ":", "*", "?", "\"", "<", ">", "|", "\n", "\r" };
                     for (i = 0; i < 11; i++)
                     {
                         if (rpname.Contains(dosmoji[i])){
@@ -431,9 +431,9 @@ namespace WindowsFormsApplication1
                         rpname = mecab_sparse_tostr(mecab, rpname);
                         mecab_destroy(mecab);
                         
-                        string[] kana = { "ー","ァ","ィ","ゥ","ェ","ォ","ヶ","ア", "イ", "ウ", "エ", "オ", "カ", "キ", "ク", "ケ", "コ", "サ", "シ", "ス", "セ", "ソ", "タ", "チ", "ツ", "テ", "ト", "ナ", "ニ", "ヌ", "ネ", "ノ", "ハ", "ヒ", "フ", "ヘ", "ホ", "マ", "ミ", "ム", "メ", "モ", "ヤ", "ユ", "ヨ", "ラ", "リ", "ル", "レ", "ロ", "ワ", "ヰ", "ヱ", "ヲ", "ン", "ガ", "ギ", "グ", "ゲ", "ゴ", "ザ", "ジ", "ズ", "ゼ", "ゾ", "ダ", "ヂ", "ヅ", "デ", "ド", "バ", "ビ", "ブ", "ベ", "ボ", "パ", "ピ", "プ", "ペ", "ポ", "キャ", "キュ", "キョ", "シャ", "シュ", "ショ", "チャ", "チュ", "チョ", "ニャ", "ニュ", "ニョ", "ヒャ", "ヒュ", "ヒョ", "ミャ", "ミュ", "ミョ", "リャ", "リュ", "リョ", "ギャ", "ギュ", "ギョ", "ジャ", "ジュ", "ジョ", "ビャ", "ビュ", "ビョ", "ピャ", "ピュ", "ピョ", "ファ", "フィ", "フェ", "フォ", "ヴァ", "ヴィ", "ヴ", "ヴェ", "ヴォ"};
-                        string[] roma = {"-","a","i","u","e","o","ke", "A", "I", "U", "E", "O", "KA", "KI", "KU", "KE", "KO", "SA", "SHI", "SU", "SE", "SO", "TA", "CHI", "TSU", "TE", "TO", "NA", "NI", "NU", "NE", "NO", "HA", "HI", "FU", "HE", "HO", "MA", "MI", "MU", "ME", "MO", "YA", "YU", "YO", "RA", "RI", "RU", "RE", "RO", "WA", "I", "E", "O", "N", "GA", "GI", "GU", "GE", "GO", "ZA", "JI", "ZU", "ZE", "ZO", "DA", "JI", "ZU", "DE", "DO", "BA", "BI", "BU", "BE", "BO", "PA", "PI", "PU", "PE", "PO", "KYA", "KYU", "KYO", "SHA", "SHU", "SHO", "CHA", "CHU", "CHO", "NYA", "NYU", "NYO", "HYA", "HYU", "HYO", "MYA", "MYU", "MYO", "RYA", "RYU", "RYO", "GYA", "GYU", "GYO", "JA", "JU", "JO", "BYA", "BYU", "BYO", "PYA", "PYU", "PYO", "FA", "FI", "FE", "FO", "VA", "VI", "VU", "VE", "VO" };
-
+                        string[] kana = {"・","ー","ァ","ィ","ゥ","ェ","ォ","ヶ","ア", "イ", "ウ", "エ", "オ", "カ", "キ", "ク", "ケ", "コ", "サ", "シ", "ス", "セ", "ソ", "タ", "チ", "ツ", "テ", "ト", "ナ", "ニ", "ヌ", "ネ", "ノ", "ハ", "ヒ", "フ", "ヘ", "ホ", "マ", "ミ", "ム", "メ", "モ", "ヤ", "ユ", "ヨ", "ラ", "リ", "ル", "レ", "ロ", "ワ", "ヰ", "ヱ", "ヲ", "ン", "ガ", "ギ", "グ", "ゲ", "ゴ", "ザ", "ジ", "ズ", "ゼ", "ゾ", "ダ", "ヂ", "ヅ", "デ", "ド", "バ", "ビ", "ブ", "ベ", "ボ", "パ", "ピ", "プ", "ペ", "ポ", "キャ", "キュ", "キョ", "シャ", "シュ", "ショ", "チャ", "チュ", "チョ", "ニャ", "ニュ", "ニョ", "ヒャ", "ヒュ", "ヒョ", "ミャ", "ミュ", "ミョ", "リャ", "リュ", "リョ", "ギャ", "ギュ", "ギョ", "ジャ", "ジュ", "ジョ", "ビャ", "ビュ", "ビョ", "ピャ", "ピュ", "ピョ", "ファ", "フィ", "フェ", "フォ", "ヴァ", "ヴィ", "ヴ", "ヴェ", "ヴォ"};
+                        string[] roma = {" ","-","a","i","u","e","o","ke", "A", "I", "U", "E", "O", "KA", "KI", "KU", "KE", "KO", "SA", "SHI", "SU", "SE", "SO", "TA", "CHI", "TSU", "TE", "TO", "NA", "NI", "NU", "NE", "NO", "HA", "HI", "FU", "HE", "HO", "MA", "MI", "MU", "ME", "MO", "YA", "YU", "YO", "RA", "RI", "RU", "RE", "RO", "WA", "I", "E", "O", "N", "GA", "GI", "GU", "GE", "GO", "ZA", "JI", "ZU", "ZE", "ZO", "DA", "JI", "ZU", "DE", "DO", "BA", "BI", "BU", "BE", "BO", "PA", "PI", "PU", "PE", "PO", "KYA", "KYU", "KYO", "SHA", "SHU", "SHO", "CHA", "CHU", "CHO", "NYA", "NYU", "NYO", "HYA", "HYU", "HYO", "MYA", "MYU", "MYO", "RYA", "RYU", "RYO", "GYA", "GYU", "GYO", "JA", "JU", "JO", "BYA", "BYU", "BYO", "PYA", "PYU", "PYO", "FA", "FI", "FE", "FO", "VA", "VI", "VU", "VE", "VO" };
+                        //
 
                         string[] suuji = { "零", "壱", "弐", "参", "廿", "卅", "卌"};
                         string[] romasuuji = { "ZERO", "ITI", "NI", "SAN", "NIJUU", "SANJUU", "SIJUU"};
@@ -458,7 +458,7 @@ namespace WindowsFormsApplication1
                             }
                         }
 
-                        for (i = 121; i>=0 ; i--) {
+                        for (i = 122; i>=0 ; i--) {
                             if (rpname.Contains(kana[i]) == true) {
                                 rpname = rpname.Replace(kana[i],roma[i]);
                             }
@@ -471,6 +471,9 @@ namespace WindowsFormsApplication1
                             rpname = rpname.Substring(0, tu) + cp + rpname.Substring(tu+1, rpname.Length-tu-1);
                         }
                         rpname = Strings.StrConv(rpname, VbStrConv.Narrow, 0x0411);
+
+                        //string aa = "・ーヾヿ";
+                        //aa = Strings.StrConv(aa, VbStrConv.Narrow, 0x0411);
 
                         for (i = 0; i < 11; i++)
                         {
@@ -524,7 +527,7 @@ namespace WindowsFormsApplication1
         public static bool hankaku_zenkana(char c)
         {
             return ('\u0020' <= c && c <= '\u007E')
-                || ('\u30A0' <= c && c <= '\u30FF')
+                || ('\u30A0' <= c && c <= '\u30FC')
                 || ('\u31F0' <= c && c <= '\u31FF')
                 || ('\u3099' <= c && c <= '\u309C');
         }        
@@ -1007,8 +1010,8 @@ namespace WindowsFormsApplication1
                         rpname = mecab_sparse_tostr(mecab, rpname);
                         mecab_destroy(mecab);
 
-                        string[] kana = { "ー", "ァ", "ィ", "ゥ", "ェ", "ォ", "ヶ", "ア", "イ", "ウ", "エ", "オ", "カ", "キ", "ク", "ケ", "コ", "サ", "シ", "ス", "セ", "ソ", "タ", "チ", "ツ", "テ", "ト", "ナ", "ニ", "ヌ", "ネ", "ノ", "ハ", "ヒ", "フ", "ヘ", "ホ", "マ", "ミ", "ム", "メ", "モ", "ヤ", "ユ", "ヨ", "ラ", "リ", "ル", "レ", "ロ", "ワ", "ヰ", "ヱ", "ヲ", "ン", "ガ", "ギ", "グ", "ゲ", "ゴ", "ザ", "ジ", "ズ", "ゼ", "ゾ", "ダ", "ヂ", "ヅ", "デ", "ド", "バ", "ビ", "ブ", "ベ", "ボ", "パ", "ピ", "プ", "ペ", "ポ", "キャ", "キュ", "キョ", "シャ", "シュ", "ショ", "チャ", "チュ", "チョ", "ニャ", "ニュ", "ニョ", "ヒャ", "ヒュ", "ヒョ", "ミャ", "ミュ", "ミョ", "リャ", "リュ", "リョ", "ギャ", "ギュ", "ギョ", "ジャ", "ジュ", "ジョ", "ビャ", "ビュ", "ビョ", "ピャ", "ピュ", "ピョ", "ファ", "フィ", "フェ", "フォ", "ヴァ", "ヴィ", "ヴ", "ヴェ", "ヴォ" };
-                        string[] roma = { "-", "a", "i", "u", "e", "o", "ke", "A", "I", "U", "E", "O", "KA", "KI", "KU", "KE", "KO", "SA", "SHI", "SU", "SE", "SO", "TA", "CHI", "TSU", "TE", "TO", "NA", "NI", "NU", "NE", "NO", "HA", "HI", "FU", "HE", "HO", "MA", "MI", "MU", "ME", "MO", "YA", "YU", "YO", "RA", "RI", "RU", "RE", "RO", "WA", "I", "E", "O", "N", "GA", "GI", "GU", "GE", "GO", "ZA", "JI", "ZU", "ZE", "ZO", "DA", "JI", "ZU", "DE", "DO", "BA", "BI", "BU", "BE", "BO", "PA", "PI", "PU", "PE", "PO", "KYA", "KYU", "KYO", "SHA", "SHU", "SHO", "CHA", "CHU", "CHO", "NYA", "NYU", "NYO", "HYA", "HYU", "HYO", "MYA", "MYU", "MYO", "RYA", "RYU", "RYO", "GYA", "GYU", "GYO", "JA", "JU", "JO", "BYA", "BYU", "BYO", "PYA", "PYU", "PYO", "FA", "FI", "FE", "FO", "VA", "VI", "VU", "VE", "VO" };
+                        string[] kana = {"・", "ー", "ァ", "ィ", "ゥ", "ェ", "ォ", "ヶ", "ア", "イ", "ウ", "エ", "オ", "カ", "キ", "ク", "ケ", "コ", "サ", "シ", "ス", "セ", "ソ", "タ", "チ", "ツ", "テ", "ト", "ナ", "ニ", "ヌ", "ネ", "ノ", "ハ", "ヒ", "フ", "ヘ", "ホ", "マ", "ミ", "ム", "メ", "モ", "ヤ", "ユ", "ヨ", "ラ", "リ", "ル", "レ", "ロ", "ワ", "ヰ", "ヱ", "ヲ", "ン", "ガ", "ギ", "グ", "ゲ", "ゴ", "ザ", "ジ", "ズ", "ゼ", "ゾ", "ダ", "ヂ", "ヅ", "デ", "ド", "バ", "ビ", "ブ", "ベ", "ボ", "パ", "ピ", "プ", "ペ", "ポ", "キャ", "キュ", "キョ", "シャ", "シュ", "ショ", "チャ", "チュ", "チョ", "ニャ", "ニュ", "ニョ", "ヒャ", "ヒュ", "ヒョ", "ミャ", "ミュ", "ミョ", "リャ", "リュ", "リョ", "ギャ", "ギュ", "ギョ", "ジャ", "ジュ", "ジョ", "ビャ", "ビュ", "ビョ", "ピャ", "ピュ", "ピョ", "ファ", "フィ", "フェ", "フォ", "ヴァ", "ヴィ", "ヴ", "ヴェ", "ヴォ" };
+                        string[] roma = { " ","-", "a", "i", "u", "e", "o", "ke", "A", "I", "U", "E", "O", "KA", "KI", "KU", "KE", "KO", "SA", "SHI", "SU", "SE", "SO", "TA", "CHI", "TSU", "TE", "TO", "NA", "NI", "NU", "NE", "NO", "HA", "HI", "FU", "HE", "HO", "MA", "MI", "MU", "ME", "MO", "YA", "YU", "YO", "RA", "RI", "RU", "RE", "RO", "WA", "I", "E", "O", "N", "GA", "GI", "GU", "GE", "GO", "ZA", "JI", "ZU", "ZE", "ZO", "DA", "JI", "ZU", "DE", "DO", "BA", "BI", "BU", "BE", "BO", "PA", "PI", "PU", "PE", "PO", "KYA", "KYU", "KYO", "SHA", "SHU", "SHO", "CHA", "CHU", "CHO", "NYA", "NYU", "NYO", "HYA", "HYU", "HYO", "MYA", "MYU", "MYO", "RYA", "RYU", "RYO", "GYA", "GYU", "GYO", "JA", "JU", "JO", "BYA", "BYU", "BYO", "PYA", "PYU", "PYO", "FA", "FI", "FE", "FO", "VA", "VI", "VU", "VE", "VO" };
 
 
                         string[] suuji = { "零", "壱", "弐", "参", "廿", "卅", "卌" };
@@ -1032,11 +1035,11 @@ namespace WindowsFormsApplication1
                             char x = Convert.ToChar(cp);
                             if (hankaku_zenkana(x) == false)
                             {
-                                rpname = rpname.Replace(cp, "");
+                                rpname = rpname.Replace(cp, " ");
                             }
                         }
 
-                        for (j = 121; j >= 0; j--)
+                        for (j = 122; j >= 0; j--)
                         {
                             if (rpname.Contains(kana[j]) == true)
                             {
