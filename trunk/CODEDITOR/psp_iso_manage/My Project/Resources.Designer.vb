@@ -105,6 +105,33 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  clrmamepro用DATファイルを選択します に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property rm() As String
+            Get
+                Return ResourceManager.GetString("rm", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  clrmamepro用DATファイルを使ってリネームします に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property rmdat() As String
+            Get
+                Return ResourceManager.GetString("rmdat", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  OFFLINE用XMLファイルを使ってリネームします に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property rmxml() As String
+            Get
+                Return ResourceManager.GetString("rmxml", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  OFFLINE用XMLを選択します
         '''CRC32と一致する管理名,画像が検索ボタンで適用されます に類似しているローカライズされた文字列を検索します。
         '''</summary>

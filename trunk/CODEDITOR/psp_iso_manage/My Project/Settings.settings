@@ -90,5 +90,8 @@ X:\PSP\GAME660\</Value>
     <Setting Name="pspinsdir" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="datpath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>
