@@ -65,6 +65,7 @@ Partial Class umdisomanger
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.SAVELS = New System.Windows.Forms.ToolStripMenuItem()
         Me.EXPORTPSPINS = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SAVE_clrmamepro = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.CLOSEToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.sort = New System.Windows.Forms.ToolStripMenuItem()
@@ -84,9 +85,18 @@ Partial Class umdisomanger
         Me.file_sort = New System.Windows.Forms.ToolStripMenuItem()
         Me.file_sort_up = New System.Windows.Forms.ToolStripMenuItem()
         Me.file_sort_down = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RENAME = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RMXML = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RMDAT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
+        Me.MNEN = New System.Windows.Forms.ToolStripMenuItem()
+        Me.FILEPATHToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.NAMEToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.BOTHToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.setting = New System.Windows.Forms.ToolStripMenuItem()
         Me.GUITOP = New System.Windows.Forms.ToolStripMenuItem()
         Me.xmlselect = New System.Windows.Forms.ToolStripMenuItem()
+        Me.rename_dat = New System.Windows.Forms.ToolStripMenuItem()
         Me.editpspdir = New System.Windows.Forms.ToolStripMenuItem()
         Me.HELPToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.online = New System.Windows.Forms.ToolStripMenuItem()
@@ -302,13 +312,13 @@ Partial Class umdisomanger
         'MenuStrip1
         '
         resources.ApplyResources(Me.MenuStrip1, "MenuStrip1")
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menufile, Me.sort, Me.setting, Me.HELPToolStripMenuItem})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menufile, Me.sort, Me.RENAME, Me.setting, Me.HELPToolStripMenuItem})
         Me.MenuStrip1.Name = "MenuStrip1"
         '
         'menufile
         '
         resources.ApplyResources(Me.menufile, "menufile")
-        Me.menufile.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ADD, Me.ToolStripSeparator2, Me.SAVELS, Me.EXPORTPSPINS, Me.ToolStripSeparator3, Me.CLOSEToolStripMenuItem})
+        Me.menufile.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ADD, Me.ToolStripSeparator2, Me.SAVELS, Me.EXPORTPSPINS, Me.SAVE_clrmamepro, Me.ToolStripSeparator3, Me.CLOSEToolStripMenuItem})
         Me.menufile.Name = "menufile"
         '
         'ADD
@@ -330,6 +340,11 @@ Partial Class umdisomanger
         '
         resources.ApplyResources(Me.EXPORTPSPINS, "EXPORTPSPINS")
         Me.EXPORTPSPINS.Name = "EXPORTPSPINS"
+        '
+        'SAVE_clrmamepro
+        '
+        resources.ApplyResources(Me.SAVE_clrmamepro, "SAVE_clrmamepro")
+        Me.SAVE_clrmamepro.Name = "SAVE_clrmamepro"
         '
         'ToolStripSeparator3
         '
@@ -431,10 +446,54 @@ Partial Class umdisomanger
         resources.ApplyResources(Me.file_sort_down, "file_sort_down")
         Me.file_sort_down.Name = "file_sort_down"
         '
+        'RENAME
+        '
+        resources.ApplyResources(Me.RENAME, "RENAME")
+        Me.RENAME.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RMXML, Me.RMDAT, Me.ToolStripSeparator4, Me.MNEN})
+        Me.RENAME.Name = "RENAME"
+        '
+        'RMXML
+        '
+        resources.ApplyResources(Me.RMXML, "RMXML")
+        Me.RMXML.Name = "RMXML"
+        '
+        'RMDAT
+        '
+        resources.ApplyResources(Me.RMDAT, "RMDAT")
+        Me.RMDAT.Name = "RMDAT"
+        '
+        'ToolStripSeparator4
+        '
+        resources.ApplyResources(Me.ToolStripSeparator4, "ToolStripSeparator4")
+        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        '
+        'MNEN
+        '
+        resources.ApplyResources(Me.MNEN, "MNEN")
+        Me.MNEN.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FILEPATHToolStripMenuItem, Me.NAMEToolStripMenuItem, Me.BOTHToolStripMenuItem})
+        Me.MNEN.Name = "MNEN"
+        '
+        'FILEPATHToolStripMenuItem
+        '
+        resources.ApplyResources(Me.FILEPATHToolStripMenuItem, "FILEPATHToolStripMenuItem")
+        Me.FILEPATHToolStripMenuItem.Checked = True
+        Me.FILEPATHToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.FILEPATHToolStripMenuItem.Name = "FILEPATHToolStripMenuItem"
+        '
+        'NAMEToolStripMenuItem
+        '
+        resources.ApplyResources(Me.NAMEToolStripMenuItem, "NAMEToolStripMenuItem")
+        Me.NAMEToolStripMenuItem.Name = "NAMEToolStripMenuItem"
+        '
+        'BOTHToolStripMenuItem
+        '
+        resources.ApplyResources(Me.BOTHToolStripMenuItem, "BOTHToolStripMenuItem")
+        Me.BOTHToolStripMenuItem.Name = "BOTHToolStripMenuItem"
+        '
         'setting
         '
         resources.ApplyResources(Me.setting, "setting")
-        Me.setting.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GUITOP, Me.xmlselect, Me.editpspdir})
+        Me.setting.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GUITOP, Me.xmlselect, Me.rename_dat, Me.editpspdir})
         Me.setting.Name = "setting"
         '
         'GUITOP
@@ -446,6 +505,11 @@ Partial Class umdisomanger
         '
         resources.ApplyResources(Me.xmlselect, "xmlselect")
         Me.xmlselect.Name = "xmlselect"
+        '
+        'rename_dat
+        '
+        resources.ApplyResources(Me.rename_dat, "rename_dat")
+        Me.rename_dat.Name = "rename_dat"
         '
         'editpspdir
         '
@@ -620,5 +684,15 @@ Partial Class umdisomanger
     Friend WithEvents PpriorUSAToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents PriorEUToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents RENAME As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents RMXML As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents RMDAT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents rename_dat As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator4 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents MNEN As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents FILEPATHToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents NAMEToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents BOTHToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents SAVE_clrmamepro As System.Windows.Forms.ToolStripMenuItem
 
 End Class

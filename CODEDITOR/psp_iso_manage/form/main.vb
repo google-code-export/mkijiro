@@ -9,7 +9,7 @@ Imports System.Globalization
 
 Public Class umdisomanger
     Friend psx As Boolean = False
-    Friend lang(45) As String
+    Friend lang(50) As String
 
     Private Sub load_list(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         If File.Exists(Application.StartupPath & "\path.txt") = True Then
@@ -87,6 +87,10 @@ Public Class umdisomanger
             My.Settings.imgdir = Application.StartupPath & "\imgs\ADVANsCEne Sony PSP Collection\"
         End If
 
+        If File.Exists(My.Settings.datpath) = False Then
+            My.Settings.datpath = Application.StartupPath & "\datas\a.dat"
+        End If
+
         If My.Settings.pspinsdir = "" Then
             My.Settings.pspinsdir = Application.StartupPath & "\"
         End If
@@ -115,6 +119,9 @@ Public Class umdisomanger
             editpspdir.ToolTipText = My.Resources.pspdir
             xmlselect.ToolTipText = My.Resources.xml
             EXPORTPSPINS.ToolTipText = My.Resources.po_gei
+            rename_dat.ToolTipText = My.Resources.rm
+            RMXML.ToolTipText = My.Resources.rmxml
+            RMDAT.ToolTipText = My.Resources.rmdat
             If File.Exists(Application.StartupPath & "\ja\ja.txt") = True Then
                 Dim lw As New System.IO.StreamReader(Application.StartupPath & "\ja\ja.txt", System.Text.Encoding.GetEncoding(932))
                 Dim i As Integer
@@ -266,7 +273,7 @@ Public Class umdisomanger
                         img &= st.ToString & "-" & en.ToString & "\"
 
                         bitmap_resize(PictureBox1, img & num.ToString & "a.png", 104, 181)
-                        bitmap_resize(PictureBox2, img & num.ToString & "b.png", 382, 181)
+                        bitmap_resize(PictureBox2, img & num.ToString & "b.png", 320, 181)
                         treenode.Name = img & num.ToString & ".png"
 
                         If crc.Text = "" Then
@@ -1749,9 +1756,91 @@ Public Class umdisomanger
         End Try
     End Sub
 
+
+    Private Sub rename_dat_Click(sender As System.Object, e As System.EventArgs) Handles rename_dat.Click
+
+        Dim ofd As New OpenFileDialog()
+        ofd.InitialDirectory = Path.GetDirectoryName(My.Settings.datpath)
+        '"DAT/ZIPファイルを選択してください"
+        ofd.Filter = lang(46)
+        ofd.Title = lang(47)
+        ofd.RestoreDirectory = True
+
+        If ofd.ShowDialog() = DialogResult.OK Then
+
+            Dim fs As New FileStream(ofd.FileName, System.IO.FileMode.Open, System.IO.FileAccess.Read)
+            'ファイルを読み込むバイト型配列を作成する
+            Dim bs(CInt(fs.Length - 1)) As Byte
+            'ファイルの内容をすべて読み込む
+            fs.Read(bs, 0, bs.Length)
+            '閉じる
+            fs.Close()
+            'ZIPHEAD
+            If bs(0) = &H50 AndAlso bs(1) = &H4B AndAlso bs(2) = &H3 AndAlso bs(3) = &H4 Then
+                '展開するZIP書庫のパス
+                Dim zipPath As String = ofd.FileName
+                'ZIP書庫を読み込む 
+                Dim zfs As New System.IO.FileStream( _
+                    zipPath, _
+                    System.IO.FileMode.Open, _
+                    System.IO.FileAccess.Read)
+                'ZipInputStreamオブジェクトの作成 
+                Dim zis As New ICSharpCode.SharpZipLib.Zip.ZipInputStream(zfs)
+
+                'ZIP内のエントリを列挙 
+                Dim ze As ICSharpCode.SharpZipLib.Zip.ZipEntry
+                Dim xmll As Boolean = False
+                While True
+                    'ZipEntryを取得
+                    ze = zis.GetNextEntry()
+                    If ze Is Nothing Then
+                        Exit While
+                    End If
+                    If Not ze.IsDirectory Then
+                        '展開先のファイル名を決定 
+                        Dim fileName As String = System.IO.Path.GetFileName(ze.Name)
+
+                        If ze.Name.Contains(".xml") = True Then
+                            '展開するファイルを読み込む
+                            Dim buffer As Byte() = New Byte(2047) {}
+                            Dim len As Integer = 0
+                            Dim i As Integer = 0
+                            While True
+                                len = zis.Read(buffer, 0, buffer.Length)
+                                If len = 0 Then
+                                    Exit While
+                                End If
+                                'ファイルに書き込む
+                                Array.Resize(bs, i + buffer.Length)
+                                Array.ConstrainedCopy(buffer, 0, bs, i, buffer.Length)
+                                i += buffer.Length
+                            End While
+                            xmll = True
+                        End If
+                    End If
+                End While
+
+                '閉じる 
+                zis.Close()
+                zfs.Close()
+            End If
+
+            Dim s As String = System.Text.Encoding.GetEncoding(932).GetString(bs)
+            Dim maskdat As String = "clrmamepro \(\r\n\tname "".+""\r\n\tdescription "".+""\r\n\tversion \d{8}\r\n\tcomment "".+""\r\n\)"
+            Dim q As New Regex(maskdat, RegexOptions.ECMAScript)
+            Dim dat As Match = q.Match(s)
+            If dat.Success Then
+                My.Settings.datpath = ofd.FileName
+            Else
+                '"DATではありません", "DAT"
+                MessageBox.Show(lang(48), lang(45))
+            End If
+        End If
+    End Sub
+
     Private Sub xmlselect_Click(sender As System.Object, e As System.EventArgs) Handles xmlselect.Click
         Dim ofd As New OpenFileDialog()
-        ofd.InitialDirectory = Application.StartupPath & "\datas"
+        ofd.InitialDirectory = Path.GetDirectoryName(My.Settings.xml)
         '"xml/zipファイル(*.xml;*.zip)|*xml;*.zip"
         '"XML/ZIPファイルを選択してください"
         ofd.Filter = lang(29)
@@ -2033,6 +2122,93 @@ Public Class umdisomanger
 
 #End Region
 
+
+    Private Sub SAVE_clrmamepro_Click(sender As System.Object, e As System.EventArgs) Handles SAVE_clrmamepro.Click
+
+        Try
+            Dim sw As New System.IO.StreamWriter(Application.StartupPath & "\games.dat", False, System.Text.Encoding.GetEncoding(932))
+            Dim sb As New StringBuilder
+            Dim s As String = ""
+            Dim iso As Boolean = False
+            Dim impath As String = ""
+            Dim fpath As String = ""
+            Dim mode As String = ""
+            Dim instdir As String = ""
+            Dim emphash As String() = {"00000000", "000000000000000000000000", "000000000000000000000000000000000"}
+            Dim hash(2) As String
+            Dim psf As New psf
+            sb.AppendLine("clrmamepro (")
+            sb.Append(vbTab)
+            sb.AppendLine("name ""Sony - PlayStation Portable""")
+            sb.Append(vbTab)
+            sb.AppendLine("description ""Sony - PlayStation Portable""")
+            sb.Append(vbTab)
+            sb.Append("version ")
+            sb.AppendLine(Now.ToString.Replace("/", "").Substring(0, 8))
+            sb.Append(vbTab)
+            sb.Append("comment(""")
+            sb.Append(System.Environment.ExpandEnvironmentVariables("%username%"))
+            sb.AppendLine(""")")
+            sb.AppendLine()
+
+            For Each n As TreeNode In TreeView1.Nodes
+                sb.AppendLine("game (")
+                sb.Append(vbTab)
+                sb.Append("name """)
+                sb.Append(n.Text)
+                sb.AppendLine("""")
+                sb.Append(vbTab)
+                sb.Append("description """)
+                sb.Append(n.Text)
+                sb.AppendLine("""")
+                sb.Append(vbTab)
+                sb.Append("serial """)
+                sb.Append(n.Tag.ToString)
+                sb.AppendLine("""")
+                sb.Append(vbTab)
+                sb.Append("rom ( name """)
+                sb.Append(n.Text)
+                sb.Append(".iso"" size ")
+                hash(0) = emphash(0)
+                hash(1) = emphash(1)
+                hash(2) = emphash(2)
+
+                For Each m As TreeNode In n.Nodes
+                    If m.Index = 0 Then
+                        Dim fs As New System.IO.FileStream(m.Tag.ToString, System.IO.FileMode.Open, System.IO.FileAccess.Read)
+                        sb.Append(fs.Length.ToString)
+                        fs.Close()
+                    End If
+                    If m.Text.Contains("CRC32") Then
+                        hash(0) = m.Text.ToString.Remove(0, 7)
+                    End If
+                    If m.Text.Contains("MD5") Then
+                        hash(1) = m.Text.ToString.Remove(0, 5)
+                    End If
+                    If m.Text.Contains("SHA-1") Then
+                        hash(2) = m.Text.ToString.Remove(0, 7)
+                    End If
+                Next
+                sb.Append(" crc ")
+                sb.Append(hash(0))
+                sb.Append(" md5 ")
+                sb.Append(hash(1))
+                sb.Append(" sha1 ")
+                sb.Append(hash(2))
+                sb.AppendLine(" )")
+                sb.AppendLine(")")
+                sb.AppendLine()
+            Next
+            sw.Write(sb.ToString)
+            sw.Close()
+
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, lang(7))
+        End Try
+    End Sub
+
+
     Private Sub EXPORTPSPINSToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles EXPORTPSPINS.Click
         Try
             Dim sw As New System.IO.StreamWriter(Application.StartupPath & "\games.ini", False, System.Text.Encoding.GetEncoding(932))
@@ -2199,5 +2375,182 @@ Public Class umdisomanger
             End If
         End Try
     End Function
+
+    Private Sub DATToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles RMDAT.Click
+        Try
+            Dim dat As String = My.Settings.datpath
+            If File.Exists(dat) = True Then
+                Dim sr As New System.IO.StreamReader(dat, System.Text.Encoding.GetEncoding(932))
+                Dim s As String = sr.ReadToEnd()
+                sr.Close()
+                Dim ss As String = ""
+                Dim rp As String = ""
+                Dim path As String = ""
+                Dim hit As Integer = 0
+                TreeView1.CheckBoxes = True
+                For Each n As TreeNode In TreeView1.Nodes
+                    n.Checked = False
+                    ss = n.Tag.ToString
+                    If ss.Contains("UP") Or ss.Contains("HB") Then
+                    Else
+                        For Each b As TreeNode In n.Nodes
+                            If b.Index = 0 Then
+                                path = b.Tag.ToString
+                            End If
+                            If b.Text.Contains("CRC32") Then
+                                ss = b.Text.Remove(0, 6).Trim
+                                ss = "crc " & ss & " md5"
+                                hit = s.IndexOf(ss)
+                                If hit > 0 Then
+                                    ss = s.Remove(hit + 8, s.Length - (hit + 8))
+                                    hit = ss.LastIndexOf("name """)
+                                    ss = ss.Remove(0, hit + 6)
+                                    hit = ss.IndexOf("""")
+                                    ss = ss.Remove(hit, ss.Length - hit)
+                                    rp = System.IO.Path.GetDirectoryName(path) & "\" & ss
+                                    If rp = path Then
+                                        b.Parent.Checked = True
+                                    ElseIf File.Exists(rp) Then
+
+                                    Else
+                                        File.Move(path, rp)
+                                        b.Parent.Nodes(0).Tag = rp
+                                        b.Parent.Checked = True
+                                    End If
+
+                                End If
+                            End If
+                        Next
+                    End If
+                Next
+                Beep()
+            Else
+                '"リネーム用DATがみつかりません", "DATエラー"
+                MessageBox.Show(lang(44), lang(45))
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "")
+        End Try
+    End Sub
+
+    Private Sub XML使用ToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles RMXML.Click
+
+        Try
+
+
+            Dim xml As String = My.Settings.xml
+            If File.Exists(xml) = True Then
+
+                Dim hash As String = crc.Text.ToUpper
+                Dim ffs As New FileStream(xml, System.IO.FileMode.Open, System.IO.FileAccess.Read)
+                'ファイルを読み込むバイト型配列を作成する
+                Dim bs(CInt(ffs.Length - 1)) As Byte
+                'ファイルの内容をすべて読み込む
+                ffs.Read(bs, 0, bs.Length)
+                '閉じる
+                ffs.Close()
+                'ZIPHEAD
+                If bs(0) = &H50 AndAlso bs(1) = &H4B AndAlso bs(2) = &H3 AndAlso bs(3) = &H4 Then
+                    '展開するZIP書庫のパス
+                    Dim zipPath As String = xml
+                    'ZIP書庫を読み込む 
+                    Dim zfs As New System.IO.FileStream( _
+                        zipPath, _
+                        System.IO.FileMode.Open, _
+                        System.IO.FileAccess.Read)
+                    'ZipInputStreamオブジェクトの作成 
+                    Dim zis As New ICSharpCode.SharpZipLib.Zip.ZipInputStream(zfs)
+
+                    'ZIP内のエントリを列挙 
+                    Dim ze As ICSharpCode.SharpZipLib.Zip.ZipEntry
+                    Dim xmll As Boolean = False
+                    While True
+                        'ZipEntryを取得
+                        ze = zis.GetNextEntry()
+                        If ze Is Nothing Then
+                            Exit While
+                        End If
+                        If Not ze.IsDirectory Then
+                            '展開先のファイル名を決定 
+                            Dim fileName As String = System.IO.Path.GetFileName(ze.Name)
+
+                            If ze.Name.Contains(".xml") = True Then
+                                '展開するファイルを読み込む
+                                Dim buffer As Byte() = New Byte(2047) {}
+                                Dim len As Integer = 0
+                                Dim i As Integer = 0
+                                While True
+                                    len = zis.Read(buffer, 0, buffer.Length)
+                                    If len = 0 Then
+                                        Exit While
+                                    End If
+                                    'ファイルに書き込む
+                                    Array.Resize(bs, i + buffer.Length)
+                                    Array.ConstrainedCopy(buffer, 0, bs, i, buffer.Length)
+                                    i += buffer.Length
+                                End While
+                                xmll = True
+                            End If
+                        End If
+                    End While
+
+                    '閉じる 
+                    zis.Close()
+                    zfs.Close()
+                End If
+                Dim s As String = System.Text.Encoding.GetEncoding(65001).GetString(bs)
+                ffs.Close()
+
+
+                Dim ss As String = ""
+                Dim rp As String = ""
+                Dim path As String = ""
+                Dim hit As Integer = 0
+                TreeView1.CheckBoxes = True
+                For Each n As TreeNode In TreeView1.Nodes
+                    n.Checked = False
+                    ss = n.Tag.ToString
+                    If ss.Contains("UP") Or ss.Contains("HB") Then
+                    Else
+                        For Each b As TreeNode In n.Nodes
+                            If b.Index = 0 Then
+                                path = b.Tag.ToString
+                            End If
+                            If b.Text.Contains("CRC32") Then
+                                ss = b.Text.Remove(0, 6).Trim
+                                Dim mask As String = "<romCRC extension="".iso"">" & ss & "</romCRC>"
+                                Dim r As New Regex(mask, RegexOptions.ECMAScript)
+                                Dim m As Match = r.Match(s)
+                                If m.Success Then
+                                    ss = s.Remove(m.Index + m.Length, s.Length - (m.Index + m.Length))
+                                    ss = ss.Remove(0, ss.LastIndexOf("<title>") + 7)
+                                    ss = ss.Remove(ss.LastIndexOf("</title>"), ss.Length - ss.LastIndexOf("</title>"))
+
+                                    rp = System.IO.Path.GetDirectoryName(path) & "\" & ss & ".iso"
+                                    If rp = path Then
+                                        b.Parent.Checked = True
+                                    ElseIf File.Exists(rp) Then
+
+                                    Else
+                                        File.Move(path, rp)
+                                        b.Parent.Nodes(0).Tag = rp
+                                        b.Parent.Checked = True
+                                    End If
+
+                                End If
+                            End If
+                        Next
+                    End If
+                Next
+                Beep()
+            Else
+
+                '"画像検索用のoffline用XMLがみつかりません", "XMLエラー"
+                MessageBox.Show(lang(5), lang(6))
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "")
+        End Try
+    End Sub
 
 End Class

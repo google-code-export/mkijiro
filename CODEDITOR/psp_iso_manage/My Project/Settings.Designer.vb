@@ -196,6 +196,18 @@ Namespace My
                 Me("pspinsdir") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property datpath() As String
+            Get
+                Return CType(Me("datpath"),String)
+            End Get
+            Set
+                Me("datpath") = value
+            End Set
+        End Property
     End Class
 End Namespace
 
