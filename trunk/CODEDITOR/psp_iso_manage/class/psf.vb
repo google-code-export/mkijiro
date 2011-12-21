@@ -188,7 +188,7 @@ Public Class psf
     End Function
 
 
-    Public Function GETNAME(ByVal filename As String) As String
+    Public Function GETNAME(ByVal filename As String, ByVal mode As String) As String
 
         Dim fs As New FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read)
         Dim bs(2047) As Byte
@@ -220,7 +220,10 @@ Public Class psf
                     Dim psfst As String() = pname.Split(Chr(0))
                     i = 0
                     While True
-                        If psfst(i) = "TITLE" Then
+                        If mode = "N" AndAlso psfst(i) = "TITLE" Then
+                            Exit While
+                        End If
+                        If mode = "I" AndAlso psfst(i) = "DISC_VERSION" Then
                             Exit While
                         End If
                         If i = z Then
@@ -276,8 +279,8 @@ Public Class psf
                     Dim str(8) As Byte
 
                     fs.Seek(&H8008, SeekOrigin.Begin)
-                    fs.Read(Str, 0, 9)
-                    Dim iso As String = Encoding.GetEncoding(0).GetString(Str)
+                    fs.Read(str, 0, 9)
+                    Dim iso As String = Encoding.GetEncoding(0).GetString(str)
 
                     fs.Seek(&H8050, SeekOrigin.Begin)
                     fs.Read(size, 0, 5)
@@ -352,25 +355,56 @@ Public Class psf
                             Dim psfst As String() = pname.Split(Chr(0))
                             i = 0
                             While True
-                                If psfst(i) = "TITLE" Then
+                                If mode = "N" AndAlso psfst(i) = "TITLE" Then
                                     Exit While
                                 End If
-                                If i = z Then
+                                If mode = "I" AndAlso psfst(i) = "DISC_VERSION" Then
+                                    Exit While
+                                End If
+                                If i = z - 1 Then
                                     fs.Close()
-                                    Return ""
+                                    If mode <> "A" Then
+                                        Return ""
+                                    Else
+                                        Exit While
+                                    End If
                                 End If
                                 i += 1
                             End While
 
-                            Array.ConstrainedCopy(bs, 32 + i * 16, offset, 0, 4)
-                            i = BitConverter.ToInt32(offset, 0)
-                            k += i
+                            If mode = "A" Then
+                                Dim name(128) As Byte
+                                Dim ss As New StringBuilder
+                                Dim h As Integer = 0
+                                For i = 0 To z - 1
+                                    Array.ConstrainedCopy(bs, 32 + i * 16, offset, 0, 4)
+                                    h = BitConverter.ToInt32(offset, 0)
+                                    Array.ConstrainedCopy(bs, k + h, name, 0, 128)
+                                   If bs(k + h) < 20 Then
+                                        Array.Resize(name, 4)
+                                        result = BitConverter.ToInt32(name, 0).ToString
+                                        Array.Resize(name, 128)
+                                    Else
+                                        result = Encoding.GetEncoding(65001).GetString(name)
+                                        h = result.IndexOf(vbNullChar)
+                                        result = result.Substring(0, h)
+                                    End If
+                                    ss.Append(psfst(i))
+                                    ss.Append(" ")
+                                    ss.AppendLine(result)
+                                Next
+                                result = ss.ToString
+                            Else
+                                Array.ConstrainedCopy(bs, 32 + i * 16, offset, 0, 4)
+                                i = BitConverter.ToInt32(offset, 0)
+                                k += i
 
-                            Dim name(128) As Byte
-                            Array.ConstrainedCopy(bs, k, name, 0, 128)
-                            result = Encoding.GetEncoding(65001).GetString(name)
-                            i = result.IndexOf(vbNullChar)
-                            result = result.Substring(0, i)
+                                Dim name(128) As Byte
+                                Array.ConstrainedCopy(bs, k, name, 0, 128)
+                                result = Encoding.GetEncoding(65001).GetString(name)
+                                i = result.IndexOf(vbNullChar)
+                                result = result.Substring(0, i)
+                            End If
 
                             If result = "" Then
                                 result = ""
