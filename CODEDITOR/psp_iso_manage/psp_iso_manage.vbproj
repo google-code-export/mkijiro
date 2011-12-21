@@ -91,6 +91,12 @@
     <Compile Include="form\editor.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="form\extra.Designer.vb">
+      <DependentUpon>extra.vb</DependentUpon>
+    </Compile>
+    <Compile Include="form\extra.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="form\list.Designer.vb">
       <DependentUpon>list.vb</DependentUpon>
     </Compile>
@@ -132,6 +138,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="form\editor.resx">
       <DependentUpon>editor.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form\extra.resx">
+      <DependentUpon>extra.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="form\list.ja.resx">
       <DependentUpon>list.vb</DependentUpon>
