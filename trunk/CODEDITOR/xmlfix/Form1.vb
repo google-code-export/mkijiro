@@ -8,7 +8,7 @@ Public Class Form1
     Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles Button1.Click
         Try
             Dim sr As New System.IO.StreamReader(Application.StartupPath & "\nointro.txt", _
-                System.Text.Encoding.GetEncoding(65001))
+                System.Text.Encoding.GetEncoding(932))
             Dim s As String = ""
             Dim ss As String = ""
             Dim index(450) As Integer
@@ -28,32 +28,38 @@ Public Class Form1
             End While
             sr.Close()
 
-            Dim sr2 As New System.IO.StreamReader(Application.StartupPath & "\ADVANsCEne_PSP.xml", _
-                System.Text.Encoding.GetEncoding(65001))
-            Dim wr As New System.IO.StreamWriter(Application.StartupPath & "\ADVANsCEne_PSP(nointrofix).xml",
-                False, System.Text.Encoding.GetEncoding(65001))
-            Dim q As New Regex("<imageNumber>\d+</imageNumber>", RegexOptions.ECMAScript)
-            Dim n As Match
-            Dim p As New Regex("<romCRC extension=""\.iso"">[0-9A-F]{8}</romCRC>", RegexOptions.ECMAScript)
-            Dim l As Match
-            Dim str As New StringBuilder
-            Dim rplace As Boolean = False
-            i = 0
-            While sr2.Peek() > -1
-                s = sr2.ReadLine()
-                n = q.Match(s)
-                l = p.Match(s)
+            Dim ofd As New OpenFileDialog()
+            ofd.Filter = "XMLファイル(*.xml;)|*.xml"
+            If ofd.ShowDialog() = DialogResult.OK Then
+                Dim sr2 As New System.IO.StreamReader(ofd.FileName, _
+                    System.Text.Encoding.GetEncoding(65001))
+                Dim wr As New System.IO.StreamWriter(Path.GetDirectoryName(ofd.FileName) & "\" & Path.GetFileNameWithoutExtension(ofd.FileName) & "(nointro_fix).xml",
+                    False, System.Text.Encoding.GetEncoding(65001))
+                Dim q As New Regex("<imageNumber>\d+</imageNumber>", RegexOptions.ECMAScript)
+                Dim n As Match
+                Dim p As New Regex("<romCRC extension=""\.iso"">[0-9A-F]{8}</romCRC>", RegexOptions.ECMAScript)
+                Dim l As Match
+                Dim str As New StringBuilder
+                Dim rplace As Boolean = False
+                i = 0
+                While sr2.Peek() > -1
+                    s = sr2.ReadLine()
+                    n = q.Match(s)
+                    l = p.Match(s)
+                    If s.Contains("<datVersion>") Then
+                        s = vbTab & vbTab & "<datVersion>999</datVersion>"
+                    End If
 
                     If n.Success Then
                         rplace = False
                         ss = n.Value.Remove(0, 13)
                         ss = ss.Remove(ss.Length - 14, 14)
-                    While CDbl(ss) > index(i)
-                        If index(i) = 0 Then
-                            Exit While
-                        End If
-                        i += 1
-                    End While
+                        While CDbl(ss) > index(i)
+                            If index(i) = 0 Then
+                                Exit While
+                            End If
+                            i += 1
+                        End While
 
 
                         If CDbl(ss) = index(i) Then
@@ -65,10 +71,11 @@ Public Class Form1
                         i += 1
                     End If
                     str.AppendLine(s)
-            End While
-            sr2.Close()
-            wr.Write(str.ToString)
-            wr.Close()
+                End While
+                sr2.Close()
+                wr.Write(str.ToString)
+                wr.Close()
+            End If
         Catch ex As Exception
             MessageBox.Show(ex.Message, "例外")
         End Try
