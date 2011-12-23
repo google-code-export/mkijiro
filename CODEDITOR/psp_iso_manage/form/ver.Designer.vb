@@ -54,7 +54,7 @@ Partial Class ver
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(138, 14)
         Me.Label3.TabIndex = 2
-        Me.Label3.Text = "BUID;2011/12/22 0:25"
+        Me.Label3.Text = "BUID;2011/12/24 7:41"
         '
         'Label4
         '
