@@ -380,7 +380,7 @@ Public Class psf
                                     Array.ConstrainedCopy(bs, 32 + i * 16, offset, 0, 4)
                                     h = BitConverter.ToInt32(offset, 0)
                                     Array.ConstrainedCopy(bs, k + h, name, 0, 128)
-                                   If bs(k + h) < 20 Then
+                                    If bs(k + h) < 20 Then
                                         Array.Resize(name, 4)
                                         result = BitConverter.ToInt32(name, 0).ToString
                                         Array.Resize(name, 128)

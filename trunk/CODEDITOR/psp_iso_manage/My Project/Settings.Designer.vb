@@ -256,6 +256,18 @@ Namespace My
                 Me("alwayssave") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property romcode() As Boolean
+            Get
+                Return CType(Me("romcode"),Boolean)
+            End Get
+            Set
+                Me("romcode") = value
+            End Set
+        End Property
     End Class
 End Namespace
 
