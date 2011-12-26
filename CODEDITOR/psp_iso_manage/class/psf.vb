@@ -376,6 +376,10 @@ Public Class psf
                                 Dim name(128) As Byte
                                 Dim ss As New StringBuilder
                                 Dim h As Integer = 0
+                                ss.Append("SFO Version: ")
+                                ss.Append(bs(5).ToString)
+                                ss.Append(".")
+                                ss.AppendLine(bs(4).ToString.PadLeft(2, "0"c))
                                 For i = 0 To z - 1
                                     Array.ConstrainedCopy(bs, 32 + i * 16, offset, 0, 4)
                                     h = BitConverter.ToInt32(offset, 0)
@@ -390,7 +394,7 @@ Public Class psf
                                         result = result.Substring(0, h)
                                     End If
                                     ss.Append(psfst(i))
-                                    ss.Append(" ")
+                                    ss.Append(": ")
                                     ss.AppendLine(result)
                                 Next
                                 result = ss.ToString

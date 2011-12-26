@@ -128,7 +128,7 @@ void ui_cls()
 	font_output(100, 30,"CM Fusion " VER_STR);
 #endif
 	if(usbinit){
-		font_output(379-4*6, 30,"USB");
+		font_output(379-4*6, 42,"USB");
 	}
 
 	font_outputn(100, 42, ui_gv.ui_gname, 45);

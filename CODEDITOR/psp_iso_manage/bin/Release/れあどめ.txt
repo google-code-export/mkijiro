@@ -3,6 +3,9 @@
 そのかわりPARAM.SFOのタイトルになるからいちいちリネームする必要がない,圧縮不要なのでリネームが高速
 ゲームCRC32での画像検索はOFFLINEりすとのXML.DBを流用してるので、exeはOFFLINEと同じとこにおくこと
 
+2011/12/25
+SFO書き出しにSFOバージョンを追加
+
 2011/12/24
 サイズがセクター算出とあわないとき　オーバーダンプ時赤字、足りないとき青字になるようにした
 CMPRO出力でSHA1が一文字足らないときがあったので修正
@@ -89,8 +92,12 @@ _G 100万トンのバラバラ
 _P G:\PSP\ISO\ISOs\100MANTONNOBARABARA .ISO
 _I G:\PSP\IJIRO\CODEDITOR\psp_iso_manage\bin\Debug\imgs\ADVANsCEne Sony PSP Collection\2001-2500\2120.png
 _H CRC32: 9EC21B68,MD5: F9DDDF857DA7B37E56845E9991BE6ACD,SHA-1: 7D48A727CE3C45DF89C7D438BA8567B9AB77AEE6
+#X:\(転送先名）
+#コメントなど
 
 BY (ﾟ∀ﾟ)
 
-ZIB
+ZLIB
 http://www.icsharpcode.net/OpenSource/SharpZipLib/Default.aspx
+SFO
+http://www.ps3devwiki.com/index.php?title=PARAM.SFO#APP_VER
