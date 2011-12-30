@@ -44,6 +44,6 @@ char MODULE_DIR[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )="m
 char TAB_DIR [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "ms0:/PICTURE/CWC/TAB";
 char CMF_DIR [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "ms0:/PICTURE/CWC/CMF";
 char MEM_DIR [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "ms0:/CheatMaster/MEM";
-char SET_DIR [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "ms0:/CheatMaster/SET";
+char SET_DIR [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "ms0:/PICTURE/CWC/SET";
 char MCR_DIR [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "ms0:/CheatMaster/MCR";
 char IME_DIR[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "ms0:/CheatMaster/ime.dat";
