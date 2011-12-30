@@ -184,6 +184,7 @@ namespace WindowsFormsApplication1
                 }
                 isosize *= 2048;
                 trimsize = isosize;
+                sizecolor(fsize, trimsize);
                 label1.Text +=  Convert.ToString(fsize);
                 label2.Text += Convert.ToString(isosize);
                  if (isosize - fsize == 2048)
@@ -636,6 +637,7 @@ namespace WindowsFormsApplication1
                 Array.Copy(source, 0x50, isize, 0, 5);
                 long lbatotal = BitConverter.ToInt64(isize, 0);
                 lbatotal *= 2048;
+                sizecolor(size, lbatotal);
                 label1.Text = "推定サイズ　;" + size.ToString();
                 label2.Text = "セクター算出;" + lbatotal.ToString();
 
@@ -731,6 +733,7 @@ namespace WindowsFormsApplication1
             Array.Copy(source, 0x50, isize, 0, 5);
             long lbatotal = BitConverter.ToInt64(isize, 0);
             lbatotal *= 2048;
+            sizecolor(size, lbatotal);
             label1.Text = "推定サイズ　;" + (counter << 11).ToString();
             label2.Text = "セクター算出;" + lbatotal.ToString();
 
@@ -835,6 +838,7 @@ namespace WindowsFormsApplication1
                 Array.Copy(source, 0x50, isize, 0, 5);
                 long lbatotal = BitConverter.ToInt64(isize, 0);
                 lbatotal *= 2048;
+                sizecolor(size, lbatotal);
                 label1.Text = "推定サイズ　;"+ (counter<<11).ToString();
                 label2.Text = "セクター算出;" + lbatotal.ToString();
                 if (lbatotal - size ==0 && (iso.Contains("PSP GAME") || iso.Contains("UMD VIDEO")))
@@ -1101,6 +1105,21 @@ namespace WindowsFormsApplication1
 
         }
 
+        void sizecolor(long size, long trim)
+        {
+            if (size < trim)
+            {
+                label1.ForeColor = Color.Blue;
+            }
+            else if (size > trim)
+            {
+                label1.ForeColor = Color.Red;
+            }
+            else
+            {
+                label1.ForeColor = Color.Black;
+            }
+        }
     }
 }
 

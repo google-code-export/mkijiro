@@ -281,7 +281,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(230, 325);
+            this.ClientSize = new System.Drawing.Size(236, 325);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.sectorview);
             this.Controls.Add(this.groupBox2);
