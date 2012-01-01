@@ -12,6 +12,7 @@ Public Class Form1
                 System.Text.Encoding.GetEncoding(932))
             Dim s As String = ""
             Dim ss As String = ""
+            Dim fn As String = "NOINTRO_FIX"
             Dim index(450) As Integer
             Dim goodcrc(450) As String
             'B9D68496 > FD305564  0003
@@ -34,10 +35,14 @@ Public Class Form1
             If ofd.ShowDialog() = DialogResult.OK Then
                 Dim sr2 As New System.IO.StreamReader(ofd.FileName, _
                     System.Text.Encoding.GetEncoding(65001))
-                Dim q As New Regex("<imageNumber>\d+</imageNumber>", RegexOptions.ECMAScript)
+                Dim q As New Regex("<releaseNumber>\d+</releaseNumber>", RegexOptions.ECMAScript)
                 Dim n As Match
-                Dim p As New Regex("<romCRC extension=""\.iso"">[0-9A-F]{8}</romCRC>", RegexOptions.ECMAScript)
+                Dim p As New Regex(My.Settings.mask, RegexOptions.ECMAScript)
                 Dim l As Match
+                Dim cr As New Regex("[0-9A-Fa-f]{8}", RegexOptions.ECMAScript)
+                Dim crc As Match
+                Dim srr As New Regex("<sourceRom>.*?</sourceRom>", RegexOptions.ECMAScript)
+                Dim srm As Match
                 Dim str As New StringBuilder
                 Dim rplace As Boolean = False
                 Dim filer As Boolean = False
@@ -46,6 +51,7 @@ Public Class Form1
                     s = sr2.ReadLine()
                     n = q.Match(s)
                     l = p.Match(s)
+                    srm = srr.Match(s)
                     If s.Contains("Sony PSP Collection 日本語版 CE") Then
                         MessageBox.Show("FILERSORCEです、パッチの必要はありません")
                         sr2.Close()
@@ -57,8 +63,8 @@ Public Class Form1
 
                     If n.Success Then
                         rplace = False
-                        ss = n.Value.Remove(0, 13)
-                        ss = ss.Remove(ss.Length - 14, 14)
+                        ss = n.Value.Remove(0, 15)
+                        ss = ss.Remove(ss.Length - 16, 16)
                         While CDbl(ss) > index(i)
                             If index(i) = 0 Then
                                 Exit While
@@ -66,20 +72,28 @@ Public Class Form1
                             i += 1
                         End While
 
-
                         If CDbl(ss) = index(i) Then
                             rplace = True
                         End If
                     End If
-                    If l.Success AndAlso rplace = True Then
-                        s = s.Replace(l.Value, "<romCRC extension="".iso"">" & goodcrc(i) & "</romCRC>")
-                        i += 1
+                    If rplace = True Then
+                        If srm.Success Then
+                            ss = srm.Value.Remove(0, 11)
+                            ss = ss.Remove(ss.Length - 12, 12)
+                            s = s.Replace(ss, fn)
+                        End If
+                        If l.Success Then
+                            crc = cr.Match(l.Value)
+                            s = s.Replace(crc.Value, goodcrc(i))
+                            i += 1
+                        End If
                     End If
                     str.AppendLine(s)
                 End While
                 sr2.Close()
+                Dim utf8NoBOM As New UTF8Encoding()
                 Dim wr As New System.IO.StreamWriter(Path.GetDirectoryName(ofd.FileName) & "\" & Path.GetFileNameWithoutExtension(ofd.FileName) & "(nointro_fix).xml",
-                    False, System.Text.Encoding.GetEncoding(65001))
+                    False, utf8NoBOM)
                 wr.Write(str.ToString)
                 wr.Close()
                 Beep()
@@ -95,18 +109,19 @@ Public Class Form1
                 System.Text.Encoding.GetEncoding(932))
             Dim s As String = ""
             Dim ss As String = ""
+            Dim fn As String = "REDUMP_FIX"
             Dim index(450) As Integer
             Dim goodcrc(450) As String
-            'B9D68496 > FD305564  0003
-            Dim r As New Regex("[0-9A-F]{8} > [0-9A-F]{8}  \d{4}", RegexOptions.ECMAScript)
+            '0105 - Yarudora_Portable_Yukiwari_no_Hana 	Missing last 2kb 	2E37A384 	B8F9B04E 
+            Dim r As New Regex("[0-9]{4}.+[0-9A-F]{8}[\x20\t]{1,2}[0-9A-F]{8}", RegexOptions.ECMAScript)
             Dim m As Match
             Dim i As Integer
             While sr.Peek() > -1
                 s = sr.ReadLine()
                 m = r.Match(s)
                 If m.Success Then
-                    index(i) = CInt(m.Value.Remove(0, m.Value.Length - 4))
-                    goodcrc(i) = m.Value.Substring(11, 8)
+                    index(i) = CInt(m.Value.Substring(0, 4))
+                    goodcrc(i) = m.Value.Substring(m.Value.Length - 8, 8)
                     i += 1
                 End If
             End While
@@ -117,10 +132,15 @@ Public Class Form1
             If ofd.ShowDialog() = DialogResult.OK Then
                 Dim sr2 As New System.IO.StreamReader(ofd.FileName, _
                     System.Text.Encoding.GetEncoding(65001))
-                Dim q As New Regex("<imageNumber>\d+</imageNumber>", RegexOptions.ECMAScript)
+                Dim q As New Regex("<releaseNumber>\d+</releaseNumber>", RegexOptions.ECMAScript)
                 Dim n As Match
-                Dim p As New Regex("<romCRC extension=""\.iso"">[0-9A-F]{8}</romCRC>", RegexOptions.ECMAScript)
+                Dim mask As String = My.Settings.mask2
+                Dim p As New Regex(mask, RegexOptions.ECMAScript)
                 Dim l As Match
+                Dim cr As New Regex("[0-9A-Fa-f]{8}", RegexOptions.ECMAScript)
+                Dim crc As Match
+                Dim srr As New Regex("<sourceRom>.*?</sourceRom>", RegexOptions.ECMAScript)
+                Dim srm As Match
                 Dim str As New StringBuilder
                 Dim rplace As Boolean = False
                 Dim filer As Boolean = False
@@ -129,6 +149,7 @@ Public Class Form1
                     s = sr2.ReadLine()
                     n = q.Match(s)
                     l = p.Match(s)
+                    srm = srr.Match(s)
                     If s.Contains("Sony PSP Collection 日本語版 CE") Then
                         MessageBox.Show("FILERSORCEです、パッチの必要はありません")
                         sr2.Close()
@@ -140,8 +161,8 @@ Public Class Form1
 
                     If n.Success Then
                         rplace = False
-                        ss = n.Value.Remove(0, 13)
-                        ss = ss.Remove(ss.Length - 14, 14)
+                        ss = n.Value.Remove(0, 15)
+                        ss = ss.Remove(ss.Length - 16, 16)
                         While CDbl(ss) > index(i)
                             If index(i) = 0 Then
                                 Exit While
@@ -154,15 +175,24 @@ Public Class Form1
                             rplace = True
                         End If
                     End If
-                    If l.Success AndAlso rplace = True Then
-                        s = s.Replace(l.Value, "<romCRC extension="".iso"">" & goodcrc(i) & "</romCRC>")
-                        i += 1
+                    If rplace = True Then
+                        If srm.Success Then
+                            ss = srm.Value.Remove(0, 11)
+                            ss = ss.Remove(ss.Length - 12, 12)
+                            s = s.Replace(ss, fn)
+                        End If
+                        If l.Success Then
+                            crc = cr.Match(l.Value)
+                            s = s.Replace(crc.Value, goodcrc(i))
+                            i += 1
+                        End If
                     End If
                     str.AppendLine(s)
                 End While
                 sr2.Close()
+                Dim utf8NoBOM As New UTF8Encoding()
                 Dim wr As New System.IO.StreamWriter(Path.GetDirectoryName(ofd.FileName) & "\" & Path.GetFileNameWithoutExtension(ofd.FileName) & "(redump_fix).xml",
-                    False, System.Text.Encoding.GetEncoding(65001))
+                    False, utf8NoBOM)
                 wr.Write(str.ToString)
                 wr.Close()
                 Beep()
@@ -179,12 +209,14 @@ Public Class Form1
             Dim romcode As String() = {" [o]", " []", " [b]", " [!]"}
             Dim emphash As String() = {"00000000", "000000000000000000000000", "000000000000000000000000000000000"}
             Dim flag As String() = {" flags verified", " flag baddump", " flags nodump"}
-            Dim title(4000) As String
-            Dim size(4000) As String
-            Dim crc(4000) As String
-            Dim id(4000) As String
+            Dim title(8000) As String
+            Dim size(8000) As String
+            Dim crc(8000) As String
+            Dim id(8000) As String
             Dim ppath As String = ""
             Dim i As Integer = 0
+            Dim ext As String = ".iso"
+            Dim datname As String = System.Environment.ExpandEnvironmentVariables("%username%") & "'s dat"
 
             Dim ofd As New OpenFileDialog()
             ofd.Filter = "XMLファイル(*.xml;)|*.xml"
@@ -197,8 +229,16 @@ Public Class Form1
                 Dim t As Match
                 Dim d As New Regex("[A-Z]{4}-[0-9]{5}", RegexOptions.ECMAScript)
                 Dim dd As Match
-                Dim p As New Regex("<romCRC extension=""\.iso"">[0-9A-Fa-f]{8}</romCRC>", RegexOptions.ECMAScript)
+                Dim cr As New Regex("[0-9A-Fa-f]{8}", RegexOptions.ECMAScript)
+                Dim crr As Match
+                Dim mask As String = My.Settings.mask
+                If My.Settings.cmmask = False Then
+                    mask = My.Settings.mask2
+                End If
+                Dim p As New Regex(mask, RegexOptions.ECMAScript)
                 Dim l As Match
+                Dim ex As New Regex(""".*?""", RegexOptions.ECMAScript)
+                Dim exx As Match
                 Dim str As New StringBuilder
                 While sr2.Peek() > -1
                     s = sr2.ReadLine()
@@ -206,6 +246,11 @@ Public Class Form1
                     l = p.Match(s)
                     t = r.Match(s)
                     dd = d.Match(s)
+                    If s.Contains("<datName>") Then
+                        datname = s.Replace("<datName>", "")
+                        datname = datname.Replace("</datName>", "")
+                        datname = datname.Trim
+                    End If
                     If n.Success Then
                         s = n.Value.Remove(0, 7)
                         s = s.Remove(s.Length - 8, 8)
@@ -215,9 +260,12 @@ Public Class Form1
                         s = s.Remove(s.Length - 10, 10)
                         size(i) = s
                     ElseIf l.Success Then
-                        s = l.Value.Remove(0, 25)
-                        s = s.Remove(s.Length - 9, 9)
-                        crc(i) = s
+                        crr = cr.Match(l.Value)
+                        crc(i) = crr.Value
+                        exx = ex.Match(l.Value)
+                        If exx.Success Then
+                            ext = exx.Value.Replace("""", "")
+                        End If
                     ElseIf dd.Success Then
                         id(i) = dd.Value
                     ElseIf s.Contains("</game>") Then
@@ -233,9 +281,13 @@ Public Class Form1
 
             sb.AppendLine("clrmamepro (")
             sb.Append(vbTab)
-            sb.AppendLine("name ""Sony - PlayStation Portable""")
+            sb.Append("name """)
+            sb.Append(datname)
+            sb.AppendLine("""")
             sb.Append(vbTab)
-            sb.AppendLine("description ""Sony - PlayStation Portable""")
+            sb.Append("description """)
+            sb.Append(datname)
+            sb.AppendLine("""")
             sb.Append(vbTab)
             sb.Append("version ")
             sb.AppendLine(Now.ToString.Replace("/", "").Substring(0, 8))
@@ -265,7 +317,8 @@ Public Class Form1
                 sb.Append(vbTab)
                 sb.Append("rom ( name """)
                 sb.Append(title(i))
-                sb.Append(".iso"" size ")
+                sb.Append(ext)
+                sb.Append(""" size ")
                 sb.Append(size(i))
                 sb.Append(" crc ")
                 sb.Append(crc(i))
@@ -727,5 +780,17 @@ Public Class Form1
         Catch ex As Exception
             MessageBox.Show(ex.Message, "例外")
         End Try
+    End Sub
+
+    Private Sub バージョンToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles バージョンToolStripMenuItem.Click
+        Dim f As New Form3
+        f.ShowDialog()
+        f.Close()
+    End Sub
+
+    Private Sub CRCマスクToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles CRCマスクToolStripMenuItem.Click
+        Dim f As New Form2
+        f.ShowDialog()
+        f.Close()
     End Sub
 End Class

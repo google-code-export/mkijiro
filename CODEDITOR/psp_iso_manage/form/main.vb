@@ -2540,14 +2540,12 @@ Public Class umdisomanger
     Function status(ByVal url As String) As Boolean
 
         'WebRequestの作成
-        Dim webreq As System.Net.HttpWebRequest = _
-            CType(System.Net.WebRequest.Create(url),  _
-            System.Net.HttpWebRequest)
+        Dim webreq As System.Net.HttpWebRequest = CType(System.Net.WebRequest.Create(url), System.Net.HttpWebRequest)
 
         Dim webres As System.Net.HttpWebResponse = Nothing
         Try
             'サーバーからの応答を受信するためのWebResponseを取得
-            webres = CType(webreq.GetResponse(), System.Net.HttpWebResponse)
+            webres = CType(webreq.GetResponse(), Net.HttpWebResponse)
 
             '応答ステータスコードを表示する
             If webres.StatusCode = Net.HttpStatusCode.OK Then
@@ -2558,16 +2556,17 @@ Public Class umdisomanger
         Catch ex As System.Net.WebException
             'HTTPプロトコルエラーかどうか調べる
             If ex.Status = System.Net.WebExceptionStatus.ProtocolError Then
-                'HttpWebResponseを取得
+                'HttpWebResponseを取得()
                 Dim errres As System.Net.HttpWebResponse = _
                     CType(ex.Response, System.Net.HttpWebResponse)
                 '応答したURIを表示する
-                Console.WriteLine(errres.ResponseUri)
+                MessageBox.Show(errres.StatusCode & vbCrLf & errres.StatusDescription)
+                'Console.WriteLine(errres.ResponseUri)
                 '応答ステータスコードを表示する
-                Console.WriteLine("{0}:{1}", _
-                    errres.StatusCode, errres.StatusDescription)
+                'Console.WriteLine("{0}:{1}", errres.StatusCode, errres.StatusDescription)
             Else
-                Console.WriteLine(ex.Message)
+                MessageBox.Show(ex.Message)
+                'Console.WriteLine(ex.Message)
             End If
             Return False
         Finally
