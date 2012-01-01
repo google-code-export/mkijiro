@@ -1,0 +1,614 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="CRCimage.Location" type="System.Drawing.Point, System.Drawing">
+    <value>370, 38</value>
+  </data>
+  <data name="CRCimage.Text" xml:space="preserve">
+    <value>CRC画像検索</value>
+  </data>
+  <data name="rg_add.Size" type="System.Drawing.Size, System.Drawing">
+    <value>258, 26</value>
+  </data>
+  <data name="rg_add.Text" xml:space="preserve">
+    <value>登録追加</value>
+  </data>
+  <data name="rg_edit.Size" type="System.Drawing.Size, System.Drawing">
+    <value>258, 26</value>
+  </data>
+  <data name="rg_edit.Text" xml:space="preserve">
+    <value>登録編集</value>
+  </data>
+  <data name="rg_del.Size" type="System.Drawing.Size, System.Drawing">
+    <value>258, 26</value>
+  </data>
+  <data name="rg_del.Text" xml:space="preserve">
+    <value>登録削除</value>
+  </data>
+  <data name="ToolStripSeparator5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>255, 6</value>
+  </data>
+  <data name="VIEW.Size" type="System.Drawing.Size, System.Drawing">
+    <value>258, 26</value>
+  </data>
+  <data name="VIEW.Text" xml:space="preserve">
+    <value>ジャケット/UMD画像を見る</value>
+  </data>
+  <data name="ContextMenuStrip2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>259, 114</value>
+  </data>
+  <data name="TreeView1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>242, 413</value>
+  </data>
+  <data name="GAMEID.Location" type="System.Drawing.Point, System.Drawing">
+    <value>413, 284</value>
+  </data>
+  <data name="GAMEID.Text" xml:space="preserve">
+    <value>取得</value>
+  </data>
+  <data name="PFS.Location" type="System.Drawing.Point, System.Drawing">
+    <value>547, 257</value>
+  </data>
+  <data name="PFS.Text" xml:space="preserve">
+    <value>PSF取得</value>
+  </data>
+  <data name="PictureBox1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>104, 181</value>
+  </data>
+  <data name="managename.Location" type="System.Drawing.Point, System.Drawing">
+    <value>316, 256</value>
+  </data>
+  <data name="managename.Size" type="System.Drawing.Size, System.Drawing">
+    <value>216, 21</value>
+  </data>
+  <data name="PictureBox2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>370, 64</value>
+  </data>
+  <data name="Label1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>261, 259</value>
+  </data>
+  <data name="Label1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>49, 14</value>
+  </data>
+  <data name="Label1.Text" xml:space="preserve">
+    <value>管理名</value>
+  </data>
+  <data name="movepsp.Location" type="System.Drawing.Point, System.Drawing">
+    <value>260, 403</value>
+  </data>
+  <data name="movepsp.Text" xml:space="preserve">
+    <value>PSPへ転送</value>
+  </data>
+  <data name="Button1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>472, 38</value>
+  </data>
+  <data name="Button1.Text" xml:space="preserve">
+    <value>GOOGLE検索</value>
+  </data>
+  <data name="drivelettter.Location" type="System.Drawing.Point, System.Drawing">
+    <value>506, 401</value>
+  </data>
+  <data name="lockdriveletter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>138, 18</value>
+  </data>
+  <data name="lockdriveletter.Text" xml:space="preserve">
+    <value>ドライブレターを固定</value>
+  </data>
+  <data name="Label2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>489, 287</value>
+  </data>
+  <data name="Label2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 14</value>
+  </data>
+  <data name="Label2.Text" xml:space="preserve">
+    <value>ファイルサイズ;</value>
+  </data>
+  <data name="Label3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>489, 316</value>
+  </data>
+  <data name="Label3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 14</value>
+  </data>
+  <data name="Label3.Text" xml:space="preserve">
+    <value>セクター算出;</value>
+  </data>
+  <data name="Label4.Location" type="System.Drawing.Point, System.Drawing">
+    <value>262, 320</value>
+  </data>
+  <data name="Label5.Location" type="System.Drawing.Point, System.Drawing">
+    <value>262, 347</value>
+  </data>
+  <data name="Label6.Location" type="System.Drawing.Point, System.Drawing">
+    <value>261, 377</value>
+  </data>
+  <data name="isosize.Location" type="System.Drawing.Point, System.Drawing">
+    <value>575, 284</value>
+  </data>
+  <data name="isosize.Size" type="System.Drawing.Size, System.Drawing">
+    <value>110, 21</value>
+  </data>
+  <data name="isolba.Location" type="System.Drawing.Point, System.Drawing">
+    <value>575, 313</value>
+  </data>
+  <data name="isolba.Size" type="System.Drawing.Size, System.Drawing">
+    <value>110, 21</value>
+  </data>
+  <data name="crc.Location" type="System.Drawing.Point, System.Drawing">
+    <value>318, 313</value>
+  </data>
+  <data name="md5hash.Location" type="System.Drawing.Point, System.Drawing">
+    <value>316, 344</value>
+  </data>
+  <data name="sha.Location" type="System.Drawing.Point, System.Drawing">
+    <value>316, 374</value>
+  </data>
+  <data name="Label7.Location" type="System.Drawing.Point, System.Drawing">
+    <value>258, 287</value>
+  </data>
+  <data name="Label7.Size" type="System.Drawing.Size, System.Drawing">
+    <value>55, 14</value>
+  </data>
+  <data name="Label7.Text" xml:space="preserve">
+    <value>ゲームID;</value>
+  </data>
+  <data name="gid.Location" type="System.Drawing.Point, System.Drawing">
+    <value>319, 284</value>
+  </data>
+  <data name="calc_crc.Location" type="System.Drawing.Point, System.Drawing">
+    <value>412, 314</value>
+  </data>
+  <data name="calc_crc.Text" xml:space="preserve">
+    <value>計算</value>
+  </data>
+  <data name="calc_md5.Location" type="System.Drawing.Point, System.Drawing">
+    <value>550, 344</value>
+  </data>
+  <data name="calc_md5.Text" xml:space="preserve">
+    <value>計算</value>
+  </data>
+  <data name="calc_sha.Location" type="System.Drawing.Point, System.Drawing">
+    <value>619, 374</value>
+  </data>
+  <data name="calc_sha.Text" xml:space="preserve">
+    <value>計算</value>
+  </data>
+  <data name="all_hash.Location" type="System.Drawing.Point, System.Drawing">
+    <value>619, 344</value>
+  </data>
+  <data name="all_hash.Text" xml:space="preserve">
+    <value>全ハッシュ</value>
+  </data>
+  <data name="tree_apply.Location" type="System.Drawing.Point, System.Drawing">
+    <value>576, 403</value>
+  </data>
+  <data name="tree_apply.Text" xml:space="preserve">
+    <value>ツリーに反映</value>
+  </data>
+  <data name="ADD.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 26</value>
+  </data>
+  <data name="ADD.Text" xml:space="preserve">
+    <value>いめーじ追加</value>
+  </data>
+  <data name="ADD.ToolTipText" xml:space="preserve">
+    <value>add image you want
+please drag&amp;dropg files from explore,if you want to add many  files</value>
+  </data>
+  <data name="ToolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>197, 6</value>
+  </data>
+  <data name="SAVELS.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 26</value>
+  </data>
+  <data name="SAVELS.Text" xml:space="preserve">
+    <value>リスト保存</value>
+  </data>
+  <data name="SAVELS.ToolTipText" xml:space="preserve">
+    <value>save image list</value>
+  </data>
+  <data name="EXPORTPSPINS.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 26</value>
+  </data>
+  <data name="EXPORTPSPINS.Text" xml:space="preserve">
+    <value>PSPINS形式で出力</value>
+  </data>
+  <data name="disck_ver.Size" type="System.Drawing.Size, System.Drawing">
+    <value>276, 26</value>
+  </data>
+  <data name="disck_ver.Text" xml:space="preserve">
+    <value>ディスクバージョンを付加する</value>
+  </data>
+  <data name="ROMCODEs.Size" type="System.Drawing.Size, System.Drawing">
+    <value>276, 26</value>
+  </data>
+  <data name="ROMCODEs.Text" xml:space="preserve">
+    <value>ロムコードを付加する</value>
+  </data>
+  <data name="ROMCODEs.ToolTipText" xml:space="preserve">
+    <value>[!] VAID IMGAGEONLY USE FILER/NO_INTRO(正常判定,ファイラーXML/NOINTROソース使用時のみ)
+[o] overdump,オーバーダンプ
+[b] baddump,バッドダンプ
+[-(size)k] lack of sector,サイズ欠け</value>
+  </data>
+  <data name="SAVE_clrmamepro.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 26</value>
+  </data>
+  <data name="SAVE_clrmamepro.Text" xml:space="preserve">
+    <value>CMPRO形式で出力</value>
+  </data>
+  <data name="ToolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>197, 6</value>
+  </data>
+  <data name="CLOSEToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 26</value>
+  </data>
+  <data name="CLOSEToolStripMenuItem.Text" xml:space="preserve">
+    <value>終了</value>
+  </data>
+  <data name="menufile.Size" type="System.Drawing.Size, System.Drawing">
+    <value>78, 25</value>
+  </data>
+  <data name="menufile.Text" xml:space="preserve">
+    <value>ファイル</value>
+  </data>
+  <data name="mane_sort_up.Size" type="System.Drawing.Size, System.Drawing">
+    <value>152, 26</value>
+  </data>
+  <data name="mane_sort_up.Text" xml:space="preserve">
+    <value>昇順</value>
+  </data>
+  <data name="mane_sort_down.Size" type="System.Drawing.Size, System.Drawing">
+    <value>152, 26</value>
+  </data>
+  <data name="mane_sort_down.Text" xml:space="preserve">
+    <value>降順</value>
+  </data>
+  <data name="name_sort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>161, 26</value>
+  </data>
+  <data name="name_sort.Text" xml:space="preserve">
+    <value>管理名</value>
+  </data>
+  <data name="gid_sort_up.Size" type="System.Drawing.Size, System.Drawing">
+    <value>164, 26</value>
+  </data>
+  <data name="gid_sort_up.Text" xml:space="preserve">
+    <value>昇順</value>
+  </data>
+  <data name="gid_sort_down.Size" type="System.Drawing.Size, System.Drawing">
+    <value>164, 26</value>
+  </data>
+  <data name="gid_sort_down.Text" xml:space="preserve">
+    <value>降順</value>
+  </data>
+  <data name="ToolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>161, 6</value>
+  </data>
+  <data name="sort_jp.Size" type="System.Drawing.Size, System.Drawing">
+    <value>164, 26</value>
+  </data>
+  <data name="sort_jp.Text" xml:space="preserve">
+    <value>日本優先</value>
+  </data>
+  <data name="PpriorUSAToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>164, 26</value>
+  </data>
+  <data name="PpriorUSAToolStripMenuItem.Text" xml:space="preserve">
+    <value>アメリカ優先</value>
+  </data>
+  <data name="PriorEUToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>164, 26</value>
+  </data>
+  <data name="PriorEUToolStripMenuItem.Text" xml:space="preserve">
+    <value>欧州優先</value>
+  </data>
+  <data name="GAMEID_sort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>161, 26</value>
+  </data>
+  <data name="GAMEID_sort.Text" xml:space="preserve">
+    <value>ゲームID</value>
+  </data>
+  <data name="psf_sort_up.Size" type="System.Drawing.Size, System.Drawing">
+    <value>152, 26</value>
+  </data>
+  <data name="psf_sort_up.Text" xml:space="preserve">
+    <value>昇順</value>
+  </data>
+  <data name="psf_sort_down.Size" type="System.Drawing.Size, System.Drawing">
+    <value>152, 26</value>
+  </data>
+  <data name="psf_sort_down.Text" xml:space="preserve">
+    <value>降順</value>
+  </data>
+  <data name="PSFtitle_sort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>161, 26</value>
+  </data>
+  <data name="PSFtitle_sort.Text" xml:space="preserve">
+    <value>PSFタイトル</value>
+  </data>
+  <data name="file_sort_up.Size" type="System.Drawing.Size, System.Drawing">
+    <value>152, 26</value>
+  </data>
+  <data name="file_sort_up.Text" xml:space="preserve">
+    <value>昇順</value>
+  </data>
+  <data name="file_sort_down.Size" type="System.Drawing.Size, System.Drawing">
+    <value>152, 26</value>
+  </data>
+  <data name="file_sort_down.Text" xml:space="preserve">
+    <value>降順</value>
+  </data>
+  <data name="file_sort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>161, 26</value>
+  </data>
+  <data name="file_sort.Text" xml:space="preserve">
+    <value>ファイル名</value>
+  </data>
+  <data name="sort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>50, 25</value>
+  </data>
+  <data name="sort.Text" xml:space="preserve">
+    <value>整列</value>
+  </data>
+  <data name="RMXML.ToolTipText" xml:space="preserve">
+    <value>RENAME FILE,USE OFFLINE XML</value>
+  </data>
+  <data name="RMDAT.ToolTipText" xml:space="preserve">
+    <value>RENAME FILE, USE NOINTRO DATFILE</value>
+  </data>
+  <data name="MNAME.Size" type="System.Drawing.Size, System.Drawing">
+    <value>164, 26</value>
+  </data>
+  <data name="MNAME.Text" xml:space="preserve">
+    <value>管理名</value>
+  </data>
+  <data name="FILEPATH.Size" type="System.Drawing.Size, System.Drawing">
+    <value>164, 26</value>
+  </data>
+  <data name="FILEPATH.Text" xml:space="preserve">
+    <value>ファイルパス</value>
+  </data>
+  <data name="MNEN.Text" xml:space="preserve">
+    <value>対象</value>
+  </data>
+  <data name="RENAME.Size" type="System.Drawing.Size, System.Drawing">
+    <value>78, 25</value>
+  </data>
+  <data name="RENAME.Text" xml:space="preserve">
+    <value>リネーム</value>
+  </data>
+  <data name="GUITOP.Size" type="System.Drawing.Size, System.Drawing">
+    <value>234, 26</value>
+  </data>
+  <data name="GUITOP.Text" xml:space="preserve">
+    <value>常に前面に表示</value>
+  </data>
+  <data name="xmlselect.Size" type="System.Drawing.Size, System.Drawing">
+    <value>234, 26</value>
+  </data>
+  <data name="xmlselect.Text" xml:space="preserve">
+    <value>画像検索用XML指定</value>
+  </data>
+  <data name="xmlselect.ToolTipText" xml:space="preserve">
+    <value>SELECT XML OFFLINELSIT
+IF MATCH CRC32 IN XML,NAME AND IMAGE APPLIED</value>
+  </data>
+  <data name="rename_dat.Size" type="System.Drawing.Size, System.Drawing">
+    <value>234, 26</value>
+  </data>
+  <data name="rename_dat.Text" xml:space="preserve">
+    <value>リネーム用DAT指定</value>
+  </data>
+  <data name="rename_dat.ToolTipText" xml:space="preserve">
+    <value>SELECT NOINTRO DAT
+IF MATCH CRC32 IN DAT
+files are renamed</value>
+  </data>
+  <data name="editpspdir.Size" type="System.Drawing.Size, System.Drawing">
+    <value>234, 26</value>
+  </data>
+  <data name="editpspdir.Text" xml:space="preserve">
+    <value>転送先リスト編集</value>
+  </data>
+  <data name="editpspdir.ToolTipText" xml:space="preserve">
+    <value>edit list, copy to psp(categoly etc.)
+right click on treeview,you can edit copydir
+//example
+X:\PSP\GAME\</value>
+  </data>
+  <data name="ALSAVE.Size" type="System.Drawing.Size, System.Drawing">
+    <value>234, 26</value>
+  </data>
+  <data name="ALSAVE.Text" xml:space="preserve">
+    <value>終了時リストを必ず保存</value>
+  </data>
+  <data name="setting.Size" type="System.Drawing.Size, System.Drawing">
+    <value>50, 25</value>
+  </data>
+  <data name="setting.Text" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="online.Size" type="System.Drawing.Size, System.Drawing">
+    <value>192, 26</value>
+  </data>
+  <data name="online.Text" xml:space="preserve">
+    <value>オンラインヘルプ</value>
+  </data>
+  <data name="version.Size" type="System.Drawing.Size, System.Drawing">
+    <value>192, 26</value>
+  </data>
+  <data name="version.Text" xml:space="preserve">
+    <value>バージョン</value>
+  </data>
+  <data name="HELPToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>64, 25</value>
+  </data>
+  <data name="HELPToolStripMenuItem.Text" xml:space="preserve">
+    <value>ヘルプ</value>
+  </data>
+  <data name="MenuStrip1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>697, 29</value>
+  </data>
+  <data name="del_psp.Location" type="System.Drawing.Point, System.Drawing">
+    <value>261, 430</value>
+  </data>
+  <data name="del_psp.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 21</value>
+  </data>
+  <data name="del_psp.Text" xml:space="preserve">
+    <value>PSPから削除</value>
+  </data>
+  <data name="t_gid.Location" type="System.Drawing.Point, System.Drawing">
+    <value>370, 431</value>
+  </data>
+  <data name="t_gid.Size" type="System.Drawing.Size, System.Drawing">
+    <value>110, 18</value>
+  </data>
+  <data name="t_gid.Text" xml:space="preserve">
+    <value>ゲームIDで転送</value>
+  </data>
+  <data name="crc_xml.Location" type="System.Drawing.Point, System.Drawing">
+    <value>619, 256</value>
+  </data>
+  <data name="crc_xml.Text" xml:space="preserve">
+    <value>XML検索</value>
+  </data>
+  <data name="free.Location" type="System.Drawing.Point, System.Drawing">
+    <value>503, 432</value>
+  </data>
+  <data name="free.Size" type="System.Drawing.Size, System.Drawing">
+    <value>81, 14</value>
+  </data>
+  <data name="free.Text" xml:space="preserve">
+    <value>MS空き;不明</value>
+  </data>
+  <data name="Button2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>568, 38</value>
+  </data>
+  <data name="SAVELS2.Text" xml:space="preserve">
+    <value>リスト保存</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>697, 463</value>
+  </data>
+  <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>715, 506</value>
+  </data>
+</root>
