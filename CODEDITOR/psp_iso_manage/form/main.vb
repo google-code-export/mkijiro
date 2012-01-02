@@ -2809,6 +2809,7 @@ Public Class umdisomanger
                                     ss = s.Remove(m.Index + m.Length, s.Length - (m.Index + m.Length))
                                     ss = ss.Remove(0, ss.LastIndexOf("<title>") + 7)
                                     ss = ss.Remove(ss.LastIndexOf("</title>"), ss.Length - ss.LastIndexOf("</title>"))
+                                    ss = doskiller(ss)
 
                                     rp = System.IO.Path.GetDirectoryName(path) & "\" & ss & ".iso"
                                     If MNAME.Checked = True Then
@@ -2843,6 +2844,43 @@ Public Class umdisomanger
             TreeView1.EndUpdate()
         End Try
     End Sub
+
+    Function doskiller(ByVal s As String) As String
+
+        Dim ss As String() = {"/", "\", "?", "*", ":", "|", """", "<", ">"}
+        Dim html As String() = {"&amp;", "&gt;", "&lt;", "&apos;", "&quot;"}
+        Dim html2 As String() = {"&", "", "", "'", ""}
+        For i = 0 To 4
+            s = s.Replace(html(i), html2(i))
+        Next
+
+        'Dim a As String = "&#12415;&#12435;&#12394;&#12398;GOLF &#12509;&#12540;&#12479;&#12502;&#12523;"
+        Dim htmluni As New Regex("&#\d{1,5};", RegexOptions.ECMAScript)
+        Dim uni As Match = htmluni.Match(s)
+        Dim k As UInt16 = 0
+        Dim b(1) As Byte
+        While uni.Success
+            k = Convert.ToUInt16(uni.Value.Substring(2, uni.Value.Length - 3))
+            b = BitConverter.GetBytes(k)
+            s = s.Replace(uni.Value, System.Text.Encoding.GetEncoding(1200).GetString(b))
+            uni = uni.NextMatch
+        End While
+
+        'Dim ba As String = "&#x30D5;&#x30ED;&#x30E0;&#x30FB;&#x30BD;&#x30D5;&#x30C8;&#x30A6;&#x30A7;&#x30A2;"
+        Dim htmluni2 As New Regex("&#x[0-9A-Fa-f]{1,4};", RegexOptions.ECMAScript)
+        Dim uni2 As Match = htmluni2.Match(s)
+        While uni2.Success
+            k = Convert.ToUInt16(uni2.Value.Substring(3, uni2.Value.Length - 4), 16)
+            b = BitConverter.GetBytes(k)
+            s = s.Replace(uni2.Value, System.Text.Encoding.GetEncoding(1200).GetString(b))
+            uni2 = uni2.NextMatch
+        End While
+
+        For i = 0 To 8
+            s = s.Replace(ss(i), "")
+        Next
+        Return s
+    End Function
 
     Private Sub VIEW_Click(sender As System.Object, e As System.EventArgs) Handles VIEW.Click
         Dim treenode As TreeNode = TreeView1.SelectedNode
