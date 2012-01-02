@@ -13,8 +13,8 @@ Public Class Form1
             Dim s As String = ""
             Dim ss As String = ""
             Dim fn As String = "NOINTRO_FIX"
-            Dim index(450) As Integer
-            Dim goodcrc(450) As String
+            Dim index(1000) As Integer
+            Dim goodcrc(1000) As String
             'B9D68496 > FD305564  0003
             Dim r As New Regex("[0-9A-F]{8} > [0-9A-F]{8}  \d{4}", RegexOptions.ECMAScript)
             Dim m As Match
@@ -110,8 +110,8 @@ Public Class Form1
             Dim s As String = ""
             Dim ss As String = ""
             Dim fn As String = "REDUMP_FIX"
-            Dim index(450) As Integer
-            Dim goodcrc(450) As String
+            Dim index(1000) As Integer
+            Dim goodcrc(1000) As String
             '0105 - Yarudora_Portable_Yukiwari_no_Hana 	Missing last 2kb 	2E37A384 	B8F9B04E 
             Dim r As New Regex("[0-9]{4}.+[0-9A-F]{8}[\x20\t]{1,2}[0-9A-F]{8}", RegexOptions.ECMAScript)
             Dim m As Match
@@ -209,14 +209,16 @@ Public Class Form1
             Dim romcode As String() = {" [o]", " []", " [b]", " [!]"}
             Dim emphash As String() = {"00000000", "000000000000000000000000", "000000000000000000000000000000000"}
             Dim flag As String() = {" flags verified", " flag baddump", " flags nodump"}
-            Dim title(8000) As String
-            Dim size(8000) As String
-            Dim crc(8000) As String
-            Dim id(8000) As String
+            Dim title(10000) As String
+            Dim size(10000) As String
+            Dim crc(10000) As String
+            Dim id(10000) As String
             Dim ppath As String = ""
             Dim i As Integer = 0
             Dim ext As String = ".iso"
             Dim datname As String = System.Environment.ExpandEnvironmentVariables("%username%") & "'s dat"
+
+
 
             Dim ofd As New OpenFileDialog()
             ofd.Filter = "XMLファイル(*.xml;)|*.xml"
@@ -249,7 +251,7 @@ Public Class Form1
                     If s.Contains("<datName>") Then
                         datname = s.Replace("<datName>", "")
                         datname = datname.Replace("</datName>", "")
-                        datname = datname.Trim
+                        datname = doskiller(datname.Trim)
                     End If
                     If n.Success Then
                         s = n.Value.Remove(0, 7)
@@ -350,10 +352,10 @@ Public Class Form1
             Dim s As String = ""
             Dim emphash As String() = {"00000000", "000000000000000000000000", "000000000000000000000000000000000"}
             Dim flag As String() = {" flags verified", " flag baddump", " flags nodump"}
-            Dim title(4000) As String
-            Dim desk(4000) As String
-            Dim rom(4000) As String
-            Dim id(4000) As String
+            Dim title(10000) As String
+            Dim desk(10000) As String
+            Dim rom(10000) As String
+            Dim id(10000) As String
             Dim opath As String = ""
             Dim ppath As String = ""
             Dim tmp As String = ""
@@ -494,10 +496,10 @@ Public Class Form1
             Dim s As String = ""
             Dim emphash As String() = {"00000000", "000000000000000000000000", "000000000000000000000000000000000"}
             Dim flag As String() = {" flags verified", " flag baddump", " flags nodump"}
-            Dim title(4000) As String
-            Dim desk(4000) As String
-            Dim rom(4000) As String
-            Dim id(4000) As String
+            Dim title(10000) As String
+            Dim desk(10000) As String
+            Dim rom(10000) As String
+            Dim id(10000) As String
             Dim opath As String = ""
             Dim ppath As String = ""
             Dim tmp As String = ""
@@ -671,12 +673,39 @@ Public Class Form1
 
     Function doskiller(ByVal s As String) As String
         Dim ss As String() = {"/", "\", "?", "*", ":", "|", """", "<", ">"}
+        Dim html As String() = {"&amp;", "&gt;", "&lt;", "&apos;", "&quot;"}
+        Dim html2 As String() = {"&", "", "", "'", ""}
+        For i = 0 To 4
+            s = s.Replace(html(i), html2(i))
+        Next
+
+        'Dim a As String = "&#12415;&#12435;&#12394;&#12398;GOLF &#12509;&#12540;&#12479;&#12502;&#12523;"
+        Dim htmluni As New Regex("&#\d{1,5};", RegexOptions.ECMAScript)
+        Dim uni As Match = htmluni.Match(s)
+        Dim k As UInt16 = 0
+        Dim b(1) As Byte
+        While uni.Success
+            k = Convert.ToUInt16(uni.Value.Substring(2, uni.Value.Length - 3))
+            b = BitConverter.GetBytes(k)
+            s = s.Replace(uni.Value, System.Text.Encoding.GetEncoding(1200).GetString(b))
+            uni = uni.NextMatch
+        End While
+
+        'Dim ba As String = "&#x30D5;&#x30ED;&#x30E0;&#x30FB;&#x30BD;&#x30D5;&#x30C8;&#x30A6;&#x30A7;&#x30A2;"
+        Dim htmluni2 As New Regex("&#x[0-9A-Fa-f]{1,4};", RegexOptions.ECMAScript)
+        Dim uni2 As Match = htmluni2.Match(s)
+        While uni2.Success
+            k = Convert.ToUInt16(uni2.Value.Substring(3, uni2.Value.Length - 4), 16)
+            b = BitConverter.GetBytes(k)
+            s = s.Replace(uni2.Value, System.Text.Encoding.GetEncoding(1200).GetString(b))
+            uni2 = uni2.NextMatch
+        End While
+
         For i = 0 To 8
             s = s.Replace(ss(i), "")
         Next
         Return s
     End Function
-
 
     Private Sub Button6_Click(sender As System.Object, e As System.EventArgs) Handles Button6.Click
         Try
@@ -793,4 +822,272 @@ Public Class Form1
         f.ShowDialog()
         f.Close()
     End Sub
+
+    Private Sub Button7_Click(sender As System.Object, e As System.EventArgs) Handles Button8.Click
+        Try
+            Dim ofd As New OpenFileDialog
+            ofd.InitialDirectory = Application.StartupPath
+            ofd.Title = "XMLファイルを選んで下さい"
+            ofd.Filter = "XMLファイル(*.xml)|*.xml"
+            Dim xml_parse As Boolean = False
+            If ofd.ShowDialog() = Windows.Forms.DialogResult.OK Then
+
+                Dim reader As System.Xml.XmlReader = System.Xml.XmlReader.Create(ofd.FileName)
+                Dim sb As New StringBuilder
+                sb.Append("画像")
+                sb.Append(vbTab)
+                sb.Append("UID")
+                sb.Append(vbTab)
+                sb.Append("ゲーム名")
+                sb.Append(vbTab)
+                sb.Append("セーブタイプ")
+                sb.Append(vbTab)
+                sb.Append("サイズ")
+                sb.Append(vbTab)
+                sb.Append("メーカー")
+                sb.Append(vbTab)
+                sb.Append("国")
+                sb.Append(vbTab)
+                sb.Append("ソース")
+                sb.Append(vbTab)
+                sb.Append("言語")
+                sb.Append(vbTab)
+                sb.Append("CRC32")
+                sb.Append(vbTab)
+                sb.Append("画像1CRC")
+                sb.Append(vbTab)
+                sb.Append("画像2CRC")
+                sb.Append(vbTab)
+                sb.Append("コメント")
+                sb.Append(vbTab)
+                sb.AppendLine("重複ID")
+
+                While reader.Read
+                    If reader.NodeType = Xml.XmlNodeType.EndElement AndAlso reader.LocalName = "configuration" Then
+                        xml_parse = True
+                    End If
+                    If reader.NodeType = Xml.XmlNodeType.Element AndAlso xml_parse = True Then
+                        If reader.LocalName = "imageNumber" Then
+                            sb.Append(reader.ReadString())
+                            sb.Append(vbTab)
+                        End If
+                        If reader.LocalName = "releaseNumber" Then
+                            sb.Append(reader.ReadString())
+                            sb.Append(vbTab)
+                        End If
+                        If reader.LocalName = "title" Then
+                            sb.Append(reader.ReadString())
+                            sb.Append(vbTab)
+                        End If
+                        If reader.LocalName = "saveType" Then
+                            sb.Append(reader.ReadString())
+                            sb.Append(vbTab)
+                        End If
+                        If reader.LocalName = "romSize" Then
+                            sb.Append(reader.ReadString())
+                            sb.Append(vbTab)
+                        End If
+                        If reader.LocalName = "publisher" Then
+                            sb.Append(reader.ReadString())
+                            sb.Append(vbTab)
+                        End If
+                        If reader.LocalName = "location" Then
+                            sb.Append(reader.ReadString())
+                            sb.Append(vbTab)
+                        End If
+                        If reader.LocalName = "sourceRom" Then
+                            sb.Append(reader.ReadString())
+                            sb.Append(vbTab)
+                        End If
+                        If reader.LocalName = "language" Then
+                            sb.Append(reader.ReadString())
+                            sb.Append(vbTab)
+                        End If
+                        If reader.LocalName = "romCRC" Then
+                            sb.Append(reader.ReadString())
+                            sb.Append(vbTab)
+                        End If
+                        If reader.LocalName = "im1CRC" Then
+                            sb.Append(reader.ReadString())
+                            sb.Append(vbTab)
+                        End If
+                        If reader.LocalName = "im2CRC" Then
+                            sb.Append(reader.ReadString())
+                            sb.Append(vbTab)
+                        End If
+                        If reader.LocalName = "comment" Then
+                            sb.Append(reader.ReadString())
+                            sb.Append(vbTab)
+                        End If
+                        If reader.LocalName = "duplicateID" Then
+                            sb.AppendLine(reader.ReadString())
+                        End If
+                    End If
+                End While
+                Dim sw As New System.IO.StreamWriter(Path.GetDirectoryName(ofd.FileName) & "\" & Path.GetFileNameWithoutExtension(ofd.FileName) & "_cvt.tsv", False, Encoding.GetEncoding(932))
+                sw.Write(sb.ToString)
+                Beep()
+                sw.Close()
+
+                reader.Close()
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "例外")
+        End Try
+    End Sub
+
+    Private Sub Button8_Click(sender As System.Object, e As System.EventArgs) Handles Button7.Click
+        Try
+            Dim ofd As New OpenFileDialog
+            ofd.InitialDirectory = Application.StartupPath
+            ofd.Title = "XMLファイルを選んで下さい"
+            ofd.Filter = "XMLファイル(*.xml)|*.xml"
+            Dim xml_parse As Boolean = False
+            If ofd.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                Dim s As String = ""
+                Dim reader As System.Xml.XmlReader = System.Xml.XmlReader.Create(ofd.FileName)
+                Dim sb As New StringBuilder
+                sb.Append("""画像""")
+                sb.Append(",")
+                sb.Append("""UID""")
+                sb.Append(",")
+                sb.Append("""ゲーム名""")
+                sb.Append(",")
+                sb.Append("""セーブタイプ""")
+                sb.Append(",")
+                sb.Append("""サイズ""")
+                sb.Append(",")
+                sb.Append("""メーカー""")
+                sb.Append(",")
+                sb.Append("""国""")
+                sb.Append(",")
+                sb.Append("""ソース""")
+                sb.Append(",")
+                sb.Append("""言語""")
+                sb.Append(",")
+                sb.Append("""CRC32""")
+                sb.Append(",")
+                sb.Append("""画像1CRC""")
+                sb.Append(",")
+                sb.Append("""画像2CRC""")
+                sb.Append(",")
+                sb.Append("""コメント""")
+                sb.Append(",")
+                sb.AppendLine("""重複ID""")
+
+                While reader.Read
+                    If reader.NodeType = Xml.XmlNodeType.EndElement AndAlso reader.LocalName = "configuration" Then
+                        xml_parse = True
+                    End If
+                    If reader.NodeType = Xml.XmlNodeType.Element AndAlso xml_parse = True Then
+                        If reader.LocalName = "imageNumber" Then
+                            s = reader.ReadString()
+                            sb.Append("""")
+                            sb.Append(s.Replace("""", """"""))
+                            sb.Append("""")
+                            sb.Append(",")
+                        End If
+                        If reader.LocalName = "releaseNumber" Then
+                            s = reader.ReadString()
+                            sb.Append("""")
+                            sb.Append(s.Replace("""", """"""))
+                            sb.Append("""")
+                            sb.Append(",")
+                        End If
+                        If reader.LocalName = "title" Then
+                            s = reader.ReadString()
+                            sb.Append("""")
+                            sb.Append(doskiller(s))
+                            sb.Append("""")
+                            sb.Append(",")
+                        End If
+                        If reader.LocalName = "saveType" Then
+                            s = reader.ReadString()
+                            sb.Append("""")
+                            sb.Append(s.Replace("""", """"""))
+                            sb.Append("""")
+                            sb.Append(",")
+                        End If
+                        If reader.LocalName = "romSize" Then
+                            s = reader.ReadString()
+                            sb.Append("""")
+                            sb.Append(s.Replace("""", """"""))
+                            sb.Append("""")
+                            sb.Append(",")
+                        End If
+                        If reader.LocalName = "publisher" Then
+                            s = reader.ReadString()
+                            sb.Append("""")
+                            sb.Append(s)
+                            sb.Append("""")
+                            sb.Append(",")
+                        End If
+                        If reader.LocalName = "location" Then
+                            s = reader.ReadString()
+                            sb.Append("""")
+                            sb.Append(s.Replace("""", """"""))
+                            sb.Append("""")
+                            sb.Append(",")
+                        End If
+                        If reader.LocalName = "sourceRom" Then
+                            s = reader.ReadString()
+                            sb.Append("""")
+                            sb.Append(s.Replace("""", """"""))
+                            sb.Append("""")
+                            sb.Append(",")
+                        End If
+                        If reader.LocalName = "language" Then
+                            s = reader.ReadString()
+                            sb.Append("""")
+                            sb.Append(s.Replace("""", """"""))
+                            sb.Append("""")
+                            sb.Append(",")
+                        End If
+                        If reader.LocalName = "romCRC" Then
+                            s = reader.ReadString()
+                            sb.Append("""")
+                            sb.Append(s.Replace("""", """"""))
+                            sb.Append("""")
+                            sb.Append(",")
+                        End If
+                        If reader.LocalName = "im1CRC" Then
+                            s = reader.ReadString()
+                            sb.Append("""")
+                            sb.Append(s.Replace("""", """"""))
+                            sb.Append("""")
+                            sb.Append(",")
+                        End If
+                        If reader.LocalName = "im2CRC" Then
+                            s = reader.ReadString()
+                            sb.Append("""")
+                            sb.Append(s.Replace("""", """"""))
+                            sb.Append("""")
+                            sb.Append(",")
+                        End If
+                        If reader.LocalName = "comment" Then
+                            s = reader.ReadString()
+                            sb.Append("""")
+                            sb.Append(s.Replace("""", """"""))
+                            sb.Append("""")
+                            sb.Append(",")
+                        End If
+                        If reader.LocalName = "duplicateID" Then
+                            s = reader.ReadString()
+                            sb.Append("""")
+                            sb.Append(s.Replace("""", """"""))
+                            sb.AppendLine("""")
+                        End If
+                    End If
+                End While
+                Dim sw As New System.IO.StreamWriter(Path.GetDirectoryName(ofd.FileName) & "\" & Path.GetFileNameWithoutExtension(ofd.FileName) & "_cvt.csv", False, Encoding.GetEncoding(932))
+                sw.Write(sb.ToString)
+                sw.Close()
+                Beep()
+                reader.Close()
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "例外")
+        End Try
+    End Sub
+
 End Class

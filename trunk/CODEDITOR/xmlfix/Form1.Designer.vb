@@ -33,6 +33,8 @@ Partial Class Form1
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.CRCマスクToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.バージョンToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Button7 = New System.Windows.Forms.Button()
+        Me.Button8 = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
@@ -80,12 +82,14 @@ Partial Class Form1
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.Button8)
+        Me.GroupBox1.Controls.Add(Me.Button7)
         Me.GroupBox1.Controls.Add(Me.Button5)
         Me.GroupBox1.Controls.Add(Me.Button1)
         Me.GroupBox1.Controls.Add(Me.Button2)
         Me.GroupBox1.Location = New System.Drawing.Point(23, 32)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(143, 125)
+        Me.GroupBox1.Size = New System.Drawing.Size(143, 187)
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "XML"
@@ -117,7 +121,7 @@ Partial Class Form1
         Me.GroupBox2.Controls.Add(Me.Button4)
         Me.GroupBox2.Location = New System.Drawing.Point(185, 32)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(143, 125)
+        Me.GroupBox2.Size = New System.Drawing.Size(143, 187)
         Me.GroupBox2.TabIndex = 5
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "CMPRO"
@@ -143,11 +147,29 @@ Partial Class Form1
         Me.バージョンToolStripMenuItem.Size = New System.Drawing.Size(92, 25)
         Me.バージョンToolStripMenuItem.Text = "バージョン"
         '
+        'Button7
+        '
+        Me.Button7.Location = New System.Drawing.Point(11, 122)
+        Me.Button7.Name = "Button7"
+        Me.Button7.Size = New System.Drawing.Size(113, 23)
+        Me.Button7.TabIndex = 3
+        Me.Button7.Text = "CSVに変換"
+        Me.Button7.UseVisualStyleBackColor = True
+        '
+        'Button8
+        '
+        Me.Button8.Location = New System.Drawing.Point(11, 151)
+        Me.Button8.Name = "Button8"
+        Me.Button8.Size = New System.Drawing.Size(113, 23)
+        Me.Button8.TabIndex = 4
+        Me.Button8.Text = "TSVに変換"
+        Me.Button8.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(350, 169)
+        Me.ClientSize = New System.Drawing.Size(350, 232)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.MenuStrip1)
@@ -174,5 +196,7 @@ Partial Class Form1
     Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
     Friend WithEvents CRCマスクToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents バージョンToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents Button8 As System.Windows.Forms.Button
+    Friend WithEvents Button7 As System.Windows.Forms.Button
 
 End Class
