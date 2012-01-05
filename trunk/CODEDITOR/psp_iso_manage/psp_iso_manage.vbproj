@@ -97,6 +97,18 @@
     <Compile Include="form\extra.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="form\uid.Designer.vb">
+      <DependentUpon>uid.vb</DependentUpon>
+    </Compile>
+    <Compile Include="form\uid.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="form\xmlhf.Designer.vb">
+      <DependentUpon>xmlhf.vb</DependentUpon>
+    </Compile>
+    <Compile Include="form\xmlhf.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="form\list.Designer.vb">
       <DependentUpon>list.vb</DependentUpon>
     </Compile>
@@ -142,11 +154,20 @@
     <EmbeddedResource Include="form\extra.resx">
       <DependentUpon>extra.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="form\uid.resx">
+      <DependentUpon>uid.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form\xmlhf.resx">
+      <DependentUpon>xmlhf.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="form\list.ja.resx">
       <DependentUpon>list.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="form\list.resx">
       <DependentUpon>list.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form\main.is.resx">
+      <DependentUpon>main.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="form\main.ja.resx">
       <DependentUpon>main.vb</DependentUpon>

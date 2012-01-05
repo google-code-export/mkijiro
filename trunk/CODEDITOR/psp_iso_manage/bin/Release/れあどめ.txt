@@ -1,7 +1,33 @@
 いろいろあれど、いまいちきにらなかったりするので自分用に作成
 圧縮イメージはサイズ/MD5/SHA1が取得できないのであつかわない
-そのかわりPARAM.SFOのタイトルになるからいちいちリネームする必要がない,圧縮不要なのでリネームが高速
+そのかわりPARAM.SFOのタイトルになるからいちいちリネームする必要がない,圧縮してないのでリネームが高速
 ゲームCRC32での画像検索はOFFLINEりすとのXML.DBを流用してるので、exeはOFFLINEと同じとこにおくこと
+
+2012/01/05
+UIDが500で割り切れる場合検索画像がずれてたので修正
+FILER_XML形式のリスト出力を追加(ID1番～),差分の場合は開始IDを指定する必要あり(でふぉは1800)
+CMPRO/XMLでリネーム失敗したもの(チェックボックス無し)は差分を作れるようにした
+OFFLINEには画像自動調節ないためXML変換時画像も規定サイズに変換した差分をつくるようにした
+
+//FILER_XML
+<game>
+		<imageNumber>1800</imageNumber>
+		<releaseNumber>1800</releaseNumber>
+		<title>初音ミク　-Project　DIVA-　extend</title>
+		<saveType>9999/99/99</saveType><!--日付ダミー-->
+		<romSize>1799192576</romSize>
+		<publisher>ユーザー</publisher>
+		<location>7</location>
+		<sourceRom>PSP Filer Ver.3.9以降</sourceRom>
+		<language>256</language>
+		<files>
+			<romCRC extension=".iso">463D7382</romCRC>
+		</files>
+		<im1CRC>NPJH-50465 / NPJH50465</im1CRC><!--BOXIDの代わりに内部GID 内部GID-->
+		<im2CRC>6.39 / 1.01</im2CRC><!--要求FW,ディスクバージョン,イメージから自動取得-->
+		<comment></comment>
+		<duplicateID>1800</duplicateID>
+</game>
 
 2012/01/03
 リネームで符号文字がそのままでていたので修正

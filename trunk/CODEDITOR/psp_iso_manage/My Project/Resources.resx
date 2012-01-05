@@ -150,4 +150,10 @@ X:\PSP\GAME\</value>
     <value>OFFLINE用XMLを選択します
 CRC32と一致する管理名,画像が検索ボタンで適用されます</value>
   </data>
+  <data name="xmlfoot" xml:space="preserve">
+    <value />
+  </data>
+  <data name="xmlhead" xml:space="preserve">
+    <value />
+  </data>
 </root>

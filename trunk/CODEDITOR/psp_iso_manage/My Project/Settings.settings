@@ -108,5 +108,63 @@ X:\PSP\GAME660\</Value>
     <Setting Name="romcode" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="xmlindex" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="sabunindex" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1800</Value>
+    </Setting>
+    <Setting Name="xmlfoot" Type="System.String" Scope="User">
+      <Value Profile="(Default)">&lt;/games&gt;
+	&lt;gui&gt;
+		&lt;images width="431" height="183"&gt;
+			&lt;image x="0" y="0" width="104" height="181"/&gt;
+			&lt;image x="109" y="0" width="320" height="181"/&gt;
+		&lt;/images&gt;
+	&lt;/gui&gt;
+&lt;/dat&gt;</Value>
+    </Setting>
+    <Setting Name="xmlhead" Type="System.String" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;
+&lt;dat xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="datas.xsd"&gt;
+	&lt;configuration&gt;
+		&lt;datName&gt;Sony PSP Collection USER&lt;/datName&gt;
+		&lt;imFolder&gt;Sony PSP Collection USER&lt;/imFolder&gt;
+		&lt;datVersion&gt;9999&lt;/datVersion&gt;
+		&lt;system&gt;Sony PSP&lt;/system&gt;
+		&lt;screenshotsWidth&gt;320&lt;/screenshotsWidth&gt;
+		&lt;screenshotsHeight&gt;181&lt;/screenshotsHeight&gt;
+		&lt;infos&gt;
+			&lt;releaseNumber visible="true" inNamingOption="true" default="false"/&gt;
+			&lt;title visible="false" inNamingOption="true" default="false"/&gt;
+			&lt;saveType visible="true" inNamingOption="true" default="true"/&gt;
+			&lt;publisher visible="true" inNamingOption="true" default="true"/&gt;
+			&lt;sourceRom visible="true" inNamingOption="true" default="true"/&gt;
+			&lt;romSize visible="true" inNamingOption="true" default="true"/&gt;
+			&lt;romCRC visible="true" inNamingOption="true" default="true"/&gt;
+			&lt;im1CRC visible="true" inNamingOption="false" default="true"/&gt;
+			&lt;im2CRC visible="true" inNamingOption="false" default="true"/&gt;
+			&lt;comment visible="true" inNamingOption="true" default="true"/&gt;
+			&lt;languages visible="true" inNamingOption="true" default="false"/&gt;
+			&lt;languageNumber visible="true" inNamingOption="true" default="false"/&gt;
+		&lt;/infos&gt;
+		&lt;canOpen&gt;
+			&lt;extension&gt;.iso&lt;/extension&gt;
+		&lt;/canOpen&gt;
+		&lt;newDat&gt;
+ 			&lt;datVersionURL&gt;http://&lt;/datVersionURL&gt;
+			&lt;datURL fileName="PSP_List.zip"&gt;http://&lt;/datURL&gt;
+			&lt;imURL&gt;http://&lt;/imURL&gt;
+		&lt;/newDat&gt;
+		&lt;search&gt;
+			&lt;to value="saveType" default="true" auto="true"/&gt;
+			&lt;to value="publisher" default="true" auto="true"/&gt;
+			&lt;to value="sourceRom" default="true" auto="true"/&gt;
+		&lt;/search&gt;
+		&lt;romTitle&gt;%u - %n&lt;/romTitle&gt;
+	&lt;/configuration&gt;
+	&lt;games&gt;
+</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

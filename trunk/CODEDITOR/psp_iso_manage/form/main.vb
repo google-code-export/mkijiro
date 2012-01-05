@@ -86,6 +86,14 @@ Public Class umdisomanger
             If Directory.Exists(Application.StartupPath & "\imgs\user") = False Then
                 Directory.CreateDirectory(Application.StartupPath & "\imgs\user")
             End If
+            If Directory.Exists(Application.StartupPath & ("\diff\imgs")) = False Then
+                Directory.CreateDirectory(Application.StartupPath & "\diff\imgs")
+            End If
+
+            If Directory.Exists(Application.StartupPath & ("\diff\datas")) = False Then
+
+                Directory.CreateDirectory(Application.StartupPath & "\diff\datas")
+            End If
 
 
             If My.Settings.pspinsdir = "" Then
@@ -300,6 +308,10 @@ Public Class umdisomanger
                         Dim st, en As Integer
                         st = 500 * (num \ 500) + 1
                         en = 500 * (num \ 500 + 1)
+                        If num Mod 500 = 0 Then
+                            st = 500 * (num \ 500 - 1) + 1
+                            en = 500 * (num \ 500)
+                        End If
                         img &= st.ToString & "-" & en.ToString & "\"
 
                         bitmap_resize(PictureBox1, img & num.ToString & "a.png", 104, 181)
@@ -2833,8 +2845,1024 @@ Public Class umdisomanger
                         Next
                     End If
                 Next
+                diffCMPRO.Enabled = False
+                diffXML.Enabled = True
                 TreeView1.EndUpdate()
                 Beep()
+            Else
+                '"画像検索用のoffline用XMLがみつかりません", "XMLエラー"
+                MessageBox.Show(lang(5), lang(6))
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "")
+            TreeView1.EndUpdate()
+        End Try
+    End Sub
+
+
+
+    Private Sub CMPROToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles diffCMPRO.Click
+        Try
+            Dim dat As String = My.Settings.datpath
+            Dim i As Integer = 0
+            Dim ci As System.Globalization.CompareInfo = _
+    System.Globalization.CompareInfo.GetCompareInfo("ja-JP")
+
+            If File.Exists(dat) = True Then
+
+                Dim fs As New FileStream(dat, System.IO.FileMode.Open, System.IO.FileAccess.Read)
+                'ファイルを読み込むバイト型配列を作成する
+                Dim bs(CInt(fs.Length - 1)) As Byte
+                'ファイルの内容をすべて読み込む
+                fs.Read(bs, 0, bs.Length)
+                '閉じる
+                fs.Close()
+                'ZIPHEAD
+                If bs(0) = &H50 AndAlso bs(1) = &H4B AndAlso bs(2) = &H3 AndAlso bs(3) = &H4 Then
+                    '展開するZIP書庫のパス
+                    Dim zipPath As String = dat
+                    'ZIP書庫を読み込む 
+                    Dim zfs As New System.IO.FileStream( _
+                        zipPath, _
+                        System.IO.FileMode.Open, _
+                        System.IO.FileAccess.Read)
+                    'ZipInputStreamオブジェクトの作成 
+                    Dim zis As New ICSharpCode.SharpZipLib.Zip.ZipInputStream(zfs)
+
+                    'ZIP内のエントリを列挙 
+                    Dim ze As ICSharpCode.SharpZipLib.Zip.ZipEntry
+                    Dim xmll As Boolean = False
+                    While True
+                        'ZipEntryを取得
+                        ze = zis.GetNextEntry()
+                        If ze Is Nothing Then
+                            Exit While
+                        End If
+                        If Not ze.IsDirectory Then
+                            '展開先のファイル名を決定 
+                            Dim fileName As String = System.IO.Path.GetFileName(ze.Name)
+
+                            If ze.Name.Contains(".dat") = True Then
+                                '展開するファイルを読み込む
+                                Dim buffer As Byte() = New Byte(2047) {}
+                                Dim len As Integer = 0
+                                i = 0
+                                While True
+                                    len = zis.Read(buffer, 0, buffer.Length)
+                                    If len = 0 Then
+                                        Exit While
+                                    End If
+                                    'ファイルに書き込む
+                                    Array.Resize(bs, i + buffer.Length)
+                                    Array.ConstrainedCopy(buffer, 0, bs, i, buffer.Length)
+                                    i += buffer.Length
+                                End While
+                                xmll = True
+                            End If
+                        End If
+                    End While
+
+                    '閉じる 
+                    zis.Close()
+                    zfs.Close()
+                End If
+
+                Dim s As String = System.Text.Encoding.GetEncoding(932).GetString(bs)
+                Dim ss As String = ""
+                Dim rp As String = ""
+                Dim path As String = ""
+                Dim hit As Integer = 0
+                Dim sb As New StringBuilder
+                Dim sba As New StringBuilder
+                Dim rr As New StringBuilder
+                Dim romcode As String() = {" [o]", " []", " [b]", " [!]"}
+                Dim emphash As String() = {"00000000", "000000000000000000000000", "000000000000000000000000000000000"}
+                Dim flag As String() = {" flags verified", " flag baddump", " flags nodump"}
+                Dim title(10000) As String
+                Dim desk(10000) As String
+                Dim rom(10000) As String
+                Dim id(10000) As String
+                Dim opath As String = ""
+                Dim ppath As String = ""
+                Dim tmp As String = ""
+                i = 0
+                Dim s1 As String = ""
+                Dim sss As String = ""
+                Dim asd As String = ""
+                Dim k As Integer = 0
+                Dim mi As Integer = 0
+                Dim ud As Integer = 0
+                Dim size As Long = 0
+                Dim hash(2) As String
+                Dim psf As New psf
+                Dim st As String = ""
+                Dim sabun As Boolean = False
+
+                sba.AppendLine("clrmamepro (")
+                sba.Append(vbTab)
+                sba.AppendLine("name ""Sony - PlayStation Portable""")
+                sba.Append(vbTab)
+                sba.AppendLine("description ""Sony - PlayStation Portable""")
+                sba.Append(vbTab)
+                sba.Append("version ")
+                sba.AppendLine(Now.ToString.Replace("/", "").Substring(0, 8))
+                sba.Append(vbTab)
+                sba.Append("comment """)
+                sba.Append(System.Environment.ExpandEnvironmentVariables("%username%"))
+                sba.AppendLine("""")
+                sba.AppendLine(")")
+                sba.AppendLine()
+
+                TreeView1.CheckBoxes = True
+                TreeView1.BeginUpdate()
+                For Each n As TreeNode In TreeView1.Nodes
+                    ss = n.Tag.ToString
+                    hash(0) = emphash(0)
+                    hash(1) = emphash(1)
+                    hash(2) = emphash(2)
+                    If ss.Contains("UP") Or ss.Contains("HB") Then
+                    Else
+                        For Each bb As TreeNode In n.Nodes
+                            If bb.Index = 0 Then
+                                path = bb.Tag.ToString
+                            End If
+                            If bb.Text.Contains("MD5") Then
+                                hash(1) = bb.Text.ToString.Remove(0, 5)
+                            End If
+                            If bb.Text.Contains("SHA-1") Then
+                                hash(2) = bb.Text.ToString.Remove(0, 7)
+                            End If
+                            If bb.Text.Contains("CRC32") Then
+                                hash(0) = bb.Text.ToString.Remove(0, 7)
+                            End If
+
+                            If bb.Index = n.Nodes.Count - 1 AndAlso n.Checked = False Then
+                                Dim fhs As New System.IO.FileStream(n.Nodes(0).Tag.ToString, System.IO.FileMode.Open, System.IO.FileAccess.Read)
+                                size = fhs.Length
+                                fhs.Close()
+                                ss = n.Text
+                                If disck_ver.Checked = True Then
+                                    If Not n.Text.Contains("(v") Then
+                                        st = psf.GETNAME(n.Nodes(0).Tag.ToString, "I")
+                                        If st <> "" Then
+                                            ss &= " (v" & st & ")"
+                                        End If
+                                    End If
+                                End If
+                                sb.AppendLine("game (")
+                                sb.Append(vbTab)
+                                sb.Append("name """)
+                                sb.Append(ss)
+                                sb.AppendLine("""")
+                                sb.Append(vbTab)
+                                sb.Append("description """)
+                                sb.Append(ss)
+                                sb.AppendLine("""")
+                                sb.Append(vbTab)
+                                sb.Append("serial """)
+                                sb.Append(n.Tag.ToString)
+                                sb.AppendLine("""")
+                                sb.Append(vbTab)
+                                sb.Append("rom ( name """)
+                                sb.Append(ss)
+                                sb.Append(".iso"" size ")
+                                sb.Append(size.ToString)
+                                sb.Append(" crc ")
+                                sb.Append(hash(0))
+                                sb.Append(" md5 ")
+                                sb.Append(hash(1))
+                                sb.Append(" sha1 ")
+                                sb.Append(hash(2))
+                                sb.AppendLine(" )")
+                                sb.AppendLine(")")
+                                sb.AppendLine()
+                            End If
+                        Next
+                    End If
+                Next
+
+                Dim wr As New System.IO.StreamWriter(Application.StartupPath & "\diff\" & Now.ToString.Replace("/", "").Replace(":", "") & ".dat",
+                        False, System.Text.Encoding.GetEncoding(932))
+                wr.Write(sba.ToString)
+                wr.Write(sb.ToString)
+                wr.Close()
+                diffCMPRO.Enabled = True
+                diffXML.Enabled = False
+                Beep()
+                TreeView1.EndUpdate()
+
+            Else
+                '"リネーム用DATがみつかりません", "DATエラー"
+                MessageBox.Show(lang(44), lang(45))
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "")
+            TreeView1.EndUpdate()
+        End Try
+    End Sub
+
+
+    Private Sub ToolStripMenuItem2_Click(sender As System.Object, e As System.EventArgs) Handles exportxml.Click
+
+        Try
+
+            Dim imgbase As New Regex("<imFolder>.*?</imFolder>")
+            Dim imb As Match = imgbase.Match(My.Settings.xmlhead)
+            If imb.Success Then
+                Dim s As String = imb.Value.Remove(0, 10)
+                s = s.Remove(s.Length - 11, 11) & "\"
+                Dim i As Integer = 0
+                Dim ss As String = ""
+                Dim rp As String = ""
+                Dim path As String = ""
+                Dim impath As String = ""
+                Dim impathu As String = ""
+                Dim impathu2 As String = ""
+                Dim tmpim As String = ""
+                Dim tmpim2 As String = ""
+                Dim img As String = ""
+                Dim hit As Integer = 0
+                Dim sb As New StringBuilder
+                Dim rr As New StringBuilder
+                Dim romcode As String() = {" [o]", " []", " [b]", " [!]"}
+                Dim emphash As String() = {"00000000", "000000000000000000000000", "000000000000000000000000000000000"}
+                Dim flag As String() = {" flags verified", " flag baddump", " flags nodump"}
+                Dim title(10000) As String
+                Dim desk(10000) As String
+                Dim rom(10000) As String
+                Dim id(10000) As String
+                Dim opath As String = ""
+                Dim ppath As String = ""
+                Dim tmp As String = ""
+                i = My.Settings.xmlindex
+                Dim s1 As String = ""
+                Dim sss As String = ""
+                Dim asd As String = ""
+                Dim k As Integer = 0
+                Dim mi As Integer = 0
+                Dim ud As Integer = 0
+                Dim size As Long = 0
+                Dim hash(2) As String
+                Dim psf As New psf
+                Dim st As String = ""
+                Dim sabun As Boolean = False
+
+                img = Application.StartupPath & "\diff\imgs\" & s & "\"
+                If Directory.Exists(img) = False Then
+                    Directory.CreateDirectory(img)
+                End If
+                TreeView1.CheckBoxes = True
+                TreeView1.BeginUpdate()
+                For Each n As TreeNode In TreeView1.Nodes
+                    ss = n.Tag.ToString
+                    If ss.Contains("UP") Or ss.Contains("HB") Then
+                    Else
+                        For Each bb As TreeNode In n.Nodes
+                            If bb.Index = 0 Then
+                                hash(0) = emphash(0)
+                                hash(1) = emphash(1)
+                                hash(2) = emphash(2)
+                                path = bb.Tag.ToString
+                                impath = bb.Name.ToString
+                                impathu = Application.StartupPath & "\imgs\user\" & ss & "a.png"
+                                impathu2 = Application.StartupPath & "\imgs\user\" & ss & "b.png"
+                            End If
+                            If bb.Text.Contains("MD5") Then
+                                hash(1) = bb.Text.ToString.Remove(0, 5)
+                            End If
+                            If bb.Text.Contains("SHA-1") Then
+                                hash(2) = bb.Text.ToString.Remove(0, 7)
+                            End If
+                            If bb.Text.Contains("CRC32") Then
+                                hash(0) = bb.Text.ToString.Remove(0, 7)
+                            End If
+
+                            If bb.Index = n.Nodes.Count - 1 Then
+                                Dim fhs As New System.IO.FileStream(path, System.IO.FileMode.Open, System.IO.FileAccess.Read)
+                                size = fhs.Length
+                                fhs.Close()
+                                ss = n.Text
+                                'If disck_ver.Checked = True Then
+                                '    If Not n.Text.Contains("(v") Then
+                                '        st = psf.GETNAME(n.Nodes(0).Tag.ToString, "I")
+                                '        If st <> "" Then
+                                '            ss &= " (v" & st & ")"
+                                '        End If
+                                '    End If
+                                'End If
+
+                                '<game>
+                                '	<imageNumber>1</imageNumber>
+                                '	<releaseNumber>1</releaseNumber>
+                                '	<title>Ridge Racers</title>
+                                '	<saveType>700 KB</saveType>
+                                '	<romSize>906297344</romSize>
+                                '	<publisher>Namco</publisher>
+                                '	<location>7</location>
+                                '	<sourceRom>Paradox</sourceRom>
+                                '	<language>256</language>
+                                '	<files>
+                                '		<romCRC extension=".iso">37DC8144</romCRC>
+                                '	</files>
+                                '	<im1CRC>0E928F1E</im1CRC>
+                                '	<im2CRC>2BA5174D</im2CRC>
+                                '	<comment></comment>
+                                '	<duplicateID>92</duplicateID>
+                                '</game>
+
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.AppendLine("<game>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append("<imageNumber>")
+                                sb.Append(i.ToString)
+                                sb.AppendLine("</imageNumber>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append("<releaseNumber>")
+                                sb.Append(i.ToString)
+                                sb.AppendLine("</releaseNumber>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append("<title>")
+                                sb.Append(n.Text.Replace(" ", "　"))
+                                sb.AppendLine("</title>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.AppendLine("<saveType>9999/99/99</saveType>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append("<romSize>")
+                                sb.Append(size.ToString)
+                                sb.AppendLine("</romSize>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.AppendLine("<publisher>PSP</publisher>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.AppendLine("<location>7</location>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.AppendLine("<sourceRom>PSP Filer Ver.3.9以降</sourceRom>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.AppendLine("<language>256</language>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.AppendLine("<files>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append("<romCRC extension="".iso"">")
+                                sb.Append(hash(0))
+                                sb.AppendLine("</romCRC>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.AppendLine("</files>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append("<im1CRC>")
+                                sb.Append(n.Tag.ToString)
+                                sb.Append(" / ")
+                                sb.Append(n.Tag.ToString.Replace("-", ""))
+                                'sb.Append(hash(1))
+                                sb.AppendLine("</im1CRC>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append("<im2CRC>")
+                                sb.Append(psf.GETNAME(n.Nodes(0).Tag.ToString, "XML"))
+                                'sb.Append("9.99 / 9.99")
+                                'sb.Append(hash(2))
+                                sb.AppendLine("</im2CRC>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append("<comment>")
+                                sb.AppendLine("</comment>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append("<duplicateID>")
+                                sb.Append(i.ToString)
+                                sb.AppendLine("</duplicateID>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.AppendLine("</game>")
+                                Dim num As Integer = i
+                                Dim stt, en As Integer
+                                stt = 500 * (num \ 500) + 1
+                                en = 500 * (num \ 500 + 1)
+                                If num Mod 500 = 0 Then
+                                    stt = 500 * (num \ 500 - 1) + 1
+                                    en = 500 * (num \ 500)
+                                End If
+                                Dim imgt As String = img & stt.ToString & "-" & en.ToString & "\"
+                                If Directory.Exists(imgt) = False Then
+                                    Directory.CreateDirectory(imgt)
+                                End If
+                                If impath.Length > 4 Then
+                                    tmpim = impath.Insert(impath.Length - 4, "a")
+                                    tmpim2 = impath.Insert(impath.Length - 4, "b")
+                                Else
+                                    tmpim = ""
+                                    tmpim2 = ""
+                                End If
+
+
+                                If File.Exists(impathu) = True Then
+                                    If File.Exists(imgt & i.ToString & "a.png") Then
+                                        File.Delete(imgt & i.ToString & "a.png")
+                                    End If
+
+                                    PictureBox1.Image = Image.FromFile(impathu)
+                                    PictureBox1.SetBounds(0, 0, _
+                                    PictureBox1.Image.Size.Width + 2, _
+                                    PictureBox1.Image.Size.Height + 30)
+
+                                    Dim objBtm As Bitmap
+                                    Dim lngW As Integer = 104
+                                    Dim lngH As Integer = 181
+                                    objBtm = New Bitmap(PictureBox1.Image)
+                                    Dim objBtm2 As New Bitmap(objBtm, lngW, lngH)
+
+                                    PictureBox1.Image = objBtm2
+
+                                    PictureBox1.SetBounds(0, 0, _
+                                    PictureBox1.Image.Size.Width + 2, _
+                                    PictureBox1.Image.Size.Height + 30)
+
+                                    Me.Width = PictureBox1.Image.Size.Width + 2
+                                    Me.Height = PictureBox1.Image.Size.Height + 30
+
+                                    Dim strImageFileName As String
+                                    strImageFileName = "cvt.png"
+                                    PictureBox1.Image.Save(strImageFileName, Imaging.ImageFormat.Png)
+                                    File.Copy("cvt.png", imgt & i.ToString & "a.png")
+                                ElseIf File.Exists(tmpim) Then
+                                    If File.Exists(imgt & i.ToString & "a.png") Then
+                                        File.Delete(imgt & i.ToString & "a.png")
+                                    End If
+
+                                    PictureBox1.Image = Image.FromFile(tmpim)
+                                    PictureBox1.SetBounds(0, 0, _
+                                    PictureBox1.Image.Size.Width + 2, _
+                                    PictureBox1.Image.Size.Height + 30)
+
+                                    Dim objBtm As Bitmap
+                                    Dim lngW As Integer = 104
+                                    Dim lngH As Integer = 181
+                                    objBtm = New Bitmap(PictureBox1.Image)
+                                    Dim objBtm2 As New Bitmap(objBtm, lngW, lngH)
+
+                                    PictureBox1.Image = objBtm2
+
+                                    PictureBox1.SetBounds(0, 0, _
+                                    PictureBox1.Image.Size.Width + 2, _
+                                    PictureBox1.Image.Size.Height + 30)
+
+                                    Me.Width = PictureBox1.Image.Size.Width + 2
+                                    Me.Height = PictureBox1.Image.Size.Height + 30
+                                    Dim strImageFileName As String
+                                    strImageFileName = "cvt.png"
+                                    PictureBox1.Image.Save(strImageFileName, Imaging.ImageFormat.Png)
+                                    File.Copy("cvt.png", imgt & i.ToString & "a.png")
+
+                                End If
+
+
+                                If File.Exists(impathu2) = True Then
+                                    If File.Exists(imgt & i.ToString & "b.png") Then
+                                        File.Delete(imgt & i.ToString & "b.png")
+                                    End If
+
+                                    PictureBox1.Image = Image.FromFile(impathu2)
+                                    PictureBox1.SetBounds(0, 0, _
+                                    PictureBox1.Image.Size.Width + 2, _
+                                    PictureBox1.Image.Size.Height + 30)
+
+                                    Dim objBtm As Bitmap
+                                    Dim lngW As Integer = 320
+                                    Dim lngH As Integer = 181
+                                    objBtm = New Bitmap(PictureBox1.Image)
+                                    Dim objBtm2 As New Bitmap(objBtm, lngW, lngH)
+
+                                    PictureBox1.Image = objBtm2
+
+                                    PictureBox1.SetBounds(0, 0, _
+                                    PictureBox1.Image.Size.Width + 2, _
+                                    PictureBox1.Image.Size.Height + 30)
+
+                                    Me.Width = PictureBox1.Image.Size.Width + 2
+                                    Me.Height = PictureBox1.Image.Size.Height + 30
+
+                                    Dim strImageFileName As String
+                                    strImageFileName = "cvt.png"
+                                    PictureBox1.Image.Save(strImageFileName, Imaging.ImageFormat.Png)
+                                    File.Copy("cvt.png", imgt & i.ToString & "b.png")
+                                ElseIf File.Exists(tmpim2) Then
+                                    If File.Exists(imgt & i.ToString & "b.png") Then
+                                        File.Delete(imgt & i.ToString & "b.png")
+                                    End If
+
+                                    PictureBox1.Image = Image.FromFile(tmpim2)
+                                    PictureBox1.SetBounds(0, 0, _
+                                    PictureBox1.Image.Size.Width + 2, _
+                                    PictureBox1.Image.Size.Height + 30)
+
+                                    Dim objBtm As Bitmap
+                                    Dim lngW As Integer = 320
+                                    Dim lngH As Integer = 181
+                                    objBtm = New Bitmap(PictureBox1.Image)
+                                    Dim objBtm2 As New Bitmap(objBtm, lngW, lngH)
+
+                                    PictureBox1.Image = objBtm2
+
+                                    PictureBox1.SetBounds(0, 0, _
+                                    PictureBox1.Image.Size.Width + 2, _
+                                    PictureBox1.Image.Size.Height + 30)
+
+                                    Me.Width = PictureBox1.Image.Size.Width + 2
+                                    Me.Height = PictureBox1.Image.Size.Height + 30
+
+                                    Dim strImageFileName As String
+                                    strImageFileName = "cvt.png"
+                                    PictureBox1.Image.Save(strImageFileName, Imaging.ImageFormat.Png)
+                                    File.Copy("cvt.png", imgt & i.ToString & "b.png")
+                                End If
+                                i += 1
+                            End If
+                        Next
+                    End If
+                Next
+
+                PictureBox1.SetBounds(260, 64, 104, 181)
+                Dim utf8nobom As New UTF8Encoding
+                Dim wr As New System.IO.StreamWriter(Application.StartupPath & "\diff\datas\" & Now.ToString.Replace("/", "").Replace(":", "") & ".xml",
+                                        False, utf8nobom)
+                wr.Write(My.Settings.xmlhead)
+                wr.Write(sb.ToString)
+                wr.Write(My.Settings.xmlfoot)
+                wr.Close()
+                Beep()
+                TreeView1.EndUpdate()
+            Else
+                MessageBox.Show("XMLヘッダーに<imFoder>がありません")
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "")
+            TreeView1.EndUpdate()
+        End Try
+    End Sub
+
+    Private Sub XMLToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles diffXML.Click
+
+        Try
+            Dim xml As String = My.Settings.xml
+            Dim i As Integer = 0
+            If File.Exists(xml) = True Then
+                My.Settings.edit = True
+                Dim ffs As New FileStream(xml, System.IO.FileMode.Open, System.IO.FileAccess.Read)
+                'ファイルを読み込むバイト型配列を作成する
+                Dim bs(CInt(ffs.Length - 1)) As Byte
+                'ファイルの内容をすべて読み込む
+                ffs.Read(bs, 0, bs.Length)
+                '閉じる
+                ffs.Close()
+                'ZIPHEAD
+                If bs(0) = &H50 AndAlso bs(1) = &H4B AndAlso bs(2) = &H3 AndAlso bs(3) = &H4 Then
+                    '展開するZIP書庫のパス
+                    Dim zipPath As String = xml
+                    'ZIP書庫を読み込む 
+                    Dim zfs As New System.IO.FileStream( _
+                        zipPath, _
+                        System.IO.FileMode.Open, _
+                        System.IO.FileAccess.Read)
+                    'ZipInputStreamオブジェクトの作成 
+                    Dim zis As New ICSharpCode.SharpZipLib.Zip.ZipInputStream(zfs)
+
+                    'ZIP内のエントリを列挙 
+                    Dim ze As ICSharpCode.SharpZipLib.Zip.ZipEntry
+                    Dim xmll As Boolean = False
+                    While True
+                        'ZipEntryを取得
+                        ze = zis.GetNextEntry()
+                        If ze Is Nothing Then
+                            Exit While
+                        End If
+                        If Not ze.IsDirectory Then
+                            '展開先のファイル名を決定 
+                            Dim fileName As String = System.IO.Path.GetFileName(ze.Name)
+
+                            If ze.Name.Contains(".xml") = True Then
+                                '展開するファイルを読み込む
+                                Dim buffer As Byte() = New Byte(2047) {}
+                                Dim len As Integer = 0
+                                While True
+                                    len = zis.Read(buffer, 0, buffer.Length)
+                                    If len = 0 Then
+                                        Exit While
+                                    End If
+                                    'ファイルに書き込む
+                                    Array.Resize(bs, i + buffer.Length)
+                                    Array.ConstrainedCopy(buffer, 0, bs, i, buffer.Length)
+                                    i += buffer.Length
+                                End While
+                                xmll = True
+                            End If
+                        End If
+                    End While
+
+                    '閉じる 
+                    zis.Close()
+                    zfs.Close()
+                End If
+
+                Dim s As String = System.Text.Encoding.GetEncoding(65001).GetString(bs)
+                Dim maskim As String = "<imFolder>.+</imFolder>"
+                Dim maskdat As String = "<datName>.+</datName>"
+                Dim r As New Regex(maskim, RegexOptions.ECMAScript)
+                Dim im As Match = r.Match(s)
+                Dim q As New Regex(maskdat, RegexOptions.ECMAScript)
+                Dim dat As Match = q.Match(s)
+                Dim ss As String = dat.Value
+                ss = ss.Replace("<datName>", "")
+                ss = ss.Replace("</datName>", "")
+                If Directory.Exists(Application.StartupPath & "\imgs\" & ss & "\") Then
+                    s = ss & "\"
+                End If
+                ss = im.Value
+                ss = ss.Replace("<imFolder>", "")
+                ss = ss.Replace("</imFolder>", "")
+                If ss <> "" AndAlso Directory.Exists(Application.StartupPath & "\imgs\" & ss) Then
+                    s = ss & "\"
+                End If
+
+                If dat.Value = "" Then
+                    '"OFFLINE用のXMLではありません", "不明XML"
+                    MessageBox.Show(lang(31), lang(32))
+                    Exit Sub
+                End If
+
+                Dim rp As String = ""
+                Dim path As String = ""
+                Dim impath As String = ""
+                Dim impathu As String = ""
+                Dim impathu2 As String = ""
+                Dim tmpim As String = ""
+                Dim tmpim2 As String = ""
+                Dim img As String = ""
+                Dim hit As Integer = 0
+                Dim sb As New StringBuilder
+                Dim rr As New StringBuilder
+                Dim romcode As String() = {" [o]", " []", " [b]", " [!]"}
+                Dim emphash As String() = {"00000000", "000000000000000000000000", "000000000000000000000000000000000"}
+                Dim flag As String() = {" flags verified", " flag baddump", " flags nodump"}
+                Dim title(10000) As String
+                Dim desk(10000) As String
+                Dim rom(10000) As String
+                Dim id(10000) As String
+                Dim opath As String = ""
+                Dim ppath As String = ""
+                Dim tmp As String = ""
+                i = My.Settings.sabunindex
+                Dim s1 As String = ""
+                Dim sss As String = ""
+                Dim asd As String = ""
+                Dim k As Integer = 0
+                Dim mi As Integer = 0
+                Dim ud As Integer = 0
+                Dim size As Long = 0
+                Dim hash(2) As String
+                Dim psf As New psf
+                Dim st As String = ""
+                Dim sabun As Boolean = False
+
+                img = Application.StartupPath & "\diff\imgs\" & s
+                If Directory.Exists(img) = False Then
+                    Directory.CreateDirectory(img)
+                End If
+                TreeView1.CheckBoxes = True
+                TreeView1.BeginUpdate()
+                For Each n As TreeNode In TreeView1.Nodes
+                    ss = n.Tag.ToString
+                    If ss.Contains("UP") Or ss.Contains("HB") Then
+                    Else
+                        For Each bb As TreeNode In n.Nodes
+                            If bb.Index = 0 Then
+                                hash(0) = emphash(0)
+                                hash(1) = emphash(1)
+                                hash(2) = emphash(2)
+                                path = bb.Tag.ToString
+                                impath = bb.Name.ToString
+                                impathu = Application.StartupPath & "\imgs\user\" & ss & "a.png"
+                                impathu2 = Application.StartupPath & "\imgs\user\" & ss & "b.png"
+                            End If
+                            If bb.Text.Contains("MD5") Then
+                                hash(1) = bb.Text.ToString.Remove(0, 5)
+                            End If
+                            If bb.Text.Contains("SHA-1") Then
+                                hash(2) = bb.Text.ToString.Remove(0, 7)
+                            End If
+                            If bb.Text.Contains("CRC32") Then
+                                hash(0) = bb.Text.ToString.Remove(0, 7)
+                            End If
+
+                            If bb.Index = n.Nodes.Count - 1 AndAlso n.Checked = False Then
+                                Dim fhs As New System.IO.FileStream(path, System.IO.FileMode.Open, System.IO.FileAccess.Read)
+                                size = fhs.Length
+                                fhs.Close()
+                                ss = n.Text
+                                'If disck_ver.Checked = True Then
+                                '    If Not n.Text.Contains("(v") Then
+                                '        st = psf.GETNAME(n.Nodes(0).Tag.ToString, "I")
+                                '        If st <> "" Then
+                                '            ss &= " (v" & st & ")"
+                                '        End If
+                                '    End If
+                                'End If
+
+                                '<game>
+                                '	<imageNumber>1</imageNumber>
+                                '	<releaseNumber>1</releaseNumber>
+                                '	<title>Ridge Racers</title>
+                                '	<saveType>700 KB</saveType>
+                                '	<romSize>906297344</romSize>
+                                '	<publisher>Namco</publisher>
+                                '	<location>7</location>
+                                '	<sourceRom>Paradox</sourceRom>
+                                '	<language>256</language>
+                                '	<files>
+                                '		<romCRC extension=".iso">37DC8144</romCRC>
+                                '	</files>
+                                '	<im1CRC>0E928F1E</im1CRC>
+                                '	<im2CRC>2BA5174D</im2CRC>
+                                '	<comment></comment>
+                                '	<duplicateID>92</duplicateID>
+                                '</game>
+
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.AppendLine("<game>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append("<imageNumber>")
+                                sb.Append(i.ToString)
+                                sb.AppendLine("</imageNumber>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append("<releaseNumber>")
+                                sb.Append(i.ToString)
+                                sb.AppendLine("</releaseNumber>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append("<title>")
+                                sb.Append(n.Text.Replace(" ", "　"))
+                                sb.AppendLine("</title>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.AppendLine("<saveType>9999/99/99</saveType>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append("<romSize>")
+                                sb.Append(size.ToString)
+                                sb.AppendLine("</romSize>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.AppendLine("<publisher>ユーザー</publisher>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.AppendLine("<location>7</location>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.AppendLine("<sourceRom>PSP Filer Ver.3.9以降</sourceRom>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.AppendLine("<language>256</language>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.AppendLine("<files>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append("<romCRC extension="".iso"">")
+                                sb.Append(hash(0))
+                                sb.AppendLine("</romCRC>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.AppendLine("</files>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append("<im1CRC>")
+                                sb.Append(n.Tag.ToString)
+                                sb.Append(" / ")
+                                sb.Append(n.Tag.ToString.Replace("-", ""))
+                                'sb.Append(hash(1))
+                                sb.AppendLine("</im1CRC>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append("<im2CRC>")
+                                sb.Append(psf.GETNAME(n.Nodes(0).Tag.ToString, "XML"))
+                                'sb.Append("9.99 / 9.99")
+                                'sb.Append(hash(2))
+                                sb.AppendLine("</im2CRC>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append("<comment>")
+                                sb.AppendLine("</comment>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.Append("<duplicateID>")
+                                sb.Append(i.ToString)
+                                sb.AppendLine("</duplicateID>")
+                                sb.Append(vbTab)
+                                sb.Append(vbTab)
+                                sb.AppendLine("</game>")
+                                Dim num As Integer = i
+                                Dim stt, en As Integer
+                                stt = 500 * (num \ 500) + 1
+                                en = 500 * (num \ 500 + 1)
+                                If (num Mod 500) = 0 Then
+                                    stt = 500 * (num \ 500 - 1) + 1
+                                    en = 500 * (num \ 500)
+                                End If
+                                Dim imgt As String = img & stt.ToString & "-" & en.ToString & "\"
+                                If Directory.Exists(imgt) = False Then
+                                    Directory.CreateDirectory(imgt)
+                                End If
+                                If impath.Length > 4 Then
+                                    tmpim = impath.Insert(impath.Length - 4, "a")
+                                    tmpim2 = impath.Insert(impath.Length - 4, "b")
+                                Else
+                                    tmpim = ""
+                                    tmpim2 = ""
+                                End If
+
+
+                                If File.Exists(impathu) = True Then
+                                    If File.Exists(imgt & i.ToString & "a.png") Then
+                                        File.Delete(imgt & i.ToString & "a.png")
+                                    End If
+
+                                    PictureBox1.Image = Image.FromFile(impathu)
+                                    PictureBox1.SetBounds(0, 0, _
+                                    PictureBox1.Image.Size.Width + 2, _
+                                    PictureBox1.Image.Size.Height + 30)
+
+                                    Dim objBtm As Bitmap
+                                    Dim lngW As Integer = 104
+                                    Dim lngH As Integer = 181
+                                    objBtm = New Bitmap(PictureBox1.Image)
+                                    Dim objBtm2 As New Bitmap(objBtm, lngW, lngH)
+
+                                    PictureBox1.Image = objBtm2
+
+                                    PictureBox1.SetBounds(0, 0, _
+                                    PictureBox1.Image.Size.Width + 2, _
+                                    PictureBox1.Image.Size.Height + 30)
+
+                                    Me.Width = PictureBox1.Image.Size.Width + 2
+                                    Me.Height = PictureBox1.Image.Size.Height + 30
+
+                                    Dim strImageFileName As String
+                                    strImageFileName = "cvt.png"
+                                    PictureBox1.Image.Save(strImageFileName, Imaging.ImageFormat.Png)
+                                    File.Copy("cvt.png", imgt & i.ToString & "a.png")
+                                ElseIf File.Exists(tmpim) Then
+                                    If File.Exists(imgt & i.ToString & "a.png") Then
+                                        File.Delete(imgt & i.ToString & "a.png")
+                                    End If
+
+                                    PictureBox1.Image = Image.FromFile(tmpim)
+                                    PictureBox1.SetBounds(0, 0, _
+                                    PictureBox1.Image.Size.Width + 2, _
+                                    PictureBox1.Image.Size.Height + 30)
+
+                                    Dim objBtm As Bitmap
+                                    Dim lngW As Integer = 104
+                                    Dim lngH As Integer = 181
+                                    objBtm = New Bitmap(PictureBox1.Image)
+                                    Dim objBtm2 As New Bitmap(objBtm, lngW, lngH)
+
+                                    PictureBox1.Image = objBtm2
+
+                                    PictureBox1.SetBounds(0, 0, _
+                                    PictureBox1.Image.Size.Width + 2, _
+                                    PictureBox1.Image.Size.Height + 30)
+
+                                    Me.Width = PictureBox1.Image.Size.Width + 2
+                                    Me.Height = PictureBox1.Image.Size.Height + 30
+                                    Dim strImageFileName As String
+                                    strImageFileName = "cvt.png"
+                                    PictureBox1.Image.Save(strImageFileName, Imaging.ImageFormat.Png)
+                                    File.Copy("cvt.png", imgt & i.ToString & "a.png")
+
+                                End If
+
+
+                                If File.Exists(impathu2) = True Then
+                                    If File.Exists(imgt & i.ToString & "b.png") Then
+                                        File.Delete(imgt & i.ToString & "b.png")
+                                    End If
+
+                                    PictureBox1.Image = Image.FromFile(impathu2)
+                                    PictureBox1.SetBounds(0, 0, _
+                                    PictureBox1.Image.Size.Width + 2, _
+                                    PictureBox1.Image.Size.Height + 30)
+
+                                    Dim objBtm As Bitmap
+                                    Dim lngW As Integer = 320
+                                    Dim lngH As Integer = 181
+                                    objBtm = New Bitmap(PictureBox1.Image)
+                                    Dim objBtm2 As New Bitmap(objBtm, lngW, lngH)
+
+                                    PictureBox1.Image = objBtm2
+
+                                    PictureBox1.SetBounds(0, 0, _
+                                    PictureBox1.Image.Size.Width + 2, _
+                                    PictureBox1.Image.Size.Height + 30)
+
+                                    Me.Width = PictureBox1.Image.Size.Width + 2
+                                    Me.Height = PictureBox1.Image.Size.Height + 30
+
+                                    Dim strImageFileName As String
+                                    strImageFileName = "cvt.png"
+                                    PictureBox1.Image.Save(strImageFileName, Imaging.ImageFormat.Png)
+                                    File.Copy("cvt.png", imgt & i.ToString & "b.png")
+                                ElseIf File.Exists(tmpim2) Then
+                                    If File.Exists(imgt & i.ToString & "b.png") Then
+                                        File.Delete(imgt & i.ToString & "b.png")
+                                    End If
+
+                                    PictureBox1.Image = Image.FromFile(tmpim2)
+                                    PictureBox1.SetBounds(0, 0, _
+                                    PictureBox1.Image.Size.Width + 2, _
+                                    PictureBox1.Image.Size.Height + 30)
+
+                                    Dim objBtm As Bitmap
+                                    Dim lngW As Integer = 320
+                                    Dim lngH As Integer = 181
+                                    objBtm = New Bitmap(PictureBox1.Image)
+                                    Dim objBtm2 As New Bitmap(objBtm, lngW, lngH)
+
+                                    PictureBox1.Image = objBtm2
+
+                                    PictureBox1.SetBounds(0, 0, _
+                                    PictureBox1.Image.Size.Width + 2, _
+                                    PictureBox1.Image.Size.Height + 30)
+
+                                    Me.Width = PictureBox1.Image.Size.Width + 2
+                                    Me.Height = PictureBox1.Image.Size.Height + 30
+
+                                    Dim strImageFileName As String
+                                    strImageFileName = "cvt.png"
+                                    PictureBox1.Image.Save(strImageFileName, Imaging.ImageFormat.Png)
+                                    File.Copy("cvt.png", imgt & i.ToString & "b.png")
+                                End If
+                                i += 1
+                            End If
+                        Next
+                    End If
+                Next
+
+                PictureBox1.SetBounds(260, 64, 104, 181)
+                Dim utf8nobom As New UTF8Encoding
+                Dim wr As New System.IO.StreamWriter(Application.StartupPath & "\diff\datas\" & s.Replace("\", "") & "_diff_" & Now.ToString.Replace("/", "").Replace(":", "") & ".xml",
+                                        False, utf8nobom)
+                wr.Write(sb.ToString)
+                wr.Close()
+                Beep()
+                TreeView1.EndUpdate()
             Else
                 '"画像検索用のoffline用XMLがみつかりません", "XMLエラー"
                 MessageBox.Show(lang(5), lang(6))
@@ -2967,6 +3995,26 @@ Public Class umdisomanger
         Else
             ROMCODEs.Checked = False
             My.Settings.romcode = False
+        End If
+    End Sub
+
+    Private Sub XMLヘッダフッター編集ToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles XMLヘッダフッター編集ToolStripMenuItem.Click
+        Dim f As New xmlhf
+        Me.TopMost = False
+        f.ShowDialog()
+        f.Dispose()
+        If My.Settings.topmost = True Then
+            Me.TopMost = True
+        End If
+    End Sub
+
+    Private Sub 差分開始インデックスToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles sabunindex.Click
+        Dim f As New uid
+        Me.TopMost = False
+        f.ShowDialog()
+        f.Dispose()
+        If My.Settings.topmost = True Then
+            Me.TopMost = True
         End If
     End Sub
 End Class
