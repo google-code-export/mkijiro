@@ -124,6 +124,12 @@
   <data name="CRCimage.Text" xml:space="preserve">
     <value>CRC画像検索</value>
   </data>
+  <data name="ContextMenuStrip2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>259, 114</value>
+  </data>
+  <data name="TreeView1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>242, 413</value>
+  </data>
   <data name="rg_add.Size" type="System.Drawing.Size, System.Drawing">
     <value>258, 26</value>
   </data>
@@ -150,12 +156,6 @@
   </data>
   <data name="VIEW.Text" xml:space="preserve">
     <value>ジャケット/UMD画像を見る</value>
-  </data>
-  <data name="ContextMenuStrip2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>259, 114</value>
-  </data>
-  <data name="TreeView1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>242, 413</value>
   </data>
   <data name="GAMEID.Location" type="System.Drawing.Point, System.Drawing">
     <value>413, 284</value>
@@ -329,6 +329,84 @@ please drag&amp;dropg files from explore,if you want to add many  files</value>
   <data name="EXPORTPSPINS.Text" xml:space="preserve">
     <value>PSPINS形式で出力</value>
   </data>
+  <data name="SAVE_clrmamepro.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 26</value>
+  </data>
+  <data name="SAVE_clrmamepro.Text" xml:space="preserve">
+    <value>CMPRO形式で出力</value>
+  </data>
+  <data name="exportxml.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 26</value>
+  </data>
+  <data name="exportxml.Text" xml:space="preserve">
+    <value>XML形式で出力</value>
+  </data>
+  <data name="exportxml.ToolTipText" xml:space="preserve">
+    <value>OFFLINE用XMLを出力します(ID1番から)
+画像も変換するため多少時間がかかります
+diffフォルダにimgとDATができます</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="diffCMPRO.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="diffXML.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="ToolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 26</value>
+  </data>
+  <data name="ToolStripMenuItem1.Text" xml:space="preserve">
+    <value>差分作成</value>
+  </data>
+  <data name="ToolStripMenuItem1.ToolTipText" xml:space="preserve">
+    <value>CMPRO/XMLでリネーム失敗したもの(=CRC不一致)
+の差分ファイルを作成します
+XMLは被らないようINDEX指定が必要です
+diffフォルダにimgとDATができます</value>
+  </data>
+  <data name="ToolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>197, 6</value>
+  </data>
+  <data name="CLOSEToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 26</value>
+  </data>
+  <data name="CLOSEToolStripMenuItem.Text" xml:space="preserve">
+    <value>終了</value>
+  </data>
+  <data name="menufile.Size" type="System.Drawing.Size, System.Drawing">
+    <value>78, 25</value>
+  </data>
+  <data name="menufile.Text" xml:space="preserve">
+    <value>ファイル</value>
+  </data>
+  <data name="sort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>50, 25</value>
+  </data>
+  <data name="sort.Text" xml:space="preserve">
+    <value>整列</value>
+  </data>
+  <data name="RENAME.Size" type="System.Drawing.Size, System.Drawing">
+    <value>78, 25</value>
+  </data>
+  <data name="RENAME.Text" xml:space="preserve">
+    <value>リネーム</value>
+  </data>
+  <data name="setting.Size" type="System.Drawing.Size, System.Drawing">
+    <value>50, 25</value>
+  </data>
+  <data name="setting.Text" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="HELPToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>64, 25</value>
+  </data>
+  <data name="HELPToolStripMenuItem.Text" xml:space="preserve">
+    <value>ヘルプ</value>
+  </data>
+  <data name="MenuStrip1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>697, 29</value>
+  </data>
   <data name="disck_ver.Size" type="System.Drawing.Size, System.Drawing">
     <value>276, 26</value>
   </data>
@@ -347,44 +425,32 @@ please drag&amp;dropg files from explore,if you want to add many  files</value>
 [b] baddump,バッドダンプ
 [-(size)k] lack of sector,サイズ欠け</value>
   </data>
-  <data name="SAVE_clrmamepro.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 26</value>
-  </data>
-  <data name="SAVE_clrmamepro.Text" xml:space="preserve">
-    <value>CMPRO形式で出力</value>
-  </data>
-  <data name="ToolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>197, 6</value>
-  </data>
-  <data name="CLOSEToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 26</value>
-  </data>
-  <data name="CLOSEToolStripMenuItem.Text" xml:space="preserve">
-    <value>終了</value>
-  </data>
-  <data name="menufile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>78, 25</value>
-  </data>
-  <data name="menufile.Text" xml:space="preserve">
-    <value>ファイル</value>
-  </data>
-  <data name="mane_sort_up.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 26</value>
-  </data>
-  <data name="mane_sort_up.Text" xml:space="preserve">
-    <value>昇順</value>
-  </data>
-  <data name="mane_sort_down.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 26</value>
-  </data>
-  <data name="mane_sort_down.Text" xml:space="preserve">
-    <value>降順</value>
+  <data name="sabunindex.Text" xml:space="preserve">
+    <value>出力時最初のID</value>
   </data>
   <data name="name_sort.Size" type="System.Drawing.Size, System.Drawing">
     <value>161, 26</value>
   </data>
   <data name="name_sort.Text" xml:space="preserve">
     <value>管理名</value>
+  </data>
+  <data name="mane_sort_up.Size" type="System.Drawing.Size, System.Drawing">
+    <value>108, 26</value>
+  </data>
+  <data name="mane_sort_up.Text" xml:space="preserve">
+    <value>昇順</value>
+  </data>
+  <data name="mane_sort_down.Size" type="System.Drawing.Size, System.Drawing">
+    <value>108, 26</value>
+  </data>
+  <data name="mane_sort_down.Text" xml:space="preserve">
+    <value>降順</value>
+  </data>
+  <data name="GAMEID_sort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>161, 26</value>
+  </data>
+  <data name="GAMEID_sort.Text" xml:space="preserve">
+    <value>ゲームID</value>
   </data>
   <data name="gid_sort_up.Size" type="System.Drawing.Size, System.Drawing">
     <value>164, 26</value>
@@ -419,40 +485,22 @@ please drag&amp;dropg files from explore,if you want to add many  files</value>
   <data name="PriorEUToolStripMenuItem.Text" xml:space="preserve">
     <value>欧州優先</value>
   </data>
-  <data name="GAMEID_sort.Size" type="System.Drawing.Size, System.Drawing">
-    <value>161, 26</value>
-  </data>
-  <data name="GAMEID_sort.Text" xml:space="preserve">
-    <value>ゲームID</value>
-  </data>
-  <data name="psf_sort_up.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 26</value>
-  </data>
-  <data name="psf_sort_up.Text" xml:space="preserve">
-    <value>昇順</value>
-  </data>
-  <data name="psf_sort_down.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 26</value>
-  </data>
-  <data name="psf_sort_down.Text" xml:space="preserve">
-    <value>降順</value>
-  </data>
   <data name="PSFtitle_sort.Size" type="System.Drawing.Size, System.Drawing">
     <value>161, 26</value>
   </data>
   <data name="PSFtitle_sort.Text" xml:space="preserve">
     <value>PSFタイトル</value>
   </data>
-  <data name="file_sort_up.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 26</value>
+  <data name="psf_sort_up.Size" type="System.Drawing.Size, System.Drawing">
+    <value>108, 26</value>
   </data>
-  <data name="file_sort_up.Text" xml:space="preserve">
+  <data name="psf_sort_up.Text" xml:space="preserve">
     <value>昇順</value>
   </data>
-  <data name="file_sort_down.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 26</value>
+  <data name="psf_sort_down.Size" type="System.Drawing.Size, System.Drawing">
+    <value>108, 26</value>
   </data>
-  <data name="file_sort_down.Text" xml:space="preserve">
+  <data name="psf_sort_down.Text" xml:space="preserve">
     <value>降順</value>
   </data>
   <data name="file_sort.Size" type="System.Drawing.Size, System.Drawing">
@@ -461,17 +509,38 @@ please drag&amp;dropg files from explore,if you want to add many  files</value>
   <data name="file_sort.Text" xml:space="preserve">
     <value>ファイル名</value>
   </data>
-  <data name="sort.Size" type="System.Drawing.Size, System.Drawing">
-    <value>50, 25</value>
+  <data name="file_sort_up.Size" type="System.Drawing.Size, System.Drawing">
+    <value>108, 26</value>
   </data>
-  <data name="sort.Text" xml:space="preserve">
-    <value>整列</value>
+  <data name="file_sort_up.Text" xml:space="preserve">
+    <value>昇順</value>
+  </data>
+  <data name="file_sort_down.Size" type="System.Drawing.Size, System.Drawing">
+    <value>108, 26</value>
+  </data>
+  <data name="file_sort_down.Text" xml:space="preserve">
+    <value>降順</value>
+  </data>
+  <data name="RMXML.Size" type="System.Drawing.Size, System.Drawing">
+    <value>152, 26</value>
   </data>
   <data name="RMXML.ToolTipText" xml:space="preserve">
     <value>RENAME FILE,USE OFFLINE XML</value>
   </data>
+  <data name="RMDAT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>152, 26</value>
+  </data>
   <data name="RMDAT.ToolTipText" xml:space="preserve">
     <value>RENAME FILE, USE NOINTRO DATFILE</value>
+  </data>
+  <data name="ToolStripSeparator4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>149, 6</value>
+  </data>
+  <data name="MNEN.Size" type="System.Drawing.Size, System.Drawing">
+    <value>152, 26</value>
+  </data>
+  <data name="MNEN.Text" xml:space="preserve">
+    <value>対象</value>
   </data>
   <data name="MNAME.Size" type="System.Drawing.Size, System.Drawing">
     <value>164, 26</value>
@@ -485,23 +554,14 @@ please drag&amp;dropg files from explore,if you want to add many  files</value>
   <data name="FILEPATH.Text" xml:space="preserve">
     <value>ファイルパス</value>
   </data>
-  <data name="MNEN.Text" xml:space="preserve">
-    <value>対象</value>
-  </data>
-  <data name="RENAME.Size" type="System.Drawing.Size, System.Drawing">
-    <value>78, 25</value>
-  </data>
-  <data name="RENAME.Text" xml:space="preserve">
-    <value>リネーム</value>
-  </data>
   <data name="GUITOP.Size" type="System.Drawing.Size, System.Drawing">
-    <value>234, 26</value>
+    <value>235, 26</value>
   </data>
   <data name="GUITOP.Text" xml:space="preserve">
     <value>常に前面に表示</value>
   </data>
   <data name="xmlselect.Size" type="System.Drawing.Size, System.Drawing">
-    <value>234, 26</value>
+    <value>235, 26</value>
   </data>
   <data name="xmlselect.Text" xml:space="preserve">
     <value>画像検索用XML指定</value>
@@ -511,7 +571,7 @@ please drag&amp;dropg files from explore,if you want to add many  files</value>
 IF MATCH CRC32 IN XML,NAME AND IMAGE APPLIED</value>
   </data>
   <data name="rename_dat.Size" type="System.Drawing.Size, System.Drawing">
-    <value>234, 26</value>
+    <value>235, 26</value>
   </data>
   <data name="rename_dat.Text" xml:space="preserve">
     <value>リネーム用DAT指定</value>
@@ -522,7 +582,7 @@ IF MATCH CRC32 IN DAT
 files are renamed</value>
   </data>
   <data name="editpspdir.Size" type="System.Drawing.Size, System.Drawing">
-    <value>234, 26</value>
+    <value>235, 26</value>
   </data>
   <data name="editpspdir.Text" xml:space="preserve">
     <value>転送先リスト編集</value>
@@ -533,17 +593,14 @@ right click on treeview,you can edit copydir
 //example
 X:\PSP\GAME\</value>
   </data>
+  <data name="XMLヘッダフッター編集ToolStripMenuItem.Text" xml:space="preserve">
+    <value>XMLヘッダフッター編集</value>
+  </data>
   <data name="ALSAVE.Size" type="System.Drawing.Size, System.Drawing">
-    <value>234, 26</value>
+    <value>235, 26</value>
   </data>
   <data name="ALSAVE.Text" xml:space="preserve">
     <value>終了時リストを必ず保存</value>
-  </data>
-  <data name="setting.Size" type="System.Drawing.Size, System.Drawing">
-    <value>50, 25</value>
-  </data>
-  <data name="setting.Text" xml:space="preserve">
-    <value>設定</value>
   </data>
   <data name="online.Size" type="System.Drawing.Size, System.Drawing">
     <value>192, 26</value>
@@ -556,15 +613,6 @@ X:\PSP\GAME\</value>
   </data>
   <data name="version.Text" xml:space="preserve">
     <value>バージョン</value>
-  </data>
-  <data name="HELPToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>64, 25</value>
-  </data>
-  <data name="HELPToolStripMenuItem.Text" xml:space="preserve">
-    <value>ヘルプ</value>
-  </data>
-  <data name="MenuStrip1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>697, 29</value>
   </data>
   <data name="del_psp.Location" type="System.Drawing.Point, System.Drawing">
     <value>261, 430</value>
@@ -607,8 +655,5 @@ X:\PSP\GAME\</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
     <value>697, 463</value>
-  </data>
-  <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
-    <value>715, 506</value>
   </data>
 </root>

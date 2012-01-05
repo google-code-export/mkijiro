@@ -140,5 +140,23 @@ Namespace My.Resources
                 Return ResourceManager.GetString("xml", resourceCulture)
             End Get
         End Property
+        
+        '''<summary>
+        '''   に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property xmlfoot() As String
+            Get
+                Return ResourceManager.GetString("xmlfoot", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''   に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property xmlhead() As String
+            Get
+                Return ResourceManager.GetString("xmlhead", resourceCulture)
+            End Get
+        End Property
     End Module
 End Namespace

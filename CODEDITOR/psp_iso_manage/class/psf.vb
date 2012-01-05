@@ -363,7 +363,7 @@ Public Class psf
                                 End If
                                 If i = z - 1 Then
                                     fs.Close()
-                                    If mode <> "A" Then
+                                    If mode <> "A" AndAlso mode <> "XML" Then
                                         Return ""
                                     Else
                                         Exit While
@@ -398,6 +398,31 @@ Public Class psf
                                     ss.AppendLine(result)
                                 Next
                                 result = ss.ToString
+                            ElseIf mode = "XML" Then
+                                Dim name(128) As Byte
+                                Dim ss As String = "0.00"
+                                Dim ss2 As String = "0.00"
+                                Dim h As Integer = 0
+                                For i = 0 To z - 1
+                                    Array.ConstrainedCopy(bs, 32 + i * 16, offset, 0, 4)
+                                    h = BitConverter.ToInt32(offset, 0)
+                                    Array.ConstrainedCopy(bs, k + h, name, 0, 128)
+                                    If bs(k + h) < 20 Then
+                                        Array.Resize(name, 4)
+                                        result = BitConverter.ToInt32(name, 0).ToString
+                                        Array.Resize(name, 128)
+                                    Else
+                                        result = Encoding.GetEncoding(65001).GetString(name)
+                                        h = result.IndexOf(vbNullChar)
+                                        result = result.Substring(0, h)
+                                    End If
+                                    If psfst(i) = "DISC_VERSION" Then
+                                        ss = result
+                                    ElseIf psfst(i) = "PSP_SYSTEM_VER" Then
+                                        ss2 = result
+                                    End If
+                                Next
+                                result = ss2 & " / " & ss
                             Else
                                 Array.ConstrainedCopy(bs, 32 + i * 16, offset, 0, 4)
                                 i = BitConverter.ToInt32(offset, 0)

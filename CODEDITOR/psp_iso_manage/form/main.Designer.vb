@@ -69,6 +69,11 @@ Partial Class umdisomanger
         Me.SAVE_clrmamepro = New System.Windows.Forms.ToolStripMenuItem()
         Me.disck_ver = New System.Windows.Forms.ToolStripMenuItem()
         Me.ROMCODEs = New System.Windows.Forms.ToolStripMenuItem()
+        Me.exportxml = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.diffCMPRO = New System.Windows.Forms.ToolStripMenuItem()
+        Me.diffXML = New System.Windows.Forms.ToolStripMenuItem()
+        Me.sabunindex = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.CLOSEToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.sort = New System.Windows.Forms.ToolStripMenuItem()
@@ -100,6 +105,7 @@ Partial Class umdisomanger
         Me.xmlselect = New System.Windows.Forms.ToolStripMenuItem()
         Me.rename_dat = New System.Windows.Forms.ToolStripMenuItem()
         Me.editpspdir = New System.Windows.Forms.ToolStripMenuItem()
+        Me.XMLヘッダフッター編集ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ALSAVE = New System.Windows.Forms.ToolStripMenuItem()
         Me.HELPToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.online = New System.Windows.Forms.ToolStripMenuItem()
@@ -119,6 +125,7 @@ Partial Class umdisomanger
         'CRCimage
         '
         resources.ApplyResources(Me.CRCimage, "CRCimage")
+        Me.CRCimage.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.CRCimage.Name = "CRCimage"
         Me.CRCimage.UseVisualStyleBackColor = True
         '
@@ -127,8 +134,10 @@ Partial Class umdisomanger
         resources.ApplyResources(Me.TreeView1, "TreeView1")
         Me.TreeView1.AllowDrop = True
         Me.TreeView1.ContextMenuStrip = Me.ContextMenuStrip2
+        Me.TreeView1.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.TreeView1.LabelEdit = True
         Me.TreeView1.Name = "TreeView1"
+        Me.TreeView1.SelectedImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         '
         'ContextMenuStrip2
         '
@@ -164,12 +173,14 @@ Partial Class umdisomanger
         'GAMEID
         '
         resources.ApplyResources(Me.GAMEID, "GAMEID")
+        Me.GAMEID.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.GAMEID.Name = "GAMEID"
         Me.GAMEID.UseVisualStyleBackColor = True
         '
         'PFS
         '
         resources.ApplyResources(Me.PFS, "PFS")
+        Me.PFS.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.PFS.Name = "PFS"
         Me.PFS.UseVisualStyleBackColor = True
         '
@@ -194,17 +205,20 @@ Partial Class umdisomanger
         'Label1
         '
         resources.ApplyResources(Me.Label1, "Label1")
+        Me.Label1.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.Label1.Name = "Label1"
         '
         'movepsp
         '
         resources.ApplyResources(Me.movepsp, "movepsp")
+        Me.movepsp.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.movepsp.Name = "movepsp"
         Me.movepsp.UseVisualStyleBackColor = True
         '
         'Button1
         '
         resources.ApplyResources(Me.Button1, "Button1")
+        Me.Button1.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.Button1.Name = "Button1"
         Me.Button1.UseVisualStyleBackColor = True
         '
@@ -222,32 +236,38 @@ Partial Class umdisomanger
         'lockdriveletter
         '
         resources.ApplyResources(Me.lockdriveletter, "lockdriveletter")
+        Me.lockdriveletter.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.lockdriveletter.Name = "lockdriveletter"
         Me.lockdriveletter.UseVisualStyleBackColor = True
         '
         'Label2
         '
         resources.ApplyResources(Me.Label2, "Label2")
+        Me.Label2.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.Label2.Name = "Label2"
         '
         'Label3
         '
         resources.ApplyResources(Me.Label3, "Label3")
+        Me.Label3.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.Label3.Name = "Label3"
         '
         'Label4
         '
         resources.ApplyResources(Me.Label4, "Label4")
+        Me.Label4.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.Label4.Name = "Label4"
         '
         'Label5
         '
         resources.ApplyResources(Me.Label5, "Label5")
+        Me.Label5.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.Label5.Name = "Label5"
         '
         'Label6
         '
         resources.ApplyResources(Me.Label6, "Label6")
+        Me.Label6.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.Label6.Name = "Label6"
         '
         'isosize
@@ -280,6 +300,7 @@ Partial Class umdisomanger
         'Label7
         '
         resources.ApplyResources(Me.Label7, "Label7")
+        Me.Label7.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.Label7.Name = "Label7"
         '
         'gid
@@ -290,30 +311,35 @@ Partial Class umdisomanger
         'calc_crc
         '
         resources.ApplyResources(Me.calc_crc, "calc_crc")
+        Me.calc_crc.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.calc_crc.Name = "calc_crc"
         Me.calc_crc.UseVisualStyleBackColor = True
         '
         'calc_md5
         '
         resources.ApplyResources(Me.calc_md5, "calc_md5")
+        Me.calc_md5.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.calc_md5.Name = "calc_md5"
         Me.calc_md5.UseVisualStyleBackColor = True
         '
         'calc_sha
         '
         resources.ApplyResources(Me.calc_sha, "calc_sha")
+        Me.calc_sha.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.calc_sha.Name = "calc_sha"
         Me.calc_sha.UseVisualStyleBackColor = True
         '
         'all_hash
         '
         resources.ApplyResources(Me.all_hash, "all_hash")
+        Me.all_hash.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.all_hash.Name = "all_hash"
         Me.all_hash.UseVisualStyleBackColor = True
         '
         'tree_apply
         '
         resources.ApplyResources(Me.tree_apply, "tree_apply")
+        Me.tree_apply.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.tree_apply.Name = "tree_apply"
         Me.tree_apply.UseVisualStyleBackColor = True
         '
@@ -326,7 +352,7 @@ Partial Class umdisomanger
         'menufile
         '
         resources.ApplyResources(Me.menufile, "menufile")
-        Me.menufile.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ADD, Me.ToolStripSeparator2, Me.SAVELS, Me.EXPORTPSPINS, Me.SAVE_clrmamepro, Me.ToolStripSeparator3, Me.CLOSEToolStripMenuItem})
+        Me.menufile.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ADD, Me.ToolStripSeparator2, Me.SAVELS, Me.EXPORTPSPINS, Me.SAVE_clrmamepro, Me.exportxml, Me.ToolStripMenuItem1, Me.ToolStripSeparator3, Me.CLOSEToolStripMenuItem})
         Me.menufile.Name = "menufile"
         '
         'ADD
@@ -364,6 +390,33 @@ Partial Class umdisomanger
         '
         resources.ApplyResources(Me.ROMCODEs, "ROMCODEs")
         Me.ROMCODEs.Name = "ROMCODEs"
+        '
+        'exportxml
+        '
+        resources.ApplyResources(Me.exportxml, "exportxml")
+        Me.exportxml.Name = "exportxml"
+        '
+        'ToolStripMenuItem1
+        '
+        resources.ApplyResources(Me.ToolStripMenuItem1, "ToolStripMenuItem1")
+        Me.ToolStripMenuItem1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.diffCMPRO, Me.diffXML})
+        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
+        '
+        'diffCMPRO
+        '
+        resources.ApplyResources(Me.diffCMPRO, "diffCMPRO")
+        Me.diffCMPRO.Name = "diffCMPRO"
+        '
+        'diffXML
+        '
+        resources.ApplyResources(Me.diffXML, "diffXML")
+        Me.diffXML.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.sabunindex})
+        Me.diffXML.Name = "diffXML"
+        '
+        'sabunindex
+        '
+        resources.ApplyResources(Me.sabunindex, "sabunindex")
+        Me.sabunindex.Name = "sabunindex"
         '
         'ToolStripSeparator3
         '
@@ -505,7 +558,7 @@ Partial Class umdisomanger
         'setting
         '
         resources.ApplyResources(Me.setting, "setting")
-        Me.setting.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GUITOP, Me.xmlselect, Me.rename_dat, Me.editpspdir, Me.ALSAVE})
+        Me.setting.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GUITOP, Me.xmlselect, Me.rename_dat, Me.editpspdir, Me.XMLヘッダフッター編集ToolStripMenuItem, Me.ALSAVE})
         Me.setting.Name = "setting"
         '
         'GUITOP
@@ -527,6 +580,11 @@ Partial Class umdisomanger
         '
         resources.ApplyResources(Me.editpspdir, "editpspdir")
         Me.editpspdir.Name = "editpspdir"
+        '
+        'XMLヘッダフッター編集ToolStripMenuItem
+        '
+        resources.ApplyResources(Me.XMLヘッダフッター編集ToolStripMenuItem, "XMLヘッダフッター編集ToolStripMenuItem")
+        Me.XMLヘッダフッター編集ToolStripMenuItem.Name = "XMLヘッダフッター編集ToolStripMenuItem"
         '
         'ALSAVE
         '
@@ -552,35 +610,41 @@ Partial Class umdisomanger
         'del_psp
         '
         resources.ApplyResources(Me.del_psp, "del_psp")
+        Me.del_psp.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.del_psp.Name = "del_psp"
         Me.del_psp.UseVisualStyleBackColor = True
         '
         't_gid
         '
         resources.ApplyResources(Me.t_gid, "t_gid")
+        Me.t_gid.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.t_gid.Name = "t_gid"
         Me.t_gid.UseVisualStyleBackColor = True
         '
         'crc_xml
         '
         resources.ApplyResources(Me.crc_xml, "crc_xml")
+        Me.crc_xml.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.crc_xml.Name = "crc_xml"
         Me.crc_xml.UseVisualStyleBackColor = True
         '
         'free
         '
         resources.ApplyResources(Me.free, "free")
+        Me.free.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.free.Name = "free"
         '
         'Button2
         '
         resources.ApplyResources(Me.Button2, "Button2")
+        Me.Button2.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.Button2.Name = "Button2"
         Me.Button2.UseVisualStyleBackColor = True
         '
         'SAVELS2
         '
         resources.ApplyResources(Me.SAVELS2, "SAVELS2")
+        Me.SAVELS2.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.SAVELS2.Name = "SAVELS2"
         Me.SAVELS2.UseVisualStyleBackColor = True
         '
@@ -721,5 +785,11 @@ Partial Class umdisomanger
     Friend WithEvents disck_ver As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ALSAVE As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ROMCODEs As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents diffCMPRO As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents diffXML As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents exportxml As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents XMLヘッダフッター編集ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents sabunindex As System.Windows.Forms.ToolStripMenuItem
 
 End Class
