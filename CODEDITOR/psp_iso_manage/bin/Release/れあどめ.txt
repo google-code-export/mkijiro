@@ -1,7 +1,29 @@
 いろいろあれど、いまいちきにらなかったりするので自分用に作成
-圧縮イメージはサイズ/MD5/SHA1が取得できないのであつかわない
-そのかわりPARAM.SFOのタイトルになるからいちいちリネームする必要がない,圧縮してないのでリネームが高速
 ゲームCRC32での画像検索はOFFLINEりすとのXML.DBを流用してるので、exeはOFFLINEと同じとこにおくこと
+
+**仕様**
+ファイルドロップで一括追加可能(GAMEID重複チェックあるので同じものは防止)
+生ISOなのでサイズが正しいかどうかわかる(そのかわり圧縮非対応)
+OFFLINEの画像を流用可能(ゲームCRCで検索する)
+リネームにXMLだけでなくCLRMAMEPRO用DATを使用可能
+リストビューではなくツリービューなので項目のドラッグ移動可能
+CMPRO/XML差分作成機能有り
+
+PATH.TXT　CWC風、_P パス名,_I イメージ名(番号a.b抜き),_H ハッシュ　他にPSPINS/OFFLINEXML/CMPRO形式で出力可能
+_S UCJS-10108
+_G 100万トンのバラバラ 
+_P G:\PSP\ISO\ISOs\100MANTONNOBARABARA .ISO
+_I G:\PSP\IJIRO\CODEDITOR\psp_iso_manage\bin\Debug\imgs\ADVANsCEne Sony PSP Collection\2001-2500\2120.png
+_H CRC32: 9EC21B68,MD5: F9DDDF857DA7B37E56845E9991BE6ACD,SHA-1: 7D48A727CE3C45DF89C7D438BA8567B9AB77AEE6
+#X:\(転送先名）
+#コメントなど
+
+
+**更新履歴**
+2012/01/06
+画像の修正,ジャケット/UMDラベル登録で画像差し替えができなったので修正
+1番画像がないDBがあるのでダミー用にimgs\user\0a.png,imgs\user\0b.pngを追加
+ツリーにフォルダをドロップした場合,フォルダにある全てのファイルパスを調べるようにした
 
 2012/01/05
 UIDが500で割り切れる場合検索画像がずれてたので修正
@@ -111,19 +133,6 @@ UMDVIDEOの名前取得をUSCより移植
 2011/12/06
 とりあえず作成
 
-仕様
-ファイルドロップで一括追加可能(GAMEID重複チェックあるので同じものは防止)
-生ISOなのでサイズが正しいかどうかわかる,OFFLINEの画像を流用可能(ゲームCRCで検索する)
-ツリーなので項目のドラッグ移動可能
-
-PATH.TXT　CWC風、_P パス名,_I イメージ名(番号a.b抜き),_H ハッシュ
-_S UCJS-10108
-_G 100万トンのバラバラ 
-_P G:\PSP\ISO\ISOs\100MANTONNOBARABARA .ISO
-_I G:\PSP\IJIRO\CODEDITOR\psp_iso_manage\bin\Debug\imgs\ADVANsCEne Sony PSP Collection\2001-2500\2120.png
-_H CRC32: 9EC21B68,MD5: F9DDDF857DA7B37E56845E9991BE6ACD,SHA-1: 7D48A727CE3C45DF89C7D438BA8567B9AB77AEE6
-#X:\(転送先名）
-#コメントなど
 
 BY (ﾟ∀ﾟ)
 

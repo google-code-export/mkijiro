@@ -657,7 +657,7 @@ Public Class Form1
 
     Function get_list(ByVal url As String) As String
 
-        Dim enc As Encoding = Encoding.GetEncoding("Shift_JIS")
+        Dim enc As Encoding = Encoding.GetEncoding(65001)
 
         Dim req As WebRequest = WebRequest.Create(url)
         Dim res As WebResponse = req.GetResponse()
@@ -724,6 +724,7 @@ Public Class Form1
             redump.AppendLine(get_list("http://wiki.redump.org/index.php?title=Sony_PSP_Japan_Missing_Games"))
             redump.AppendLine(get_list("http://wiki.redump.org/index.php?title=Sony_PSP_Japan_Best_Of_Missing_Games"))
             redump.AppendLine(get_list("http://wiki.redump.org/index.php?title=Sony_PSP_Japan_Limited_Edition_Missing_Games"))
+            'redump.AppendLine(get_list("http://unzu127xp.pa.land.to/"))
             Dim www As New System.IO.StreamWriter(Application.StartupPath & "\redump_wiki.txt",
                     False, System.Text.Encoding.GetEncoding(932))
             Dim tag As New System.Text.RegularExpressions.Regex("<.*?>", RegexOptions.ECMAScript)
@@ -735,7 +736,7 @@ Public Class Form1
             End While
             www.Write(temp)
             www.Close()
-            Dim sr As New StreamReader(Application.StartupPath & "\redump_wiki.txt", System.Text.Encoding.GetEncoding(932))
+            Dim sr As New StreamReader(Application.StartupPath & "\redump_wiki.txt", System.Text.Encoding.GetEncoding(65001))
             Dim s As String = ""
             Dim ss As String = ""
             Dim index(5000) As String

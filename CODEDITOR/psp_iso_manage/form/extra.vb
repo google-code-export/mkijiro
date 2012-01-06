@@ -5,11 +5,12 @@ Imports System.IO
 Public Class extra
     Friend x As Single = 1.0F
 
-    Private Sub PictureBox1_Click(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
+    Private Sub extra_load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
         PictureBox1.AllowDrop = True
         PictureBox2.AllowDrop = True
         PictureBox3.AllowDrop = True
     End Sub
+
 
     Private Sub Form1_Activated( _
         ByVal sender As Object, ByVal e As EventArgs) Handles MyBase.Activated
@@ -30,9 +31,7 @@ Public Class extra
     Public Function AutoGraphics(ByVal picSource As PictureBox) As Graphics
 
         If picSource.Image Is Nothing Then
-
             picSource.Image = New Bitmap(picSource.ClientRectangle.Width, picSource.ClientRectangle.Height)
-
         End If
 
         Return Graphics.FromImage(picSource.Image)
@@ -49,17 +48,19 @@ Public Class extra
 
     Private Sub picture1_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles PictureBox1.DragDrop
         Try
+            'Dim m As umdisomanger
+            'm = CType(Me.Owner, umdisomanger)
             Dim fileName As String() = CType(e.Data.GetData(DataFormats.FileDrop, False), String())
             Dim picture As String = Application.StartupPath & "\imgs\user\" & Me.Text & "boxart.png"
-            Dim m As umdisomanger
-            m = CType(Me.Owner, umdisomanger)
             Me.Focus()
             If picture = fileName(0) Then
 
-            ElseIf File.Exists(picture) = True AndAlso MessageBox.Show(m.lang(39) & picture & m.lang(40), m.lang(14), _
-           MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
-                File.Delete(picture)
-                File.Copy(fileName(0), picture)
+            ElseIf File.Exists(picture) = True Then
+                'If MessageBox.Show(m.lang(39) & picture & m.lang(40), m.lang(14), MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
+                If File.Exists(picture) = True AndAlso MessageBox.Show(picture & "が存在します。削除してもよろしいですか？", "確認", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
+                    File.Delete(picture)
+                    File.Copy(fileName(0), picture)
+                End If
             Else
                 File.Copy(fileName(0), picture)
             End If
@@ -71,7 +72,7 @@ Public Class extra
             End If
 
         Catch ex As Exception
-            'MessageBox.Show(ex.Message, lang(7))
+            'MessageBox.Show(ex.Message, m.lang(7))
         End Try
     End Sub
     Private Sub picture2_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles PictureBox2.DragDrop
@@ -79,13 +80,15 @@ Public Class extra
             Dim fileName As String() = CType(e.Data.GetData(DataFormats.FileDrop, False), String())
             Dim picture As String = Application.StartupPath & "\imgs\user\" & Me.Text & "umd_front.png"
 
-            Dim m As umdisomanger
-            m = CType(Me.Owner, umdisomanger)
+            'Dim m As New umdisomanger
+            ''m = CType(Me.Owner, umdisomanger)
             Me.Focus()
             If picture = fileName(0) Then
 
-            ElseIf File.Exists(picture) = True AndAlso MessageBox.Show(m.lang(39) & picture & m.lang(40), m.lang(14), _
-           MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
+                ' ElseIf File.Exists(picture) = True AndAlso MessageBox.Show(m.lang(39) & picture & m.lang(40), m.lang(14), _
+                'MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
+            ElseIf File.Exists(picture) = True AndAlso File.Exists(picture) = True AndAlso MessageBox.Show(picture & "が存在します。削除してもよろしいですか？", "確認", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
+
                 File.Delete(picture)
                 File.Copy(fileName(0), picture)
             Else
@@ -136,6 +139,8 @@ Public Class extra
 
         Dim image = New Bitmap(path)
         'PictureBox1のGraphicsオブジェクトの作成
+
+        pc.Image = Nothing
         Dim g As Graphics = AutoGraphics(pc) 'pc.CreateGraphics()
         '補間方法として最近傍補間を指定する
         g.InterpolationMode = _
