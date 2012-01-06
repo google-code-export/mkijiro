@@ -511,9 +511,25 @@ Public Class umdisomanger
     End Sub
 
 
+    Public Function AutoGraphics(ByVal picSource As PictureBox) As Graphics
+
+        If picSource.Image Is Nothing Then
+
+            picSource.Image = New Bitmap(picSource.ClientRectangle.Width, picSource.ClientRectangle.Height)
+
+        End If
+
+        Return Graphics.FromImage(picSource.Image)
+
+    End Function
+
     Private Sub ListBox1_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles TreeView1.DragDrop
         Try
-            Dim fileName As String() = CType(e.Data.GetData(DataFormats.FileDrop, False), String())
+            Dim fileName As String() =CType(e.Data.GetData(DataFormats.FileDrop, False), String())
+            If Directory.Exists(fileName(0)) Then
+                fileName = System.IO.Directory.GetFiles( _
+            fileName(0), "*", System.IO.SearchOption.AllDirectories)
+            End If
             Dim isoname As TreeNode
             Dim isoinfo As TreeNode
             Dim psf As New psf
@@ -562,9 +578,13 @@ Public Class umdisomanger
                 If beeps = True Then
                     '"同じゲームがすで登録されてます" "ゲームID重複"
                     sb.Insert(0, lang(8) & vbCrLf)
+                    Me.TopMost = False
                     MessageBox.Show(sb.ToString, lang(9))
+                    If My.Settings.topmost = True Then
+                        Me.TopMost = False
+                    End If
                 End If
-                my.settings.edit = True
+                My.Settings.edit = True
             End If
 
         Catch ex As Exception
@@ -597,6 +617,14 @@ Public Class umdisomanger
                 Else
                     treenode = treenode.Parent.Nodes(0)
                 End If
+                'Dim str As String = CType(Me.Owner, extra).Text
+                'CType(Me.Owner, extra).Text = treenode.Parent.Tag.ToString
+                'Dim picture As String = Application.StartupPath & "\imgs\user\" & treenode.Parent.Tag.ToString
+                'exim.bitmap_resize(exim.PictureBox1, picture & "boxart.png", 790, 630)
+                'exim.bitmap_resize(exim.PictureBox2, picture & "umdfront.png", 280, 260)
+                'exim.bitmap_resize(exim.PictureBox3, picture & "umdback.png", 280, 260)
+
+
 
                 Dim userpic As String = Application.StartupPath & "\imgs\user\" & treenode.Parent.Tag.ToString & "a.png"
                 Dim userpic2 As String = Application.StartupPath & "\imgs\user\" & treenode.Parent.Tag.ToString & "b.png"
@@ -668,12 +696,12 @@ Public Class umdisomanger
                 End If
 
                 If File.Exists(My.Settings.imgdir & "1-500\1a.png") = True Then
-                    'なにもないときはりっじダミー表示
+                    'なにもないときはダミー表示
                     If p1 = False Then
-                        PictureBox1.Image = System.Drawing.Image.FromFile(My.Settings.imgdir & "1-500\1a.png")
+                        PictureBox1.Image = System.Drawing.Image.FromFile(Application.StartupPath & "\imgs\user\0a.png")
                     End If
                     If p2 = False Then
-                        PictureBox2.Image = System.Drawing.Image.FromFile(My.Settings.imgdir & "1-500\1b.png")
+                        PictureBox2.Image = System.Drawing.Image.FromFile(Application.StartupPath & "\imgs\user\0b.png")
                     End If
                 End If
 
@@ -2017,7 +2045,9 @@ Public Class umdisomanger
 
         Dim image = New Bitmap(path)
         'PictureBox1のGraphicsオブジェクトの作成
-        Dim g As Graphics = pc.CreateGraphics()
+
+        pc.Image = Nothing
+        Dim g As Graphics = AutoGraphics(pc) 'pc.CreateGraphics()
         '補間方法として最近傍補間を指定する
         g.InterpolationMode = _
             System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor
@@ -2572,7 +2602,7 @@ Public Class umdisomanger
                 Dim errres As System.Net.HttpWebResponse = _
                     CType(ex.Response, System.Net.HttpWebResponse)
                 '応答したURIを表示する
-                MessageBox.Show(errres.StatusCode & vbCrLf & errres.StatusDescription)
+                'MessageBox.Show(errres.StatusCode & vbCrLf & errres.StatusDescription)
                 'Console.WriteLine(errres.ResponseUri)
                 '応答ステータスコードを表示する
                 'Console.WriteLine("{0}:{1}", errres.StatusCode, errres.StatusDescription)
@@ -3928,7 +3958,6 @@ Public Class umdisomanger
             End If
             Dim rg As New extra
             rg.Text = treenode.Parent.Tag.ToString
-            Me.TopMost = False
             rg.Show()
         End If
     End Sub
