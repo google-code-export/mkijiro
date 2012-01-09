@@ -59,5 +59,53 @@ Namespace My.Resources
                 resourceCulture = value
             End Set
         End Property
+        
+        '''<summary>
+        '''  37DC8144 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property crc() As String
+            Get
+                Return ResourceManager.GetString("crc", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  ULJS-00001 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property gid() As String
+            Get
+                Return ResourceManager.GetString("gid", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  name &quot;s1&quot;
+        '''description &quot;s2&quot;
+        '''serial &quot;s3&quot;
+        '''rom( name &quot;s4.iso&quot; size s5 crc s6 ) に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property preview() As String
+            Get
+                Return ResourceManager.GetString("preview", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  906297344 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property size() As String
+            Get
+                Return ResourceManager.GetString("size", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  リッジレーサー に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property title() As String
+            Get
+                Return ResourceManager.GetString("title", resourceCulture)
+            End Get
+        End Property
     End Module
 End Namespace

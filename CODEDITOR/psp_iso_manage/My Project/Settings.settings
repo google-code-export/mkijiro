@@ -166,5 +166,8 @@ X:\PSP\GAME660\</Value>
 	&lt;games&gt;
 </Value>
     </Setting>
+    <Setting Name="filenamecrc" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
