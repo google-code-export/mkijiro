@@ -100,6 +100,10 @@ Public Class umdisomanger
                 My.Settings.pspinsdir = Application.StartupPath & "\"
             End If
 
+            If My.Settings.filenamecrc = True Then
+                pathcrc.Checked = True
+            End If
+
             If My.Settings.topmost = True Then
                 Me.TopMost = True
                 GUITOP.Checked = True
@@ -314,8 +318,12 @@ Public Class umdisomanger
                         End If
                         img &= st.ToString & "-" & en.ToString & "\"
 
-                        bitmap_resize(PictureBox1, img & num.ToString & "a.png", 104, 181)
-                        bitmap_resize(PictureBox2, img & num.ToString & "b.png", 320, 181)
+                        If File.Exists(img & num.ToString & "a.png") Then
+                            bitmap_resize(PictureBox1, img & num.ToString & "a.png", 104, 181)
+                        End If
+                        If File.Exists(img & num.ToString & "b.png") Then
+                            bitmap_resize(PictureBox2, img & num.ToString & "b.png", 320, 181)
+                        End If
                         treenode.Name = img & num.ToString & ".png"
 
                         If crc.Text = "" Then
@@ -525,19 +533,22 @@ Public Class umdisomanger
 
     Private Sub ListBox1_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles TreeView1.DragDrop
         Try
-            Dim fileName As String() =CType(e.Data.GetData(DataFormats.FileDrop, False), String())
-            If Directory.Exists(fileName(0)) Then
-                fileName = System.IO.Directory.GetFiles( _
-            fileName(0), "*", System.IO.SearchOption.AllDirectories)
-            End If
             Dim isoname As TreeNode
             Dim isoinfo As TreeNode
             Dim psf As New psf
             Dim add As Boolean = True
             Dim beeps As Boolean = False
             Dim sb As New StringBuilder
+            Dim cr As New Regex("\[[0-9A-Fa-f]{8}\]", RegexOptions.ECMAScript)
+            Dim crcs As Match
 
             If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+
+                Dim fileName As String() = CType(e.Data.GetData(DataFormats.FileDrop, False), String())
+                If Directory.Exists(fileName(0)) Then
+                    fileName = System.IO.Directory.GetFiles( _
+                fileName(0), "*", System.IO.SearchOption.AllDirectories)
+                End If
                 For i = 0 To fileName.Length - 1
 
                     If System.IO.Directory.Exists(fileName(i)) = True Or psf.GETID(fileName(i)) = "" Then
@@ -571,6 +582,13 @@ Public Class umdisomanger
                                 .Tag = fileName(i)
                             End With
                             isoname.Nodes.Add(isoinfo)
+
+                            crcs = cr.Match(Path.GetFileNameWithoutExtension(fileName(i)))
+                            If crcs.Success Then
+                                Dim crctree As New TreeNode
+                                crctree.Text = ("CRC32; " & crcs.Value.Substring(1, 8))
+                                isoname.Nodes.Add(crctree)
+                            End If
                         End If
 
                     End If
@@ -773,6 +791,8 @@ Public Class umdisomanger
 
         Try
             Dim treenode As TreeNode = TreeView1.SelectedNode
+            Dim cr As New Regex("\[[0-9A-fa-f]{8}\]", RegexOptions.ECMAScript)
+            Dim crcs As Match
             If treenode IsNot Nothing Then
                 My.Settings.edit = True
                 If treenode.Level = 1 Then
@@ -794,6 +814,12 @@ Public Class umdisomanger
                     treenode2.Tag = rg.fpath.Text
                     treenode2.Text = rg.gid.Text
                     treenode1.Nodes.Add(treenode2)
+                    crcs = cr.Match(Path.GetFileNameWithoutExtension(rg.fpath.Text))
+                    If crcs.Success Then
+                        Dim crctree As New TreeNode
+                        crctree.Text = ("CRC32; " & crcs.Value.Substring(1, 8))
+                        treenode1.Nodes.Add(crctree)
+                    End If
                 End If
                 If My.Settings.topmost = True Then
                     Me.TopMost = True
@@ -1662,10 +1688,13 @@ Public Class umdisomanger
                 My.Settings.edit = True
                 Dim isoname As TreeNode
                 Dim isoinfo As TreeNode
+                Dim crctree As New TreeNode
                 Dim psf As New psf
                 Dim add As Boolean = True
                 Dim beeps As Boolean = False
                 Dim sb As New StringBuilder
+                Dim cr As New Regex("\[[0-9A-Fa-f]{8}\]", RegexOptions.ECMAScript)
+                Dim crcs As Match
 
                 If System.IO.Directory.Exists(ofd.FileName) = True Or psf.GETID(ofd.FileName) = "" Then
                 Else
@@ -1698,6 +1727,11 @@ Public Class umdisomanger
                             .Tag = ofd.FileName
                         End With
                         isoname.Nodes.Add(isoinfo)
+                        crcs = cr.Match(Path.GetFileNameWithoutExtension(ofd.FileName))
+                        If crcs.Success Then
+                            crctree = New TreeNode("CRC32; " & crcs.Value.Substring(1, 8))
+                            isoname.Nodes.Add(crctree)
+                        End If
                     End If
 
                 End If
@@ -1931,7 +1965,7 @@ Public Class umdisomanger
                 zfs.Close()
             End If
 
-            Dim s As String = System.Text.Encoding.GetEncoding(932).GetString(bs)
+            Dim s As String = System.Text.Encoding.GetEncoding(65001).GetString(bs)
             Dim maskdat As String = "clrmamepro \(\r\n\tname "".+""\r\n\tdescription "".+""\r\n\tversion \d{8}\r\n\tcomment "".+""\r\n\)"
             Dim q As New Regex(maskdat, RegexOptions.ECMAScript)
             Dim dat As Match = q.Match(s)
@@ -2247,7 +2281,8 @@ Public Class umdisomanger
 
         Try
             check = False
-            Dim sw As New System.IO.StreamWriter(Application.StartupPath & "\" & System.Environment.ExpandEnvironmentVariables("%username%") & ".dat", False, System.Text.Encoding.GetEncoding(932))
+            Dim utf8nobom As New UTF8Encoding
+            Dim sw As New System.IO.StreamWriter(Application.StartupPath & "\" & System.Environment.ExpandEnvironmentVariables("%username%") & ".dat", False, utf8nobom)
             Dim sb As New StringBuilder
             Dim s As String = ""
             Dim iso As Boolean = False
@@ -2347,7 +2382,8 @@ Public Class umdisomanger
                         zis.Close()
                         zfs.Close()
                     End If
-                    no_intro = System.Text.Encoding.GetEncoding(932).GetString(bs)
+
+                    no_intro = System.Text.Encoding.GetEncoding(65001).GetString(bs)
                     If no_intro.Contains("crc FB3DF0B7") Then
                         check = True
                     Else
@@ -2623,6 +2659,7 @@ Public Class umdisomanger
         Try
             Dim dat As String = My.Settings.datpath
             check = False
+            Dim utf8nobom As New UTF8Encoding
             Dim ci As System.Globalization.CompareInfo = _
     System.Globalization.CompareInfo.GetCompareInfo("ja-JP")
             If File.Exists(dat) = True Then
@@ -2684,7 +2721,7 @@ Public Class umdisomanger
                     zis.Close()
                     zfs.Close()
                 End If
-                Dim s As String = System.Text.Encoding.GetEncoding(932).GetString(bs)
+                Dim s As String = System.Text.Encoding.GetEncoding(65001).GetString(bs)
                 If s.Contains("crc FB3DF0B7") Then
                     check = True
                 End If
@@ -2718,7 +2755,19 @@ Public Class umdisomanger
                                     ss = ss.Remove(0, hit + 6)
                                     hit = ss.IndexOf("""")
                                     ss = ss.Remove(hit, ss.Length - hit)
+                                    If My.Settings.filenamecrc = True Then
+                                        Dim cr As New Regex("\[[0-9A-Fa-f]{8}\}", RegexOptions.ECMAScript)
+                                        Dim crcs As Match = cr.Match(ss)
+                                        If crcs.Success Then
+                                        ElseIf ss.Length > 4 Then
+                                            ss = ss.Insert(ss.Length - 4, " [" & b.Text.Remove(0, 6).Trim & "]")
+                                        End If
+                                    End If
                                     rp = System.IO.Path.GetDirectoryName(path) & "\" & ss
+
+                                    If MNAME.Checked = False AndAlso FILEPATH.Checked = False Then
+                                        b.Parent.Checked = True
+                                    End If
                                     If MNAME.Checked = True Then
                                         b.Parent.Text = ss.Replace(".iso", "")
                                         b.Parent.Checked = True
@@ -2851,9 +2900,21 @@ Public Class umdisomanger
                                     ss = s.Remove(m.Index + m.Length, s.Length - (m.Index + m.Length))
                                     ss = ss.Remove(0, ss.LastIndexOf("<title>") + 7)
                                     ss = ss.Remove(ss.LastIndexOf("</title>"), ss.Length - ss.LastIndexOf("</title>"))
+                                    If My.Settings.filenamecrc = True Then
+                                        Dim cr As New Regex("\[[0-9A-Fa-f]{8}\}", RegexOptions.ECMAScript)
+                                        Dim crcs As Match = cr.Match(ss)
+                                        If crcs.Success Then
+                                        Else
+                                            ss &= " [" & b.Text.Remove(0, 6).Trim & "]"
+                                        End If
+                                    End If
                                     ss = doskiller(ss)
 
+
                                     rp = System.IO.Path.GetDirectoryName(path) & "\" & ss & ".iso"
+                                    If MNAME.Checked = False AndAlso FILEPATH.Checked = False Then
+                                        b.Parent.Checked = True
+                                    End If
                                     If MNAME.Checked = True Then
                                         b.Parent.Text = ss
                                         b.Parent.Checked = True
@@ -2888,8 +2949,6 @@ Public Class umdisomanger
             TreeView1.EndUpdate()
         End Try
     End Sub
-
-
 
     Private Sub CMPROToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles diffCMPRO.Click
         Try
@@ -2957,7 +3016,8 @@ Public Class umdisomanger
                     zfs.Close()
                 End If
 
-                Dim s As String = System.Text.Encoding.GetEncoding(932).GetString(bs)
+                Dim utf8nobom As New UTF8Encoding
+                Dim s As String = System.Text.Encoding.GetEncoding(65001).GetString(bs)
                 Dim ss As String = ""
                 Dim rp As String = ""
                 Dim path As String = ""
@@ -3072,7 +3132,7 @@ Public Class umdisomanger
                 Next
 
                 Dim wr As New System.IO.StreamWriter(Application.StartupPath & "\diff\" & Now.ToString.Replace("/", "").Replace(":", "") & ".dat",
-                        False, System.Text.Encoding.GetEncoding(932))
+                        False, utf8nobom)
                 wr.Write(sba.ToString)
                 wr.Write(sb.ToString)
                 wr.Close()
@@ -3945,6 +4005,9 @@ Public Class umdisomanger
         For i = 0 To 8
             s = s.Replace(ss(i), "")
         Next
+        If s.Length > 256 Then
+            s = s.Substring(0, 255)
+        End If
         Return s
     End Function
 
@@ -4044,6 +4107,17 @@ Public Class umdisomanger
         f.Dispose()
         If My.Settings.topmost = True Then
             Me.TopMost = True
+        End If
+    End Sub
+
+    Private Sub pathcrc_Click(sender As System.Object, e As System.EventArgs) Handles pathcrc.Click
+
+        If pathcrc.Checked = False Then
+            pathcrc.Checked = True
+            My.Settings.filenamecrc = True
+        Else
+            pathcrc.Checked = False
+            My.Settings.filenamecrc = False
         End If
     End Sub
 End Class

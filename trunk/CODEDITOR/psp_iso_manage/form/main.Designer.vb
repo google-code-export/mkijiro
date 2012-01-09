@@ -100,6 +100,7 @@ Partial Class umdisomanger
         Me.MNEN = New System.Windows.Forms.ToolStripMenuItem()
         Me.MNAME = New System.Windows.Forms.ToolStripMenuItem()
         Me.FILEPATH = New System.Windows.Forms.ToolStripMenuItem()
+        Me.pathcrc = New System.Windows.Forms.ToolStripMenuItem()
         Me.setting = New System.Windows.Forms.ToolStripMenuItem()
         Me.GUITOP = New System.Windows.Forms.ToolStripMenuItem()
         Me.xmlselect = New System.Windows.Forms.ToolStripMenuItem()
@@ -125,62 +126,57 @@ Partial Class umdisomanger
         'CRCimage
         '
         resources.ApplyResources(Me.CRCimage, "CRCimage")
-        Me.CRCimage.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.CRCimage.Name = "CRCimage"
         Me.CRCimage.UseVisualStyleBackColor = True
         '
         'TreeView1
         '
-        resources.ApplyResources(Me.TreeView1, "TreeView1")
         Me.TreeView1.AllowDrop = True
         Me.TreeView1.ContextMenuStrip = Me.ContextMenuStrip2
-        Me.TreeView1.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.TreeView1.LabelEdit = True
+        resources.ApplyResources(Me.TreeView1, "TreeView1")
         Me.TreeView1.Name = "TreeView1"
-        Me.TreeView1.SelectedImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         '
         'ContextMenuStrip2
         '
-        resources.ApplyResources(Me.ContextMenuStrip2, "ContextMenuStrip2")
         Me.ContextMenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.rg_add, Me.rg_edit, Me.rg_del, Me.ToolStripSeparator5, Me.VIEW})
         Me.ContextMenuStrip2.Name = "ContextMenuStrip2"
+        resources.ApplyResources(Me.ContextMenuStrip2, "ContextMenuStrip2")
         '
         'rg_add
         '
-        resources.ApplyResources(Me.rg_add, "rg_add")
         Me.rg_add.Name = "rg_add"
+        resources.ApplyResources(Me.rg_add, "rg_add")
         '
         'rg_edit
         '
-        resources.ApplyResources(Me.rg_edit, "rg_edit")
         Me.rg_edit.Name = "rg_edit"
+        resources.ApplyResources(Me.rg_edit, "rg_edit")
         '
         'rg_del
         '
-        resources.ApplyResources(Me.rg_del, "rg_del")
         Me.rg_del.Name = "rg_del"
+        resources.ApplyResources(Me.rg_del, "rg_del")
         '
         'ToolStripSeparator5
         '
-        resources.ApplyResources(Me.ToolStripSeparator5, "ToolStripSeparator5")
         Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
+        resources.ApplyResources(Me.ToolStripSeparator5, "ToolStripSeparator5")
         '
         'VIEW
         '
-        resources.ApplyResources(Me.VIEW, "VIEW")
         Me.VIEW.Name = "VIEW"
+        resources.ApplyResources(Me.VIEW, "VIEW")
         '
         'GAMEID
         '
         resources.ApplyResources(Me.GAMEID, "GAMEID")
-        Me.GAMEID.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.GAMEID.Name = "GAMEID"
         Me.GAMEID.UseVisualStyleBackColor = True
         '
         'PFS
         '
         resources.ApplyResources(Me.PFS, "PFS")
-        Me.PFS.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.PFS.Name = "PFS"
         Me.PFS.UseVisualStyleBackColor = True
         '
@@ -197,89 +193,80 @@ Partial Class umdisomanger
         '
         'PictureBox2
         '
-        resources.ApplyResources(Me.PictureBox2, "PictureBox2")
         Me.PictureBox2.Cursor = System.Windows.Forms.Cursors.Default
+        resources.ApplyResources(Me.PictureBox2, "PictureBox2")
         Me.PictureBox2.Name = "PictureBox2"
         Me.PictureBox2.TabStop = False
         '
         'Label1
         '
         resources.ApplyResources(Me.Label1, "Label1")
-        Me.Label1.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.Label1.Name = "Label1"
         '
         'movepsp
         '
         resources.ApplyResources(Me.movepsp, "movepsp")
-        Me.movepsp.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.movepsp.Name = "movepsp"
         Me.movepsp.UseVisualStyleBackColor = True
         '
         'Button1
         '
         resources.ApplyResources(Me.Button1, "Button1")
-        Me.Button1.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.Button1.Name = "Button1"
         Me.Button1.UseVisualStyleBackColor = True
         '
         'drivelettter
         '
-        resources.ApplyResources(Me.drivelettter, "drivelettter")
         Me.drivelettter.ContextMenuStrip = Me.ContextMenuStrip1
+        resources.ApplyResources(Me.drivelettter, "drivelettter")
         Me.drivelettter.Name = "drivelettter"
         '
         'ContextMenuStrip1
         '
-        resources.ApplyResources(Me.ContextMenuStrip1, "ContextMenuStrip1")
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
+        resources.ApplyResources(Me.ContextMenuStrip1, "ContextMenuStrip1")
         '
         'lockdriveletter
         '
         resources.ApplyResources(Me.lockdriveletter, "lockdriveletter")
-        Me.lockdriveletter.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.lockdriveletter.Name = "lockdriveletter"
         Me.lockdriveletter.UseVisualStyleBackColor = True
         '
         'Label2
         '
         resources.ApplyResources(Me.Label2, "Label2")
-        Me.Label2.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.Label2.Name = "Label2"
         '
         'Label3
         '
         resources.ApplyResources(Me.Label3, "Label3")
-        Me.Label3.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.Label3.Name = "Label3"
         '
         'Label4
         '
         resources.ApplyResources(Me.Label4, "Label4")
-        Me.Label4.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.Label4.Name = "Label4"
         '
         'Label5
         '
         resources.ApplyResources(Me.Label5, "Label5")
-        Me.Label5.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.Label5.Name = "Label5"
         '
         'Label6
         '
         resources.ApplyResources(Me.Label6, "Label6")
-        Me.Label6.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.Label6.Name = "Label6"
         '
         'isosize
         '
-        resources.ApplyResources(Me.isosize, "isosize")
         Me.isosize.ContextMenuStrip = Me.ContextMenuStrip1
+        resources.ApplyResources(Me.isosize, "isosize")
         Me.isosize.Name = "isosize"
         '
         'isolba
         '
-        resources.ApplyResources(Me.isolba, "isolba")
         Me.isolba.ContextMenuStrip = Me.ContextMenuStrip1
+        resources.ApplyResources(Me.isolba, "isolba")
         Me.isolba.Name = "isolba"
         '
         'crc
@@ -300,7 +287,6 @@ Partial Class umdisomanger
         'Label7
         '
         resources.ApplyResources(Me.Label7, "Label7")
-        Me.Label7.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.Label7.Name = "Label7"
         '
         'gid
@@ -311,340 +297,334 @@ Partial Class umdisomanger
         'calc_crc
         '
         resources.ApplyResources(Me.calc_crc, "calc_crc")
-        Me.calc_crc.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.calc_crc.Name = "calc_crc"
         Me.calc_crc.UseVisualStyleBackColor = True
         '
         'calc_md5
         '
         resources.ApplyResources(Me.calc_md5, "calc_md5")
-        Me.calc_md5.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.calc_md5.Name = "calc_md5"
         Me.calc_md5.UseVisualStyleBackColor = True
         '
         'calc_sha
         '
         resources.ApplyResources(Me.calc_sha, "calc_sha")
-        Me.calc_sha.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.calc_sha.Name = "calc_sha"
         Me.calc_sha.UseVisualStyleBackColor = True
         '
         'all_hash
         '
         resources.ApplyResources(Me.all_hash, "all_hash")
-        Me.all_hash.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.all_hash.Name = "all_hash"
         Me.all_hash.UseVisualStyleBackColor = True
         '
         'tree_apply
         '
         resources.ApplyResources(Me.tree_apply, "tree_apply")
-        Me.tree_apply.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.tree_apply.Name = "tree_apply"
         Me.tree_apply.UseVisualStyleBackColor = True
         '
         'MenuStrip1
         '
-        resources.ApplyResources(Me.MenuStrip1, "MenuStrip1")
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menufile, Me.sort, Me.RENAME, Me.setting, Me.HELPToolStripMenuItem})
+        resources.ApplyResources(Me.MenuStrip1, "MenuStrip1")
         Me.MenuStrip1.Name = "MenuStrip1"
         '
         'menufile
         '
-        resources.ApplyResources(Me.menufile, "menufile")
         Me.menufile.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ADD, Me.ToolStripSeparator2, Me.SAVELS, Me.EXPORTPSPINS, Me.SAVE_clrmamepro, Me.exportxml, Me.ToolStripMenuItem1, Me.ToolStripSeparator3, Me.CLOSEToolStripMenuItem})
         Me.menufile.Name = "menufile"
+        resources.ApplyResources(Me.menufile, "menufile")
         '
         'ADD
         '
-        resources.ApplyResources(Me.ADD, "ADD")
         Me.ADD.Name = "ADD"
+        resources.ApplyResources(Me.ADD, "ADD")
         '
         'ToolStripSeparator2
         '
-        resources.ApplyResources(Me.ToolStripSeparator2, "ToolStripSeparator2")
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+        resources.ApplyResources(Me.ToolStripSeparator2, "ToolStripSeparator2")
         '
         'SAVELS
         '
-        resources.ApplyResources(Me.SAVELS, "SAVELS")
         Me.SAVELS.Name = "SAVELS"
+        resources.ApplyResources(Me.SAVELS, "SAVELS")
         '
         'EXPORTPSPINS
         '
-        resources.ApplyResources(Me.EXPORTPSPINS, "EXPORTPSPINS")
         Me.EXPORTPSPINS.Name = "EXPORTPSPINS"
+        resources.ApplyResources(Me.EXPORTPSPINS, "EXPORTPSPINS")
         '
         'SAVE_clrmamepro
         '
-        resources.ApplyResources(Me.SAVE_clrmamepro, "SAVE_clrmamepro")
         Me.SAVE_clrmamepro.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.disck_ver, Me.ROMCODEs})
         Me.SAVE_clrmamepro.Name = "SAVE_clrmamepro"
+        resources.ApplyResources(Me.SAVE_clrmamepro, "SAVE_clrmamepro")
         '
         'disck_ver
         '
-        resources.ApplyResources(Me.disck_ver, "disck_ver")
         Me.disck_ver.Name = "disck_ver"
+        resources.ApplyResources(Me.disck_ver, "disck_ver")
         '
         'ROMCODEs
         '
-        resources.ApplyResources(Me.ROMCODEs, "ROMCODEs")
         Me.ROMCODEs.Name = "ROMCODEs"
+        resources.ApplyResources(Me.ROMCODEs, "ROMCODEs")
         '
         'exportxml
         '
-        resources.ApplyResources(Me.exportxml, "exportxml")
         Me.exportxml.Name = "exportxml"
+        resources.ApplyResources(Me.exportxml, "exportxml")
         '
         'ToolStripMenuItem1
         '
-        resources.ApplyResources(Me.ToolStripMenuItem1, "ToolStripMenuItem1")
         Me.ToolStripMenuItem1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.diffCMPRO, Me.diffXML})
         Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
+        resources.ApplyResources(Me.ToolStripMenuItem1, "ToolStripMenuItem1")
         '
         'diffCMPRO
         '
-        resources.ApplyResources(Me.diffCMPRO, "diffCMPRO")
         Me.diffCMPRO.Name = "diffCMPRO"
+        resources.ApplyResources(Me.diffCMPRO, "diffCMPRO")
         '
         'diffXML
         '
-        resources.ApplyResources(Me.diffXML, "diffXML")
         Me.diffXML.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.sabunindex})
         Me.diffXML.Name = "diffXML"
+        resources.ApplyResources(Me.diffXML, "diffXML")
         '
         'sabunindex
         '
-        resources.ApplyResources(Me.sabunindex, "sabunindex")
         Me.sabunindex.Name = "sabunindex"
+        resources.ApplyResources(Me.sabunindex, "sabunindex")
         '
         'ToolStripSeparator3
         '
-        resources.ApplyResources(Me.ToolStripSeparator3, "ToolStripSeparator3")
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
+        resources.ApplyResources(Me.ToolStripSeparator3, "ToolStripSeparator3")
         '
         'CLOSEToolStripMenuItem
         '
-        resources.ApplyResources(Me.CLOSEToolStripMenuItem, "CLOSEToolStripMenuItem")
         Me.CLOSEToolStripMenuItem.Name = "CLOSEToolStripMenuItem"
+        resources.ApplyResources(Me.CLOSEToolStripMenuItem, "CLOSEToolStripMenuItem")
         '
         'sort
         '
-        resources.ApplyResources(Me.sort, "sort")
         Me.sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.name_sort, Me.GAMEID_sort, Me.PSFtitle_sort, Me.file_sort})
         Me.sort.Name = "sort"
+        resources.ApplyResources(Me.sort, "sort")
         '
         'name_sort
         '
-        resources.ApplyResources(Me.name_sort, "name_sort")
         Me.name_sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mane_sort_up, Me.mane_sort_down})
         Me.name_sort.Name = "name_sort"
+        resources.ApplyResources(Me.name_sort, "name_sort")
         '
         'mane_sort_up
         '
-        resources.ApplyResources(Me.mane_sort_up, "mane_sort_up")
         Me.mane_sort_up.Name = "mane_sort_up"
+        resources.ApplyResources(Me.mane_sort_up, "mane_sort_up")
         '
         'mane_sort_down
         '
-        resources.ApplyResources(Me.mane_sort_down, "mane_sort_down")
         Me.mane_sort_down.Name = "mane_sort_down"
+        resources.ApplyResources(Me.mane_sort_down, "mane_sort_down")
         '
         'GAMEID_sort
         '
-        resources.ApplyResources(Me.GAMEID_sort, "GAMEID_sort")
         Me.GAMEID_sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.gid_sort_up, Me.gid_sort_down, Me.ToolStripSeparator1, Me.sort_jp, Me.PpriorUSAToolStripMenuItem, Me.PriorEUToolStripMenuItem})
         Me.GAMEID_sort.Name = "GAMEID_sort"
+        resources.ApplyResources(Me.GAMEID_sort, "GAMEID_sort")
         '
         'gid_sort_up
         '
-        resources.ApplyResources(Me.gid_sort_up, "gid_sort_up")
         Me.gid_sort_up.Name = "gid_sort_up"
+        resources.ApplyResources(Me.gid_sort_up, "gid_sort_up")
         '
         'gid_sort_down
         '
-        resources.ApplyResources(Me.gid_sort_down, "gid_sort_down")
         Me.gid_sort_down.Name = "gid_sort_down"
+        resources.ApplyResources(Me.gid_sort_down, "gid_sort_down")
         '
         'ToolStripSeparator1
         '
-        resources.ApplyResources(Me.ToolStripSeparator1, "ToolStripSeparator1")
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        resources.ApplyResources(Me.ToolStripSeparator1, "ToolStripSeparator1")
         '
         'sort_jp
         '
-        resources.ApplyResources(Me.sort_jp, "sort_jp")
         Me.sort_jp.Name = "sort_jp"
+        resources.ApplyResources(Me.sort_jp, "sort_jp")
         '
         'PpriorUSAToolStripMenuItem
         '
-        resources.ApplyResources(Me.PpriorUSAToolStripMenuItem, "PpriorUSAToolStripMenuItem")
         Me.PpriorUSAToolStripMenuItem.Name = "PpriorUSAToolStripMenuItem"
+        resources.ApplyResources(Me.PpriorUSAToolStripMenuItem, "PpriorUSAToolStripMenuItem")
         '
         'PriorEUToolStripMenuItem
         '
-        resources.ApplyResources(Me.PriorEUToolStripMenuItem, "PriorEUToolStripMenuItem")
         Me.PriorEUToolStripMenuItem.Name = "PriorEUToolStripMenuItem"
+        resources.ApplyResources(Me.PriorEUToolStripMenuItem, "PriorEUToolStripMenuItem")
         '
         'PSFtitle_sort
         '
-        resources.ApplyResources(Me.PSFtitle_sort, "PSFtitle_sort")
         Me.PSFtitle_sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.psf_sort_up, Me.psf_sort_down})
         Me.PSFtitle_sort.Name = "PSFtitle_sort"
+        resources.ApplyResources(Me.PSFtitle_sort, "PSFtitle_sort")
         '
         'psf_sort_up
         '
-        resources.ApplyResources(Me.psf_sort_up, "psf_sort_up")
         Me.psf_sort_up.Name = "psf_sort_up"
+        resources.ApplyResources(Me.psf_sort_up, "psf_sort_up")
         '
         'psf_sort_down
         '
-        resources.ApplyResources(Me.psf_sort_down, "psf_sort_down")
         Me.psf_sort_down.Name = "psf_sort_down"
+        resources.ApplyResources(Me.psf_sort_down, "psf_sort_down")
         '
         'file_sort
         '
-        resources.ApplyResources(Me.file_sort, "file_sort")
         Me.file_sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.file_sort_up, Me.file_sort_down})
         Me.file_sort.Name = "file_sort"
+        resources.ApplyResources(Me.file_sort, "file_sort")
         '
         'file_sort_up
         '
-        resources.ApplyResources(Me.file_sort_up, "file_sort_up")
         Me.file_sort_up.Name = "file_sort_up"
+        resources.ApplyResources(Me.file_sort_up, "file_sort_up")
         '
         'file_sort_down
         '
-        resources.ApplyResources(Me.file_sort_down, "file_sort_down")
         Me.file_sort_down.Name = "file_sort_down"
+        resources.ApplyResources(Me.file_sort_down, "file_sort_down")
         '
         'RENAME
         '
-        resources.ApplyResources(Me.RENAME, "RENAME")
-        Me.RENAME.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RMXML, Me.RMDAT, Me.ToolStripSeparator4, Me.MNEN})
+        Me.RENAME.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RMXML, Me.RMDAT, Me.ToolStripSeparator4, Me.MNEN, Me.pathcrc})
         Me.RENAME.Name = "RENAME"
+        resources.ApplyResources(Me.RENAME, "RENAME")
         '
         'RMXML
         '
-        resources.ApplyResources(Me.RMXML, "RMXML")
         Me.RMXML.Name = "RMXML"
+        resources.ApplyResources(Me.RMXML, "RMXML")
         '
         'RMDAT
         '
-        resources.ApplyResources(Me.RMDAT, "RMDAT")
         Me.RMDAT.Name = "RMDAT"
+        resources.ApplyResources(Me.RMDAT, "RMDAT")
         '
         'ToolStripSeparator4
         '
-        resources.ApplyResources(Me.ToolStripSeparator4, "ToolStripSeparator4")
         Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        resources.ApplyResources(Me.ToolStripSeparator4, "ToolStripSeparator4")
         '
         'MNEN
         '
-        resources.ApplyResources(Me.MNEN, "MNEN")
         Me.MNEN.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MNAME, Me.FILEPATH})
         Me.MNEN.Name = "MNEN"
+        resources.ApplyResources(Me.MNEN, "MNEN")
         '
         'MNAME
         '
-        resources.ApplyResources(Me.MNAME, "MNAME")
         Me.MNAME.Name = "MNAME"
+        resources.ApplyResources(Me.MNAME, "MNAME")
         '
         'FILEPATH
         '
-        resources.ApplyResources(Me.FILEPATH, "FILEPATH")
         Me.FILEPATH.Name = "FILEPATH"
+        resources.ApplyResources(Me.FILEPATH, "FILEPATH")
+        '
+        'pathcrc
+        '
+        Me.pathcrc.Name = "pathcrc"
+        resources.ApplyResources(Me.pathcrc, "pathcrc")
         '
         'setting
         '
-        resources.ApplyResources(Me.setting, "setting")
         Me.setting.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GUITOP, Me.xmlselect, Me.rename_dat, Me.editpspdir, Me.XMLヘッダフッター編集ToolStripMenuItem, Me.ALSAVE})
         Me.setting.Name = "setting"
+        resources.ApplyResources(Me.setting, "setting")
         '
         'GUITOP
         '
-        resources.ApplyResources(Me.GUITOP, "GUITOP")
         Me.GUITOP.Name = "GUITOP"
+        resources.ApplyResources(Me.GUITOP, "GUITOP")
         '
         'xmlselect
         '
-        resources.ApplyResources(Me.xmlselect, "xmlselect")
         Me.xmlselect.Name = "xmlselect"
+        resources.ApplyResources(Me.xmlselect, "xmlselect")
         '
         'rename_dat
         '
-        resources.ApplyResources(Me.rename_dat, "rename_dat")
         Me.rename_dat.Name = "rename_dat"
+        resources.ApplyResources(Me.rename_dat, "rename_dat")
         '
         'editpspdir
         '
-        resources.ApplyResources(Me.editpspdir, "editpspdir")
         Me.editpspdir.Name = "editpspdir"
+        resources.ApplyResources(Me.editpspdir, "editpspdir")
         '
         'XMLヘッダフッター編集ToolStripMenuItem
         '
-        resources.ApplyResources(Me.XMLヘッダフッター編集ToolStripMenuItem, "XMLヘッダフッター編集ToolStripMenuItem")
         Me.XMLヘッダフッター編集ToolStripMenuItem.Name = "XMLヘッダフッター編集ToolStripMenuItem"
+        resources.ApplyResources(Me.XMLヘッダフッター編集ToolStripMenuItem, "XMLヘッダフッター編集ToolStripMenuItem")
         '
         'ALSAVE
         '
-        resources.ApplyResources(Me.ALSAVE, "ALSAVE")
         Me.ALSAVE.Name = "ALSAVE"
+        resources.ApplyResources(Me.ALSAVE, "ALSAVE")
         '
         'HELPToolStripMenuItem
         '
-        resources.ApplyResources(Me.HELPToolStripMenuItem, "HELPToolStripMenuItem")
         Me.HELPToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.online, Me.version})
         Me.HELPToolStripMenuItem.Name = "HELPToolStripMenuItem"
+        resources.ApplyResources(Me.HELPToolStripMenuItem, "HELPToolStripMenuItem")
         '
         'online
         '
-        resources.ApplyResources(Me.online, "online")
         Me.online.Name = "online"
+        resources.ApplyResources(Me.online, "online")
         '
         'version
         '
-        resources.ApplyResources(Me.version, "version")
         Me.version.Name = "version"
+        resources.ApplyResources(Me.version, "version")
         '
         'del_psp
         '
         resources.ApplyResources(Me.del_psp, "del_psp")
-        Me.del_psp.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.del_psp.Name = "del_psp"
         Me.del_psp.UseVisualStyleBackColor = True
         '
         't_gid
         '
         resources.ApplyResources(Me.t_gid, "t_gid")
-        Me.t_gid.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.t_gid.Name = "t_gid"
         Me.t_gid.UseVisualStyleBackColor = True
         '
         'crc_xml
         '
         resources.ApplyResources(Me.crc_xml, "crc_xml")
-        Me.crc_xml.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.crc_xml.Name = "crc_xml"
         Me.crc_xml.UseVisualStyleBackColor = True
         '
         'free
         '
         resources.ApplyResources(Me.free, "free")
-        Me.free.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.free.Name = "free"
         '
         'Button2
         '
         resources.ApplyResources(Me.Button2, "Button2")
-        Me.Button2.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.Button2.Name = "Button2"
         Me.Button2.UseVisualStyleBackColor = True
         '
         'SAVELS2
         '
         resources.ApplyResources(Me.SAVELS2, "SAVELS2")
-        Me.SAVELS2.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.SAVELS2.Name = "SAVELS2"
         Me.SAVELS2.UseVisualStyleBackColor = True
         '
@@ -791,5 +771,6 @@ Partial Class umdisomanger
     Friend WithEvents exportxml As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents XMLヘッダフッター編集ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents sabunindex As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents pathcrc As System.Windows.Forms.ToolStripMenuItem
 
 End Class

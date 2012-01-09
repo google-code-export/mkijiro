@@ -11,5 +11,42 @@
     <Setting Name="cmmask" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="lastfile" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="encode" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">932</Value>
+    </Setting>
+    <Setting Name="cmname" Type="System.String" Scope="User">
+      <Value Profile="(Default)">%t</Value>
+    </Setting>
+    <Setting Name="cmdesc" Type="System.String" Scope="User">
+      <Value Profile="(Default)">%t</Value>
+    </Setting>
+    <Setting Name="cmromname" Type="System.String" Scope="User">
+      <Value Profile="(Default)">%t</Value>
+    </Setting>
+    <Setting Name="namepattern" Type="System.String" Scope="User">
+      <Value Profile="(Default)">%t
+%t [%c]
+%t [%f]
+%g - %t [%c]
+</Value>
+    </Setting>
+    <Setting Name="descpattern" Type="System.String" Scope="User">
+      <Value Profile="(Default)">%t
+%g
+%c
+%f</Value>
+    </Setting>
+    <Setting Name="romnamepattern" Type="System.String" Scope="User">
+      <Value Profile="(Default)">%t
+%t [%c]
+%t [%f]
+%g - %t [%c]</Value>
+    </Setting>
+    <Setting Name="ask" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

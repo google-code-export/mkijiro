@@ -117,22 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="crc" xml:space="preserve">
-    <value>37DC8144</value>
-  </data>
-  <data name="gid" xml:space="preserve">
-    <value>ULJS-00001</value>
-  </data>
-  <data name="preview" xml:space="preserve">
-    <value>name "s1"
-description "s2"
-serial "s3"
-rom( name "s4.iso" size s5 crc s6 )</value>
-  </data>
-  <data name="size" xml:space="preserve">
-    <value>906297344</value>
-  </data>
-  <data name="title" xml:space="preserve">
-    <value>リッジレーサー</value>
-  </data>
+  <metadata name="MenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
 </root>
