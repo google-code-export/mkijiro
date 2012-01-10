@@ -37,10 +37,10 @@ namespace WindowsFormsApplication1.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("8192")]
-        public int buf {
+        [global::System.Configuration.DefaultSettingValueAttribute("64")]
+        public string buf {
             get {
-                return ((int)(this["buf"]));
+                return ((string)(this["buf"]));
             }
             set {
                 this["buf"] = value;
