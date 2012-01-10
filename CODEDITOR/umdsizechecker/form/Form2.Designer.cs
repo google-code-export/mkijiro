@@ -43,18 +43,18 @@
             // 
             // listView1
             // 
-            this.listView1.Location = new System.Drawing.Point(12, 32);
+            this.listView1.Location = new System.Drawing.Point(10, 30);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(825, 121);
+            this.listView1.Size = new System.Drawing.Size(722, 113);
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
             // 
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("MS UI Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.button1.Location = new System.Drawing.Point(255, 47);
+            this.button1.Location = new System.Drawing.Point(223, 44);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(168, 23);
+            this.button1.Size = new System.Drawing.Size(147, 21);
             this.button1.TabIndex = 1;
             this.button1.Text = "-6k付近のデータを見る";
             this.button1.UseVisualStyleBackColor = true;
@@ -63,9 +63,9 @@
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("MS UI Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.button2.Location = new System.Drawing.Point(255, 17);
+            this.button2.Location = new System.Drawing.Point(223, 16);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(168, 23);
+            this.button2.Size = new System.Drawing.Size(147, 21);
             this.button2.TabIndex = 2;
             this.button2.Text = "-2k付近のデータを見る";
             this.button2.UseVisualStyleBackColor = true;
@@ -74,18 +74,18 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(16, 25);
+            this.label1.Location = new System.Drawing.Point(14, 23);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(98, 15);
+            this.label1.Size = new System.Drawing.Size(90, 14);
             this.label1.TabIndex = 3;
             this.label1.Text = "-2kのオフセット:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(16, 51);
+            this.label2.Location = new System.Drawing.Point(14, 48);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(98, 15);
+            this.label2.Size = new System.Drawing.Size(90, 14);
             this.label2.TabIndex = 4;
             this.label2.Text = "-6kのオフセット:";
             // 
@@ -97,9 +97,9 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.button1);
-            this.groupBox1.Location = new System.Drawing.Point(148, 159);
+            this.groupBox1.Location = new System.Drawing.Point(130, 148);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(478, 109);
+            this.groupBox1.Size = new System.Drawing.Size(418, 102);
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "セクターヴュー";
@@ -108,9 +108,9 @@
             // 
             this.button3.Enabled = false;
             this.button3.Font = new System.Drawing.Font("MS UI Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.button3.Location = new System.Drawing.Point(255, 75);
+            this.button3.Location = new System.Drawing.Point(223, 70);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(168, 23);
+            this.button3.Size = new System.Drawing.Size(147, 21);
             this.button3.TabIndex = 9;
             this.button3.Text = "オーバーダンプ箇所を見る";
             this.button3.UseVisualStyleBackColor = true;
@@ -120,35 +120,36 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Enabled = false;
-            this.label5.Location = new System.Drawing.Point(23, 79);
+            this.label5.Location = new System.Drawing.Point(20, 74);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(91, 15);
+            this.label5.Size = new System.Drawing.Size(86, 14);
             this.label5.TabIndex = 8;
             this.label5.Text = "オーバーダンプ:";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(38, 184);
+            this.label3.Location = new System.Drawing.Point(33, 172);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(92, 15);
+            this.label3.Size = new System.Drawing.Size(87, 14);
             this.label3.TabIndex = 6;
             this.label3.Text = "☆1セクタ始点";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(38, 210);
+            this.label4.Location = new System.Drawing.Point(33, 196);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(92, 15);
+            this.label4.Size = new System.Drawing.Size(87, 14);
             this.label4.TabIndex = 7;
             this.label4.Text = "★1セクタ終点";
             // 
             // Form2
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(859, 272);
+            this.AutoSize = true;
+            this.ClientSize = new System.Drawing.Size(752, 254);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.groupBox1);

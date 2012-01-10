@@ -125,10 +125,13 @@
     <value>CRC画像検索</value>
   </data>
   <data name="ContextMenuStrip2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>259, 114</value>
+    <value>259, 146</value>
   </data>
   <data name="TreeView1.Size" type="System.Drawing.Size, System.Drawing">
     <value>242, 413</value>
+  </data>
+  <data name="cnt_install.Text" xml:space="preserve">
+    <value>PSPに転送</value>
   </data>
   <data name="rg_add.Size" type="System.Drawing.Size, System.Drawing">
     <value>258, 26</value>
@@ -256,8 +259,14 @@
   <data name="md5hash.Location" type="System.Drawing.Point, System.Drawing">
     <value>316, 344</value>
   </data>
+  <data name="md5hash.Size" type="System.Drawing.Size, System.Drawing">
+    <value>253, 21</value>
+  </data>
   <data name="sha.Location" type="System.Drawing.Point, System.Drawing">
     <value>316, 374</value>
+  </data>
+  <data name="sha.Size" type="System.Drawing.Size, System.Drawing">
+    <value>321, 21</value>
   </data>
   <data name="Label7.Location" type="System.Drawing.Point, System.Drawing">
     <value>258, 287</value>
@@ -278,25 +287,37 @@
     <value>計算</value>
   </data>
   <data name="calc_md5.Location" type="System.Drawing.Point, System.Drawing">
-    <value>550, 344</value>
+    <value>575, 345</value>
+  </data>
+  <data name="calc_md5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>42, 21</value>
   </data>
   <data name="calc_md5.Text" xml:space="preserve">
     <value>計算</value>
   </data>
   <data name="calc_sha.Location" type="System.Drawing.Point, System.Drawing">
-    <value>619, 374</value>
+    <value>643, 374</value>
+  </data>
+  <data name="calc_sha.Size" type="System.Drawing.Size, System.Drawing">
+    <value>42, 21</value>
   </data>
   <data name="calc_sha.Text" xml:space="preserve">
     <value>計算</value>
   </data>
   <data name="all_hash.Location" type="System.Drawing.Point, System.Drawing">
-    <value>619, 344</value>
+    <value>621, 345</value>
+  </data>
+  <data name="all_hash.Size" type="System.Drawing.Size, System.Drawing">
+    <value>64, 21</value>
   </data>
   <data name="all_hash.Text" xml:space="preserve">
     <value>全ハッシュ</value>
   </data>
   <data name="tree_apply.Location" type="System.Drawing.Point, System.Drawing">
-    <value>576, 403</value>
+    <value>608, 404</value>
+  </data>
+  <data name="tree_apply.Size" type="System.Drawing.Size, System.Drawing">
+    <value>77, 21</value>
   </data>
   <data name="tree_apply.Text" xml:space="preserve">
     <value>ツリーに反映</value>
@@ -389,14 +410,11 @@ diffフォルダにimgとDATができます</value>
   <data name="diffCMPRO.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
-  <data name="diffCMPRO.Size" type="System.Drawing.Size, System.Drawing">
-    <value>130, 26</value>
-  </data>
   <data name="diffXML.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
-  <data name="diffXML.Size" type="System.Drawing.Size, System.Drawing">
-    <value>130, 26</value>
+  <data name="sabunindex.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 26</value>
   </data>
   <data name="sabunindex.Text" xml:space="preserve">
     <value>出力時最初のID</value>
@@ -516,22 +534,22 @@ diffフォルダにimgとDATができます</value>
     <value>リネーム</value>
   </data>
   <data name="RMXML.Size" type="System.Drawing.Size, System.Drawing">
-    <value>168, 26</value>
+    <value>182, 26</value>
   </data>
   <data name="RMXML.ToolTipText" xml:space="preserve">
     <value>RENAME FILE,USE OFFLINE XML</value>
   </data>
   <data name="RMDAT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>168, 26</value>
+    <value>182, 26</value>
   </data>
   <data name="RMDAT.ToolTipText" xml:space="preserve">
     <value>RENAME FILE, USE NOINTRO DATFILE</value>
   </data>
   <data name="ToolStripSeparator4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>165, 6</value>
+    <value>179, 6</value>
   </data>
   <data name="MNEN.Size" type="System.Drawing.Size, System.Drawing">
-    <value>168, 26</value>
+    <value>182, 26</value>
   </data>
   <data name="MNEN.Text" xml:space="preserve">
     <value>対象</value>
@@ -552,20 +570,20 @@ diffフォルダにimgとDATができます</value>
   <data name="FILEPATH.Text" xml:space="preserve">
     <value>ファイルパス</value>
   </data>
+  <data name="pathcrc.Size" type="System.Drawing.Size, System.Drawing">
+    <value>182, 26</value>
+  </data>
+  <data name="pathcrc.Text" xml:space="preserve">
+    <value>CRC32をつける</value>
+  </data>
   <data name="setting.Size" type="System.Drawing.Size, System.Drawing">
     <value>50, 25</value>
   </data>
   <data name="setting.Text" xml:space="preserve">
     <value>設定</value>
   </data>
-  <data name="GUITOP.Size" type="System.Drawing.Size, System.Drawing">
-    <value>235, 26</value>
-  </data>
   <data name="GUITOP.Text" xml:space="preserve">
     <value>常に前面に表示</value>
-  </data>
-  <data name="xmlselect.Size" type="System.Drawing.Size, System.Drawing">
-    <value>235, 26</value>
   </data>
   <data name="xmlselect.Text" xml:space="preserve">
     <value>画像検索用XML指定</value>
@@ -574,9 +592,6 @@ diffフォルダにimgとDATができます</value>
     <value>SELECT XML OFFLINELSIT
 IF MATCH CRC32 IN XML,NAME AND IMAGE APPLIED</value>
   </data>
-  <data name="rename_dat.Size" type="System.Drawing.Size, System.Drawing">
-    <value>235, 26</value>
-  </data>
   <data name="rename_dat.Text" xml:space="preserve">
     <value>リネーム用DAT指定</value>
   </data>
@@ -584,9 +599,6 @@ IF MATCH CRC32 IN XML,NAME AND IMAGE APPLIED</value>
     <value>SELECT NOINTRO DAT
 IF MATCH CRC32 IN DAT
 files are renamed</value>
-  </data>
-  <data name="editpspdir.Size" type="System.Drawing.Size, System.Drawing">
-    <value>235, 26</value>
   </data>
   <data name="editpspdir.Text" xml:space="preserve">
     <value>転送先リスト編集</value>
@@ -599,9 +611,6 @@ X:\PSP\GAME\</value>
   </data>
   <data name="XMLヘッダフッター編集ToolStripMenuItem.Text" xml:space="preserve">
     <value>XMLヘッダフッター編集</value>
-  </data>
-  <data name="ALSAVE.Size" type="System.Drawing.Size, System.Drawing">
-    <value>235, 26</value>
   </data>
   <data name="ALSAVE.Text" xml:space="preserve">
     <value>終了時リストを必ず保存</value>
@@ -662,12 +671,6 @@ X:\PSP\GAME\</value>
   </data>
   <data name="SAVELS2.Text" xml:space="preserve">
     <value>リスト保存</value>
-  </data>
-  <data name="pathcrc.Size" type="System.Drawing.Size, System.Drawing">
-    <value>182, 26</value>
-  </data>
-  <data name="pathcrc.Text" xml:space="preserve">
-    <value>CRC32をつける</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
     <value>697, 463</value>

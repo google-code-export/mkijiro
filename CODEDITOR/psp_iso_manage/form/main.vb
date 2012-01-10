@@ -1090,11 +1090,18 @@ Public Class umdisomanger
         End Try
     End Sub
 
-    Private Sub move_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles movepsp.Click
+    Private Sub move_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles movepsp.Click, cnt_install.Click
         Try
             Dim psp As String = findpsp()
 
-            If psp <> "" Then
+            If psp = "" Then
+                Beep()
+                MessageBox.Show(lang(18), lang(19))
+            ElseIf free.ForeColor = Color.Red Then
+                Beep()
+                MessageBox.Show("空き容量が足りません", "MSFREE")
+            Else
+
                 Dim treenode As TreeNode = TreeView1.SelectedNode
                 If treenode IsNot Nothing Then
                     If treenode.Level = 0 Then
@@ -1208,9 +1215,6 @@ Public Class umdisomanger
                     free.Text = lang(12)
                 End If
 
-            Else
-                Beep()
-                MessageBox.Show(lang(18), lang(19))
             End If
         Catch ex As Exception
             Beep()
@@ -4120,4 +4124,5 @@ Public Class umdisomanger
             My.Settings.filenamecrc = False
         End If
     End Sub
+
 End Class
