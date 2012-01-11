@@ -138,6 +138,12 @@ Public Class umdisomanger
             If My.Settings.alwayssave = True Then
                 ALSAVE.Checked = True
             End If
+            If File.Exists(My.Settings.datpath) = False Then
+                My.Settings.datpath = Application.StartupPath & "\datas\nanamitan.dat"
+            End If
+            If File.Exists(My.Settings.xml) = False Then
+                My.Settings.xml = Application.StartupPath & "\datas\nanamitan.xml"
+            End If
             'System.Threading.Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
 
             If CultureInfo.CurrentCulture.ToString.Contains("ja") Then
@@ -2798,6 +2804,8 @@ Public Class umdisomanger
                     End If
                 Next
                 Beep()
+                diffCMPRO.Enabled = True
+                diffXML.Enabled = False
                 TreeView1.EndUpdate()
             Else
                 '"リネーム用DATがみつかりません", "DATエラー"
@@ -3235,7 +3243,7 @@ Public Class umdisomanger
                                 Dim fhs As New System.IO.FileStream(path, System.IO.FileMode.Open, System.IO.FileAccess.Read)
                                 size = fhs.Length
                                 fhs.Close()
-                                ss = n.Text
+                                ss = doskiller2(n.Text)
                                 'If disck_ver.Checked = True Then
                                 '    If Not n.Text.Contains("(v") Then
                                 '        st = psf.GETNAME(n.Nodes(0).Tag.ToString, "I")
@@ -3283,7 +3291,7 @@ Public Class umdisomanger
                                 sb.Append(vbTab)
                                 sb.Append(vbTab)
                                 sb.Append("<title>")
-                                sb.Append(n.Text.Replace(" ", "　"))
+                                sb.Append(ss)
                                 sb.AppendLine("</title>")
                                 sb.Append(vbTab)
                                 sb.Append(vbTab)
@@ -3506,7 +3514,7 @@ Public Class umdisomanger
 
                 PictureBox1.SetBounds(260, 64, 104, 181)
                 Dim utf8nobom As New UTF8Encoding
-                Dim wr As New System.IO.StreamWriter(Application.StartupPath & "\diff\datas\" & Now.ToString.Replace("/", "").Replace(":", "") & ".xml",
+                Dim wr As New System.IO.StreamWriter(Application.StartupPath & "\" & Now.ToString.Replace("/", "").Replace(":", "") & ".xml",
                                         False, utf8nobom)
                 wr.Write(My.Settings.xmlhead)
                 wr.Write(sb.ToString)
@@ -3680,7 +3688,7 @@ Public Class umdisomanger
                                 Dim fhs As New System.IO.FileStream(path, System.IO.FileMode.Open, System.IO.FileAccess.Read)
                                 size = fhs.Length
                                 fhs.Close()
-                                ss = n.Text
+                                ss = doskiller2(n.Text)
                                 'If disck_ver.Checked = True Then
                                 '    If Not n.Text.Contains("(v") Then
                                 '        st = psf.GETNAME(n.Nodes(0).Tag.ToString, "I")
@@ -3728,7 +3736,7 @@ Public Class umdisomanger
                                 sb.Append(vbTab)
                                 sb.Append(vbTab)
                                 sb.Append("<title>")
-                                sb.Append(n.Text.Replace(" ", "　"))
+                                sb.Append(ss)
                                 sb.AppendLine("</title>")
                                 sb.Append(vbTab)
                                 sb.Append(vbTab)
@@ -4005,6 +4013,31 @@ Public Class umdisomanger
             s = s.Replace(uni2.Value, System.Text.Encoding.GetEncoding(1200).GetString(b))
             uni2 = uni2.NextMatch
         End While
+
+        For i = 0 To 8
+            s = s.Replace(ss(i), "")
+        Next
+        If s.Length > 256 Then
+            s = s.Substring(0, 255)
+        End If
+        Return s
+    End Function
+
+
+    Function doskiller2(ByVal s As String) As String
+
+        Dim ss As String() = {"/", "\", "?", "*", ":", "|", """", "<", ">"}
+        'http://www.scollabo.com/banban/apply/ap8.html
+        'Dim html As String() = {"&amp;", "&gt;", "&lt;"} ' "&apos;", "&quot;", "&nbsp;", "&iexcl;", "&cent;", "&pound;", "&curren;", "&yen;", "&brvbar;", "&sect;", "&uml;", "&copy;", "&ordf;", "&laquo;", "&not;", "&shy;", "&reg;", "&macr;", "&deg;", "&plusmn;", "&sup2;", "&sup3;", "&acute;", "&micro;", "&para;", "&middot;", "&cedil;", "&sup1;", "&ordm;", "&raquo;", "&frac14;", "&frac12;", "&frac34;", "&iquest;", "&Agrave;", "&Aacute;", "&Acirc;", "&Atilde;", "&Auml;", "&Aring;", "&AElig;", "&Ccedil;", "&Egrave;", "&Eacute;", "&Ecirc;", "&Euml;", "&Igrave;", "&Iacute;", "&Icirc;", "&Iuml;", "&ETH;", "&Ntilde;", "&Ograve;", "&Oacute;", "&Ocirc;", "&Otilde;", "&Ouml;", "&times;", "&Oslash;", "&Ugrave;", "&Uacute;", "&Ucirc;", "&Uuml;", "&Yacute;", "&THORN;", "&szlig;", "&agrave;", "&aacute;", "&acirc;", "&atilde;", "&auml;", "&aring;", "&aelig;", "&ccedil;", "&egrave;", "&eacute;", "&ecirc;", "&euml;", "&igrave;", "&iacute;", "&icirc;", "&iuml;", "&eth;", "&ntilde;", "&ograve;", "&oacute;", "&ocirc;", "&otilde;", "&ouml;", "&divide;", "&oslash;", "&ugrave;", "&uacute;", "&ucirc;", "&uuml;", "&yacute;", "&thorn;", "&yuml;", "&Alpha;", "&Beta;", "&Gamma;", "&Delta;", "&Epsilon;", "&Zeta;", "&Eta;", "&Theta;", "&Iota;", "&Kappa;", "&Lambda;", "&Mu;", "&Nu;", "&Xi;", "&Omicron;", "&Pi;", "&Pho;", "&Sigma;", "&Tau;", "&Upsilon;", "&Phi;", "&Chi;", "&Psi;", "&Omega;", "&alpha;", "&beta;", "&gamma;", "&delta;", "&epsilon;", "&zeta;", "&eta;", "&theta;", "&iota;", "&kappa;", "&lambda;", "&mu;", "&nu;", "&xi;", "&omicron;", "&pi;", "&rho;", "&sigmaf;", "&sigma;", "&tau;", "&upsilon;", "&phi;", "&chi;", "&psi;", "&omega;", "&ndash;", "&mdash;", "&lsquo;", "&rsquo;", "&sbquo;", "&ldquo;", "&rdquo;", "&bdquo;", "&dagger;", "&Dagger;", "&bull;", "&hellip;", "&permil;", "&prime;", "&Prime;", "&lsaquo;", "&rsaquo;", "&oline;", "&frasl;", "&euro;", "&weierp;", "&image;", "&real;", "&trade;", "&alefsym;", "&larr;", "&rarr;", "&darr;", "&harr;", "&crarr;", "&lArr;", "&uArr;", "&rArr;", "&dArr;", "&hArr;", "&loz;", "&spades;", "&clubs;", "&hearts;", "&diams;", "&forall;", "&part;", "&exist;", "&empty;", "&nabla;", "&isin;", "&notin;", "&ni;", "&prod;", "&sum;", "&minus;", "&lowast;", "&radic;", "&prop;", "&infin;", "&ang;", "&and;", "&or;", "&cap;", "&cup;", "&int;", "&there4;", "&sim;", "&cong;", "&asymp;", "&ne;", "&equiv;", "&le;", "&ge;", "&sub;", "&sup;", "&nsub;", "&sube;", "&supe;", "&oplus;", "&otimes;", "&perp;"}
+        'Dim html2 As String() = {"&", "", "", "'", ""} ' "&#160;", "&#161;", "&#162;", "&#163;", "&#164;", "&#165;", "&#166;", "&#167;", "&#168;", "&#169;", "&#170;", "&#171;", "&#172;", "&#173;", "&#174;", "&#175;", "&#176;", "&#177;", "&#178;", "&#179;", "&#180;", "&#181;", "&#182;", "&#183;", "&#184;", "&#185;", "&#186;", "&#187;", "&#188;", "&#189;", "&#190;", "&#191;", "&#192;", "&#193;", "&#194;", "&#195;", "&#196;", "&#197;", "&#198;", "&#199;", "&#200;", "&#201;", "&#202;", "&#203;", "&#204;", "&#205;", "&#206;", "&#207;", "&#208;", "&#209;", "&#210;", "&#211;", "&#212;", "&#213;", "&#214;", "&#215;", "&#216;", "&#217;", "&#218;", "&#219;", "&#220;", "&#221;", "&#222;", "&#223;", "&#224;", "&#225;", "&#226;", "&#227;", "&#228;", "&#229;", "&#230;", "&#231;", "&#232;", "&#233;", "&#234;", "&#235;", "&#236;", "&#237;", "&#238;", "&#239;", "&#240;", "&#241;", "&#242;", "&#243;", "&#244;", "&#245;", "&#246;", "&#247;", "&#248;", "&#249;", "&#250;", "&#251;", "&#252;", "&#253;", "&#254;", "&#255;", "&#913;", "&#914;", "&#915;", "&#916;", "&#917;", "&#918;", "&#919;", "&#920;", "&#921;", "&#922;", "&#923;", "&#924;", "&#925;", "&#926;", "&#927;", "&#928;", "&#929;", "&#931;", "&#932;", "&#933;", "&#934;", "&#935;", "&#936;", "&#937;", "&#945;", "&#946;", "&#947;", "&#948;", "&#949;", "&#950;", "&#951;", "&#952;", "&#953;", "&#954;", "&#955;", "&#956;", "&#957;", "&#958;", "&#959;", "&#960;", "&#961;", "&#962;", "&#963;", "&#964;", "&#965;", "&#966;", "&#967;", "&#968;", "&#969;", "&#8211;", "&#8212;", "&#8216;", "&#8217;", "&#8218;", "&#8220;", "&#8221;", "&#8222;", "&#8224;", "&#8225;", "&#8226;", "&#8230;", "&#8240;", "&#8242;", "&#8243;", "&#8249;", "&#8250;", "&#8254;", "&#8260;", "&#8364;", "&#8472;", "&#8465;", "&#8476;", "&#8482;", "&#8501;", "&#8592;", "&#8594;", "&#8595;", "&#8596;", "&#8629;", "&#8656;", "&#8657;", "&#8658;", "&#8659;", "&#8660;", "&#9674;", "&#9824;", "&#9827;", "&#9829;", "&#9830;", "&#8704;", "&#8706;", "&#8707;", "&#8709;", "&#8711;", "&#8712;", "&#8713;", "&#8715;", "&#8719;", "&#8721;", "&#8722;", "&#8727;", "&#8730;", "&#8733;", "&#8734;", "&#8736;", "&#8743;", "&#8744;", "&#8745;", "&#8746;", "&#8747;", "&#8756;", "&#8764;", "&#8773;", "&#8776;", "&#8800;", "&#8801;", "&#8804;", "&#8805;", "&#8834;", "&#8835;", "&#8836;", "&#8838;", "&#8839;", "&#8853;", "&#8855;", "&#8869;"}
+
+        'Dim ht As New Regex("&[^;]+", RegexOptions.ECMAScript)
+        'Dim htt As Match = ht.Match(s)
+        'While htt.Success
+        If s.Contains("&") = True Then
+            s = s.Replace("amp;", "")
+            s = s.Replace("&", "&amp;")
+        End If
 
         For i = 0 To 8
             s = s.Replace(ss(i), "")

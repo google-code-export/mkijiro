@@ -127,15 +127,16 @@ namespace WindowsFormsApplication1
                 {
                     fs.Seek(0x18 + 4 * i, System.IO.SeekOrigin.Begin);
                     fs.Read(integer, 0, 4);
-                    offset_csio[i] = (BitConverter.ToInt32(integer, 0) & 0x7fffffff) << align;
+                    offset_csio[i] = (BitConverter.ToInt32(integer, 0)); //& 0x7fffffff) << align;
                 }
 
-
-                fs.Seek(offset_csio[16], System.IO.SeekOrigin.Begin);
-                fs.Read(source, 0, offset_csio[17] - offset_csio[16]);
-
-
-                if ((offset_csio[17] - offset_csio[16]) != (2048 >> align))
+                fs.Seek((offset_csio[16] & 0x7fffffff) << align, System.IO.SeekOrigin.Begin);
+                fs.Read(source, 0, (offset_csio[17] - offset_csio[16] & 0x7fffffff) << align);
+                
+                if ((offset_csio[16] & 0x80000000) != 0)
+                {
+                }
+                else
                 {
                     MemoryStream ms = new MemoryStream();
                     ms.Write(source, 0, 2048);
@@ -143,7 +144,6 @@ namespace WindowsFormsApplication1
                     DeflateStream zipStream = new DeflateStream(ms, CompressionMode.Decompress);
                     zipStream.Read(source, 0, 2048);
                     zipStream.Close();
-                    ms.Close();
                 }
 
                 Array.Copy(source, 0x50, x, 0, 4);
@@ -160,7 +160,6 @@ namespace WindowsFormsApplication1
                 }
                 else
                 {
-
                     get = size - (trimsize - 8192);
                     offset = trimsize - 8192;
                     if (get > 8192)
@@ -172,23 +171,33 @@ namespace WindowsFormsApplication1
                         label5.Text = "オーバーダンプ:" + Convert.ToString(trimsize, 16).ToUpper();
                         Array.Resize(ref sector, Convert.ToInt32(get));
                     }
-                    int k = 0;
                     counter = Convert.ToInt32(ct);
+                    int k = 0;
                     for (z = counter -4; z < counter; z++)
                     {
-                        fs.Seek(offset_csio[z], System.IO.SeekOrigin.Begin);
-                        fs.Read(source, 0, offset_csio[z + 1] - offset_csio[z]);
+                        fs.Seek((offset_csio[z] & 0x7fffffff) << align, System.IO.SeekOrigin.Begin);
+                        fs.Read(source, 0, (offset_csio[z + 1] - offset_csio[z] & 0x7fffffff) << align);
 
-                        if (offset_csio[z + 1] - offset_csio[z] != 2048)
+                         if ((offset_csio[z] & 0x80000000) != 0)
                         {
+                        }
+                        else
+                         {
+                             if (offset_csio[z + 1] == offset_csio[z])
+                             {
+                                 Array.Clear(source, 0, 2048);
+                             }
+                             else{
                             MemoryStream ms = new MemoryStream();
                             ms.Write(source, 0, 2048);
                             ms.Position = 0;
                             DeflateStream zipStream = new DeflateStream(ms, CompressionMode.Decompress);
                             zipStream.Read(source, 0, 2048);
-                            Array.ConstrainedCopy(source,0,sector,k* 2048,2048);
+                            Array.ConstrainedCopy(source, 0, sector, k*2048, 2048);
                             zipStream.Close();
                             ms.Close();
+                            }
+                            k += 1;
                         }
                     }
 

@@ -128,7 +128,7 @@ Partial Class umdisomanger
         'CRCimage
         '
         resources.ApplyResources(Me.CRCimage, "CRCimage")
-        Me.CRCimage.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlhead
+        Me.CRCimage.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.CRCimage.Name = "CRCimage"
         Me.CRCimage.UseVisualStyleBackColor = True
         '
@@ -137,10 +137,10 @@ Partial Class umdisomanger
         resources.ApplyResources(Me.TreeView1, "TreeView1")
         Me.TreeView1.AllowDrop = True
         Me.TreeView1.ContextMenuStrip = Me.ContextMenuStrip2
-        Me.TreeView1.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlhead
+        Me.TreeView1.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.TreeView1.LabelEdit = True
         Me.TreeView1.Name = "TreeView1"
-        Me.TreeView1.SelectedImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlhead
+        Me.TreeView1.SelectedImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         '
         'ContextMenuStrip2
         '
@@ -186,14 +186,14 @@ Partial Class umdisomanger
         'GAMEID
         '
         resources.ApplyResources(Me.GAMEID, "GAMEID")
-        Me.GAMEID.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlhead
+        Me.GAMEID.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.GAMEID.Name = "GAMEID"
         Me.GAMEID.UseVisualStyleBackColor = True
         '
         'PFS
         '
         resources.ApplyResources(Me.PFS, "PFS")
-        Me.PFS.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlhead
+        Me.PFS.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.PFS.Name = "PFS"
         Me.PFS.UseVisualStyleBackColor = True
         '
@@ -218,20 +218,20 @@ Partial Class umdisomanger
         'Label1
         '
         resources.ApplyResources(Me.Label1, "Label1")
-        Me.Label1.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlhead
+        Me.Label1.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.Label1.Name = "Label1"
         '
         'movepsp
         '
         resources.ApplyResources(Me.movepsp, "movepsp")
-        Me.movepsp.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlhead
+        Me.movepsp.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.movepsp.Name = "movepsp"
         Me.movepsp.UseVisualStyleBackColor = True
         '
         'Button1
         '
         resources.ApplyResources(Me.Button1, "Button1")
-        Me.Button1.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlhead
+        Me.Button1.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.Button1.Name = "Button1"
         Me.Button1.UseVisualStyleBackColor = True
         '
@@ -249,38 +249,38 @@ Partial Class umdisomanger
         'lockdriveletter
         '
         resources.ApplyResources(Me.lockdriveletter, "lockdriveletter")
-        Me.lockdriveletter.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlhead
+        Me.lockdriveletter.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.lockdriveletter.Name = "lockdriveletter"
         Me.lockdriveletter.UseVisualStyleBackColor = True
         '
         'Label2
         '
         resources.ApplyResources(Me.Label2, "Label2")
-        Me.Label2.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlhead
+        Me.Label2.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.Label2.Name = "Label2"
         '
         'Label3
         '
         resources.ApplyResources(Me.Label3, "Label3")
-        Me.Label3.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlhead
+        Me.Label3.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.Label3.Name = "Label3"
         '
         'Label4
         '
         resources.ApplyResources(Me.Label4, "Label4")
-        Me.Label4.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlhead
+        Me.Label4.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.Label4.Name = "Label4"
         '
         'Label5
         '
         resources.ApplyResources(Me.Label5, "Label5")
-        Me.Label5.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlhead
+        Me.Label5.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.Label5.Name = "Label5"
         '
         'Label6
         '
         resources.ApplyResources(Me.Label6, "Label6")
-        Me.Label6.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlhead
+        Me.Label6.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.Label6.Name = "Label6"
         '
         'isosize
@@ -313,7 +313,7 @@ Partial Class umdisomanger
         'Label7
         '
         resources.ApplyResources(Me.Label7, "Label7")
-        Me.Label7.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlhead
+        Me.Label7.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.Label7.Name = "Label7"
         '
         'gid
@@ -324,35 +324,35 @@ Partial Class umdisomanger
         'calc_crc
         '
         resources.ApplyResources(Me.calc_crc, "calc_crc")
-        Me.calc_crc.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlhead
+        Me.calc_crc.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.calc_crc.Name = "calc_crc"
         Me.calc_crc.UseVisualStyleBackColor = True
         '
         'calc_md5
         '
         resources.ApplyResources(Me.calc_md5, "calc_md5")
-        Me.calc_md5.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlhead
+        Me.calc_md5.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.calc_md5.Name = "calc_md5"
         Me.calc_md5.UseVisualStyleBackColor = True
         '
         'calc_sha
         '
         resources.ApplyResources(Me.calc_sha, "calc_sha")
-        Me.calc_sha.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlhead
+        Me.calc_sha.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.calc_sha.Name = "calc_sha"
         Me.calc_sha.UseVisualStyleBackColor = True
         '
         'all_hash
         '
         resources.ApplyResources(Me.all_hash, "all_hash")
-        Me.all_hash.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlhead
+        Me.all_hash.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.all_hash.Name = "all_hash"
         Me.all_hash.UseVisualStyleBackColor = True
         '
         'tree_apply
         '
         resources.ApplyResources(Me.tree_apply, "tree_apply")
-        Me.tree_apply.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlhead
+        Me.tree_apply.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.tree_apply.Name = "tree_apply"
         Me.tree_apply.UseVisualStyleBackColor = True
         '
@@ -628,41 +628,41 @@ Partial Class umdisomanger
         'del_psp
         '
         resources.ApplyResources(Me.del_psp, "del_psp")
-        Me.del_psp.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlhead
+        Me.del_psp.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.del_psp.Name = "del_psp"
         Me.del_psp.UseVisualStyleBackColor = True
         '
         't_gid
         '
         resources.ApplyResources(Me.t_gid, "t_gid")
-        Me.t_gid.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlhead
+        Me.t_gid.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.t_gid.Name = "t_gid"
         Me.t_gid.UseVisualStyleBackColor = True
         '
         'crc_xml
         '
         resources.ApplyResources(Me.crc_xml, "crc_xml")
-        Me.crc_xml.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlhead
+        Me.crc_xml.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.crc_xml.Name = "crc_xml"
         Me.crc_xml.UseVisualStyleBackColor = True
         '
         'free
         '
         resources.ApplyResources(Me.free, "free")
-        Me.free.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlhead
+        Me.free.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.free.Name = "free"
         '
         'Button2
         '
         resources.ApplyResources(Me.Button2, "Button2")
-        Me.Button2.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlhead
+        Me.Button2.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.Button2.Name = "Button2"
         Me.Button2.UseVisualStyleBackColor = True
         '
         'SAVELS2
         '
         resources.ApplyResources(Me.SAVELS2, "SAVELS2")
-        Me.SAVELS2.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlhead
+        Me.SAVELS2.ImageKey = Global.umd_rawimage_manger.My.Resources.Resources.xmlfoot
         Me.SAVELS2.Name = "SAVELS2"
         Me.SAVELS2.UseVisualStyleBackColor = True
         '

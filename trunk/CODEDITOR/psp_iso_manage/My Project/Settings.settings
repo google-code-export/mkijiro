@@ -15,10 +15,10 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="xml" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">C:\</Value>
     </Setting>
     <Setting Name="imgdir" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">C:\</Value>
     </Setting>
     <Setting Name="lockdrive" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>

@@ -841,7 +841,6 @@ namespace WindowsFormsApplication1
 
                 if ((offset[17] - offset[16]) != (2048 >> align))
                 {
-
                     MemoryStream ms = new MemoryStream();
                     ms.Write(source, 0, 2048);
                     ms.Position = 0;
@@ -912,7 +911,6 @@ namespace WindowsFormsApplication1
 
                     if ((offset[z + 1] - offset[z]) != (2048 >> align))
                     {
-
                         MemoryStream ms = new MemoryStream();
                         ms.Write(source, 0, 2048);
                         ms.Position = 0;
@@ -1098,7 +1096,7 @@ namespace WindowsFormsApplication1
              if (File.Exists(isofile) == true)
              {
                  System.IO.FileStream fs = new System.IO.FileStream(isofile, System.IO.FileMode.Open, System.IO.FileAccess.Read);
-                 string rp = Path.GetFileNameWithoutExtension(isofile) + "_unpack.iso";
+                 string rp = Path.GetDirectoryName(isofile) + "\\"+ Path.GetFileNameWithoutExtension(isofile) + "_unpack.iso";
                  System.IO.FileStream wss = new System.IO.FileStream(rp, System.IO.FileMode.Create, System.IO.FileAccess.Write);
                  //ファイルを読み込むバイト型配列を作成する
                  byte[] integer = new byte[8];
@@ -1120,22 +1118,32 @@ namespace WindowsFormsApplication1
                  {
                      fs.Seek(0x18 + 4 * i, System.IO.SeekOrigin.Begin);
                      fs.Read(integer, 0, 4);
-                     offset[i] = (BitConverter.ToInt32(integer, 0) & 0x7fffffff) << align;
+                     offset[i] = (BitConverter.ToInt32(integer, 0));
                  }
 
                  for (z = 0; z < counter; z++)
                  {
-                     fs.Seek(offset[z], System.IO.SeekOrigin.Begin);
-                     fs.Read(source, 0, offset[z + 1] - offset[z]);
+                     fs.Seek((offset[z] & 0x7fffffff) << align, System.IO.SeekOrigin.Begin);
+                     fs.Read(source, 0, (offset[z + 1] - offset[z]& 0x7fffffff) << align);
 
-                     if (offset[z + 1] - offset[z] != 2048)
+                     if ((offset[z] & 0x80000000) != 0) {
+                     }
+                     else
                      {
-                         MemoryStream ms = new MemoryStream();
-                         ms.Write(source, 0, 2048);
-                         ms.Position = 0;
-                         DeflateStream zipStream = new DeflateStream(ms, CompressionMode.Decompress);
-                         zipStream.Read(source, 0, 2048);
-                         zipStream.Close();
+                         if (offset[z + 1] == offset[z])
+                         {
+                             Array.Clear(source, 0, 2048);
+                         }
+                         else
+                         {
+                             MemoryStream ms = new MemoryStream();
+                             ms.Write(source, 0, 2048);
+                             ms.Position = 0;
+                             DeflateStream zipStream = new DeflateStream(ms, CompressionMode.Decompress);
+                             zipStream.Read(source, 0, 2048);
+                             zipStream.Close();
+                             ms.Close();
+                         }
                      }
                      wss.Write(source, 0, 2048);
                  }
