@@ -169,5 +169,8 @@ X:\PSP\GAME660\</Value>
     <Setting Name="filenamecrc" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="unpackdir" Type="System.String" Scope="User">
+      <Value Profile="(Default)">unpack\</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
