@@ -3208,6 +3208,7 @@ Public Class umdisomanger
                 Dim psf As New psf
                 Dim st As String = ""
                 Dim sabun As Boolean = False
+                Dim nn As Integer = 0
 
                 img = Application.StartupPath & "\diff\imgs\" & s & "\"
                 If Directory.Exists(img) = False Then
@@ -3311,6 +3312,9 @@ Public Class umdisomanger
                                 sb.Append(vbTab)
                                 sb.Append(vbTab)
                                 sb.AppendLine("<location>7</location>")
+                                'sb.Append("<location>")
+                                'sb.Append(nn.ToString)
+                                'sb.AppendLine("</location>")
                                 sb.Append(vbTab)
                                 sb.Append(vbTab)
                                 sb.Append(vbTab)
@@ -3319,6 +3323,10 @@ Public Class umdisomanger
                                 sb.Append(vbTab)
                                 sb.Append(vbTab)
                                 sb.AppendLine("<language>256</language>")
+                                'sb.Append("<language>")
+                                'sb.Append((1 << nn).ToString)
+                                'sb.AppendLine("</language>")
+                                nn += 1
                                 sb.Append(vbTab)
                                 sb.Append(vbTab)
                                 sb.Append(vbTab)

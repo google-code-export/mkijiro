@@ -6,7 +6,15 @@ Imports System.Net
 
 Public Class Form1
 
-    Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles Button1.Click
+    Private Sub ini(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
+        If Directory.Exists(My.Settings.lastfile) = False Then
+            My.Settings.lastfile = Application.StartupPath
+        End If
+
+    End Sub
+
+
+    Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles NOINTRO_DIFF.Click
         Try
             Dim sr As New System.IO.StreamReader(Application.StartupPath & "\nointro.txt", _
                 System.Text.Encoding.GetEncoding(932))
@@ -37,6 +45,7 @@ Public Class Form1
             If ofd.ShowDialog() = DialogResult.OK Then
 
                 My.Settings.lastfile = Path.GetDirectoryName(ofd.FileName)
+                My.Settings.lastxml = ofd.FileName
                 Dim sr2 As New System.IO.StreamReader(ofd.FileName, _
                     System.Text.Encoding.GetEncoding(65001))
                 Dim q As New Regex("<releaseNumber>\d+</releaseNumber>", RegexOptions.ECMAScript)
@@ -107,7 +116,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub Button5_Click(sender As System.Object, e As System.EventArgs) Handles Button5.Click
+    Private Sub Button5_Click(sender As System.Object, e As System.EventArgs) Handles REDUMP_DIFF.Click
         Try
             Dim sr As New System.IO.StreamReader(Application.StartupPath & "\redump.txt", _
                 System.Text.Encoding.GetEncoding(932))
@@ -136,6 +145,7 @@ Public Class Form1
             ofd.InitialDirectory = My.Settings.lastfile
             If ofd.ShowDialog() = DialogResult.OK Then
                 My.Settings.lastfile = Path.GetDirectoryName(ofd.FileName)
+                My.Settings.lastxml = ofd.FileName
                 Dim sr2 As New System.IO.StreamReader(ofd.FileName, _
                     System.Text.Encoding.GetEncoding(65001))
                 Dim q As New Regex("<releaseNumber>\d+</releaseNumber>", RegexOptions.ECMAScript)
@@ -208,7 +218,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub Button2_Click(sender As System.Object, e As System.EventArgs) Handles Button2.Click
+    Private Sub Button2_Click(sender As System.Object, e As System.EventArgs) Handles CVT_CLRMAEPRO.Click
         Try
             Dim sb As New StringBuilder
             Dim s As String = ""
@@ -217,8 +227,53 @@ Public Class Form1
             Dim flag As String() = {" flags verified", " flag baddump", " flags nodump"}
             Dim title(10000) As String
             Dim size(10000) As String
-            Dim crc(10000) As String
+            Dim bid(10000) As String
             Dim id(10000) As String
+            Dim fw(10000) As String
+            Dim discver(10000) As String
+            Dim rdate(10000) As String
+            Dim crc(10000) As String
+            Dim comment(10000) As String
+            Dim maker(10000) As String
+            Dim countries(10000) As String
+            Dim languages(10000) As String
+            'Dim country As Integer() = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25}
+            Dim countryname As String() = {"Europe", "USA", "Germany", "China", "Spain", "France", "Italy", "Japan", "Netherlands", "England", "Denmark", "Finland", "Norway", "Poland", "Portugal", "Sweden", "Europe USA", "Europe USA Japan", "USA Japan", "Australia", "North Korea", "Brazil", "South Korea", "Europe Brazil", "Europe USA Brazil", "USA Brazil"}
+            'Dim lang As Integer() = {0, 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536}
+            Dim langname As String() = {"nothing", "French", "English (US)", "Chinese", "Danish", "Dutch", "Finland", "German", "Italian", "Japanese", "Norwegian", "Polish", "Portuguese", "Spanish", "Swedish", "English (UK)", "Portuguese (BR)", "Korean"}
+
+            If My.Settings.custom_country = True Then
+                Dim cntxt As String = "lang\country" & My.Settings.custom_country_num & ".txt"
+                If File.Exists(cntxt) Then
+                    Dim sr As New System.IO.StreamReader(cntxt, System.Text.Encoding.GetEncoding(65001))
+                    Dim y As Integer = 0
+                    While sr.Peek() > -1
+                        countryname(y) = sr.ReadLine
+                        y += 1
+                        If y = 26 Then
+                            Exit While
+                        End If
+                    End While
+                    sr.Close()
+                End If
+            End If
+            If My.Settings.custom_lang = True Then
+                Dim lntxt As String = "lang\lang" & My.Settings.custom_lang_num & ".txt"
+                If File.Exists(lntxt) Then
+                    Dim sr As New System.IO.StreamReader(lntxt, System.Text.Encoding.GetEncoding(65001))
+                    Dim x As Integer = 0
+                    While sr.Peek() > -1
+                        langname(x) = sr.ReadLine
+                        x += 1
+                        If x = 18 Then
+                            Exit While
+                        End If
+                    End While
+                    sr.Close()
+                End If
+            End If
+
+            Dim num As Integer = 0
             Dim ppath As String = ""
             Dim i As Integer = 0
             Dim ext As String = ".iso"
@@ -229,6 +284,7 @@ Public Class Form1
             ofd.InitialDirectory = My.Settings.lastfile
             If ofd.ShowDialog() = DialogResult.OK Then
                 My.Settings.lastfile = Path.GetDirectoryName(ofd.FileName)
+                My.Settings.lastxml = ofd.FileName
 
                 Dim sr2 As New System.IO.StreamReader(ofd.FileName, _
                     System.Text.Encoding.GetEncoding(65001))
@@ -236,10 +292,24 @@ Public Class Form1
                 Dim n As Match
                 Dim r As New Regex("<romSize>\d+</romSize>", RegexOptions.ECMAScript)
                 Dim t As Match
-                Dim d As New Regex("[A-Z]{4}-[0-9]{5}", RegexOptions.ECMAScript)
+                Dim d As New Regex("[A-Z]{4}[0-9]{5}", RegexOptions.ECMAScript)
                 Dim dd As Match
                 Dim cr As New Regex("[0-9A-Fa-f]{8}", RegexOptions.ECMAScript)
                 Dim crr As Match
+                Dim rd As New Regex("\d{4}/\d{1,2}/\d{1,2}", RegexOptions.ECMAScript)
+                Dim rdm As Match
+                Dim bi As New Regex("[A-Z]{4}-[0-9]{5}", RegexOptions.ECMAScript)
+                Dim bidm As Match
+                Dim fv As New Regex("\d\.\d\d / \d.\d\d", RegexOptions.ECMAScript)
+                Dim fvm As Match
+                Dim cm As New Regex("<comment>.*?</comment>", RegexOptions.ECMAScript)
+                Dim cmm As Match
+                Dim pb As New Regex("<publisher>.*?</publisher>", RegexOptions.ECMAScript)
+                Dim pbm As Match
+                Dim lo As New Regex("<location>\d*?</location>", RegexOptions.ECMAScript)
+                Dim lom As Match
+                Dim la As New Regex("<language>\d*?</language>", RegexOptions.ECMAScript)
+                Dim lam As Match
                 Dim mask As String = My.Settings.mask
                 If My.Settings.cmmask = False Then
                     mask = My.Settings.mask2
@@ -254,7 +324,14 @@ Public Class Form1
                     n = q.Match(s)
                     l = p.Match(s)
                     t = r.Match(s)
+                    bidm = bi.Match(s)
                     dd = d.Match(s)
+                    fvm = fv.Match(s)
+                    rdm = rd.Match(s)
+                    cmm = cm.Match(s)
+                    pbm = pb.Match(s)
+                    lom = lo.Match(s)
+                    lam = la.Match(s)
                     If s.Contains("<datName>") Then
                         datname = s.Replace("<datName>", "")
                         datname = datname.Replace("</datName>", "")
@@ -275,8 +352,48 @@ Public Class Form1
                         If exx.Success Then
                             ext = exx.Value.Replace("""", "")
                         End If
+                    ElseIf bidm.Success Then
+                        bid(i) = bidm.Value
+                        If dd.Success Then
+                            id(i) = dd.Value.Insert(4, "-")
+                        End If
                     ElseIf dd.Success Then
-                        id(i) = dd.Value
+                        id(i) = dd.Value.Insert(4, "-")
+                    ElseIf pbm.Success Then
+                        s = pbm.Value.Remove(0, 11)
+                        s = s.Remove(s.Length - 12, 12)
+                        maker(i) = s
+                    ElseIf cmm.Success Then
+                        s = cmm.Value.Remove(0, 9)
+                        s = s.Remove(s.Length - 10, 10)
+                        comment(i) = s
+                    ElseIf lom.Success Then
+                        s = lom.Value.Remove(0, 10)
+                        s = s.Remove(s.Length - 11, 11)
+                        num = CInt(s) Mod 26
+                        countries(i) = countryname(num)
+                    ElseIf lam.Success Then
+                        s = lam.Value.Remove(0, 10)
+                        s = s.Remove(s.Length - 11, 11)
+                        num = CInt(s)
+                        s = ""
+                        If num = 0 Then
+                            s = langname(0)
+                        Else
+                            For j = 0 To 16
+                                If (num And (1 << j)) <> 0 Then
+                                    s &= langname(j + 1) & vbTab
+                                End If
+                            Next
+                            s = s.Replace(vbTab, " - ")
+                            s = s.Remove(s.Length - 3, 3)
+                        End If
+                        languages(i) = s
+                    ElseIf rdm.Success Then
+                        rdate(i) = rdm.Value
+                    ElseIf fvm.Success Then
+                        fw(i) = fvm.Value.Substring(0, 4)
+                        discver(i) = fvm.Value.Substring(fvm.Value.Length - 4, 4)
                     ElseIf s.Contains("</game>") Then
                         i += 1
                     End If
@@ -287,7 +404,7 @@ Public Class Form1
             Dim basename As String = My.Settings.cmname
             Dim basedesc As String = My.Settings.cmdesc
             Dim baseromname As String = My.Settings.cmromname
-            Dim xml(9) As String
+            Dim xml(11) As String
             Dim temps As String = ""
             Dim utf8nobom As New UTF8Encoding
             Dim wr As New System.IO.StreamWriter(Path.GetDirectoryName(ppath) & "\" & Path.GetFileNameWithoutExtension(ppath) & "_convert.dat",
@@ -319,6 +436,14 @@ Public Class Form1
                 xml(1) = id(i)
                 xml(2) = crc(i)
                 xml(3) = size(i)
+                xml(4) = bid(i)
+                xml(5) = fw(i)
+                xml(6) = discver(i)
+                xml(7) = rdate(i)
+                xml(8) = maker(i)
+                xml(9) = comment(i)
+                xml(10) = countries(i)
+                xml(11) = languages(i)
                 sb.AppendLine("game (")
                 sb.Append(vbTab)
                 sb.Append("name """)
@@ -363,6 +488,7 @@ Public Class Form1
     End Sub
 
     Function tempsrp(ByVal base As String, ByVal xml As String()) As String
+
         If base.Contains("%t") Then
             base = base.Replace("%t", xml(0))
         End If
@@ -375,13 +501,39 @@ Public Class Form1
         If base.Contains("%f") Then
             base = base.Replace("%f", xml(3))
         End If
+        If base.Contains("%b") Then
+            base = base.Replace("%b", xml(4))
+        End If
+        If base.Contains("%w") Then
+            base = base.Replace("%w", xml(5))
+        End If
+        If base.Contains("%v") Then
+            base = base.Replace("%v", xml(6))
+        End If
+        If base.Contains("%r") Then
+            base = base.Replace("%r", xml(7))
+        End If
+        If base.Contains("%p") Then
+            base = base.Replace("%p", xml(8))
+        End If
+        If base.Contains("%m") Then
+            base = base.Replace("%m", xml(9))
+        End If
+        '国
+        If base.Contains("%o") Then
+            base = base.Replace("%o", xml(10))
+        End If
+        '言語
+        If base.Contains("%a") Then
+            base = base.Replace("%a", xml(11))
+        End If
         If base.Length > 256 Then
             base = base.Substring(0, 255)
         End If
         Return base
     End Function
 
-    Private Sub Button3_Click(sender As System.Object, e As System.EventArgs) Handles Button3.Click
+    Private Sub Button3_Click(sender As System.Object, e As System.EventArgs) Handles ENJPN.Click
         Try
             Dim sb As New StringBuilder
             Dim s As String = ""
@@ -524,7 +676,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub Button4_Click(sender As System.Object, e As System.EventArgs) Handles Button4.Click
+    Private Sub Button4_Click(sender As System.Object, e As System.EventArgs) Handles MERGE.Click
         Try
             Dim sb As New StringBuilder
             Dim sbn As New StringBuilder
@@ -753,7 +905,7 @@ Public Class Form1
         Return s
     End Function
 
-    Private Sub Button6_Click(sender As System.Object, e As System.EventArgs) Handles Button6.Click
+    Private Sub Button6_Click(sender As System.Object, e As System.EventArgs) Handles GETHTML.Click
         Try
             Dim redump As New StringBuilder
             redump.AppendLine(get_list("http://wiki.redump.org/index.php?title=Sony_PSP_USA_Missing_Games"))
@@ -866,22 +1018,65 @@ Public Class Form1
     End Sub
 
 
-    Private Sub Button7_Click(sender As System.Object, e As System.EventArgs) Handles Button8.Click
+    Private Sub Button7_Click(sender As System.Object, e As System.EventArgs) Handles CVT_TSV.Click
         Try
             Dim ofd As New OpenFileDialog
-            ofd.InitialDirectory = Application.StartupPath
+            ofd.InitialDirectory = My.Settings.lastfile
             ofd.Title = "XMLファイルを選んで下さい"
             ofd.Filter = "XMLファイル(*.xml)|*.xml"
             Dim xml_parse As Boolean = False
             ofd.InitialDirectory = My.Settings.lastfile
             If ofd.ShowDialog() = DialogResult.OK Then
                 My.Settings.lastfile = Path.GetDirectoryName(ofd.FileName)
+                My.Settings.lastxml = ofd.FileName
+
+
+
+                Dim countryname As String() = {"Europe", "USA", "Germany", "China", "Spain", "France", "Italy", "Japan", "Netherlands", "England", "Denmark", "Finland", "Norway", "Poland", "Portugal", "Sweden", "Europe USA", "Europe USA Japan", "USA Japan", "Australia", "North Korea", "Brazil", "South Korea", "Europe Brazil", "Europe USA Brazil", "USA Brazil"}
+                Dim langname As String() = {"nothing", "French", "English (US)", "Chinese", "Danish", "Dutch", "Finland", "German", "Italian", "Japanese", "Norwegian", "Polish", "Portuguese", "Spanish", "Swedish", "English (UK)", "Portuguese (BR)", "Korean"}
+                Dim s As String = ""
+                Dim num As Integer = 0
+
+                If My.Settings.cvt_country_lang = True Then
+                    Dim cntxt As String = "lang\country" & My.Settings.custom_country_num & ".txt"
+                    If File.Exists(cntxt) Then
+                        Dim sr As New System.IO.StreamReader(cntxt, System.Text.Encoding.GetEncoding(65001))
+                        Dim y As Integer = 0
+                        While sr.Peek() > -1
+                            countryname(y) = sr.ReadLine
+                            y += 1
+                            If y = 26 Then
+                                Exit While
+                            End If
+                        End While
+                        sr.Close()
+                    End If
+
+                    Dim lntxt As String = "lang\lang" & My.Settings.custom_lang_num & ".txt"
+                    If File.Exists(lntxt) Then
+                        Dim sr As New System.IO.StreamReader(lntxt, System.Text.Encoding.GetEncoding(65001))
+                        Dim x As Integer = 0
+                        While sr.Peek() > -1
+                            langname(x) = sr.ReadLine
+                            x += 1
+                            If x = 18 Then
+                                Exit While
+                            End If
+                        End While
+                        sr.Close()
+                    End If
+                End If
 
                 If My.Settings.ask = True Then
-                    Dim f As New Form4
+                    Dim f As New Form2
                     f.ShowDialog()
                     f.Dispose()
                 End If
+
+
+                Dim crc As New Regex("[0-9A-Fa-z]{8}", RegexOptions.ECMAScript)
+                Dim crm As Match
+
                 Dim reader As System.Xml.XmlReader = System.Xml.XmlReader.Create(ofd.FileName)
                 Dim sb As New StringBuilder
                 sb.Append("画像")
@@ -942,7 +1137,12 @@ Public Class Form1
                             sb.Append(vbTab)
                         End If
                         If reader.LocalName = "location" Then
-                            sb.Append(reader.ReadString())
+                            s = reader.ReadString()
+                            If My.Settings.cvt_country_lang = True Then
+                                num = CInt(s) Mod 26
+                                s = countryname(num)
+                            End If
+                            sb.Append(s)
                             sb.Append(vbTab)
                         End If
                         If reader.LocalName = "sourceRom" Then
@@ -950,19 +1150,56 @@ Public Class Form1
                             sb.Append(vbTab)
                         End If
                         If reader.LocalName = "language" Then
-                            sb.Append(reader.ReadString())
+                            s = reader.ReadString()
+                            If My.Settings.cvt_country_lang = True Then
+                                num = CInt(s)
+                                s = ""
+                                If num = 0 Then
+                                    s = langname(0)
+                                Else
+                                    For i = 0 To 16
+                                        If (num And (1 << i)) <> 0 Then
+                                            s &= langname(i + 1) & vbTab
+                                        End If
+                                    Next
+                                    s = s.Replace(vbTab, " - ")
+                                    s = s.Remove(s.Length - 3, 3)
+                                End If
+                            End If
+                            sb.Append(s)
                             sb.Append(vbTab)
                         End If
                         If reader.LocalName = "romCRC" Then
-                            sb.Append(reader.ReadString())
+                            s = reader.ReadString()
+                            If My.Settings.crcblock = True Then
+                                crm = crc.Match(s)
+                                If crm.Success Then
+                                    s = "[" & crm.Value & "]"
+                                End If
+                            End If
+                            sb.Append(s)
                             sb.Append(vbTab)
                         End If
                         If reader.LocalName = "im1CRC" Then
-                            sb.Append(reader.ReadString())
+                            s = reader.ReadString()
+                            If My.Settings.crcblock = True Then
+                                crm = crc.Match(s)
+                                If crm.Success Then
+                                    s = "[" & crm.Value & "]"
+                                End If
+                            End If
+                            sb.Append(s)
                             sb.Append(vbTab)
                         End If
                         If reader.LocalName = "im2CRC" Then
-                            sb.Append(reader.ReadString())
+                            s = reader.ReadString()
+                            If My.Settings.crcblock = True Then
+                                crm = crc.Match(s)
+                                If crm.Success Then
+                                    s = "[" & crm.Value & "]"
+                                End If
+                            End If
+                            sb.Append(s)
                             sb.Append(vbTab)
                         End If
                         If reader.LocalName = "comment" Then
@@ -992,104 +1229,146 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub Button8_Click(sender As System.Object, e As System.EventArgs) Handles Button7.Click
+    Private Sub Button8_Click(sender As System.Object, e As System.EventArgs) Handles CVT_CSV.Click
         Try
             Dim ofd As New OpenFileDialog
-            ofd.InitialDirectory = Application.StartupPath
+            ofd.InitialDirectory = My.Settings.lastfile
             ofd.Title = "XMLファイルを選んで下さい"
             ofd.Filter = "XMLファイル(*.xml)|*.xml"
             Dim xml_parse As Boolean = False
             ofd.InitialDirectory = My.Settings.lastfile
             If ofd.ShowDialog() = DialogResult.OK Then
                 My.Settings.lastfile = Path.GetDirectoryName(ofd.FileName)
+                My.Settings.lastxml = ofd.FileName
                 Dim s As String = ""
+                Dim num As Integer = 0
 
                 If My.Settings.ask = True Then
-                    Dim f As New Form4
+                    Dim f As New Form2
                     f.ShowDialog()
                     f.Dispose()
                 End If
 
-                Dim reader As System.Xml.XmlReader = System.Xml.XmlReader.Create(ofd.FileName)
-                Dim sb As New StringBuilder
-                sb.Append("""画像""")
-                sb.Append(",")
-                sb.Append("""UID""")
-                sb.Append(",")
-                sb.Append("""ゲーム名""")
-                sb.Append(",")
-                sb.Append("""セーブタイプ""")
-                sb.Append(",")
-                sb.Append("""サイズ""")
-                sb.Append(",")
-                sb.Append("""メーカー""")
-                sb.Append(",")
-                sb.Append("""国""")
-                sb.Append(",")
-                sb.Append("""ソース""")
-                sb.Append(",")
-                sb.Append("""言語""")
-                sb.Append(",")
-                sb.Append("""CRC32""")
-                sb.Append(",")
-                sb.Append("""画像1CRC""")
-                sb.Append(",")
-                sb.Append("""画像2CRC""")
-                sb.Append(",")
-                sb.Append("""コメント""")
-                sb.Append(",")
-                sb.AppendLine("""重複ID""")
+                Dim countryname As String() = {"Europe", "USA", "Germany", "China", "Spain", "France", "Italy", "Japan", "Netherlands", "England", "Denmark", "Finland", "Norway", "Poland", "Portugal", "Sweden", "Europe USA", "Europe USA Japan", "USA Japan", "Australia", "North Korea", "Brazil", "South Korea", "Europe Brazil", "Europe USA Brazil", "USA Brazil"}
+                 Dim langname As String() = {"nothing", "French", "English (US)", "Chinese", "Danish", "Dutch", "Finland", "German", "Italian", "Japanese", "Norwegian", "Polish", "Portuguese", "Spanish", "Swedish", "English (UK)", "Portuguese (BR)", "Korean"}
 
-                While reader.Read
-                    If reader.NodeType = Xml.XmlNodeType.EndElement AndAlso reader.LocalName = "configuration" Then
-                        xml_parse = True
+                If My.Settings.cvt_country_lang = True Then
+                    Dim cntxt As String = "lang\country" & My.Settings.custom_country_num & ".txt"
+                    If File.Exists(cntxt) Then
+                        Dim sr As New System.IO.StreamReader(cntxt, System.Text.Encoding.GetEncoding(65001))
+                        Dim y As Integer = 0
+                        While sr.Peek() > -1
+                            countryname(y) = sr.ReadLine
+                            y += 1
+                            If y = 26 Then
+                                Exit While
+                            End If
+                        End While
+                        sr.Close()
                     End If
-                    If reader.NodeType = Xml.XmlNodeType.Element AndAlso xml_parse = True Then
-                        If reader.LocalName = "imageNumber" Then
-                            s = reader.ReadString()
-                            sb.Append("""")
-                            sb.Append(s.Replace("""", """"""))
-                            sb.Append("""")
-                            sb.Append(",")
+
+                Dim lntxt As String = "lang\lang" & My.Settings.custom_lang_num & ".txt"
+                If File.Exists(lntxt) Then
+                    Dim sr As New System.IO.StreamReader(lntxt, System.Text.Encoding.GetEncoding(65001))
+                    Dim x As Integer = 0
+                    While sr.Peek() > -1
+                        langname(x) = sr.ReadLine
+                        x += 1
+                        If x = 18 Then
+                            Exit While
                         End If
-                        If reader.LocalName = "releaseNumber" Then
-                            s = reader.ReadString()
+                    End While
+                    sr.Close()
+                End If
+                End If
+
+                Dim crc As New Regex("[0-9A-Fa-z]{8}", RegexOptions.ECMAScript)
+                Dim crm As Match
+
+            Dim reader As System.Xml.XmlReader = System.Xml.XmlReader.Create(ofd.FileName)
+            Dim sb As New StringBuilder
+            sb.Append("""画像""")
+            sb.Append(",")
+            sb.Append("""UID""")
+            sb.Append(",")
+            sb.Append("""ゲーム名""")
+            sb.Append(",")
+            sb.Append("""セーブタイプ""")
+            sb.Append(",")
+            sb.Append("""サイズ""")
+            sb.Append(",")
+            sb.Append("""メーカー""")
+            sb.Append(",")
+            sb.Append("""国""")
+            sb.Append(",")
+            sb.Append("""ソース""")
+            sb.Append(",")
+            sb.Append("""言語""")
+            sb.Append(",")
+            sb.Append("""CRC32""")
+            sb.Append(",")
+            sb.Append("""画像1CRC""")
+            sb.Append(",")
+            sb.Append("""画像2CRC""")
+            sb.Append(",")
+            sb.Append("""コメント""")
+            sb.Append(",")
+            sb.AppendLine("""重複ID""")
+
+            While reader.Read
+                If reader.NodeType = Xml.XmlNodeType.EndElement AndAlso reader.LocalName = "configuration" Then
+                    xml_parse = True
+                End If
+                If reader.NodeType = Xml.XmlNodeType.Element AndAlso xml_parse = True Then
+                    If reader.LocalName = "imageNumber" Then
+                        s = reader.ReadString()
+                        sb.Append("""")
+                        sb.Append(s.Replace("""", """"""))
+                        sb.Append("""")
+                        sb.Append(",")
+                    End If
+                    If reader.LocalName = "releaseNumber" Then
+                        s = reader.ReadString()
+                        sb.Append("""")
+                        sb.Append(s.Replace("""", """"""))
+                        sb.Append("""")
+                        sb.Append(",")
+                    End If
+                    If reader.LocalName = "title" Then
+                        s = reader.ReadString()
+                        sb.Append("""")
+                        sb.Append(doskiller(s))
+                        sb.Append("""")
+                        sb.Append(",")
+                    End If
+                    If reader.LocalName = "saveType" Then
+                        s = reader.ReadString()
+                        sb.Append("""")
+                        sb.Append(s.Replace("""", """"""))
+                        sb.Append("""")
+                        sb.Append(",")
+                    End If
+                    If reader.LocalName = "romSize" Then
+                        s = reader.ReadString()
+                        sb.Append("""")
+                        sb.Append(s.Replace("""", """"""))
+                        sb.Append("""")
+                        sb.Append(",")
+                    End If
+                    If reader.LocalName = "publisher" Then
+                        s = reader.ReadString()
+                        sb.Append("""")
+                        sb.Append(s)
+                        sb.Append("""")
+                        sb.Append(",")
+                    End If
+                    If reader.LocalName = "location" Then
+                        s = reader.ReadString()
                             sb.Append("""")
-                            sb.Append(s.Replace("""", """"""))
-                            sb.Append("""")
-                            sb.Append(",")
-                        End If
-                        If reader.LocalName = "title" Then
-                            s = reader.ReadString()
-                            sb.Append("""")
-                            sb.Append(doskiller(s))
-                            sb.Append("""")
-                            sb.Append(",")
-                        End If
-                        If reader.LocalName = "saveType" Then
-                            s = reader.ReadString()
-                            sb.Append("""")
-                            sb.Append(s.Replace("""", """"""))
-                            sb.Append("""")
-                            sb.Append(",")
-                        End If
-                        If reader.LocalName = "romSize" Then
-                            s = reader.ReadString()
-                            sb.Append("""")
-                            sb.Append(s.Replace("""", """"""))
-                            sb.Append("""")
-                            sb.Append(",")
-                        End If
-                        If reader.LocalName = "publisher" Then
-                            s = reader.ReadString()
-                            sb.Append("""")
-                            sb.Append(s)
-                            sb.Append("""")
-                            sb.Append(",")
-                        End If
-                        If reader.LocalName = "location" Then
-                            s = reader.ReadString()
-                            sb.Append("""")
+                            If My.Settings.cvt_country_lang = True Then
+                                num = CInt(s) Mod 26
+                                s = countryname(num)
+                            End If
                             sb.Append(s.Replace("""", """"""))
                             sb.Append("""")
                             sb.Append(",")
@@ -1104,6 +1383,21 @@ Public Class Form1
                         If reader.LocalName = "language" Then
                             s = reader.ReadString()
                             sb.Append("""")
+                            If My.Settings.cvt_country_lang = True Then
+                                num = CInt(s)
+                                s = ""
+                                If num = 0 Then
+                                    s = langname(0)
+                                Else
+                                    For i = 0 To 16
+                                        If (num And (1 << i)) <> 0 Then
+                                            s &= langname(i + 1) & vbTab
+                                        End If
+                                    Next
+                                    s = s.Replace(vbTab, " - ")
+                                    s = s.Remove(s.Length - 3, 3)
+                                End If
+                            End If
                             sb.Append(s.Replace("""", """"""))
                             sb.Append("""")
                             sb.Append(",")
@@ -1111,6 +1405,12 @@ Public Class Form1
                         If reader.LocalName = "romCRC" Then
                             s = reader.ReadString()
                             sb.Append("""")
+                            If My.Settings.crcblock = True Then
+                                crm = crc.Match(s)
+                                If crm.Success Then
+                                    s = "[" & crm.Value & "]"
+                                End If
+                            End If
                             sb.Append(s.Replace("""", """"""))
                             sb.Append("""")
                             sb.Append(",")
@@ -1118,6 +1418,12 @@ Public Class Form1
                         If reader.LocalName = "im1CRC" Then
                             s = reader.ReadString()
                             sb.Append("""")
+                            If My.Settings.crcblock = True Then
+                                crm = crc.Match(s)
+                                If crm.Success Then
+                                    s = "[" & crm.Value & "]"
+                                End If
+                            End If
                             sb.Append(s.Replace("""", """"""))
                             sb.Append("""")
                             sb.Append(",")
@@ -1125,6 +1431,12 @@ Public Class Form1
                         If reader.LocalName = "im2CRC" Then
                             s = reader.ReadString()
                             sb.Append("""")
+                            If My.Settings.crcblock = True Then
+                                crm = crc.Match(s)
+                                If crm.Success Then
+                                    s = "[" & crm.Value & "]"
+                                End If
+                            End If
                             sb.Append(s.Replace("""", """"""))
                             sb.Append("""")
                             sb.Append(",")
@@ -1145,16 +1457,16 @@ Public Class Form1
                     End If
                 End While
 
-                Dim enc As Encoding = Encoding.GetEncoding(My.Settings.encode)
-                If My.Settings.encode = 65001 Then
-                    Dim utfnobom As New UTF8Encoding
-                    enc = utfnobom
-                End If
-                Dim sw As New System.IO.StreamWriter(Path.GetDirectoryName(ofd.FileName) & "\" & Path.GetFileNameWithoutExtension(ofd.FileName) & "_cvt.csv", False, enc)
-                sw.Write(sb.ToString)
-                sw.Close()
-                Beep()
-                reader.Close()
+            Dim enc As Encoding = Encoding.GetEncoding(My.Settings.encode)
+            If My.Settings.encode = 65001 Then
+                Dim utfnobom As New UTF8Encoding
+                enc = utfnobom
+            End If
+            Dim sw As New System.IO.StreamWriter(Path.GetDirectoryName(ofd.FileName) & "\" & Path.GetFileNameWithoutExtension(ofd.FileName) & "_cvt.csv", False, enc)
+            sw.Write(sb.ToString)
+            sw.Close()
+            Beep()
+            reader.Close()
             End If
         Catch ex As Exception
             MessageBox.Show(ex.Message, "例外")
@@ -1168,9 +1480,5 @@ Public Class Form1
         f.Close()
     End Sub
 
-    Private Sub XML変換ToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles XML変換ToolStripMenuItem.Click
-        Dim f As New Form4
-        f.ShowDialog()
-        f.Close()
-    End Sub
+
 End Class

@@ -46,7 +46,7 @@ Partial Class Form5
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(92, 281)
+        Me.Button1.Location = New System.Drawing.Point(95, 357)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 1
@@ -56,20 +56,22 @@ Partial Class Form5
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(27, 230)
+        Me.Label1.Location = New System.Drawing.Point(28, 230)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(253, 42)
+        Me.Label1.Size = New System.Drawing.Size(220, 112)
         Me.Label1.TabIndex = 2
-        Me.Label1.Text = "%t=タイトル名; %g=ゲームID(FILER_XMLのみ);" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "%c=CRC32;　　%f=ファイルサイズ " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "※DOS文字<>/\:|?*は使えません"
+        Me.Label1.Text = "%t=タイトル名; %p=販売元;　　" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "%c=CRC32; %f=ファイルサイズ ;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "%o=国; %a=対応言語; %m=コメント;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "--これより下はFIL" & _
+    "ER_XMLのみ対応--" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "%r=発売日;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "%b=ボックスID;　%g=ゲームID;%" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "%w=要求FW;　%v=ディスクバージョン;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "※DOS文字 <>/" & _
+    "\:|?*は使えません"
         '
         'Form5
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(293, 316)
+        Me.ClientSize = New System.Drawing.Size(293, 384)
         Me.Controls.Add(Me.Label1)
-        Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.TextBox1)
+        Me.Controls.Add(Me.Button1)
         Me.Name = "Form5"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Form5"
