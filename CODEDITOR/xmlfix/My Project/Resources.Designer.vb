@@ -61,11 +61,47 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  ULJS-00001 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property boxid() As String
+            Get
+                Return ResourceManager.GetString("boxid", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  リィィィィィッッジ ルゥエェェェィィスゥァァァァァ！！！  に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property comment() As String
+            Get
+                Return ResourceManager.GetString("comment", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  37DC8144 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property crc() As String
             Get
                 Return ResourceManager.GetString("crc", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  1.01 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property diskver() As String
+            Get
+                Return ResourceManager.GetString("diskver", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  1.00 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property fwver() As String
+            Get
+                Return ResourceManager.GetString("fwver", resourceCulture)
             End Get
         End Property
         
@@ -79,6 +115,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  ナムコ に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property mk() As String
+            Get
+                Return ResourceManager.GetString("mk", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  name &quot;s1&quot;
         '''description &quot;s2&quot;
         '''serial &quot;s3&quot;
@@ -87,6 +132,15 @@ Namespace My.Resources
         Friend ReadOnly Property preview() As String
             Get
                 Return ResourceManager.GetString("preview", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  2004/12/12 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property rdate() As String
+            Get
+                Return ResourceManager.GetString("rdate", resourceCulture)
             End Get
         End Property
         

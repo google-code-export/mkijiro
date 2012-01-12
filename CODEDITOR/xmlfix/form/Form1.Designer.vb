@@ -22,73 +22,72 @@ Partial Class Form1
     'コード エディターを使って変更しないでください。
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.Button2 = New System.Windows.Forms.Button()
-        Me.Button3 = New System.Windows.Forms.Button()
-        Me.Button4 = New System.Windows.Forms.Button()
+        Me.NOINTRO_DIFF = New System.Windows.Forms.Button()
+        Me.CVT_CLRMAEPRO = New System.Windows.Forms.Button()
+        Me.ENJPN = New System.Windows.Forms.Button()
+        Me.MERGE = New System.Windows.Forms.Button()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.Button8 = New System.Windows.Forms.Button()
-        Me.Button5 = New System.Windows.Forms.Button()
-        Me.Button7 = New System.Windows.Forms.Button()
-        Me.Button6 = New System.Windows.Forms.Button()
+        Me.CVT_TSV = New System.Windows.Forms.Button()
+        Me.REDUMP_DIFF = New System.Windows.Forms.Button()
+        Me.CVT_CSV = New System.Windows.Forms.Button()
+        Me.GETHTML = New System.Windows.Forms.Button()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.CRCマスクToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CRCマスクToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.バージョンToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.XML変換ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
-        'Button1
+        'NOINTRO_DIFF
         '
-        Me.Button1.Font = New System.Drawing.Font("MS UI Gothic", 7.854546!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Button1.Location = New System.Drawing.Point(11, 27)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(113, 26)
-        Me.Button1.TabIndex = 0
-        Me.Button1.Text = "NOINTRO_FIX"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.NOINTRO_DIFF.Font = New System.Drawing.Font("MS UI Gothic", 7.854546!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.NOINTRO_DIFF.Location = New System.Drawing.Point(11, 27)
+        Me.NOINTRO_DIFF.Name = "NOINTRO_DIFF"
+        Me.NOINTRO_DIFF.Size = New System.Drawing.Size(113, 26)
+        Me.NOINTRO_DIFF.TabIndex = 0
+        Me.NOINTRO_DIFF.Text = "NOINTRO_FIX"
+        Me.NOINTRO_DIFF.UseVisualStyleBackColor = True
         '
-        'Button2
+        'CVT_CLRMAEPRO
         '
-        Me.Button2.Font = New System.Drawing.Font("MS UI Gothic", 7.854546!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Button2.Location = New System.Drawing.Point(11, 90)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(113, 26)
-        Me.Button2.TabIndex = 1
-        Me.Button2.Text = "CMPROに変換"
-        Me.Button2.UseVisualStyleBackColor = True
+        Me.CVT_CLRMAEPRO.Font = New System.Drawing.Font("MS UI Gothic", 7.854546!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.CVT_CLRMAEPRO.Location = New System.Drawing.Point(11, 90)
+        Me.CVT_CLRMAEPRO.Name = "CVT_CLRMAEPRO"
+        Me.CVT_CLRMAEPRO.Size = New System.Drawing.Size(113, 26)
+        Me.CVT_CLRMAEPRO.TabIndex = 1
+        Me.CVT_CLRMAEPRO.Text = "CMPROに変換"
+        Me.CVT_CLRMAEPRO.UseVisualStyleBackColor = True
         '
-        'Button3
+        'ENJPN
         '
-        Me.Button3.Font = New System.Drawing.Font("MS UI Gothic", 7.854546!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Button3.Location = New System.Drawing.Point(11, 27)
-        Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(113, 26)
-        Me.Button3.TabIndex = 2
-        Me.Button3.Text = "英和名マージ"
-        Me.Button3.UseVisualStyleBackColor = True
+        Me.ENJPN.Font = New System.Drawing.Font("MS UI Gothic", 7.854546!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.ENJPN.Location = New System.Drawing.Point(11, 27)
+        Me.ENJPN.Name = "ENJPN"
+        Me.ENJPN.Size = New System.Drawing.Size(113, 26)
+        Me.ENJPN.TabIndex = 2
+        Me.ENJPN.Text = "英和名マージ"
+        Me.ENJPN.UseVisualStyleBackColor = True
         '
-        'Button4
+        'MERGE
         '
-        Me.Button4.Font = New System.Drawing.Font("MS UI Gothic", 7.854546!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Button4.Location = New System.Drawing.Point(11, 60)
-        Me.Button4.Name = "Button4"
-        Me.Button4.Size = New System.Drawing.Size(113, 24)
-        Me.Button4.TabIndex = 3
-        Me.Button4.Text = "重複チェック"
-        Me.Button4.UseVisualStyleBackColor = True
+        Me.MERGE.Font = New System.Drawing.Font("MS UI Gothic", 7.854546!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.MERGE.Location = New System.Drawing.Point(11, 60)
+        Me.MERGE.Name = "MERGE"
+        Me.MERGE.Size = New System.Drawing.Size(113, 24)
+        Me.MERGE.TabIndex = 3
+        Me.MERGE.Text = "重複チェック"
+        Me.MERGE.UseVisualStyleBackColor = True
         '
         'GroupBox1
         '
-        Me.GroupBox1.Controls.Add(Me.Button8)
-        Me.GroupBox1.Controls.Add(Me.Button5)
-        Me.GroupBox1.Controls.Add(Me.Button1)
-        Me.GroupBox1.Controls.Add(Me.Button7)
-        Me.GroupBox1.Controls.Add(Me.Button2)
+        Me.GroupBox1.Controls.Add(Me.CVT_TSV)
+        Me.GroupBox1.Controls.Add(Me.REDUMP_DIFF)
+        Me.GroupBox1.Controls.Add(Me.NOINTRO_DIFF)
+        Me.GroupBox1.Controls.Add(Me.CVT_CSV)
+        Me.GroupBox1.Controls.Add(Me.CVT_CLRMAEPRO)
         Me.GroupBox1.Location = New System.Drawing.Point(23, 32)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(143, 191)
@@ -96,49 +95,49 @@ Partial Class Form1
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "XML"
         '
-        'Button8
+        'CVT_TSV
         '
-        Me.Button8.Location = New System.Drawing.Point(11, 151)
-        Me.Button8.Name = "Button8"
-        Me.Button8.Size = New System.Drawing.Size(113, 23)
-        Me.Button8.TabIndex = 4
-        Me.Button8.Text = "TSVに変換"
-        Me.Button8.UseVisualStyleBackColor = True
+        Me.CVT_TSV.Location = New System.Drawing.Point(11, 151)
+        Me.CVT_TSV.Name = "CVT_TSV"
+        Me.CVT_TSV.Size = New System.Drawing.Size(113, 23)
+        Me.CVT_TSV.TabIndex = 4
+        Me.CVT_TSV.Text = "TSVに変換"
+        Me.CVT_TSV.UseVisualStyleBackColor = True
         '
-        'Button5
+        'REDUMP_DIFF
         '
-        Me.Button5.Font = New System.Drawing.Font("MS UI Gothic", 7.854546!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Button5.Location = New System.Drawing.Point(11, 59)
-        Me.Button5.Name = "Button5"
-        Me.Button5.Size = New System.Drawing.Size(113, 25)
-        Me.Button5.TabIndex = 2
-        Me.Button5.Text = "REDUMP_FIX"
-        Me.Button5.UseVisualStyleBackColor = True
+        Me.REDUMP_DIFF.Font = New System.Drawing.Font("MS UI Gothic", 7.854546!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.REDUMP_DIFF.Location = New System.Drawing.Point(11, 59)
+        Me.REDUMP_DIFF.Name = "REDUMP_DIFF"
+        Me.REDUMP_DIFF.Size = New System.Drawing.Size(113, 25)
+        Me.REDUMP_DIFF.TabIndex = 2
+        Me.REDUMP_DIFF.Text = "REDUMP_FIX"
+        Me.REDUMP_DIFF.UseVisualStyleBackColor = True
         '
-        'Button7
+        'CVT_CSV
         '
-        Me.Button7.Location = New System.Drawing.Point(11, 122)
-        Me.Button7.Name = "Button7"
-        Me.Button7.Size = New System.Drawing.Size(113, 23)
-        Me.Button7.TabIndex = 3
-        Me.Button7.Text = "CSVに変換"
-        Me.Button7.UseVisualStyleBackColor = True
+        Me.CVT_CSV.Location = New System.Drawing.Point(11, 122)
+        Me.CVT_CSV.Name = "CVT_CSV"
+        Me.CVT_CSV.Size = New System.Drawing.Size(113, 23)
+        Me.CVT_CSV.TabIndex = 3
+        Me.CVT_CSV.Text = "CSVに変換"
+        Me.CVT_CSV.UseVisualStyleBackColor = True
         '
-        'Button6
+        'GETHTML
         '
-        Me.Button6.Font = New System.Drawing.Font("MS UI Gothic", 7.854546!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Button6.Location = New System.Drawing.Point(11, 90)
-        Me.Button6.Name = "Button6"
-        Me.Button6.Size = New System.Drawing.Size(113, 26)
-        Me.Button6.TabIndex = 3
-        Me.Button6.Text = "REDUMP_WIKI"
-        Me.Button6.UseVisualStyleBackColor = True
+        Me.GETHTML.Font = New System.Drawing.Font("MS UI Gothic", 7.854546!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.GETHTML.Location = New System.Drawing.Point(11, 90)
+        Me.GETHTML.Name = "GETHTML"
+        Me.GETHTML.Size = New System.Drawing.Size(113, 26)
+        Me.GETHTML.TabIndex = 3
+        Me.GETHTML.Text = "REDUMP_WIKI"
+        Me.GETHTML.UseVisualStyleBackColor = True
         '
         'GroupBox2
         '
-        Me.GroupBox2.Controls.Add(Me.Button6)
-        Me.GroupBox2.Controls.Add(Me.Button3)
-        Me.GroupBox2.Controls.Add(Me.Button4)
+        Me.GroupBox2.Controls.Add(Me.GETHTML)
+        Me.GroupBox2.Controls.Add(Me.ENJPN)
+        Me.GroupBox2.Controls.Add(Me.MERGE)
         Me.GroupBox2.Location = New System.Drawing.Point(185, 32)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(143, 127)
@@ -157,7 +156,7 @@ Partial Class Form1
         '
         'CRCマスクToolStripMenuItem
         '
-        Me.CRCマスクToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CRCマスクToolStripMenuItem1, Me.XML変換ToolStripMenuItem})
+        Me.CRCマスクToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CRCマスクToolStripMenuItem1})
         Me.CRCマスクToolStripMenuItem.Name = "CRCマスクToolStripMenuItem"
         Me.CRCマスクToolStripMenuItem.Size = New System.Drawing.Size(50, 25)
         Me.CRCマスクToolStripMenuItem.Text = "設定"
@@ -165,20 +164,14 @@ Partial Class Form1
         'CRCマスクToolStripMenuItem1
         '
         Me.CRCマスクToolStripMenuItem1.Name = "CRCマスクToolStripMenuItem1"
-        Me.CRCマスクToolStripMenuItem1.Size = New System.Drawing.Size(152, 26)
-        Me.CRCマスクToolStripMenuItem1.Text = "CRCマスク"
+        Me.CRCマスクToolStripMenuItem1.Size = New System.Drawing.Size(164, 26)
+        Me.CRCマスクToolStripMenuItem1.Text = "変換時の出力"
         '
         'バージョンToolStripMenuItem
         '
         Me.バージョンToolStripMenuItem.Name = "バージョンToolStripMenuItem"
         Me.バージョンToolStripMenuItem.Size = New System.Drawing.Size(92, 25)
         Me.バージョンToolStripMenuItem.Text = "バージョン"
-        '
-        'XML変換ToolStripMenuItem
-        '
-        Me.XML変換ToolStripMenuItem.Name = "XML変換ToolStripMenuItem"
-        Me.XML変換ToolStripMenuItem.Size = New System.Drawing.Size(152, 26)
-        Me.XML変換ToolStripMenuItem.Text = "XML変換"
         '
         'Form1
         '
@@ -200,20 +193,19 @@ Partial Class Form1
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents Button1 As System.Windows.Forms.Button
-    Friend WithEvents Button2 As System.Windows.Forms.Button
-    Friend WithEvents Button3 As System.Windows.Forms.Button
-    Friend WithEvents Button4 As System.Windows.Forms.Button
+    Friend WithEvents NOINTRO_DIFF As System.Windows.Forms.Button
+    Friend WithEvents CVT_CLRMAEPRO As System.Windows.Forms.Button
+    Friend WithEvents ENJPN As System.Windows.Forms.Button
+    Friend WithEvents MERGE As System.Windows.Forms.Button
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
     Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
-    Friend WithEvents Button5 As System.Windows.Forms.Button
-    Friend WithEvents Button6 As System.Windows.Forms.Button
+    Friend WithEvents REDUMP_DIFF As System.Windows.Forms.Button
+    Friend WithEvents GETHTML As System.Windows.Forms.Button
     Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
     Friend WithEvents CRCマスクToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents バージョンToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents Button8 As System.Windows.Forms.Button
-    Friend WithEvents Button7 As System.Windows.Forms.Button
+    Friend WithEvents CVT_TSV As System.Windows.Forms.Button
+    Friend WithEvents CVT_CSV As System.Windows.Forms.Button
     Friend WithEvents CRCマスクToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents XML変換ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class

@@ -117,17 +117,35 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="boxid" xml:space="preserve">
+    <value>ULJS-00001</value>
+  </data>
+  <data name="comment" xml:space="preserve">
+    <value>リィィィィィッッジ ルゥエェェェィィスゥァァァァァ！！！ </value>
+  </data>
   <data name="crc" xml:space="preserve">
     <value>37DC8144</value>
   </data>
+  <data name="diskver" xml:space="preserve">
+    <value>1.01</value>
+  </data>
+  <data name="fwver" xml:space="preserve">
+    <value>1.00</value>
+  </data>
   <data name="gid" xml:space="preserve">
     <value>ULJS-00001</value>
+  </data>
+  <data name="mk" xml:space="preserve">
+    <value>ナムコ</value>
   </data>
   <data name="preview" xml:space="preserve">
     <value>name "s1"
 description "s2"
 serial "s3"
 rom( name "s4.iso" size s5 crc s6 )</value>
+  </data>
+  <data name="rdate" xml:space="preserve">
+    <value>2004/12/12</value>
   </data>
   <data name="size" xml:space="preserve">
     <value>906297344</value>

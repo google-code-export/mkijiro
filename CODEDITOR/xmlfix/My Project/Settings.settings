@@ -37,7 +37,14 @@
       <Value Profile="(Default)">%t
 %g
 %c
-%f</Value>
+%f
+%b
+%w
+%v
+%r
+%p
+%m
+%r boxid %b disc_ver %v fw_ver %w</Value>
     </Setting>
     <Setting Name="romnamepattern" Type="System.String" Scope="User">
       <Value Profile="(Default)">%t
@@ -46,6 +53,30 @@
 %g - %t [%c]</Value>
     </Setting>
     <Setting Name="ask" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="lastxml" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="usexml" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="custom_country" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="custom_lang" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="custom_country_num" Type="System.String" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="custom_lang_num" Type="System.String" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="cvt_country_lang" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="crcblock" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
