@@ -350,6 +350,18 @@ Namespace My
                 Me("filenamecrc") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("unpack\")>  _
+        Public Property unpackdir() As String
+            Get
+                Return CType(Me("unpackdir"),String)
+            End Get
+            Set
+                Me("unpackdir") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

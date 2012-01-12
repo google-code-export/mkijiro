@@ -222,6 +222,31 @@ Public Class umdisomanger
 
                         If File.Exists(path) = True Then
                             Dim crc32 As New CRC32()
+                            
+                            Dim psf As New psf
+                            Dim gid As String = My.Settings.unpackdir & treenode.Parent.Tag.ToString
+                            Dim fss As New FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read)
+                            Dim bst(4) As Byte
+                            If fss.Length > 4 Then
+                                fss.Read(bst, 0, 4)
+                                fss.Close()
+                                If File.Exists(gid) = True Then
+                                    path = gid
+                                ElseIf bst(0) = &H43 AndAlso bst(1) = &H49 AndAlso bst(2) = &H53 AndAlso bst(3) = &H4F Then
+                                    If MessageBox.Show("CSOなのでアンパックが必要です、時間がかかりますがよろしいですか？", "アンパック", _
+                           MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
+                                        If psf.unpack_cso(path, gid) = True Then
+                                            Beep()
+                                            path = gid
+                                        Else
+                                            MessageBox.Show("アンパックに失敗しました")
+                                            Exit Sub
+                                        End If
+                                    Else
+                                        Exit Sub
+                                    End If
+                                End If
+                            End If
 
                             Using fs As FileStream = File.OpenRead(path)
                                 For Each b As Byte In crc32.ComputeHash(fs)
@@ -371,7 +396,7 @@ Public Class umdisomanger
 
         Try
             If File.Exists(My.Settings.xml) = True Then
-                my.settings.edit = True
+                My.Settings.edit = True
                 Dim xml As String = My.Settings.xml
                 Dim treenode As TreeNode = TreeView1.SelectedNode
                 If treenode IsNot Nothing Then
@@ -389,6 +414,31 @@ Public Class umdisomanger
                         If File.Exists(path) = True Then
                             Dim crc32 As New CRC32()
 
+                            Dim psf As New psf
+                            Dim gid As String = My.Settings.unpackdir & treenode.Parent.Tag.ToString
+                            Dim fss As New FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read)
+                            Dim bst(4) As Byte
+                            If fss.Length > 4 Then
+                                fss.Read(bst, 0, 4)
+                                fss.Close()
+                                If File.Exists(gid) = True Then
+                                    path = gid
+                                ElseIf bst(0) = &H43 AndAlso bst(1) = &H49 AndAlso bst(2) = &H53 AndAlso bst(3) = &H4F Then
+                                    If MessageBox.Show("CSOなのでアンパックが必要です、時間がかかりますがよろしいですか？", "アンパック", _
+                           MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
+                                        If psf.unpack_cso(path, gid) = True Then
+                                            Beep()
+                                            path = gid
+                                        Else
+                                            MessageBox.Show("アンパックに失敗しました")
+                                            Exit Sub
+                                        End If
+                                    Else
+                                        Exit Sub
+                                    End If
+                                End If
+                            End If
+
                             Using fs As FileStream = File.OpenRead(path)
                                 For Each b As Byte In crc32.ComputeHash(fs)
                                     hash += b.ToString("x2").ToLower()
@@ -396,6 +446,7 @@ Public Class umdisomanger
                             End Using
 
                             hash = hash.ToUpper
+                            Beep()
                         Else
                             MessageBox.Show(path & lang(0), lang(1))
                             Exit Sub
@@ -631,7 +682,7 @@ Public Class umdisomanger
     Private Sub TreeView1_AfterSelect(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles TreeView1.AfterSelect
         Try
 
-            isosize.ForeColor = Color.Black
+            isolba.ForeColor = Color.Black
             Dim treenode As TreeNode = TreeView1.SelectedNode
 
             If treenode IsNot Nothing Then
@@ -655,6 +706,7 @@ Public Class umdisomanger
                 Dim p1 As Boolean = False
                 Dim p2 As Boolean = False
                 Dim psf As New psf
+                Dim tempsize As Long = 0
 
                 managename.Text = treenode.Parent.Text
                 gid.Text = treenode.Parent.Tag.ToString
@@ -678,22 +730,30 @@ Public Class umdisomanger
                     Dim size(3) As Byte
                     Dim lba As Long
                     isosize.Text = fs.Length.ToString("0,0,0")
+                    tempsize = fs.Length
                     fs.Seek(&H8050, SeekOrigin.Begin)
                     fs.Read(size, 0, 4)
+                    fs.Close()
                     If psf.video(isopath) = "PBP" Then
                         '"PBPファイルです"
                         isolba.Text = lang(10)
+                    ElseIf psf.video(isopath) = "CISO" Then
+                        isolba.Text = psf.ciso_size(isopath).ToString
+                        If psf.ciso_size(isopath) > 0 Then
+                            isolba.ForeColor = Color.Red
+                        ElseIf psf.ciso_size(isopath) < 0 Then
+                            isolba.ForeColor = Color.Blue
+                        End If
                     Else
-                        lba = BitConverter.ToInt32(size, 0) << 11
-                        isolba.Text = lba.ToString("0,0,0")
-                        If fs.Length - lba > 0 Then
-                            isosize.ForeColor = Color.Red
-                        ElseIf fs.Length - lba < 0 Then
-                            isosize.ForeColor = Color.Blue
+                        lba = (BitConverter.ToInt32(size, 0) << 11)
+                        isolba.Text = (tempsize - lba).ToString
+                        If tempsize - lba > 0 Then
+                            isolba.ForeColor = Color.Red
+                        ElseIf tempsize - lba < 0 Then
+                            isolba.ForeColor = Color.Blue
                         End If
 
                     End If
-                    fs.Close()
                 End If
 
                 If File.Exists(userpic) Then
@@ -736,7 +796,7 @@ Public Class umdisomanger
                     Dim ms2 As Long = drive.TotalFreeSpace
                     'ドライブの準備ができているか調べる
                     If drive.IsReady Then
-                        If ms2 - Convert.ToInt64(isosize.Text.Replace(",", "")) > 0 Then
+                        If ms2 - tempsize > 0 Then
                             free.ForeColor = Color.Black
                         Else
                             free.ForeColor = Color.Red
@@ -1375,6 +1435,7 @@ Public Class umdisomanger
         Return ""
     End Function
 
+
     Private Sub calc_crc_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles calc_crc.Click
 
         Dim treenode As TreeNode = TreeView1.SelectedNode
@@ -1393,6 +1454,31 @@ Public Class umdisomanger
                 Try
                     Dim crc32 As New CRC32()
                     Dim hash As [String] = [String].Empty
+
+                    Dim psf As New psf
+                    Dim gid As String = My.Settings.unpackdir & treenode.Parent.Tag.ToString
+                    Dim fss As New FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read)
+                    Dim bst(4) As Byte
+                    If fss.Length > 4 Then
+                        fss.Read(bst, 0, 4)
+                        fss.Close()
+                        If File.Exists(gid) = True Then
+                            path = gid
+                        ElseIf bst(0) = &H43 AndAlso bst(1) = &H49 AndAlso bst(2) = &H53 AndAlso bst(3) = &H4F Then
+                            If MessageBox.Show("CSOなのでアンパックが必要です、時間がかかりますがよろしいですか？", "アンパック", _
+                   MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
+                                If psf.unpack_cso(path, gid) = True Then
+                                    Beep()
+                                    path = gid
+                                Else
+                                    MessageBox.Show("アンパックに失敗しました")
+                                    Exit Sub
+                                End If
+                            Else
+                                Exit Sub
+                            End If
+                        End If
+                    End If
 
                     Using fs As FileStream = File.OpenRead(path)
                         For Each b As Byte In crc32.ComputeHash(fs)
@@ -1442,6 +1528,32 @@ Public Class umdisomanger
             If File.Exists(path) = True Then
 
                 Try
+
+                    Dim psf As New psf
+                    Dim gid As String = My.Settings.unpackdir & treenode.Parent.Tag.ToString
+                    Dim fss As New FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read)
+                    Dim bst(4) As Byte
+                    If fss.Length > 4 Then
+                        fss.Read(bst, 0, 4)
+                        fss.Close()
+                        If File.Exists(gid) = True Then
+                            path = gid
+                        ElseIf bst(0) = &H43 AndAlso bst(1) = &H49 AndAlso bst(2) = &H53 AndAlso bst(3) = &H4F Then
+                            If MessageBox.Show("CSOなのでアンパックが必要です、時間がかかりますがよろしいですか？", "アンパック", _
+                   MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
+                                If psf.unpack_cso(path, gid) = True Then
+                                    Beep()
+                                    path = gid
+                                Else
+                                    MessageBox.Show("アンパックに失敗しました")
+                                    Exit Sub
+                                End If
+                            Else
+                                Exit Sub
+                            End If
+                        End If
+                    End If
+
                     'ファイルを開く
                     Dim fs As New System.IO.FileStream(path, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read)
 
@@ -1497,6 +1609,32 @@ Public Class umdisomanger
 
             If File.Exists(path) = True Then
                 Try
+
+                    Dim psf As New psf
+                    Dim gid As String = My.Settings.unpackdir & treenode.Parent.Tag.ToString
+                    Dim fss As New FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read)
+                    Dim bst(4) As Byte
+                    If fss.Length > 4 Then
+                        fss.Read(bst, 0, 4)
+                        fss.Close()
+                        If File.Exists(gid) = True Then
+                            path = gid
+                        ElseIf bst(0) = &H43 AndAlso bst(1) = &H49 AndAlso bst(2) = &H53 AndAlso bst(3) = &H4F Then
+                            If MessageBox.Show("CSOなのでアンパックが必要です、時間がかかりますがよろしいですか？", "アンパック", _
+                   MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
+                                If psf.unpack_cso(path, gid) = True Then
+                                    Beep()
+                                    path = gid
+                                Else
+                                    MessageBox.Show("アンパックに失敗しました")
+                                    Exit Sub
+                                End If
+                            Else
+                                Exit Sub
+                            End If
+                        End If
+                    End If
+
                     'ファイルを開く
                     Dim fs As New System.IO.FileStream(path, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read)
 
@@ -2307,8 +2445,8 @@ Public Class umdisomanger
             Dim instdir As String = ""
             Dim sizeoffset As Long = 0
             Dim romcode As String() = {" [o]", " []", " [b]", " [!]"}
-            Dim emphash As String() = {"00000000", "000000000000000000000000", "000000000000000000000000000000000"}
-            Dim flag As String() = {" ", "000000000000000000000000", "000000000000000000000000000000000"}
+            Dim emphash As String() = {"00000000", "", ""}
+            Dim flag As String() = {" flags verified", " flag baddump", " flags nodump"}
             Dim hash(2) As String
             Dim psf As New psf
             Dim sss As String = ""
@@ -2408,11 +2546,20 @@ Public Class umdisomanger
                 If n.Tag.ToString.Contains("HB") Or n.Tag.ToString.Contains("UP") Then
                 Else
                     ss = n.Text
-                    Dim fs As New System.IO.FileStream(n.Nodes(0).Tag.ToString, System.IO.FileMode.Open, System.IO.FileAccess.Read)
+                    fpath = n.Nodes(0).Tag.ToString
+                    Dim fs As New System.IO.FileStream(fpath, System.IO.FileMode.Open, System.IO.FileAccess.Read)
                     size = fs.Length
+                    fs.Read(lbas, 0, 4)
+                    If lbas(0) = &H43 AndAlso lbas(1) = &H49 AndAlso lbas(2) = &H53 AndAlso lbas(3) = &H4F Then
+                        fs.Seek(8, SeekOrigin.Begin)
+                        fs.Read(lbas, 0, 4)
+                        size = BitConverter.ToInt64(lbas, 0)
+                        lba = psf.ciso_size(fpath) + size
+                    Else
                     fs.Seek(&H8050, SeekOrigin.Begin)
                     fs.Read(lbas, 0, 4)
-                    lba = BitConverter.ToInt64(lbas, 0) << 11
+                        lba = BitConverter.ToInt64(lbas, 0) << 11
+                    End If
                     fs.Close()
                     If disck_ver.Checked = True Then
                         If Not n.Text.Contains("(v") Then
@@ -2477,10 +2624,14 @@ Public Class umdisomanger
                     sb.Append(size.ToString)
                     sb.Append(" crc ")
                     sb.Append(hash(0))
-                    sb.Append(" md5 ")
-                    sb.Append(hash(1))
-                    sb.Append(" sha1 ")
-                    sb.Append(hash(2))
+                    If hash(1) <> "" Then
+                        sb.Append(" md5 ")
+                        sb.Append(hash(1))
+                    End If
+                    If hash(2) <> "" Then
+                        sb.Append(" sha1 ")
+                        sb.Append(hash(2))
+                    End If
                     sb.AppendLine(" )")
                     sb.AppendLine(")")
                     sb.AppendLine()
@@ -2773,7 +2924,8 @@ Public Class umdisomanger
                                             ss = ss.Insert(ss.Length - 4, " [" & b.Text.Remove(0, 6).Trim & "]")
                                         End If
                                     End If
-                                    rp = System.IO.Path.GetDirectoryName(path) & "\" & ss
+                                    ss = ss.Replace(".iso", "")
+                                    rp = System.IO.Path.GetDirectoryName(path) & "\" & ss & System.IO.Path.GetExtension(path).ToLower
 
                                     If MNAME.Checked = False AndAlso FILEPATH.Checked = False Then
                                         b.Parent.Checked = True
@@ -2923,7 +3075,7 @@ Public Class umdisomanger
                                     ss = doskiller(ss)
 
 
-                                    rp = System.IO.Path.GetDirectoryName(path) & "\" & ss & ".iso"
+                                    rp = System.IO.Path.GetDirectoryName(path) & "\" & ss & System.IO.Path.GetExtension(path).ToLower
                                     If MNAME.Checked = False AndAlso FILEPATH.Checked = False Then
                                         b.Parent.Checked = True
                                     End If
@@ -3038,7 +3190,7 @@ Public Class umdisomanger
                 Dim sba As New StringBuilder
                 Dim rr As New StringBuilder
                 Dim romcode As String() = {" [o]", " []", " [b]", " [!]"}
-                Dim emphash As String() = {"00000000", "000000000000000000000000", "000000000000000000000000000000000"}
+                Dim emphash As String() = {"00000000", "", ""}
                 Dim flag As String() = {" flags verified", " flag baddump", " flags nodump"}
                 Dim title(10000) As String
                 Dim desk(10000) As String
@@ -3058,6 +3210,9 @@ Public Class umdisomanger
                 Dim hash(2) As String
                 Dim psf As New psf
                 Dim st As String = ""
+                Dim fpath As String = ""
+                Dim lbas(3) As Byte
+                Dim lba As Long = 0
                 Dim sabun As Boolean = False
 
                 sba.AppendLine("clrmamepro (")
@@ -3099,9 +3254,22 @@ Public Class umdisomanger
                             End If
 
                             If bb.Index = n.Nodes.Count - 1 AndAlso n.Checked = False Then
-                                Dim fhs As New System.IO.FileStream(n.Nodes(0).Tag.ToString, System.IO.FileMode.Open, System.IO.FileAccess.Read)
-                                size = fhs.Length
-                                fhs.Close()
+
+                                fpath = n.Nodes(0).Tag.ToString
+                                Dim fss As New System.IO.FileStream(fpath, System.IO.FileMode.Open, System.IO.FileAccess.Read)
+                                size = fss.Length
+                                fs.Read(lbas, 0, 4)
+                                If lbas(0) = &H43 AndAlso lbas(1) = &H49 AndAlso lbas(2) = &H53 AndAlso lbas(3) = &H4F Then
+                                    fss.Seek(8, SeekOrigin.Begin)
+                                    fss.Read(lbas, 0, 4)
+                                    size = BitConverter.ToInt64(lbas, 0)
+                                    lba = psf.ciso_size(fpath) + size
+                                Else
+                                    fss.Seek(&H8050, SeekOrigin.Begin)
+                                    fss.Read(lbas, 0, 4)
+                                    lba = BitConverter.ToInt64(lbas, 0) << 11
+                                End If
+                                fss.Close()
                                 ss = n.Text
                                 If disck_ver.Checked = True Then
                                     If Not n.Text.Contains("(v") Then
@@ -3109,6 +3277,19 @@ Public Class umdisomanger
                                         If st <> "" Then
                                             ss &= " (v" & st & ")"
                                         End If
+                                    End If
+                                End If
+
+                                If ROMCODEs.Checked = True Then
+                                    Dim sizeoffset As Long = size - lba
+                                    If n.Name.Contains("BADDUMP") Then
+                                        ss &= romcode(2)
+                                    End If
+                                    If sizeoffset > 0 AndAlso ss.Contains(romcode(0)) = False Then
+                                        ss &= romcode(0)
+                                    ElseIf sizeoffset < 0 AndAlso ss.Contains("[-") = False Then
+                                        ss &= romcode(1)
+                                        ss = ss.Insert(ss.Length - 1, (sizeoffset >> 10).ToString & "k")
                                     End If
                                 End If
                                 sb.AppendLine("game (")
@@ -3131,10 +3312,14 @@ Public Class umdisomanger
                                 sb.Append(size.ToString)
                                 sb.Append(" crc ")
                                 sb.Append(hash(0))
-                                sb.Append(" md5 ")
-                                sb.Append(hash(1))
-                                sb.Append(" sha1 ")
-                                sb.Append(hash(2))
+                                If hash(1) <> "" Then
+                                    sb.Append(" md5 ")
+                                    sb.Append(hash(1))
+                                End If
+                                If hash(2) <> "" Then
+                                    sb.Append(" sha1 ")
+                                    sb.Append(hash(2))
+                                End If
                                 sb.AppendLine(" )")
                                 sb.AppendLine(")")
                                 sb.AppendLine()
@@ -3209,6 +3394,7 @@ Public Class umdisomanger
                 Dim st As String = ""
                 Dim sabun As Boolean = False
                 Dim nn As Integer = 0
+                Dim lbas(3) As Byte
 
                 img = Application.StartupPath & "\diff\imgs\" & s & "\"
                 If Directory.Exists(img) = False Then
@@ -3241,8 +3427,16 @@ Public Class umdisomanger
                             End If
 
                             If bb.Index = n.Nodes.Count - 1 Then
+
+                                path = n.Nodes(0).Tag.ToString
                                 Dim fhs As New System.IO.FileStream(path, System.IO.FileMode.Open, System.IO.FileAccess.Read)
                                 size = fhs.Length
+                                fhs.Read(lbas, 0, 4)
+                                If lbas(0) = &H43 AndAlso lbas(1) = &H49 AndAlso lbas(2) = &H53 AndAlso lbas(3) = &H4F Then
+                                    fhs.Seek(8, SeekOrigin.Begin)
+                                    fhs.Read(lbas, 0, 4)
+                                    size = BitConverter.ToInt64(lbas, 0)
+                                End If
                                 fhs.Close()
                                 ss = doskiller2(n.Text)
                                 'If disck_ver.Checked = True Then
@@ -3660,6 +3854,7 @@ Public Class umdisomanger
                 Dim hash(2) As String
                 Dim psf As New psf
                 Dim st As String = ""
+                Dim lbas(3) As Byte
                 Dim sabun As Boolean = False
 
                 img = Application.StartupPath & "\diff\imgs\" & s
@@ -3693,8 +3888,15 @@ Public Class umdisomanger
                             End If
 
                             If bb.Index = n.Nodes.Count - 1 AndAlso n.Checked = False Then
+                                path = n.Nodes(0).Tag.ToString
                                 Dim fhs As New System.IO.FileStream(path, System.IO.FileMode.Open, System.IO.FileAccess.Read)
                                 size = fhs.Length
+                                fhs.Read(lbas, 0, 4)
+                                If lbas(0) = &H43 AndAlso lbas(1) = &H49 AndAlso lbas(2) = &H53 AndAlso lbas(3) = &H4F Then
+                                    fhs.Seek(8, SeekOrigin.Begin)
+                                    fhs.Read(lbas, 0, 4)
+                                    size = BitConverter.ToInt64(lbas, 0)
+                                End If
                                 fhs.Close()
                                 ss = doskiller2(n.Text)
                                 'If disck_ver.Checked = True Then
@@ -4166,4 +4368,16 @@ Public Class umdisomanger
         End If
     End Sub
 
+    Private Sub ToolStripMenuItem2_Click_1(sender As System.Object, e As System.EventArgs) Handles ToolStripMenuItem2.Click
+        Dim fbd As New FolderBrowserDialog
+        fbd.Description = "フォルダを指定してください。"
+        fbd.RootFolder = Environment.SpecialFolder.Desktop
+        fbd.SelectedPath = My.Settings.unpackdir
+        fbd.ShowNewFolderButton = True
+
+        'ダイアログを表示する
+        If fbd.ShowDialog(Me) = DialogResult.OK Then
+            My.Settings.unpackdir = fbd.SelectedPath & "\"
+        End If
+    End Sub
 End Class
