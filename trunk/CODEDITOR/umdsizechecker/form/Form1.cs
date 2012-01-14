@@ -1121,10 +1121,12 @@ namespace WindowsFormsApplication1
                      offset[i] = (BitConverter.ToInt32(integer, 0));
                  }
 
+                 fs.Seek((offset[0] & 0x7fffffff) << align, System.IO.SeekOrigin.Begin);
+
                  for (z = 0; z < counter; z++)
                  {
-                     fs.Seek((offset[z] & 0x7fffffff) << align, System.IO.SeekOrigin.Begin);
-                     fs.Read(source, 0, (offset[z + 1] - offset[z]& 0x7fffffff) << align);
+                     //fs.Seek((offset[z] & 0x7fffffff) << align, System.IO.SeekOrigin.Begin);
+                     fs.Read(source, 0, ((offset[z + 1] & 0x7fffffff) - (offset[z] & 0x7fffffff)) << align);
 
                      if ((offset[z] & 0x80000000) != 0) {
                      }

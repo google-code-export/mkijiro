@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports System.Text
 Imports System.Security.Cryptography
+Imports System.IO.Compression
 
 Public Class psf
 
@@ -125,10 +126,13 @@ Public Class psf
                 offset(i) = (BitConverter.ToInt32(hex, 0))
             Next
 
+            seek = (offset(0) And mask) << align
+            fs.Seek(seek, System.IO.SeekOrigin.Begin)
+
             For z = 0 To counter - 1
-                seek = (offset(z) And mask) << align
+                'seek = (offset(z) And mask) << align
+                'fs.Seek(seek, System.IO.SeekOrigin.Begin)
                 read = ((offset(z + 1) And mask) - (offset(z) And mask)) << align
-                fs.Seek(seek, System.IO.SeekOrigin.Begin)
                 fs.Read(source, 0, read)
 
                 If (offset(z) And mask2) <> 0 Then
@@ -140,7 +144,7 @@ Public Class psf
                         Dim ms As New MemoryStream()
                         ms.Write(source, 0, 2048)
                         ms.Position = 0
-                        Dim zipStream As New System.IO.Compression.DeflateStream(ms, System.IO.Compression.CompressionMode.Decompress)
+                        Dim zipStream As New DeflateStream(ms, CompressionMode.Decompress)
                         zipStream.Read(source, 0, 2048)
                         zipStream.Close()
                         ms.Close()
