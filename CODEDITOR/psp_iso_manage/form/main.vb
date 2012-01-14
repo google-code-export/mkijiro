@@ -3211,7 +3211,7 @@ Public Class umdisomanger
                 Dim psf As New psf
                 Dim st As String = ""
                 Dim fpath As String = ""
-                Dim lbas(3) As Byte
+                Dim lbas(7) As Byte
                 Dim lba As Long = 0
                 Dim sabun As Boolean = False
 
@@ -3255,15 +3255,14 @@ Public Class umdisomanger
 
                             If bb.Index = n.Nodes.Count - 1 AndAlso n.Checked = False Then
 
-                                fpath = n.Nodes(0).Tag.ToString
-                                Dim fss As New System.IO.FileStream(fpath, System.IO.FileMode.Open, System.IO.FileAccess.Read)
+                                Dim fss As New System.IO.FileStream(path, System.IO.FileMode.Open, System.IO.FileAccess.Read)
                                 size = fss.Length
-                                fs.Read(lbas, 0, 4)
+                                fss.Read(lbas, 0, 4)
                                 If lbas(0) = &H43 AndAlso lbas(1) = &H49 AndAlso lbas(2) = &H53 AndAlso lbas(3) = &H4F Then
                                     fss.Seek(8, SeekOrigin.Begin)
                                     fss.Read(lbas, 0, 4)
                                     size = BitConverter.ToInt64(lbas, 0)
-                                    lba = psf.ciso_size(fpath) + size
+                                    lba = psf.ciso_size(path) + size
                                 Else
                                     fss.Seek(&H8050, SeekOrigin.Begin)
                                     fss.Read(lbas, 0, 4)
@@ -3273,7 +3272,7 @@ Public Class umdisomanger
                                 ss = n.Text
                                 If disck_ver.Checked = True Then
                                     If Not n.Text.Contains("(v") Then
-                                        st = psf.GETNAME(n.Nodes(0).Tag.ToString, "I")
+                                        st = psf.GETNAME(path, "I")
                                         If st <> "" Then
                                             ss &= " (v" & st & ")"
                                         End If
@@ -3292,6 +3291,7 @@ Public Class umdisomanger
                                         ss = ss.Insert(ss.Length - 1, (sizeoffset >> 10).ToString & "k")
                                     End If
                                 End If
+
                                 sb.AppendLine("game (")
                                 sb.Append(vbTab)
                                 sb.Append("name """)
@@ -3394,7 +3394,7 @@ Public Class umdisomanger
                 Dim st As String = ""
                 Dim sabun As Boolean = False
                 Dim nn As Integer = 0
-                Dim lbas(3) As Byte
+                Dim lbas(7) As Byte
 
                 img = Application.StartupPath & "\diff\imgs\" & s & "\"
                 If Directory.Exists(img) = False Then
@@ -3439,33 +3439,6 @@ Public Class umdisomanger
                                 End If
                                 fhs.Close()
                                 ss = doskiller2(n.Text)
-                                'If disck_ver.Checked = True Then
-                                '    If Not n.Text.Contains("(v") Then
-                                '        st = psf.GETNAME(n.Nodes(0).Tag.ToString, "I")
-                                '        If st <> "" Then
-                                '            ss &= " (v" & st & ")"
-                                '        End If
-                                '    End If
-                                'End If
-
-                                '<game>
-                                '	<imageNumber>1</imageNumber>
-                                '	<releaseNumber>1</releaseNumber>
-                                '	<title>Ridge Racers</title>
-                                '	<saveType>700 KB</saveType>
-                                '	<romSize>906297344</romSize>
-                                '	<publisher>Namco</publisher>
-                                '	<location>7</location>
-                                '	<sourceRom>Paradox</sourceRom>
-                                '	<language>256</language>
-                                '	<files>
-                                '		<romCRC extension=".iso">37DC8144</romCRC>
-                                '	</files>
-                                '	<im1CRC>0E928F1E</im1CRC>
-                                '	<im2CRC>2BA5174D</im2CRC>
-                                '	<comment></comment>
-                                '	<duplicateID>92</duplicateID>
-                                '</game>
 
                                 sb.Append(vbTab)
                                 sb.Append(vbTab)
@@ -3854,7 +3827,7 @@ Public Class umdisomanger
                 Dim hash(2) As String
                 Dim psf As New psf
                 Dim st As String = ""
-                Dim lbas(3) As Byte
+                Dim lbas(7) As Byte
                 Dim sabun As Boolean = False
 
                 img = Application.StartupPath & "\diff\imgs\" & s
@@ -3899,33 +3872,6 @@ Public Class umdisomanger
                                 End If
                                 fhs.Close()
                                 ss = doskiller2(n.Text)
-                                'If disck_ver.Checked = True Then
-                                '    If Not n.Text.Contains("(v") Then
-                                '        st = psf.GETNAME(n.Nodes(0).Tag.ToString, "I")
-                                '        If st <> "" Then
-                                '            ss &= " (v" & st & ")"
-                                '        End If
-                                '    End If
-                                'End If
-
-                                '<game>
-                                '	<imageNumber>1</imageNumber>
-                                '	<releaseNumber>1</releaseNumber>
-                                '	<title>Ridge Racers</title>
-                                '	<saveType>700 KB</saveType>
-                                '	<romSize>906297344</romSize>
-                                '	<publisher>Namco</publisher>
-                                '	<location>7</location>
-                                '	<sourceRom>Paradox</sourceRom>
-                                '	<language>256</language>
-                                '	<files>
-                                '		<romCRC extension=".iso">37DC8144</romCRC>
-                                '	</files>
-                                '	<im1CRC>0E928F1E</im1CRC>
-                                '	<im2CRC>2BA5174D</im2CRC>
-                                '	<comment></comment>
-                                '	<duplicateID>92</duplicateID>
-                                '</game>
 
                                 sb.Append(vbTab)
                                 sb.Append(vbTab)
