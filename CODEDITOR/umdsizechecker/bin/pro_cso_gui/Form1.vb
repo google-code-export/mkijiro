@@ -30,13 +30,19 @@ Public Class Form1
         ofd.Filter = "ISOファイル(*.iso)|*iso"
         If ofd.ShowDialog() = DialogResult.OK Then
             My.Settings.last = Path.GetDirectoryName(ofd.FileName)
-            Dim procso As New System.Diagnostics.ProcessStartInfo()
-            procso.FileName = "ciso.py"
-            procso.Arguments = "-c" & (ComboBox1.SelectedIndex + 1).ToString & " -a " & ComboBox2.SelectedIndex.ToString & " """ & ofd.FileName & """ """ & Path.GetFileNameWithoutExtension(ofd.FileName) & ".cso"""
-            If CheckBox1.Checked = True Then
-                procso.Arguments = procso.Arguments.Insert(0, "-m ")
+
+            Dim psf As New psf
+            If psf.video(ofd.FileName, "ISO") <> "" Then
+                Dim procso As New System.Diagnostics.ProcessStartInfo()
+                procso.FileName = "ciso.py"
+                procso.Arguments = "-c" & (ComboBox1.SelectedIndex + 1).ToString & " -a " & ComboBox2.SelectedIndex.ToString & " """ & ofd.FileName & """ """ & Path.GetFileNameWithoutExtension(ofd.FileName) & ".cso"""
+                If CheckBox1.Checked = True Then
+                    procso.Arguments = procso.Arguments.Insert(0, "-m ")
+                End If
+                System.Diagnostics.Process.Start(procso)
+            Else
+                MessageBox.Show("ISO/CSOではありまえん")
             End If
-            System.Diagnostics.Process.Start(procso)
         End If
     End Sub
 
@@ -54,13 +60,18 @@ Public Class Form1
         ofd.Filter = "CSOファイル(*.cso)|*cso"
         If ofd.ShowDialog() = DialogResult.OK Then
             My.Settings.last = Path.GetDirectoryName(ofd.FileName)
-            Dim procso As New System.Diagnostics.ProcessStartInfo()
-            procso.FileName = "ciso.py"
-            procso.Arguments = "-c0 """ & ofd.FileName & """ """ & Path.GetFileNameWithoutExtension(ofd.FileName) & ".iso"""
-            If CheckBox1.Checked = True Then
-                procso.Arguments = procso.Arguments.Insert(0, "-m ")
+            Dim psf As New psf
+            If psf.video(ofd.FileName, "C") <> "" Then
+                Dim procso As New System.Diagnostics.ProcessStartInfo()
+                procso.FileName = "ciso.py"
+                procso.Arguments = "-c0 """ & ofd.FileName & """ """ & Path.GetFileNameWithoutExtension(ofd.FileName) & ".iso"""
+                If CheckBox1.Checked = True Then
+                    procso.Arguments = procso.Arguments.Insert(0, "-m ")
+                End If
+                System.Diagnostics.Process.Start(procso)
+            Else
+                MessageBox.Show("ISO/CSOではありまえん")
             End If
-            System.Diagnostics.Process.Start(procso)
         End If
     End Sub
 
@@ -82,4 +93,10 @@ Public Class Form1
         End If
         Return 0
     End Function
+
+    Private Sub Button3_Click(sender As System.Object, e As System.EventArgs) Handles Button3.Click
+        Dim f As New Form3
+        f.ShowDialog()
+        f.Dispose()
+    End Sub
 End Class
