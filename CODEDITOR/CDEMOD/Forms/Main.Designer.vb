@@ -179,7 +179,6 @@ Partial Class MERGE
         Me.PSX_iconset = New System.Windows.Forms.ImageList(Me.components)
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
-        Me.コード形式 = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.TEMP = New System.Windows.Forms.RadioButton()
         Me.PSPAR = New System.Windows.Forms.RadioButton()
@@ -192,6 +191,9 @@ Partial Class MERGE
         Me.DATAGRID = New System.Windows.Forms.Button()
         Me.PSF = New System.Windows.Forms.Button()
         Me.dgtext = New System.Windows.Forms.TextBox()
+        Me.dmtext = New System.Windows.Forms.TextBox()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.コード形式 = New System.Windows.Forms.Label()
         Me.treeopen.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.tool_menu.SuspendLayout()
@@ -204,7 +206,7 @@ Partial Class MERGE
         Me.treeopen.Location = New System.Drawing.Point(0, 0)
         Me.treeopen.Name = "treeopen"
         Me.treeopen.Padding = New System.Windows.Forms.Padding(7, 2, 0, 2)
-        Me.treeopen.Size = New System.Drawing.Size(760, 29)
+        Me.treeopen.Size = New System.Drawing.Size(833, 29)
         Me.treeopen.TabIndex = 0
         Me.treeopen.Text = "MenuStrip1"
         '
@@ -1049,7 +1051,7 @@ Partial Class MERGE
         Me.GT_tb.Margin = New System.Windows.Forms.Padding(4)
         Me.GT_tb.MaxLength = 72
         Me.GT_tb.Name = "GT_tb"
-        Me.GT_tb.Size = New System.Drawing.Size(381, 21)
+        Me.GT_tb.Size = New System.Drawing.Size(454, 21)
         Me.GT_tb.TabIndex = 2
         '
         'gtitle_lbl
@@ -1091,7 +1093,7 @@ Partial Class MERGE
         Me.CT_tb.Margin = New System.Windows.Forms.Padding(4)
         Me.CT_tb.MaxLength = 72
         Me.CT_tb.Name = "CT_tb"
-        Me.CT_tb.Size = New System.Drawing.Size(381, 21)
+        Me.CT_tb.Size = New System.Drawing.Size(454, 21)
         Me.CT_tb.TabIndex = 4
         '
         'codetitle_lbl
@@ -1174,7 +1176,7 @@ Partial Class MERGE
         Me.cmt_tb.Multiline = True
         Me.cmt_tb.Name = "cmt_tb"
         Me.cmt_tb.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.cmt_tb.Size = New System.Drawing.Size(390, 117)
+        Me.cmt_tb.Size = New System.Drawing.Size(463, 117)
         Me.cmt_tb.TabIndex = 5
         '
         'cm_lbl
@@ -1193,7 +1195,7 @@ Partial Class MERGE
         Me.tool_menu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.add_game, Me.rem_game, Me.ToolStripSeparator2, Me.Add_cd, Me.rem_cd, Me.ToolStripSeparator1, Me.save_gc, Me.save_cc, Me.move_up, Me.move_down, Me.merge_codes})
         Me.tool_menu.Location = New System.Drawing.Point(0, 29)
         Me.tool_menu.Name = "tool_menu"
-        Me.tool_menu.Size = New System.Drawing.Size(760, 58)
+        Me.tool_menu.Size = New System.Drawing.Size(833, 58)
         Me.tool_menu.TabIndex = 14
         Me.tool_menu.Text = "ToolStrip1"
         '
@@ -1340,7 +1342,7 @@ Partial Class MERGE
         Me.button_list.Location = New System.Drawing.Point(606, 241)
         Me.button_list.Margin = New System.Windows.Forms.Padding(4)
         Me.button_list.Name = "button_list"
-        Me.button_list.Size = New System.Drawing.Size(154, 244)
+        Me.button_list.Size = New System.Drawing.Size(227, 244)
         Me.button_list.TabIndex = 9
         '
         'inverse_chk
@@ -1389,16 +1391,6 @@ Partial Class MERGE
         Me.TextBox2.Name = "TextBox2"
         Me.TextBox2.Size = New System.Drawing.Size(0, 21)
         Me.TextBox2.TabIndex = 19
-        '
-        'コード形式
-        '
-        Me.コード形式.AutoSize = True
-        Me.コード形式.Location = New System.Drawing.Point(480, 136)
-        Me.コード形式.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.コード形式.Name = "コード形式"
-        Me.コード形式.Size = New System.Drawing.Size(66, 14)
-        Me.コード形式.TabIndex = 21
-        Me.コード形式.Text = "コード形式"
         '
         'Panel1
         '
@@ -1512,12 +1504,12 @@ Partial Class MERGE
         Me.DATAGRID.Enabled = False
         Me.DATAGRID.Font = New System.Drawing.Font("MS UI Gothic", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.DATAGRID.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.DATAGRID.Location = New System.Drawing.Point(575, 515)
+        Me.DATAGRID.Location = New System.Drawing.Point(561, 515)
         Me.DATAGRID.Margin = New System.Windows.Forms.Padding(4)
         Me.DATAGRID.Name = "DATAGRID"
-        Me.DATAGRID.Size = New System.Drawing.Size(24, 21)
+        Me.DATAGRID.Size = New System.Drawing.Size(37, 21)
         Me.DATAGRID.TabIndex = 31
-        Me.DATAGRID.Text = "D"
+        Me.DATAGRID.Text = "DG"
         Me.DATAGRID.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage
         Me.DATAGRID.UseVisualStyleBackColor = False
         Me.DATAGRID.Visible = False
@@ -1536,22 +1528,51 @@ Partial Class MERGE
         '
         'dgtext
         '
-        Me.dgtext.Location = New System.Drawing.Point(741, 512)
+        Me.dgtext.Location = New System.Drawing.Point(764, 156)
         Me.dgtext.Multiline = True
         Me.dgtext.Name = "dgtext"
-        Me.dgtext.Size = New System.Drawing.Size(9, 21)
+        Me.dgtext.Size = New System.Drawing.Size(10, 21)
         Me.dgtext.TabIndex = 33
         Me.dgtext.Visible = False
+        '
+        'dmtext
+        '
+        Me.dmtext.Location = New System.Drawing.Point(780, 156)
+        Me.dmtext.Name = "dmtext"
+        Me.dmtext.Size = New System.Drawing.Size(10, 21)
+        Me.dmtext.TabIndex = 34
+        Me.dmtext.Visible = False
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(761, 515)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(11, 14)
+        Me.Label2.TabIndex = 35
+        Me.Label2.Text = " "
+        '
+        'コード形式
+        '
+        Me.コード形式.AutoSize = True
+        Me.コード形式.Location = New System.Drawing.Point(480, 136)
+        Me.コード形式.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.コード形式.Name = "コード形式"
+        Me.コード形式.Size = New System.Drawing.Size(66, 14)
+        Me.コード形式.TabIndex = 21
+        Me.コード形式.Text = "コード形式"
         '
         'MERGE
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
-        Me.ClientSize = New System.Drawing.Size(760, 655)
-        Me.Controls.Add(Me.dgtext)
+        Me.ClientSize = New System.Drawing.Size(833, 655)
         Me.Controls.Add(Me.PSF)
+        Me.Controls.Add(Me.Label2)
+        Me.Controls.Add(Me.dmtext)
         Me.Controls.Add(Me.SELECTLIST)
+        Me.Controls.Add(Me.dgtext)
         Me.Controls.Add(Me.SHIFLIST)
         Me.Controls.Add(Me.USELIST)
         Me.Controls.Add(Me.changed)
@@ -1664,7 +1685,6 @@ Partial Class MERGE
     Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
     Friend WithEvents TextBox2 As System.Windows.Forms.TextBox
     Friend WithEvents copy_to_psp As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents コード形式 As System.Windows.Forms.Label
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents PSPAR As System.Windows.Forms.RadioButton
     Friend WithEvents CWC As System.Windows.Forms.RadioButton
@@ -1767,5 +1787,8 @@ Partial Class MERGE
     Friend WithEvents dgtext As System.Windows.Forms.TextBox
     Friend WithEvents FCTXT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents dgedit As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents dmtext As System.Windows.Forms.TextBox
+    Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents コード形式 As System.Windows.Forms.Label
 
 End Class

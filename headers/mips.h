@@ -1273,6 +1273,8 @@ Encoding: 0000 01ss sss1 0001 iiii iiii iiii iiii*/
       }
       break;
       
+      
+      
     case 0x08:
         if((a_opcode >= 0x08000000) && (a_opcode < 0x8800000)){
         pspDebugScreenPuts("kernelram");}

@@ -410,7 +410,6 @@ Public Class save_db
 
     End Sub
 
-
     Public Sub save_ar(ByVal filename As String, ByVal enc1 As Integer)
 
         Dim m As MERGE = MERGE
@@ -617,7 +616,6 @@ Public Class save_db
         fs.Close()
 
     End Sub
-
 
     Public Function datel_hash(ByVal bin() As Byte, ByVal s As Integer, ByVal w As Integer) As UInteger
 
