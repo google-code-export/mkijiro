@@ -125,6 +125,7 @@
   <ItemGroup>
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Classes\checkupdate.vb" />
+    <Compile Include="Classes\textline.vb" />
     <Compile Include="Classes\psf.vb" />
     <Compile Include="Classes\codecheck.vb" />
     <Compile Include="Classes\joker.vb" />

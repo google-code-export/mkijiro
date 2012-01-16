@@ -4,6 +4,54 @@ Imports System.Security.Cryptography
 
 Public Class psf
 
+
+    Public Function video(ByVal filename As String) As String
+
+        Dim fs As New FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read)
+        Dim bs(2047) As Byte
+        Dim result As String = ""
+        Dim MODE As String = ""
+
+        If fs.Length > 2048 + 40 Then
+            fs.Read(bs, 0, 2048)
+            'PBP
+            If bs(0) = &H0 AndAlso bs(1) = &H50 AndAlso bs(2) = &H42 AndAlso bs(3) = &H50 Then
+                fs.Close()
+                Return "PBP"
+            ElseIf bs(0) = &H43 AndAlso bs(1) = &H49 AndAlso bs(2) = &H53 AndAlso bs(3) = &H4F Then
+                fs.Close()
+                Return "CISO"
+            End If
+        End If
+
+
+        If fs.Length > &H8060 Then
+            fs.Seek(&H8000, SeekOrigin.Begin)
+            fs.Read(bs, 0, 2048)
+            '.CD001
+            If bs(0) = &H1 AndAlso bs(1) = &H43 AndAlso bs(2) = &H44 AndAlso bs(3) = &H30 _
+                AndAlso bs(4) = &H30 AndAlso bs(5) = &H31 Then
+                'PSP GAME
+                If bs(8) = &H50 AndAlso bs(9) = &H53 AndAlso bs(10) = &H50 AndAlso bs(11) = &H20 _
+                    AndAlso bs(12) = &H47 AndAlso bs(13) = &H41 AndAlso bs(14) = &H4D AndAlso bs(15) = &H45 Then
+
+                    fs.Close()
+                    Return "PSP"
+
+                ElseIf bs(8) = &H55 AndAlso bs(9) = &H4D AndAlso bs(10) = &H44 AndAlso bs(11) = &H20 _
+                        AndAlso bs(12) = &H56 AndAlso bs(13) = &H49 AndAlso bs(14) = &H44 AndAlso bs(15) = &H45 AndAlso bs(16) = &H4F Then
+
+                    fs.Close()
+                    Return "VIDEO"
+                End If
+            End If
+        End If
+
+        fs.Close()
+        Return ""
+
+    End Function
+
     Public Function GETID(ByVal filename As String) As String
 
         Dim fs As New FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read)
@@ -87,7 +135,43 @@ Public Class psf
                 result = "DAX"
                 'CISO
             ElseIf bs(0) = &H43 AndAlso bs(1) = &H49 AndAlso bs(2) = &H53 AndAlso bs(3) = &H4F Then
-                result = "CSO"
+
+                Dim offset(7) As Byte
+                Dim source(2047) As Byte
+                Dim seek As Integer = 0
+                Array.ConstrainedCopy(bs, 8, offset, 0, 4)
+                Dim size As Long = BitConverter.ToInt64(offset, 0)
+                Array.ConstrainedCopy(bs, 16, offset, 0, 4)
+                Dim sec As Integer = BitConverter.ToInt32(offset, 0) >> 8
+                Array.ConstrainedCopy(bs, 20, offset, 0, 4)
+                Dim align As Integer = BitConverter.ToInt32(offset, 0) >> 8
+                Dim counter As Integer = CInt(size / sec)
+
+                fs.Seek(24 + 4 * 16, System.IO.SeekOrigin.Begin)
+                fs.Read(offset, 0, 4)
+                seek = BitConverter.ToInt32(offset, 0) << align
+
+                fs.Seek(seek, System.IO.SeekOrigin.Begin)
+                fs.Read(source, 0, 2048)
+                If (seek And &H8000000) <> 0 Then
+                Else
+                    Dim ms As New MemoryStream()
+                    ms.Write(source, 0, 2048)
+                    ms.Position = 0
+                    Dim zipStream As New System.IO.Compression.DeflateStream(ms, System.IO.Compression.CompressionMode.Decompress)
+                    zipStream.Read(source, 0, 2048)
+                    zipStream.Close()
+                    ms.Close()
+                End If
+
+                Dim gid(9) As Byte
+
+                Array.ConstrainedCopy(source, &H373, gid, 0, 10)
+                result = Encoding.GetEncoding(0).GetString(gid)
+
+                fs.Close()
+                Return result
+                'result = "CSO"
                 'JISO
             ElseIf bs(0) = &H4A AndAlso bs(1) = &H49 AndAlso bs(2) = &H53 AndAlso bs(3) = &H4F Then
                 result = "JSO"
@@ -190,7 +274,207 @@ Public Class psf
                 result = "DAX"
                 'CISO
             ElseIf bs(0) = &H43 AndAlso bs(1) = &H49 AndAlso bs(2) = &H53 AndAlso bs(3) = &H4F Then
-                result = "CSO"
+
+                Dim offset(7) As Byte
+                Dim source(2047) As Byte
+                Dim seek As Long = 0
+                Dim i As Integer = 0
+
+                Array.ConstrainedCopy(bs, 8, offset, 0, 4)
+                Dim size As Long = BitConverter.ToInt64(offset, 0)
+                Array.ConstrainedCopy(bs, 16, offset, 0, 4)
+                Dim sec As Integer = BitConverter.ToInt32(offset, 0)
+                Array.ConstrainedCopy(bs, 20, offset, 0, 4)
+                Dim align As Integer = BitConverter.ToInt32(offset, 0) >> 8
+
+                fs.Seek(24 + 4 * 16, System.IO.SeekOrigin.Begin)
+                fs.Read(offset, 0, 4)
+                seek = BitConverter.ToInt64(offset, 0) << align
+
+                fs.Seek(seek, System.IO.SeekOrigin.Begin)
+                fs.Read(source, 0, 2048)
+                If (seek And &H8000000) <> 0 Then
+                Else
+                    Dim ms As New MemoryStream()
+                    ms.Write(source, 0, 2048)
+                    ms.Position = 0
+                    Dim zipStream As New System.IO.Compression.DeflateStream(ms, System.IO.Compression.CompressionMode.Decompress)
+                    zipStream.Read(source, 0, 2048)
+                    zipStream.Close()
+                    ms.Close()
+                End If
+
+                Dim str(8) As Byte
+                Array.ConstrainedCopy(source, &H8, str, 0, 9)
+                Dim iso As String = Encoding.GetEncoding(0).GetString(str)
+
+                Array.ConstrainedCopy(source, &H50, offset, 0, 5)
+                seek = BitConverter.ToInt64(offset, 0)
+
+                fs.Seek(24 + 4 * 16, System.IO.SeekOrigin.Begin)
+                fs.Read(offset, 0, 4)
+                seek = BitConverter.ToInt64(offset, 0) << align
+
+                fs.Seek(seek, System.IO.SeekOrigin.Begin)
+                fs.Read(source, 0, 2048)
+
+                If (seek And &H8000000) <> 0 Then
+                Else
+                    Dim ms As New MemoryStream()
+                    ms.Write(source, 0, 2048)
+                    ms.Position = 0
+                    Dim zipStream As New System.IO.Compression.DeflateStream(ms, System.IO.Compression.CompressionMode.Decompress)
+                    zipStream.Read(source, 0, 2048)
+                    zipStream.Close()
+                    ms.Close()
+                End If
+
+                If (iso.Contains("PSP GAME")) Then 'Or iso.Contains("UMD VIDEO")) Then
+
+                    'PSP_GAME,UMD_VIDEO,LPATHTABLE
+                    Array.ConstrainedCopy(source, &H8C, offset, 0, 4)
+                    seek = BitConverter.ToInt32(offset, 0)
+                    If seek * 2048 > size Then
+                        fs.Close()
+                        Return ""
+                    End If
+
+                    fs.Seek(24 + 4 * seek, System.IO.SeekOrigin.Begin)
+                    fs.Read(offset, 0, 4)
+                    seek = BitConverter.ToInt64(offset, 0) << align
+
+                    fs.Seek(seek, System.IO.SeekOrigin.Begin)
+                    fs.Read(source, 0, 2048)
+
+                    If (seek And &H8000000) <> 0 Then
+                    Else
+                        Dim ms As New MemoryStream()
+                        ms.Write(source, 0, 2048)
+                        ms.Position = 0
+                        Dim zipStream As New System.IO.Compression.DeflateStream(ms, System.IO.Compression.CompressionMode.Decompress)
+                        zipStream.Read(source, 0, 2048)
+                        zipStream.Close()
+                        ms.Close()
+                    End If
+
+                    i = 6
+                    While True
+                        'PSP_GAME
+                        If iso.Contains("PSP GAME") = True AndAlso source(i) = &H50 AndAlso source(i + 1) = &H53 AndAlso source(i + 2) = &H50 Then
+                            Exit While
+                            'ElseIf iso.Contains("UMD VIDEO") = True AndAlso source(i) = &H55 AndAlso source(i + 1) = &H4D AndAlso source(i + 2) = &H44 AndAlso source(i + 3) = &H5F AndAlso source(i + 4) = &H56 Then
+                            '    Exit While
+                        ElseIf i > 2038 Then
+                            fs.Close()
+                            Return ""
+                        End If
+                        i += 1
+                    End While
+
+                    Array.ConstrainedCopy(source, i - 6, offset, 0, 4)
+                    seek = BitConverter.ToInt32(offset, 0)
+                    If seek * 2048 > size Then
+                        fs.Close()
+                        Return ""
+                    End If
+
+                    fs.Seek(24 + 4 * seek, System.IO.SeekOrigin.Begin)
+                    fs.Read(offset, 0, 4)
+                    seek = BitConverter.ToInt64(offset, 0) << align
+
+                    fs.Seek(seek, System.IO.SeekOrigin.Begin)
+                    fs.Read(source, 0, 2048)
+
+                    If (seek And &H8000000) <> 0 Then
+                    Else
+                        Dim ms As New MemoryStream()
+                        ms.Write(source, 0, 2048)
+                        ms.Position = 0
+                        Dim zipStream As New System.IO.Compression.DeflateStream(ms, System.IO.Compression.CompressionMode.Decompress)
+                        zipStream.Read(source, 0, 2048)
+                        zipStream.Close()
+                        ms.Close()
+                    End If
+
+                    i = 31
+                    'PARAM.SFO
+                    While True
+                        If source(i) = &H50 AndAlso source(i + 1) = &H41 AndAlso source(i + 2) = &H52 AndAlso source(i + 3) = &H41 Then
+                            Exit While
+                        ElseIf i > 2038 Then
+                            fs.Close()
+                            Return ""
+                        End If
+                        i += 1
+                    End While
+                    Array.ConstrainedCopy(source, i - 31, offset, 0, 4)
+                    seek = BitConverter.ToInt64(offset, 0)
+                    If seek * 2048 > size Then
+                        fs.Close()
+                        Return ""
+                    End If
+
+                    fs.Seek(24 + 4 * seek, System.IO.SeekOrigin.Begin)
+                    fs.Read(offset, 0, 4)
+                    seek = BitConverter.ToInt64(offset, 0) << align
+
+                    fs.Seek(seek, System.IO.SeekOrigin.Begin)
+                    fs.Read(source, 0, 2048)
+
+                    If (seek And &H8000000) <> 0 Then
+                    Else
+                        Dim ms As New MemoryStream()
+                        ms.Write(source, 0, 2048)
+                        ms.Position = 0
+                        Dim zipStream As New System.IO.Compression.DeflateStream(ms, System.IO.Compression.CompressionMode.Decompress)
+                        zipStream.Read(source, 0, 2048)
+                        zipStream.Close()
+                        ms.Close()
+                    End If
+
+                    Array.ConstrainedCopy(source, 0, bs, 0, 2048)
+
+                    'PSF
+                    If bs(0) = &H0 AndAlso bs(1) = &H50 AndAlso bs(2) = &H53 AndAlso bs(3) = &H46 Then
+                        Array.ConstrainedCopy(bs, 8, offset, 0, 4)
+                        i = BitConverter.ToInt32(offset, 0)
+                        Array.ConstrainedCopy(bs, 12, offset, 0, 4)
+                        Dim k As Integer = BitConverter.ToInt32(offset, 0)
+                        Array.ConstrainedCopy(bs, 16, offset, 0, 4)
+                        Dim z As Integer = BitConverter.ToInt32(offset, 0)
+                        Dim psfbyte(200) As Byte
+                        Array.ConstrainedCopy(bs, i, psfbyte, 0, 200)
+                        Dim pname As String = Encoding.GetEncoding(65001).GetString(psfbyte)
+                        pname = pname.Substring(0, pname.IndexOf(Chr(0) & Chr(0)))
+                        Dim psfst As String() = pname.Split(Chr(0))
+                        i = 0
+                        While True
+                            If psfst(i) = "TITLE" Then
+                                Exit While
+                            End If
+                            If i = z - 1 Then
+                                fs.Close()
+                                Return ""
+                            End If
+                            i += 1
+                        End While
+
+                        Array.ConstrainedCopy(bs, 32 + i * 16, offset, 0, 4)
+                        i = BitConverter.ToInt32(offset, 0)
+                        k += i
+
+                        Dim name(128) As Byte
+                        Array.ConstrainedCopy(bs, k, name, 0, 128)
+                        result = Encoding.GetEncoding(65001).GetString(name)
+                        i = result.IndexOf(vbNullChar)
+                        result = result.Substring(0, i)
+
+
+                        fs.Close()
+                        Return result
+                    End If
+                End If
+                'result = "CSO"
                 'JISO
             ElseIf bs(0) = &H4A AndAlso bs(1) = &H49 AndAlso bs(2) = &H53 AndAlso bs(3) = &H4F Then
                 result = "JSO"

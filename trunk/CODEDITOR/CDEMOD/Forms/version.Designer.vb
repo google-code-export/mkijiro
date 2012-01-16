@@ -56,9 +56,9 @@ Partial Class version
         Me.Label2.Location = New System.Drawing.Point(14, 99)
         Me.Label2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(146, 14)
+        Me.Label2.Size = New System.Drawing.Size(192, 14)
         Me.Label2.TabIndex = 2
-        Me.Label2.Text = "BUILD:2012/01/06 2:04"
+        Me.Label2.Text = "BUILD:2012/01/16 2012/01/16"
         '
         'CDEupdate
         '

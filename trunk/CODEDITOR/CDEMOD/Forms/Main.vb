@@ -1766,6 +1766,7 @@ Public Class MERGE
                 End If
 
                 buffer &= "#" & dgtext.Text.Trim & vbCrLf
+                buffer &= "#" & dmtext.Text.Trim & vbCrLf
 
                 codetree.SelectedNode.Tag = buffer
                 codetree.EndUpdate()
@@ -2046,6 +2047,7 @@ Public Class MERGE
         Me.AutoSize = False
         changed.Text = ""
         dgtext.Text = ""
+        dmtext.Text = ""
         move_up.Enabled = True
         move_down.Enabled = True
         merge_codes.Enabled = True
@@ -2120,6 +2122,8 @@ Public Class MERGE
 
                                 If s.Contains("#<DGLINE") Then
                                     dgtext.Text &= s.Substring(1, s.Length - 1) & vbCrLf
+                                ElseIf s.Contains("#<DGMODE") Then
+                                    dmtext.Text &= s.Substring(1, s.Length - 1) & vbCrLf
                                 ElseIf s.Contains("#") Then
                                     cmt_tb.Text &= s.Substring(1, s.Length - 1) & vbCrLf
                                 Else
@@ -2175,6 +2179,26 @@ Public Class MERGE
             Dim fileName As String() = CType( _
                 e.Data.GetData(DataFormats.FileDrop, False), _
                 String())
+            Dim psf As New psf
+            If psf.video(fileName(0)) <> "" Then
+                Dim id As String = psf.GETID(fileName(0))
+                Dim add As Boolean = True
+                For Each n As TreeNode In codetree.Nodes(0).Nodes
+                    If n.Tag.ToString = id Then
+                        add = False
+                    End If
+                Next
+                If add = True Then
+                    Dim newnode As New TreeNode
+                    newnode.Text = psf.GETNAME(fileName(0))
+                    newnode.Name = psf.GETNAME(fileName(0))
+                    newnode.Tag = id
+                    codetree.Nodes(0).Nodes.Insert(0, newnode)
+                Else
+                    MessageBox.Show(id & "," & psf.GETNAME(fileName(0)) & vbCrLf & "はすでにIDが登録されてます", "ID重複")
+                End If
+                Exit Sub
+            End If
 
             Dim open As New load_db
             If codetree.Nodes(0).Nodes.Count > 0 AndAlso MessageBox.Show("ドロップされたデータベースを開くと現在のデータベースが消えてしまいます。このまま開いてもよろしいですか？", "データベース保存の確認", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) = Windows.Forms.DialogResult.Cancel Then
@@ -2565,7 +2589,9 @@ Public Class MERGE
                 z = "8"
             End If
 
-            cmt_tb.Text = "LIST/shift" & z & ".txt" & "(V,1,6,3)シフト倍" & vbCrLf & cmt_tb.Text
+            Dim tl As New textline
+            Dim s As String = tl.linec(cl_tb.Text, cl_tb.SelectionStart).ToString
+            cmt_tb.Text = "LIST/shift" & z & ".txt" & "(V," & s & ",6,3)シフト倍" & vbCrLf & cmt_tb.Text
         Else
             changed.Text = "コード内容が空か文字数が足りません。"
         End If
@@ -2590,7 +2616,9 @@ Public Class MERGE
                 lspath = lspath.Replace(My.Application.Info.DirectoryPath.ToString(), "")
                 lspath = lspath.Replace("\", "/")
                 lspath = lspath.Remove(0, 1)
-                cmt_tb.Text = lspath & "(V,1,1,8)" & vbCrLf & cmt_tb.Text
+                Dim tl As New textline
+                Dim s As String = tl.linec(cl_tb.Text, cl_tb.SelectionStart).ToString
+                cmt_tb.Text = lspath & "(V," & s & ",1,8)" & vbCrLf & cmt_tb.Text
             End If
         Else
             changed.Text = "コード内容が空か文字数が足りません。"
@@ -2800,8 +2828,8 @@ Public Class MERGE
                 changed.Text = "UMDVIDEOイメージなので取得しませんでした"
             ElseIf str = "DAX" Then
                 changed.Text = "Deflate圧縮イメージDAXは対応してません"
-            ElseIf str = "CSO" Then
-                changed.Text = "Deflate圧縮イメージCSOは対応してません"
+                'ElseIf str = "CSO" Then
+                '    'changed.Text = "Deflate圧縮イメージCSOは対応してません"
             ElseIf str = "JSO" Then
                 changed.Text = "LZ0圧縮イメージJSOは対応してません"
             Else
@@ -2879,5 +2907,33 @@ Public Class MERGE
         End If
     End Sub
 
+
+    Private Sub cl_tb_TextChanged_1(sender As System.Object, e As System.EventArgs) Handles cl_tb.MouseClick, cl_tb.Validated, cl_tb.TextChanged
+        Dim tl As New textline
+        Label2.Text = tl.linec(cl_tb.Text, cl_tb.SelectionStart).ToString & "行目"
+    End Sub
+
+
+    Private Sub cl_tbTextChanged_1(sender As System.Object, e As KeyEventArgs) Handles cl_tb.KeyDown
+        Dim tl As New textline
+        Dim temp As Integer = cl_tb.SelectionStart
+        Dim j = temp
+        Dim k = cl_tb.Text.Length
+        temp = tl.linec(cl_tb.Text, temp)
+        If e.KeyData = Keys.Up AndAlso temp > 1 Then
+            temp -= 1
+        ElseIf e.KeyData = Keys.Down Then
+            If j >= k Then
+            Else
+                temp += 1
+            End If
+        End If
+            If e.KeyData = Keys.Left AndAlso temp > 1 AndAlso cl_tb.Text.Substring(cl_tb.SelectionStart - 2, 2) = vbCrLf Then
+                temp -= 1
+            ElseIf e.KeyData = Keys.Right AndAlso cl_tb.SelectionStart < cl_tb.Text.Length AndAlso cl_tb.Text.Substring(cl_tb.SelectionStart, 2) = vbCrLf Then
+                temp += 1
+            End If
+            Label2.Text = temp.ToString & "行目"
+    End Sub
 End Class
 
