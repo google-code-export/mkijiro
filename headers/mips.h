@@ -891,7 +891,7 @@ Encoding: 0000 0000 0000 0000 dddd d000 0001 0000*/
 
         case 0x11:
           pspDebugScreenPuts("mthi     ");
-          mipsRegister(a_opcode, 2, 0);
+          mipsRegister(a_opcode, 0, 0);
         break;
           
         case 0x12:
@@ -906,7 +906,7 @@ Encoding: 0000 0000 0000 0000 dddd d000 0001 0010*/
           
          case 0x13:
           pspDebugScreenPuts("mtlo     ");
-          mipsRegister(a_opcode, 2, 0);
+          mipsRegister(a_opcode, 0, 0);
           break;
 
         case 0x16:
@@ -1135,17 +1135,17 @@ Encoding: 0000 00ss ssst tttt 0000 0000 0001 1011*/
 
           case 0x2e:
           pspDebugScreenPuts("msub     ");
-          mipsRegister(a_opcode, 2, 1);
+          mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
           break;
           
           case 0x2F:
           pspDebugScreenPuts("msubu    ");
-          mipsRegister(a_opcode, 2, 1);
+          mipsRegister(a_opcode, 0, 1);
           mipsRegister(a_opcode, 1, 0);
           break;
-//        { "msub",               0x0000002e, 0xfc00ffff, "%d, %t"},
-//        { "msubu",              0x0000002f, 0xfc00ffff, "%d, %t"},
+//	{ "msub",		0x0000002e, 0xfc00ffff, "%s, %t", ADDR_TYPE_NONE, INSTR_TYPE_PSP },
+//	{ "msubu",		0x0000002f, 0xfc00ffff, "%s, %t", ADDR_TYPE_NONE, INSTR_TYPE_PSP },
       }
       break;
       
@@ -2669,19 +2669,21 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 			VFR=4;
 	     	 	vectors(a_opcode, 1, 0);
 			}
-        break;       
- // { "vs2i.p",      0xD03B0080, 0xFFFF8080, "%zq, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zp -> %zq
+        break;
+ //{ "vs2i.p",      0xD03B0080, 0xFFFF8080, "%zq, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zp -> %zq
  //{ "vs2i.s",      0xD03B0000, 0xFFFF8080, "%zp, %ys" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zs -> %zp
   
 
         case 0xD03C:
                 pspDebugScreenPuts("vi2uc.q  ");
-                VFR=6;
+                //VFR=6;
                 vectors(a_opcode, 2, 1);
                 VFR=6;
                 vectors(a_opcode, 1, 0);
         break;
-//{ "vi2uc.q", 0xD03C8080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zp -> %zq
+//http://code.google.com/p/pops-gte/wiki/DisasmHints
+//    { "vi2uc.q", 0xD03C8080, 0xFFFF8080, "%zs, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zp -> %zq
+//XX{ "vi2uc.q", 0xD03C8080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zp -> %zq
 
         case 0xD03D:
                 pspDebugScreenPuts("vs2c.q   ");
@@ -2694,21 +2696,24 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
         case 0xD03E:
                 if((a_opcode & 0x8080) == 0x80){
                 pspDebugScreenPuts("vi2us.p  ");
-                VFR=6;
+                //VFR=6;
                 vectors(a_opcode, 2, 1);
                 VFR=6;
                 vectors(a_opcode, 1, 0);
                 }
                 else if((a_opcode & 0x8080) == 0x8080){
                 pspDebugScreenPuts("vi2us.q  ");
-                VFR=6;
+                VFR=4;//VFR=6;
                 vectors(a_opcode, 2, 1);
                 VFR=6;
                 vectors(a_opcode, 1, 0);
                 }
-        break;//?????
-//{ "vi2us.p", 0xD03E0080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zp -> %zq
-//{ "vi2us.q", 0xD03E8080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zp -> %zq
+        break;
+//http://code.google.com/p/pops-gte/wiki/DisasmHints
+//{ "vi2us.p", 0xD03E0080, 0xFFFF8080, "%zs, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zp -> %zq
+//XX{ "vi2us.p", 0xD03E0080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zp -> %zq
+//   { "vi2us.q", 0xD03E8080, 0xFFFF8080, "%zp, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zp -> %zq
+//XX{ "vi2us.q", 0xD03E8080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] %zp -> %zq
 
         case 0xD03F:
                 if((a_opcode & 0x8080) == 0x80){

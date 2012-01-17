@@ -1193,7 +1193,6 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
             Dim lui As New Regex("^lui\x20+")
             Dim luim As Match = lui.Match(str)
 
-
             Dim lb As New Regex("^lb\x20+")
             Dim lbm As Match = lb.Match(str)
             Dim lh As New Regex("^lh\x20+")
@@ -1225,13 +1224,13 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 
 
             'Dim freg As New Regex("\$f\d{1,2}")
-            'Dim vfreg As New Regex("(S|C)\d\d\d")
+            'Dim vfreg As New Regex("(S|C|M)\d\d\d")
 
 
             If str = "nop" Then
             ElseIf str = "syscall" Then
                 hex = 12
-            ElseIf str = "syscall" Then
+            ElseIf str = "break" Then
                 hex = 13
             ElseIf str = "sync" Then
                 hex = 15
@@ -1253,14 +1252,14 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                 hex = valdec_boolean_para(str, hex, 3)
             ElseIf sllvm.Success Then
                 hex = hex Or &H4
-                hex = reg_boolean(str, hex, 0)
+                hex = reg_boolean3(str, hex, 0)
             ElseIf srlvm.Success Then
                 hex = hex Or &H6
-                hex = reg_boolean(str, hex, 0)
+                hex = reg_boolean3(str, hex, 0)
             ElseIf sravm.Success Then
                 hex = hex Or &H7
                 str = str.Replace("srav", "")
-                hex = reg_boolean(str, hex, 0)
+                hex = reg_boolean3(str, hex, 0)
             ElseIf jalrm.Success Then
                 hex = hex Or &H9
                 If ss.Length = 1 Then
@@ -1282,13 +1281,13 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                 hex = reg_boolean_para(ss(2), hex, 1)
             ElseIf mfhim.Success Then
                 hex = hex Or &H10
-                hex = reg_boolean_para(str, hex, 0)
+                hex = reg_boolean_para(str, hex, 2)
             ElseIf mthim.Success Then
                 hex = hex Or &H11
                 hex = reg_boolean_para(str, hex, 0)
             ElseIf mflom.Success Then
                 hex = hex Or &H12
-                hex = reg_boolean_para(str, hex, 0)
+                hex = reg_boolean_para(str, hex, 2)
             ElseIf mtlom.Success Then
                 hex = hex Or &H13
                 hex = reg_boolean_para(str, hex, 0)
@@ -1919,78 +1918,4 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
     '      }
     '      break;
 
-    '    case 0x08:
-    '        if((a_opcode >= 0x08000000) && (a_opcode < 0x8800000)){
-    '        pspDebugScreenPuts("kernelram");}
-    '        else if((a_opcode >= 0x8800000) && (a_opcode < 0xA000000)){
-    '        pspDebugScreenPuts("userram  ");  
-    '        if(decodeFormat==0x48800000){
-    '        	sprintf(buffer,"$%08X",a_opcode-0x8800000);
-    '            pspDebugScreenPuts(buffer);}
-    '        }
-    '        else{
-    '      pspDebugScreenPuts("j        ");
-    '      mipsImm(a_opcode, 1, 0);}
-    '/*J -- Jump
-    'Description: Jumps to the calculated address
-    'Operation: PC = nPC; nPC = (PC & 0xf0000000) | (target << 2);
-    'Syntax:                                             j(target)
-    'Encoding: 0000 10ii iiii iiii iiii iiii iiii iiii*/
-    '      break;
-
-    '    case 0x0C:
-    '      pspDebugScreenPuts("jal      ");
-    '      mipsImm(a_opcode, 1, 0);
-    '/*JAL -- Jump and link
-    'Description: Jumps to the calculated address and stores the return address in $31
-    'Operation: $31 = PC + 8 (or nPC + 4); PC = nPC; nPC = (PC & 0xf0000000) | (target << 2);
-    'Syntax:                                             jal(target)
-    'Encoding: 0000 11ii iiii iiii iiii iiii iiii iiii*/
-    '      break;
-
-    '    case 0x10:
-    '      pspDebugScreenPuts("beq      ");
-    '      mipsRegister(a_opcode, S, 1);
-    '      mipsRegister(a_opcode, T, 1);
-    '      //mipsDec(a_opcode, 0, 0);
-    '/*BEQ -- Branch on equal
-    'Description: Branches if the two registers are equal
-    'Operation: if $s == $t advance_pc (offset << 2)); else advance_pc (4);
-    'Syntax: beq $s, $t, offset
-    'Encoding: 0001 00ss ssst tttt iiii iiii iiii iiii*/
-    '      break;
-
-    '    case 0x14:
-    '      pspDebugScreenPuts("bne      ");
-    '      mipsRegister(a_opcode, S, 1);
-    '      mipsRegister(a_opcode, T, 1);
-    '      //mipsDec(a_opcode, 0, 0);
-    '/*BNE -- Branch on not equal
-    'Description: Branches if the two registers are not equal
-    'Operation: if $s != $t advance_pc (offset << 2)); else advance_pc (4);
-    'Syntax: bne $s, $t, offset
-    'Encoding: 0001 01ss ssst tttt iiii iiii iiii iiii*/
-    '      break;
-
-    '    case 0x18:
-    '      pspDebugScreenPuts("blez     ");  
-    '      mipsRegister(a_opcode, S, 1);
-    '      //mipsDec(a_opcode, 0, 0);
-    '/*BLEZ -- Branch on less than or equal to zero
-    'Description: Branches if the register is less than or equal to zero
-    'Operation: if $s <= 0 advance_pc (offset << 2)); else advance_pc (4);
-    'Syntax: blez $s, offset
-    'Encoding: 0001 10ss sss0 0000 iiii iiii iiii iiii*/
-    '      break;
-
-    '    case 0x1C:
-    '      pspDebugScreenPuts("bgtz     ");
-    '      mipsRegister(a_opcode, S, 1);
-    '      //mipsDec(a_opcode, 0, 0);
-    '/*BGTZ -- Branch on greater than zero
-    'Description: Branches if the register is greater than zero
-    'Operation: if $s > 0 advance_pc (offset << 2)); else advance_pc (4);
-    'Syntax: bgtz $s, offset
-    'Encoding: 0001 11ss sss0 0000 iiii iiii iiii iiii*/
-    '      break;
 End Class
