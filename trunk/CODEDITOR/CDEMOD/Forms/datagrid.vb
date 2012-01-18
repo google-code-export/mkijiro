@@ -260,7 +260,7 @@ Public Class datagrid
                     End If
                 ElseIf check.Contains("ASM") Then
                     Dim str As String = e.FormattedValue.ToString()
-                    DirectCast(DataGridView1.Columns(3), DataGridViewTextBoxColumn).MaxInputLength = 20
+                    DirectCast(DataGridView1.Columns(3), DataGridViewTextBoxColumn).MaxInputLength = 40
                     'Label1.Text = assembler(str)
                 Else
                         dgv.CancelEdit()
@@ -379,7 +379,7 @@ Public Class datagrid
                     DirectCast(DataGridView1.Columns(3), DataGridViewTextBoxColumn).MaxInputLength = 6
                 ElseIf check = "ASM" Then
                     e.KeyChar = Char.ToLower(e.KeyChar)
-                    DirectCast(DataGridView1.Columns(3), DataGridViewTextBoxColumn).MaxInputLength = 20
+                    DirectCast(DataGridView1.Columns(3), DataGridViewTextBoxColumn).MaxInputLength = 40
                 Else
                     If (e.KeyChar < "0"c Or e.KeyChar > "9"c) And e.KeyChar <> "."c And e.KeyChar <> "-"c And e.KeyChar <> "+"c And e.KeyChar <> vbBack Then
                         e.Handled = True
@@ -497,46 +497,49 @@ Public Class datagrid
 
             ElseIf check = "ASM" Then
                 If m.PSX = False Then
-                    DataGridView1.Rows(d).Cells(add_val).Value = assembler(str, DataGridView1.Rows(d).Cells(0).Value.ToString)
-                End If
-            Else 'BINARY32/16
-                Dim r As New System.Text.RegularExpressions.Regex( _
-                 "^[-|+]?\d+\.?\d*", _
-                            System.Text.RegularExpressions.RegexOptions.IgnoreCase)
-                Dim v As System.Text.RegularExpressions.Match = r.Match(str)
-                If v.Success AndAlso v.Value.Length = str.Length Then
-                    Dim f As Single = Convert.ToSingle(v.Value)
-                    Dim bit() As Byte = BitConverter.GetBytes(f)
-                    Dim sb As New System.Text.StringBuilder()
-                    Dim i As Integer = 3
-                    While i >= 0
-                        sb.Append(Convert.ToString(bit(i), 16).PadLeft(2, "0"c))
-                        i -= 1
-                    End While
-                    Dim half As String = ""
-                    If check = "BINARY32" Then
-                        DataGridView1.Rows(d).Cells(add_val).Value = "0x" + sb.ToString.ToUpper
-                    ElseIf check = "BIN32>>16" Then
-                        If m.PSX = True AndAlso g_value.Checked = True Then
-                            DataGridView1.Rows(d).Cells(add_val).Value = sb.ToString.Substring(0, 4).ToUpper
-                        Else
-                            half = DataGridView1.Rows(d).Cells(add_val).Value.ToString.Substring(0, 6)
-                            DataGridView1.Rows(d).Cells(add_val).Value = half & sb.ToString.Substring(0, 4).ToUpper
-                        End If
-                    ElseIf check = "BINARY16" Then
-                        Dim hf As String = sb.ToString
-                        hf = converthalffloat(hf)
-                        If m.PSX = True AndAlso g_value.Checked = True Then
-                            DataGridView1.Rows(d).Cells(add_val).Value = hf
-                        Else
-                            half = DataGridView1.Rows(d).Cells(add_val).Value.ToString.Substring(0, 6)
-                            DataGridView1.Rows(d).Cells(add_val).Value = half & hf
-                        End If
+                    Dim asm As String = assembler(str, DataGridView1.Rows(d).Cells(0).Value.ToString)
+                    If asm <> "" Then
+                        DataGridView1.Rows(d).Cells(add_val).Value = asm
                     End If
-
-                Else
-                    Label1.Text = "不正な値です"
                 End If
+                Else 'BINARY32/16
+                    Dim r As New System.Text.RegularExpressions.Regex( _
+                     "^[-|+]?\d+\.?\d*", _
+                                System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+                    Dim v As System.Text.RegularExpressions.Match = r.Match(str)
+                    If v.Success AndAlso v.Value.Length = str.Length Then
+                        Dim f As Single = Convert.ToSingle(v.Value)
+                        Dim bit() As Byte = BitConverter.GetBytes(f)
+                        Dim sb As New System.Text.StringBuilder()
+                        Dim i As Integer = 3
+                        While i >= 0
+                            sb.Append(Convert.ToString(bit(i), 16).PadLeft(2, "0"c))
+                            i -= 1
+                        End While
+                        Dim half As String = ""
+                        If check = "BINARY32" Then
+                            DataGridView1.Rows(d).Cells(add_val).Value = "0x" + sb.ToString.ToUpper
+                        ElseIf check = "BIN32>>16" Then
+                            If m.PSX = True AndAlso g_value.Checked = True Then
+                                DataGridView1.Rows(d).Cells(add_val).Value = sb.ToString.Substring(0, 4).ToUpper
+                            Else
+                                half = DataGridView1.Rows(d).Cells(add_val).Value.ToString.Substring(0, 6)
+                                DataGridView1.Rows(d).Cells(add_val).Value = half & sb.ToString.Substring(0, 4).ToUpper
+                            End If
+                        ElseIf check = "BINARY16" Then
+                            Dim hf As String = sb.ToString
+                            hf = converthalffloat(hf)
+                            If m.PSX = True AndAlso g_value.Checked = True Then
+                                DataGridView1.Rows(d).Cells(add_val).Value = hf
+                            Else
+                                half = DataGridView1.Rows(d).Cells(add_val).Value.ToString.Substring(0, 6)
+                                DataGridView1.Rows(d).Cells(add_val).Value = half & hf
+                            End If
+                        End If
+
+                    Else
+                        Label1.Text = "不正な値です"
+                    End If
                 End If
         End If
         Dim gridtx As String = Nothing
@@ -607,9 +610,6 @@ Public Class datagrid
             If DataGridView1.Rows(d).Cells(2).Value Is Nothing Then
                 DataGridView1.Rows(d).Cells(2).Value = "DEC"
             End If
-            'If DataGridView1.Rows(d).Cells(2).Value.ToString = "ASM" Then
-            '    Label1.Text = assembler(DataGridView1.Rows(d).Cells(3).Value.ToString, DataGridView1.Rows(d).Cells(0).Value.ToString)
-            'End If
         End If
     End Sub
 
@@ -827,6 +827,13 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                     st.Append("='")
                     st.Append(row.Cells(2).Value.ToString)
                     st.Append("'>")
+                    st.Append("<DGVAL")
+                    st.Append((r.Index + 1).ToString.PadLeft(3, "0"c))
+                    st.Append("='")
+                    If Not row.Cells(3).Value Is Nothing Then
+                        st.Append(row.Cells(3).Value.ToString)
+                    End If
+                    st.Append("'>")
                     st.Append(vbCrLf)
                     st.Append(edmode)
                     st.Append(row.Cells(0).Value.ToString)
@@ -873,7 +880,6 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 
     End Sub
 
-
     Private Sub コピーToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles copy.Click
 
         Dim d As Integer = DataGridView1.CurrentCell.RowIndex
@@ -905,6 +911,13 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                     st.Append("='")
                     st.Append(row.Cells(2).Value.ToString)
                     st.Append("'>")
+                    st.Append("<DGVAL")
+                    st.Append((r.Index + 1).ToString.PadLeft(3, "0"c))
+                    st.Append("='")
+                    If Not row.Cells(3).Value Is Nothing Then
+                        st.Append(row.Cells(3).Value.ToString)
+                    End If
+                    st.Append("'>")
                     st.Append(vbCrLf)
                     st.Append(edmode)
                     st.Append(row.Cells(0).Value.ToString)
@@ -933,7 +946,6 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         End If
     End Sub
 
-
     Private Sub paste_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles paste.Click
 
         Dim m As MERGE
@@ -948,6 +960,8 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         Dim line As System.Text.RegularExpressions.Match = dg.Match(Clipboard.GetText)
         Dim dm As New System.Text.RegularExpressions.Regex("<DGMODE[0-9]{3}='.*?'>", RegularExpressions.RegexOptions.ECMAScript)
         Dim dmm As System.Text.RegularExpressions.Match = dm.Match(Clipboard.GetText)
+        Dim dv As New System.Text.RegularExpressions.Regex("<DGVAL[0-9]{3}='.*?'>", RegularExpressions.RegexOptions.ECMAScript)
+        Dim dvm As System.Text.RegularExpressions.Match = dv.Match(Clipboard.GetText)
         If d < DataGridView1.RowCount AndAlso (hex.Success Or (m.PSX = True AndAlso phex.Success AndAlso hex.Success = True)) Then
             While hex.Success
                 DataGridView1.Rows.Insert(d + i)
@@ -975,8 +989,17 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                 If k <= z Then
                     DataGridView1.Rows(d + i).Cells(4).Value = line.Value.Substring(k, z - k)
                 End If
+
+                k = dvm.Value.IndexOf("'") + 1
+                z = dvm.Value.LastIndexOf("'")
+                If k <= z Then
+                    DataGridView1.Rows(d + i).Cells(3).Value = dvm.Value.Substring(k, z - k)
+                End If
+
+
                 line = line.NextMatch
                 dmm = dmm.NextMatch
+                dvm = dvm.NextMatch
                 i += 1
             End While
             DataGridView1.Rows(d).Selected = True
@@ -1100,315 +1123,649 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         Try
             Dim hex As Integer = 0
             Dim hex2 As Integer = Convert.ToInt32(str2, 16) And &H9FFFFFFF
-            Dim asm As String = str
+            Dim asm As String = ""
             Dim ss As String() = str.Split(CChar(","))
+            Dim mips As String = ""
 
-            Dim sll As New Regex("^sll\x20+")
-            Dim sllm As Match = sll.Match(str)
+            Dim shead As New Regex("^[a-z0-9\.]+\x20+")
+            Dim sheadm As Match = shead.Match(str)
 
-            Dim srl As New Regex("^srl\x20+")
-            Dim srlm As Match = srl.Match(str)
+            If sheadm.Success Then
+                mips = sheadm.Value.Replace(" ", "")
+                ss(0) = ss(0).Replace(sheadm.Value, "")
+                If mips = "nop" Then
+                ElseIf mips = "syscall" Then
+                    hex = 12
+                ElseIf str = "break" Then
+                    hex = 13
+                ElseIf mips = "sync" Then
+                    hex = 15
+                ElseIf mips = "sll" Then
+                    hex = reg_boolean3(str, hex, 0)
+                    hex = valdec_boolean_para(str, hex, 3)
+                ElseIf mips = "rotr" Then
+                    hex = hex Or &H200002
+                    hex = reg_boolean3(str, hex, 0)
+                    hex = valdec_boolean_para(str, hex, 3)
+                ElseIf mips = "rotv" Then
+                    hex = hex Or &H46
+                    hex = reg_boolean3(str, hex, 0)
+                ElseIf mips = "srl" Then
+                    hex = hex Or &H2
+                    hex = reg_boolean3(str, hex, 0)
+                    hex = valdec_boolean_para(str, hex, 3)
+                ElseIf mips = "sra" Then
+                    hex = hex Or &H3
+                    hex = reg_boolean3(str, hex, 0)
+                    hex = valdec_boolean_para(str, hex, 3)
+                ElseIf mips = "sllv" Then
+                    hex = hex Or &H4
+                    hex = reg_boolean3(str, hex, 0)
+                ElseIf mips = "srlv" Then
+                    hex = hex Or &H6
+                    hex = reg_boolean3(str, hex, 0)
+                ElseIf mips = "srav" Then
+                    hex = hex Or &H7
+                    hex = reg_boolean3(str, hex, 0)
+                ElseIf mips = "jalr" Then
+                    hex = hex Or &H9
+                    If ss.Length = 1 Then
+                        Array.Resize(ss, 2)
+                        ss(1) = ss(0)
+                        ss(0) = "ra"
+                    End If
+                    hex = reg_boolean_para(ss(0), hex, 0)
+                    hex = reg_boolean_para(ss(1), hex, 2)
+                ElseIf mips = "movz" Then
+                    hex = hex Or &HA
+                    hex = reg_boolean_para(ss(0), hex, 2)
+                    hex = reg_boolean_para(ss(1), hex, 0)
+                    hex = reg_boolean_para(ss(2), hex, 1)
+                ElseIf mips = "movn" Then
+                    hex = hex Or &HB
+                    hex = reg_boolean_para(ss(0), hex, 2)
+                    hex = reg_boolean_para(ss(1), hex, 0)
+                    hex = reg_boolean_para(ss(2), hex, 1)
+                ElseIf mips = "mfhi" Then
+                    hex = hex Or &H10
+                    hex = reg_boolean_para(str, hex, 2)
+                ElseIf mips = "mthi" Then
+                    hex = hex Or &H11
+                    hex = reg_boolean_para(str, hex, 0)
+                ElseIf mips = "mflo" Then
+                    hex = hex Or &H12
+                    hex = reg_boolean_para(str, hex, 2)
+                ElseIf mips = "mtlo" Then
+                    hex = hex Or &H13
+                    hex = reg_boolean_para(str, hex, 0)
+                ElseIf mips = "clz" Then
+                    hex = hex Or &H16
+                    hex = reg_boolean2(str, hex, 0)
+                ElseIf mips = "clo" Then
+                    hex = hex Or &H17
+                    hex = reg_boolean2(str, hex, 0)
+                ElseIf mips = "add" Then
+                    hex = hex Or &H20
+                    hex = reg_boolean_para(ss(0), hex, 2)
+                    hex = reg_boolean_para(ss(1), hex, 0)
+                    hex = reg_boolean_para(ss(2), hex, 1)
+                ElseIf mips = "addu" Then
+                    hex = hex Or &H21
+                    hex = reg_boolean_para(ss(0), hex, 2)
+                    hex = reg_boolean_para(ss(1), hex, 0)
+                    hex = reg_boolean_para(ss(2), hex, 1)
+                ElseIf mips = "mov" Then
+                    hex = hex Or &H21
+                    hex = reg_boolean_para(ss(0), hex, 2)
+                    hex = reg_boolean_para(ss(1), hex, 1)
+                ElseIf mips = "sub" Then
+                    hex = hex Or &H22
+                    hex = reg_boolean_para(ss(0), hex, 2)
+                    hex = reg_boolean_para(ss(1), hex, 0)
+                    hex = reg_boolean_para(ss(2), hex, 1)
+                ElseIf mips = "neg" Then
+                    hex = hex Or &H22
+                    hex = reg_boolean_para(ss(0), hex, 2)
+                    hex = reg_boolean_para(ss(1), hex, 1)
+                ElseIf mips = "subu" Then
+                    hex = hex Or &H23
+                    hex = reg_boolean_para(ss(0), hex, 2)
+                    hex = reg_boolean_para(ss(1), hex, 0)
+                    hex = reg_boolean_para(ss(2), hex, 1)
+                ElseIf mips = "negu" Then
+                    hex = hex Or &H23
+                    hex = reg_boolean_para(ss(0), hex, 2)
+                    hex = reg_boolean_para(ss(1), hex, 1)
+                ElseIf mips = "or" Then
+                    hex = hex Or &H24
+                    hex = reg_boolean_para(ss(0), hex, 2)
+                    hex = reg_boolean_para(ss(1), hex, 0)
+                    hex = reg_boolean_para(ss(2), hex, 1)
+                ElseIf mips = "and" Then
+                    hex = hex Or &H25
+                    hex = reg_boolean_para(ss(0), hex, 2)
+                    hex = reg_boolean_para(ss(1), hex, 0)
+                    hex = reg_boolean_para(ss(2), hex, 1)
+                ElseIf mips = "xor" Then
+                    hex = hex Or &H26
+                    hex = reg_boolean_para(ss(0), hex, 2)
+                    hex = reg_boolean_para(ss(1), hex, 0)
+                    hex = reg_boolean_para(ss(2), hex, 1)
+                ElseIf mips = "nor" Then
+                    hex = hex Or &H27
+                    hex = reg_boolean_para(ss(0), hex, 2)
+                    hex = reg_boolean_para(ss(1), hex, 0)
+                    hex = reg_boolean_para(ss(2), hex, 1)
+                ElseIf mips = "not" Then
+                    hex = hex Or &H27
+                    hex = reg_boolean_para(ss(0), hex, 2)
+                    hex = reg_boolean_para(ss(1), hex, 0)
+                ElseIf mips = "slt" Then
+                    hex = hex Or &H2A
+                    hex = reg_boolean_para(ss(0), hex, 2)
+                    hex = reg_boolean_para(ss(1), hex, 0)
+                    hex = reg_boolean_para(ss(2), hex, 1)
+                ElseIf mips = "sltu" Then
+                    hex = hex Or &H2B
+                    hex = reg_boolean_para(ss(0), hex, 2)
+                    hex = reg_boolean_para(ss(1), hex, 0)
+                    hex = reg_boolean_para(ss(2), hex, 1)
+                ElseIf mips = "max" Then
+                    hex = hex Or &H2C
+                    hex = reg_boolean_para(ss(0), hex, 2)
+                    hex = reg_boolean_para(ss(1), hex, 0)
+                    hex = reg_boolean_para(ss(2), hex, 1)
+                ElseIf mips = "min" Then
+                    hex = hex Or &H2D
+                    hex = reg_boolean_para(ss(0), hex, 2)
+                    hex = reg_boolean_para(ss(1), hex, 0)
+                    hex = reg_boolean_para(ss(2), hex, 1)
+                ElseIf mips = "j" Then
+                    hex = hex Or &H8000000
+                    hex = offset_boolean(str, hex)
+                ElseIf mips = "jal" Then
+                    hex = hex Or &HC000000
+                    hex = offset_boolean(str, hex)
+                ElseIf mips = "jr" Then
+                    hex = hex Or &H8
+                    hex = reg_boolean_para(ss(0), hex, 0)
+                ElseIf mips = "mult" Then
+                    hex = hex Or &H18
+                    hex = reg_boolean_para(ss(0), hex, 0)
+                    hex = reg_boolean_para(ss(1), hex, 1)
+                ElseIf mips = "multu" Then
+                    hex = hex Or &H19
+                    hex = reg_boolean_para(ss(0), hex, 0)
+                    hex = reg_boolean_para(ss(1), hex, 1)
+                ElseIf mips = "div" Then
+                    hex = hex Or &H1A
+                    hex = reg_boolean_para(ss(0), hex, 0)
+                    hex = reg_boolean_para(ss(1), hex, 1)
+                ElseIf mips = "divu" Then
+                    hex = hex Or &H1B
+                    hex = reg_boolean_para(ss(0), hex, 0)
+                    hex = reg_boolean_para(ss(1), hex, 1)
+                ElseIf mips = "madd" Then
+                    hex = hex Or &H1C
+                    hex = reg_boolean_para(ss(0), hex, 0)
+                    hex = reg_boolean_para(ss(1), hex, 1)
+                ElseIf mips = "maddu" Then
+                    hex = hex Or &H1D
+                    hex = reg_boolean_para(ss(0), hex, 0)
+                    hex = reg_boolean_para(ss(1), hex, 1)
+                ElseIf mips = "msub" Then
+                    hex = hex Or &H2E
+                    hex = reg_boolean_para(ss(0), hex, 0)
+                    hex = reg_boolean_para(ss(1), hex, 1)
+                ElseIf mips = "msubu" Then
+                    hex = hex Or &H2F
+                    hex = reg_boolean_para(ss(0), hex, 0)
+                    hex = reg_boolean_para(ss(1), hex, 1)
+                ElseIf mips = "bltz" Then
+                    hex = hex Or &H4000000
+                    hex = reg_boolean_para(ss(0), hex, 0)
+                    hex = offset_boolean2(str, hex, hex2)
+                ElseIf mips = "bgez" Then
+                    hex = hex Or &H4010000
+                    hex = reg_boolean_para(ss(0), hex, 0)
+                    hex = offset_boolean2(str, hex, hex2)
+                ElseIf mips = "bltzl" Then
+                    hex = hex Or &H4020000
+                    hex = reg_boolean_para(ss(0), hex, 0)
+                    hex = offset_boolean2(str, hex, hex2)
+                ElseIf mips = "bgezl" Then
+                    hex = hex Or &H4030000
+                    hex = reg_boolean_para(ss(0), hex, 0)
+                    hex = offset_boolean2(str, hex, hex2)
+                ElseIf mips = "bltzal" Then
+                    hex = hex Or &H4100000
+                    hex = reg_boolean_para(ss(0), hex, 0)
+                    hex = offset_boolean2(str, hex, hex2)
+                ElseIf mips = "bgezal" Then
+                    hex = hex Or &H4110000
+                    hex = reg_boolean_para(ss(0), hex, 0)
+                    hex = offset_boolean2(str, hex, hex2)
+                ElseIf mips = "bltzall" Then
+                    hex = hex Or &H4120000
+                    hex = reg_boolean_para(ss(0), hex, 0)
+                    hex = offset_boolean2(str, hex, hex2)
+                ElseIf mips = "bgezall" Then
+                    hex = hex Or &H4130000
+                    hex = reg_boolean_para(ss(0), hex, 0)
+                    hex = offset_boolean2(str, hex, hex2)
+                ElseIf mips = "mtsab" Then
+                    hex = hex Or &H4180000
+                    hex = reg_boolean_para(ss(0), hex, 0)
+                    hex = valhex_boolean(ss(1), hex)
+                ElseIf mips = "mtsah" Then
+                    hex = hex Or &H4190000
+                    hex = reg_boolean_para(ss(0), hex, 0)
+                    hex = valhex_boolean(ss(1), hex)
 
-            Dim sra As New Regex("^sra\x20+")
-            Dim sram As Match = sra.Match(str)
+                    '0x10 branch
+                ElseIf mips = "beq" Then
+                    hex = hex Or &H10000000
+                    hex = reg_boolean(str, hex, 0)
+                    hex = offset_boolean2(str, hex, hex2)
+                ElseIf mips = "bne" Then
+                    hex = hex Or &H14000000
+                    hex = reg_boolean(str, hex, 0)
+                    hex = offset_boolean2(str, hex, hex2)
+                ElseIf mips = "blez" Then
+                    hex = hex Or &H18000000
+                    hex = reg_boolean_para(str, hex, 0)
+                    hex = offset_boolean2(str, hex, hex2)
+                ElseIf mips = "bgtz" Then
+                    hex = hex Or &H1C000000
+                    hex = reg_boolean_para(str, hex, 0)
+                    hex = offset_boolean2(str, hex, hex2)
 
-            Dim sllv As New Regex("^sllv\x20+")
-            Dim sllvm As Match = sllv.Match(str)
+                    '0x20 add/boolean
+                ElseIf mips = "addi" Then
+                    hex = hex Or &H20000000
+                    hex = valdec_boolean_para(str, hex, 3)
+                ElseIf mips = "addiu" Then
+                    hex = hex Or &H24000000
+                    hex = reg_boolean(str, hex, 0)
+                    hex = valhex_boolean(str, hex)
+                ElseIf mips = "li" Then
+                    hex = hex Or &H24000000
+                    hex = reg_boolean_para(ss(0), hex, 1)
+                    hex = valhex_boolean(str, hex)
+                ElseIf mips = "slti" Then
+                    hex = hex Or &H28000000
+                    hex = reg_boolean(str, hex, 0)
+                    hex = valhex_boolean(str, hex)
+                ElseIf mips = "sltiu" Then
+                    hex = hex Or &H2C000000
+                    hex = reg_boolean(str, hex, 0)
+                    hex = valhex_boolean(str, hex)
+                ElseIf mips = "andi" Then
+                    hex = hex Or &H30000000
+                    hex = reg_boolean(str, hex, 0)
+                    hex = valhex_boolean(str, hex)
+                ElseIf mips = "ori" Then
+                    hex = hex Or &H34000000
+                    hex = reg_boolean(str, hex, 0)
+                    hex = valhex_boolean(str, hex)
+                ElseIf mips = "xori" Then
+                    hex = hex Or &H38000000
+                    hex = reg_boolean(str, hex, 0)
+                    hex = valhex_boolean(str, hex)
+                ElseIf mips = "lui" Then
+                    hex = hex Or &H3C000000
+                    hex = reg_boolean_para(str, hex, 1)
+                    hex = valhex_boolean(str, hex)
 
-            Dim srlv As New Regex("^srlv\x20+")
-            Dim srlvm As Match = srlv.Match(str)
+                    '0x40 FPU
+                ElseIf mips = "mfc0" Then
+                    hex = hex Or &H40000000
+                    hex = reg_boolean_para(ss(0), hex, 1)
+                    hex = hex Or (cop_sel(ss(1), "COP0") << 11)
+                ElseIf mips = "mtc0" Then
+                    hex = hex Or &H40800000
+                    hex = reg_boolean_para(ss(0), hex, 1)
+                    hex = hex Or (cop_sel(ss(1), "COP0") << 11)
+                ElseIf mips = "cfc0" Then
+                    hex = hex Or &H40400000
+                    hex = reg_boolean_para(ss(0), hex, 1)
+                    hex = hex Or (cop_sel(ss(1), "") << 11)
+                ElseIf mips = "ctc0" Then
+                    hex = hex Or &H40C00000
+                    hex = reg_boolean_para(ss(0), hex, 1)
+                    hex = hex Or (cop_sel(ss(1), "") << 11)
+                ElseIf mips = "eret" Then
+                    hex = &H42000018
+                ElseIf mips = "cfc1" Then
+                    hex = hex Or &H40400000
+                    hex = reg_boolean_para(ss(0), hex, 1)
+                    hex = hex Or (cop_sel(ss(1), "") << 11)
+                ElseIf mips = "ctc1" Then
+                    hex = hex Or &H40C00000
+                    hex = reg_boolean_para(ss(0), hex, 1)
+                    hex = hex Or (cop_sel(ss(1), "") << 11)
+                ElseIf mips = "mfc1" Then
+                    hex = hex Or &H40000000
+                    hex = reg_boolean_para(ss(0), hex, 1)
+                    hex = float_sel(ss(1), hex, 2)
+                ElseIf mips = "mtc1" Then
+                    hex = hex Or &H40800000
+                    hex = reg_boolean_para(ss(0), hex, 1)
+                    hex = float_sel(ss(1), hex, 2)
+                ElseIf mips = "bc1f" Then
+                    hex = hex Or &H45000000
+                    hex = offset_boolean2(str, hex, hex2)
+                ElseIf mips = "bc1t" Then
+                    hex = hex Or &H45010000
+                    hex = offset_boolean2(str, hex, hex2)
+                ElseIf mips = "bc1tl" Then
+                    hex = hex Or &H45020000
+                    hex = offset_boolean2(str, hex, hex2)
+                ElseIf mips = "bc1tl" Then
+                    hex = hex Or &H45030000
+                    hex = offset_boolean2(str, hex, hex2)
+                ElseIf mips = "add.s" Then
+                    hex = hex Or &H46000000
+                    hex = float_sel(ss(0), hex, 3)
+                    hex = float_sel(ss(1), hex, 2)
+                    hex = float_sel(ss(2), hex, 1)
+                ElseIf mips = "sub.s" Then
+                    hex = hex Or &H46000001
+                    hex = float_sel(ss(0), hex, 3)
+                    hex = float_sel(ss(1), hex, 2)
+                    hex = float_sel(ss(2), hex, 1)
+                ElseIf mips = "mul.s" Then
+                    hex = hex Or &H46000002
+                    hex = float_sel(ss(0), hex, 3)
+                    hex = float_sel(ss(1), hex, 2)
+                    hex = float_sel(ss(2), hex, 1)
+                ElseIf mips = "div.s" Then
+                    hex = hex Or &H46000003
+                    hex = float_sel(ss(0), hex, 3)
+                    hex = float_sel(ss(1), hex, 2)
+                    hex = float_sel(ss(2), hex, 1)
+                ElseIf mips = "sqrt.s" Then
+                    hex = hex Or &H46000004
+                    hex = float_sel(ss(0), hex, 3)
+                    hex = float_sel(ss(1), hex, 2)
+                ElseIf mips = "abs.s" Then
+                    hex = hex Or &H46000005
+                    hex = float_sel(ss(0), hex, 3)
+                    hex = float_sel(ss(1), hex, 2)
+                ElseIf mips = "mov.s" Then
+                    hex = hex Or &H46000006
+                    hex = float_sel(ss(0), hex, 3)
+                    hex = float_sel(ss(1), hex, 2)
+                ElseIf mips = "neg.s" Then
+                    hex = hex Or &H46000007
+                    hex = float_sel(ss(0), hex, 3)
+                    hex = float_sel(ss(1), hex, 2)
+                ElseIf mips = "round.w.s" Then
+                    hex = hex Or &H4600000C
+                    hex = float_sel(ss(0), hex, 3)
+                    hex = float_sel(ss(1), hex, 2)
+                ElseIf mips = "trunc.w.s" Then
+                    hex = hex Or &H4600000D
+                    hex = float_sel(ss(0), hex, 3)
+                    hex = float_sel(ss(1), hex, 2)
+                ElseIf mips = "ceil.w.s" Then
+                    hex = hex Or &H4600000E
+                    hex = float_sel(ss(0), hex, 3)
+                    hex = float_sel(ss(1), hex, 2)
+                ElseIf mips = "floor.w.s" Then
+                    hex = hex Or &H4600000F
+                    hex = float_sel(ss(0), hex, 3)
+                    hex = float_sel(ss(1), hex, 2)
+                ElseIf mips = "cvt.s.w" Then
+                    hex = hex Or &H46800020
+                    hex = float_sel(ss(0), hex, 3)
+                    hex = float_sel(ss(1), hex, 2)
+                ElseIf mips = "cvt.w.s" Then
+                    hex = hex Or &H46000024
+                    hex = float_sel(ss(0), hex, 3)
+                    hex = float_sel(ss(1), hex, 2)
+                ElseIf mips = "c.f.s" Then
+                    hex = hex Or &H46000030
+                    hex = float_sel(ss(0), hex, 2)
+                    hex = float_sel(ss(1), hex, 1)
+                ElseIf mips = "c.un.s" Then
+                    hex = hex Or &H46000031
+                    hex = float_sel(ss(0), hex, 2)
+                    hex = float_sel(ss(1), hex, 1)
+                ElseIf mips = "c.eq.s" Then
+                    hex = hex Or &H46000032
+                    hex = float_sel(ss(0), hex, 2)
+                    hex = float_sel(ss(1), hex, 1)
+                ElseIf mips = "c.ueq.s" Then
+                    hex = hex Or &H46000033
+                    hex = float_sel(ss(0), hex, 2)
+                    hex = float_sel(ss(1), hex, 1)
+                ElseIf mips = "c.olt.s" Then
+                    hex = hex Or &H46000034
+                    hex = float_sel(ss(0), hex, 2)
+                    hex = float_sel(ss(1), hex, 1)
+                ElseIf mips = "c.ult.s" Then
+                    hex = hex Or &H46000035
+                    hex = float_sel(ss(0), hex, 2)
+                    hex = float_sel(ss(1), hex, 1)
+                ElseIf mips = "c.ole.s" Then
+                    hex = hex Or &H46000036
+                    hex = float_sel(ss(0), hex, 2)
+                    hex = float_sel(ss(1), hex, 1)
+                ElseIf mips = "c.ule.s" Then
+                    hex = hex Or &H46000037
+                    hex = float_sel(ss(0), hex, 2)
+                    hex = float_sel(ss(1), hex, 1)
+                ElseIf mips = "c.sf.s" Then
+                    hex = hex Or &H46000038
+                    hex = float_sel(ss(0), hex, 2)
+                    hex = float_sel(ss(1), hex, 1)
+                ElseIf mips = "c.ngle.s" Then
+                    hex = hex Or &H46000039
+                    hex = float_sel(ss(0), hex, 2)
+                    hex = float_sel(ss(1), hex, 1)
+                ElseIf mips = "c.seq.s" Then
+                    hex = hex Or &H4600003A
+                    hex = float_sel(ss(0), hex, 2)
+                    hex = float_sel(ss(1), hex, 1)
+                ElseIf mips = "c.ngl.s" Then
+                    hex = hex Or &H4600003B
+                    hex = float_sel(ss(0), hex, 2)
+                    hex = float_sel(ss(1), hex, 1)
+                ElseIf mips = "c.lt.s" Then
+                    hex = hex Or &H4600003C
+                    hex = float_sel(ss(0), hex, 2)
+                    hex = float_sel(ss(1), hex, 1)
+                ElseIf mips = "c.nge.s" Then
+                    hex = hex Or &H4600003D
+                    hex = float_sel(ss(0), hex, 2)
+                    hex = float_sel(ss(1), hex, 1)
+                ElseIf mips = "c.le.s" Then
+                    hex = hex Or &H4600003E
+                    hex = float_sel(ss(0), hex, 2)
+                    hex = float_sel(ss(1), hex, 1)
+                ElseIf mips = "c.ngl.s" Then
+                    hex = hex Or &H4600003F
+                    hex = float_sel(ss(0), hex, 2)
+                    hex = float_sel(ss(1), hex, 1)
 
-            Dim srav As New Regex("^srav\x20+")
-            Dim sravm As Match = srav.Match(str)
+                    '0x50
+                ElseIf mips = "beql" Then
+                    hex = hex Or &H50000000
+                    hex = reg_boolean(str, hex, 0)
+                    hex = offset_boolean2(str, hex, hex2)
+                ElseIf mips = "bnel" Then
+                    hex = hex Or &H54000000
+                    hex = reg_boolean(str, hex, 0)
+                    hex = offset_boolean2(str, hex, hex2)
+                ElseIf mips = "blezl" Then
+                    hex = hex Or &H58000000
+                    hex = reg_boolean_para(str, hex, 0)
+                    hex = offset_boolean2(str, hex, hex2)
+                ElseIf mips = "bgtzl" Then
+                    hex = hex Or &H5C000000
+                    hex = reg_boolean_para(str, hex, 0)
+                    hex = offset_boolean2(str, hex, hex2)
 
-            Dim jalr As New Regex("^jalr\x20+")
-            Dim jalrm As Match = jalr.Match(str)
+                    '     case 0x70:
+                    '        if(a_opcode >> 24 == 0x70){
+                    '                switch(a_opcode & 0xE007FF){
+                    '                case 0x24:
+                    '                pspDebugScreenPuts("mfic     ");
+                    '                mipsRegister(a_opcode, T, 1);
+                    '                mipsNibble(a_opcode, 2, 0);
+                    '                break;
 
-            Dim movz As New Regex("^movz\x20+")
-            Dim movzm As Match = movz.Match(str)
+                    '                case 0x26:
+                    '                pspDebugScreenPuts("mtic     ");
+                    '                mipsRegister(a_opcode, T, 1);
+                    '                mipsNibble(a_opcode, 2, 0);
+                    '                break;
 
-            Dim movn As New Regex("^movn\x20+")
-            Dim movnm As Match = movn.Match(str)
+                    '                case 0x3D:
+                    '                pspDebugScreenPuts("mfdr     ");
+                    '                mipsRegister(a_opcode, T, 1);
+                    '                DrRegister(a_opcode,2,0);
+                    '                break;
 
-            Dim mfhi As New Regex("^mfhi\x20+")
-            Dim mfhim As Match = mfhi.Match(str)
+                    '                case 0x80003D:
+                    '                pspDebugScreenPuts("mtdr     ");
+                    '                mipsRegister(a_opcode, T, 1);
+                    '                DrRegister(a_opcode,2,0);
+                    '                break; 
+                    '//"mfdr",              0x7000003D, 0xFFE007FF, "%t, %r"},
+                    '//"mtdr",              0x7080003D, 0xFFE007FF, "%t, %r"},
+                    '//"mfic",              0x70000024, 0xFFE007FF, "%t, %p"},
+                    '//"mtic",              0x70000026, 0xFFE007FF, "%t, %p"},
+                    '                }
+                ElseIf mips = "dbreak" Then
+                    hex = &H7000003F
+                ElseIf mips = "dret" Then
+                    hex = &H7000003E
+                ElseIf mips = "haltl" Then
+                    hex = &H70000000
+                ElseIf mips = "seb" Then
+                    hex = &H7C000420
+                    hex = reg_boolean_para(ss(0), hex, 2)
+                    hex = reg_boolean_para(ss(1), hex, 1)
+                ElseIf mips = "seh" Then
+                    hex = &H7C000620
+                    hex = reg_boolean_para(ss(0), hex, 2)
+                    hex = reg_boolean_para(ss(1), hex, 1)
+                ElseIf mips = "wsbbn" Then
+                    hex = &H7C0000A0
+                    hex = reg_boolean_para(ss(0), hex, 2)
+                    hex = reg_boolean_para(ss(1), hex, 1)
+                ElseIf mips = "wsbw" Then
+                    hex = &H7C0000E0
+                    hex = reg_boolean_para(ss(0), hex, 2)
+                    hex = reg_boolean_para(ss(1), hex, 1)
+                ElseIf mips = "bitrev" Then
+                    hex = &H7C000520
+                    hex = reg_boolean_para(ss(0), hex, 2)
+                    hex = reg_boolean_para(ss(0), hex, 1)
 
-            Dim mthi As New Regex("^mthi\x20+")
-            Dim mthim As Match = mthi.Match(str)
+                    '        switch(a_opcode & 0x03F){
+                    '        case 0x0:
+                    '        pspDebugScreenPuts("ext      ");
+                    '        mipsRegister(a_opcode, T, 1);
+                    '        mipsRegister(a_opcode, S, 1);
+                    '        mipsNibble(a_opcode, 3, 1);
+                    '        a_opcode+=0x800;
+                    '        mipsNibble(a_opcode, 2, 0);
+                    '        break;
 
-            Dim mflo As New Regex("^mflo\x20+")
-            Dim mflom As Match = mflo.Match(str)
+                    '        case 0x4:
+                    '        pspDebugScreenPuts("ins      ");
+                    '        mipsRegister(a_opcode, T, 1);
+                    '        mipsRegister(a_opcode, S, 1);
+                    '        mipsNibble(a_opcode, 3, 1);
+                    '        mipsins(a_opcode);
+                    '        break;
+                    '        }
+                    '    break;
 
-            Dim mtlo As New Regex("^mtlo\x20+")
-            Dim mtlom As Match = mtlo.Match(str)
+                    '0x80
+                ElseIf mips = "lb" Then
+                    hex = hex Or &H80000000
+                    hex = reg_boolean2(str, hex, 0)
+                    hex = offset_boolean3(str, hex)
+                ElseIf mips = "lh" Then
+                    hex = hex Or &H84000000
+                    hex = reg_boolean2(str, hex, 0)
+                    hex = offset_boolean3(str, hex)
+                ElseIf mips = "lw" Then
+                    hex = hex Or &H8C000000
+                    hex = reg_boolean2(str, hex, 0)
+                    hex = offset_boolean3(str, hex)
+                ElseIf mips = "lbu" Then
+                    hex = hex Or &H90000000
+                    hex = reg_boolean2(str, hex, 0)
+                    hex = offset_boolean3(str, hex)
+                ElseIf mips = "lhu" Then
+                    hex = hex Or &H94000000
+                    hex = reg_boolean2(str, hex, 0)
+                    hex = offset_boolean3(str, hex)
+                ElseIf mips = "lwu" Then
+                    hex = hex Or &H9C000000
+                    hex = reg_boolean2(str, hex, 0)
+                    hex = offset_boolean3(str, hex)
+                ElseIf mips = "lwl" Then
+                    hex = hex Or &H88000000
+                    hex = reg_boolean2(str, hex, 0)
+                    hex = offset_boolean3(str, hex)
+                ElseIf mips = "lwr" Then
+                    hex = hex Or &H98000000
+                    hex = reg_boolean2(str, hex, 0)
+                    hex = offset_boolean3(str, hex)
 
-            Dim clz As New Regex("^clz\x20+")
-            Dim clzm As Match = clz.Match(str)
+                    '0xA0
+                ElseIf mips = "sb" Then
+                    hex = hex Or &HA0000000
+                    hex = reg_boolean2(str, hex, 0)
+                    hex = offset_boolean3(str, hex)
+                ElseIf mips = "sh" Then
+                    hex = hex Or &HA4000000
+                    hex = reg_boolean2(str, hex, 0)
+                    hex = offset_boolean3(str, hex)
+                ElseIf mips = "sw" Then
+                    hex = hex Or &HAC000000
+                    hex = reg_boolean2(str, hex, 0)
+                    hex = offset_boolean3(str, hex)
+                ElseIf mips = "swl" Then
+                    hex = hex Or &HA8000000
+                    hex = reg_boolean2(str, hex, 0)
+                    hex = offset_boolean3(str, hex)
+                ElseIf mips = "swr" Then
+                    hex = hex Or &HB8000000
+                    hex = reg_boolean2(str, hex, 0)
+                    hex = offset_boolean3(str, hex)
 
-            Dim clo As New Regex("^clo\x20+")
-            Dim clom As Match = clo.Match(str)
+                    '0xc0
+                ElseIf mips = "lwc1" Then
+                    hex = hex Or &HC4000000
+                    hex = float_sel(ss(0), hex, 1)
+                    hex = reg_boolean_para(ss(1), hex, 0)
+                    hex = offset_boolean3(str, hex)
 
-            Dim j As New Regex("^j\x20+")
-            Dim jm As Match = j.Match(str)
+                    '0xe0
+                ElseIf mips = "swc1" Then
+                    hex = hex Or &HE4000000
+                    hex = float_sel(ss(0), hex, 1)
+                    hex = reg_boolean_para(ss(1), hex, 0)
+                    hex = offset_boolean3(str, hex)
 
-            Dim jal As New Regex("^jal\x20+")
-            Dim jalm As Match = jal.Match(str)
-
-            Dim beq As New Regex("^beq\x20+")
-            Dim beqm As Match = beq.Match(str)
-
-            Dim bne As New Regex("^bne\x20+")
-            Dim bnem As Match = bne.Match(str)
-
-            Dim blez As New Regex("^blez\x20+")
-            Dim blezm As Match = blez.Match(str)
-
-            Dim bgtz As New Regex("^bgtz\x20+")
-            Dim bgtzm As Match = bgtz.Match(str)
-
-            Dim rotr As New Regex("^rotr\x20+")
-            Dim rotrm As Match = rotr.Match(str)
-
-            Dim addi As New Regex("^addi\x20+")
-            Dim addim As Match = addi.Match(str)
-
-            Dim addiu As New Regex("^addiu\x20+")
-            Dim addium As Match = addiu.Match(str)
-
-            Dim slti As New Regex("^slti\x20+")
-            Dim sltim As Match = slti.Match(str)
-
-            Dim sltiu As New Regex("^sltiu\x20+")
-            Dim sltium As Match = sltiu.Match(str)
-
-            Dim ori As New Regex("^ori\x20+")
-            Dim orim As Match = ori.Match(str)
-
-            Dim andi As New Regex("^andi\x20+")
-            Dim andim As Match = andi.Match(str)
-
-            Dim xori As New Regex("^xori\x20+")
-            Dim xorim As Match = xori.Match(str)
-
-            Dim lui As New Regex("^lui\x20+")
-            Dim luim As Match = lui.Match(str)
-
-            Dim lb As New Regex("^lb\x20+")
-            Dim lbm As Match = lb.Match(str)
-            Dim lh As New Regex("^lh\x20+")
-            Dim lhm As Match = lh.Match(str)
-            Dim lw As New Regex("^lw\x20+")
-            Dim lwm As Match = lw.Match(str)
-            Dim lbu As New Regex("^lbu\x20+")
-            Dim lbum As Match = lbu.Match(str)
-            Dim lhu As New Regex("^lhu\x20+")
-            Dim lhum As Match = lhu.Match(str)
-            Dim lwu As New Regex("^lwu\x20+")
-            Dim lwum As Match = lwu.Match(str)
-
-            Dim sb As New Regex("^sb\x20+")
-            Dim sbm As Match = sb.Match(str)
-            Dim sh As New Regex("^sh\x20+")
-            Dim shm As Match = sh.Match(str)
-            Dim sw As New Regex("^sw\x20+")
-            Dim swm As Match = sw.Match(str)
-
-            Dim lwl As New Regex("^lwl\x20+")
-            Dim lwlm As Match = lwl.Match(str)
-            Dim lwr As New Regex("^lwr\x20+")
-            Dim lwrm As Match = lwr.Match(str)
-            Dim swl As New Regex("^swl\x20+")
-            Dim swlm As Match = swl.Match(str)
-            Dim swr As New Regex("^swr\x20+")
-            Dim swrm As Match = swr.Match(str)
-
-
-            'Dim freg As New Regex("\$f\d{1,2}")
-            'Dim vfreg As New Regex("(S|C|M)\d\d\d")
-
-
-            If str = "nop" Then
-            ElseIf str = "syscall" Then
-                hex = 12
-            ElseIf str = "break" Then
-                hex = 13
-            ElseIf str = "sync" Then
-                hex = 15
-            ElseIf sllm.Success Then
-                hex = reg_boolean3(str, hex, 0)
-                hex = valdec_boolean_para(str, hex, 3)
-            ElseIf rotrm.Success Then
-                hex = hex Or &H200002
-                hex = reg_boolean3(str, hex, 0)
-                hex = valdec_boolean_para(str, hex, 3)
-            ElseIf srlm.Success Then
-                hex = hex Or &H2
-                hex = reg_boolean3(str, hex, 0)
-                hex = valdec_boolean_para(str, hex, 3)
-            ElseIf sram.Success Then
-                hex = hex Or &H3
-                str = str.Replace("sra", "")
-                hex = reg_boolean3(str, hex, 0)
-                hex = valdec_boolean_para(str, hex, 3)
-            ElseIf sllvm.Success Then
-                hex = hex Or &H4
-                hex = reg_boolean3(str, hex, 0)
-            ElseIf srlvm.Success Then
-                hex = hex Or &H6
-                hex = reg_boolean3(str, hex, 0)
-            ElseIf sravm.Success Then
-                hex = hex Or &H7
-                str = str.Replace("srav", "")
-                hex = reg_boolean3(str, hex, 0)
-            ElseIf jalrm.Success Then
-                hex = hex Or &H9
-                If ss.Length = 1 Then
-                    Array.Resize(ss, 2)
-                    ss(1) = ss(0)
-                    ss(0) = "ra"
                 End If
-                hex = reg_boolean_para(ss(0), hex, 0)
-                hex = reg_boolean_para(ss(1), hex, 2)
-            ElseIf movzm.Success Then
-                hex = hex Or &HA
-                hex = reg_boolean_para(ss(0), hex, 0)
-                hex = reg_boolean_para(ss(1), hex, 2)
-                hex = reg_boolean_para(ss(2), hex, 1)
-            ElseIf movnm.Success Then
-                hex = hex Or &HB
-                hex = reg_boolean_para(ss(0), hex, 0)
-                hex = reg_boolean_para(ss(1), hex, 2)
-                hex = reg_boolean_para(ss(2), hex, 1)
-            ElseIf mfhim.Success Then
-                hex = hex Or &H10
-                hex = reg_boolean_para(str, hex, 2)
-            ElseIf mthim.Success Then
-                hex = hex Or &H11
-                hex = reg_boolean_para(str, hex, 0)
-            ElseIf mflom.Success Then
-                hex = hex Or &H12
-                hex = reg_boolean_para(str, hex, 2)
-            ElseIf mtlom.Success Then
-                hex = hex Or &H13
-                hex = reg_boolean_para(str, hex, 0)
-            ElseIf clzm.Success Then
-                hex = hex Or &H16
-                hex = reg_boolean2(str, hex, 0)
-            ElseIf clom.Success Then
-                hex = hex Or &H17
-                hex = reg_boolean2(str, hex, 0)
-            ElseIf jm.Success Then
-                hex = hex Or &H8000000
-                hex = offset_boolean(str, hex)
-            ElseIf jalm.Success Then
-                hex = hex Or &HC000000
-                hex = offset_boolean(str, hex)
-            ElseIf beqm.Success Then
-                hex = hex Or &H10000000
-                hex = reg_boolean(str, hex, 0)
-                hex = offset_boolean2(str, hex, hex2)
-            ElseIf bnem.Success Then
-                hex = hex Or &H14000000
-                hex = reg_boolean(str, hex, 0)
-                hex = offset_boolean2(str, hex, hex2)
-            ElseIf blezm.Success Then
-                hex = hex Or &H18000000
-                hex = reg_boolean_para(str, hex, 0)
-                hex = offset_boolean2(str, hex, hex2)
-            ElseIf bgtzm.Success Then
-                hex = hex Or &H1C000000
-                hex = reg_boolean_para(str, hex, 0)
-                hex = offset_boolean2(str, hex, hex2)
-            ElseIf addim.Success Then
-                hex = hex Or &H20000000
-                hex = valdec_boolean_para(str, hex, 3)
-            ElseIf addium.Success Then
-                hex = hex Or &H24000000
-                hex = reg_boolean(str, hex, 0)
-                hex = valhex_boolean(str, hex)
-            ElseIf sltim.Success Then
-                hex = hex Or &H28000000
-                hex = reg_boolean(str, hex, 0)
-                hex = valhex_boolean(str, hex)
-            ElseIf sltium.Success Then
-                hex = hex Or &H2C000000
-                hex = reg_boolean(str, hex, 0)
-                hex = valhex_boolean(str, hex)
-            ElseIf andim.Success Then
-                hex = hex Or &H30000000
-                hex = reg_boolean(str, hex, 0)
-                hex = valhex_boolean(str, hex)
-            ElseIf orim.Success Then
-                hex = hex Or &H34000000
-                hex = reg_boolean(str, hex, 0)
-                hex = valhex_boolean(str, hex)
-            ElseIf xorim.Success Then
-                hex = hex Or &H38000000
-                hex = reg_boolean(str, hex, 0)
-                hex = valhex_boolean(str, hex)
-            ElseIf luim.Success Then
-                hex = hex Or &H3C000000
-                hex = reg_boolean_para(str, hex, 1)
-                hex = valhex_boolean(str, hex)
-            ElseIf lbm.Success Then
-                hex = hex Or &H80000000
-                hex = reg_boolean2(str, hex, 0)
-                hex = offset_boolean3(str, hex)
-            ElseIf lhm.Success Then
-                hex = hex Or &H84000000
-                hex = reg_boolean2(str, hex, 0)
-                hex = offset_boolean3(str, hex)
-            ElseIf lwm.Success Then
-                hex = hex Or &H8C000000
-                hex = reg_boolean2(str, hex, 0)
-                hex = offset_boolean3(str, hex)
-            ElseIf lbum.Success Then
-                hex = hex Or &H90000000
-                hex = reg_boolean2(str, hex, 0)
-                hex = offset_boolean3(str, hex)
-            ElseIf lhum.Success Then
-                hex = hex Or &H94000000
-                hex = reg_boolean2(str, hex, 0)
-                hex = offset_boolean3(str, hex)
-            ElseIf lwum.Success Then
-                hex = hex Or &H9C000000
-                hex = reg_boolean2(str, hex, 0)
-                hex = offset_boolean3(str, hex)
-            ElseIf lwlm.Success Then
-                hex = hex Or &H88000000
-                hex = reg_boolean2(str, hex, 0)
-                hex = offset_boolean3(str, hex)
-            ElseIf lwrm.Success Then
-                hex = hex Or &H98000000
-                hex = reg_boolean2(str, hex, 0)
-                hex = offset_boolean3(str, hex)
-            ElseIf sbm.Success Then
-                hex = hex Or &HA0000000
-                hex = reg_boolean2(str, hex, 0)
-                hex = offset_boolean3(str, hex)
-            ElseIf shm.Success Then
-                hex = hex Or &HA4000000
-                hex = reg_boolean2(str, hex, 0)
-                hex = offset_boolean3(str, hex)
-            ElseIf swm.Success Then
-                hex = hex Or &HAC000000
-                hex = reg_boolean2(str, hex, 0)
-                hex = offset_boolean3(str, hex)
-            ElseIf swlm.Success Then
-                hex = hex Or &HA8000000
-                hex = reg_boolean2(str, hex, 0)
-                hex = offset_boolean3(str, hex)
-            ElseIf swrm.Success Then
-                hex = hex Or &HB8000000
-                hex = reg_boolean2(str, hex, 0)
-                hex = offset_boolean3(str, hex)
+
+                asm = "0x" & Convert.ToString(hex, 16).ToUpper.PadLeft(8, "0"c)
             End If
 
-            asm = "0x" & Convert.ToString(hex, 16).ToUpper.PadLeft(8, "0"c)
+            'Dim vfreg As New Regex("(S|C|M)\d\d\d")
+
             Return asm
         Catch ex As Exception
             MessageBox.Show(ex.Message)
-            Return str
+            Return ""
         End Try
     End Function
 
@@ -1424,6 +1781,34 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         End Try
     End Function
 
+    Function float_sel(ByVal str As String, ByVal hex As Integer, ByVal k As Integer) As Integer
+        Dim freg As New Regex("\$(f|fpr)\d{1,2}")
+        Dim fregm As Match = freg.Match(str)
+        If fregm.Success Then
+            Dim dec As New Regex("\d{1,2}")
+            Dim decm As Match = dec.Match(fregm.Value)
+            hex = hex Or ((CInt(decm.Value) And 31) << 21) >> (5 * k)
+        End If
+        Return hex
+    End Function
+
+    Function cop_sel(ByVal str As String, ByVal mode As String) As Integer
+        Dim cop0 As String() = {"INDEX", "RANDOM", "ENTRYLO0", "ENTRYLO1", "CONTEXT", "PAGEMASK", "WIRED", "7", "BADVADDR", "COUNT", "ENTRYHI", "COMPARE", "STATUS", "CAUSE", "EPC", "PRID", "CONFIG", "LLADDR", "WATCHLO", "WATCHHI", "XCONTEXT", "21", "22", "DEBUG", "DEPC", "PERFCNT", "ERRCTL", "CACHEERR", "TAGLO", "TAGHI", "ERROREPC", "DESAVE"}
+        Dim i As Integer
+        If Integer.TryParse(str, i) Then
+            i = CInt(str) And 31
+        ElseIf mode = "COP0" Then
+            For i = 0 To 32
+                If i = 32 Then
+                    i = 0
+                    Exit For
+                ElseIf str.Contains(cop0(i).ToLower) Then
+                    Exit For
+                End If
+            Next
+        End If
+        Return i
+    End Function
 
     Function offset_boolean(ByVal str As String, ByVal hex As Integer) As Integer
         Dim valhex As New Regex("(\x20|,)(\$|0x)[0-9A-Fa-f]{1,8}$")
@@ -1461,15 +1846,21 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         Return hex
     End Function
 
-
     Function offset_boolean3(ByVal str As String, ByVal hex As Integer) As Integer
-        Dim valhex As New Regex("(\x20|,|\t)(\$|0x)[0-9A-Fa-f]{1,4}\(")
+        Dim valhex As New Regex("(\x20|,|\t)-?(\$|0x)[0-9A-Fa-f]{1,4}\(")
         Dim valhexm As Match = valhex.Match(str)
         Dim valdec As New Regex("(\x20|,|\t)(\+|-)?\d{1,5}\(")
         Dim valdecm As Match = valdec.Match(str)
         Dim k As Integer = 0
         If valhexm.Success Then
-            k = Convert.ToInt32(valhexm.Value.Replace("$", "").Remove(0, 1).Replace("(", ""), 16)
+            Dim s As String = valhexm.Value
+            If s.Contains("-") Then
+                k = &H10000
+                s = s.Replace("-", "")
+                k = k - Convert.ToInt32(s.Replace("$", "").Remove(0, 1).Replace("(", ""), 16)
+            Else
+                k = Convert.ToInt32(s.Replace("$", "").Remove(0, 1).Replace("(", ""), 16)
+            End If
             hex = hex Or (k And &HFFFF)
         End If
         If valdecm.Success Then
@@ -1479,14 +1870,23 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
     End Function
 
     Function valhex_boolean(ByVal str As String, ByVal hex As Integer) As Integer
-        Dim valhex As New Regex("(\x20|,)(\$|0x)[0-9A-Fa-f]{1,4}$")
+        Dim valhex As New Regex("(\x20|,)-?(\$|0x)[0-9A-Fa-f]{1,4}$")
         Dim valhexm As Match = valhex.Match(str)
         Dim valdec As New Regex("(\x20|,)-?\d{1,5}$")
         Dim valdecm As Match = valdec.Match(str)
         Dim valfloat As New Regex("(\x20|,)-?\d+\.?\d*f$")
         Dim valfloatm As Match = valfloat.Match(str)
         If valhexm.Success Then
-            hex = hex Or (Convert.ToInt32(valhexm.Value.Replace("$", "").Remove(0, 1), 16) And &HFFFF)
+            Dim s As String = valhexm.Value
+            Dim minus As Integer = 0
+            If s.Contains("-") Then
+                s = s.Replace("-", "")
+                minus = &H10000
+                minus -= Convert.ToInt32(s.Replace("$", "").Remove(0, 1), 16) And &HFFFF
+            Else
+                minus = Convert.ToInt32(s.Replace("$", "").Remove(0, 1), 16)
+            End If
+            hex = hex Or (minus And &HFFFF)
         End If
         If valdecm.Success Then
             hex = hex Or (Convert.ToInt32(valdecm.Value.Remove(0, 1)) And &HFFFF)
@@ -1511,6 +1911,8 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         For i = 0 To 31
             If ss(i) = s Then
                 Exit For
+            ElseIf s = "s8" Then
+                i = 30
             End If
         Next
         Return i
@@ -1527,7 +1929,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 
     Function reg_boolean_para(ByVal str As String, ByVal hex As Integer, ByVal k As Integer) As Integer
 
-        Dim reg As New Regex("(zr|at|a[0-3]|v[0-3]|t[0-9]|k[0-1]|sp|gp|fp|ra)")
+        Dim reg As New Regex("(zr|at|a[0-3]|v[0-1]|t[0-9]|k[0-1]|s[0-8]|sp|gp|fp|ra)")
         Dim regm As Match = reg.Match(str)
         If regm.Success Then
             hex = hex Or ((reg_sel(regm.Value) << 21) >> (5 * k))
@@ -1536,7 +1938,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
     End Function
 
     Function reg_boolean(ByVal str As String, ByVal hex As Integer, ByVal k As Integer) As Integer
-        Dim reg As New Regex("(zr|at|a[0-3]|v[0-3]|t[0-9]|k[0-1]|sp|gp|fp|ra)")
+        Dim reg As New Regex("(zr|at|a[0-3]|v[0-1]|t[0-9]|k[0-1]|s[0-8]|sp|gp|fp|ra)")
         Dim regm As Match = reg.Match(str)
         While regm.Success
             hex = hex Or ((reg_sel(regm.Value) << 21) >> (5 * k))
@@ -1547,7 +1949,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
     End Function
 
     Function reg_boolean2(ByVal str As String, ByVal hex As Integer, ByVal k As Integer) As Integer
-        Dim reg As New Regex("(zr|at|a[0-3]|v[0-3]|t[0-9]|k[0-1]|sp|gp|fp|ra)")
+        Dim reg As New Regex("(zr|at|a[0-3]|v[0-1]|t[0-9]|k[0-1]|s[0-8]|sp|gp|fp|ra)")
         Dim regm As Match = reg.Match(str)
         While regm.Success
             hex = hex Or ((reg_sel(regm.Value) << 16) << (5 * k))
@@ -1558,7 +1960,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
     End Function
 
     Function reg_boolean3(ByVal str As String, ByVal hex As Integer, ByVal k As Integer) As Integer
-        Dim reg As New Regex("(zr|at|a[0-3]|v[0-3]|t[0-9]|k[0-1]|sp|gp|fp|ra)")
+        Dim reg As New Regex("(zr|at|a[0-3]|v[0-1]|t[0-9]|k[0-1]|s[0-8]|sp|gp|fp|ra)")
         Dim regm As Match = reg.Match(str)
         While regm.Success
             hex = hex Or ((reg_sel(regm.Value) << 11) << (5 * k))
@@ -1568,354 +1970,16 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         Return hex
     End Function
 
-    '        case 0x20:
-    '          pspDebugScreenPuts("add      ");
-    '          mipsRegister(a_opcode, 2, 1);
-    '          mipsRegister(a_opcode, 0, 1);
-    '          mipsRegister(a_opcode, 1, 0);
-    '/*ADD -- Add
-    'Description: Adds two registers and stores the result in a register
-    'Operation: $d = $s + $t; advance_pc (4);
-    'Syntax: add $d, $s, $t
-    'Encoding: 0000 00ss ssst tttt dddd d000 0010 0000 */
-    '          break;
+    Function reg_boolean4(ByVal str As String, ByVal hex As Integer, ByVal k As Integer) As Integer
+        Dim reg As New Regex("(zr|at|a[0-3]|v[0-3]|t[0-9]|k[0-1]|s[0-8]|sp|gp|fp|ra)")
+        Dim regm As Match = reg.Match(str)
+        While regm.Success
+            hex = hex Or ((reg_sel(regm.Value) << 6) << (5 * k))
+            regm = regm.NextMatch
+            k += 1
+        End While
+        Return hex
+    End Function
 
-    '        case 0x21:
-    '          pspDebugScreenPuts("addu     ");
-    '          mipsRegister(a_opcode, 2, 1);
-    '          mipsRegister(a_opcode, 0, 1);
-    '          mipsRegister(a_opcode, 1, 0);
-    '/*ADDU -- Add unsigned
-    'Description: Adds two registers and stores the result in a register
-    'Operation: $d = $s + $t; advance_pc (4);
-    'Syntax: addu $d, $s, $t
-    'Encoding: 0000 00ss ssst tttt dddd d000 0010 0001*/
-    '          break;
-
-    '        case 0x22:
-    '          pspDebugScreenPuts("sub      ");
-    '          mipsRegister(a_opcode, 2, 1);
-    '          mipsRegister(a_opcode, 0, 1);
-    '          mipsRegister(a_opcode, 1, 0);
-    '/*SUB -- Subtract
-    'Description: Subtracts two registers and stores the result in a register
-    'Operation: $d = $s - $t; advance_pc (4);
-    'Syntax: sub $d, $s, $t
-    'Encoding: 0000 00ss ssst tttt dddd d000 0010 0010*/
-    '          break;
-
-    '        case 0x23:
-    '          pspDebugScreenPuts("subu     ");
-    '          mipsRegister(a_opcode, 2, 1);
-    '          mipsRegister(a_opcode, 0, 1);
-    '          mipsRegister(a_opcode, 1, 0);
-    '/*SUBU -- Subtract unsigned
-    'Description: Subtracts two registers and stores the result in a register
-    'Operation: $d = $s - $t; advance_pc (4);
-    'Syntax: subu $d, $s, $t
-    'Encoding: 0000 00ss ssst tttt dddd d000 0010 0011*/
-    '          break;
-
-    '        case 0x24:
-    '          pspDebugScreenPuts("and      ");
-    '          mipsRegister(a_opcode, 2, 1);
-    '          mipsRegister(a_opcode, 0, 1);
-    '          mipsRegister(a_opcode, 1, 0);
-    '/*AND -- Bitwise and
-    'Description: Bitwise ands two registers and stores the result in a register
-    'Operation: $d = $s & $t; advance_pc (4);
-    'Syntax: and $d, $s, $t
-    'Encoding: 0000 00ss ssst tttt dddd d000 0010 0100*/
-    '          break;
-
-    '        case 0x25:
-    '          pspDebugScreenPuts("or       ");
-    '          mipsRegister(a_opcode, 2, 1);
-    '          mipsRegister(a_opcode, 0, 1);
-    '          mipsRegister(a_opcode, 1, 0);
-    '/*OR -- Bitwise or
-    'Description: Bitwise logical ors two registers and stores the result in a register
-    'Operation: $d = $s | $t; advance_pc (4);
-    'Syntax: or $d, $s, $t
-    'Encoding: 0000 00ss ssst tttt dddd d000 0010 0101*/
-    '          break;
-
-    '        case 0x26:
-    '          pspDebugScreenPuts("xor      ");
-    '          mipsRegister(a_opcode, 2, 1);
-    '          mipsRegister(a_opcode, 0, 1);
-    '          mipsRegister(a_opcode, 1, 0);
-    '/*The syscall instruction is described in more detail on the System Calls page.
-    'XOR -- Bitwise exclusive or
-    'Description: Exclusive ors two registers and stores the result in a register
-    'Operation: $d = $s ^ $t; advance_pc (4);
-    'Syntax: xor $d, $s, $t
-    'Encoding: 0000 00ss ssst tttt dddd d--- --10 0110*/
-    '          break;
-
-    '          case 0x27:
-    '          pspDebugScreenPuts("nor      ");
-    '          mipsRegister(a_opcode, 2, 1);
-    '          mipsRegister(a_opcode, 0, 1);
-    '          mipsRegister(a_opcode, 1, 0);
-    '          break;
-
-    '        case 0x2A:
-    '          pspDebugScreenPuts("slt      ");
-    '          mipsRegister(a_opcode, 2, 1);
-    '          mipsRegister(a_opcode, 0, 1);
-    '          mipsRegister(a_opcode, 1, 0);
-    '/*SLT -- Set on less than (signed)
-    'Description: If $s is less than $t, $d is set to one. It gets zero otherwise.
-    'Operation: if $s < $t $d = 1; advance_pc (4); else $d = 0; advance_pc (4);
-    'Syntax: slt $d, $s, $t
-    'Encoding: 0000 00ss ssst tttt dddd d000 0010 1010*/
-    '        break;
-
-    '        case 0x2B:
-    '          pspDebugScreenPuts("sltu     ");
-    '          mipsRegister(a_opcode, 2, 1);
-    '          mipsRegister(a_opcode, 0, 1);
-    '          mipsRegister(a_opcode, 1, 0);
-    '/*SLTU -- Set on less than unsigned
-    'Description: If $s is less than $t, $d is set to one. It gets zero otherwise.
-    'Operation: if $s < $t $d = 1; advance_pc (4); else $d = 0; advance_pc (4);
-    'Syntax: sltu $d, $s, $t
-    'Encoding: 0000 00ss ssst tttt dddd d000 0010 1011*/
-    '          break;
-
-    '          case 0x2c:
-    '          pspDebugScreenPuts("max      ");
-    '          mipsRegister(a_opcode, 2, 1);
-    '          mipsRegister(a_opcode, 0, 1);
-    '          mipsRegister(a_opcode, 1, 0);
-    '          break;
-    '//        { "max",                0x0000002C, 0xFC0007FF, "%d, %s, %t"},
-    '//        { "min",                0x0000002D, 0xFC0007FF, "%d, %s, %t"},
-
-    '          case 0x2d:
-    '          pspDebugScreenPuts("min      ");
-    '          mipsRegister(a_opcode, 2, 1);
-    '          mipsRegister(a_opcode, 0, 1);
-    '          mipsRegister(a_opcode, 1, 0);
-    '          break;
-
-    '        case 0x46:
-    '          pspDebugScreenPuts("rotv     ");
-    '          mipsRegister(a_opcode, 2, 1);
-    '          mipsRegister(a_opcode, 0, 1);
-    '          mipsRegister(a_opcode, 1, 0);
-    '          break;
-    '//        { "rotv",               0x00000046, 0xFC0007FF, "%d, %t, %s"},
-    '        }
-
-    '        switch(a_opcode & 0xFFFF){
-    '        case 0x08:
-    '          pspDebugScreenPuts("jr       ");
-    '          mipsRegister(a_opcode, 0, 0);
-    '/*JR -- Jump register
-    'Description: Jump to the address contained in register $s
-    'Operation: PC = nPC; nPC = $s;
-    'Syntax: jr $s
-    'Encoding: 0000 00ss sss0 0000 0000 0000 0000 1000*/
-    '          break;
-
-    '        case 0x18:
-    '          pspDebugScreenPuts("mult     ");
-    '          mipsRegister(a_opcode, 0, 1);
-    '          mipsRegister(a_opcode, 1, 0);
-    '/*MULT -- Multiply
-    'Description: Multiplies $s by $t and stores the result in $LO.
-    'Operation: $LO = $s * $t; advance_pc (4);
-    'Syntax: mult $s, $t
-    'Encoding: 0000 00ss ssst tttt 0000 0000 0001 1000*/
-    '          break;
-
-    '        case 0x19:
-    '          pspDebugScreenPuts("multu    ");
-    '          mipsRegister(a_opcode, 0, 1);
-    '          mipsRegister(a_opcode, 1, 0);
-    '/*MULTU -- Multiply unsigned
-    'Description: Multiplies $s by $t and stores the result in $LO.
-    'Operation: $LO = $s * $t; advance_pc (4);
-    'Syntax: multu $s, $t
-    'Encoding: 0000 00ss ssst tttt 0000 0000 0001 1001*/
-    '          break;
-
-    '        case 0x1A:
-    '          pspDebugScreenPuts("div      ");
-    '          mipsRegister(a_opcode, 0, 1);
-    '          mipsRegister(a_opcode, 1, 0);
-    '/*DIV -- Divide
-    'Description: Divides $s by $t and stores the quotient in $LO and the remainder in $HI
-    'Operation: $LO = $s / $t; $HI = $s % $t; advance_pc (4);
-    'Syntax: div $s, $t
-    'Encoding: 0000 00ss ssst tttt 0000 0000 0001 1010*/
-    '          break;
-
-    '        case 0x1B:
-    '          pspDebugScreenPuts("divu     ");
-    '          mipsRegister(a_opcode, 0, 1);
-    '          mipsRegister(a_opcode, 1, 0);
-    '/*DIVU -- Divide unsigned
-    'Description: Divides $s by $t and stores the quotient in $LO and the remainder in $HI
-    'Operation: $LO = $s / $t; $HI = $s % $t; advance_pc (4);
-    'Syntax: divu $s, $t
-    'Encoding: 0000 00ss ssst tttt 0000 0000 0001 1011*/
-    '          break;
-
-    '         case 0x1C:
-    '          pspDebugScreenPuts("madd     ");
-    '          mipsRegister(a_opcode, 0, 1);
-    '          mipsRegister(a_opcode, 1, 0);
-    '          break;
-    '//        { "madd",               0x0000001C, 0xFC00FFFF, "%s, %t"},
-    '//        { "maddu",              0x0000001D, 0xFC00FFFF, "%s, %t"},
-
-    '        case 0x1D:
-    '          pspDebugScreenPuts("maddu    ");
-    '          mipsRegister(a_opcode, 0, 1);
-    '          mipsRegister(a_opcode, 1, 0);
-    '          break;
-
-    '          case 0x2e:
-    '          pspDebugScreenPuts("msub     ");
-    '          mipsRegister(a_opcode, 2, 1);
-    '          mipsRegister(a_opcode, 1, 0);
-    '          break;
-
-    '          case 0x2F:
-    '          pspDebugScreenPuts("msubu    ");
-    '          mipsRegister(a_opcode, 2, 1);
-    '          mipsRegister(a_opcode, 1, 0);
-    '          break;
-    '//        { "msub",               0x0000002e, 0xfc00ffff, "%d, %t"},
-    '//        { "msubu",              0x0000002f, 0xfc00ffff, "%d, %t"},
-    '      }
-    '      break;
-
-    '    case 0x04:
-    '      switch((a_opcode & 0x1F0000) >> 16)
-    '      {
-    '          case 0x00:
-    '            pspDebugScreenPuts("bltz     ");
-    '            mipsRegister(a_opcode, S, 1);
-    '            //mipsDec(a_opcode,0,0);
-    '/*BLTZ -- Branch on less than zero
-    'Description: Branches if the register is less than zero
-    'Operation: if $s < 0 advance_pc (offset << 2)); else advance_pc (4);
-    'Syntax: bltz $s, offset
-    'Encoding: 0000 01ss sss0 0000 iiii iiii iiii iiii*/
-    '          break;
-
-    '          case 0x01:
-    '            pspDebugScreenPuts("bgez     ");
-    '            mipsRegister(a_opcode, S, 1);
-    '            //mipsDec(a_opcode,0,0);
-    '/*BGEZ -- Branch on greater than or equal to zero
-    'Description: Branches if the register is greater than or equal to zero
-    'Operation: if $s >= 0 advance_pc (offset << 2)); else advance_pc (4);
-    'Syntax: bgez $s, offset
-    'Encoding: 0000 01ss sss0 0001 iiii iiii iiii iiii*/
-    '          break;
-
-    '           case 0x02:
-    '            pspDebugScreenPuts("bltzl    ");
-    '            mipsRegister(a_opcode, S, 1);
-    '            //mipsDec(a_opcode,0,0);
-    '           break;
-
-    '           case 0x03:
-    '            pspDebugScreenPuts("bgezl    ");
-    '            mipsRegister(a_opcode, S, 1);
-    '            //mipsDec(a_opcode,0,0);
-    '           break;
-
-    '           case 0x08:
-    '            pspDebugScreenPuts("tgei    ");
-    '            mipsRegister(a_opcode, S, 1);
-    '            mipsImm(a_opcode, 0, 0);
-    '           break;
-
-    '           case 0x09:
-    '            pspDebugScreenPuts("tgeiu    ");
-    '            mipsRegister(a_opcode, S, 1);
-    '            mipsImm(a_opcode, 0, 0);
-    '           break;
-
-    '           case 0x0A:
-    '            pspDebugScreenPuts("tlti    ");
-    '            mipsRegister(a_opcode, S, 1);
-    '            mipsImm(a_opcode, 0, 0);
-    '           break;
-
-    '           case 0x0B:
-    '            pspDebugScreenPuts("tltiu    ");
-    '            mipsRegister(a_opcode, S, 1);
-    '            mipsImm(a_opcode, 0, 0);
-    '           break;
-
-    '           case 0x0C:
-    '            pspDebugScreenPuts("teqi    ");
-    '            mipsRegister(a_opcode, S, 1);
-    '            mipsImm(a_opcode, 0, 0);
-    '           break;
-
-    '           case 0x0E:
-    '            pspDebugScreenPuts("tnei    ");
-    '            mipsRegister(a_opcode, S, 1);
-    '            mipsImm(a_opcode, 0, 0);
-    '           break;
-
-    '          case 0x10:
-    '            pspDebugScreenPuts("bltzal   ");
-    '            mipsRegister(a_opcode, S, 1);
-    '            //mipsDec(a_opcode,0,0);
-    '/*BLTZAL -- Branch on less than zero and link
-    'Description: Branches if the register is less than zero and saves the return address in $31
-    'Operation: if $s < 0 $31 = PC + 8 (or nPC + 4); advance_pc (offset << 2)); else advance_pc (4);
-    'Syntax: bltzal $s, offset
-    'Encoding: 0000 01ss sss1 0000 iiii iiii iiii iiii*/
-    '            break;
-
-    '           case 0x11:
-    '            pspDebugScreenPuts("bgezal   ");
-    '            mipsRegister(a_opcode, S, 1);
-    '            //mipsDec(a_opcode,0,0);
-    '/*BGEZAL -- Branch on greater than or equal to zero and link
-    'Description: Branches if the register is greater than or equal to zero and saves the return address in $31
-    'Operation: if $s >= 0 $31 = PC + 8 (or nPC + 4); advance_pc (offset << 2)); else advance_pc (4);
-    'Syntax: bgezal $s, offset
-    'Encoding: 0000 01ss sss1 0001 iiii iiii iiii iiii*/
-    '           break;
-
-    '           case 0x12:
-    '            pspDebugScreenPuts("bltzall  ");
-    '            mipsRegister(a_opcode, S, 1);
-    '            //mipsDec(a_opcode,0,0);
-    '           break;
-
-    '           case 0x13:
-    '            pspDebugScreenPuts("bgezall  ");
-    '            mipsRegister(a_opcode, S, 1);
-    '            //mipsDec(a_opcode,0,0);
-    '           break;    
-
-    '           case 0x18:
-    '            pspDebugScreenPuts("mtsab    ");
-    '            mipsRegister(a_opcode, S, 1);
-    '            mipsImm(a_opcode, 0, 0);
-    '           break;        
-
-    '           case 0x19:
-    '            pspDebugScreenPuts("mtsah    ");
-    '            mipsRegister(a_opcode, S, 1);
-    '            mipsImm(a_opcode, 0, 0);
-    '           break;   
-
-    '          default:
-    '            pspDebugScreenPuts("???");
-    '      }
-    '      break;
 
 End Class
