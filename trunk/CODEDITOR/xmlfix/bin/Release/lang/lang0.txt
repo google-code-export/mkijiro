@@ -1,0 +1,18 @@
+nothing
+French
+English (US)
+Chinese
+Danish
+Dutch
+Finland
+German
+Italian
+Japanese
+Norwegian
+Polish
+Portuguese
+Spanish
+Swedish
+English (UK)
+Portuguese (BR)
+Korean
