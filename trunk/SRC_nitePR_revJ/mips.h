@@ -999,8 +999,8 @@ Encoding: 0000 00ss ssst tttt dddd d000 0010 1011*/
         case 0x46:
           pspDebugScreenPuts("rotv     ");
           mipsRegister(a_opcode, 2, 1);
-          mipsRegister(a_opcode, 0, 1);
-          mipsRegister(a_opcode, 1, 0);
+          mipsRegister(a_opcode, 1, 1);
+          mipsRegister(a_opcode, 0, 0);
           break;
 //        { "rotv",               0x00000046, 0xFC0007FF, "%d, %t, %s"},
         }
