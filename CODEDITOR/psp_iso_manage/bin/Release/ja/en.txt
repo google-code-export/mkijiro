@@ -1,0 +1,50 @@
+ cannot find
+ERROR
+ISO images CRC32;
+ doesnot match in XML database
+CRC missmatch
+OFFLEINE XML cannot find for image search
+XML ERROR
+EXCEPTION
+this game have already registed
+dupe GAMEID
+this is PBP file
+MSFREE;
+MSFREE;unknown
+remove these infomation you selected?
+REMOVE COMFIRM
+(NEW ADD)
+COMPLETED file copy
+SUCCEED
+PSP cannot find,please toggle usb,or you might delete MEMSTICK.IND(sony used this file to recognize for their app)
+PSP connection ERROR
+this file has already copied to psp
+file exists
+remove this file on PSP?
+ was removed
+REMOVE
+ISO/PBP file(*iso;*.pbp)|*.iso;*.pbp
+select ISO/PBP file
+bmp/png/jpg file(*bmp;*.png;*.jpg)|*bmp;*.png;*.jpg
+select BMP/PNG/JPG file
+xml/zip file(*.xml;*.zip)|*xml;*.zip
+select XML/ZIP file
+this is not OFFLINE XML
+unknownXML
+//EDITOR
+NAME is empty
+GAMEID is empty
+this filepath doesnot exist
+this is not UMDRAWimage,PBP
+//í«â¡
+you have user image;
+,overwriteÅH
+install this fileÅH
+COPY START
+copy process...
+there are no DAT file to rename
+DAT ERROR
+DAT/ZIP file(*.dat;*.zip)|*.dat;*.zip
+select DAT/ZIP file
+this is not CMPRODATA
+CLOSE FORM?IF not saved list,missing path & managename applied...
