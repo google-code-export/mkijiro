@@ -1126,9 +1126,10 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
             Dim asm As String = ""
             Dim ss As String() = str.Split(CChar(","))
             Dim mips As String = ""
-
+            str &= " "
             Dim shead As New Regex("^[a-z0-9\.]+\x20+")
             Dim sheadm As Match = shead.Match(str)
+            str = str.Trim
 
             If sheadm.Success Then
                 mips = sheadm.Value.Replace(" ", "")
@@ -1136,8 +1137,8 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                 If mips = "nop" Then
                 ElseIf mips = "syscall" Then
                     hex = 12
-                ElseIf str = "break" Then
-                    hex = 13
+                ElseIf mips = "break" Then
+                    hex = &H1CD '13
                 ElseIf mips = "sync" Then
                     hex = 15
                 ElseIf mips = "sll" Then
