@@ -912,7 +912,24 @@ Public Class Form1
     Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles Button1.Click
         Dim ss As String() = TextBox1.Text.Split(CChar(vbLf))
         Dim sb As New StringBuilder
+        Dim st As Integer = Convert.ToInt32(ADDR.Text, 16)
         Dim i As Integer = Convert.ToInt32(ADDR.Text, 16)
+        If MODE.SelectedIndex < 2 Then
+            If st >= &H8800000 Then
+                i -= &H8800000
+            End If
+            If i >= &H8800000 Then
+                i -= &H8800000
+            End If
+        Else
+            If st < &H8800000 Then
+                st += &H8800000
+            End If
+            If i < &H8800000 Then
+                i += &H8800000
+            End If
+        End If
+
         Dim odd As Boolean = False
         For Each s As String In ss
             If s.Trim = "" Then
@@ -944,7 +961,7 @@ Public Class Form1
                 If MODE.Text = "PMETAN" Then
                     sb.Append("_NWR ")
                     sb.Append("0x80000000 0x")
-                    sb.Append(Convert.ToString(i, 16).ToUpper.PadLeft(8, "0"c))
+                    sb.Append(Convert.ToString(i And &HFFFFFFF, 16).ToUpper.PadLeft(8, "0"c))
                     sb.Append(" ")
                     sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
                     i += 4
@@ -959,7 +976,7 @@ Public Class Form1
                         sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
                         odd = False
                     End If
-                    i += 8
+                    i += 4
                 End If
                 If MODE.Text = "TEMPAR(0xC2)" Then
                     If odd = False Then
@@ -971,7 +988,7 @@ Public Class Form1
                         sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
                         odd = False
                     End If
-                    i += 8
+                    i += 4
                 End If
                 If MODE.Text = "CMFUSION(0xF0)" Then
                     If odd = False Then
@@ -989,16 +1006,15 @@ Public Class Form1
         Next
         If odd = True Then
             sb.Append("0x00000000")
-            i += 4
         End If
-        i = i - Convert.ToInt32(ADDR.Text, 16)
+        i = i - st
         If MODE.Text = "PSPAR(0xE)" Then
-            sb.Insert(0, "_M 0xE0000000 0x000000" & Convert.ToString((i), 16).ToUpper.PadLeft(2, "0"c) & vbCrLf)
+            sb.Insert(0, "_M 0xE" & (st And &HFFFFFFF).ToString("X").ToUpper.PadLeft(7, "0"c) & " 0x000000" & Convert.ToString((i), 16).ToUpper.PadLeft(2, "0"c) & vbCrLf)
         ElseIf MODE.Text = "TEMPAR(0xC2)" Then
             sb.Insert(0, "_N 0xC2000000 0x000000" & Convert.ToString((i), 16).ToUpper.PadLeft(2, "0"c) & vbCrLf)
         ElseIf MODE.Text = "CMFUSION(0xF0)" Then
             If odd = True Then
-                i += 4
+                i += 8
             End If
             sb.Insert(0, "_L 0xF00000" & Convert.ToString((i >> 4), 16).ToUpper.PadLeft(2, "0"c) & " 0x00000000" & vbCrLf)
         End If
