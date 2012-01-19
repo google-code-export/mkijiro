@@ -1,4 +1,6 @@
-2012/01/19
+2012/01/19-1
+nopがうまく出てなかったの修正
+breakを0x1CDに変更
 ADDDI～XORIが間違っていたので修正
 零レジスタをzr/zeroどちらでも変換するようにした
 
@@ -517,3 +519,9 @@ MODDED BY　(ﾟ∀ﾟ)
 
 ソース元,VisualStudio2010 VB
 http://code.google.com/p/cwcheatdb/
+
+//謝辞
+PRXTOOL/PSPLINK
+http://psp.jim.sh/svn/log.php?repname=psp&path=%2Ftrunk%2Fprxtool%2F&isdir=1&all=1
+PRXTOOLBUGFIX
+http://code.google.com/p/pops-gte/wiki/DisasmHints

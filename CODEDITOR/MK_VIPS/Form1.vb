@@ -5,27 +5,60 @@ Imports System.Text.RegularExpressions
 
 Public Class Form1
 
+    Private Sub ff(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
+        If File.Exists("conf") = True Then
+            Dim sr As New System.IO.StreamReader("conf", System.Text.Encoding.GetEncoding(0))
+            Dim s As String
+            While sr.Peek() > -1
+                s = sr.ReadLine()
+                If s.Contains("ADDR") Then
+                    ADDR.Text = s.Remove(0, 4)
+                ElseIf s.Contains("MODE") Then
+                    MODE.Text = s.Remove(0, 4)
+                End If
+            End While
+            sr.Close()
+        End If
+    End Sub
+
+    Private Sub Form1_FormClosing(sender As System.Object, e As System.Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
+
+        Dim sr As New System.IO.StreamWriter("conf", False, System.Text.Encoding.GetEncoding(0))
+        Dim s As String
+        s = "ADDR" & ADDR.Text
+        sr.WriteLine(s)
+        s = "MODE" & MODE.Text
+        sr.WriteLine(s)
+        sr.Close()
+    End Sub
 
     Function assembler(ByVal str As String, ByVal str2 As String) As String
         Try
             Dim hex As Integer = 0
             Dim hex2 As Integer = Convert.ToInt32(str2, 16) And &H9FFFFFFF
             Dim asm As String = ""
-            Dim ss As String() = str.Split(CChar(","))
             Dim mips As String = ""
 
+            Dim psdis As New Regex("(\t|\x20|\x3000)*?#.+$")
+            Dim psdism As Match = psdis.Match(str)
+            If psdism.Success Then
+                str = str.Substring(0, psdism.Index)
+            End If
+            str &= " "
+            Dim ss As String() = str.Split(CChar(","))
             Dim shead As New Regex("^[a-z0-9\.]+(\x20|\t)+")
             Dim sheadm As Match = shead.Match(str)
 
             If sheadm.Success Then
                 mips = sheadm.Value.Replace(" ", "")
                 mips = mips.Replace(vbTab, "")
+                str = str.Trim
                 ss(0) = ss(0).Replace(sheadm.Value, "")
                 If mips = "nop" Then
                 ElseIf mips = "syscall" Then
                     hex = 12
-                ElseIf str = "break" Then
-                    hex = 13
+                ElseIf mips = "break" Then
+                    hex = &H1CD '13
                 ElseIf mips = "sync" Then
                     hex = 15
                 ElseIf mips = "sll" Then
@@ -701,7 +734,7 @@ Public Class Form1
     End Function
 
     Function offset_boolean(ByVal str As String, ByVal hex As Integer) As Integer
-        Dim valhex As New Regex("(\x20|,)(\$|0x)[0-9A-Fa-f]{1,8}$")
+        Dim valhex As New Regex("(\x20|,|\t)(\$|0x)[0-9A-Fa-f]{1,8}$")
         Dim valhexm As Match = valhex.Match(str)
         Dim k As Integer = 0
         If valhexm.Success Then
@@ -808,7 +841,7 @@ Public Class Form1
                 If ss(i) = s Then
                     Exit For
                 End If
-        Next
+            Next
         End If
         Return i
     End Function
@@ -879,77 +912,78 @@ Public Class Form1
     Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles Button1.Click
         Dim ss As String() = TextBox1.Text.Split(CChar(vbLf))
         Dim sb As New StringBuilder
-        Dim i As Integer = Convert.ToInt32(TextBox3.Text, 16)
+        Dim i As Integer = Convert.ToInt32(ADDR.Text, 16)
         Dim odd As Boolean = False
         For Each s As String In ss
-            If s.Contains("__") Or s.Trim = "" Then
+            If s.Trim = "" Then
+            ElseIf s.Length > 3 AndAlso (s.Substring(0, 2) = "__" Or s.Substring(0, 3) = "FNC" Or s.Substring(0, 2) = "//") Then
             Else
-            If MODE.Text = "NITEPR" Then
-                sb.Append("0x")
-                sb.Append(Convert.ToString(i, 16).ToUpper.PadLeft(8, "0"c))
-                sb.Append(" ")
-                sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                i += 4
-            End If
-            If MODE.Text = "CWCHEAT" Then
-                sb.Append("_L ")
-                sb.Append("0x")
-                sb.Append(Convert.ToString(i Or &H20000000, 16).ToUpper.PadLeft(8, "0"c))
-                sb.Append(" ")
-                sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                i += 4
-            End If
-            If MODE.Text = "PSPAR" Then
-                sb.Append("_M ")
-                sb.Append("0x")
-                sb.Append(Convert.ToString(i And &HFFFFFFF, 16).ToUpper.PadLeft(8, "0"c))
-                sb.Append(" ")
-                sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                i += 4
-            End If
-            If MODE.Text = "PMETAN" Then
-                sb.Append("_NWR ")
-                sb.Append("0x80000000 0x")
-                sb.Append(Convert.ToString(i, 16).ToUpper.PadLeft(8, "0"c))
-                sb.Append(" ")
-                sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                i += 4
-            End If
-            If MODE.Text = "PSPAR(0xE)" Then
-                If odd = False Then
-                    sb.Append("_M ")
-                    sb.Append(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                If MODE.Text = "NITEPR" Then
+                    sb.Append("0x")
+                    sb.Append(Convert.ToString(i, 16).ToUpper.PadLeft(8, "0"c))
                     sb.Append(" ")
-                    odd = True
-                Else
                     sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                    odd = False
+                    i += 4
                 End If
-                i += 8
-            End If
-            If MODE.Text = "TEMPAR(0xC2)" Then
-                If odd = False Then
-                    sb.Append("_M ")
-                    sb.Append(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                    sb.Append(" ")
-                    odd = True
-                Else
-                    sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                    odd = False
-                End If
-                i += 8
-            End If
-            If MODE.Text = "CMFUSION(0xF0)" Then
-                If odd = False Then
+                If MODE.Text = "CWCHEAT" Then
                     sb.Append("_L ")
-                    sb.Append(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                    sb.Append("0x")
+                    sb.Append(Convert.ToString(i Or &H20000000, 16).ToUpper.PadLeft(8, "0"c))
                     sb.Append(" ")
-                    odd = True
-                Else
                     sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                    odd = False
+                    i += 4
                 End If
-                i += 8
+                If MODE.Text = "PSPAR" Then
+                    sb.Append("_M ")
+                    sb.Append("0x")
+                    sb.Append(Convert.ToString(i And &HFFFFFFF, 16).ToUpper.PadLeft(8, "0"c))
+                    sb.Append(" ")
+                    sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                    i += 4
+                End If
+                If MODE.Text = "PMETAN" Then
+                    sb.Append("_NWR ")
+                    sb.Append("0x80000000 0x")
+                    sb.Append(Convert.ToString(i, 16).ToUpper.PadLeft(8, "0"c))
+                    sb.Append(" ")
+                    sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                    i += 4
+                End If
+                If MODE.Text = "PSPAR(0xE)" Then
+                    If odd = False Then
+                        sb.Append("_M ")
+                        sb.Append(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                        sb.Append(" ")
+                        odd = True
+                    Else
+                        sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                        odd = False
+                    End If
+                    i += 8
+                End If
+                If MODE.Text = "TEMPAR(0xC2)" Then
+                    If odd = False Then
+                        sb.Append("_N ")
+                        sb.Append(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                        sb.Append(" ")
+                        odd = True
+                    Else
+                        sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                        odd = False
+                    End If
+                    i += 8
+                End If
+                If MODE.Text = "CMFUSION(0xF0)" Then
+                    If odd = False Then
+                        sb.Append("_L ")
+                        sb.Append(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                        sb.Append(" ")
+                        odd = True
+                    Else
+                        sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                        odd = False
+                    End If
+                    i += 8
                 End If
             End If
         Next
@@ -957,7 +991,7 @@ Public Class Form1
             sb.Append("0x00000000")
             i += 4
         End If
-        i = i - Convert.ToInt32(TextBox3.Text, 16)
+        i = i - Convert.ToInt32(ADDR.Text, 16)
         If MODE.Text = "PSPAR(0xE)" Then
             sb.Insert(0, "_M 0xE0000000 0x000000" & Convert.ToString((i), 16).ToUpper.PadLeft(2, "0"c) & vbCrLf)
         ElseIf MODE.Text = "TEMPAR(0xC2)" Then
@@ -971,4 +1005,20 @@ Public Class Form1
 
         TextBox2.Text = sb.ToString
     End Sub
+
+    Private Sub only_hexdicimal(sender As System.Object, e As System.Windows.Forms.KeyPressEventArgs) Handles ADDR.KeyPress
+        Dim hex As New Regex("[^0-9A-Fa-fx\x08]")
+        Dim hexm As Match = hex.Match(e.KeyChar)
+        If hexm.Success Then
+            e.Handled = True
+            Beep()
+        ElseIf e.KeyChar <> "x" Then
+            e.KeyChar = Char.ToUpper(e.KeyChar)
+        End If
+    End Sub
+
+    Private Sub MODE_SelectedIndexChanged(sender As System.Object, e As System.Windows.Forms.KeyPressEventArgs) Handles MODE.KeyPress
+        e.Handled = True
+    End Sub
+
 End Class

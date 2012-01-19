@@ -41,7 +41,7 @@ Partial Class version
         'LinkLabel1
         '
         Me.LinkLabel1.AutoSize = True
-        Me.LinkLabel1.Location = New System.Drawing.Point(71, 123)
+        Me.LinkLabel1.Location = New System.Drawing.Point(71, 130)
         Me.LinkLabel1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LinkLabel1.Name = "LinkLabel1"
         Me.LinkLabel1.Size = New System.Drawing.Size(89, 14)
@@ -53,16 +53,16 @@ Partial Class version
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(14, 99)
+        Me.Label2.Location = New System.Drawing.Point(14, 98)
         Me.Label2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(153, 14)
+        Me.Label2.Size = New System.Drawing.Size(167, 14)
         Me.Label2.TabIndex = 2
-        Me.Label2.Text = "BUILD:2012/01/19 12:04"
+        Me.Label2.Text = "BUILD:2012/01/19-1 12:42"
         '
         'CDEupdate
         '
-        Me.CDEupdate.Location = New System.Drawing.Point(69, 145)
+        Me.CDEupdate.Location = New System.Drawing.Point(74, 148)
         Me.CDEupdate.Margin = New System.Windows.Forms.Padding(4)
         Me.CDEupdate.Name = "CDEupdate"
         Me.CDEupdate.Size = New System.Drawing.Size(88, 27)
@@ -74,7 +74,7 @@ Partial Class version
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(249, 177)
+        Me.ClientSize = New System.Drawing.Size(249, 178)
         Me.Controls.Add(Me.CDEupdate)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.LinkLabel1)

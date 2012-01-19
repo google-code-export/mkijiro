@@ -1,0 +1,14 @@
+2012/01/19
+TEMPAR 0xC2が_Nになってなかったので修正
+PS2DISのタブテキストに一部対応
+＃以降の文字を自動除去するようにした
+nopが出てなかったので修正
+confであどれす・もーどを保存するするようにした
+ADDIU周辺が変だったので修正
+
+2012/01/18
+とりあえず作成,
+
+参考サイト
+http://psp.jim.sh/svn/log.php?repname=psp&path=%2Ftrunk%2Fprxtool%2F&isdir=1&all=1
+http://code.google.com/p/pops-gte/wiki/DisasmHints
