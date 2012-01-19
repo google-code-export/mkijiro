@@ -58,7 +58,7 @@ Partial Class version
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(153, 14)
         Me.Label2.TabIndex = 2
-        Me.Label2.Text = "BUILD:2012/01/18 17:27"
+        Me.Label2.Text = "BUILD:2012/01/19 12:04"
         '
         'CDEupdate
         '
