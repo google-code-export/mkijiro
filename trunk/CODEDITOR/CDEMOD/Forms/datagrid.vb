@@ -1383,10 +1383,11 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                     '0x20 add/boolean
                 ElseIf mips = "addi" Then
                     hex = hex Or &H20000000
-                    hex = valdec_boolean_para(str, hex, 3)
+                    hex = reg_boolean2(str, hex, 0)
+                    hex = valhex_boolean(str, hex)
                 ElseIf mips = "addiu" Then
                     hex = hex Or &H24000000
-                    hex = reg_boolean(str, hex, 0)
+                    hex = reg_boolean2(str, hex, 0)
                     hex = valhex_boolean(str, hex)
                 ElseIf mips = "li" Then
                     hex = hex Or &H24000000
@@ -1394,23 +1395,23 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                     hex = valhex_boolean(str, hex)
                 ElseIf mips = "slti" Then
                     hex = hex Or &H28000000
-                    hex = reg_boolean(str, hex, 0)
+                    hex = reg_boolean2(str, hex, 0)
                     hex = valhex_boolean(str, hex)
                 ElseIf mips = "sltiu" Then
                     hex = hex Or &H2C000000
-                    hex = reg_boolean(str, hex, 0)
+                    hex = reg_boolean2(str, hex, 0)
                     hex = valhex_boolean(str, hex)
                 ElseIf mips = "andi" Then
                     hex = hex Or &H30000000
-                    hex = reg_boolean(str, hex, 0)
+                    hex = reg_boolean2(str, hex, 0)
                     hex = valhex_boolean(str, hex)
                 ElseIf mips = "ori" Then
                     hex = hex Or &H34000000
-                    hex = reg_boolean(str, hex, 0)
+                    hex = reg_boolean2(str, hex, 0)
                     hex = valhex_boolean(str, hex)
                 ElseIf mips = "xori" Then
                     hex = hex Or &H38000000
-                    hex = reg_boolean(str, hex, 0)
+                    hex = reg_boolean2(str, hex, 0)
                     hex = valhex_boolean(str, hex)
                 ElseIf mips = "lui" Then
                     hex = hex Or &H3C000000
@@ -1908,13 +1909,17 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
     Function reg_sel(ByVal s As String) As Integer
         Dim ss As String() = {"zr", "at", "v0", "v1", "a0", "a1", "a2", "a3", "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "s0", "s1", "s2", "s3", "s4", "s5", "s6", "s7", "t8", "t9", "k0", "k1", "gp", "sp", "fp", "ra"}
         Dim i As Integer
-        For i = 0 To 31
-            If ss(i) = s Then
-                Exit For
-            ElseIf s = "s8" Then
-                i = 30
-            End If
-        Next
+        If s = "zero" Then
+            i = 0
+        ElseIf s = "s8" Then
+            i = 30
+        Else
+            For i = 0 To 31
+                If ss(i) = s Then
+                    Exit For
+                End If
+            Next
+        End If
         Return i
     End Function
 
@@ -1929,7 +1934,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 
     Function reg_boolean_para(ByVal str As String, ByVal hex As Integer, ByVal k As Integer) As Integer
 
-        Dim reg As New Regex("(zr|at|a[0-3]|v[0-1]|t[0-9]|k[0-1]|s[0-8]|sp|gp|fp|ra)")
+        Dim reg As New Regex("(zero|zr|at|a[0-3]|v[0-1]|t[0-9]|k[0-1]|s[0-8]|sp|gp|fp|ra)")
         Dim regm As Match = reg.Match(str)
         If regm.Success Then
             hex = hex Or ((reg_sel(regm.Value) << 21) >> (5 * k))
@@ -1938,7 +1943,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
     End Function
 
     Function reg_boolean(ByVal str As String, ByVal hex As Integer, ByVal k As Integer) As Integer
-        Dim reg As New Regex("(zr|at|a[0-3]|v[0-1]|t[0-9]|k[0-1]|s[0-8]|sp|gp|fp|ra)")
+        Dim reg As New Regex("(zero|zr|at|a[0-3]|v[0-1]|t[0-9]|k[0-1]|s[0-8]|sp|gp|fp|ra)")
         Dim regm As Match = reg.Match(str)
         While regm.Success
             hex = hex Or ((reg_sel(regm.Value) << 21) >> (5 * k))
@@ -1949,7 +1954,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
     End Function
 
     Function reg_boolean2(ByVal str As String, ByVal hex As Integer, ByVal k As Integer) As Integer
-        Dim reg As New Regex("(zr|at|a[0-3]|v[0-1]|t[0-9]|k[0-1]|s[0-8]|sp|gp|fp|ra)")
+        Dim reg As New Regex("(zero|zr|at|a[0-3]|v[0-1]|t[0-9]|k[0-1]|s[0-8]|sp|gp|fp|ra)")
         Dim regm As Match = reg.Match(str)
         While regm.Success
             hex = hex Or ((reg_sel(regm.Value) << 16) << (5 * k))
@@ -1960,7 +1965,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
     End Function
 
     Function reg_boolean3(ByVal str As String, ByVal hex As Integer, ByVal k As Integer) As Integer
-        Dim reg As New Regex("(zr|at|a[0-3]|v[0-1]|t[0-9]|k[0-1]|s[0-8]|sp|gp|fp|ra)")
+        Dim reg As New Regex("(zero|zr|at|a[0-3]|v[0-1]|t[0-9]|k[0-1]|s[0-8]|sp|gp|fp|ra)")
         Dim regm As Match = reg.Match(str)
         While regm.Success
             hex = hex Or ((reg_sel(regm.Value) << 11) << (5 * k))
@@ -1971,7 +1976,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
     End Function
 
     Function reg_boolean4(ByVal str As String, ByVal hex As Integer, ByVal k As Integer) As Integer
-        Dim reg As New Regex("(zr|at|a[0-3]|v[0-3]|t[0-9]|k[0-1]|s[0-8]|sp|gp|fp|ra)")
+        Dim reg As New Regex("(zero|zr|at|a[0-3]|v[0-3]|t[0-9]|k[0-1]|s[0-8]|sp|gp|fp|ra)")
         Dim regm As Match = reg.Match(str)
         While regm.Success
             hex = hex Or ((reg_sel(regm.Value) << 6) << (5 * k))

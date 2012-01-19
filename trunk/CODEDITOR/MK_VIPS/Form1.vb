@@ -14,11 +14,12 @@ Public Class Form1
             Dim ss As String() = str.Split(CChar(","))
             Dim mips As String = ""
 
-            Dim shead As New Regex("^[a-z0-9\.]+\x20+")
+            Dim shead As New Regex("^[a-z0-9\.]+(\x20|\t)+")
             Dim sheadm As Match = shead.Match(str)
 
             If sheadm.Success Then
                 mips = sheadm.Value.Replace(" ", "")
+                mips = mips.Replace(vbTab, "")
                 ss(0) = ss(0).Replace(sheadm.Value, "")
                 If mips = "nop" Then
                 ElseIf mips = "syscall" Then
@@ -267,13 +268,15 @@ Public Class Form1
                     hex = reg_boolean_para(str, hex, 0)
                     hex = offset_boolean2(str, hex, hex2)
 
+
                     '0x20 add/boolean
                 ElseIf mips = "addi" Then
                     hex = hex Or &H20000000
-                    hex = valdec_boolean_para(str, hex, 3)
+                    hex = reg_boolean2(str, hex, 0)
+                    hex = valhex_boolean(str, hex)
                 ElseIf mips = "addiu" Then
                     hex = hex Or &H24000000
-                    hex = reg_boolean(str, hex, 0)
+                    hex = reg_boolean2(str, hex, 0)
                     hex = valhex_boolean(str, hex)
                 ElseIf mips = "li" Then
                     hex = hex Or &H24000000
@@ -281,23 +284,23 @@ Public Class Form1
                     hex = valhex_boolean(str, hex)
                 ElseIf mips = "slti" Then
                     hex = hex Or &H28000000
-                    hex = reg_boolean(str, hex, 0)
+                    hex = reg_boolean2(str, hex, 0)
                     hex = valhex_boolean(str, hex)
                 ElseIf mips = "sltiu" Then
                     hex = hex Or &H2C000000
-                    hex = reg_boolean(str, hex, 0)
+                    hex = reg_boolean2(str, hex, 0)
                     hex = valhex_boolean(str, hex)
                 ElseIf mips = "andi" Then
                     hex = hex Or &H30000000
-                    hex = reg_boolean(str, hex, 0)
+                    hex = reg_boolean2(str, hex, 0)
                     hex = valhex_boolean(str, hex)
                 ElseIf mips = "ori" Then
                     hex = hex Or &H34000000
-                    hex = reg_boolean(str, hex, 0)
+                    hex = reg_boolean2(str, hex, 0)
                     hex = valhex_boolean(str, hex)
                 ElseIf mips = "xori" Then
                     hex = hex Or &H38000000
-                    hex = reg_boolean(str, hex, 0)
+                    hex = reg_boolean2(str, hex, 0)
                     hex = valhex_boolean(str, hex)
                 ElseIf mips = "lui" Then
                     hex = hex Or &H3C000000
@@ -863,7 +866,7 @@ Public Class Form1
     End Function
 
     Function reg_boolean4(ByVal str As String, ByVal hex As Integer, ByVal k As Integer) As Integer
-        Dim reg As New Regex("(zr|at|a[0-3]|v[0-3]|t[0-9]|k[0-1]|s[0-8]|sp|gp|fp|ra)")
+        Dim reg As New Regex("(zero|zr|at|a[0-3]|v[0-3]|t[0-9]|k[0-1]|s[0-8]|sp|gp|fp|ra)")
         Dim regm As Match = reg.Match(str)
         While regm.Success
             hex = hex Or ((reg_sel(regm.Value) << 6) << (5 * k))
@@ -879,6 +882,8 @@ Public Class Form1
         Dim i As Integer = Convert.ToInt32(TextBox3.Text, 16)
         Dim odd As Boolean = False
         For Each s As String In ss
+            If s.Contains("__") Or s.Trim = "" Then
+            Else
             If MODE.Text = "NITEPR" Then
                 sb.Append("0x")
                 sb.Append(Convert.ToString(i, 16).ToUpper.PadLeft(8, "0"c))
@@ -945,6 +950,7 @@ Public Class Form1
                     odd = False
                 End If
                 i += 8
+                End If
             End If
         Next
         If odd = True Then
