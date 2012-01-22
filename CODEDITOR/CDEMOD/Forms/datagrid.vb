@@ -1215,7 +1215,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                     hex = reg_boolean_para(ss(0), hex, 2)
                     hex = reg_boolean_para(ss(1), hex, 0)
                     hex = reg_boolean_para(ss(2), hex, 1)
-                ElseIf mips = "mov" Then
+                ElseIf mips = "mov" Or mips = "move" Then
                     hex = hex Or &H21
                     hex = reg_boolean_para(ss(0), hex, 2)
                     hex = reg_boolean_para(ss(1), hex, 1)

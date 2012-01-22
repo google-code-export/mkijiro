@@ -4153,7 +4153,8 @@ void menuInput()
           }
         	break;
           
-      case 4: //INPUT EXT TEXT SEARCH
+      case 4: //INPUT EXT 
+      
         	if(pad.Buttons & CPYBUTTON) { copyMenu=1; menuDraw(); sceKernelDelayThread(150000);}
         	
           if(pad.Buttons & PSP_CTRL_CROSS)
