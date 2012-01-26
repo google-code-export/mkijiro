@@ -99,6 +99,7 @@ var ARLIMIT=document.form1.elements[7].checked;
 var ADDNO=document.form1.elements[8].checked;
 var RMNO=document.form1.elements[9].checked;
 var HEXVALUE=document.form1.elements[10].checked;
+var RMCWC=document.emu.elements[0].checked;
 var REPST=eval(document.st.elements[0].value);
 var RP=REPST.toString(16);
 var tnum=0;
@@ -161,6 +162,9 @@ var name=0;
 				{
 					funcOut='_C0 ';
 				}
+				if(RMCWC!=0){
+				funcOut= funcOut.replace("_C0 ","");
+				}
 				funcOutSect="";
 				line=0;
 				nameback="";
@@ -192,6 +196,9 @@ var name=0;
 				{
 					funcOut='_S ';
 				}
+				if(RMCWC!=0){
+				funcOut= funcOut.replace("_S ","");
+				}
 				funcOutSect="";
 			}
 			else if((letC == '_') && (letN == 'G') && (nameMode==0) && (commentMode==0) && (addressMode==0)  && (valueMode==0))
@@ -217,6 +224,9 @@ var name=0;
 				else
 				{
 					funcOut='_G ';
+				}
+				if(RMCWC!=0){
+				funcOut= funcOut.replace("_G ","");
 				}
 				funcOutSect="";
 			}
@@ -248,6 +258,9 @@ var name=0;
 			{
 				nullcode=0;
 				CWCAR="_L ";
+				if(RMCWC!=0){
+				CWCAR="";
+				}
 				mode=0;
 				addressMode=1;
 				address=0;
@@ -634,6 +647,7 @@ var name=0;
 			}
 			counter++;
 		}
+		
 
 		document.cvcode.elements[0].value = funcOut;
 
@@ -647,28 +661,34 @@ invaid string+space remover/decompresser/fixer for cwcheat code<br>
 ※IEはIE9でないとjava速度がいまいちなので1万行超える場合chromeかfirefox4推奨 <a href="http://memorva.jp/internet/pc/browser_benchmark.php">javabench</a><br>
 <form name="asc2hex">
 CWCheat/ActionReplay code:<br><textarea name="text" rows="10" cols="50"></textarea><br>
+
 <input type="Submit" value="Convert" Generate" onclick="doHex(document.asc2hex.text.value);return false">
 <input type="reset" value="Clear">
+</center>
 </form>
 <form name="form1">
-<font color="#60C0F0">#CWC特殊オプション</font><br>
-<input type="checkbox" name="fcjoker" value="ok">FreeCheatJokerLine-1(フリーチートのパッドコード-1行)　　　　　　　　　　　　　<br>
-<input type="checkbox" name="30line" value="ok" >CWCheat30lineLimit(CWCの30行制限で分割,判定は未考慮)　　　　　　　　　　　<br>
-<input type="checkbox" name="cffix" value="ok"  >CODEFREAKFIX(CFの100行制限で分割,ポインタコードに判定を追加)　　　　　<br>
-<input type="checkbox" name="serial" value="ok" >DecompressSerialCodes(シリアルコードを分解,長くなるので注意)　　　　　　　　<br>
-<input type="checkbox" name="special" value="ok">RmCMF/FCSpCodes(CMF/FREECHEATの特殊コードを除去,0xCを0x2に変更)<br>
-<font color="#C0F060">#AR特殊オプション(フリーズ対策)</font><br>
-<input type="checkbox" name="null" value="ok"   >AVOIDNULLCODEBGUG(コード無しフリーズの修正,ダミーの0xCFを付加)<br>
-<input type="checkbox" name="d4_dc" value="ok"  >RemoveNull0xDC,0xD4(0xDC,0xD4の右コード0の場合除去)　　　　　　　　<br>
-<input type="checkbox" name="100line" value="ok">ARnextOffsetLimit(ARの<s>128行制限</s>名前長考慮して100行で長いシリアルのみ分割,判定は未考慮)<br>
-<input type="checkbox" name="addNO" value="ok">AddNameNo.(コードタイトル番号を付加)　　　　　　　　　　　　　　　　　　　　<br>
-<input type="checkbox" name="rmNO" value="ok">RmNameNo.(コードタイトル番号を除去)　　　　　　　　　　　　　　　　　　　　　<br>
-<br>
+<font color="#60C0F0"><center>#CWC特殊オプション</center></font>
+<p class="cwc"><input type="checkbox" name="fcjoker" value="ok">FreeCheatJokerLine-1(フリーチートのパッドコード-1行)</p>
+<p class="cwc"><input type="checkbox" name="30line" value="ok" >CWCheat30lineLimit(CWCの30行制限で分割,判定は未考慮)</p>
+<p class="cwc"><input type="checkbox" name="cffix" value="ok"  >CODEFREAKFIX(CFの100行制限で分割,ポインタコードに判定を追加)</p>
+<p class="cwc"><input type="checkbox" name="serial" value="ok" >DecompressSerialCodes(シリアルコードを分解,長くなるので注意)</p>
+<p class="cwc"><input type="checkbox" name="special" value="ok">RmCMF/FCSpCodes(CMF/FREECHEATの特殊コードを除去,0xCを0x2に変更)</p>
+<font color="#C0F060"><center>#AR特殊オプション(フリーズ対策)</center></font>
+<p class="ar"><input type="checkbox" name="null" value="ok"   >AVOIDNULLCODEBGUG(コード無しフリーズの修正,ダミーの0xCFを付加)</p>
+<p class="ar"><input type="checkbox" name="d4_dc" value="ok"  >RemoveNull0xDC,0xD4(0xDC,0xD4の右コード0の場合除去)</p>
+<p class="ar"><input type="checkbox" name="100line" value="ok">ARnextOffsetLimit(ARの<s>128行制限</s>名前長考慮して100行で長いシリアルのみ分割,判定は未考慮)</p>
+<p class="ar"><input type="checkbox" name="addNO" value="ok">AddNameNo.(コードタイトル番号を付加)</p>
+<p class="ar"><input type="checkbox" name="rmNO" value="ok">RmNameNo.(コードタイトル番号を除去)</p>
+<center>
 <font color="#60C0F0">#CWCWIK特殊オプション</font><br>
-<input type="checkbox" name="hex" value="ok">ForceHEX(0xがないものでも強制16進数扱いににする)
+<input type="checkbox" name="hex" value="ok">ForceHEX(0xがないものでも強制16進数扱いにする)<br>
+</form>
+<form name="emu">
+<font color="#C0F060">#JPCPS特殊オプション</font><br>
+<input type="checkbox" name="jpcps" value="ok">REMOVE CWCHEADER(CWCの_Lを除去して出力)<br>
 </form>
 <form name="st">
-ReplaceVal(0xghijklmnなど16進数でないもの置換文字)<br>
+<br>ReplaceVal(0xghijklmnなど16進数でないもの置換文字)<br>
 <INPUT TYPE="text" NAME="text1" SIZE="40" VALUE="0xA" onblur="inputcheck();"><BR>
 </form>
 REGULAR CWC/AR CODE:<br>
