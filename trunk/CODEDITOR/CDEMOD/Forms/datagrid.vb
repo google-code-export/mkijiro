@@ -1230,12 +1230,12 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                     hex = hex Or &H23
                     hex = reg_boolean_para(ss(0), hex, 2)
                     hex = reg_boolean_para(ss(1), hex, 1)
-                ElseIf mips = "or" Then
+                ElseIf mips = "and" Then
                     hex = hex Or &H24
                     hex = reg_boolean_para(ss(0), hex, 2)
                     hex = reg_boolean_para(ss(1), hex, 0)
                     hex = reg_boolean_para(ss(2), hex, 1)
-                ElseIf mips = "and" Then
+                ElseIf mips = "or" Then
                     hex = hex Or &H25
                     hex = reg_boolean_para(ss(0), hex, 2)
                     hex = reg_boolean_para(ss(1), hex, 0)
