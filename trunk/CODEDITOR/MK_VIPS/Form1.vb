@@ -32,6 +32,7 @@ Public Class Form1
         sr.Close()
     End Sub
 
+
     Function assembler(ByVal str As String, ByVal str2 As String) As String
         Try
             Dim hex As Integer = 0
@@ -46,7 +47,7 @@ Public Class Form1
             End If
             str &= " "
 
-            Dim valhex As New Regex("(\$|0x)[0-9A-Fa-f]{1,8}")
+            Dim valhex As New Regex("(\$|0x)[0-9A-Fa-f]{3,8}")
             Dim valhexm As Match = valhex.Match(str)
             If valhexm.Success Then
                 str = str.Replace(valhexm.Value, valhexm.Value.ToUpper)
@@ -60,7 +61,7 @@ Public Class Form1
                 mips = sheadm.Value.Replace(" ", "")
                 mips = mips.Replace(vbTab, "")
                 str = str.Trim
-                ss(0) = ss(0).Replace(sheadm.Value, "")
+                ss(0) = ss(0).Replace(sheadm.Value, "").ToLower
                 If mips = "nop" Then
                 ElseIf mips = "syscall" Then
                     hex = 12
@@ -99,8 +100,7 @@ Public Class Form1
                     hex = hex Or &H9
                     If ss.Length = 1 Then
                         Array.Resize(ss, 2)
-                        ss(1) = ss(0)
-                        ss(0) = "ra"
+                        ss(1) = "ra"
                     End If
                     hex = reg_boolean_para(ss(0), hex, 0)
                     hex = reg_boolean_para(ss(1), hex, 2)
@@ -366,19 +366,19 @@ Public Class Form1
                 ElseIf mips = "eret" Then
                     hex = &H42000018
                 ElseIf mips = "cfc1" Then
-                    hex = hex Or &H40400000
+                    hex = hex Or &H44400000
                     hex = reg_boolean_para(ss(0), hex, 1)
                     hex = hex Or (cop_sel(ss(1), "") << 11)
                 ElseIf mips = "ctc1" Then
-                    hex = hex Or &H40C00000
+                    hex = hex Or &H44C00000
                     hex = reg_boolean_para(ss(0), hex, 1)
                     hex = hex Or (cop_sel(ss(1), "") << 11)
                 ElseIf mips = "mfc1" Then
-                    hex = hex Or &H40000000
+                    hex = hex Or &H44000000
                     hex = reg_boolean_para(ss(0), hex, 1)
                     hex = float_sel(ss(1), hex, 2)
                 ElseIf mips = "mtc1" Then
-                    hex = hex Or &H40800000
+                    hex = hex Or &H44800000
                     hex = reg_boolean_para(ss(0), hex, 1)
                     hex = float_sel(ss(1), hex, 2)
                 ElseIf mips = "bc1f" Then
