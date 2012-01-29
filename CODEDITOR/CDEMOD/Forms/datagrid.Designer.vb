@@ -24,6 +24,11 @@ Partial Class datagrid
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
+        Me.アドレス = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.値 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.編集タイプ = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.入力値 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.備考 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.CNVbikou = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.addline = New System.Windows.Forms.ToolStripMenuItem()
         Me.addmacro = New System.Windows.Forms.ToolStripMenuItem()
@@ -41,13 +46,12 @@ Partial Class datagrid
         Me.gridsave = New System.Windows.Forms.CheckBox()
         Me.g_address = New System.Windows.Forms.RadioButton()
         Me.g_value = New System.Windows.Forms.RadioButton()
-        Me.アドレス = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.値 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.編集タイプ = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.入力値 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.備考 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Label2 = New System.Windows.Forms.Label()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.CNVbikou.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'DataGridView1
@@ -57,13 +61,65 @@ Partial Class datagrid
         Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.アドレス, Me.値, Me.編集タイプ, Me.入力値, Me.備考})
         Me.DataGridView1.ContextMenuStrip = Me.CNVbikou
         Me.DataGridView1.ImeMode = System.Windows.Forms.ImeMode.NoControl
-        Me.DataGridView1.Location = New System.Drawing.Point(4, 46)
+        Me.DataGridView1.Location = New System.Drawing.Point(7, 86)
         Me.DataGridView1.Margin = New System.Windows.Forms.Padding(4)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.RowTemplate.Height = 21
         Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridView1.Size = New System.Drawing.Size(517, 280)
         Me.DataGridView1.TabIndex = 0
+        '
+        'アドレス
+        '
+        Me.アドレス.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
+        Me.アドレス.Frozen = True
+        Me.アドレス.HeaderText = "アドレス"
+        Me.アドレス.MaxInputLength = 10
+        Me.アドレス.Name = "アドレス"
+        Me.アドレス.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.アドレス.Width = 56
+        '
+        '値
+        '
+        Me.値.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
+        Me.値.Frozen = True
+        Me.値.HeaderText = "値"
+        Me.値.MaxInputLength = 10
+        Me.値.Name = "値"
+        Me.値.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.値.Width = 27
+        '
+        '編集タイプ
+        '
+        Me.編集タイプ.AutoComplete = False
+        Me.編集タイプ.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
+        Me.編集タイプ.Frozen = True
+        Me.編集タイプ.HeaderText = "編集タイプ"
+        Me.編集タイプ.Items.AddRange(New Object() {"DEC", "DEC16BIT", "BINARY32", "BIN32>>16", "BINARY16", "OR", "AND", "XOR", "ASM"})
+        Me.編集タイプ.Name = "編集タイプ"
+        Me.編集タイプ.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.編集タイプ.Width = 72
+        '
+        '入力値
+        '
+        Me.入力値.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
+        Me.入力値.Frozen = True
+        Me.入力値.HeaderText = "入力値　　　 "
+        Me.入力値.MaxInputLength = 11
+        Me.入力値.MinimumWidth = 88
+        Me.入力値.Name = "入力値"
+        Me.入力値.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.入力値.Width = 88
+        '
+        '備考
+        '
+        Me.備考.FillWeight = 200.0!
+        Me.備考.HeaderText = "備考　　　　"
+        Me.備考.MaxInputLength = 64
+        Me.備考.MinimumWidth = 80
+        Me.備考.Name = "備考"
+        Me.備考.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.備考.Width = 83
         '
         'CNVbikou
         '
@@ -144,10 +200,10 @@ Partial Class datagrid
         '
         'APPLY
         '
-        Me.APPLY.Location = New System.Drawing.Point(304, 8)
+        Me.APPLY.Location = New System.Drawing.Point(153, 26)
         Me.APPLY.Margin = New System.Windows.Forms.Padding(4)
         Me.APPLY.Name = "APPLY"
-        Me.APPLY.Size = New System.Drawing.Size(88, 27)
+        Me.APPLY.Size = New System.Drawing.Size(65, 27)
         Me.APPLY.TabIndex = 2
         Me.APPLY.Text = "適用"
         Me.APPLY.UseVisualStyleBackColor = True
@@ -155,7 +211,7 @@ Partial Class datagrid
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(11, 15)
+        Me.Label1.Location = New System.Drawing.Point(228, 11)
         Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(11, 14)
@@ -165,7 +221,7 @@ Partial Class datagrid
         'gridsave
         '
         Me.gridsave.AutoSize = True
-        Me.gridsave.Location = New System.Drawing.Point(398, 14)
+        Me.gridsave.Location = New System.Drawing.Point(16, 38)
         Me.gridsave.Name = "gridsave"
         Me.gridsave.Size = New System.Drawing.Size(130, 18)
         Me.gridsave.TabIndex = 4
@@ -175,7 +231,7 @@ Partial Class datagrid
         'g_address
         '
         Me.g_address.AutoSize = True
-        Me.g_address.Location = New System.Drawing.Point(178, 14)
+        Me.g_address.Location = New System.Drawing.Point(16, 11)
         Me.g_address.Name = "g_address"
         Me.g_address.Size = New System.Drawing.Size(70, 18)
         Me.g_address.TabIndex = 5
@@ -187,7 +243,7 @@ Partial Class datagrid
         '
         Me.g_value.AutoSize = True
         Me.g_value.Checked = True
-        Me.g_value.Location = New System.Drawing.Point(245, 14)
+        Me.g_value.Location = New System.Drawing.Point(92, 11)
         Me.g_value.Name = "g_value"
         Me.g_value.Size = New System.Drawing.Size(56, 18)
         Me.g_value.TabIndex = 6
@@ -195,68 +251,44 @@ Partial Class datagrid
         Me.g_value.Text = "value"
         Me.g_value.UseVisualStyleBackColor = True
         '
-        'アドレス
+        'ComboBox1
         '
-        Me.アドレス.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
-        Me.アドレス.Frozen = True
-        Me.アドレス.HeaderText = "アドレス"
-        Me.アドレス.MaxInputLength = 10
-        Me.アドレス.Name = "アドレス"
-        Me.アドレス.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.アドレス.Width = 56
+        Me.ComboBox1.FormattingEnabled = True
+        Me.ComboBox1.Items.AddRange(New Object() {"DEC", "BINARY32", "BIN32>>16", "BINARY16", "ASM"})
+        Me.ComboBox1.Location = New System.Drawing.Point(355, 36)
+        Me.ComboBox1.Name = "ComboBox1"
+        Me.ComboBox1.Size = New System.Drawing.Size(121, 22)
+        Me.ComboBox1.TabIndex = 7
         '
-        '値
+        'Panel1
         '
-        Me.値.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
-        Me.値.Frozen = True
-        Me.値.HeaderText = "値"
-        Me.値.MaxInputLength = 10
-        Me.値.Name = "値"
-        Me.値.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.値.Width = 27
+        Me.Panel1.Controls.Add(Me.Label2)
+        Me.Panel1.Controls.Add(Me.APPLY)
+        Me.Panel1.Controls.Add(Me.ComboBox1)
+        Me.Panel1.Controls.Add(Me.Label1)
+        Me.Panel1.Controls.Add(Me.g_value)
+        Me.Panel1.Controls.Add(Me.g_address)
+        Me.Panel1.Controls.Add(Me.gridsave)
+        Me.Panel1.Location = New System.Drawing.Point(22, 12)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(502, 67)
+        Me.Panel1.TabIndex = 8
         '
-        '編集タイプ
+        'Label2
         '
-        Me.編集タイプ.AutoComplete = False
-        Me.編集タイプ.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
-        Me.編集タイプ.Frozen = True
-        Me.編集タイプ.HeaderText = "編集タイプ"
-        Me.編集タイプ.Items.AddRange(New Object() {"DEC", "DEC16BIT", "BINARY32", "BIN32>>16", "BINARY16", "OR", "AND", "XOR", "ASM"})
-        Me.編集タイプ.Name = "編集タイプ"
-        Me.編集タイプ.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.編集タイプ.Width = 72
-        '
-        '入力値
-        '
-        Me.入力値.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
-        Me.入力値.Frozen = True
-        Me.入力値.HeaderText = "入力値　　　 "
-        Me.入力値.MaxInputLength = 11
-        Me.入力値.MinimumWidth = 88
-        Me.入力値.Name = "入力値"
-        Me.入力値.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.入力値.Width = 88
-        '
-        '備考
-        '
-        Me.備考.FillWeight = 200.0!
-        Me.備考.HeaderText = "備考　　　　"
-        Me.備考.MaxInputLength = 64
-        Me.備考.MinimumWidth = 80
-        Me.備考.Name = "備考"
-        Me.備考.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.備考.Width = 83
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(228, 39)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(122, 14)
+        Me.Label2.TabIndex = 8
+        Me.Label2.Text = "編集タイプ一括変更"
         '
         'datagrid
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(564, 340)
-        Me.Controls.Add(Me.g_value)
-        Me.Controls.Add(Me.g_address)
-        Me.Controls.Add(Me.gridsave)
-        Me.Controls.Add(Me.Label1)
-        Me.Controls.Add(Me.APPLY)
+        Me.ClientSize = New System.Drawing.Size(537, 372)
+        Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.DataGridView1)
         Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "datagrid"
@@ -264,8 +296,9 @@ Partial Class datagrid
         Me.Text = "データグリッドエディター"
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.CNVbikou.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
     Friend WithEvents DataGridView1 As System.Windows.Forms.DataGridView
@@ -291,4 +324,7 @@ Partial Class datagrid
     Friend WithEvents 編集タイプ As System.Windows.Forms.DataGridViewComboBoxColumn
     Friend WithEvents 入力値 As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents 備考 As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents ComboBox1 As System.Windows.Forms.ComboBox
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents Label2 As System.Windows.Forms.Label
 End Class
