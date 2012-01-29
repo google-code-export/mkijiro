@@ -39,12 +39,19 @@ Public Class Form1
             Dim asm As String = ""
             Dim mips As String = ""
 
-            Dim psdis As New Regex("(\t|\x20|\x3000)*?#.+$")
+            Dim psdis As New Regex("(\t|\x20|　)*?#.+$")
             Dim psdism As Match = psdis.Match(str)
             If psdism.Success Then
                 str = str.Substring(0, psdism.Index)
             End If
             str &= " "
+
+            Dim valhex As New Regex("(\$|0x)[0-9A-Fa-f]{1,8}")
+            Dim valhexm As Match = valhex.Match(str)
+            If valhexm.Success Then
+                str = str.Replace(valhexm.Value, valhexm.Value.ToUpper)
+                str = str.Replace("0X", "0x")
+            End If
             Dim ss As String() = str.Split(CChar(","))
             Dim shead As New Regex("^[a-z0-9\.]+(\x20|\t)+")
             Dim sheadm As Match = shead.Match(str)
@@ -109,16 +116,16 @@ Public Class Form1
                     hex = reg_boolean_para(ss(2), hex, 1)
                 ElseIf mips = "mfhi" Then
                     hex = hex Or &H10
-                    hex = reg_boolean_para(str, hex, 2)
+                    hex = reg_boolean_para(ss(0), hex, 2)
                 ElseIf mips = "mthi" Then
                     hex = hex Or &H11
-                    hex = reg_boolean_para(str, hex, 0)
+                    hex = reg_boolean_para(ss(0), hex, 0)
                 ElseIf mips = "mflo" Then
                     hex = hex Or &H12
-                    hex = reg_boolean_para(str, hex, 2)
+                    hex = reg_boolean_para(ss(0), hex, 2)
                 ElseIf mips = "mtlo" Then
                     hex = hex Or &H13
-                    hex = reg_boolean_para(str, hex, 0)
+                    hex = reg_boolean_para(ss(0), hex, 0)
                 ElseIf mips = "clz" Then
                     hex = hex Or &H16
                     hex = reg_boolean2(str, hex, 0)
@@ -300,7 +307,6 @@ Public Class Form1
                     hex = hex Or &H1C000000
                     hex = reg_boolean_para(str, hex, 0)
                     hex = offset_boolean2(str, hex, hex2)
-
 
                     '0x20 add/boolean
                 ElseIf mips = "addi" Then
@@ -739,7 +745,7 @@ Public Class Form1
         Dim k As Integer = 0
         If valhexm.Success Then
             k = Convert.ToInt32(valhexm.Value.Replace("$", "").Remove(0, 1), 16)
-            If k < &H8800000 Then
+            If k < &H1800000 Then
                 k += &H8800000
             End If
             hex = hex Or ((k >> 2) And &H3FFFFFF)
@@ -755,10 +761,10 @@ Public Class Form1
         Dim k As Integer = 0
         If valhexm.Success Then
             k = Convert.ToInt32(valhexm.Value.Replace("$", "").Remove(0, 1), 16)
-            If k < &H8800000 Then
+            If k < &H1800000 Then
                 k += &H8800000
             End If
-            If hex2 < &H8800000 Then
+            If hex2 < &H1800000 Then
                 hex2 += &H8800000
             End If
             hex = hex Or ((k - hex2 - 4) >> 2 And &HFFFF)
@@ -922,10 +928,10 @@ Public Class Form1
                 i -= &H8800000
             End If
         Else
-            If st < &H8800000 Then
+            If st < &H1800000 Then
                 st += &H8800000
             End If
-            If i < &H8800000 Then
+            If i < &H1800000 Then
                 i += &H8800000
             End If
         End If

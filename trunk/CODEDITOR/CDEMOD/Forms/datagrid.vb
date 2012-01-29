@@ -1124,15 +1124,29 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
             Dim hex As Integer = 0
             Dim hex2 As Integer = Convert.ToInt32(str2, 16) And &H9FFFFFFF
             Dim asm As String = ""
-            Dim ss As String() = str.Split(CChar(","))
             Dim mips As String = ""
+
+            Dim psdis As New Regex("(\t|\x20|　)*?#.+$")
+            Dim psdism As Match = psdis.Match(str)
+            If psdism.Success Then
+                str = str.Substring(0, psdism.Index)
+            End If
             str &= " "
-            Dim shead As New Regex("^[a-z0-9\.]+\x20+")
+
+            Dim valhex As New Regex("(\$|0x)[0-9A-Fa-f]{1,8}")
+            Dim valhexm As Match = valhex.Match(str)
+            If valhexm.Success Then
+                str = str.Replace(valhexm.Value, valhexm.Value.ToUpper)
+                str = str.Replace("0X", "0x")
+            End If
+            Dim ss As String() = str.Split(CChar(","))
+            Dim shead As New Regex("^[a-z0-9\.]+(\x20|\t)+")
             Dim sheadm As Match = shead.Match(str)
-            str = str.Trim
 
             If sheadm.Success Then
                 mips = sheadm.Value.Replace(" ", "")
+                mips = mips.Replace(vbTab, "")
+                str = str.Trim
                 ss(0) = ss(0).Replace(sheadm.Value, "")
                 If mips = "nop" Then
                 ElseIf mips = "syscall" Then
@@ -1189,16 +1203,16 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                     hex = reg_boolean_para(ss(2), hex, 1)
                 ElseIf mips = "mfhi" Then
                     hex = hex Or &H10
-                    hex = reg_boolean_para(str, hex, 2)
+                    hex = reg_boolean_para(ss(0), hex, 2)
                 ElseIf mips = "mthi" Then
                     hex = hex Or &H11
-                    hex = reg_boolean_para(str, hex, 0)
+                    hex = reg_boolean_para(ss(0), hex, 0)
                 ElseIf mips = "mflo" Then
                     hex = hex Or &H12
-                    hex = reg_boolean_para(str, hex, 2)
+                    hex = reg_boolean_para(ss(0), hex, 2)
                 ElseIf mips = "mtlo" Then
                     hex = hex Or &H13
-                    hex = reg_boolean_para(str, hex, 0)
+                    hex = reg_boolean_para(ss(0), hex, 0)
                 ElseIf mips = "clz" Then
                     hex = hex Or &H16
                     hex = reg_boolean2(str, hex, 0)
@@ -1818,7 +1832,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         Dim k As Integer = 0
         If valhexm.Success Then
             k = Convert.ToInt32(valhexm.Value.Replace("$", "").Remove(0, 1), 16)
-            If k < &H8800000 Then
+            If k < &H1800000 Then
                 k += &H8800000
             End If
             hex = hex Or ((k >> 2) And &H3FFFFFF)
@@ -1834,10 +1848,10 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         Dim k As Integer = 0
         If valhexm.Success Then
             k = Convert.ToInt32(valhexm.Value.Replace("$", "").Remove(0, 1), 16)
-            If k < &H8800000 Then
+            If k < &H1800000 Then
                 k += &H8800000
             End If
-            If hex2 < &H8800000 Then
+            If hex2 < &H1800000 Then
                 hex2 += &H8800000
             End If
             hex = hex Or ((k - hex2 - 4) >> 2 And &HFFFF)
