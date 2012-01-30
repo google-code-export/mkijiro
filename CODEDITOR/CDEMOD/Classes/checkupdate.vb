@@ -13,7 +13,7 @@ Public Class checkupdate
 
             If My.Settings.updatesever = False Then
                 exe = "http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/CDEMOD/bin/Release/CDE_CP932_FM4.exe"
-                up = "http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/CODEDITOR/CDEMOD/updater/bin/Release/updater.exe"
+                up = "http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/CDEMOD/updater/bin/Release//updater.exe"
             End If
 
             '保存先のファイル名
