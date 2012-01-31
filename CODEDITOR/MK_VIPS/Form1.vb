@@ -679,6 +679,7 @@ Public Class Form1
                 ElseIf mips = "ll" Then
                     hex = &HC0000000
                     hex = reg_boolean_para(ss(0), hex, 1)
+                    hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
                     hex = offset_boolean3(str, hex)
                 ElseIf mips = "lwc1" Then
                     hex = &HC4000000
@@ -780,7 +781,7 @@ Public Class Form1
 "lbu", "0x90000000", "0xFC000000", "%t,%o", _
 "lh", "0x84000000", "0xFC000000", "%t,%o", _
 "lhu", "0x94000000", "0xFC000000", "%t,%o", _
-"ll", "0xC0000000", "0xFC000000", "%t,%O", _
+"ll", "0xC0000000", "0xFC000000", "%t,%o", _
 "lui", "0x3C000000", "0xFFE00000", "%t,%I", _
 "lw", "0x8C000000", "0xFC000000", "%t,%o", _
 "lwl", "0x88000000", "0xFC000000", "%t,%o", _
