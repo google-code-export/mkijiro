@@ -1171,10 +1171,11 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                     hex = &H9
                     If ss.Length = 1 Then
                         Array.Resize(ss, 2)
-                        ss(1) = "ra"
+                        ss(1) = ss(0)
+                        ss(0) = "ra"
                     End If
-                    hex = reg_boolean_para(ss(0), hex, 0)
-                    hex = reg_boolean_para(ss(1), hex, 2)
+                    hex = reg_boolean_para(ss(0), hex, 2)
+                    hex = reg_boolean_para(ss(1), hex, 0)
                 ElseIf mips = "movz" Then
                     hex = &HA
                     hex = reg_boolean_para(ss(0), hex, 2)
@@ -1839,7 +1840,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 "ins", "0x7C000004", "0xFC00003F", "%t,%s,%a,%ni", _
 "j", "0x08000000", "0xFC000000", "%j", _
 "jr", "0x00000008", "0xFC1FFFFF", "%J", _
-"jalr", "0x00000009", "0xFC1F07FF", "%J,%d", _
+"jalr", "0x00000009", "0xFC1F07FF", "%d,%J", _
 "jal", "0x0C000000", "0xFC000000", "%j", _
 "lb", "0x80000000", "0xFC000000", "%t,%o", _
 "lbu", "0x90000000", "0xFC000000", "%t,%o", _

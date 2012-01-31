@@ -868,8 +868,9 @@ Encoding: 0000 00ss ssst tttt dddd d000 0000 0110*/
           
         case 0x09:
           pspDebugScreenPuts("jalr     ");
-          mipsRegister(a_opcode, 0, 1);
-          mipsRegister(a_opcode, 2, 0);
+          mipsRegister(a_opcode, 2, 1);
+          mipsRegister(a_opcode, 0, 0);
+          //JALR rd,rs 
           break;
 
         case 0x0A:
