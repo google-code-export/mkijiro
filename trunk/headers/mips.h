@@ -312,7 +312,12 @@ void mipsImm(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
     a_opcode&=0xFFFC;
     sprintf(mipsNum, "%04X", a_opcode);
   }
-  else 
+  else if(a_slot==3)
+  {
+    a_opcode= (a_opcode >>6) &0xFFFFF;
+    sprintf(mipsNum, "%X", a_opcode);
+  }
+  else
   {
     a_opcode&=0xFFFF;
     sprintf(mipsNum, "%04X", a_opcode);
@@ -732,7 +737,8 @@ Encoding: 0000 00-- ---t tttt dddd dhhh hh00 0011*/
           break;
           
         case 0x0C:
-          pspDebugScreenPuts("syscall");
+          pspDebugScreenPuts("syscall  ");
+          mipsImm(a_opcode, 3, 0);
 /*SYSCALL -- System call
 Description: Generates a software interrupt.
 Operation: advance_pc (4);
@@ -741,7 +747,8 @@ Encoding: 0000 00-- ---- ---- ---- ---- --00 1100*/
           break;
           
         case 0x0D:
-          pspDebugScreenPuts("break");
+          pspDebugScreenPuts("break    ");
+          mipsImm(a_opcode, 3, 0);
           break;
           
           //0x0e = nothing
@@ -911,16 +918,16 @@ Encoding: 0000 0000 0000 0000 dddd d000 0001 0010*/
 
         case 0x16:
           pspDebugScreenPuts("clz      ");
-          mipsRegister(a_opcode, 1, 1);
-          mipsRegister(a_opcode, 2, 0);
+          mipsRegister(a_opcode, 2, 1);
+          mipsRegister(a_opcode, 0, 0);
          break;
 //        { "clo",                0x00000017, 0xFC1F07FF, "%d, %s"},
 //        { "clz",                0x00000016, 0xFC1F07FF, "%d, %s"},
 
          case 0x17:
           pspDebugScreenPuts("clo      ");
-          mipsRegister(a_opcode, 1, 1);
-          mipsRegister(a_opcode, 2, 0);
+          mipsRegister(a_opcode, 2, 1);
+          mipsRegister(a_opcode, 0, 0);
          break;
           
         case 0x20:
@@ -1849,14 +1856,14 @@ Encoding: 0011 11-- ---t tttt iiii iiii iiii iiii*/
      case 0x58:
       pspDebugScreenPuts("blezl    ");
       mipsRegister(a_opcode, S, 1);
-      mipsRegister(a_opcode, T, 1);
+      //mipsRegister(a_opcode, T, 1);
       //mipsDec(a_opcode, 0, 0);
      break;
      
      case 0x5C:
       pspDebugScreenPuts("bgtzl    ");
       mipsRegister(a_opcode, S, 1);
-      mipsRegister(a_opcode, T, 1);
+      //mipsRegister(a_opcode, T, 1);
       //mipsDec(a_opcode, 0, 0);
      break;
 
@@ -2353,11 +2360,11 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
      
       case 0xC0:
       pspDebugScreenPuts("ll       ");
-      mipsRegister(a_opcode, T, 1);
+      /*mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
       mipsRegister(a_opcode, S, 0);
-      pspDebugScreenPuts(")");
+      pspDebugScreenPuts(")");*/
       break;
       
       case 0xC4:
@@ -3438,6 +3445,7 @@ void mipsSpecial(unsigned int addresscode,unsigned int addresstmp,unsigned int c
 int mips_branch(int addressvalue){
 
 	if(((addressvalue >= 0x10000000) && (addressvalue <= 0x1FFFFFFF)) || ((addressvalue >= 0x50000000) && (addressvalue <= 0x5FFFFFFF))
+							|| ((addressvalue & 0xFC000000) == 0xC0000000)
 							|| ((addressvalue >= 0x45000000) && (addressvalue <= 0x4503FFFF)) || ((addressvalue >= 0x49000000) && (addressvalue <= 0x491FFFFF))
 							|| (((addressvalue & 0xFC1F0000) >= 0x04000000) && ((addressvalue & 0xFC1F0000) <= 0x04030000))
 							||  (((addressvalue & 0xFC1F0000) >= 0x04100000) && ((addressvalue & 0xFC1F0000) <= 0x04130000)) )
