@@ -2361,11 +2361,11 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
      
       case 0xC0:
       pspDebugScreenPuts("ll       ");
-      /*mipsRegister(a_opcode, T, 1);
+      mipsRegister(a_opcode, T, 1);
       mipsImm(a_opcode, 0, 0);
       pspDebugScreenPuts("(");
       mipsRegister(a_opcode, S, 0);
-      pspDebugScreenPuts(")");*/
+      pspDebugScreenPuts(")");
       break;
       
       case 0xC4:
@@ -3446,7 +3446,7 @@ void mipsSpecial(unsigned int addresscode,unsigned int addresstmp,unsigned int c
 int mips_branch(int addressvalue){
 
 	if(((addressvalue >= 0x10000000) && (addressvalue <= 0x1FFFFFFF)) || ((addressvalue >= 0x50000000) && (addressvalue <= 0x5FFFFFFF))
-							|| ((addressvalue & 0xFC000000) == 0xC0000000)
+							//|| ((addressvalue & 0xFC000000) == 0xC0000000)
 							|| ((addressvalue >= 0x45000000) && (addressvalue <= 0x4503FFFF)) || ((addressvalue >= 0x49000000) && (addressvalue <= 0x491FFFFF))
 							|| (((addressvalue & 0xFC1F0000) >= 0x04000000) && ((addressvalue & 0xFC1F0000) <= 0x04030000))
 							||  (((addressvalue & 0xFC1F0000) >= 0x04100000) && ((addressvalue & 0xFC1F0000) <= 0x04130000)) )
