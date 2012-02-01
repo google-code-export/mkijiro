@@ -1754,6 +1754,11 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                     hex = offset_boolean3(str, hex)
 
                     '0xe0
+                ElseIf mips = "sc" Then
+                    hex = &HE0000000
+                    hex = reg_boolean_para(ss(0), hex, 1)
+                    hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
+                    hex = offset_boolean3(str, hex)
                 ElseIf mips = "swc1" Then
                     hex = &HE4000000
                     hex = float_sel(ss(0), hex, 1)
@@ -1880,6 +1885,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 "seh", "0x7C000620", "0xFFE007FF", "%d,%t", _
 "sb", "0xA0000000", "0xFC000000", "%t,%o", _
 "sh", "0xA4000000", "0xFC000000", "%t,%o", _
+"sc", "0xE0000000", "0xFC000000", "%t, %o", _
 "sllv", "0x00000004", "0xFC0007FF", "%d,%t,%s", _
 "sll", "0x00000000", "0xFFE0003F", "%d,%t,%a", _
 "slt", "0x0000002A", "0xFC0007FF", "%d,%s,%t", _
