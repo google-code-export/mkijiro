@@ -123,7 +123,7 @@ Partial Class Form1
         Me.ImeMode = System.Windows.Forms.ImeMode.Disable
         Me.Name = "Form1"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "MK_VIPS（＾ω＾）2012/01/31"
+        Me.Text = "MK_VIPS（＾ω＾）2012/02/01"
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         Me.ResumeLayout(False)
