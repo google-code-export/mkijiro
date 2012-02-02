@@ -284,7 +284,6 @@ void mipsins(unsigned int a_opcode)
   a_opcode=((a_opcode>>11)& 0x1F )- ((a_opcode>>6)  & 0x1F) +1;
   pspDebugScreenSetTextColor(0xFF999999); pspDebugScreenPuts("$"); pspDebugScreenSetTextColor(color02);
   sprintf(mipsNum, "%D", a_opcode); pspDebugScreenPuts(mipsNum);
-  //if(a_more) pspDebugScreenPuts(", ");
 }
 
 void mipsImm(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
@@ -2638,6 +2637,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
                 vectors(a_opcode, 1, 0);
                 pspDebugScreenPuts(unknown[1]);
         break;
+        
         case 0xD039:
                 pspDebugScreenPuts(unknown[0]);
                 vectors(a_opcode, 2, 1);
@@ -2941,7 +2941,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 //{ "vf2id.t", 0xD2608000, 0xFFE08080, "%zt, %yt, %v5" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zt, %yt, %v5"
 
         case 0xD200:
-        pspDebugScreenPuts("vf2idn");
+        pspDebugScreenPuts("vf2in.");
         vsel(a_opcode,0,2);
         pspDebugScreenPuts(", ");
         a_opcode=(a_opcode>>16)&0x1F;
@@ -3194,7 +3194,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 
 	case 0xF000:
         pspDebugScreenPuts("vmmul.");
-	vsel(a_opcode,3,2);
+		vsel(a_opcode,3,2);
         break;
 //{ "vmmul.p", 0xF0000080, 0xFF808080, "%zm, %ym, %xm" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%?%zm, %ym, %xm"
 //{ "vmmul.q", 0xF0008080, 0xFF808080, "%zo, %yo, %xo" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
