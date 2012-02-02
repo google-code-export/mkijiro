@@ -2888,7 +2888,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 //{ "vf2id.t", 0xD2608000, 0xFFE08080, "%zt, %yt, %v5" , ADDR_TYPE_NONE, INSTR_TYPE_PSP }, // [hlide] added "%zt, %yt, %v5"
 
         case 0xD200:
-        pspDebugScreenPuts("vf2idn");
+        pspDebugScreenPuts("vf2in.");
         vsel(a_opcode,0,2);
         pspDebugScreenPuts(", ");
         a_opcode=(a_opcode>>16)&0x1F;
