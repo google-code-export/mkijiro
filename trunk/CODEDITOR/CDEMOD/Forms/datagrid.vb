@@ -2699,6 +2699,8 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                     hex = &H7C000520
                     hex = reg_boolean_para(ss(0), hex, 2)
                     hex = reg_boolean_para(ss(1), hex, 1)
+                ElseIf mips = "halt" Then
+                    hex = &H7C000000
                 ElseIf mips = "ext" Then
                     hex = &H7C000000
                     hex = reg_boolean_para(ss(0), hex, 1)
