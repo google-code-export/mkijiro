@@ -54,7 +54,7 @@ Public Class Form1
             'リトルエンディアンパステーブル(L型)
             lba = cvt32bit(bbbb) << 11
             fs.Read(bbbb, 0, 4)
-            'ビッグエンディアンパステーブル(M型)
+            '任意L形パステーブル
             lba_m = cvt32bit(bbbb) << 11
             fs.Seek(lba, SeekOrigin.Begin)
             'LBA読み込みサイズを拡張
