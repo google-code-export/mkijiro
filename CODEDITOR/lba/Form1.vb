@@ -98,13 +98,10 @@ Public Class Form1
                 x.Tag = parent(k)
                 x.Name = k
                 '親ノードを検索し追加する
-                Dim seek_pareny_node As New TreeNode
+                Dim seek_parent_node As New TreeNode
                 Dim arr As TreeNode() = TreeView1.Nodes.Find(parent(k), True)
-                For j = 0 To arr.Length - 1
-                    TreeView1.SelectedNode = arr(j)
-                    seek_pareny_node = TreeView1.SelectedNode
-                Next
-                seek_pareny_node.Nodes.Add(x)
+                seek_parent_node = arr(0)
+                seek_parent_node.Nodes.Add(x)
 
                 k += 1
                 i += 8
