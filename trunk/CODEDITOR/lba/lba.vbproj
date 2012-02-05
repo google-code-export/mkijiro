@@ -8,8 +8,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{D52FB987-17F1-4F88-9C83-39A552FDD5B8}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <StartupObject>iso9660_lba.My.MyApplication</StartupObject>
-    <RootNamespace>iso9660_lba</RootNamespace>
+    <StartupObject>iso9660_treeviewer.My.MyApplication</StartupObject>
+    <RootNamespace>iso9660_treeviewer</RootNamespace>
     <AssemblyName>lba</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>WindowsForms</MyType>

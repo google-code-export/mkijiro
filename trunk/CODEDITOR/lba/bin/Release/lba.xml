@@ -6,16 +6,16 @@ lba
 </name>
 </assembly>
 <members>
-<member name="P:iso9660_lba.My.Resources.Resources.ResourceManager">
+<member name="P:iso9660_treeviewer.My.Resources.Resources.ResourceManager">
 	<summary>
   このクラスで使用されているキャッシュされた ResourceManager インスタンスを返します。
 </summary>
-</member><member name="P:iso9660_lba.My.Resources.Resources.Culture">
+</member><member name="P:iso9660_treeviewer.My.Resources.Resources.Culture">
 	<summary>
   厳密に型指定されたこのリソース クラスを使用して、すべての検索リソースに対し、
   現在のスレッドの CurrentUICulture プロパティをオーバーライドします。
 </summary>
-</member><member name="T:iso9660_lba.My.Resources.Resources">
+</member><member name="T:iso9660_treeviewer.My.Resources.Resources">
 	<summary>
   ローカライズされた文字列などを検索するための、厳密に型指定されたリソース クラスです。
 </summary>
