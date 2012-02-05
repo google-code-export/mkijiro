@@ -64,9 +64,9 @@ Namespace My
     Friend Module MySettingsProperty
         
         <Global.System.ComponentModel.Design.HelpKeywordAttribute("My.Settings")>  _
-        Friend ReadOnly Property Settings() As Global.iso9660_lba.My.MySettings
+        Friend ReadOnly Property Settings() As Global.iso9660_treeviewer.My.MySettings
             Get
-                Return Global.iso9660_lba.My.MySettings.Default
+                Return Global.iso9660_treeviewer.My.MySettings.Default
             End Get
         End Property
     End Module
