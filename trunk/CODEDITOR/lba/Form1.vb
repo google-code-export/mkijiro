@@ -28,6 +28,7 @@ Public Class Form1
             e.Data.GetData(DataFormats.FileDrop, False), _
             String())
         iso = fileName(0)
+        Button1_Click(sender, e)
     End Sub
 
     Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles Button1.Click
@@ -40,6 +41,7 @@ Public Class Form1
             Dim level(1000) As Integer
             Dim lba As Integer
             Dim lba_m As Integer
+            Dim table_len As Integer
             Dim parent_node As New TreeNode
             Dim name As String
             Dim i As Integer
@@ -49,6 +51,12 @@ Public Class Form1
             Dim na As Byte() = Nothing
             Dim sb As New StringBuilder
             Dim bs(2047) As Byte
+
+
+            fs.Seek(&H8084, SeekOrigin.Begin)
+            fs.Read(bbbb, 0, 4)
+            'パステーブルサイズ
+            table_len = cvt32bit(bbbb) << 11
             fs.Seek(&H808C, SeekOrigin.Begin)
             fs.Read(bbbb, 0, 4)
             'リトルエンディアンパステーブル(L型)
@@ -60,10 +68,10 @@ Public Class Form1
             'LBA読み込みサイズを拡張
             Array.Resize(bs, lba_m - lba)
             fs.Read(bs, 0, bs.Length)
-            TreeView1.Nodes.Add("ISO[0,]")
+            TreeView1.Nodes.Add("ISO[0,0]")
             TreeView1.Nodes(0).Name = "0"
             parent_node = TreeView1.Nodes(0)
-            While i < bs.Length
+            While i < table_len
                 '文字の長さ
                 str_len = bs(i)
                 Array.Copy(bs, i + 2, bbbb, 0, 4)
@@ -95,11 +103,12 @@ Public Class Form1
                 sb.AppendLine(name)
                 Dim x As New TreeNode
                 x.Text = name & "[" & k & "," & parent(k) & "]"
-                x.Tag = parent(k)
-                x.Name = k
+                x.Tag = lba 'parent(k)
+                x.ImageIndex = 0
+                x.Name = k.ToString
                 '親ノードを検索し追加する
                 Dim seek_parent_node As New TreeNode
-                Dim arr As TreeNode() = TreeView1.Nodes.Find(parent(k), True)
+                Dim arr As TreeNode() = TreeView1.Nodes.Find(parent(k).ToString, True)
                 seek_parent_node = arr(0)
                 seek_parent_node.Nodes.Add(x)
 
@@ -113,7 +122,6 @@ Public Class Form1
                     Exit While
                 End If
             End While
-
 
             TreeView1.ExpandAll()
             TextBox1.Text = sb.ToString
@@ -168,4 +176,151 @@ Public Class Form1
 
     End Sub
 
+    Private Sub TreeView1_AfterSelect(sender As System.Object, e As System.Windows.Forms.TreeViewEventArgs) Handles TreeView1.AfterSelect
+        getlist(CInt(TreeView1.SelectedNode.Tag))
+    End Sub
+
+    Function getlist(ByVal dst As Integer) As Boolean
+        Try
+            ListView1.Clear()
+            ListView1.View = View.Details
+            ListView1.HideSelection = True
+            ListView1.AutoSize = True
+
+            ListView1.Columns.Add("NAME", -1, HorizontalAlignment.Left)
+            ListView1.Columns.Add("LBA", -1, HorizontalAlignment.Left)
+            ListView1.Columns.Add("SIZE", -1, HorizontalAlignment.Left)
+            ListView1.Columns.Add("DATE", -1, HorizontalAlignment.Left)
+
+            Dim lba As Integer = 0
+            Dim lba_base As Integer = dst << 11
+
+            Dim fs As New FileStream(iso, FileMode.Open, FileAccess.Read)
+            Dim next_len As Integer
+            Dim filesize As Integer
+            Dim str_len As Integer
+            Dim name As String
+            Dim i As Integer
+            Dim bb(1) As Byte
+            Dim bbbb(3) As Byte
+            Dim yyyymmdd(6) As Byte
+            Dim na As Byte() = Nothing
+            Dim bs(2047) As Byte
+            fs.Seek(lba_base, SeekOrigin.Begin)
+            fs.Read(bs, 0, 2048)
+
+            ListView1.BeginUpdate()
+            Dim unix_back As New ListViewItem
+            unix_back.Text = ".."
+            If TreeView1.SelectedNode.Parent IsNot Nothing Then
+                ListView1.Items.Add(unix_back)
+            End If
+
+            While i < bs.Length
+                next_len = bs(i)
+                If bs(i + 33) >= 32 Then
+                    Array.Copy(bs, i + 2, bbbb, 0, 4)
+                    lba = cvt32bit(bbbb)
+                    Array.Copy(bs, i + 10, bbbb, 0, 4)
+                    filesize = cvt32bit(bbbb)
+                    Array.Copy(bs, i + 18, yyyymmdd, 0, 7)
+                    str_len = bs(i + 32)
+                    Array.Resize(na, str_len)
+                    Array.Copy(bs, i + 33, na, 0, str_len)
+                    name = Encoding.GetEncoding(0).GetString(na)
+                    Dim itemx As New ListViewItem
+                    itemx.Text = name
+                    If ((bs(i + 25) >> 1) And 1) = 0 Then
+                        itemx.ImageIndex = 2
+                    Else
+                        itemx.ImageIndex = 0
+                    End If
+                    itemx.SubItems.Add(lba.ToString)
+                    itemx.SubItems.Add(filesize.ToString)
+                    itemx.SubItems.Add(cvt_date(yyyymmdd))
+
+                    ListView1.Items.Add(itemx)
+                End If
+
+                i += next_len
+
+                If bs(i) = 0 Then
+                    Exit While
+                End If
+            End While
+
+            ListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize)
+
+            ListView1.EndUpdate()
+
+            ListView2.Items.Clear()
+            Dim itemx2 As New ListViewItem
+            Dim s As String = TreeView1.SelectedNode.FullPath
+            'Dim ss As String() = s.Split("\"c)
+            'For i = 0 To ss.Length - 1
+            '    If i = 0 Then
+            '        itemx2.Text = ss(0)
+            '    Else
+            '        itemx2.SubItems.Add(ss(i))
+            '    End If
+            'Next
+            Dim rm As New Regex("\[\d+,\d+\]")
+            Dim m As Match = rm.Match(s)
+            While m.Success
+                s = s.Replace(m.Value, "")
+                m = m.NextMatch
+            End While
+            itemx2.Text = s
+            ListView2.Items.Add(itemx2)
+
+            fs.Close()
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+        End Try
+        Return True
+    End Function
+
+    Function cvt_date(ByVal ymd As Byte()) As String
+        Dim sb As New StringBuilder
+        sb.Append((ymd(0) + 1900))
+        sb.Append("/")
+        sb.Append((ymd(1).ToString.PadLeft(2, "0"c)))
+        sb.Append("/")
+        sb.Append((ymd(2).ToString).PadLeft(2, "0"c))
+        sb.Append("/")
+        sb.Append((ymd(3).ToString.PadLeft(2, "0"c)))
+        sb.Append(" ")
+        sb.Append((ymd(4).ToString.PadLeft(2, "0"c)))
+        sb.Append(":")
+        sb.Append((ymd(5).ToString.PadLeft(2, "0"c)))
+        sb.Append(":")
+        sb.Append((ymd(6).ToString.PadLeft(2, "0"c)))
+
+        Return sb.ToString
+    End Function
+
+    Private Sub ListView1_SelectedIndexChanged(sender As System.Object, ByVal e As System.EventArgs) Handles ListView1.DoubleClick
+        If ListView1.SelectedItems.Count = 0 Then
+            Exit Sub
+        End If
+
+        Dim itemx As New ListViewItem
+        itemx = ListView1.SelectedItems(0)
+
+        If itemx.Index = 0 AndAlso itemx.Text = ".." Then
+            TreeView1.SelectedNode = TreeView1.SelectedNode.Parent
+            getlist(CInt(TreeView1.SelectedNode.Tag))
+        ElseIf itemx.ImageIndex = 0 Then
+            Dim seek_node As New TreeNode
+            Dim s As String = ListView1.Items(itemx.Index).SubItems(1).Text
+            For Each ss As TreeNode In TreeView1.SelectedNode.Nodes
+                If s = ss.Tag.ToString Then
+                    TreeView1.SelectedNode = ss
+                    Exit For
+                End If
+            Next
+            getlist(CInt(TreeView1.SelectedNode.Tag))
+            'getlist(CInt(s))
+        End If
+    End Sub
 End Class
