@@ -77,6 +77,34 @@ namespace WindowsFormsApplication1
                 }
                 sr.Close();
             }
+
+            string[] cmds;
+            cmds = System.Environment.GetCommandLineArgs();
+            //コマンドライン引数の表示
+            int i = 0;
+            foreach (string cmd in cmds)
+            { 
+                if(i==1){
+                    isofile = cmd;
+            }
+                i++;
+            }
+            textBox1.Text = getsize(isofile);
+            groupBox1.Visible = true;
+            groupBox3.Visible = false;
+            groupBox2.Visible = true;
+            groupBox4.Visible = false;
+            if (textBox1.Text.Contains("ません"))
+            {
+
+                groupBox1.Enabled = false;
+                sectorview.Enabled = false;
+            }
+            else
+            {
+                groupBox1.Enabled = true;
+                sectorview.Enabled = true;
+            }
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)

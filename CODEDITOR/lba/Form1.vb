@@ -4,7 +4,18 @@ Imports System.Text
 Imports System.Text.RegularExpressions
 
 Public Class Form1
-    Dim iso As String
+    Dim iso As String = "NULL"
+
+
+    Private Sub ll(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
+        For Each cmd As String In My.Application.CommandLineArgs
+            If cmd.Contains(".iso") Then
+                iso = cmd
+            End If
+        Next
+        Button1_Click(sender, e)
+    End Sub
+
 
     Private Sub ListBox1_DragEnter(ByVal sender As Object, _
         ByVal e As System.Windows.Forms.DragEventArgs) _
@@ -126,7 +137,7 @@ Public Class Form1
             TreeView1.ExpandAll()
             TextBox1.Text = sb.ToString
             fs.Close()
-        Else
+        ElseIf iso <> "NULL" Then
             MessageBox.Show("ファイルをドロップして下さい")
         End If
     End Sub
