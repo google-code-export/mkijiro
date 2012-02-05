@@ -125,6 +125,10 @@ Public Class MERGE
             URL10custom.Text = URL8.Text
         End If
 
+        For Each cmd As String In My.Application.CommandLineArgs
+                My.Settings.lastcodepath = cmd
+        Next
+
         If System.IO.File.Exists(My.Settings.lastcodepath) Then
             Dim open As New load_db
             database = My.Settings.lastcodepath
