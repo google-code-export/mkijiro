@@ -416,7 +416,7 @@ Public Class Form1
 
     Function getfile(ByVal tt As TreeNode) As Boolean
         Dim basepath As String = Application.StartupPath & "\" & tt.FullPath & "\"
-        Directory.CreateDirectory(tt.FullPath)
+        Directory.CreateDirectory(Application.StartupPath & "\" & tt.FullPath)
         Dim dst As Integer = CInt(tt.Tag.ToString)
         Dim lba As Integer = 0
         Dim lba_base As Integer = dst << 11
