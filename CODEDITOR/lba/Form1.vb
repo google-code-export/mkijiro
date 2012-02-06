@@ -14,14 +14,16 @@ Public Class Form1
             End If
         Next
         Dim psf As New psf
-        If psf.video(iso) <> "" Then
+        If File.Exists(iso) Then
+            If psf.video(iso) <> "" Then
+                Button1_Click(sender, e)
+                Label5.Text = psf.GETNAME(iso)
+                Label6.Text = psf.GETID(iso)
+            Else
+                iso = ""
+            End If
             Button1_Click(sender, e)
-            Label5.Text = psf.GETNAME(iso)
-            Label6.Text = psf.GETID(iso)
-        Else
-            iso = ""
         End If
-        Button1_Click(sender, e)
     End Sub
 
 
@@ -48,12 +50,14 @@ Public Class Form1
             e.Data.GetData(DataFormats.FileDrop, False), _
             String())
         iso = fileName(0)
-        If psf.video(iso) <> "" Then
-            Button1_Click(sender, e)
-            Label5.Text = psf.GETNAME(iso)
-            Label6.Text = psf.GETID(iso)
-        Else
-            iso = ""
+        If File.Exists(iso) Then
+            If psf.video(iso) <> "" Then
+                Button1_Click(sender, e)
+                Label5.Text = psf.GETNAME(iso)
+                Label6.Text = psf.GETID(iso)
+            Else
+                iso = ""
+            End If
         End If
     End Sub
 
@@ -210,105 +214,107 @@ Public Class Form1
     Function getlist(ByVal dst As Integer) As Boolean
         Try
             ListView1.Clear()
-            If TreeView1.SelectedNode.Level = 0 Then
-                Return True
-            End If
-            ListView1.View = View.Details
-            ListView1.HideSelection = True
-            ListView1.AutoSize = True
+            If File.Exists(iso) Then
+                If TreeView1.SelectedNode.Level = 0 Then
+                    Return True
+                End If
+                ListView1.View = View.Details
+                ListView1.HideSelection = True
+                ListView1.AutoSize = True
 
-            ListView1.Columns.Add("NAME", -1, HorizontalAlignment.Left)
-            ListView1.Columns.Add("LBA", -1, HorizontalAlignment.Left)
-            ListView1.Columns.Add("SIZE", -1, HorizontalAlignment.Left)
-            ListView1.Columns.Add("DATE", -1, HorizontalAlignment.Left)
+                ListView1.Columns.Add("NAME", -1, HorizontalAlignment.Left)
+                ListView1.Columns.Add("LBA", -1, HorizontalAlignment.Left)
+                ListView1.Columns.Add("SIZE", -1, HorizontalAlignment.Left)
+                ListView1.Columns.Add("DATE", -1, HorizontalAlignment.Left)
 
-            Dim lba As Integer = 0
-            Dim lba_base As Integer = dst << 11
+                Dim lba As Integer = 0
+                Dim lba_base As Integer = dst << 11
 
-            Dim seek_parent_node As New TreeNode
-            Dim arr As TreeNode() = TreeView1.Nodes.Find((CInt(TreeView1.SelectedNode.Name) + 1).ToString, True)
-            Dim nextlba As Integer = -dst
-            If arr.Length > 0 Then
-                nextlba += CInt(arr(0).Tag.ToString)
-            End If
-
-            Dim fs As New FileStream(iso, FileMode.Open, FileAccess.Read)
-            Dim next_len As Integer
-            Dim filesize As Integer
-            Dim str_len As Integer
-            Dim name As String
-            Dim i As Integer
-            Dim bb(1) As Byte
-            Dim bbbb(3) As Byte
-            Dim yyyymmdd(6) As Byte
-            Dim na As Byte() = Nothing
-            Dim bs(2047) As Byte
-            fs.Seek(lba_base, SeekOrigin.Begin)
-            fs.Read(bs, 0, 2048)
-
-            ListView1.BeginUpdate()
-            Dim unix_back As New ListViewItem
-            unix_back.Text = ".."
-            If TreeView1.SelectedNode.Parent IsNot Nothing Then
-                ListView1.Items.Add(unix_back)
-            End If
-
-            While i < bs.Length
-                next_len = bs(i)
-                If bs(i + 33) >= 32 Then
-                    Array.Copy(bs, i + 2, bbbb, 0, 4)
-                    lba = cvt32bit(bbbb)
-                    Array.Copy(bs, i + 10, bbbb, 0, 4)
-                    filesize = cvt32bit(bbbb)
-                    Array.Copy(bs, i + 18, yyyymmdd, 0, 7)
-                    str_len = bs(i + 32)
-                    Array.Resize(na, str_len)
-                    Array.Copy(bs, i + 33, na, 0, str_len)
-                    name = Encoding.GetEncoding(0).GetString(na)
-                    Dim itemx As New ListViewItem
-                    itemx.Text = name
-                    If ((bs(i + 25) >> 1) And 1) = 0 Then
-                        itemx.ImageIndex = 2
-                    Else
-                        itemx.ImageIndex = 0
-                    End If
-                    itemx.SubItems.Add(lba.ToString)
-                    itemx.SubItems.Add(filesize.ToString)
-                    itemx.SubItems.Add(cvt_date(yyyymmdd))
-
-                    ListView1.Items.Add(itemx)
+                Dim seek_parent_node As New TreeNode
+                Dim arr As TreeNode() = TreeView1.Nodes.Find((CInt(TreeView1.SelectedNode.Name) + 1).ToString, True)
+                Dim nextlba As Integer = -dst
+                If arr.Length > 0 Then
+                    nextlba += CInt(arr(0).Tag.ToString)
                 End If
 
-                i += next_len
+                Dim fs As New FileStream(iso, FileMode.Open, FileAccess.Read)
+                Dim next_len As Integer
+                Dim filesize As Integer
+                Dim str_len As Integer
+                Dim name As String
+                Dim i As Integer
+                Dim bb(1) As Byte
+                Dim bbbb(3) As Byte
+                Dim yyyymmdd(6) As Byte
+                Dim na As Byte() = Nothing
+                Dim bs(2047) As Byte
+                fs.Seek(lba_base, SeekOrigin.Begin)
+                fs.Read(bs, 0, 2048)
 
-                If bs(i) = 0 Then
-                    nextlba -= 1
-                    If nextlba > 0 Then
-                        i = 0
-                        fs.Read(bs, 0, 2048)
-                    Else
-                        Exit While
-                    End If
+                ListView1.BeginUpdate()
+                Dim unix_back As New ListViewItem
+                unix_back.Text = ".."
+                If TreeView1.SelectedNode.Parent IsNot Nothing Then
+                    ListView1.Items.Add(unix_back)
                 End If
-            End While
 
-            ListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize)
+                While i < bs.Length
+                    next_len = bs(i)
+                    If bs(i + 33) >= 32 Then
+                        Array.Copy(bs, i + 2, bbbb, 0, 4)
+                        lba = cvt32bit(bbbb)
+                        Array.Copy(bs, i + 10, bbbb, 0, 4)
+                        filesize = cvt32bit(bbbb)
+                        Array.Copy(bs, i + 18, yyyymmdd, 0, 7)
+                        str_len = bs(i + 32)
+                        Array.Resize(na, str_len)
+                        Array.Copy(bs, i + 33, na, 0, str_len)
+                        name = Encoding.GetEncoding(0).GetString(na)
+                        Dim itemx As New ListViewItem
+                        itemx.Text = name
+                        If ((bs(i + 25) >> 1) And 1) = 0 Then
+                            itemx.ImageIndex = 2
+                        Else
+                            itemx.ImageIndex = 0
+                        End If
+                        itemx.SubItems.Add(lba.ToString)
+                        itemx.SubItems.Add(filesize.ToString)
+                        itemx.SubItems.Add(cvt_date(yyyymmdd))
 
-            ListView1.EndUpdate()
+                        ListView1.Items.Add(itemx)
+                    End If
 
-            ListView2.Items.Clear()
-            Dim itemx2 As New ListViewItem
-            Dim s As String = TreeView1.SelectedNode.FullPath
-            Dim rm As New Regex("\[\d+,\d+\]")
-            Dim m As Match = rm.Match(s)
-            While m.Success
-                s = s.Replace(m.Value, "")
-                m = m.NextMatch
-            End While
-            itemx2.Text = s
-            ListView2.Items.Add(itemx2)
+                    i += next_len
 
-            fs.Close()
+                    If bs(i) = 0 Then
+                        nextlba -= 1
+                        If nextlba > 0 Then
+                            i = 0
+                            fs.Read(bs, 0, 2048)
+                        Else
+                            Exit While
+                        End If
+                    End If
+                End While
+
+                ListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize)
+
+                ListView1.EndUpdate()
+
+                ListView2.Items.Clear()
+                Dim itemx2 As New ListViewItem
+                Dim s As String = TreeView1.SelectedNode.FullPath
+                Dim rm As New Regex("\[\d+,\d+\]")
+                Dim m As Match = rm.Match(s)
+                While m.Success
+                    s = s.Replace(m.Value, "")
+                    m = m.NextMatch
+                End While
+                itemx2.Text = s
+                ListView2.Items.Add(itemx2)
+
+                fs.Close()
+            End If
         Catch ex As Exception
             MessageBox.Show(ex.Message)
         End Try
@@ -376,7 +382,7 @@ Public Class Form1
         ElseIf itemx.ImageIndex >= 2 Then
             If File.Exists(iso) Then
                 Dim fs As New FileStream(iso, FileMode.Open, FileAccess.Read)
-                Dim save As New FileStream(itemx.Text, FileMode.CreateNew, FileAccess.Write)
+                Dim save As New FileStream(Application.StartupPath & "\" & itemx.Text, FileMode.CreateNew, FileAccess.Write)
                 Dim s As String = ListView1.Items(itemx.Index).SubItems(1).Text
                 Dim ss As String = ListView1.Items(itemx.Index).SubItems(2).Text
                 Dim bs(CInt(ss) - 1) As Byte
@@ -409,7 +415,7 @@ Public Class Form1
     End Sub
 
     Function getfile(ByVal tt As TreeNode) As Boolean
-        Dim basepath As String = tt.FullPath & "\"
+        Dim basepath As String = Application.StartupPath & "\" & tt.FullPath & "\"
         Directory.CreateDirectory(tt.FullPath)
         Dim dst As Integer = CInt(tt.Tag.ToString)
         Dim lba As Integer = 0
