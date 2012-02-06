@@ -13,6 +13,14 @@ Public Class Form1
                 iso = cmd
             End If
         Next
+        Dim psf As New psf
+        If psf.video(iso) <> "" Then
+            Button1_Click(sender, e)
+            Label5.Text = psf.GETNAME(iso)
+            Label6.Text = psf.GETID(iso)
+        Else
+            iso = ""
+        End If
         Button1_Click(sender, e)
     End Sub
 
@@ -35,11 +43,18 @@ Public Class Form1
             Handles Me.DragDrop
         'コントロール内にドロップされたとき実行される
         'ドロップされたすべてのファイル名を取得する
+        Dim psf As New psf
         Dim fileName As String() = CType( _
             e.Data.GetData(DataFormats.FileDrop, False), _
             String())
         iso = fileName(0)
-        Button1_Click(sender, e)
+        If psf.video(iso) <> "" Then
+            Button1_Click(sender, e)
+            Label5.Text = psf.GETNAME(iso)
+            Label6.Text = psf.GETID(iso)
+        Else
+            iso = ""
+        End If
     End Sub
 
     Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles Button1.Click
@@ -64,6 +79,9 @@ Public Class Form1
             Dim bs(2047) As Byte
 
 
+            TreeView1.Nodes.Add("ISO[0,0]")
+            TreeView1.Nodes(0).Name = "0"
+            TreeView1.Nodes(0).Tag = "-1"
             fs.Seek(&H8084, SeekOrigin.Begin)
             fs.Read(bbbb, 0, 4)
             'パステーブルサイズ
@@ -79,8 +97,6 @@ Public Class Form1
             'LBA読み込みサイズを拡張
             Array.Resize(bs, lba_m - lba)
             fs.Read(bs, 0, bs.Length)
-            TreeView1.Nodes.Add("ISO[0,0]")
-            TreeView1.Nodes(0).Name = "0"
             parent_node = TreeView1.Nodes(0)
             While i < table_len
                 '文字の長さ
@@ -194,6 +210,9 @@ Public Class Form1
     Function getlist(ByVal dst As Integer) As Boolean
         Try
             ListView1.Clear()
+            If TreeView1.SelectedNode.Level = 0 Then
+                Return True
+            End If
             ListView1.View = View.Details
             ListView1.HideSelection = True
             ListView1.AutoSize = True
@@ -205,6 +224,13 @@ Public Class Form1
 
             Dim lba As Integer = 0
             Dim lba_base As Integer = dst << 11
+
+            Dim seek_parent_node As New TreeNode
+            Dim arr As TreeNode() = TreeView1.Nodes.Find((CInt(TreeView1.SelectedNode.Name) + 1).ToString, True)
+            Dim nextlba As Integer = -dst
+            If arr.Length > 0 Then
+                nextlba += CInt(arr(0).Tag.ToString)
+            End If
 
             Dim fs As New FileStream(iso, FileMode.Open, FileAccess.Read)
             Dim next_len As Integer
@@ -256,7 +282,13 @@ Public Class Form1
                 i += next_len
 
                 If bs(i) = 0 Then
-                    Exit While
+                    nextlba -= 1
+                    If nextlba > 0 Then
+                        i = 0
+                        fs.Read(bs, 0, 2048)
+                    Else
+                        Exit While
+                    End If
                 End If
             End While
 
@@ -267,14 +299,6 @@ Public Class Form1
             ListView2.Items.Clear()
             Dim itemx2 As New ListViewItem
             Dim s As String = TreeView1.SelectedNode.FullPath
-            'Dim ss As String() = s.Split("\"c)
-            'For i = 0 To ss.Length - 1
-            '    If i = 0 Then
-            '        itemx2.Text = ss(0)
-            '    Else
-            '        itemx2.SubItems.Add(ss(i))
-            '    End If
-            'Next
             Dim rm As New Regex("\[\d+,\d+\]")
             Dim m As Match = rm.Match(s)
             While m.Success
@@ -314,10 +338,8 @@ Public Class Form1
         If ListView1.SelectedItems.Count = 0 Then
             Exit Sub
         End If
-
         Dim itemx As New ListViewItem
         itemx = ListView1.SelectedItems(0)
-
         If itemx.Index = 0 AndAlso itemx.Text = ".." Then
             TreeView1.SelectedNode = TreeView1.SelectedNode.Parent
             getlist(CInt(TreeView1.SelectedNode.Tag))
@@ -331,7 +353,156 @@ Public Class Form1
                 End If
             Next
             getlist(CInt(TreeView1.SelectedNode.Tag))
-            'getlist(CInt(s))
         End If
+    End Sub
+
+    Private Sub TREECOLLASEToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles TREECOLLASEToolStripMenuItem.Click
+        TreeView1.CollapseAll()
+    End Sub
+
+    Private Sub TREEEXPANDToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles TREEEXPANDToolStripMenuItem.Click
+        TreeView1.ExpandAll()
+    End Sub
+
+    Private Sub GETDATAToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles GETDATAToolStripMenuItem.Click
+        If ListView1.SelectedItems.Count = 0 Then
+            Exit Sub
+        End If
+
+        Dim itemx As New ListViewItem
+        itemx = ListView1.SelectedItems(0)
+
+        If itemx.Index = 0 AndAlso itemx.Text = ".." Then
+        ElseIf itemx.ImageIndex >= 2 Then
+            If File.Exists(iso) Then
+                Dim fs As New FileStream(iso, FileMode.Open, FileAccess.Read)
+                Dim save As New FileStream(itemx.Text, FileMode.CreateNew, FileAccess.Write)
+                Dim s As String = ListView1.Items(itemx.Index).SubItems(1).Text
+                Dim ss As String = ListView1.Items(itemx.Index).SubItems(2).Text
+                Dim bs(CInt(ss) - 1) As Byte
+                fs.Seek(CInt(s) << 11, SeekOrigin.Begin)
+                fs.Read(bs, 0, bs.Length)
+                fs.Close()
+                save.Write(bs, 0, bs.Length)
+                save.Close()
+            End If
+        ElseIf itemx.ImageIndex = 0 Then
+            If File.Exists(iso) Then
+                Dim seek_node As New TreeNode
+                Dim s As String = ListView1.Items(itemx.Index).SubItems(1).Text
+                For Each ss As TreeNode In TreeView1.SelectedNode.Nodes
+                    If s = ss.Tag.ToString Then
+                        seek_node = ss
+                        Exit For
+                    End If
+                Next
+                Dim Ar As New ArrayList
+                Ar = GetAllNodes(seek_node.Nodes)
+
+                getfile(seek_node)
+                For Each tt As TreeNode In Ar
+                    getfile(tt)
+                Next
+
+            End If
+        End If
+    End Sub
+
+    Function getfile(ByVal tt As TreeNode) As Boolean
+        Dim basepath As String = tt.FullPath & "\"
+        Directory.CreateDirectory(tt.FullPath)
+        Dim dst As Integer = CInt(tt.Tag.ToString)
+        Dim lba As Integer = 0
+        Dim lba_base As Integer = dst << 11
+
+        Dim seek_parent_node As New TreeNode
+        Dim arr As TreeNode() = TreeView1.Nodes.Find((CInt(tt.Name) + 1).ToString, True)
+        Dim nextlba As Integer = -dst
+        If arr.Length > 0 Then
+            nextlba += CInt(arr(0).Tag.ToString)
+        End If
+
+        Dim fs As New FileStream(iso, FileMode.Open, FileAccess.Read)
+        Dim next_len As Integer
+        Dim filesize As Integer
+        Dim str_len As Integer
+        Dim name As String
+        Dim i As Integer = 0
+        Dim bb(1) As Byte
+        Dim bbbb(3) As Byte
+        Dim na As Byte() = Nothing
+        Dim bs(2047) As Byte
+        fs.Seek(lba_base, SeekOrigin.Begin)
+        fs.Read(bs, 0, 2048)
+
+        While i < bs.Length
+            next_len = bs(i)
+            If bs(i + 33) >= 32 Then
+                Array.Copy(bs, i + 2, bbbb, 0, 4)
+                lba = cvt32bit(bbbb)
+                Array.Copy(bs, i + 10, bbbb, 0, 4)
+                filesize = cvt32bit(bbbb)
+                str_len = bs(i + 32)
+                Array.Resize(na, str_len)
+                Array.Copy(bs, i + 33, na, 0, str_len)
+                name = Encoding.GetEncoding(0).GetString(na)
+                If ((bs(i + 25) >> 1) And 1) = 0 Then
+                    'file
+                    Dim fss As New FileStream(iso, FileMode.Open, FileAccess.Read)
+                    If File.Exists(basepath & name) Then
+                        File.Delete(basepath & name)
+                    End If
+                    Dim save As New FileStream(basepath & name, FileMode.CreateNew, FileAccess.Write)
+                    Dim bss(filesize - 1) As Byte
+                    fss.Seek(lba << 11, SeekOrigin.Begin)
+                    fss.Read(bss, 0, bss.Length)
+                    fss.Close()
+                    save.Write(bss, 0, bss.Length)
+                    save.Close()
+                End If
+            End If
+
+            i += next_len
+
+            If bs(i) = 0 Then
+                nextlba -= 1
+                If nextlba > 0 Then
+                    i = 0
+                    fs.Read(bs, 0, 2048)
+                Else
+                    Exit While
+                End If
+            End If
+        End While
+        fs.Close()
+        Return True
+    End Function
+
+    Private Function GetAllNodes(ByVal Nodes As TreeNodeCollection) As ArrayList
+
+        Dim Ar As New ArrayList
+        Dim Node As TreeNode
+
+        For Each Node In Nodes
+            Ar.Add(Node)
+            If Node.GetNodeCount(False) > 0 Then
+                Ar.AddRange(GetAllNodes(Node.Nodes))
+            End If
+        Next
+
+        Return Ar
+
+    End Function
+
+    Private Sub EXTRACTDATAToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles EXTRACTDATAToolStripMenuItem.Click
+        Dim Ar As New ArrayList
+        Ar = GetAllNodes(TreeView1.SelectedNode.Nodes)
+        If TreeView1.SelectedNode.Level > 0 Then
+            getfile(TreeView1.SelectedNode)
+        End If
+
+        For Each tt As TreeNode In Ar
+            getfile(tt)
+        Next
     End Sub
 End Class
