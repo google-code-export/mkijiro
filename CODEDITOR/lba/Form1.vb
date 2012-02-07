@@ -8,11 +8,17 @@ Public Class Form1
 
 
     Private Sub ll(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
-        For Each cmd As String In My.Application.CommandLineArgs
-            If cmd.Contains(".iso") Then
+        Dim cmds() As String
+        cmds = System.Environment.GetCommandLineArgs()
+        Dim cmd As String
+        Dim i As Integer = 0
+        For Each cmd In cmds
+            If i = 1 Then
                 iso = cmd
             End If
+            i += 1
         Next
+
         Dim psf As New psf
         If File.Exists(iso) Then
             If psf.video(iso) <> "" Then
@@ -230,30 +236,63 @@ Public Class Form1
                 Dim lba As Integer = 0
                 Dim lba_base As Integer = dst << 11
 
-                Dim seek_parent_node As New TreeNode
-                Dim arr As TreeNode() = TreeView1.Nodes.Find((CInt(TreeView1.SelectedNode.Name) + 1).ToString, True)
-                Dim nextlba As Integer = -dst
-                If arr.Length > 0 Then
-                    nextlba += CInt(arr(0).Tag.ToString)
-                End If
-
                 Dim fs As New FileStream(iso, FileMode.Open, FileAccess.Read)
+                Dim bs(2047) As Byte
+                Dim bb(1) As Byte
+                Dim bbbb(3) As Byte
                 Dim next_len As Integer
                 Dim filesize As Integer
                 Dim str_len As Integer
                 Dim name As String
                 Dim i As Integer
-                Dim bb(1) As Byte
-                Dim bbbb(3) As Byte
                 Dim yyyymmdd(6) As Byte
                 Dim na As Byte() = Nothing
-                Dim bs(2047) As Byte
+
+                Dim seek_parent_node As New TreeNode
+                Dim arr As TreeNode() = TreeView1.Nodes.Find((CInt(TreeView1.SelectedNode.Name) + 1).ToString, True)
+                Dim nextlba As Integer = -dst
+                If arr.Length > 0 Then
+                    nextlba += CInt(arr(0).Tag.ToString)
+                Else
+                    fs.Seek((CInt(TreeView1.SelectedNode.Parent.Tag.ToString)) << 11, SeekOrigin.Begin)
+                    fs.Read(bs, 0, 2048)
+                    While i < 2048
+                        next_len = bs(i)
+                        If bs(i + 33) >= 32 Then
+                            Array.Copy(bs, i + 2, bbbb, 0, 4)
+                            lba = cvt32bit(bbbb)
+                            Array.Copy(bs, i + 10, bbbb, 0, 4)
+                            filesize = cvt32bit(bbbb)
+                            str_len = bs(i + 32)
+                            Array.Resize(na, str_len)
+                            Array.Copy(bs, i + 33, na, 0, str_len)
+                            name = Encoding.GetEncoding(0).GetString(na)
+                            If ((bs(i + 25) >> 1) And 1) = 0 Then
+                                If dst = lba Then
+                                    Exit While
+                                End If
+                            End If
+                        End If
+
+                        i += next_len
+
+                        If bs(i) = 0 Then
+                            Exit While
+                        End If
+                    End While
+                    nextlba = (filesize >> 11) - 1
+                    i = 0
+                End If
+
                 fs.Seek(lba_base, SeekOrigin.Begin)
                 fs.Read(bs, 0, 2048)
 
                 ListView1.BeginUpdate()
                 Dim unix_back As New ListViewItem
                 unix_back.Text = ".."
+                unix_back.SubItems.Add("")
+                unix_back.SubItems.Add("")
+                unix_back.SubItems.Add("")
                 If TreeView1.SelectedNode.Parent IsNot Nothing Then
                     ListView1.Items.Add(unix_back)
                 End If
@@ -414,6 +453,13 @@ Public Class Form1
         End If
     End Sub
 
+    Private Sub ColumnClick(ByVal o As Object, ByVal e As ColumnClickEventArgs) Handles ListView1.ColumnClick
+        ' Set the ListViewItemSorter property to a new ListViewItemComparer 
+        ' object. Setting this property immediately sorts the 
+        ' ListView using the ListViewItemComparer object.
+        Me.ListView1.ListViewItemSorter = New ListViewItemComparer(e.Column)
+    End Sub
+
     Function getfile(ByVal tt As TreeNode) As Boolean
         Dim basepath As String = Application.StartupPath & "\" & tt.FullPath & "\"
         Directory.CreateDirectory(Application.StartupPath & "\" & tt.FullPath)
@@ -421,12 +467,6 @@ Public Class Form1
         Dim lba As Integer = 0
         Dim lba_base As Integer = dst << 11
 
-        Dim seek_parent_node As New TreeNode
-        Dim arr As TreeNode() = TreeView1.Nodes.Find((CInt(tt.Name) + 1).ToString, True)
-        Dim nextlba As Integer = -dst
-        If arr.Length > 0 Then
-            nextlba += CInt(arr(0).Tag.ToString)
-        End If
 
         Dim fs As New FileStream(iso, FileMode.Open, FileAccess.Read)
         Dim next_len As Integer
@@ -438,6 +478,43 @@ Public Class Form1
         Dim bbbb(3) As Byte
         Dim na As Byte() = Nothing
         Dim bs(2047) As Byte
+
+        Dim seek_parent_node As New TreeNode
+        Dim arr As TreeNode() = TreeView1.Nodes.Find((CInt(tt.Name) + 1).ToString, True)
+        Dim nextlba As Integer = -dst
+        If arr.Length > 0 Then
+            nextlba += CInt(arr(0).Tag.ToString)
+        Else
+            fs.Seek((CInt(tt.Parent.Tag.ToString)) << 11, SeekOrigin.Begin)
+            fs.Read(bs, 0, 2048)
+            While i < 2048
+                next_len = bs(i)
+                If bs(i + 33) >= 32 Then
+                    Array.Copy(bs, i + 2, bbbb, 0, 4)
+                    lba = cvt32bit(bbbb)
+                    Array.Copy(bs, i + 10, bbbb, 0, 4)
+                    filesize = cvt32bit(bbbb)
+                    str_len = bs(i + 32)
+                    Array.Resize(na, str_len)
+                    Array.Copy(bs, i + 33, na, 0, str_len)
+                    name = Encoding.GetEncoding(0).GetString(na)
+                    If ((bs(i + 25) >> 1) And 1) = 0 Then
+                        If dst = lba Then
+                            Exit While
+                        End If
+                    End If
+                End If
+
+                i += next_len
+
+                If bs(i) = 0 Then
+                    Exit While
+                End If
+            End While
+            nextlba = (filesize >> 11) - 1
+            i = 0
+        End If
+
         fs.Seek(lba_base, SeekOrigin.Begin)
         fs.Read(bs, 0, 2048)
 
@@ -511,4 +588,31 @@ Public Class Form1
             getfile(tt)
         Next
     End Sub
+End Class
+
+Class ListViewItemComparer
+    Implements IComparer
+
+    Private col As Integer
+
+    Public Sub New()
+        col = 0
+    End Sub
+
+    Public Sub New(ByVal column As Integer)
+        col = column
+    End Sub
+
+    Public Function Compare(ByVal x As Object, ByVal y As Object) As Integer _
+       Implements IComparer.Compare
+        Dim xx As String = CType(x, ListViewItem).SubItems(col).Text
+        Dim yy As String = CType(y, ListViewItem).SubItems(col).Text
+        If xx.Length <> yy.Length AndAlso col > 0 Then
+            xx = xx.PadLeft(yy.Length, " "c)
+            yy = yy.PadLeft(xx.Length, " "c)
+            xx = xx.PadLeft(yy.Length, " "c)
+        End If
+        Return [String].Compare(xx, yy)
+    End Function
+
 End Class

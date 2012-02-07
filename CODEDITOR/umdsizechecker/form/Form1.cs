@@ -58,9 +58,9 @@ namespace WindowsFormsApplication1
 
         private void Form1_Load(object sender, System.EventArgs e)
         {
-            if (File.Exists("setting"))
+            if (File.Exists(Application.StartupPath +"\\" + "setting"))
             {
-                System.IO.StreamReader sr = new System.IO.StreamReader("setting", System.Text.Encoding.GetEncoding(932));
+                System.IO.StreamReader sr = new System.IO.StreamReader(Application.StartupPath + "\\" + "setting", System.Text.Encoding.GetEncoding(932));
                 string s = "";
                 while (sr.Peek() > -1)
                 {
@@ -109,7 +109,7 @@ namespace WindowsFormsApplication1
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            System.IO.StreamWriter sr = new System.IO.StreamWriter("setting", false,System.Text.Encoding.GetEncoding(932));
+            System.IO.StreamWriter sr = new System.IO.StreamWriter(Application.StartupPath + "\\" + "setting", false, System.Text.Encoding.GetEncoding(932));
             StringBuilder s = new StringBuilder();
             if(checkBox1.Checked == true)
             {
