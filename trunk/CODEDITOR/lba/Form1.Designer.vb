@@ -25,6 +25,11 @@ Partial Class Form1
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.TreeView1 = New System.Windows.Forms.TreeView()
+        Me.ContextMenuStrip2 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.TREECOLLASEToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TREEEXPANDToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.EXTRACTDATAToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.Button1 = New System.Windows.Forms.Button()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
@@ -35,19 +40,13 @@ Partial Class Form1
         Me.GETDATAToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.ListView2 = New System.Windows.Forms.ListView()
-        Me.ContextMenuStrip2 = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.TREECOLLASEToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TREEEXPANDToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.Label5 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
-        Me.ListView3 = New System.Windows.Forms.ListView()
-        Me.EXTRACTDATAToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ContextMenuStrip1.SuspendLayout()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
         Me.ContextMenuStrip2.SuspendLayout()
+        Me.ContextMenuStrip1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -63,6 +62,35 @@ Partial Class Form1
         Me.TreeView1.SelectedImageIndex = 0
         Me.TreeView1.Size = New System.Drawing.Size(293, 357)
         Me.TreeView1.TabIndex = 0
+        '
+        'ContextMenuStrip2
+        '
+        Me.ContextMenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TREECOLLASEToolStripMenuItem, Me.TREEEXPANDToolStripMenuItem, Me.ToolStripSeparator1, Me.EXTRACTDATAToolStripMenuItem})
+        Me.ContextMenuStrip2.Name = "ContextMenuStrip2"
+        Me.ContextMenuStrip2.Size = New System.Drawing.Size(194, 110)
+        '
+        'TREECOLLASEToolStripMenuItem
+        '
+        Me.TREECOLLASEToolStripMenuItem.Name = "TREECOLLASEToolStripMenuItem"
+        Me.TREECOLLASEToolStripMenuItem.Size = New System.Drawing.Size(193, 26)
+        Me.TREECOLLASEToolStripMenuItem.Text = "TREE COLLAPSE"
+        '
+        'TREEEXPANDToolStripMenuItem
+        '
+        Me.TREEEXPANDToolStripMenuItem.Name = "TREEEXPANDToolStripMenuItem"
+        Me.TREEEXPANDToolStripMenuItem.Size = New System.Drawing.Size(193, 26)
+        Me.TREEEXPANDToolStripMenuItem.Text = "TREE EXPAND"
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(190, 6)
+        '
+        'EXTRACTDATAToolStripMenuItem
+        '
+        Me.EXTRACTDATAToolStripMenuItem.Name = "EXTRACTDATAToolStripMenuItem"
+        Me.EXTRACTDATAToolStripMenuItem.Size = New System.Drawing.Size(193, 26)
+        Me.EXTRACTDATAToolStripMenuItem.Text = "EXTRACT　DATA"
         '
         'ImageList1
         '
@@ -147,24 +175,6 @@ Partial Class Form1
         Me.ListView2.UseCompatibleStateImageBehavior = False
         Me.ListView2.View = System.Windows.Forms.View.SmallIcon
         '
-        'ContextMenuStrip2
-        '
-        Me.ContextMenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TREECOLLASEToolStripMenuItem, Me.TREEEXPANDToolStripMenuItem, Me.ToolStripSeparator1, Me.EXTRACTDATAToolStripMenuItem})
-        Me.ContextMenuStrip2.Name = "ContextMenuStrip2"
-        Me.ContextMenuStrip2.Size = New System.Drawing.Size(194, 110)
-        '
-        'TREECOLLASEToolStripMenuItem
-        '
-        Me.TREECOLLASEToolStripMenuItem.Name = "TREECOLLASEToolStripMenuItem"
-        Me.TREECOLLASEToolStripMenuItem.Size = New System.Drawing.Size(193, 26)
-        Me.TREECOLLASEToolStripMenuItem.Text = "TREE COLLAPSE"
-        '
-        'TREEEXPANDToolStripMenuItem
-        '
-        Me.TREEEXPANDToolStripMenuItem.Name = "TREEEXPANDToolStripMenuItem"
-        Me.TREEEXPANDToolStripMenuItem.Size = New System.Drawing.Size(193, 26)
-        Me.TREEEXPANDToolStripMenuItem.Text = "TREE EXPAND"
-        '
         'Panel1
         '
         Me.Panel1.Controls.Add(Me.Label6)
@@ -176,23 +186,14 @@ Partial Class Form1
         Me.Panel1.Size = New System.Drawing.Size(296, 68)
         Me.Panel1.TabIndex = 10
         '
-        'Label3
+        'Label6
         '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(15, 3)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(45, 14)
-        Me.Label3.TabIndex = 9
-        Me.Label3.Text = "TITLE;"
-        '
-        'Label4
-        '
-        Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(15, 37)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(51, 14)
-        Me.Label4.TabIndex = 10
-        Me.Label4.Text = "DISCID;"
+        Me.Label6.AutoSize = True
+        Me.Label6.Location = New System.Drawing.Point(72, 36)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(11, 14)
+        Me.Label6.TabIndex = 12
+        Me.Label6.Text = " "
         '
         'Label5
         '
@@ -203,34 +204,23 @@ Partial Class Form1
         Me.Label5.TabIndex = 11
         Me.Label5.Text = " "
         '
-        'Label6
+        'Label4
         '
-        Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(72, 36)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(11, 14)
-        Me.Label6.TabIndex = 12
-        Me.Label6.Text = " "
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(15, 37)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(51, 14)
+        Me.Label4.TabIndex = 10
+        Me.Label4.Text = "DISCID;"
         '
-        'ListView3
+        'Label3
         '
-        Me.ListView3.Location = New System.Drawing.Point(751, 457)
-        Me.ListView3.Name = "ListView3"
-        Me.ListView3.Size = New System.Drawing.Size(121, 97)
-        Me.ListView3.TabIndex = 11
-        Me.ListView3.UseCompatibleStateImageBehavior = False
-        Me.ListView3.Visible = False
-        '
-        'EXTRACTDATAToolStripMenuItem
-        '
-        Me.EXTRACTDATAToolStripMenuItem.Name = "EXTRACTDATAToolStripMenuItem"
-        Me.EXTRACTDATAToolStripMenuItem.Size = New System.Drawing.Size(193, 26)
-        Me.EXTRACTDATAToolStripMenuItem.Text = "EXTRACT　DATA"
-        '
-        'ToolStripSeparator1
-        '
-        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(190, 6)
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(15, 3)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(45, 14)
+        Me.Label3.TabIndex = 9
+        Me.Label3.Text = "TITLE;"
         '
         'Form1
         '
@@ -240,7 +230,6 @@ Partial Class Form1
         Me.ClientSize = New System.Drawing.Size(901, 578)
         Me.Controls.Add(Me.ListView2)
         Me.Controls.Add(Me.Panel1)
-        Me.Controls.Add(Me.ListView3)
         Me.Controls.Add(Me.TextBox1)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.TreeView1)
@@ -251,8 +240,8 @@ Partial Class Form1
         Me.Name = "Form1"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "DROP_IMAGE"
-        Me.ContextMenuStrip1.ResumeLayout(False)
         Me.ContextMenuStrip2.ResumeLayout(False)
+        Me.ContextMenuStrip1.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         Me.ResumeLayout(False)
@@ -278,7 +267,6 @@ Partial Class Form1
     Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents Label3 As System.Windows.Forms.Label
-    Friend WithEvents ListView3 As System.Windows.Forms.ListView
     Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents EXTRACTDATAToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
