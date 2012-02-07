@@ -267,7 +267,8 @@ Public Class Form1
                             Array.Resize(na, str_len)
                             Array.Copy(bs, i + 33, na, 0, str_len)
                             name = Encoding.GetEncoding(0).GetString(na)
-                            If ((bs(i + 25) >> 1) And 1) = 0 Then
+                            'フォルダかつLBAがおなじ
+                            If ((bs(i + 25) >> 1) And 1) = 1 Then
                                 If dst = lba Then
                                     Exit While
                                 End If
@@ -498,7 +499,8 @@ Public Class Form1
                     Array.Resize(na, str_len)
                     Array.Copy(bs, i + 33, na, 0, str_len)
                     name = Encoding.GetEncoding(0).GetString(na)
-                    If ((bs(i + 25) >> 1) And 1) = 0 Then
+                    'フォルダかつLBAがおなじ
+                    If ((bs(i + 25) >> 1) And 1) = 1 Then
                         If dst = lba Then
                             Exit While
                         End If
