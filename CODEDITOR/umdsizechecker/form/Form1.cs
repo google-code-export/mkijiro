@@ -90,17 +90,21 @@ namespace WindowsFormsApplication1
                 i++;
             }
             textBox1.Text = getsize(isofile);
-            groupBox1.Visible = true;
-            groupBox3.Visible = false;
-            groupBox2.Visible = true;
-            groupBox4.Visible = false;
             if (textBox1.Text.Contains("ません"))
             {
 
                 groupBox1.Enabled = false;
                 sectorview.Enabled = false;
             }
-            else
+            else if (textBox1.Text.Contains("Deflate")) {
+                        groupBox1.Visible = false;
+                        groupBox3.Visible = true;
+                        groupBox2.Visible = false;
+                        groupBox4.Visible = true;
+                        groupBox1.Enabled = true;
+                        sectorview.Enabled = true;
+            }
+             else
             {
                 groupBox1.Enabled = true;
                 sectorview.Enabled = true;
@@ -219,153 +223,161 @@ namespace WindowsFormsApplication1
             
             label1.Text = "ファイルサイズ:";
             label2.Text = "セクター算出　:";
-            if (fs.Length > 0x8060)
+            if (File.Exists(filepath) == true)
             {
-                byte[] bs = new byte[8];
-                byte[] big = new byte[8];
-                byte[] str = new byte[5];
-                byte[] str2 = new byte[9];
-                byte[] x = new byte[3];
-                string iso = "",iso2 = "";
-                fs.Read(str, 0, 4);
-                iso = Encoding.GetEncoding(0).GetString(str);
-                iso = iso.Replace("\x0", "");
-                if (iso == "DAX")
+                if (fs.Length > 0x8060)
                 {
+                    byte[] bs = new byte[8];
+                    byte[] big = new byte[8];
+                    byte[] str = new byte[5];
+                    byte[] str2 = new byte[9];
+                    byte[] x = new byte[3];
+                    string iso = "", iso2 = "";
+                    fs.Read(str, 0, 4);
+                    iso = Encoding.GetEncoding(0).GetString(str);
+                    iso = iso.Replace("\x0", "");
+                    if (iso == "DAX")
+                    {
+                        fs.Close();
+                        return "Deflate圧縮ISO,DAXには対応してません";
+                    }
+                    else if (iso == "CISO")
+                    {
+                        groupBox1.Visible = false;
+                        groupBox3.Visible = true;
+                        groupBox2.Visible = false;
+                        groupBox4.Visible = true;
+                        fs.Close();
+                        return "Deflate圧縮ISO,CSOは圧縮されてるためアンパックが必要です、ただしリネームでアンパック時の推定サイズ情報がでます";
+                    }
+                    else if (iso == "JISO")
+                    {
+                        fs.Close();
+                        return "LZO圧縮ISO,JSOには対応してません";
+                    }
+                    else if (iso != "")
+                    {
+                        fs.Close();
+                        return "ISOではありません";
+                    }
+                    fs.Seek(0x8001, SeekOrigin.Begin);
+                    fs.Read(str, 0, 5);
+                    fs.Seek(0x8008, SeekOrigin.Begin);
+                    fs.Read(str2, 0, 9);
+                    fs.Seek(0x8050, SeekOrigin.Begin);
+                    fs.Read(bs, 0, 3);
+                    fs.Seek(0x8055, SeekOrigin.Begin);
+                    fs.Read(big, 0, 3);
                     fs.Close();
-                    return "Deflate圧縮ISO,DAXには対応してません";
+                    Array.ConstrainedCopy(big, 0, x, 0, 3);
+                    for (int i = 0; i < 3; i++)
+                    {
+                        Array.ConstrainedCopy(x, 2 - i, big, i, 1);
+                    }
+                    iso = Encoding.GetEncoding(0).GetString(str);
+                    iso2 = Encoding.GetEncoding(0).GetString(str2);
+                    isosize = BitConverter.ToInt64(bs, 0);
+                    isobig = BitConverter.ToInt64(big, 0);
+                    if (isosize != isobig || iso != "CD001")
+                    {
+                        return "ISOではありません";
+                    }
+                    if (iso2.Contains("PSP GAME") || iso2.Contains("UMD VIDEO"))
+                    { }
+                    else
+                    {
+                        return "ISOではありません";
+                    }
+                    isosize *= 2048;
+                    trimsize = isosize;
+                    sizecolor(fsize, trimsize);
+                    label1.Text += Convert.ToString(fsize);
+                    label2.Text += Convert.ToString(isosize);
+                    if (isosize - fsize == 2048)
+                    {
+                        return "M33USBマウントやSSSで発生する-2048サイズ欠けです,セクタビュー最後で00かFFが連続してない場合バッドバンプの可能性が高いです\n\nPSPFILER/ISOTOOL/TEMPARなどを使ってください\r\nまたUSBマウントは修正版がでているので使ってください";
+                    }
+                    else if (isosize - fsize == 6144)
+                    {
+                        return "SSSで発生する-6144サイズ欠けです,セクタビュー最後で00かFFが連続してない場合バッドバンプの可能性が高いです\n手動補完するかPSPFILER/ISOTOOL/TEMPARなどを使ってください";
+                    }
+                    else if (isosize < fsize)
+                    {
+                        button5.Enabled = true;
+                        return "オーバーダンプです,トリムすると正常になることが多いです\r\nトリムはメモリースティック上だと時間がかかるため、高速なHDD/SSD/RAMDISK上での実行を推奨します";
+                    }
+                    else if (isosize == fsize)
+                    {
+                        FileStream sector = new FileStream(filepath, FileMode.Open, FileAccess.Read);
+                        byte[] beforefinal = new byte[2048];
+                        byte[] finalsector = new byte[2048];
+                        byte[] hash = new byte[32];
+                        string NU = "70BC8F4B72A86921468BF8E8441DCE51";//null
+                        string FF = "0D7DC4266497100E4831F5B31B6B274F";//FF
+
+                        sector.Seek(isosize - 8192, SeekOrigin.Begin);
+                        sector.Read(beforefinal, 0, 2048);
+                        sector.Read(finalsector, 0, 2048);
+
+                        System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create();
+                        Array.ConstrainedCopy(beforefinal, 2016, hash, 0, 32);
+                        byte[] b = md5.ComputeHash(hash);
+                        string result = BitConverter.ToString(b).ToUpper().Replace("-", "");
+                        Array.ConstrainedCopy(finalsector, 0, hash, 0, 32);
+                        byte[] c = md5.ComputeHash(hash);
+                        string result2 = BitConverter.ToString(c).ToUpper().Replace("-", "");
+
+                        sector.Seek(isosize - 4096, SeekOrigin.Begin);
+                        sector.Read(beforefinal, 0, 2048);
+                        sector.Read(finalsector, 0, 2048);
+
+                        Array.ConstrainedCopy(beforefinal, 2016, hash, 0, 32);
+                        byte[] d = md5.ComputeHash(hash);
+                        string result3 = BitConverter.ToString(d).ToUpper().Replace("-", "");
+                        Array.ConstrainedCopy(finalsector, 0, hash, 0, 32);
+                        byte[] e = md5.ComputeHash(hash);
+                        string result4 = BitConverter.ToString(e).ToUpper().Replace("-", "");
+
+                        sector.Close();
+
+                        if (result == result2)
+                        {//FILLED wiht NULL
+                            return "正常なサイズです";
+                        }
+                        else if (result == FF && result2 == NU)
+                        {
+                            return "サイズは正常です,0xFF埋めのあと0x00埋めになってます(最終-6k付近不連続ダミー判定)\r\nセクタービューで確認してください";
+                        }
+                        else if (result != NU && result2 == NU)
+                        {
+                            return "サイズは正常ですが,バッドダンプの可能性があります(最終-6k付近データ連続判定)\r\nセクタービューで確認してください";
+                        }
+                        else if (result3 == FF && result4 == NU)
+                        {
+                            return "サイズは正常です,0xFF埋めのあと0x00埋めになってます(最終-2k付近不連続ダミー判定)\r\nヴァルキリープロファイルなどが該当しますが正常なイメージだと確認済みです\r\nセクタービューで確認してください";
+                        }
+                        else if (result3 != NU && result4 == NU)
+                        {
+                            return "サイズは正常ですが,バッドダンプの可能性があります(最終-2k付近データ連続判定)\r\nセクタービューで確認してください";
+                        }
+                        else
+                        {
+                            return "正常なサイズです";
+                        }
+                    }
+                    else
+                    {
+                        return "サイズが合いません";
+                    }
                 }
-                else if (iso == "CISO")
-                {
-                    groupBox1.Visible = false;
-                    groupBox3.Visible = true;
-                    groupBox2.Visible = false;
-                    groupBox4.Visible = true;
-                    fs.Close();
-                    return "Deflate圧縮ISO,CSOは圧縮されてるためアンパックが必要です、ただしリネームでアンパック時の推定サイズ情報がでます";
-                }
-                else if (iso == "JISO")
-                {
-                    fs.Close();
-                    return "LZO圧縮ISO,JSOには対応してません";
-                }
-                else if (iso != "")
-                {
-                    fs.Close();
-                    return "ISOではありません";                
-                }
-                fs.Seek(0x8001, SeekOrigin.Begin);
-                fs.Read(str, 0, 5);
-                fs.Seek(0x8008, SeekOrigin.Begin);
-                fs.Read(str2, 0, 9);
-                fs.Seek(0x8050, SeekOrigin.Begin);
-                fs.Read(bs, 0, 3);
-                fs.Seek(0x8055, SeekOrigin.Begin);
-                fs.Read(big, 0, 3);
                 fs.Close();
-                Array.ConstrainedCopy(big, 0, x, 0, 3);
-                for (int i = 0; i < 3; i++)
-                {
-                    Array.ConstrainedCopy(x, 2-i, big, i, 1);
-                }
-                iso = Encoding.GetEncoding(0).GetString(str);
-                iso2 = Encoding.GetEncoding(0).GetString(str2);
-                isosize = BitConverter.ToInt64(bs, 0);
-                isobig = BitConverter.ToInt64(big, 0);
-                if (isosize != isobig || iso != "CD001")
-                {
-                    return "ISOではありません";
-                }
-                if (iso2.Contains("PSP GAME") || iso2.Contains("UMD VIDEO"))
-                {}
-                else
-                {
-                    return "ISOではありません";
-                }
-                isosize *= 2048;
-                trimsize = isosize;
-                sizecolor(fsize, trimsize);
-                label1.Text +=  Convert.ToString(fsize);
-                label2.Text += Convert.ToString(isosize);
-                 if (isosize - fsize == 2048)
-                 {
-                     return "M33USBマウントやSSSで発生する-2048サイズ欠けです,セクタビュー最後で00かFFが連続してない場合バッドバンプの可能性が高いです\n\nPSPFILER/ISOTOOL/TEMPARなどを使ってください\r\nまたUSBマウントは修正版がでているので使ってください";
-                }
-                 else if (isosize - fsize == 6144)
-                 {
-                     return "SSSで発生する-6144サイズ欠けです,セクタビュー最後で00かFFが連続してない場合バッドバンプの可能性が高いです\n手動補完するかPSPFILER/ISOTOOL/TEMPARなどを使ってください";
-                 }
-                else if (isosize < fsize)
-                 {
-                     button5.Enabled = true;
-                    return "オーバーダンプです,トリムすると正常になることが多いです\r\nトリムはメモリースティック上だと時間がかかるため、高速なHDD/SSD/RAMDISK上での実行を推奨します";
-                }
-                 else if (isosize == fsize)
-                 {
-                     FileStream sector = new FileStream(filepath, FileMode.Open, FileAccess.Read);
-                     byte[] beforefinal = new byte[2048];
-                     byte[] finalsector = new byte[2048];
-                     byte[] hash = new byte[32];
-                     string NU = "70BC8F4B72A86921468BF8E8441DCE51";//null
-                     string FF = "0D7DC4266497100E4831F5B31B6B274F";//FF
-
-                     sector.Seek(isosize - 8192, SeekOrigin.Begin);
-                     sector.Read(beforefinal, 0, 2048);
-                     sector.Read(finalsector, 0, 2048);
-
-                     System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create();
-                     Array.ConstrainedCopy(beforefinal,2016,hash,0,32);
-                     byte[] b = md5.ComputeHash(hash);
-                     string result = BitConverter.ToString(b).ToUpper().Replace("-", "");
-                     Array.ConstrainedCopy(finalsector, 0, hash, 0, 32);
-                     byte[] c = md5.ComputeHash(hash);
-                     string result2 = BitConverter.ToString(c).ToUpper().Replace("-", "");
-
-                     sector.Seek(isosize - 4096, SeekOrigin.Begin);
-                     sector.Read(beforefinal, 0, 2048);
-                     sector.Read(finalsector, 0, 2048);
-
-                     Array.ConstrainedCopy(beforefinal, 2016, hash, 0, 32);
-                     byte[] d = md5.ComputeHash(hash);
-                     string result3 = BitConverter.ToString(d).ToUpper().Replace("-", "");
-                     Array.ConstrainedCopy(finalsector, 0, hash, 0, 32);
-                     byte[] e= md5.ComputeHash(hash);
-                     string result4 = BitConverter.ToString(e).ToUpper().Replace("-", "");
-                     
-                     sector.Close();
-                     
-                     if (result == result2)
-                     {//FILLED wiht NULL
-                         return "正常なサイズです";
-                     }
-                     else if (result == FF && result2 == NU)
-                     {
-                         return "サイズは正常です,0xFF埋めのあと0x00埋めになってます(最終-6k付近不連続ダミー判定)\r\nセクタービューで確認してください";
-                     }
-                     else if (result != NU && result2 == NU)
-                     {
-                         return "サイズは正常ですが,バッドダンプの可能性があります(最終-6k付近データ連続判定)\r\nセクタービューで確認してください";
-                     }
-                     else if (result3 == FF && result4 == NU)
-                     {
-                         return "サイズは正常です,0xFF埋めのあと0x00埋めになってます(最終-2k付近不連続ダミー判定)\r\nヴァルキリープロファイルなどが該当しますが正常なイメージだと確認済みです\r\nセクタービューで確認してください";
-                     }
-                     else if (result3 != NU && result4 == NU)
-                     {
-                         return "サイズは正常ですが,バッドダンプの可能性があります(最終-2k付近データ連続判定)\r\nセクタービューで確認してください";
-                     }
-                     else
-                     {
-                         return "正常なサイズです";
-                     }
-                 }
-                else
-                 {
-                    return "サイズが合いません";
-                }
+                return "ISOではありません";
             }
-            fs.Close();
-            return "ISOではありません";
+            else
+            {
+                fs.Close();
+                return "ファイルが存在しません";
+            }
         }
 
         //ID
