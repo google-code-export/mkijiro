@@ -1227,6 +1227,8 @@ Public Class umdisomanger
                         UMD = "PBP"
                     End If
 
+                    Me.TopMost = False
+
                     If psp <> "" AndAlso File.Exists(cp2) = False AndAlso MessageBox.Show(cp & lang(41), lang(42), _
                    MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
                         If UMD = "PBP" Then
@@ -1279,6 +1281,10 @@ Public Class umdisomanger
                     End If
                 Else
                     free.Text = lang(12)
+                End If
+
+                If My.Settings.topmost = True Then
+                    Me.TopMost = True
                 End If
 
             End If
