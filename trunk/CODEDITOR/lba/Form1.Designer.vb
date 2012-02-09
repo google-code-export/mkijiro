@@ -53,6 +53,7 @@ Partial Class Form1
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Label1 = New System.Windows.Forms.Label()
+        Me.localtime = New System.Windows.Forms.CheckBox()
         Me.ContextMenuStrip2.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -299,12 +300,23 @@ Partial Class Form1
         Me.Label1.TabIndex = 14
         Me.Label1.Text = "+9 JAPAN" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "+0 UK" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "-8 USA"
         '
+        'localtime
+        '
+        Me.localtime.AutoSize = True
+        Me.localtime.Location = New System.Drawing.Point(783, 472)
+        Me.localtime.Name = "localtime"
+        Me.localtime.Size = New System.Drawing.Size(103, 18)
+        Me.localtime.TabIndex = 15
+        Me.localtime.Text = "LOCAL TIME"
+        Me.localtime.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AllowDrop = True
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(901, 578)
+        Me.Controls.Add(Me.localtime)
         Me.Controls.Add(Me.Panel2)
         Me.Controls.Add(Me.gridview)
         Me.Controls.Add(Me.uid_parent)
@@ -359,5 +371,6 @@ Partial Class Form1
     Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
     Friend WithEvents Panel2 As System.Windows.Forms.Panel
     Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents localtime As System.Windows.Forms.CheckBox
 
 End Class
