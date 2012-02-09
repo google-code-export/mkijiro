@@ -621,7 +621,7 @@ Public Class Form1
             End If
             dtBirth = dtBirth.ToLocalTime()
             dtBirth = dtBirth.AddHours(-(z >> 2))
-            dtBirth = dtBirth.AddMinutes(-((z Mod 4) * 15))
+            dtBirth = dtBirth.AddMinutes(-((z And 3) * 15))
             sb.Clear()
 
             sb.Append(dtBirth.ToString())
