@@ -22,15 +22,18 @@ Public Class Form1
             Dim fs As New System.IO.FileStream(Application.StartupPath & "\conf", System.IO.FileMode.Open, System.IO.FileAccess.Read)
             Dim bs(CInt(fs.Length - 1)) As Byte
             fs.Read(bs, 0, bs.Length)
-            If bs.Length >= 2 Then
+            If bs.Length >= 3 Then
                 If bs(0) = 1 Then
                     uid_parent.Checked = True
                 End If
                 If bs(1) = 1 Then
                     gridview.Checked = True
                 End If
-                fs.Close()
+                If bs(2) = 1 Then
+                    localtime.Checked = True
+                End If
             End If
+            fs.Close()
         End If
 
         Dim psf As New psf
@@ -48,14 +51,17 @@ Public Class Form1
 
     Private Sub ffclose(sender As System.Object, e As System.Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
         Dim fs As New FileStream(Application.StartupPath & "\conf", System.IO.FileMode.Create, FileAccess.Write)
-        Dim bs(1) As Byte
+        Dim bs(2) As Byte
         If uid_parent.Checked = True Then
             bs(0) = 1
         End If
         If gridview.Checked = True Then
             bs(1) = 1
         End If
-        fs.Write(bs, 0, 2)
+        If localtime.Checked = True Then
+            bs(2) = 1
+        End If
+        fs.Write(bs, 0, 3)
         fs.Close()
     End Sub
 
@@ -246,6 +252,12 @@ Public Class Form1
         ListView1.GridLines = gridview.Checked
     End Sub
 
+    Private Sub CheckBox1_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles localtime.CheckedChanged
+        If TreeView1.SelectedNode IsNot Nothing Then
+            getlist(CInt(TreeView1.SelectedNode.Tag))
+        End If
+    End Sub
+
 #End Region
 
 #Region "TREE_LIST"
@@ -369,29 +381,29 @@ Public Class Form1
             title_st = title_st.Replace(dosmoji(i), "")
         Next
 
-            Dim sw As New System.IO.StreamWriter(Application.StartupPath & "\" & title_st & ".txt", False, System.Text.Encoding.GetEncoding(65001))
-            Dim sb As New StringBuilder
-            If TreeView1.SelectedNode.Level > 0 Then
-                sb.Append(getlba(TreeView1.SelectedNode, sender))
-            End If
+        Dim sw As New System.IO.StreamWriter(Application.StartupPath & "\" & title_st & ".txt", False, System.Text.Encoding.GetEncoding(65001))
+        Dim sb As New StringBuilder
+        If TreeView1.SelectedNode.Level > 0 Then
+            sb.Append(getlba(TreeView1.SelectedNode, sender))
+        End If
 
-            For Each tt As TreeNode In Ar
-                sb.Append(getlba(tt, sender))
-            Next
+        For Each tt As TreeNode In Ar
+            sb.Append(getlba(tt, sender))
+        Next
 
-            Dim ss As String() = sb.ToString().Split(CChar(vbLf))
-            Array.Sort(ss)
-            sb.Clear()
-            For j = 0 To ss.Length - 1
-                sb.Append(ss(j))
-                sb.Append(vbLf)
-            Next
-            If sb(0) = vbLf Then
-                sb.Remove(0, 1)
-            End If
-            sw.Write(sb.ToString)
+        Dim ss As String() = sb.ToString().Split(CChar(vbLf))
+        Array.Sort(ss)
+        sb.Clear()
+        For j = 0 To ss.Length - 1
+            sb.Append(ss(j))
+            sb.Append(vbLf)
+        Next
+        If sb(0) = vbLf Then
+            sb.Remove(0, 1)
+        End If
+        sw.Write(sb.ToString)
 
-            sw.Close()
+        sw.Close()
     End Sub
 #End Region
 
@@ -419,8 +431,12 @@ Public Class Form1
                 ListView1.Columns.Add("NAME", -1, HorizontalAlignment.Left)
                 ListView1.Columns.Add("LBA", -1, HorizontalAlignment.Left)
                 ListView1.Columns.Add("SIZE", -1, HorizontalAlignment.Left)
-                ListView1.Columns.Add("DATE", -1, HorizontalAlignment.Left)
-                ListView1.Columns.Add("UTCDIFF", -1, HorizontalAlignment.Left)
+                If localtime.Checked Then
+                    ListView1.Columns.Add("DATE(LOCAL)", -1, HorizontalAlignment.Left)
+                Else
+                    ListView1.Columns.Add("DATE", -1, HorizontalAlignment.Left)
+                    ListView1.Columns.Add("UTCDIFF", -1, HorizontalAlignment.Left)
+                End If
 
                 Dim lba As Integer = 0
                 Dim lba_base As Integer = dst << 11
@@ -486,7 +502,9 @@ Public Class Form1
                 unix_back.SubItems.Add("")
                 unix_back.SubItems.Add("")
                 unix_back.SubItems.Add("")
-                unix_back.SubItems.Add("")
+                If localtime.Checked = False Then
+                    unix_back.SubItems.Add("")
+                End If
                 If TreeView1.SelectedNode.Parent.Level > 1 Then
                     ListView1.Items.Add(unix_back)
                 End If
@@ -513,7 +531,9 @@ Public Class Form1
                         itemx.SubItems.Add(lba.ToString)
                         itemx.SubItems.Add(filesize.ToString)
                         itemx.SubItems.Add(cvt_date(yyyymmdd))
-                        itemx.SubItems.Add(cvt_utc(yyyymmdd(6)))
+                        If localtime.Checked = False Then
+                            itemx.SubItems.Add(cvt_utc(yyyymmdd(6)))
+                        End If
 
                         ListView1.Items.Add(itemx)
                     End If
@@ -590,6 +610,22 @@ Public Class Form1
         sb.Append((ymd(4).ToString.PadLeft(2, "0"c)))
         sb.Append(":")
         sb.Append((ymd(5).ToString.PadLeft(2, "0"c)))
+
+        If localtime.Checked = True Then
+            Dim cFormat As New System.Globalization.CultureInfo("ja-JP", False)
+            Dim dtBirth As DateTime = DateTime.Parse(sb.ToString, cFormat)
+
+            Dim z As Integer = ymd(6)
+            If z > 127 Then
+                z -= 256
+            End If
+            dtBirth = dtBirth.ToLocalTime()
+            dtBirth = dtBirth.AddHours(-(z >> 2))
+            dtBirth = dtBirth.AddMinutes(-(z Mod 4))
+            sb.Clear()
+
+            sb.Append(dtBirth.ToString())
+        End If
 
         Return sb.ToString
     End Function
@@ -792,8 +828,12 @@ Public Class Form1
                     sb.Append(filesize)
                     sb.Append(vbTab)
                     sb.Append(cvt_date(yyyymmdd))
-                    sb.Append(vbTab)
-                    sb.AppendLine(cvt_utc(yyyymmdd(6)))
+                    If localtime.Checked Then
+                        sb.AppendLine()
+                    Else
+                        sb.Append(vbTab)
+                        sb.AppendLine(cvt_utc(yyyymmdd(6)))
+                    End If
                 End If
 
             End If
