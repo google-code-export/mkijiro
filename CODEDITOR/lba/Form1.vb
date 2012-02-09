@@ -588,12 +588,6 @@ Public Class Form1
         sb.Append(":")
         sb.Append(z Mod 4)
 
-        'If z = 36 Then
-        '    sb.Append("(JST)")
-        'ElseIf z = 0 Then
-        '    sb.Append("(JST)")
-        'End If
-
         Return sb.ToString
     End Function
 
@@ -616,7 +610,7 @@ Public Class Form1
             Dim dtBirth As DateTime = DateTime.Parse(sb.ToString, cFormat)
 
             Dim z As Integer = ymd(6)
-            If z > 127 Then
+            If (z >> 7) = 1 Then
                 z -= 256
             End If
             dtBirth = dtBirth.ToLocalTime()
