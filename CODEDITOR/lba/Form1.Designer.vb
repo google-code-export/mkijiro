@@ -54,6 +54,9 @@ Partial Class Form1
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.localtime = New System.Windows.Forms.CheckBox()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
         Me.ContextMenuStrip2.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -126,8 +129,10 @@ Partial Class Form1
         Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
         Me.ImageList1.Images.SetKeyName(0, "code title.png")
-        Me.ImageList1.Images.SetKeyName(1, "code selected.png")
+        Me.ImageList1.Images.SetKeyName(1, "corrupt_dir.png")
         Me.ImageList1.Images.SetKeyName(2, "file.png")
+        Me.ImageList1.Images.SetKeyName(3, "corrupt_f.png")
+        Me.ImageList1.Images.SetKeyName(4, "code selected.png")
         '
         'Button1
         '
@@ -167,6 +172,7 @@ Partial Class Form1
         '
         Me.ListView1.ContextMenuStrip = Me.ContextMenuStrip1
         Me.ListView1.FullRowSelect = True
+        Me.ListView1.HideSelection = False
         Me.ListView1.Location = New System.Drawing.Point(353, 76)
         Me.ListView1.Name = "ListView1"
         Me.ListView1.Size = New System.Drawing.Size(535, 356)
@@ -303,12 +309,39 @@ Partial Class Form1
         'localtime
         '
         Me.localtime.AutoSize = True
-        Me.localtime.Location = New System.Drawing.Point(783, 472)
+        Me.localtime.Location = New System.Drawing.Point(785, 439)
         Me.localtime.Name = "localtime"
         Me.localtime.Size = New System.Drawing.Size(103, 18)
         Me.localtime.TabIndex = 15
         Me.localtime.Text = "LOCAL TIME"
         Me.localtime.UseVisualStyleBackColor = True
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(462, 515)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(195, 14)
+        Me.Label2.TabIndex = 16
+        Me.Label2.Text = "+SHIFT:SART-END SELECTION"
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(462, 529)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(164, 14)
+        Me.Label3.TabIndex = 17
+        Me.Label3.Text = "+CTRL:MULTI SELECTION"
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(462, 543)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(160, 14)
+        Me.Label4.TabIndex = 18
+        Me.Label4.Text = "CTRL+A:ALL SELECTION"
         '
         'Form1
         '
@@ -316,6 +349,9 @@ Partial Class Form1
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(901, 578)
+        Me.Controls.Add(Me.Label4)
+        Me.Controls.Add(Me.Label3)
+        Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.localtime)
         Me.Controls.Add(Me.Panel2)
         Me.Controls.Add(Me.gridview)
@@ -372,5 +408,8 @@ Partial Class Form1
     Friend WithEvents Panel2 As System.Windows.Forms.Panel
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents localtime As System.Windows.Forms.CheckBox
+    Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents Label3 As System.Windows.Forms.Label
+    Friend WithEvents Label4 As System.Windows.Forms.Label
 
 End Class
