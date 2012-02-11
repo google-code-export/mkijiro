@@ -49,6 +49,7 @@ Public Class Form1
             End If
             Button1_Click(sender, e)
         End If
+
     End Sub
 
     Private Sub ffclose(sender As System.Object, e As System.Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
@@ -392,7 +393,7 @@ Public Class Form1
                     Dim s As String = ListView1.Items(itemx.Index).SubItems(1).Text
                     Dim ss As String = ListView1.Items(itemx.Index).SubItems(2).Text
                     Dim iso_len As Long = fs.Length
-                    If (CLng(ss) + CLng(s) << 11) > iso_len Then
+                    If ((CLng(s) << 11) + CLng(ss)) > iso_len Then
                         fs.Close()
                         errorm.Append(s)
                         errorm.Append(",")
@@ -437,7 +438,7 @@ Public Class Form1
             End If
         Next
 
-        If errorm(0) <> "" Then
+        If errorm.Length > 0 Then
             errorm.Insert(0, vbCrLf)
             errorm.Insert(0, "!!破損ファイルがありました")
             MessageBox.Show(errorm.ToString)
@@ -457,7 +458,7 @@ Public Class Form1
             errorm.Append(getfile(tt))
         Next
 
-        If errorm(0) <> "" Then
+        If errorm.Length > 0 Then
             errorm.Insert(0, vbCrLf)
             errorm.Insert(0, "!!破損ファイルがありました")
             MessageBox.Show(errorm.ToString)
@@ -538,6 +539,8 @@ Public Class Form1
                     zz = 4
                     finalcol = 80
                 End If
+
+
 
                 Dim lba As Integer = 0
                 Dim lba_base As Integer = dst << 11
