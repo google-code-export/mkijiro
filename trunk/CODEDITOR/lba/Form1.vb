@@ -2,6 +2,8 @@
 Imports System.IO
 Imports System.Text
 Imports System.Text.RegularExpressions
+Imports Microsoft.Win32
+Imports System.Diagnostics
 
 Public Class Form1
     Dim iso As String = "NULL"
@@ -245,8 +247,64 @@ Public Class Form1
     End Sub
 
     Private Sub LinkLabel1_LinkClicked(sender As System.Object, e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
-        Process.Start("http://wikitravel.org/ja/%E6%99%82%E5%B7%AE%E3%81%82%E3%82%8C%E3%81%93%E3%82%8C#.EF.BC.B5.EF.BC.B4.EF.BC.A3")
+        Dim url As String = "http://wikitravel.org/en/Time_zones"
+        If My.Application.Culture.Name.ToString.Contains("JP") Then
+            url = "http://wikitravel.org/ja/%25E6%2599%2582%25E5%25B7%25AE%25E3%2581%2582%25E3%2582%258C%25E3%2581%2593%25E3%2582%258C#.E6.99.82.E5.B7.AE.E6.97.A9.E8.A6.8B.E8.A1.A8"
+        End If
+        Dim browserPath As String = GetDefaultBrowserExePath()
+
+        Process.Start(browserPath, url)
     End Sub
+
+
+    Private Function GetDefaultBrowserExePath() As String
+        Return _GetDefaultExePath("http\shell\open\command")
+    End Function
+
+
+    Private Function _GetDefaultExePath(ByVal keyPath As String) As String
+        Dim path As String = ""
+
+        ' レジストリ・キーを開く
+        ' 「HKEY_CLASSES_ROOT\xxxxx\shell\open\command」
+        Dim rKey As RegistryKey = _
+          Registry.ClassesRoot.OpenSubKey(keyPath)
+        If Not rKey Is Nothing Then
+            ' レジストリの値を取得する
+            Dim command As String = _
+              CType(rKey.GetValue(String.Empty), String)
+            If command = Nothing Then
+                Return path
+            End If
+
+            ' 前後の余白を削る
+            command = command.Trim()
+            If command.Length = 0 Then
+                Return path
+            End If
+
+            ' 「"」で始まる長いパス形式かどうかで処理を分ける
+            If command.Chars(0) = """"c Then
+                ' 「"～"」間の文字列を抽出
+                Dim endIndex As Integer = command.IndexOf(""""c, 1)
+                If endIndex <> -1 Then
+                    ' 抽出開始を「1」ずらす分、長さも「1」引く
+                    path = command.Substring(1, endIndex - 1)
+                End If
+            Else
+                ' 「（先頭）～（スペース）」間の文字列を抽出
+                Dim endIndex As Integer = command.IndexOf(" "c)
+                If endIndex <> -1 Then
+                    path = command.Substring(0, endIndex)
+                Else
+                    path = command
+                End If
+            End If
+        End If
+
+        Return path
+
+    End Function
 
     Private Sub CheckBox2_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles gridview.CheckedChanged
         ListView1.GridLines = gridview.Checked
@@ -293,6 +351,17 @@ Public Class Form1
         ' ListView using the ListViewItemComparer object.
         Me.ListView1.ListViewItemSorter = New ListViewItemComparer(e.Column)
     End Sub
+
+    Private Sub ListView1_Selected_all(sender As System.Object, ByVal e As KeyEventArgs) Handles ListView1.KeyDown
+        If e.Control = True Then
+            If e.KeyValue = Keys.A Then
+                For Each itemx As ListViewItem In ListView1.Items
+                    itemx.Selected = True
+                Next
+            End If
+        End If
+    End Sub
+
 #End Region
 
 #Region "CONTEXT"
@@ -311,6 +380,7 @@ Public Class Form1
         End If
 
         Dim itemx As New ListViewItem
+        Dim errorm As New StringBuilder
 
         For k = 0 To ListView1.SelectedItems.Count - 1
             itemx = ListView1.SelectedItems(k)
@@ -319,20 +389,31 @@ Public Class Form1
             ElseIf itemx.ImageIndex >= 2 Then
                 If File.Exists(iso) Then
                     Dim fs As New FileStream(iso, FileMode.Open, FileAccess.Read)
-                    Dim p As String = Application.StartupPath & "\" & TreeView1.SelectedNode.FullPath & "\" & itemx.Text
-                    Directory.CreateDirectory(Path.GetDirectoryName(p))
-                    If File.Exists(p) Then
-                        File.Delete(p)
-                    End If
-                    Dim save As New FileStream(p, FileMode.CreateNew, FileAccess.Write)
                     Dim s As String = ListView1.Items(itemx.Index).SubItems(1).Text
                     Dim ss As String = ListView1.Items(itemx.Index).SubItems(2).Text
-                    Dim bs(CInt(ss) - 1) As Byte
-                    fs.Seek(CInt(s) << 11, SeekOrigin.Begin)
-                    fs.Read(bs, 0, bs.Length)
-                    fs.Close()
-                    save.Write(bs, 0, bs.Length)
-                    save.Close()
+                    Dim iso_len As Long = fs.Length
+                    If (CLng(ss) + CLng(s) << 11) > iso_len Then
+                        fs.Close()
+                        errorm.Append(s)
+                        errorm.Append(",")
+                        errorm.Append(ListView1.Items(itemx.Index).SubItems(0).Text)
+                        errorm.Append(",")
+                        errorm.Append(ss)
+                        errorm.AppendLine()
+                    Else
+                        Dim p As String = Application.StartupPath & "\" & TreeView1.SelectedNode.FullPath & "\" & itemx.Text
+                        Directory.CreateDirectory(Path.GetDirectoryName(p))
+                        If File.Exists(p) Then
+                            File.Delete(p)
+                        End If
+                        Dim save As New FileStream(p, FileMode.CreateNew, FileAccess.Write)
+                        Dim bs(CInt(ss) - 1) As Byte
+                        fs.Seek(CInt(s) << 11, SeekOrigin.Begin)
+                        fs.Read(bs, 0, bs.Length)
+                        fs.Close()
+                        save.Write(bs, 0, bs.Length)
+                        save.Close()
+                    End If
                 End If
             ElseIf itemx.ImageIndex = 0 Then
                 If File.Exists(iso) Then
@@ -349,24 +430,39 @@ Public Class Form1
 
                     getfile(seek_node)
                     For Each tt As TreeNode In Ar
-                        getfile(tt)
+                        errorm.Append(getfile(tt))
                     Next
 
                 End If
             End If
         Next
+
+        If errorm(0) <> "" Then
+            errorm.Insert(0, vbCrLf)
+            errorm.Insert(0, "!!破損ファイルがありました")
+            MessageBox.Show(errorm.ToString)
+        End If
+
     End Sub
 
     Private Sub EXTRACTDATAToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles EXTRACTDATAToolStripMenuItem.Click
         Dim Ar As New ArrayList
+        Dim errorm As New StringBuilder
         Ar = GetAllNodes(TreeView1.SelectedNode.Nodes)
         If TreeView1.SelectedNode.Level > 0 Then
-            getfile(TreeView1.SelectedNode)
+            errorm.Append(getfile(TreeView1.SelectedNode))
         End If
 
         For Each tt As TreeNode In Ar
-            getfile(tt)
+            errorm.Append(getfile(tt))
         Next
+
+        If errorm(0) <> "" Then
+            errorm.Insert(0, vbCrLf)
+            errorm.Insert(0, "!!破損ファイルがありました")
+            MessageBox.Show(errorm.ToString)
+        End If
+
     End Sub
 
     Private Sub EXTRACTLBAToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles ABSOLUTPATHToolStripMenuItem.Click, OFFSETPATHToolStripMenuItem.Click
@@ -425,17 +521,22 @@ Public Class Form1
                     Return True
                 End If
                 ListView1.View = View.Details
-                ListView1.HideSelection = True
                 ListView1.AutoSize = True
+                Dim zz As Integer
+                Dim finalcol As Integer
 
                 ListView1.Columns.Add("NAME", -1, HorizontalAlignment.Left)
                 ListView1.Columns.Add("LBA", -1, HorizontalAlignment.Left)
                 ListView1.Columns.Add("SIZE", -1, HorizontalAlignment.Left)
                 If localtime.Checked Then
                     ListView1.Columns.Add("DATE(LOCAL)", -1, HorizontalAlignment.Left)
+                    zz = 3
+                    finalcol = 150
                 Else
                     ListView1.Columns.Add("DATE", -1, HorizontalAlignment.Left)
                     ListView1.Columns.Add("UTCDIFF", -1, HorizontalAlignment.Left)
+                    zz = 4
+                    finalcol = 80
                 End If
 
                 Dim lba As Integer = 0
@@ -448,6 +549,7 @@ Public Class Form1
                 Dim next_len As Integer
                 Dim filesize As Integer
                 Dim str_len As Integer
+                Dim iso_len As Long = fs.Length
                 Dim name As String
                 Dim i As Integer
                 Dim yyyymmdd(6) As Byte
@@ -528,6 +630,9 @@ Public Class Form1
                         Else
                             itemx.ImageIndex = 0
                         End If
+                        If ((lba << 11) + filesize) > iso_len Then
+                            itemx.ImageIndex = itemx.ImageIndex Or 1
+                        End If
                         itemx.SubItems.Add(lba.ToString)
                         itemx.SubItems.Add(filesize.ToString)
                         itemx.SubItems.Add(cvt_date(yyyymmdd))
@@ -552,6 +657,7 @@ Public Class Form1
                 End While
 
                 ListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize)
+                ListView1.Columns(zz).Width = finalcol
 
                 ListView1.EndUpdate()
 
@@ -624,7 +730,7 @@ Public Class Form1
         Return sb.ToString
     End Function
 
-    Function getfile(ByVal tt As TreeNode) As Boolean
+    Function getfile(ByVal tt As TreeNode) As String
         Dim basepath As String = Application.StartupPath & "\" & tt.FullPath & "\"
         Directory.CreateDirectory(Application.StartupPath & "\" & tt.FullPath)
         Dim dst As Integer = CInt(tt.Tag.ToString)
@@ -637,11 +743,13 @@ Public Class Form1
         Dim filesize As Integer
         Dim str_len As Integer
         Dim name As String
+        Dim iso_len As Long = fs.Length
         Dim i As Integer = 0
         Dim bb(1) As Byte
         Dim bbbb(3) As Byte
         Dim na As Byte() = Nothing
         Dim bs(2047) As Byte
+        Dim error_file As New StringBuilder
 
         Dim seek_parent_node As New TreeNode
         Dim arr As TreeNode() = TreeView1.Nodes.Find((CInt(tt.Name) + 1).ToString, True)
@@ -698,17 +806,25 @@ Public Class Form1
                     Array.Resize(na, str_len)
                     Array.Copy(bs, i + 33, na, 0, str_len)
                     name = Encoding.GetEncoding(0).GetString(na)
-                    Dim fss As New FileStream(iso, FileMode.Open, FileAccess.Read)
-                    If File.Exists(basepath & name) Then
-                        File.Delete(basepath & name)
+                    If ((lba << 11) + filesize) > iso_len Then
+                        error_file.Append(lba)
+                        error_file.Append(",")
+                        error_file.Append(name)
+                        error_file.Append(",")
+                        error_file.AppendLine(filesize.ToString)
+                    Else
+                        Dim fss As New FileStream(iso, FileMode.Open, FileAccess.Read)
+                        If File.Exists(basepath & name) Then
+                            File.Delete(basepath & name)
+                        End If
+                        Dim save As New FileStream(basepath & name, FileMode.CreateNew, FileAccess.Write)
+                        Dim bss(filesize - 1) As Byte
+                        fss.Seek(lba << 11, SeekOrigin.Begin)
+                        fss.Read(bss, 0, bss.Length)
+                        fss.Close()
+                        save.Write(bss, 0, bss.Length)
+                        save.Close()
                     End If
-                    Dim save As New FileStream(basepath & name, FileMode.CreateNew, FileAccess.Write)
-                    Dim bss(filesize - 1) As Byte
-                    fss.Seek(lba << 11, SeekOrigin.Begin)
-                    fss.Read(bss, 0, bss.Length)
-                    fss.Close()
-                    save.Write(bss, 0, bss.Length)
-                    save.Close()
                 End If
             End If
 
@@ -724,8 +840,9 @@ Public Class Form1
                 End If
             End If
         End While
+
         fs.Close()
-        Return True
+        Return error_file.ToString
     End Function
 
     Function getlba(ByVal tt As TreeNode, ByRef sender As Object) As String
@@ -742,6 +859,7 @@ Public Class Form1
         Dim fs As New FileStream(iso, FileMode.Open, FileAccess.Read)
         Dim next_len As Integer
         Dim filesize As Integer
+        Dim iso_len As Long = fs.Length
         Dim str_len As Integer
         Dim name As String
         Dim i As Integer = 0
@@ -814,6 +932,9 @@ Public Class Form1
                     Array.Copy(bs, i + 33, na, 0, str_len)
                     name = Encoding.GetEncoding(0).GetString(na)
 
+                    If ((lba << 11) + filesize) > iso_len Then
+                        sb.Append("!!")
+                    End If
                     sb.Append(lba.ToString.PadLeft(7, "0"c))
                     sb.Append(vbTab)
                     sb.Append(base)
