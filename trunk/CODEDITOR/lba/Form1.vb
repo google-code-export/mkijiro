@@ -7,6 +7,7 @@ Imports System.Diagnostics
 
 Public Class Form1
     Dim iso As String = "NULL"
+    Dim cso As Boolean = False
 
 #Region "FORM"
     Private Sub ffload(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
@@ -132,21 +133,40 @@ Public Class Form1
             End If
             TreeView1.Nodes(0).Name = "0"
             TreeView1.Nodes(0).Tag = "-1"
-            fs.Seek(&H8084, SeekOrigin.Begin)
-            fs.Read(bbbb, 0, 4)
-            'パステーブルサイズ
-            table_len = cvt32bit(bbbb) << 11
-            fs.Seek(&H808C, SeekOrigin.Begin)
-            fs.Read(bbbb, 0, 4)
-            'リトルエンディアンパステーブル(L型)
-            lba = cvt32bit(bbbb) << 11
-            fs.Read(bbbb, 0, 4)
-            '任意L形パステーブル
-            lba_m = cvt32bit(bbbb) << 11
-            fs.Seek(lba, SeekOrigin.Begin)
-            'LBA読み込みサイズを拡張
-            Array.Resize(bs, lba_m - lba)
-            fs.Read(bs, 0, bs.Length)
+
+
+            fs.Read(bs, 0, 4)
+            If bs(0) = &H43 AndAlso bs(1) = &H49 AndAlso bs(2) = &H53 AndAlso bs(3) = &H4F Then
+                cso = True
+            End If
+
+
+            If cso = False Then
+                fs.Seek(&H8084, SeekOrigin.Begin)
+                fs.Read(bbbb, 0, 4)
+                'パステーブルサイズ
+                table_len = cvt32bit(bbbb)
+                fs.Seek(&H808C, SeekOrigin.Begin)
+                fs.Read(bbbb, 0, 4)
+                'リトルエンディアンパステーブル(L型)
+                lba = cvt32bit(bbbb) << 11
+                fs.Read(bbbb, 0, 4)
+                '任意L形パステーブル
+                lba_m = cvt32bit(bbbb) << 11
+                fs.Seek(lba, SeekOrigin.Begin)
+                'LBA読み込みサイズを拡張
+                Array.Resize(bs, lba_m - lba)
+                fs.Read(bs, 0, bs.Length)
+            Else
+                bs = unpack_cso(16)
+                Array.Copy(bs, &H84, bbbb, 0, 4)
+                table_len = cvt32bit(bbbb)
+                Array.Copy(bs, &H8C, bbbb, 0, 4)
+                lba = cvt32bit(bbbb)
+                Array.Resize(bs, table_len)
+                bs = unpack_cso(lba)
+            End If
+
             parent_node = TreeView1.Nodes(0)
             While i < table_len
                 '文字の長さ
@@ -206,6 +226,8 @@ Public Class Form1
             TreeView1.ExpandAll()
             TextBox1.Text = sb.ToString
             fs.Close()
+
+
         ElseIf iso <> "NULL" Then
             MessageBox.Show("ファイルをドロップして下さい")
         End If
@@ -393,6 +415,12 @@ Public Class Form1
                     Dim s As String = ListView1.Items(itemx.Index).SubItems(1).Text
                     Dim ss As String = ListView1.Items(itemx.Index).SubItems(2).Text
                     Dim iso_len As Long = fs.Length
+                    If cso = True Then
+                        Dim bbbb(3) As Byte
+                        fs.Seek(8, SeekOrigin.Begin)
+                        fs.Read(bbbb, 0, 4)
+                        iso_len = cvt32bit(bbbb)
+                    End If
                     If ((CLng(s) << 11) + CLng(ss)) > iso_len Then
                         fs.Close()
                         errorm.Append(s)
@@ -409,8 +437,24 @@ Public Class Form1
                         End If
                         Dim save As New FileStream(p, FileMode.CreateNew, FileAccess.Write)
                         Dim bs(CInt(ss) - 1) As Byte
-                        fs.Seek(CInt(s) << 11, SeekOrigin.Begin)
-                        fs.Read(bs, 0, bs.Length)
+                        If cso = False Then
+                            fs.Seek(CInt(s) << 11, SeekOrigin.Begin)
+                            fs.Read(bs, 0, bs.Length)
+                        Else
+                            Dim filesize As Integer = CInt(ss)
+                            Dim count As Integer = (filesize >> 11) + 1
+                            Dim lba As Integer = CInt(s)
+                            Dim binn(2047) As Byte
+                            Array.Resize(bs, count << 11)
+                            For j = 0 To count - 1
+                                binn = unpack_cso(lba)
+                                If (lba + 1) << 11 < iso_len Then
+                                    lba += 1
+                                End If
+                                Array.Copy(binn, 0, bs, j << 11, 2048)
+                            Next
+                            Array.Resize(bs, filesize)
+                        End If
                         fs.Close()
                         save.Write(bs, 0, bs.Length)
                         save.Close()
@@ -514,6 +558,47 @@ Public Class Form1
         Return BitConverter.ToInt32(b, 0)
     End Function
 
+    Function unpack_cso(ByVal lba As Integer) As Byte()
+
+        Dim cfs As New FileStream(iso, FileMode.Open, FileAccess.Read)
+        Dim offset(7) As Byte
+        Dim source(2047) As Byte
+        Dim bss(23) As Byte
+        Dim seek As Integer = 0
+        cfs.Read(bss, 0, 24)
+        Array.ConstrainedCopy(bss, 20, offset, 0, 4)
+        Dim align As Integer = cvt32bit(offset) >> 8
+
+        cfs.Seek(24 + lba * 4, System.IO.SeekOrigin.Begin)
+        cfs.Read(offset, 0, 4)
+        seek = cvt32bit(offset)
+        Dim pos As Integer = (seek And &H7FFFFFFF) << align
+        cfs.Read(offset, 0, 4)
+        Dim pos2 As Integer = (cvt32bit(offset) And &H7FFFFFFF) << align
+
+        cfs.Seek(pos, System.IO.SeekOrigin.Begin)
+        cfs.Read(source, 0, pos2 - pos)
+
+        If (seek And &H80000000) <> 0 Then
+        Else
+            If pos2 = pos Then
+                Array.Clear(source, 0, 2048)
+            Else
+                Dim ms As New MemoryStream()
+                ms.Write(source, 0, 2048)
+                ms.Position = 0
+                Dim zipStream As New System.IO.Compression.DeflateStream(ms, System.IO.Compression.CompressionMode.Decompress)
+                zipStream.Read(source, 0, 2048)
+                zipStream.Close()
+                ms.Close()
+            End If
+        End If
+        cfs.Close()
+
+        Return source
+
+    End Function
+
     Function getlist(ByVal dst As Integer) As Boolean
         Try
             ListView1.Clear()
@@ -540,10 +625,9 @@ Public Class Form1
                     finalcol = 80
                 End If
 
-
-
                 Dim lba As Integer = 0
                 Dim lba_base As Integer = dst << 11
+                Dim dst_next As Integer = dst
 
                 Dim fs As New FileStream(iso, FileMode.Open, FileAccess.Read)
                 Dim bs(2047) As Byte
@@ -553,19 +637,32 @@ Public Class Form1
                 Dim filesize As Integer
                 Dim str_len As Integer
                 Dim iso_len As Long = fs.Length
+                If cso = True Then
+                    fs.Seek(8, SeekOrigin.Begin)
+                    fs.Read(bbbb, 0, 4)
+                    iso_len = cvt32bit(bbbb)
+                End If
+
                 Dim name As String
                 Dim i As Integer
                 Dim yyyymmdd(6) As Byte
                 Dim na As Byte() = Nothing
+
 
                 Dim seek_parent_node As New TreeNode
                 Dim arr As TreeNode() = TreeView1.Nodes.Find((CInt(TreeView1.SelectedNode.Name) + 1).ToString, True)
                 Dim nextlba As Integer = -dst
                 If arr.Length > 0 Then
                     nextlba += CInt(arr(0).Tag.ToString)
-                Else
-                    fs.Seek((CInt(TreeView1.SelectedNode.Parent.Tag.ToString)) << 11, SeekOrigin.Begin)
-                    fs.Read(bs, 0, 2048)
+                ElseIf cso = False Then
+
+                    If cso = False Then
+                        fs.Seek((CInt(TreeView1.SelectedNode.Parent.Tag.ToString)) << 11, SeekOrigin.Begin)
+                        fs.Read(bs, 0, 2048)
+                    Else
+                        bs = unpack_cso(CInt(TreeView1.SelectedNode.Parent.Tag.ToString))
+                    End If
+
                     While True 'i < 2048
                         next_len = bs(i)
                         If bs(i + 33) >= 32 Then
@@ -589,16 +686,27 @@ Public Class Form1
 
                         '見つかるまで無限ループ
                         If bs(i) = 0 Then
-                            fs.Read(bs, 0, 2048)
+                            If cso = False Then
+                                fs.Read(bs, 0, 2048)
+                            Else
+                                dst_next += 1
+                                bs = unpack_cso(dst_next)
+                            End If
                             i = 0
                         End If
                     End While
                     nextlba = (filesize >> 11) - 1
                     i = 0
+                Else
+
                 End If
 
-                fs.Seek(lba_base, SeekOrigin.Begin)
-                fs.Read(bs, 0, 2048)
+                If cso = False Then
+                    fs.Seek(lba_base, SeekOrigin.Begin)
+                    fs.Read(bs, 0, 2048)
+                Else
+                    bs = unpack_cso(dst)
+                End If
 
                 ListView1.BeginUpdate()
                 Dim unix_back As New ListViewItem
@@ -652,11 +760,16 @@ Public Class Form1
                         nextlba -= 1
                         If nextlba > 0 Then
                             i = 0
-                            fs.Read(bs, 0, 2048)
+                            If cso = False Then
+                                fs.Read(bs, 0, 2048)
+                            Else
+                                dst += 1
+                                bs = unpack_cso(dst)
+                            End If
                         Else
                             Exit While
                         End If
-                    End If
+                        End If
                 End While
 
                 ListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize)
@@ -739,7 +852,7 @@ Public Class Form1
         Dim dst As Integer = CInt(tt.Tag.ToString)
         Dim lba As Integer = 0
         Dim lba_base As Integer = dst << 11
-
+        Dim dst_next As Integer = dst
 
         Dim fs As New FileStream(iso, FileMode.Open, FileAccess.Read)
         Dim next_len As Integer
@@ -750,6 +863,11 @@ Public Class Form1
         Dim i As Integer = 0
         Dim bb(1) As Byte
         Dim bbbb(3) As Byte
+        If cso = True Then
+            fs.Seek(8, SeekOrigin.Begin)
+            fs.Read(bbbb, 0, 4)
+            iso_len = cvt32bit(bbbb)
+        End If
         Dim na As Byte() = Nothing
         Dim bs(2047) As Byte
         Dim error_file As New StringBuilder
@@ -760,8 +878,14 @@ Public Class Form1
         If arr.Length > 0 Then
             nextlba += CInt(arr(0).Tag.ToString)
         Else
-            fs.Seek((CInt(tt.Parent.Tag.ToString)) << 11, SeekOrigin.Begin)
-            fs.Read(bs, 0, 2048)
+
+            If cso = False Then
+                fs.Seek((CInt(tt.Parent.Tag.ToString)) << 11, SeekOrigin.Begin)
+                fs.Read(bs, 0, 2048)
+            Else
+                bs = unpack_cso(CInt(tt.Parent.Tag.ToString))
+            End If
+
             While i < 2048
                 next_len = bs(i)
                 If bs(i + 33) >= 32 Then
@@ -785,7 +909,12 @@ Public Class Form1
 
                 '見つかるまで無限ループ
                 If bs(i) = 0 Then
-                    fs.Read(bs, 0, 2048)
+                    If cso = False Then
+                        fs.Read(bs, 0, 2048)
+                    Else
+                        dst_next += 1
+                        bs = unpack_cso(dst_next)
+                    End If
                     i = 0
                 End If
             End While
@@ -793,8 +922,12 @@ Public Class Form1
             i = 0
         End If
 
-        fs.Seek(lba_base, SeekOrigin.Begin)
-        fs.Read(bs, 0, 2048)
+        If cso = False Then
+            fs.Seek(lba_base, SeekOrigin.Begin)
+            fs.Read(bs, 0, 2048)
+        Else
+            bs = unpack_cso(dst)
+        End If
 
         While i < bs.Length
             next_len = bs(i)
@@ -820,10 +953,24 @@ Public Class Form1
                         If File.Exists(basepath & name) Then
                             File.Delete(basepath & name)
                         End If
-                        Dim save As New FileStream(basepath & name, FileMode.CreateNew, FileAccess.Write)
                         Dim bss(filesize - 1) As Byte
-                        fss.Seek(lba << 11, SeekOrigin.Begin)
-                        fss.Read(bss, 0, bss.Length)
+                        Dim save As New FileStream(basepath & name, FileMode.CreateNew, FileAccess.Write)
+                        If cso = False Then
+                            fss.Seek(lba << 11, SeekOrigin.Begin)
+                            fss.Read(bss, 0, bss.Length)
+                        Else
+                            Dim count As Integer = (filesize >> 11) + 1
+                            Dim binn(2047) As Byte
+                            Array.Resize(bss, count << 11)
+                            For k = 0 To count - 1
+                                binn = unpack_cso(lba)
+                                If (lba + 1) << 11 < iso_len Then
+                                    lba += 1
+                                End If
+                                Array.Copy(binn, 0, bss, k << 11, 2048)
+                            Next
+                            Array.Resize(bss, filesize)
+                        End If
                         fss.Close()
                         save.Write(bss, 0, bss.Length)
                         save.Close()
@@ -837,7 +984,12 @@ Public Class Form1
                 nextlba -= 1
                 If nextlba > 0 Then
                     i = 0
-                    fs.Read(bs, 0, 2048)
+                    If cso = False Then
+                        fs.Read(bs, 0, 2048)
+                    Else
+                        dst += 1
+                        bs = unpack_cso(dst)
+                    End If
                 Else
                     Exit While
                 End If
@@ -855,6 +1007,7 @@ Public Class Form1
         End If
 
         Dim dst As Integer = CInt(tt.Tag.ToString)
+        Dim dst_next As Integer = dst
         Dim lba As Integer = 0
         Dim lba_base As Integer = dst << 11
 
@@ -868,6 +1021,11 @@ Public Class Form1
         Dim i As Integer = 0
         Dim bb(1) As Byte
         Dim bbbb(3) As Byte
+        If cso = True Then
+            fs.Seek(8, SeekOrigin.Begin)
+            fs.Read(bbbb, 0, 4)
+            iso_len = cvt32bit(bbbb)
+        End If
         Dim yyyymmdd(6) As Byte
         Dim na As Byte() = Nothing
         Dim bs(2047) As Byte
@@ -878,8 +1036,14 @@ Public Class Form1
         If arr.Length > 0 Then
             nextlba += CInt(arr(0).Tag.ToString)
         Else
-            fs.Seek((CInt(tt.Parent.Tag.ToString)) << 11, SeekOrigin.Begin)
-            fs.Read(bs, 0, 2048)
+
+            If cso = False Then
+                fs.Seek((CInt(tt.Parent.Tag.ToString)) << 11, SeekOrigin.Begin)
+                fs.Read(bs, 0, 2048)
+            Else
+                bs = unpack_cso(CInt(tt.Parent.Tag.ToString))
+            End If
+
             While i < 2048
                 next_len = bs(i)
                 If bs(i + 33) >= 32 Then
@@ -903,16 +1067,26 @@ Public Class Form1
 
                 '見つかるまで無限ループ
                 If bs(i) = 0 Then
-                    fs.Read(bs, 0, 2048)
                     i = 0
+                    If cso = False Then
+                        fs.Read(bs, 0, 2048)
+                    Else
+                        dst_next += 1
+                        bs = unpack_cso(dst_next)
+                    End If
                 End If
             End While
             nextlba = (filesize >> 11) - 1
             i = 0
         End If
 
-        fs.Seek(lba_base, SeekOrigin.Begin)
-        fs.Read(bs, 0, 2048)
+        If cso = False Then
+            fs.Seek(lba_base, SeekOrigin.Begin)
+            fs.Read(bs, 0, 2048)
+        Else
+            bs = unpack_cso(dst)
+        End If
+
         Dim sb As New StringBuilder
 
         While i < bs.Length
@@ -962,7 +1136,12 @@ Public Class Form1
                 nextlba -= 1
                 If nextlba > 0 Then
                     i = 0
-                    fs.Read(bs, 0, 2048)
+                    If cso = False Then
+                        fs.Read(bs, 0, 2048)
+                    Else
+                        dst += 1
+                        bs = unpack_cso(dst)
+                    End If
                 Else
                     Exit While
                 End If
