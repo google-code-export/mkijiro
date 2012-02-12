@@ -20,7 +20,7 @@ Public Class psf
                 Return "" '"PBP"
             ElseIf bs(0) = &H43 AndAlso bs(1) = &H49 AndAlso bs(2) = &H53 AndAlso bs(3) = &H4F Then
                 fs.Close()
-                Return "" '"CISO"
+                Return "CISO" '"CISO"
             End If
         End If
 

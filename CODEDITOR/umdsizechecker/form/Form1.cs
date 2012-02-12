@@ -247,8 +247,53 @@ namespace WindowsFormsApplication1
                         groupBox3.Visible = true;
                         groupBox2.Visible = false;
                         groupBox4.Visible = true;
+
+                        byte[] integer = new byte[8];
+                        byte[] source = new byte[2048];
+                        fs.Seek(8, System.IO.SeekOrigin.Begin);
+                        fs.Read(integer, 0, 4);
+                        long size = BitConverter.ToInt64(integer, 0);
+                        fs.Seek(0x10, System.IO.SeekOrigin.Begin);
+                        fs.Read(integer, 0, 4);
+                        long sec = BitConverter.ToInt64(integer, 0);
+                        fs.Seek(0x14, System.IO.SeekOrigin.Begin);
+                        fs.Read(integer, 0, 4);
+                        int align = BitConverter.ToInt32(integer, 0) >> 8;
+                        long ct = size / sec;
+                        int[] offset_csio = new int[ct + 1];
+                        for (int i = 0; i < ct + 1; i++)
+                        {
+                            fs.Seek(0x18 + 4 * i, System.IO.SeekOrigin.Begin);
+                            fs.Read(integer, 0, 4);
+                            offset_csio[i] = (BitConverter.ToInt32(integer, 0)); //& 0x7fffffff) << align;
+                        }
+
+                        fs.Seek((offset_csio[16] & 0x7fffffff) << align, System.IO.SeekOrigin.Begin);
+                        fs.Read(source, 0, ((offset_csio[17] & 0x7fffffff) - (offset_csio[16] & 0x7fffffff)) << align);
+
+                        if ((offset_csio[16] & 0x80000000) != 0)
+                        {
+                        }
+                        else
+                        {
+                            MemoryStream ms = new MemoryStream();
+                            ms.Write(source, 0, 2048);
+                            ms.Position = 0;
+                            DeflateStream zipStream = new DeflateStream(ms, CompressionMode.Decompress);
+                            zipStream.Read(source, 0, 2048);
+                            zipStream.Close();
+                            ms.Close();
+                        }
+
+                        Array.Copy(source, 0x50, integer, 0, 4);
+                        trimsize = BitConverter.ToInt64(integer, 0) << 11;
+                        label1.Text = "推定サイズ　;" + size.ToString();
+                        label2.Text = "セクター算出;" + trimsize.ToString();
+
+                        sizecolor(size, trimsize);
                         fs.Close();
-                        return "Deflate圧縮ISO,CSOは圧縮されてるためアンパックが必要です、ただしリネームでアンパック時の推定サイズ情報がでます";
+
+                        return "Deflate圧縮ISO,CSOは圧縮されてるためアンパックが必要です、推定サイズ情報はアンパック後の予想サイズです";
                     }
                     else if (iso == "JISO")
                     {
@@ -1163,7 +1208,7 @@ namespace WindowsFormsApplication1
 
                  fs.Seek((offset[0] & 0x7fffffff) << align, System.IO.SeekOrigin.Begin);
 
-                 for (z = 0; z < counter; z++)
+                 for (z = 0; z < counter-1; z++)
                  {
                      //fs.Seek((offset[z] & 0x7fffffff) << align, System.IO.SeekOrigin.Begin);
                      fs.Read(source, 0, ((offset[z + 1] & 0x7fffffff) - (offset[z] & 0x7fffffff)) << align);
@@ -1189,6 +1234,39 @@ namespace WindowsFormsApplication1
                      }
                      wss.Write(source, 0, 2048);
                  }
+
+                     //fs.Seek((offset[z] & 0x7fffffff) << align, System.IO.SeekOrigin.Begin);
+                 if (align == 0)
+                 {
+                     fs.Read(source, 0, ((offset[z + 1] & 0x7fffffff) - (offset[z] & 0x7fffffff)) << align);
+                 }
+                 else
+                 {
+                     fs.Read(source, 0, ((offset[z + 1] & 0x7fffffff) - (offset[z] & 0x7fffffff) + 1) << align);
+                 }
+
+                     if ((offset[z] & 0x80000000) != 0) {
+                     }
+                     else
+                     {
+                         if (offset[z + 1] == offset[z])
+                         {
+                             Array.Clear(source, 0, 2048);
+                         }
+                         else
+                         {
+                             MemoryStream ms = new MemoryStream();
+                             ms.Write(source, 0, 2048);
+                             ms.Position = 0;
+                             DeflateStream zipStream = new DeflateStream(ms, CompressionMode.Decompress);
+                             zipStream.Read(source, 0, 2048);
+                             zipStream.Close();
+                             ms.Close();
+                         }
+                     }
+                     wss.Write(source, 0, 2048);
+
+
                  fs.Close();
                  wss.Close();
                  SystemSounds.Asterisk.Play();

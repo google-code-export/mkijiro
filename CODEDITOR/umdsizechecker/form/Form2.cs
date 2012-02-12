@@ -131,7 +131,7 @@ namespace WindowsFormsApplication1
                 }
 
                 fs.Seek((offset_csio[16] & 0x7fffffff) << align, System.IO.SeekOrigin.Begin);
-                fs.Read(source, 0, (offset_csio[17] - offset_csio[16] & 0x7fffffff) << align);
+                fs.Read(source, 0, ((offset_csio[17] & 0x7fffffff) - (offset_csio[16] & 0x7fffffff)) << align);
                 
                 if ((offset_csio[16] & 0x80000000) != 0)
                 {
@@ -144,6 +144,7 @@ namespace WindowsFormsApplication1
                     DeflateStream zipStream = new DeflateStream(ms, CompressionMode.Decompress);
                     zipStream.Read(source, 0, 2048);
                     zipStream.Close();
+                    ms.Close();
                 }
 
                 Array.Copy(source, 0x50, x, 0, 4);
@@ -172,11 +173,22 @@ namespace WindowsFormsApplication1
                         Array.Resize(ref sector, Convert.ToInt32(get));
                     }
                     counter = Convert.ToInt32(ct);
+                    int t_counter = Convert.ToInt32(trimsize / 2048);
+                    int readsize = 0;
                     int k = 0;
-                    for (z = counter -4; z < counter; z++)
+                    for (z = t_counter -4; z < counter; z++)
                     {
+
                         fs.Seek((offset_csio[z] & 0x7fffffff) << align, System.IO.SeekOrigin.Begin);
-                        fs.Read(source, 0, (offset_csio[z + 1] - offset_csio[z] & 0x7fffffff) << align);
+                        if (align!=0)
+                        {
+                            readsize = ((offset_csio[z + 1] & 0x7fffffff) - (offset_csio[z] & 0x7fffffff)+1) << align;
+                        }
+                        else
+                        {
+                            readsize = ((offset_csio[z + 1] & 0x7fffffff) - (offset_csio[z] & 0x7fffffff)) << align;
+                        }
+                        fs.Read(source, 0, readsize);
 
                          if ((offset_csio[z] & 0x80000000) != 0)
                         {
@@ -193,12 +205,12 @@ namespace WindowsFormsApplication1
                             ms.Position = 0;
                             DeflateStream zipStream = new DeflateStream(ms, CompressionMode.Decompress);
                             zipStream.Read(source, 0, 2048);
-                            Array.ConstrainedCopy(source, 0, sector, k*2048, 2048);
                             zipStream.Close();
                             ms.Close();
                             }
-                            k += 1;
-                        }
+                         }
+                         Array.ConstrainedCopy(source, 0, sector, k * 2048, 2048);
+                         k += 1;
                     }
 
                     listView1.Items.Clear();
