@@ -8,6 +8,7 @@ Imports System.Diagnostics
 Public Class Form1
     Dim iso As String = "NULL"
     Dim cso As Boolean = False
+    Dim lssort As Integer = 1
 
 #Region "FORM"
     Private Sub ffload(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
@@ -21,11 +22,14 @@ Public Class Form1
             End If
             i += 1
         Next
+        'LBA
+        Me.ListView1.ListViewItemSorter = New ListViewItemComparer(1)
+
         If File.Exists(Application.StartupPath & "\conf") Then
             Dim fs As New System.IO.FileStream(Application.StartupPath & "\conf", System.IO.FileMode.Open, System.IO.FileAccess.Read)
             Dim bs(CInt(fs.Length - 1)) As Byte
             fs.Read(bs, 0, bs.Length)
-            If bs.Length >= 3 Then
+            If bs.Length >= 4 Then
                 If bs(0) = 1 Then
                     uid_parent.Checked = True
                 End If
@@ -35,9 +39,13 @@ Public Class Form1
                 If bs(2) = 1 Then
                     localtime.Checked = True
                 End If
+                Me.ListView1.ListViewItemSorter = New ListViewItemComparer(bs(3))
+                lssort = bs(3)
             End If
             fs.Close()
         End If
+
+
 
         Dim psf As New psf
         If File.Exists(iso) Then
@@ -51,11 +59,12 @@ Public Class Form1
             Button1_Click(sender, e)
         End If
 
+
     End Sub
 
     Private Sub ffclose(sender As System.Object, e As System.Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
         Dim fs As New FileStream(Application.StartupPath & "\conf", System.IO.FileMode.Create, FileAccess.Write)
-        Dim bs(2) As Byte
+        Dim bs(3) As Byte
         If uid_parent.Checked = True Then
             bs(0) = 1
         End If
@@ -65,7 +74,9 @@ Public Class Form1
         If localtime.Checked = True Then
             bs(2) = 1
         End If
-        fs.Write(bs, 0, 3)
+        Dim bb As Byte() = BitConverter.GetBytes(lssort)
+        Array.Copy(bb, 0, bs, 3, 1)
+        fs.Write(bs, 0, 4)
         fs.Close()
     End Sub
 
@@ -224,6 +235,7 @@ Public Class Form1
             End While
 
             TreeView1.ExpandAll()
+            TreeView1.SelectedNode = TreeView1.TopNode
             TextBox1.Text = sb.ToString
             fs.Close()
 
@@ -279,11 +291,9 @@ Public Class Form1
         Process.Start(browserPath, url)
     End Sub
 
-
     Private Function GetDefaultBrowserExePath() As String
         Return _GetDefaultExePath("http\shell\open\command")
     End Function
-
 
     Private Function _GetDefaultExePath(ByVal keyPath As String) As String
         Dim path As String = ""
@@ -372,7 +382,10 @@ Public Class Form1
         ' Set the ListViewItemSorter property to a new ListViewItemComparer 
         ' object. Setting this property immediately sorts the 
         ' ListView using the ListViewItemComparer object.
-        Me.ListView1.ListViewItemSorter = New ListViewItemComparer(e.Column)
+        If e.Column < 4 Then
+            Me.ListView1.ListViewItemSorter = New ListViewItemComparer(e.Column)
+            lssort = e.Column
+        End If
     End Sub
 
     Private Sub ListView1_Selected_all(sender As System.Object, ByVal e As KeyEventArgs) Handles ListView1.KeyDown
