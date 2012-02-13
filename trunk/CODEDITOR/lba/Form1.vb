@@ -235,7 +235,8 @@ Public Class Form1
             End While
 
             TreeView1.ExpandAll()
-            TreeView1.SelectedNode = TreeView1.TopNode
+            TreeView1.SelectedNode = TreeView1.Nodes(0)
+            TreeView1.Focus()
             TextBox1.Text = sb.ToString
             fs.Close()
 
