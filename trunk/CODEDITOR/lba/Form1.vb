@@ -24,12 +24,13 @@ Public Class Form1
         Next
         'LBA
         Me.ListView1.ListViewItemSorter = New ListViewItemComparer(1)
+        DoubleBuffered = True
 
         If File.Exists(Application.StartupPath & "\conf") Then
             Dim fs As New System.IO.FileStream(Application.StartupPath & "\conf", System.IO.FileMode.Open, System.IO.FileAccess.Read)
             Dim bs(CInt(fs.Length - 1)) As Byte
             fs.Read(bs, 0, bs.Length)
-            If bs.Length >= 4 Then
+            If bs.Length >= 5 Then
                 If bs(0) = 1 Then
                     uid_parent.Checked = True
                 End If
@@ -41,6 +42,9 @@ Public Class Form1
                 End If
                 Me.ListView1.ListViewItemSorter = New ListViewItemComparer(bs(3))
                 lssort = bs(3)
+                If bs(4) = 1 Then
+                    VIRTUAL.Checked = True
+                End If
             End If
             fs.Close()
         End If
@@ -64,7 +68,7 @@ Public Class Form1
 
     Private Sub ffclose(sender As System.Object, e As System.Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
         Dim fs As New FileStream(Application.StartupPath & "\conf", System.IO.FileMode.Create, FileAccess.Write)
-        Dim bs(3) As Byte
+        Dim bs(4) As Byte
         If uid_parent.Checked = True Then
             bs(0) = 1
         End If
@@ -76,7 +80,10 @@ Public Class Form1
         End If
         Dim bb As Byte() = BitConverter.GetBytes(lssort)
         Array.Copy(bb, 0, bs, 3, 1)
-        fs.Write(bs, 0, 4)
+        If VIRTUAL.Checked = True Then
+            bs(4) = 1
+        End If
+        fs.Write(bs, 0, 5)
         fs.Close()
     End Sub
 
@@ -121,9 +128,9 @@ Public Class Form1
         If File.Exists(iso) Then
             Dim fs As New FileStream(iso, FileMode.Open, FileAccess.Read)
             Dim str_len As Integer
-            Dim num(1000) As Integer
-            Dim parent(1000) As Integer
-            Dim level(1000) As Integer
+            Dim num(30000) As Integer
+            Dim parent(30000) As Integer
+            Dim level(30000) As Integer
             Dim lba As Integer
             Dim lba_m As Integer
             Dim table_len As Integer
@@ -346,26 +353,57 @@ Public Class Form1
 
     Private Sub CheckBox1_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles localtime.CheckedChanged
         If TreeView1.SelectedNode IsNot Nothing Then
-            getlist(CInt(TreeView1.SelectedNode.Tag))
+            If VIRTUAL.Checked = False Then
+                getlist(CInt(TreeView1.SelectedNode.Tag))
+            Else
+                getlist_virtual(CInt(TreeView1.SelectedNode.Tag))
+            End If
         End If
     End Sub
 
+    Private Sub VIRTUAL_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles VIRTUAL.CheckedChanged
+        If TreeView1.SelectedNode IsNot Nothing Then
+            If VIRTUAL.Checked = False Then
+                getlist(CInt(TreeView1.SelectedNode.Tag))
+            Else
+                getlist_virtual(CInt(TreeView1.SelectedNode.Tag))
+            End If
+        End If
+    End Sub
 #End Region
 
 #Region "TREE_LIST"
     Private Sub TreeView1_AfterSelect(sender As System.Object, e As System.Windows.Forms.TreeViewEventArgs) Handles TreeView1.AfterSelect
-        getlist(CInt(TreeView1.SelectedNode.Tag))
+        If VIRTUAL.Checked = False Then
+
+            getlist(CInt(TreeView1.SelectedNode.Tag))
+        Else
+            getlist_virtual(CInt(TreeView1.SelectedNode.Tag))
+        End If
     End Sub
 
     Private Sub ListView1_SelectedIndexChanged(sender As System.Object, ByVal e As System.EventArgs) Handles ListView1.DoubleClick
-        If ListView1.SelectedItems.Count = 0 Then
-            Exit Sub
-        End If
+
         Dim itemx As New ListViewItem
-        itemx = ListView1.SelectedItems(0)
+        If VIRTUAL.Checked = False Then
+            If ListView1.SelectedItems.Count = 0 Then
+                Exit Sub
+            End If
+            itemx = ListView1.SelectedItems(0)
+        Else
+            If ListView1.SelectedIndices.Count = 0 Then
+                Exit Sub
+            End If
+            itemx = ListView1.Items(ListView1.SelectedIndices(0))
+        End If
+
         If itemx.Index = 0 AndAlso itemx.Text = ".." Then
             TreeView1.SelectedNode = TreeView1.SelectedNode.Parent
-            getlist(CInt(TreeView1.SelectedNode.Tag))
+            If VIRTUAL.Checked = False Then
+                getlist(CInt(TreeView1.SelectedNode.Tag))
+            Else
+                getlist_virtual(CInt(TreeView1.SelectedNode.Tag))
+            End If
         ElseIf itemx.ImageIndex = 0 Then
             Dim seek_node As New TreeNode
             Dim s As String = ListView1.Items(itemx.Index).SubItems(1).Text
@@ -375,7 +413,11 @@ Public Class Form1
                     Exit For
                 End If
             Next
-            getlist(CInt(TreeView1.SelectedNode.Tag))
+            If VIRTUAL.Checked = False Then
+                getlist(CInt(TreeView1.SelectedNode.Tag))
+            Else
+                getlist_virtual(CInt(TreeView1.SelectedNode.Tag))
+            End If
         End If
     End Sub
 
@@ -392,9 +434,18 @@ Public Class Form1
     Private Sub ListView1_Selected_all(sender As System.Object, ByVal e As KeyEventArgs) Handles ListView1.KeyDown
         If e.Control = True Then
             If e.KeyValue = Keys.A Then
-                For Each itemx As ListViewItem In ListView1.Items
-                    itemx.Selected = True
-                Next
+                If VIRTUAL.Checked = False Then
+                    For Each itemx As ListViewItem In ListView1.Items
+                        itemx.Selected = True
+                    Next
+                ElseIf virtual_item.Length > 0 Then
+                    ListView1.BeginUpdate()
+                    ListView1.SelectedIndices.Clear()
+                    For i = 0 To virtual_item.Length - 1
+                        ListView1.SelectedIndices.Add(i)
+                    Next
+                    ListView1.EndUpdate()
+                End If
             End If
         End If
     End Sub
@@ -412,15 +463,25 @@ Public Class Form1
     End Sub
 
     Private Sub GETDATAToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles GETDATAToolStripMenuItem.Click
-        If ListView1.SelectedItems.Count = 0 Then
-            Exit Sub
+
+        Dim z As Integer
+        If VIRTUAL.Checked = False Then
+            If ListView1.SelectedItems.Count = 0 Then
+                Exit Sub
+            End If
+            z = ListView1.SelectedItems.Count - 1
+        Else
+            If ListView1.SelectedIndices.Count = 0 Then
+                Exit Sub
+            End If
+            z = ListView1.SelectedIndices.Count - 1
         End If
 
         Dim itemx As New ListViewItem
         Dim errorm As New StringBuilder
 
-        For k = 0 To ListView1.SelectedItems.Count - 1
-            itemx = ListView1.SelectedItems(k)
+        For k = 0 To z
+            itemx = ListView1.Items(ListView1.SelectedIndices(k))
 
             If itemx.Index = 0 AndAlso itemx.Text = ".." Then
             ElseIf itemx.ImageIndex >= 2 Then
@@ -613,9 +674,219 @@ Public Class Form1
 
     End Function
 
+    Dim virtual_item As ListViewItem()
+
+    Function getlist_virtual(ByVal dst As Integer) As Boolean
+        Try
+            ListView1.Clear()
+            ListView1.View = View.Details
+            ListView1.VirtualMode = True
+            If dst < 0 Then
+                Return True
+            End If
+
+            Array.Resize(virtual_item, 300000)
+
+            ListView1.BeginUpdate()
+
+            ListView1.Columns.Insert(0, "NAME", 180, HorizontalAlignment.Left)
+            ListView1.Columns.Insert(1, "LBA", 60, HorizontalAlignment.Left)
+            ListView1.Columns.Add("SIZE", 80, HorizontalAlignment.Left)
+            If localtime.Checked Then
+                ListView1.Columns.Add("DATE(LOCAL)", 150, HorizontalAlignment.Left)
+            Else
+                ListView1.Columns.Add("DATE", 150, HorizontalAlignment.Left)
+                ListView1.Columns.Add("UTCDIFF", 50, HorizontalAlignment.Left)
+            End If
+
+            Dim lba As Integer = 0
+            Dim lba_base As Integer = dst << 11
+            Dim dst_next As Integer = dst
+
+            Dim fs As New FileStream(iso, FileMode.Open, FileAccess.Read)
+            Dim bs(2047) As Byte
+            Dim bb(1) As Byte
+            Dim bbbb(3) As Byte
+            Dim next_len As Integer
+            Dim filesize As Integer
+            Dim str_len As Integer
+            Dim iso_len As Long = fs.Length
+            If cso = True Then
+                fs.Seek(8, SeekOrigin.Begin)
+                fs.Read(bbbb, 0, 4)
+                iso_len = cvt32bit(bbbb)
+            End If
+
+            Dim name As String
+            Dim i As Integer
+            Dim yyyymmdd(6) As Byte
+            Dim na As Byte() = Nothing
+
+
+            Dim seek_parent_node As New TreeNode
+            Dim arr As TreeNode() = TreeView1.Nodes.Find((CInt(TreeView1.SelectedNode.Name) + 1).ToString, True)
+            Dim nextlba As Integer = -dst
+            If arr.Length > 0 Then
+                nextlba += CInt(arr(0).Tag.ToString)
+            Else
+                If cso = False Then
+                    fs.Seek((CInt(TreeView1.SelectedNode.Parent.Tag.ToString)) << 11, SeekOrigin.Begin)
+                    fs.Read(bs, 0, 2048)
+                Else
+                    bs = unpack_cso(CInt(TreeView1.SelectedNode.Parent.Tag.ToString))
+                End If
+
+                While True 'i < 2048
+                    next_len = bs(i)
+                    If bs(i + 33) >= 32 Then
+                        Array.Copy(bs, i + 2, bbbb, 0, 4)
+                        lba = cvt32bit(bbbb)
+                        Array.Copy(bs, i + 10, bbbb, 0, 4)
+                        filesize = cvt32bit(bbbb)
+                        str_len = bs(i + 32)
+                        Array.Resize(na, str_len)
+                        Array.Copy(bs, i + 33, na, 0, str_len)
+                        name = Encoding.GetEncoding(0).GetString(na)
+                        'フォルダかつLBAがおなじ
+                        If ((bs(i + 25) >> 1) And 1) = 1 Then
+                            If dst = lba Then
+                                Exit While
+                            End If
+                        End If
+                    End If
+
+                    i += next_len
+
+                    '見つかるまで無限ループ
+                    If bs(i) = 0 Then
+                        If cso = False Then
+                            fs.Read(bs, 0, 2048)
+                        Else
+                            dst_next += 1
+                            bs = unpack_cso(dst_next)
+                        End If
+                        i = 0
+                    End If
+                End While
+                nextlba = (filesize >> 11) - 1
+                i = 0
+            End If
+
+            If cso = False Then
+                fs.Seek(lba_base, SeekOrigin.Begin)
+                fs.Read(bs, 0, 2048)
+            Else
+                bs = unpack_cso(dst)
+            End If
+
+            Dim vi As Integer = 0
+
+            Dim unix_back As New ListViewItem
+            unix_back.Text = ".."
+            unix_back.ImageIndex = 0
+            unix_back.SubItems.Add("")
+            unix_back.SubItems.Add("")
+            unix_back.SubItems.Add("")
+            If localtime.Checked = False Then
+                unix_back.SubItems.Add("")
+            End If
+            If TreeView1.SelectedNode.Parent.Level > 0 Then
+                virtual_item(0) = unix_back
+                vi = 1
+            End If
+
+            While i < bs.Length
+                next_len = bs(i)
+                If bs(i + 33) >= 32 Then
+                    Array.Copy(bs, i + 2, bbbb, 0, 4)
+                    lba = cvt32bit(bbbb)
+                    Array.Copy(bs, i + 10, bbbb, 0, 4)
+                    filesize = cvt32bit(bbbb)
+                    Array.Copy(bs, i + 18, yyyymmdd, 0, 7)
+                    str_len = bs(i + 32)
+                    Array.Resize(na, str_len)
+                    Array.Copy(bs, i + 33, na, 0, str_len)
+                    name = Encoding.GetEncoding(0).GetString(na)
+                    Dim itemx As New ListViewItem
+                    itemx.Text = name
+                    If ((bs(i + 25) >> 1) And 1) = 0 Then
+                        itemx.ImageIndex = 2
+                    Else
+                        itemx.ImageIndex = 0
+                    End If
+                    If ((lba << 11) + filesize) > iso_len Then
+                        itemx.ImageIndex = itemx.ImageIndex Or 1
+                    End If
+                    itemx.SubItems.Add(lba.ToString)
+                    itemx.SubItems.Add(filesize.ToString)
+                    itemx.SubItems.Add(cvt_date(yyyymmdd))
+                    If localtime.Checked = False Then
+                        itemx.SubItems.Add(cvt_utc(yyyymmdd(6)))
+                    End If
+                    virtual_item(vi) = itemx
+                    vi += 1
+                End If
+
+                i += next_len
+
+                If bs(i) = 0 Then
+                    nextlba -= 1
+                    If nextlba > 0 Then
+                        i = 0
+                        If cso = False Then
+                            fs.Read(bs, 0, 2048)
+                        Else
+                            dst += 1
+                            bs = unpack_cso(dst)
+                        End If
+                    Else
+                        Exit While
+                    End If
+                End If
+            End While
+
+            Array.Resize(virtual_item, vi)
+            ListView1.VirtualMode = True
+            ListView1.VirtualListSize = vi
+            ListView1.EndUpdate()
+
+            ListView2.Items.Clear()
+            Dim itemx2 As New ListViewItem
+            Dim s As String = TreeView1.SelectedNode.FullPath
+            Dim rm As New Regex("\[\d+,\d+\]")
+            Dim m As Match = rm.Match(s)
+            While m.Success
+                s = s.Replace(m.Value, "")
+                m = m.NextMatch
+            End While
+            itemx2.Text = s
+            ListView2.Items.Add(itemx2)
+
+            Return True
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+            Return True
+        End Try
+    End Function
+
+    Private Sub ListView1_RetrieveVirtualItem(ByVal sender As Object, ByVal e As System.Windows.Forms.RetrieveVirtualItemEventArgs) Handles ListView1.RetrieveVirtualItem
+        'リストビューにリストをセット      
+        Dim itemx As New ListViewItem
+        itemx = CType(virtual_item(e.ItemIndex).Clone, ListViewItem)
+        e.Item = itemx
+
+    End Sub
+
     Function getlist(ByVal dst As Integer) As Boolean
         Try
             ListView1.Clear()
+            ListView1.View = View.Details
+            ListView1.VirtualMode = False
+            If dst < 0 Then
+                Return True
+            End If
+
             If File.Exists(iso) Then
                 If TreeView1.SelectedNode.Level = 0 Then
                     Return True
@@ -783,7 +1054,7 @@ Public Class Form1
                         Else
                             Exit While
                         End If
-                        End If
+                    End If
                 End While
 
                 ListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize)
