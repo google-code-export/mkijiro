@@ -51,9 +51,9 @@ Partial Class Form3
         Me.Label3.AutoSize = True
         Me.Label3.Location = New System.Drawing.Point(34, 88)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(138, 14)
+        Me.Label3.Size = New System.Drawing.Size(145, 14)
         Me.Label3.TabIndex = 2
-        Me.Label3.Text = "BUID;2012/01/12 0:39"
+        Me.Label3.Text = "BUID;2012/02/13 23:21"
         '
         'Label4
         '
