@@ -732,7 +732,7 @@ Public Class Form1
                 If localtime.Checked = False Then
                     unix_back.SubItems.Add("")
                 End If
-                If TreeView1.SelectedNode.Parent.Level > 1 Then
+                If TreeView1.SelectedNode.Parent.Level > 0 Then
                     ListView1.Items.Add(unix_back)
                 End If
 
