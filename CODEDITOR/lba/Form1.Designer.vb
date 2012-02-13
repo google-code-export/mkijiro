@@ -57,6 +57,7 @@ Partial Class Form1
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
+        Me.VIRTUAL = New System.Windows.Forms.CheckBox()
         Me.ContextMenuStrip2.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -180,6 +181,7 @@ Partial Class Form1
         Me.ListView1.Sorting = System.Windows.Forms.SortOrder.Ascending
         Me.ListView1.TabIndex = 5
         Me.ListView1.UseCompatibleStateImageBehavior = False
+        Me.ListView1.VirtualMode = True
         '
         'ContextMenuStrip1
         '
@@ -343,12 +345,23 @@ Partial Class Form1
         Me.Label4.TabIndex = 18
         Me.Label4.Text = "CTRL+A:ALL SELECTION"
         '
+        'VIRTUAL
+        '
+        Me.VIRTUAL.AutoSize = True
+        Me.VIRTUAL.Location = New System.Drawing.Point(785, 464)
+        Me.VIRTUAL.Name = "VIRTUAL"
+        Me.VIRTUAL.Size = New System.Drawing.Size(81, 18)
+        Me.VIRTUAL.TabIndex = 19
+        Me.VIRTUAL.Text = "VIRTUAL"
+        Me.VIRTUAL.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AllowDrop = True
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(901, 578)
+        Me.Controls.Add(Me.VIRTUAL)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.Label2)
@@ -411,5 +424,6 @@ Partial Class Form1
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents Label4 As System.Windows.Forms.Label
+    Friend WithEvents VIRTUAL As System.Windows.Forms.CheckBox
 
 End Class
