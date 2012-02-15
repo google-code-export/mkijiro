@@ -61,7 +61,7 @@ namespace WindowsFormsApplication1
         {
             if (File.Exists(Application.StartupPath +"\\" + "setting"))
             {
-                System.IO.StreamReader sr = new System.IO.StreamReader(Application.StartupPath + "\\" + "setting", System.Text.Encoding.GetEncoding(932));
+                System.IO.StreamReader sr = new System.IO.StreamReader(Application.StartupPath + "\\" + "setting", System.Text.Encoding.GetEncoding(65001));
                 string s = "";
                 while (sr.Peek() > -1)
                 {
@@ -74,6 +74,10 @@ namespace WindowsFormsApplication1
                     if (s.Contains("BUFFER"))
                     {
                         textBox2.Text = s.Remove(0, 6);
+                    }
+                    if (s.Contains("OPENDIR"))
+                    {
+                        open_dir = s.Remove(0, 7);
                     }
                 }
                 sr.Close();
@@ -120,7 +124,7 @@ namespace WindowsFormsApplication1
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            System.IO.StreamWriter sr = new System.IO.StreamWriter(Application.StartupPath + "\\" + "setting", false, System.Text.Encoding.GetEncoding(932));
+            System.IO.StreamWriter sr = new System.IO.StreamWriter(Application.StartupPath + "\\" + "setting", false, System.Text.Encoding.GetEncoding(65001));
             StringBuilder s = new StringBuilder();
             if(checkBox1.Checked == true)
             {
@@ -134,6 +138,11 @@ namespace WindowsFormsApplication1
             if (textBox2.Text != "") {                 
                 s.Append("BUFFER");
                 s.AppendLine(textBox2.Text);
+            }
+            if (Directory.Exists(open_dir) == true)
+            {
+                s.Append("OPENDIR");
+                s.AppendLine(open_dir);
             }
             sr.Write(s.ToString());
             
