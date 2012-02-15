@@ -20,8 +20,9 @@ namespace WindowsFormsApplication1
     public partial class Form1 : Form
     {
         
-        string isofile = "";
+        string isofile = "NULL";
         long trimsize = 0;
+        string open_dir = "";
 
         [DllImport("libmecab.dll", CallingConvention = CallingConvention.Cdecl)]
         private extern static IntPtr mecab_new2(string arg);
@@ -78,6 +79,10 @@ namespace WindowsFormsApplication1
                 sr.Close();
             }
 
+            if (Directory.Exists(open_dir) == false) {
+                open_dir = Application.StartupPath;
+            }
+
             string[] cmds;
             cmds = System.Environment.GetCommandLineArgs();
             //コマンドライン引数の表示
@@ -89,6 +94,7 @@ namespace WindowsFormsApplication1
             }
                 i++;
             }
+            if (File.Exists(isofile) ==true){
             textBox1.Text = getsize(isofile);
             if (textBox1.Text.Contains("ません"))
             {
@@ -104,10 +110,11 @@ namespace WindowsFormsApplication1
                         groupBox1.Enabled = true;
                         sectorview.Enabled = true;
             }
-             else
+             else 
             {
                 groupBox1.Enabled = true;
                 sectorview.Enabled = true;
+            }
             }
         }
 
@@ -165,22 +172,23 @@ namespace WindowsFormsApplication1
             button5.Enabled = false;
             string[] s = (string[])e.Data.GetData(DataFormats.FileDrop, false);
             isofile = s[0];
-            groupBox1.Visible = true;
-            groupBox3.Visible = false;
-            groupBox2.Visible = true;
-            groupBox4.Visible = false;
-            textBox1.Text = getsize(s[0]);
-            if (textBox1.Text.Contains("ません"))
-            {
+            button_bool(s[0]);
+            //groupBox1.Visible = true;
+            //groupBox3.Visible = false;
+            //groupBox2.Visible = true;
+            //groupBox4.Visible = false;
+            //textBox1.Text = getsize(s[0]);
+            //if (textBox1.Text.Contains("ません"))
+            //{
 
-                groupBox1.Enabled = false;
-                sectorview.Enabled = false;
-            }
-            else
-            {
-                groupBox1.Enabled = true;
-                sectorview.Enabled = true;
-            }
+            //    groupBox1.Enabled = false;
+            //    sectorview.Enabled = false;
+            //}
+            //else
+            //{
+            //    groupBox1.Enabled = true;
+            //    sectorview.Enabled = true;
+            //}
         }
 
         private void button1_DragEnter(object sender, System.Windows.Forms.DragEventArgs e)
@@ -197,11 +205,31 @@ namespace WindowsFormsApplication1
             button5.Enabled = false;
             string[] s = (string[])e.Data.GetData(DataFormats.FileDrop, false);
             isofile = s[0];
+            button_bool(s[0]);
+            //groupBox1.Visible = true;
+            //groupBox3.Visible = false;
+            //groupBox2.Visible = true;
+            //groupBox4.Visible = false;
+            //textBox1.Text = getsize(s[0]);
+            //if (textBox1.Text.Contains("ません"))
+            //{
+            //    groupBox1.Enabled = false;
+            //    sectorview.Enabled = false;
+            //}
+            //else
+            //{
+            //    groupBox1.Enabled = true;
+            //    sectorview.Enabled = true;
+            //}
+        }
+
+        private void button_bool(string s)
+        {
             groupBox1.Visible = true;
             groupBox3.Visible = false;
             groupBox2.Visible = true;
             groupBox4.Visible = false;
-            textBox1.Text = getsize(s[0]);
+            textBox1.Text = getsize(s);
             if (textBox1.Text.Contains("ません"))
             {
                 groupBox1.Enabled = false;
@@ -214,17 +242,40 @@ namespace WindowsFormsApplication1
             }
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            button5.Enabled = false; 
+            OpenFileDialog ofd = new OpenFileDialog();
+
+            ofd.FileName = "default.html";
+            ofd.InitialDirectory = open_dir;
+            ofd.Filter =
+                "UMDイメージファイル(*.iso;*.cso)|*.iso;*.cso";
+            ofd.Title = "開くファイルを選択してください";
+            ofd.RestoreDirectory = true;
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                isofile = ofd.FileName;
+                open_dir = Path.GetDirectoryName(isofile);
+                button_bool(isofile);
+            }
+        }
+
+
         //IMAGECHECK
-        private string getsize(string filepath){
+        private string getsize(string filepath)
+        {
+            label1.Text = "ファイルサイズ:";
+            label2.Text = "セクター算出　:";
+
+            if (File.Exists(filepath) == true)
+            {
             FileStream fs = new FileStream(filepath,FileMode.Open, FileAccess.Read);
             long isosize = 0;
             long isobig = 0;
             long fsize = fs.Length;
             
-            label1.Text = "ファイルサイズ:";
-            label2.Text = "セクター算出　:";
-            if (File.Exists(filepath) == true)
-            {
                 if (fs.Length > 0x8060)
                 {
                     byte[] bs = new byte[8];
@@ -420,7 +471,6 @@ namespace WindowsFormsApplication1
             }
             else
             {
-                fs.Close();
                 return "ファイルが存在しません";
             }
         }
@@ -1287,6 +1337,7 @@ namespace WindowsFormsApplication1
         {
              checkBox1.Checked = checkBox2.Checked;
         }
+
 
 
     }
