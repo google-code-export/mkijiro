@@ -134,7 +134,6 @@ Public Class Form1
             Dim parent(50000) As Integer
             Dim level(50000) As Integer
             Dim lba As Integer
-            'Dim lba_m As Integer
             Dim table_len As Integer
             Dim parent_node As New TreeNode
             Dim name As String
@@ -173,9 +172,6 @@ Public Class Form1
                 fs.Seek(&H808C, SeekOrigin.Begin)
                 fs.Read(bbbb, 0, 4)
                 lba = cvt32bit(bbbb) << 11
-                '任意L形パステーブル
-                'fs.Read(bbbb, 0, 4)
-                'lba_m = cvt32bit(bbbb) << 11
                 fs.Seek(lba, SeekOrigin.Begin)
                 'LBA読み込みサイズを拡張
                 Array.Resize(bs, table_len + 1)
@@ -235,12 +231,8 @@ Public Class Form1
                 x.Name = k.ToString
                 '親ノードを検索し追加する
                 Dim seek_parent_node As New TreeNode
-                For Each sss As TreeNode In Ar
-                    If sss.Name = parent(k).ToString Then
-                        seek_parent_node = sss
-                        Exit For
-                    End If
-                Next
+                '検索リストからノードに変換する
+                seek_parent_node = CType(Ar(parent(k)), TreeNode)
                 seek_parent_node.Nodes.Add(x)
                 '検索リストに追加したノードを追加
                 Ar.Add(seek_parent_node.Nodes(seek_parent_node.Nodes.Count - 1))
@@ -263,6 +255,7 @@ Public Class Form1
             TextBox1.Text = sb.ToString
             fs.Close()
 
+            '検索リストをキャッシュしておく
             ArG = Ar
 
         ElseIf iso <> "NULL" Then
@@ -1221,23 +1214,16 @@ Public Class Form1
         Dim bs(2047) As Byte
         Dim error_file As New StringBuilder
 
-        'Dim seek_parent_node As New TreeNode
-        'Dim arr As TreeNode() = TreeView1.Nodes.Find((CInt(tt.Name) + 1).ToString, True)
 
         Dim find As Boolean = False
-        Dim findlen As String = (CInt(tt.Name) + 1).ToString
         Dim nextlba As Integer = -dst
-        For Each seek_parent_node As TreeNode In ArG
-            If seek_parent_node.Name = findlen Then
-                find = True
-                nextlba += CInt(seek_parent_node.Tag.ToString)
-                Exit For
-            End If
-        Next
+        If ArG.Count > CInt(tt.Name) + 1 Then
+            Dim seek_parent_node As New TreeNode
+            seek_parent_node = CType(ArG(CInt(tt.Name) + 1), TreeNode)
+            nextlba += CInt(seek_parent_node.Tag.ToString)
+            find = True
+        End If
 
-        'If arr.Length > 0 Then
-        '    nextlba += CInt(arr(0).Tag.ToString)
-        'Else
         If find = False Then
             If cso = False Then
                 fs.Seek((CInt(tt.Parent.Tag.ToString)) << 11, SeekOrigin.Begin)
@@ -1390,23 +1376,16 @@ Public Class Form1
         Dim na As Byte() = Nothing
         Dim bs(2047) As Byte
 
-        'Dim seek_parent_node As New TreeNode
-        'Dim arr As TreeNode() = TreeView1.Nodes.Find((CInt(tt.Name) + 1).ToString, True)
 
         Dim find As Boolean = False
-        Dim findlen As String = (CInt(tt.Name) + 1).ToString
         Dim nextlba As Integer = -dst
-        For Each seek_parent_node As TreeNode In ArG
-            If seek_parent_node.Name = findlen Then
-                find = True
-                nextlba += CInt(seek_parent_node.Tag.ToString)
-                Exit For
-            End If
-        Next
+        If ArG.Count > CInt(tt.Name) + 1 Then
+            Dim seek_parent_node As New TreeNode
+            seek_parent_node = CType(ArG(CInt(tt.Name) + 1), TreeNode)
+            nextlba += CInt(seek_parent_node.Tag.ToString)
+            find = True
+        End If
 
-        'If arr.Length > 0 Then
-        '    nextlba += CInt(arr(0).Tag.ToString)
-        'Else
         If find = False Then
             If cso = False Then
                 fs.Seek((CInt(tt.Parent.Tag.ToString)) << 11, SeekOrigin.Begin)
