@@ -1535,18 +1535,21 @@ Class ListViewItemComparer
 
     Public Sub New(ByVal column As Integer)
         col = column
+        If col = 5 Then
+            col = 4
+        End If
     End Sub
 
     Public Function Compare(ByVal x As Object, ByVal y As Object) As Integer _
        Implements IComparer.Compare
-        Dim xx As String = CType(x, ListViewItem).SubItems(col).Text
-        Dim yy As String = CType(y, ListViewItem).SubItems(col).Text
-        If xx.Length <> yy.Length AndAlso col > 0 Then
-            xx = xx.PadLeft(yy.Length, " "c)
-            yy = yy.PadLeft(xx.Length, " "c)
-            xx = xx.PadLeft(yy.Length, " "c)
-        End If
-        Return [String].Compare(xx, yy)
+            Dim xx As String = CType(x, ListViewItem).SubItems(col).Text
+            Dim yy As String = CType(y, ListViewItem).SubItems(col).Text
+            If xx.Length <> yy.Length AndAlso col > 0 Then
+                xx = xx.PadLeft(yy.Length, " "c)
+                yy = yy.PadLeft(xx.Length, " "c)
+                xx = xx.PadLeft(yy.Length, " "c)
+            End If
+            Return [String].Compare(xx, yy)
     End Function
 
 End Class
