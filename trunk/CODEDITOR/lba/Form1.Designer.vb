@@ -58,10 +58,18 @@ Partial Class Form1
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.VIRTUAL = New System.Windows.Forms.CheckBox()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
+        Me.ファイルToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.開くToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.設定ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.バージョンToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tree = New System.Windows.Forms.CheckBox()
         Me.ContextMenuStrip2.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
+        Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'TreeView1
@@ -178,7 +186,6 @@ Partial Class Form1
         Me.ListView1.Name = "ListView1"
         Me.ListView1.Size = New System.Drawing.Size(535, 356)
         Me.ListView1.SmallImageList = Me.ImageList1
-        Me.ListView1.Sorting = System.Windows.Forms.SortOrder.Ascending
         Me.ListView1.TabIndex = 5
         Me.ListView1.UseCompatibleStateImageBehavior = False
         Me.ListView1.VirtualMode = True
@@ -219,15 +226,15 @@ Partial Class Form1
         Me.Panel1.Controls.Add(Me.title)
         Me.Panel1.Controls.Add(Me.id_h)
         Me.Panel1.Controls.Add(Me.title_h)
-        Me.Panel1.Location = New System.Drawing.Point(33, 2)
+        Me.Panel1.Location = New System.Drawing.Point(33, 32)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(296, 68)
+        Me.Panel1.Size = New System.Drawing.Size(296, 40)
         Me.Panel1.TabIndex = 10
         '
         'discid
         '
         Me.discid.AutoSize = True
-        Me.discid.Location = New System.Drawing.Point(72, 36)
+        Me.discid.Location = New System.Drawing.Point(72, 24)
         Me.discid.Name = "discid"
         Me.discid.Size = New System.Drawing.Size(11, 14)
         Me.discid.TabIndex = 12
@@ -245,7 +252,7 @@ Partial Class Form1
         'id_h
         '
         Me.id_h.AutoSize = True
-        Me.id_h.Location = New System.Drawing.Point(15, 37)
+        Me.id_h.Location = New System.Drawing.Point(15, 24)
         Me.id_h.Name = "id_h"
         Me.id_h.Size = New System.Drawing.Size(51, 14)
         Me.id_h.TabIndex = 10
@@ -323,9 +330,9 @@ Partial Class Form1
         Me.Label2.AutoSize = True
         Me.Label2.Location = New System.Drawing.Point(462, 515)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(195, 14)
+        Me.Label2.Size = New System.Drawing.Size(200, 14)
         Me.Label2.TabIndex = 16
-        Me.Label2.Text = "+SHIFT:SART-END SELECTION"
+        Me.Label2.Text = "+SHIFT:START-END　SELCTION"
         '
         'Label3
         '
@@ -355,12 +362,67 @@ Partial Class Form1
         Me.VIRTUAL.Text = "VIRTUAL"
         Me.VIRTUAL.UseVisualStyleBackColor = True
         '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(782, 555)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(46, 14)
+        Me.Label5.TabIndex = 20
+        Me.Label5.Text = "Label5"
+        '
+        'MenuStrip1
+        '
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ファイルToolStripMenuItem, Me.設定ToolStripMenuItem, Me.バージョンToolStripMenuItem})
+        Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.MenuStrip1.Name = "MenuStrip1"
+        Me.MenuStrip1.Size = New System.Drawing.Size(901, 29)
+        Me.MenuStrip1.TabIndex = 21
+        Me.MenuStrip1.Text = "MenuStrip1"
+        '
+        'ファイルToolStripMenuItem
+        '
+        Me.ファイルToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.開くToolStripMenuItem})
+        Me.ファイルToolStripMenuItem.Name = "ファイルToolStripMenuItem"
+        Me.ファイルToolStripMenuItem.Size = New System.Drawing.Size(78, 25)
+        Me.ファイルToolStripMenuItem.Text = "ファイル"
+        '
+        '開くToolStripMenuItem
+        '
+        Me.開くToolStripMenuItem.Name = "開くToolStripMenuItem"
+        Me.開くToolStripMenuItem.Size = New System.Drawing.Size(108, 26)
+        Me.開くToolStripMenuItem.Text = "開く"
+        '
+        '設定ToolStripMenuItem
+        '
+        Me.設定ToolStripMenuItem.Name = "設定ToolStripMenuItem"
+        Me.設定ToolStripMenuItem.Size = New System.Drawing.Size(50, 25)
+        Me.設定ToolStripMenuItem.Text = "設定"
+        '
+        'バージョンToolStripMenuItem
+        '
+        Me.バージョンToolStripMenuItem.Name = "バージョンToolStripMenuItem"
+        Me.バージョンToolStripMenuItem.Size = New System.Drawing.Size(92, 25)
+        Me.バージョンToolStripMenuItem.Text = "バージョン"
+        '
+        'tree
+        '
+        Me.tree.AutoSize = True
+        Me.tree.Location = New System.Drawing.Point(783, 489)
+        Me.tree.Name = "tree"
+        Me.tree.Size = New System.Drawing.Size(95, 18)
+        Me.tree.TabIndex = 22
+        Me.tree.Text = "TREEOPEN"
+        Me.tree.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AllowDrop = True
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(901, 578)
+        Me.Controls.Add(Me.tree)
+        Me.Controls.Add(Me.MenuStrip1)
         Me.Controls.Add(Me.VIRTUAL)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.Label3)
@@ -370,14 +432,16 @@ Partial Class Form1
         Me.Controls.Add(Me.gridview)
         Me.Controls.Add(Me.uid_parent)
         Me.Controls.Add(Me.ListView2)
-        Me.Controls.Add(Me.Panel1)
+        Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.TextBox1)
         Me.Controls.Add(Me.dir)
         Me.Controls.Add(Me.TreeView1)
         Me.Controls.Add(Me.Button1)
+        Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.ListView1)
         Me.Controls.Add(Me.uid_seek)
+        Me.MainMenuStrip = Me.MenuStrip1
         Me.Name = "Form1"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "DROP_IMAGE"
@@ -387,6 +451,8 @@ Partial Class Form1
         Me.Panel1.PerformLayout()
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
+        Me.MenuStrip1.ResumeLayout(False)
+        Me.MenuStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -425,5 +491,12 @@ Partial Class Form1
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents VIRTUAL As System.Windows.Forms.CheckBox
+    Friend WithEvents Label5 As System.Windows.Forms.Label
+    Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
+    Friend WithEvents ファイルToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents 開くToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents 設定ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents バージョンToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tree As System.Windows.Forms.CheckBox
 
 End Class

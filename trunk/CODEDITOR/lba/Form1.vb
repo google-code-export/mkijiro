@@ -4,16 +4,21 @@ Imports System.Text
 Imports System.Text.RegularExpressions
 Imports Microsoft.Win32
 Imports System.Diagnostics
+Imports System.Runtime.InteropServices
 
 Public Class Form1
     Dim iso As String = "NULL"
     Dim cso As Boolean = False
     Dim lssort As Integer = 1
     Dim virtual_item As ListViewItem()
+    Dim arraylistdir() As ListViewItem
     Dim ArG As New ArrayList
+    Dim cFormat As New System.Globalization.CultureInfo("ja-JP", False)
 
 #Region "FORM"
     Private Sub ffload(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
+        Dim start As DateTime = Now
+
         Dim cmds() As String
         cmds = System.Environment.GetCommandLineArgs()
         Dim cmd As String
@@ -25,14 +30,14 @@ Public Class Form1
             i += 1
         Next
         'LBA
-        Me.ListView1.ListViewItemSorter = New ListViewItemComparer(1)
+        'Me.ListView1.ListViewItemSorter = New ListViewItemComparer(1)
         DoubleBuffered = True
 
         If File.Exists(Application.StartupPath & "\conf") Then
             Dim fs As New System.IO.FileStream(Application.StartupPath & "\conf", System.IO.FileMode.Open, System.IO.FileAccess.Read)
             Dim bs(CInt(fs.Length - 1)) As Byte
             fs.Read(bs, 0, bs.Length)
-            If bs.Length >= 5 Then
+            If bs.Length >= 6 Then
                 If bs(0) = 1 Then
                     uid_parent.Checked = True
                 End If
@@ -42,10 +47,13 @@ Public Class Form1
                 If bs(2) = 1 Then
                     localtime.Checked = True
                 End If
-                Me.ListView1.ListViewItemSorter = New ListViewItemComparer(bs(3))
+                'Me.ListView1.ListViewItemSorter = New ListViewItemComparer(bs(3))
                 lssort = bs(3)
                 If bs(4) = 1 Then
                     VIRTUAL.Checked = True
+                End If
+                If bs(5) = 1 Then
+                    tree.Checked = True
                 End If
             End If
             fs.Close()
@@ -66,11 +74,18 @@ Public Class Form1
         End If
 
 
+        Label5.Text = (Now - start).TotalSeconds.ToString
+
     End Sub
 
     Private Sub ffclose(sender As System.Object, e As System.Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
+
+        Array.Resize(virtual_item, 0)
+        Array.Resize(arraylistdir, 0)
+        ArG.Clear()
+
         Dim fs As New FileStream(Application.StartupPath & "\conf", System.IO.FileMode.Create, FileAccess.Write)
-        Dim bs(4) As Byte
+        Dim bs(5) As Byte
         If uid_parent.Checked = True Then
             bs(0) = 1
         End If
@@ -85,7 +100,10 @@ Public Class Form1
         If VIRTUAL.Checked = True Then
             bs(4) = 1
         End If
-        fs.Write(bs, 0, 5)
+        If tree.Checked = True Then
+            bs(5) = 1
+        End If
+        fs.Write(bs, 0, 6)
         fs.Close()
     End Sub
 
@@ -105,6 +123,8 @@ Public Class Form1
             Handles Me.DragDrop
         'コントロール内にドロップされたとき実行される
         'ドロップされたすべてのファイル名を取得する
+        Dim start As DateTime = Now
+
         Dim psf As New psf
         Dim fileName As String() = CType( _
             e.Data.GetData(DataFormats.FileDrop, False), _
@@ -119,6 +139,8 @@ Public Class Form1
                 iso = ""
             End If
         End If
+
+        Label5.Text = (Now - start).TotalSeconds.ToString
     End Sub
 
 #End Region
@@ -247,11 +269,12 @@ Public Class Form1
                     Exit While
                 End If
             End While
-
-            TreeView1.ExpandAll()
-            TreeView1.SelectedNode = TreeView1.Nodes(0)
-            TreeView1.Focus()
+            If tree.Checked = True Then
+                TreeView1.ExpandAll()
+            End If
             TreeView1.EndUpdate()
+            TreeView1.Focus()
+            TreeView1.SelectedNode = TreeView1.Nodes(0)
             TextBox1.Text = sb.ToString
             fs.Close()
 
@@ -307,6 +330,36 @@ Public Class Form1
         Dim browserPath As String = GetDefaultBrowserExePath()
 
         Process.Start(browserPath, url)
+    End Sub
+
+    Private Sub openfile(sender As System.Object, e As System.EventArgs) Handles 開くToolStripMenuItem.Click
+        Dim start As DateTime = Now
+        Dim ofd As New OpenFileDialog()
+
+        ofd.Filter = "ISO/CSOファイル(*.iso;*.cso)|*.iso;*.cso"
+        ofd.Title = "開くファイルを選択してください"
+
+        If ofd.ShowDialog() = DialogResult.OK Then
+            iso = ofd.FileName
+            Dim psf As New psf
+            If File.Exists(iso) Then
+                If psf.video(iso) <> "" Then
+                    Button1_Click(sender, e)
+                    title.Text = psf.GETNAME(iso)
+                    discid.Text = psf.GETID(iso)
+                Else
+                    iso = ""
+                End If
+            End If
+        End If
+
+        Label5.Text = (Now - start).TotalSeconds.ToString
+    End Sub
+
+    Private Sub バージョンToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles バージョンToolStripMenuItem.Click
+        Dim f As New ver
+        f.ShowDialog()
+        f.Dispose()
     End Sub
 
     Private Function GetDefaultBrowserExePath() As String
@@ -374,11 +427,15 @@ Public Class Form1
     Private Sub VIRTUAL_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles VIRTUAL.CheckedChanged
         If TreeView1.SelectedNode IsNot Nothing Then
             If VIRTUAL.Checked = False Then
-                getlist(CInt(TreeView1.SelectedNode.Tag))
+                If virtual_item.Length < 3000 Then
+                    getlist(CInt(TreeView1.SelectedNode.Tag))
+                Else
+                    MessageBox.Show("3000項目以上あるのでVIRTUALMODE以外では表示できません")
+                End If
             Else
                 getlist_virtual(CInt(TreeView1.SelectedNode.Tag))
             End If
-        End If
+            End If
     End Sub
 #End Region
 
@@ -435,42 +492,65 @@ Public Class Form1
         ' Set the ListViewItemSorter property to a new ListViewItemComparer 
         ' object. Setting this property immediately sorts the 
         ' ListView using the ListViewItemComparer object.
-        If e.Column < 4 Then
-            Me.ListView1.ListViewItemSorter = New ListViewItemComparer(e.Column)
-            lssort = e.Column
-            If VIRTUAL.Checked Then
-                ListView1.BeginUpdate()
-                Dim keys As Integer() = New Integer(virtual_item.Length - 1) {}
-                Dim ss(virtual_item.Length - 1) As String
-                For i = 0 To keys.Length - 1
-                    ss(i) = virtual_item(i).SubItems(lssort).Text
-                    If lssort > 0 Then
-                        ss(i) = ss(i).PadLeft(10, " "c)
-                    End If
-                Next
-                Array.Sort(ss, virtual_item)
-                ListView1.VirtualListSize = virtual_item.Length
-                ListView1.EndUpdate()
-            End If
+        Dim total As Integer = TreeView1.SelectedNode.Nodes.Count
+        If TreeView1.SelectedNode.Parent IsNot Nothing Then
+            total += 1
         End If
-    End Sub
 
-    Private Sub ListView1_Selected_all(sender As System.Object, ByVal e As KeyEventArgs) Handles ListView1.KeyDown
-        If e.Control = True Then
-            If e.KeyValue = Keys.A Then
-                If VIRTUAL.Checked = False Then
-                    For Each itemx As ListViewItem In ListView1.Items
-                        itemx.Selected = True
-                    Next
-                ElseIf virtual_item.Length > 0 Then
-                    ListView1.BeginUpdate()
-                    ListView1.SelectedIndices.Clear()
-                    For i = 0 To virtual_item.Length - 1
-                        ListView1.SelectedIndices.Add(i)
-                    Next
-                    ListView1.EndUpdate()
+        If e.Column < 4 Then
+            'Me.ListView1.ListViewItemSorter = New ListViewItemComparer(e.Column)
+            Dim templist(total - 1) As ListViewItem
+            lssort = e.Column
+            ListView1.BeginUpdate()
+
+            If VIRTUAL.Checked = True Then
+                Dim vi As Integer = virtual_item.Length
+                Array.Copy(virtual_item, 0, templist, 0, total)
+                Array.Reverse(virtual_item)
+                Array.Resize(virtual_item, vi - total)
+                templist = list_item_sort(total, templist)
+                virtual_item = list_item_sort(virtual_item.Length, virtual_item)
+                virtual_item = templist.Union(virtual_item).ToArray()
+
+                ListView1.VirtualListSize = virtual_item.Length
+
+            ElseIf VIRTUAL.Checked = False Then
+                For i = 0 To total - 1
+                    templist(i) = CType(ListView1.Items(0).Clone, ListViewItem)
+                    ListView1.Items(0).Remove()
+                Next
+                Dim ls(ListView1.Items.Count - 1) As ListViewItem
+                For i = 0 To ListView1.Items.Count - 1
+                    ls(i) = CType(ListView1.Items(i).Clone, ListViewItem)
+                Next
+                ListView1.Clear()
+
+                ListView1.View = View.Details
+                Dim zz As Integer
+                Dim finalcol As Integer
+
+                templist = list_item_sort(templist.Length, templist)
+                ls = list_item_sort(ls.Length, ls)
+
+                ListView1.Columns.Add("NAME", -1, HorizontalAlignment.Left)
+                ListView1.Columns.Add("LBA", -1, HorizontalAlignment.Left)
+                ListView1.Columns.Add("SIZE", -1, HorizontalAlignment.Left)
+                If localtime.Checked Then
+                    ListView1.Columns.Add("DATE(LOCAL)", -1, HorizontalAlignment.Left)
+                    finalcol = 150
+                Else
+                    ListView1.Columns.Add("DATE", -1, HorizontalAlignment.Left)
+                    ListView1.Columns.Add("UTCDIFF", -1, HorizontalAlignment.Left)
+                    finalcol = 80
                 End If
+
+                ls = templist.Union(ls).ToArray
+                ListView1.Items.AddRange(ls)
+
+                ListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize)
+                ListView1.Columns(zz).Width = finalcol
             End If
+            ListView1.EndUpdate()
         End If
     End Sub
 
@@ -631,6 +711,7 @@ Public Class Form1
 
         Dim sw As New System.IO.StreamWriter(Application.StartupPath & "\" & title_st & ".txt", False, System.Text.Encoding.GetEncoding(65001))
         Dim sb As New StringBuilder
+        Dim error_m As New StringBuilder
         If TreeView1.SelectedNode.Level > 0 Then
             sb.Append(getlba(TreeView1.SelectedNode, sender))
         End If
@@ -652,7 +733,23 @@ Public Class Form1
         sw.Write(sb.ToString)
 
         sw.Close()
+
         Beep()
+
+        Dim er As New Regex("(^|\n)!!\d+\t.*?\t", RegexOptions.ECMAScript)
+        Dim mm As Match = er.Match(sb.ToString)
+        While mm.Success
+            error_m.Append(mm.Value)
+            mm = mm.NextMatch
+        End While
+        If error_m.Length > 0 Then
+            error_m.Insert(0, vbCrLf)
+            error_m.Insert(0, "破損ファイルがありました")
+            MessageBox.Show(error_m.ToString)
+        End If
+
+
+
     End Sub
 #End Region
 
@@ -709,6 +806,7 @@ Public Class Form1
 
     Function getlist_virtual(ByVal dst As Integer) As Boolean
         Try
+            Dim start As DateTime = Now
             ListView1.Clear()
             ListView1.View = View.Details
             ListView1.VirtualMode = True
@@ -717,6 +815,7 @@ Public Class Form1
             End If
 
             Array.Resize(virtual_item, 500000)
+            Array.Resize(arraylistdir, TreeView1.SelectedNode.Nodes.Count + 1)
 
             ListView1.BeginUpdate()
 
@@ -811,7 +910,8 @@ Public Class Form1
             End If
 
             Dim vi As Integer = 0
-            
+            Dim mi As Integer = 0
+
             Dim itemx As New ListViewItem
             itemx.Text = ".."
             itemx.ImageIndex = 0
@@ -822,8 +922,8 @@ Public Class Form1
                 itemx.SubItems.Add("")
             End If
             If TreeView1.SelectedNode.Parent.Level > 0 Then
-                virtual_item(0) = itemx
-                vi = 1
+                arraylistdir(0) = itemx
+                mi = 1
             End If
 
             While i < bs.Length
@@ -833,7 +933,6 @@ Public Class Form1
                     lba = cvt32bit(bbbb)
                     Array.Copy(bs, i + 10, bbbb, 0, 4)
                     filesize = cvt32bit(bbbb)
-                    Array.Copy(bs, i + 18, yyyymmdd, 0, 7)
                     str_len = bs(i + 32)
                     Array.Resize(na, str_len)
                     Array.Copy(bs, i + 33, na, 0, str_len)
@@ -841,23 +940,30 @@ Public Class Form1
 
                     itemx = CType(itemx.Clone, ListViewItem)
                     itemx.Text = name
-                    If ((bs(i + 25) >> 1) And 1) = 0 Then
-                        itemx.ImageIndex = 2
-                    Else
-                        itemx.ImageIndex = 0
-                    End If
-                    If ((lba << 11) + filesize) > iso_len Then
-                        itemx.ImageIndex = itemx.ImageIndex Or 1
-                    End If
                     itemx.SubItems(1).Text = lba.ToString
                     itemx.SubItems(2).Text = (filesize.ToString)
+
+                    Array.Copy(bs, i + 18, yyyymmdd, 0, 7)
                     itemx.SubItems(3).Text = (cvt_date(yyyymmdd))
                     If localtime.Checked = False Then
                         itemx.SubItems(4).Text = (cvt_utc(yyyymmdd(6)))
                     End If
+                    If ((bs(i + 25) >> 1) And 1) = 0 Then
+                        itemx.ImageIndex = 2
+                        If ((lba << 11) + filesize) > iso_len Then
+                            itemx.ImageIndex = itemx.ImageIndex Or 1
+                        End If
+                        virtual_item(vi) = itemx
+                        vi += 1
+                    Else
+                        itemx.ImageIndex = 0
+                        If ((lba << 11) + filesize) > iso_len Then
+                            itemx.ImageIndex = itemx.ImageIndex Or 1
+                        End If
+                        arraylistdir(mi) = itemx
+                        mi += 1
+                    End If
 
-                    virtual_item(vi) = itemx
-                    vi += 1
                 End If
 
                 i += next_len
@@ -879,23 +985,19 @@ Public Class Form1
             End While
 
             Array.Resize(virtual_item, vi)
+            Array.Resize(arraylistdir, mi)
+            virtual_item = list_item_sort(vi, virtual_item)
+            arraylistdir = list_item_sort(mi, arraylistdir)
 
-            Dim keys As Integer() = New Integer(virtual_item.Length - 1) {}
-            Dim ss(virtual_item.Length - 1) As String
-            For i = 0 To keys.Length - 1
-                ss(i) = virtual_item(i).SubItems(lssort).Text
-                If lssort > 0 Then
-                    ss(i) = ss(i).PadLeft(10, " "c)
-                End If
-            Next
+            virtual_item = arraylistdir.Union(virtual_item).ToArray()
 
-            Array.Sort(ss, virtual_item)
-
-            ListView1.VirtualListSize = vi
+            ListView1.VirtualListSize = vi + mi
             ListView1.EndUpdate()
 
             updatedir()
-
+            fs.Close()
+            
+            Label5.Text = (Now - start).TotalSeconds.ToString
             Return True
 
         Catch ex As Exception
@@ -911,6 +1013,19 @@ Public Class Form1
         e.Item = itemx
 
     End Sub
+
+    Function list_item_sort(ByVal vi As Integer, ByVal ls As ListViewItem()) As ListViewItem()
+        Dim ss(vi - 1) As String
+        For i = 0 To vi - 1
+            ss(i) = ls(i).SubItems(lssort).Text
+            If lssort > 0 Then
+                ss(i) = ss(i).PadLeft(10, " "c)
+            End If
+        Next
+
+        Array.Sort(ss, ls)
+        Return ls
+    End Function
 
     Function updatedir() As Boolean
         ListView2.Items.Clear()
@@ -929,13 +1044,15 @@ Public Class Form1
 
     Function getlist(ByVal dst As Integer) As Boolean
         Try
+            Dim start As DateTime = Now
             ListView1.Clear()
             ListView1.View = View.Details
             ListView1.VirtualMode = False
             If dst < 0 Then
                 Return True
             End If
-            Dim arraylist(50000) As ListViewItem
+            Dim arraylist(3000) As ListViewItem
+            Dim arraylistdir(TreeView1.SelectedNode.Nodes.Count + 1) As ListViewItem
 
             If File.Exists(iso) Then
                 If TreeView1.SelectedNode.Level = 0 Then
@@ -1044,6 +1161,7 @@ Public Class Form1
                 End If
 
                 Dim ni As Integer = 0
+                Dim mi As Integer = 0
 
                 ListView1.BeginUpdate()
 
@@ -1057,8 +1175,8 @@ Public Class Form1
                     itemx.SubItems.Add("")
                 End If
                 If TreeView1.SelectedNode.Parent.Level > 0 Then
-                    arraylist(0) = itemx
-                    ni = 1
+                    arraylistdir(0) = itemx
+                    mi = 1
                 End If
 
 
@@ -1076,14 +1194,6 @@ Public Class Form1
                         name = Encoding.GetEncoding(0).GetString(na)
                         itemx = CType(itemx.Clone, ListViewItem)
                         itemx.Text = name
-                        If ((bs(i + 25) >> 1) And 1) = 0 Then
-                            itemx.ImageIndex = 2
-                        Else
-                            itemx.ImageIndex = 0
-                        End If
-                        If ((lba << 11) + filesize) > iso_len Then
-                            itemx.ImageIndex = itemx.ImageIndex Or 1
-                        End If
                         itemx.SubItems(1).Text = lba.ToString
                         itemx.SubItems(2).Text = (filesize.ToString)
                         itemx.SubItems(3).Text = (cvt_date(yyyymmdd))
@@ -1091,8 +1201,30 @@ Public Class Form1
                             itemx.SubItems(4).Text = (cvt_utc(yyyymmdd(6)))
                         End If
 
-                        arraylist(ni) = itemx
-                        ni += 1
+
+                        If ((bs(i + 25) >> 1) And 1) = 0 Then
+                            itemx.ImageIndex = 2
+                            If ((lba << 11) + filesize) > iso_len Then
+                                itemx.ImageIndex = itemx.ImageIndex Or 1
+                            End If
+                            arraylist(ni) = itemx
+                            ni += 1
+                            If ni = 3000 Then
+                                fs.Close()
+                                MessageBox.Show("3000項目以上あるので表示できません,VIRTUALMODEを使用して下さい")
+                                Return True
+                                Exit Function
+                            End If
+                        Else
+                            itemx.ImageIndex = 0
+                            If ((lba << 11) + filesize) > iso_len Then
+                                itemx.ImageIndex = itemx.ImageIndex Or 1
+                            End If
+
+                            arraylistdir(mi) = itemx
+                            mi += 1
+                        End If
+
                     End If
 
                     i += next_len
@@ -1113,21 +1245,31 @@ Public Class Form1
                     End If
                 End While
 
+                Array.Resize(arraylistdir, mi)
                 Array.Resize(arraylist, ni)
+
+                arraylist = list_item_sort(ni, arraylist)
+                arraylistdir = list_item_sort(mi, arraylistdir)
+                arraylist = arraylistdir.Union(arraylist).ToArray
+
                 ListView1.Items.AddRange(arraylist)
 
                 ListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize)
                 ListView1.Columns(zz).Width = finalcol
 
                 ListView1.EndUpdate()
-                
+
                 updatedir()
 
                 fs.Close()
+
+                Label5.Text = (Now - start).TotalSeconds.ToString
+
             End If
         Catch ex As Exception
             MessageBox.Show(ex.Message)
         End Try
+
         Return True
     End Function
 
@@ -1167,7 +1309,6 @@ Public Class Form1
         sb.Append((ymd(5).ToString.PadLeft(2, "0"c)))
 
         If localtime.Checked = True Then
-            Dim cFormat As New System.Globalization.CultureInfo("ja-JP", False)
             Dim dtBirth As DateTime = DateTime.Parse(sb.ToString, cFormat)
 
             Dim z As Integer = ymd(6)
@@ -1524,32 +1665,32 @@ End Class
 
 
 
-Class ListViewItemComparer
-    Implements IComparer
+'Class ListViewItemComparer
+'    Implements IComparer
 
-    Private col As Integer
+'    Private col As Integer
 
-    Public Sub New()
-        col = 0
-    End Sub
+'    Public Sub New()
+'        col = 0
+'    End Sub
 
-    Public Sub New(ByVal column As Integer)
-        col = column
-        If col = 5 Then
-            col = 4
-        End If
-    End Sub
+'    Public Sub New(ByVal column As Integer)
+'        col = column
+'        If col = 5 Then
+'            col = 4
+'        End If
+'    End Sub
 
-    Public Function Compare(ByVal x As Object, ByVal y As Object) As Integer _
-       Implements IComparer.Compare
-            Dim xx As String = CType(x, ListViewItem).SubItems(col).Text
-            Dim yy As String = CType(y, ListViewItem).SubItems(col).Text
-            If xx.Length <> yy.Length AndAlso col > 0 Then
-                xx = xx.PadLeft(yy.Length, " "c)
-                yy = yy.PadLeft(xx.Length, " "c)
-                xx = xx.PadLeft(yy.Length, " "c)
-            End If
-            Return [String].Compare(xx, yy)
-    End Function
+'    Public Function Compare(ByVal x As Object, ByVal y As Object) As Integer _
+'       Implements IComparer.Compare
+'            Dim xx As String = CType(x, ListViewItem).SubItems(col).Text
+'            Dim yy As String = CType(y, ListViewItem).SubItems(col).Text
+'            If xx.Length <> yy.Length AndAlso col > 0 Then
+'                xx = xx.PadLeft(yy.Length, " "c)
+'                yy = yy.PadLeft(xx.Length, " "c)
+'                xx = xx.PadLeft(yy.Length, " "c)
+'            End If
+'            Return [String].Compare(xx, yy)
+'    End Function
 
-End Class
+'End Class
