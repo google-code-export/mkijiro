@@ -11,11 +11,14 @@ using System.IO;
 using Microsoft.VisualBasic;
 using System.Runtime.InteropServices;
 using System.IO.Compression;
+using System.Globalization;
 
 namespace WindowsFormsApplication1
 {
     public partial class Form2 : Form
     {
+        Dictionary<int, string> dic = new Dictionary<int, string>();
+
         public Form2()
         {
             InitializeComponent();
@@ -24,6 +27,96 @@ namespace WindowsFormsApplication1
 
         private void InitializeListView()
         {
+
+            string trans = "lang\\en.txt";
+            if (CultureInfo.CurrentUICulture.Name.Contains("ja") == true)
+            {
+                trans = "lang\\ja.txt";
+            }
+
+ 
+            if (File.Exists(Application.StartupPath + "\\" + trans))
+            {
+                System.IO.StreamReader sr = new System.IO.StreamReader(Application.StartupPath + "\\" + trans, System.Text.Encoding.GetEncoding(65001));
+                string s = "";
+                int k = 0;
+                bool ui = false;
+                bool pst = false;
+                while (sr.Peek() > -1)
+                {
+                    s = sr.ReadLine();
+                    if (s.Contains("\\n"))
+                    {
+                        s = s.Replace("\\n", System.Environment.NewLine);
+                    }
+
+                    if (pst==true){
+                    if (ui == true)
+                    {
+                        switch (k)
+                        {
+                            case 0:
+                                label3.Text = s;
+                                break;
+
+                            case 1:
+                                label4.Text = s;
+                                break;
+
+                            case 2:
+                                groupBox1.Text = s;
+                                break;
+
+                            case 3:
+
+                                label1.Text = s;
+                                break;
+
+                            case 4:
+                                button2.Text = s;
+                                break;
+
+                            case 5:
+                                label2.Text = s;
+                                break;
+
+                            case 6:
+                                button1.Text = s;
+                                break;
+
+                            case 7:
+                                label5.Text = s;
+                                break;
+
+                            case 8:
+                                button3.Text = s;
+                                break;
+                        }
+
+                    }
+                    else
+                    {
+                        dic[k] = s;
+                    }
+                    k++;
+                }
+
+                    if (s == "//FORM2_UI")
+                    {
+                        ui = true; pst = true; k = 0;
+                    }
+                    if (s == "//FORM2_ST")
+                    {
+                        ui = false; k = 0;
+                    }
+                    if ((s == "//FORM_END"))
+                    {
+                        break;
+                    }
+                }
+                sr.Close();
+            }
+
             listView1.GridLines = true;
             listView1.Sorting = SortOrder.Ascending;
             listView1.View = View.Details;
@@ -32,7 +125,7 @@ namespace WindowsFormsApplication1
             for (int i = 0; i < 17; i++)
                 columnHead[i] = new ColumnHeader();
 
-            columnHead[0].Text = "オフセット      ";
+            columnHead[0].Text = dic[0];//"オフセット      ";
             columnHead[0].Width = 100;
 
             for (int k = 1; k < 17; k++)
@@ -59,7 +152,7 @@ namespace WindowsFormsApplication1
             }
             else
             {
-                MessageBox.Show("ファイルが存在しません", "ファイルなし");
+                MessageBox.Show(dic[1], dic[2]);//"ファイルが存在しません", "ファイルなし");
             }
         }
 
@@ -74,7 +167,7 @@ namespace WindowsFormsApplication1
             }
             else
             {
-                MessageBox.Show("ファイルが存在しません", "ファイルなし");
+                MessageBox.Show(dic[1],dic[2]);
             }
         }
         private void button3_Click(object sender, EventArgs e)
@@ -88,7 +181,7 @@ namespace WindowsFormsApplication1
             }
             else
             {
-                MessageBox.Show("ファイルが存在しません", "ファイルなし");
+                MessageBox.Show(dic[1],dic[2]);
             }
         }
 
@@ -149,14 +242,14 @@ namespace WindowsFormsApplication1
 
                 Array.Copy(source, 0x50, x, 0, 4);
                 trimsize = BitConverter.ToInt64(x, 0) << 11;
-                label1.Text = "-2kのオフセット;" + Convert.ToString(trimsize - 2048, 16).ToUpper(); ;
-                label2.Text = "-6kのオフセット;" + Convert.ToString(trimsize - 6144, 16).ToUpper(); ;
+                label1.Text = dic[3] + Convert.ToString(trimsize - 2048, 16).ToUpper(); ;
+                label2.Text = dic[4] + Convert.ToString(trimsize - 6144, 16).ToUpper(); ;
 
 
                 if (size + 2048 < trimsize && pos > 128)
                 {
                     fs.Close();
-                    MessageBox.Show("-6kかけてるため選択できません", "範囲外エラー");
+                    MessageBox.Show(dic[6], dic[7]);//"-6kかけてるため選択できません", "範囲外エラー");
                     button2.Enabled = false;
                 }
                 else
@@ -169,7 +262,7 @@ namespace WindowsFormsApplication1
                         size = trimsize + 2048;
                         label5.Enabled = true;
                         button3.Enabled = true;
-                        label5.Text = "オーバーダンプ:" + Convert.ToString(trimsize, 16).ToUpper();
+                        label5.Text = dic[5] + Convert.ToString(trimsize, 16).ToUpper();
                         Array.Resize(ref sector, Convert.ToInt32(get));
                     }
                     counter = Convert.ToInt32(ct);
@@ -247,12 +340,12 @@ namespace WindowsFormsApplication1
             fs.Seek(0x8050, SeekOrigin.Begin);
             fs.Read(x, 0, 3);
             trimsize = BitConverter.ToInt64(x, 0) << 11;
-            label1.Text = "-2kのオフセット;" + Convert.ToString(trimsize - 2048, 16).ToUpper(); ;
-            label2.Text = "-6kのオフセット;" + Convert.ToString(trimsize - 6144, 16).ToUpper(); ;
+            label1.Text = dic[2] + Convert.ToString(trimsize - 2048, 16).ToUpper(); ;
+            label2.Text = dic[3] + Convert.ToString(trimsize - 6144, 16).ToUpper(); ;
 
             if (fs.Length + 2048 < trimsize && pos > 128)
             {
-                MessageBox.Show("-6kかけてるため選択できません", "範囲外エラー");
+                MessageBox.Show(dic[5], dic[6]);//"-6kかけてるため選択できません", "範囲外エラー");
                 button2.Enabled = false;
             }
             else
@@ -265,7 +358,7 @@ namespace WindowsFormsApplication1
                     isosize = trimsize + 2048;
                     label5.Enabled = true;
                     button3.Enabled = true;
-                    label5.Text = "オーバーダンプ:" + Convert.ToString(trimsize, 16).ToUpper();
+                    label5.Text = dic[4] + Convert.ToString(trimsize, 16).ToUpper();
                     Array.Resize(ref sector, Convert.ToInt32(get));
                 }
                 fs.Seek(offset, SeekOrigin.Begin);

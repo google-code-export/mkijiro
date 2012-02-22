@@ -1,0 +1,67 @@
+﻿//FORM1_UI
+UMDSIZE
+FileOpen
+Sectorview
+File size  ;
+Sector calc;
+Iso Rename
+Game ID
+ISO label
+Title PSF
+Trim
+Buffer
+Start
+CSO rename
+CSO unpack
+//FORM1_ST
+Not
+UMD image files.. (*.iso;*.cso)|*,iso;*.cso
+Please select a file to open
+File size  ;
+Sector calc;
+ISO compression Deflate, the DAX is not supported
+Unpacked size;
+Sector  calc ;
+Unpack ISO compression is required for Deflate, CSO is compressed, the unpackeded size information is the size expected after unpacking
+ISO compression LZO, the JSO is not supported
+this isnot ISO image
+missing 2048 size occur in the SSS M33USB mount, the possibility of baddump if FF is not continuous in the last 00 or sector view is high\n Please use there so that is a modified version\n Please use, such as PSPFILER / ISOTOOL / TEMPAR
+missing 6144 size occur in the SSS, the possibility of baddump if data is not 00/FF  in the last line of sector view,it was corrupted\nUsing, for example, fixed mount USBMOUNT/ PSPFILER / ISOTOOL / TEMPAR / or manual completion
+overdumped, would be normal if you trim it\nrecommended to run on the HDD / SSD / RAMDISK high-speed because it takes a lot on the Memory Stick
+normal size
+Size is normal, please check if there is corruption in the ISO9660 or viewer\n sector view (dummy discontinuity near-6k final decision) has to fill after the fill 0xFF 0x00
+Size is normal, please check if there is corruption in the ISO9660 or viewer\n sector view (judged last-6k near corrupted data) may be a bad dump
+Size is normal, check sector view and confirmed with a good image, but it is true, such as\n Valkyrie Profile (judged dummy last discontinuity near-2k) has to fill after the fill 0xFF 0x00
+Size is normal, please check if there is corruption in the ISO9660 or viewer\n sector view (near-2k final judgment continuous data) may be a bad dump
+Size does not fit
+The file does not exist
+renamed to %s
+The same name exists
+ISO label name could not be there
+Failed to get PSF
+stopped to obtain because more than 6k missing of PARAM.SFO
+Trim has been completed
+calculated CSO sector size does not match the header information (the size of the time = unpacked)\n
+CISO is not a normal
+Unpacking is complete
+please drag&drop image or click open file
+//FORM2_UI
+☆ 1sector start
+★ 1sector end 
+Sector view
+-2k offset of:
+See the data nearby -2k
+-6k offset of:
+See the data nearby -6k
+Overdamped:
+See the place over dump
+//FORM2_ST
+Offset        
+The file does not exist
+No file
+-2k offset;
+-6k offset;
+Overdamped:
+-6k can not be selected because underdump
+Out-of-range error
+//FORM_END

@@ -59,7 +59,8 @@
             // button1
             // 
             this.button1.AllowDrop = true;
-            this.button1.Location = new System.Drawing.Point(17, 12);
+            this.button1.Font = new System.Drawing.Font("MS UI Gothic", 7.854546F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.button1.Location = new System.Drawing.Point(14, 12);
             this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(107, 28);
@@ -79,7 +80,6 @@
             this.textBox1.ShortcutsEnabled = false;
             this.textBox1.Size = new System.Drawing.Size(201, 70);
             this.textBox1.TabIndex = 2;
-            this.textBox1.Text = "イメージファイルをドロップするか\r\n読み込みボタン指定してください";
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // label1
@@ -106,10 +106,11 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(15, 21);
+            this.button2.Font = new System.Drawing.Font("MS UI Gothic", 7.854546F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.button2.Location = new System.Drawing.Point(15, 22);
             this.button2.Margin = new System.Windows.Forms.Padding(4);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(88, 30);
+            this.button2.Size = new System.Drawing.Size(88, 28);
             this.button2.TabIndex = 5;
             this.button2.Text = "ゲームID";
             this.button2.UseVisualStyleBackColor = true;
@@ -117,10 +118,11 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(15, 59);
+            this.button3.Font = new System.Drawing.Font("MS UI Gothic", 7.854546F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.button3.Location = new System.Drawing.Point(15, 56);
             this.button3.Margin = new System.Windows.Forms.Padding(4);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(88, 27);
+            this.button3.Size = new System.Drawing.Size(88, 28);
             this.button3.TabIndex = 6;
             this.button3.Text = "PSFタイトル";
             this.button3.UseVisualStyleBackColor = true;
@@ -128,10 +130,11 @@
             // 
             // button4
             // 
+            this.button4.Font = new System.Drawing.Font("MS UI Gothic", 7.854546F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.button4.Location = new System.Drawing.Point(109, 22);
             this.button4.Margin = new System.Windows.Forms.Padding(4);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(88, 29);
+            this.button4.Size = new System.Drawing.Size(88, 28);
             this.button4.TabIndex = 7;
             this.button4.Text = "ISOラベル";
             this.button4.UseVisualStyleBackColor = true;
@@ -167,9 +170,10 @@
             // button5
             // 
             this.button5.Enabled = false;
-            this.button5.Location = new System.Drawing.Point(117, 14);
+            this.button5.Font = new System.Drawing.Font("MS UI Gothic", 7.854546F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.button5.Location = new System.Drawing.Point(121, 18);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(66, 26);
+            this.button5.Size = new System.Drawing.Size(66, 22);
             this.button5.TabIndex = 9;
             this.button5.Text = "開始";
             this.button5.UseVisualStyleBackColor = true;
@@ -208,6 +212,7 @@
             // 
             // textBox2
             // 
+            this.textBox2.Font = new System.Drawing.Font("MS UI Gothic", 9.163636F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.textBox2.ImeMode = System.Windows.Forms.ImeMode.Disable;
             this.textBox2.Location = new System.Drawing.Point(48, 20);
             this.textBox2.MaxLength = 4;
@@ -221,9 +226,10 @@
             // sectorview
             // 
             this.sectorview.Enabled = false;
-            this.sectorview.Location = new System.Drawing.Point(130, 11);
+            this.sectorview.Font = new System.Drawing.Font("MS UI Gothic", 7.854546F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.sectorview.Location = new System.Drawing.Point(128, 12);
             this.sectorview.Name = "sectorview";
-            this.sectorview.Size = new System.Drawing.Size(85, 29);
+            this.sectorview.Size = new System.Drawing.Size(85, 28);
             this.sectorview.TabIndex = 11;
             this.sectorview.Text = "セクタビュー";
             this.sectorview.UseVisualStyleBackColor = true;
@@ -231,9 +237,10 @@
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(13, 20);
+            this.button6.Font = new System.Drawing.Font("MS UI Gothic", 7.854546F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.button6.Location = new System.Drawing.Point(13, 22);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(85, 30);
+            this.button6.Size = new System.Drawing.Size(85, 28);
             this.button6.TabIndex = 12;
             this.button6.Text = "ゲームID";
             this.button6.UseVisualStyleBackColor = true;
@@ -241,9 +248,9 @@
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(104, 20);
+            this.button7.Location = new System.Drawing.Point(104, 22);
             this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(88, 30);
+            this.button7.Size = new System.Drawing.Size(88, 28);
             this.button7.TabIndex = 13;
             this.button7.Text = "ISOラベル";
             this.button7.UseVisualStyleBackColor = true;
@@ -265,9 +272,10 @@
             // 
             // button8
             // 
+            this.button8.Font = new System.Drawing.Font("MS UI Gothic", 7.854546F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.button8.Location = new System.Drawing.Point(13, 56);
             this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(85, 30);
+            this.button8.Size = new System.Drawing.Size(85, 28);
             this.button8.TabIndex = 15;
             this.button8.Text = "PSFタイトル";
             this.button8.UseVisualStyleBackColor = true;
@@ -290,7 +298,7 @@
             this.groupBox4.Controls.Add(this.button9);
             this.groupBox4.Location = new System.Drawing.Point(247, 265);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(192, 68);
+            this.groupBox4.Size = new System.Drawing.Size(192, 66);
             this.groupBox4.TabIndex = 15;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "CSOアンパック";
@@ -298,9 +306,10 @@
             // 
             // button9
             // 
+            this.button9.Font = new System.Drawing.Font("MS UI Gothic", 7.854546F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.button9.Location = new System.Drawing.Point(54, 22);
             this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(75, 26);
+            this.button9.Size = new System.Drawing.Size(75, 24);
             this.button9.TabIndex = 0;
             this.button9.Text = "開始";
             this.button9.UseVisualStyleBackColor = true;
