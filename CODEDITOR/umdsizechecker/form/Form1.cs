@@ -12,6 +12,7 @@ using Microsoft.VisualBasic;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.IO.Compression;
+using System.Globalization;
 
 
 namespace WindowsFormsApplication1
@@ -23,6 +24,7 @@ namespace WindowsFormsApplication1
         string isofile = "NULL";
         long trimsize = 0;
         string open_dir = "";
+        Dictionary<int, string> dic = new Dictionary<int, string>();
 
         [DllImport("libmecab.dll", CallingConvention = CallingConvention.Cdecl)]
         private extern static IntPtr mecab_new2(string arg);
@@ -83,6 +85,113 @@ namespace WindowsFormsApplication1
                 sr.Close();
             }
 
+
+            string trans = "lang\\en.txt";
+            if (CultureInfo.CurrentUICulture.Name.Contains("ja") == true)
+            {
+                trans = "lang\\ja.txt";
+            }
+
+            if (File.Exists(Application.StartupPath + "\\" + trans))
+            {
+                System.IO.StreamReader sr = new System.IO.StreamReader(Application.StartupPath + "\\" +trans, System.Text.Encoding.GetEncoding(65001));
+                string s = "";
+                int k = 0;
+                bool ui= false;
+                while (sr.Peek() > -1)
+                {
+                    s = sr.ReadLine();
+                    if (s.Contains("\\n")){
+                        s = s.Replace("\\n", System.Environment.NewLine);
+                    }
+                    
+                    if (ui == true) {
+                        switch(k)
+                    {
+                      case 0:
+                      this.Text = s;
+                      break;
+
+                      case 1:
+                      button1.Text = s;
+                      break;
+
+                      case 2:
+                      sectorview.Text = s;
+                      break;
+
+                      case 3:
+                      label1.Text = s;
+                      break;
+
+                      case 4:
+                      label2.Text = s;
+                      break;
+
+                      case 5:
+                      groupBox1.Text = s;
+                      break;
+
+                      case 6:
+                      button2.Text = s;
+                      button6.Text = s;
+                      break;
+
+                      case 7:
+                      button4.Text = s;
+                      button7.Text = s;
+                      break;
+
+                      case 8:
+                      button3.Text = s;
+                      button8.Text = s;
+                      break;
+
+                      case 9:
+                      groupBox2.Text = s;
+                      break;
+                                
+                      case 10:
+                     label3.Text = s;
+                      break;
+
+                      case 11:
+                      button5.Text = s;
+                      button9.Text = s;
+                      break;
+
+                      case 12:
+                      groupBox3.Text = s;
+                      break;
+                      case 13:
+                      groupBox4.Text = s;
+                      break;
+                    }
+
+                    }
+                    else
+                    {
+                        dic[k] = s;
+                    }
+                    k++;
+
+                    if (s =="//FORM1_UI")
+                    {
+                        ui = true; k = 0;
+                    }
+                    if (s == "//FORM1_ST")
+                    {
+                        ui = false; k = 0;
+                    }
+                    if ((s == "//FORM2_UI"))
+                    {
+                        break;
+                    }
+                }
+                sr.Close();
+                textBox1.Text = dic[30];
+            }
+
             if (Directory.Exists(open_dir) == false) {
                 open_dir = Application.StartupPath;
             }
@@ -100,7 +209,7 @@ namespace WindowsFormsApplication1
             }
             if (File.Exists(isofile) ==true){
             textBox1.Text = getsize(isofile);
-            if (textBox1.Text.Contains("ません"))
+            if (textBox1.Text.Contains(dic[0]))
             {
 
                 groupBox1.Enabled = false;
@@ -182,22 +291,6 @@ namespace WindowsFormsApplication1
             string[] s = (string[])e.Data.GetData(DataFormats.FileDrop, false);
             isofile = s[0];
             button_bool(s[0]);
-            //groupBox1.Visible = true;
-            //groupBox3.Visible = false;
-            //groupBox2.Visible = true;
-            //groupBox4.Visible = false;
-            //textBox1.Text = getsize(s[0]);
-            //if (textBox1.Text.Contains("ません"))
-            //{
-
-            //    groupBox1.Enabled = false;
-            //    sectorview.Enabled = false;
-            //}
-            //else
-            //{
-            //    groupBox1.Enabled = true;
-            //    sectorview.Enabled = true;
-            //}
         }
 
         private void button1_DragEnter(object sender, System.Windows.Forms.DragEventArgs e)
@@ -215,21 +308,6 @@ namespace WindowsFormsApplication1
             string[] s = (string[])e.Data.GetData(DataFormats.FileDrop, false);
             isofile = s[0];
             button_bool(s[0]);
-            //groupBox1.Visible = true;
-            //groupBox3.Visible = false;
-            //groupBox2.Visible = true;
-            //groupBox4.Visible = false;
-            //textBox1.Text = getsize(s[0]);
-            //if (textBox1.Text.Contains("ません"))
-            //{
-            //    groupBox1.Enabled = false;
-            //    sectorview.Enabled = false;
-            //}
-            //else
-            //{
-            //    groupBox1.Enabled = true;
-            //    sectorview.Enabled = true;
-            //}
         }
 
         private void button_bool(string s)
@@ -239,7 +317,7 @@ namespace WindowsFormsApplication1
             groupBox2.Visible = true;
             groupBox4.Visible = false;
             textBox1.Text = getsize(s);
-            if (textBox1.Text.Contains("ません"))
+            if (textBox1.Text.Contains(dic[0]))
             {
                 groupBox1.Enabled = false;
                 sectorview.Enabled = false;
@@ -258,9 +336,8 @@ namespace WindowsFormsApplication1
 
             ofd.FileName = "default.html";
             ofd.InitialDirectory = open_dir;
-            ofd.Filter =
-                "UMDイメージファイル(*.iso;*.cso)|*.iso;*.cso";
-            ofd.Title = "開くファイルを選択してください";
+            ofd.Filter = dic[1];//"UMDイメージファイル(*.iso;*.cso)|*.iso;*.cso";
+            ofd.Title =  dic[2];//"開くファイルを選択してください";
             ofd.RestoreDirectory = true;
 
             if (ofd.ShowDialog() == DialogResult.OK)
@@ -275,8 +352,8 @@ namespace WindowsFormsApplication1
         //IMAGECHECK
         private string getsize(string filepath)
         {
-            label1.Text = "ファイルサイズ:";
-            label2.Text = "セクター算出　:";
+            label1.Text = dic[3];//"ファイルサイズ:";
+            label2.Text = dic[4];//"セクター算出　:";
 
             if (File.Exists(filepath) == true)
             {
@@ -299,7 +376,7 @@ namespace WindowsFormsApplication1
                     if (iso == "DAX")
                     {
                         fs.Close();
-                        return "Deflate圧縮ISO,DAXには対応してません";
+                        return dic[5];//"Deflate圧縮ISO,DAXには対応してません";
                     }
                     else if (iso == "CISO")
                     {
@@ -347,23 +424,23 @@ namespace WindowsFormsApplication1
 
                         Array.Copy(source, 0x50, integer, 0, 4);
                         trimsize = BitConverter.ToInt64(integer, 0) << 11;
-                        label1.Text = "推定サイズ　;" + size.ToString();
-                        label2.Text = "セクター算出;" + trimsize.ToString();
+                        label1.Text = dic[6] + size.ToString();
+                        label2.Text = dic[7] + trimsize.ToString();
 
                         sizecolor(size, trimsize);
                         fs.Close();
 
-                        return "Deflate圧縮ISO,CSOは圧縮されてるためアンパックが必要です、推定サイズ情報はアンパック後の予想サイズです";
+                        return dic[8];//"Deflate圧縮ISO,CSOは圧縮されてるためアンパックが必要です、推定サイズ情報はアンパック後の予想サイズです";
                     }
                     else if (iso == "JISO")
                     {
                         fs.Close();
-                        return "LZO圧縮ISO,JSOには対応してません";
+                        return dic[9];//"LZO圧縮ISO,JSOには対応してません";
                     }
                     else if (iso != "")
                     {
                         fs.Close();
-                        return "ISOではありません";
+                        return dic[10];//dic[10];
                     }
                     fs.Seek(0x8001, SeekOrigin.Begin);
                     fs.Read(str, 0, 5);
@@ -385,13 +462,13 @@ namespace WindowsFormsApplication1
                     isobig = BitConverter.ToInt64(big, 0);
                     if (isosize != isobig || iso != "CD001")
                     {
-                        return "ISOではありません";
+                        return dic[10];
                     }
                     if (iso2.Contains("PSP GAME") || iso2.Contains("UMD VIDEO"))
                     { }
                     else
                     {
-                        return "ISOではありません";
+                        return dic[10];
                     }
                     isosize *= 2048;
                     trimsize = isosize;
@@ -400,16 +477,16 @@ namespace WindowsFormsApplication1
                     label2.Text += Convert.ToString(isosize);
                     if (isosize - fsize == 2048)
                     {
-                        return "M33USBマウントやSSSで発生する-2048サイズ欠けです,セクタビュー最後で00かFFが連続してない場合バッドバンプの可能性が高いです\n\nPSPFILER/ISOTOOL/TEMPARなどを使ってください\r\nまたUSBマウントは修正版がでているので使ってください";
+                        return dic[11];//"M33USBマウントやSSSで発生する-2048サイズ欠けです,セクタビュー最後で00かFFが連続してない場合バッドバンプの可能性が高いです\n\nPSPFILER/ISOTOOL/TEMPARなどを使ってください\r\nまたUSBマウントは修正版がでているので使ってください";
                     }
                     else if (isosize - fsize == 6144)
                     {
-                        return "SSSで発生する-6144サイズ欠けです,セクタビュー最後で00かFFが連続してない場合バッドバンプの可能性が高いです\n手動補完するかPSPFILER/ISOTOOL/TEMPARなどを使ってください";
+                        return dic[12];//"SSSで発生する-6144サイズ欠けです,セクタビュー最後で00かFFが連続してない場合バッドバンプの可能性が高いです\n手動補完するかPSPFILER/ISOTOOL/TEMPARなどを使ってください";
                     }
                     else if (isosize < fsize)
                     {
                         button5.Enabled = true;
-                        return "オーバーダンプです,トリムすると正常になることが多いです\r\nトリムはメモリースティック上だと時間がかかるため、高速なHDD/SSD/RAMDISK上での実行を推奨します";
+                        return dic[13];// "オーバーダンプです,トリムすると正常になることが多いです\r\nトリムはメモリースティック上だと時間がかかるため、高速なHDD/SSD/RAMDISK上での実行を推奨します";
                     }
                     else if (isosize == fsize)
                     {
@@ -447,40 +524,40 @@ namespace WindowsFormsApplication1
 
                         if (result == result2)
                         {//FILLED wiht NULL
-                            return "正常なサイズです";
+                            return dic[14];//正常なサイズです;
                         }
                         else if (result == FF && result2 == NU)
                         {
-                            return "サイズは正常です,0xFF埋めのあと0x00埋めになってます(最終-6k付近不連続ダミー判定)\r\nセクタービューで確認してください";
+                            return dic[15];// "サイズは正常です,0xFF埋めのあと0x00埋めになってます(最終-6k付近不連続ダミー判定)\r\nセクタービューで確認してください";
                         }
                         else if (result != NU && result2 == NU)
                         {
-                            return "サイズは正常ですが,バッドダンプの可能性があります(最終-6k付近データ連続判定)\r\nセクタービューで確認してください";
+                            return dic[16];// "サイズは正常ですが,バッドダンプの可能性があります(最終-6k付近データ連続判定)\r\nセクタービューで確認してください";
                         }
                         else if (result3 == FF && result4 == NU)
                         {
-                            return "サイズは正常です,0xFF埋めのあと0x00埋めになってます(最終-2k付近不連続ダミー判定)\r\nヴァルキリープロファイルなどが該当しますが正常なイメージだと確認済みです\r\nセクタービューで確認してください";
+                            return dic[17];// "サイズは正常です,0xFF埋めのあと0x00埋めになってます(最終-2k付近不連続ダミー判定)\r\nヴァルキリープロファイルなどが該当しますが正常なイメージだと確認済みです\r\nセクタービューで確認してください";
                         }
                         else if (result3 != NU && result4 == NU)
                         {
-                            return "サイズは正常ですが,バッドダンプの可能性があります(最終-2k付近データ連続判定)\r\nセクタービューで確認してください";
+                            return dic[18];// "サイズは正常ですが,バッドダンプの可能性があります(最終-2k付近データ連続判定)\r\nセクタービューで確認してください";
                         }
                         else
                         {
-                            return "正常なサイズです";
+                            return dic[14];//サイズが合いません
                         }
                     }
                     else
                     {
-                        return "サイズが合いません";
+                        return dic[19];//dic[19];
                     }
                 }
                 fs.Close();
-                return "ISOではありません";
+                return dic[10];
             }
             else
             {
-                return "ファイルが存在しません";
+                return dic[20];//"ファイルが存在しません";
             }
         }
 
@@ -495,12 +572,12 @@ namespace WindowsFormsApplication1
                 fs.Read(gid, 0, 10);
                 fs.Close();
                 string rpname = Encoding.GetEncoding(0).GetString(gid) + ".ISO";
-                textBox1.Text = rpname + "にリネームしました";
+                textBox1.Text = dic[21].Replace("%s",rpname);//"にリネームしました";
                 int last = isofile.LastIndexOf("\\") + 1;
                 rpname = isofile.Substring(0, last) + rpname;
                 if (System.IO.File.Exists(rpname))
                 {
-                    textBox1.Text = "同じ名前が存在します";
+                    textBox1.Text = dic[22];//"同じ名前が存在します";
                 }
                 else
                 {
@@ -510,7 +587,7 @@ namespace WindowsFormsApplication1
             }
             else
             {
-                textBox1.Text = "ファイルが存在しません";
+                textBox1.Text =dic[20];
             }
         }
 
@@ -529,12 +606,12 @@ namespace WindowsFormsApplication1
                 if (rpname != "")
                 {
                     rpname += ".ISO";
-                    textBox1.Text = rpname + "にリネームしました";
+                    textBox1.Text = dic[21].Replace("%s", rpname);
                     int last = isofile.LastIndexOf("\\") + 1;
                     rpname = isofile.Substring(0, last) + rpname;
                     if (System.IO.File.Exists(rpname))
                     {
-                        textBox1.Text = "同じ名前が存在します";
+                        textBox1.Text =dic[22];
                     }
                     else
                     {
@@ -544,12 +621,12 @@ namespace WindowsFormsApplication1
                 }
                 else
                 {
-                    textBox1.Text = "ISOラベル名が有りませんでした";
+                    textBox1.Text = dic[23];//"ISOラベル名が有りませんでした";
                 }
             }
             else
             {
-                textBox1.Text = "ファイルが存在しません";
+                textBox1.Text =dic[20];
             }
         }
 
@@ -587,12 +664,12 @@ namespace WindowsFormsApplication1
                     {
                         if (iso.Contains("PSP GAME") && sector[i] == 0x50 && sector[i + 1] == 0x53 && sector[i + 2] == 0x50 && sector[i + 3] == 0x5f && sector[i + 4] == 0x47) break;
                         if (iso.Contains("UMD VIDEO") && sector[i] == 0x55 && sector[i + 1] == 0x4D && sector[i + 2] == 0x44 && sector[i + 3] == 0x5f && sector[i + 4] == 0x56) break;
-                        if (i > 2038) { fs.Close(); textBox1.Text = "PSF取得に失敗しました"; return; }
+                        if (i > 2038) { fs.Close(); textBox1.Text = dic[24]; return; }//dic[24]
                         i++;
                     }
                     Array.ConstrainedCopy(sector, i - 6, lba, 0, 2);//-31 0x809E rootdir
                     z = BitConverter.ToInt32(lba, 0);
-                    if (z * 2048 > fs.Length) { fs.Close(); textBox1.Text = "PSF取得に失敗しました"; return; }
+                    if (z * 2048 > fs.Length) { fs.Close(); textBox1.Text =dic[24]; return; }
                     fs.Seek(z * 2048, SeekOrigin.Begin);
                     fs.Read(sector, 0, 2048);
                     i = 31;
@@ -600,12 +677,12 @@ namespace WindowsFormsApplication1
                     while (true)
                     {
                         if (sector[i] == 0x50 && sector[i + 1] == 0x41 && sector[i + 2] == 0x52 && sector[i + 3] == 0x41) break;
-                        if (i > 2038) { fs.Close(); textBox1.Text = "PSF取得に失敗しました"; return; }
+                        if (i > 2038) { fs.Close(); textBox1.Text =dic[24]; return; }
                         i++;
                     }
                     Array.ConstrainedCopy(sector, i - 31, lba, 0, 3);
                     z = BitConverter.ToInt32(lba, 0);
-                    if (z * 2048 > fs.Length) { fs.Close(); textBox1.Text = "PSF取得に失敗しました"; return; }
+                    if (z * 2048 > fs.Length) { fs.Close(); textBox1.Text =dic[24]; return; }
                     fs.Seek(z * 2048, SeekOrigin.Begin);
                     fs.Read(sector, 0, 2048);
                     Array.ConstrainedCopy(sector, 12, lba, 0, 4);
@@ -624,7 +701,7 @@ namespace WindowsFormsApplication1
                         if (name[k] == "TITLE") break;
                         if (k == z)
                         {
-                            fs.Close();textBox1.Text ="PSF取得に失敗しました";
+                            fs.Close();textBox1.Text= dic[24];
                             return;
                         }
                     }
@@ -704,12 +781,12 @@ namespace WindowsFormsApplication1
                         }
                     }
 
-                    textBox1.Text = rpname + "にリネームしました";
+                    textBox1.Text = dic[21].Replace("%s",rpname);
                     int last = isofile.LastIndexOf("\\") + 1;
                     rpname = isofile.Substring(0, last) + rpname;
                     if (System.IO.File.Exists(rpname))
                     {
-                        textBox1.Text = "同じ名前が存在します";
+                        textBox1.Text =dic[22];
                     }
                     else
                     {
@@ -720,12 +797,12 @@ namespace WindowsFormsApplication1
                 else
                 {
                     fs.Close();
-                    textBox1.Text ="6k以上欠けてるためPARAM.SFO取得を停止しました";
+                    textBox1.Text =dic[25];//"6k以上欠けてるためPARAM.SFO取得を停止しました";
                 }
             }
             else
             {
-                textBox1.Text = "ファイルが存在しません";
+                textBox1.Text =dic[20];
             }
         }
 
@@ -773,7 +850,7 @@ namespace WindowsFormsApplication1
             wr.Write(bs, 0, bufsize);
                 wr.Close();
             }
-            textBox1.Text = "トリムが完了しました";
+            textBox1.Text = dic[26];//"トリムが完了しました";
             SystemSounds.Asterisk.Play();
             button5.Enabled = false;
         }
@@ -839,20 +916,20 @@ namespace WindowsFormsApplication1
                 long lbatotal = BitConverter.ToInt64(isize, 0);
                 lbatotal *= 2048;
                 sizecolor(size, lbatotal);
-                label1.Text = "推定サイズ　;" + size.ToString();
-                label2.Text = "セクター算出;" + lbatotal.ToString();
+                label1.Text = dic[6] + size.ToString();
+                label2.Text = dic[4] + lbatotal.ToString();
 
                 fs.Close();
 
                 byte[] gid = new byte[10];
                 Array.Copy(source, 0x373, gid, 0, 10);
                 string rpname = Encoding.GetEncoding(0).GetString(gid) + ".CSO";
-                textBox1.Text = rpname + "にリネームしました";
+                textBox1.Text = dic[21].Replace("%s",rpname);
                 int last = isofile.LastIndexOf("\\") + 1;
                 rpname = isofile.Substring(0, last) + rpname;
                 if (System.IO.File.Exists(rpname))
                 {
-                    textBox1.Text = "同じ名前が存在します";
+                    textBox1.Text =dic[22];
                 }
                 else
                 {
@@ -862,7 +939,7 @@ namespace WindowsFormsApplication1
             }
             else
             {
-                textBox1.Text = "ファイルが存在しません";
+                textBox1.Text =dic[20];
             }
         }
 
@@ -919,8 +996,8 @@ namespace WindowsFormsApplication1
             long lbatotal = BitConverter.ToInt64(isize, 0);
             lbatotal *= 2048;
             sizecolor(size, lbatotal);
-            label1.Text = "推定サイズ　;" + (counter << 11).ToString();
-            label2.Text = "セクター算出;" + lbatotal.ToString();
+            label1.Text = dic[6] + (counter << 11).ToString();
+            label2.Text = dic[4] + lbatotal.ToString();
 
             fs.Close();
 
@@ -928,12 +1005,12 @@ namespace WindowsFormsApplication1
             Array.Copy(source,0x28, isohead, 0, 32);
             string rpname = Encoding.GetEncoding(0).GetString(isohead).Trim();
             rpname += ".CSO";
-            textBox1.Text = rpname + "にリネームしました";
+            textBox1.Text = dic[21].Replace("%s",rpname);
             int last = isofile.LastIndexOf("\\") + 1;
             rpname = isofile.Substring(0, last) + rpname;
              if (System.IO.File.Exists(rpname))
               {
-                textBox1.Text = "同じ名前が存在します";
+                textBox1.Text =dic[22];
               }
                else
               {
@@ -944,7 +1021,7 @@ namespace WindowsFormsApplication1
             }
             else
             {
-                textBox1.Text = "ファイルが存在しません";
+                textBox1.Text =dic[20];
             }
         }
 
@@ -1010,18 +1087,18 @@ namespace WindowsFormsApplication1
                 long lbatotal = BitConverter.ToInt64(isize, 0);
                 lbatotal *= 2048;
                 sizecolor(size, lbatotal);
-                label1.Text = "推定サイズ　;"+ (counter<<11).ToString();
-                label2.Text = "セクター算出;" + lbatotal.ToString();
+                label1.Text = dic[6]+ (counter<<11).ToString();
+                label2.Text = dic[4] + lbatotal.ToString();
                 if ((iso.Contains("PSP GAME") || iso.Contains("UMD VIDEO")))
                 {
                     if (lbatotal - size != 0)
                     {
-                        textBox1.Text = "ヘッダサイズ情報(=アンパック時のサイズ)とセクター算出が一致しないCSOです\n";
+                        textBox1.Text = dic[27];//"ヘッダサイズ情報(=アンパック時のサイズ)とセクター算出が一致しないCSOです\n";
                     }
                     Array.Copy(source, 0x8C, lba, 0, 2);//0x809E root
                     z = BitConverter.ToInt32(lba, 0);
 
-                    if (z > counter) { fs.Close(); textBox1.Text = "PSF取得に失敗しました"; return; }
+                    if (z > counter) { fs.Close(); textBox1.Text =dic[24]; return; }
                     fs.Seek(offset[z], System.IO.SeekOrigin.Begin);
                     fs.Read(source, 0, offset[z + 1] - offset[z]);
 
@@ -1043,12 +1120,12 @@ namespace WindowsFormsApplication1
                     {
                         if (iso.Contains("PSP GAME") == true && source[j] == 0x50 && source[j + 1] == 0x53 && source[j + 2] == 0x50 && source[j + 3] == 0x5f && source[j + 4] == 0x47) break;
                         if (iso.Contains("UMD VIDEO") == true && source[j] == 0x55 && source[j + 1] == 0x4D && source[j + 2] == 0x44 && source[j + 3] == 0x5f && source[j + 4] == 0x56) break;
-                        if (j > 2038) { fs.Close(); textBox1.Text = "PSF取得に失敗しました"; return; }
+                        if (j > 2038) { fs.Close(); textBox1.Text =dic[24]; return; }
                         j++;
                     }
                     Array.ConstrainedCopy(source, (j - 6), lba, 0, 2); //-31 0x809E rootdir
                     z = BitConverter.ToInt32(lba, 0);
-                    if (z > counter) { fs.Close(); textBox1.Text = "PSF取得に失敗しました"; return; }
+                    if (z > counter) { fs.Close(); textBox1.Text =dic[24]; return; }
                     fs.Seek(offset[z], System.IO.SeekOrigin.Begin);
                     fs.Read(source, 0, offset[z + 1] - offset[z]);
 
@@ -1070,12 +1147,12 @@ namespace WindowsFormsApplication1
                     while (true)
                     {
                         if (source[j] == 0x50 && source[j + 1] == 0x41 && source[j + 2] == 0x52 && source[j + 3] == 0x41) break;
-                        if (j > 2038) { fs.Close(); textBox1.Text = "PSF取得に失敗しました"; return; }
+                        if (j > 2038) { fs.Close(); textBox1.Text =dic[24]; return; }
                         j++;
                     }
                     Array.ConstrainedCopy(source, j - 31, lba, 0, 3);
                     z = BitConverter.ToInt32(lba, 0);
-                    if (z > counter) { fs.Close(); textBox1.Text = "PSF取得に失敗しました"; return; }
+                    if (z > counter) { fs.Close(); textBox1.Text =dic[24]; return; }
                     fs.Seek(offset[z], System.IO.SeekOrigin.Begin);
                     fs.Read(source, 0, offset[z + 1] - offset[z]);
 
@@ -1107,7 +1184,7 @@ namespace WindowsFormsApplication1
                         if (name[k] == "TITLE") break;
                         if (k == z)
                         {
-                            fs.Close(); textBox1.Text = "PSF取得に失敗しました";
+                            fs.Close(); textBox1.Text =dic[24];
                             return;
                         }
                     }
@@ -1192,12 +1269,12 @@ namespace WindowsFormsApplication1
                     }
 
                     fs.Close();
-                    textBox1.Text += rpname + "にリネームしました";
+                    textBox1.Text += dic[21].Replace("%s",rpname);
                     int last = isofile.LastIndexOf("\\") + 1;
                     rpname = isofile.Substring(0, last) + rpname;
                     if (System.IO.File.Exists(rpname))
                     {
-                        textBox1.Text = "同じ名前が存在します";
+                        textBox1.Text =dic[22];
                     }
                     else
                     {
@@ -1208,12 +1285,12 @@ namespace WindowsFormsApplication1
                 else
                 {
                     fs.Close();
-                    textBox1.Text = "正常なCISOではありません";
+                    textBox1.Text = dic[28];// "正常なCISOではありません";
                 }
             }
             else
             {
-                textBox1.Text = "ファイルが存在しません";
+                textBox1.Text =dic[20];
             }
         }
 
@@ -1329,11 +1406,11 @@ namespace WindowsFormsApplication1
                  fs.Close();
                  wss.Close();
                  SystemSounds.Asterisk.Play();
-                 textBox1.Text = "アンパックが完了しました";
+                 textBox1.Text = dic[29];//"アンパックが完了しました";
              }
              else
              {
-                 textBox1.Text = "ファイルが存在しません";
+                 textBox1.Text =dic[20];
              }
         }
 
