@@ -554,6 +554,25 @@ Public Class Form1
         End If
     End Sub
 
+    Private Sub ListView1_Selected_all(sender As System.Object, ByVal e As KeyEventArgs) Handles ListView1.KeyDown
+        If e.Control = True Then
+            If e.KeyValue = Keys.A Then
+                If VIRTUAL.Checked = False Then
+                    For Each itemx As ListViewItem In ListView1.Items
+                        itemx.Selected = True
+                    Next
+                ElseIf virtual_item.Length > 0 Then
+                    ListView1.BeginUpdate()
+                    ListView1.SelectedIndices.Clear()
+                    For i = 0 To virtual_item.Length - 1
+                        ListView1.SelectedIndices.Add(i)
+                    Next
+                    ListView1.EndUpdate()
+                End If
+            End If
+        End If
+    End Sub
+
 #End Region
 
 #Region "CONTEXT"
