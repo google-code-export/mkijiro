@@ -1108,6 +1108,8 @@ Public Class Form1
                 m = 1
             End If
 
+            buffer = CInt(fsbuf.Text) * 1024 * 1024
+
             startpath = Application.StartupPath
             Select Case SAVEMODE.Text
                 Case "S"
@@ -1131,7 +1133,6 @@ Public Class Form1
 
             startpath = startpath_fix(startpath)
 
-            buffer = CInt(fsbuf.Text) * 1024 * 1024
 
             Ar = GetAllNodes(TreeView1.SelectedNode.Nodes)
             If TreeView1.SelectedNode.Level > 0 Then
@@ -1861,31 +1862,30 @@ Public Class Form1
 
                         Dim save As New FileStream(basepath & name, FileMode.CreateNew, FileAccess.Write)
                         If cso = False Then
-                            fss.Seek(lba << 11, SeekOrigin.Begin)
-                            If buffer <> 0 Then
-                                If filesize > buffer Then
-                                    Dim bss(buffer - 1) As Byte
-                                    Dim ct As Integer
+                            fs.Seek(lba << 11, SeekOrigin.Begin)
 
-                                    While True
-                                        Dim readSize As Integer = fs.Read(bss, 0, bss.Length)
-                                        If readSize = 0 Then
-                                            Exit While
-                                        End If
+                            If filesize > buffer AndAlso buffer <> 0 Then
+                                Dim bss(buffer - 1) As Byte
+                                Dim ct As Integer
 
-                                        ct += readSize
-                                        If ct > filesize Then
-                                            readSize = filesize - (ct - readSize)
-                                            save.Write(bss, 0, readSize)
-                                            Exit While
-                                        End If
+                                While True
+                                    Dim readSize As Integer = fs.Read(bss, 0, bss.Length)
+                                    If readSize = 0 Then
+                                        Exit While
+                                    End If
 
+                                    ct += readSize
+                                    If ct > filesize Then
+                                        readSize = filesize - (ct - readSize)
                                         save.Write(bss, 0, readSize)
-                                    End While
-                                End If
+                                        Exit While
+                                    End If
+
+                                    save.Write(bss, 0, readSize)
+                                End While
                             Else
                                 Dim bss(filesize - 1) As Byte
-                                fss.Read(bss, 0, bss.Length)
+                                fs.Read(bss, 0, bss.Length)
                                 save.Write(bss, 0, bss.Length)
                             End If
                         Else
