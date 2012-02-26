@@ -78,10 +78,10 @@ Public Class Form1
                         col_len(i) = bs(i + 20)
                     End If
                 Next
-                If bs.Length - 24 > 0 Then
+                If bs.Length - 28 > 0 Then
                     Dim dr(bs.Length - 24 - 1) As Byte
                     Array.Copy(bs, 24, dr, 0, dr.Length)
-                    sdir.Text = Encoding.GetEncoding(65001).GetString(dr)
+                    sdir.Text = Encoding.GetEncoding(65001).GetString(dr).Replace(vbNullChar, "")
                 End If
             End If
             fs.Close()
@@ -1792,7 +1792,7 @@ Public Class Form1
                 bs = unpack_cso(CInt(tt.Parent.Tag.ToString))
             End If
 
-            While i < 2048
+            While True
                 next_len = bs(i)
                 'フォルダかつLBAがおなじ
                 If ((bs(i + 25) >> 1) And 1) = 1 Then
@@ -1859,17 +1859,17 @@ Public Class Form1
                         If File.Exists(basepath & name) Then
                             File.Delete(basepath & name)
                         End If
-
                         Dim save As New FileStream(basepath & name, FileMode.CreateNew, FileAccess.Write)
+
                         If cso = False Then
-                            fs.Seek(lba << 11, SeekOrigin.Begin)
+                            fss.Seek(lba << 11, SeekOrigin.Begin)
 
                             If filesize > buffer AndAlso buffer <> 0 Then
                                 Dim bss(buffer - 1) As Byte
                                 Dim ct As Integer
 
                                 While True
-                                    Dim readSize As Integer = fs.Read(bss, 0, bss.Length)
+                                    Dim readSize As Integer = fss.Read(bss, 0, bss.Length)
                                     If readSize = 0 Then
                                         Exit While
                                     End If
@@ -1885,7 +1885,7 @@ Public Class Form1
                                 End While
                             Else
                                 Dim bss(filesize - 1) As Byte
-                                fs.Read(bss, 0, bss.Length)
+                                fss.Read(bss, 0, bss.Length)
                                 save.Write(bss, 0, bss.Length)
                             End If
                         Else
