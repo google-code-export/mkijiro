@@ -103,7 +103,7 @@ Partial Class Form1
         '
         Me.ContextMenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TREECOLLASEToolStripMenuItem, Me.TREEEXPANDToolStripMenuItem, Me.ToolStripSeparator1, Me.EXTRACTDATAToolStripMenuItem, Me.EXTRACTLBAToolStripMenuItem})
         Me.ContextMenuStrip2.Name = "ContextMenuStrip2"
-        Me.ContextMenuStrip2.Size = New System.Drawing.Size(194, 114)
+        Me.ContextMenuStrip2.Size = New System.Drawing.Size(194, 136)
         '
         'TREECOLLASEToolStripMenuItem
         '
@@ -541,6 +541,7 @@ Partial Class Form1
         Me.Label6.Size = New System.Drawing.Size(46, 14)
         Me.Label6.TabIndex = 29
         Me.Label6.Text = "Label6"
+        Me.Label6.UseWaitCursor = True
         Me.Label6.Visible = False
         '
         'Form1

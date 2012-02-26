@@ -840,6 +840,12 @@ Public Class Form1
         TreeView1.EndUpdate()
     End Sub
 
+    Private Sub TREECOLLASEToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles TREECOLLASEToolStripMenuItem.Click
+        TreeView1.BeginUpdate()
+        TreeView1.CollapseAll()
+        TreeView1.EndUpdate()
+    End Sub
+
     Private Sub GETDATAToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles SAVEDATA.Click, SAVEDATAOFFSET.Click
 
         Dim start As DateTime = Now
