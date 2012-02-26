@@ -1,4 +1,6 @@
-﻿Imports System
+﻿Imports System.Resources
+
+Imports System
 Imports System.Reflection
 Imports System.Runtime.InteropServices
 
@@ -8,14 +10,14 @@ Imports System.Runtime.InteropServices
 
 ' アセンブリ属性の値を確認します。
 
-<Assembly: AssemblyTitle("WindowsApplication1")> 
-<Assembly: AssemblyDescription("")> 
+<Assembly: AssemblyTitle("ISO9660PATHTABLE")> 
+<Assembly: AssemblyDescription("PSPIMAGEのツリー展開")> 
 <Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("WindowsApplication1")> 
-<Assembly: AssemblyCopyright("Copyright ©  2012")> 
+<Assembly: AssemblyProduct("ISO9660PATHTABLE")> 
+<Assembly: AssemblyCopyright("(ﾟ∀ﾟ)")> 
 <Assembly: AssemblyTrademark("")> 
 
-<Assembly: ComVisible(False)>
+<Assembly: ComVisible(False)> 
 
 'このプロジェクトが COM に公開される場合、次の GUID がタイプ ライブラリの ID になります。
 <Assembly: Guid("55ef8b3d-5362-427d-88ad-1c83f089cf1b")> 
@@ -33,3 +35,5 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyVersion("1.0.0.0")> 
 <Assembly: AssemblyFileVersion("1.0.0.0")> 
+
+<Assembly: NeutralResourcesLanguageAttribute("ja")> 

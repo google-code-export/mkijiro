@@ -19,6 +19,12 @@ lba
 	<summary>
   ローカライズされた文字列などを検索するための、厳密に型指定されたリソース クラスです。
 </summary>
+</member><member name="M:iso9660_treeviewer.Form1.FindAssociatedExecutableFile(System.String)">
+	<summary>
+ ファイルに関連付けられた実行ファイルのパスを取得する
+ </summary>
+	<param name="fileName">関連付けを調べるファイル</param>
+	<returns>実行ファイルのパス + コマンドライン引数</returns>
 </member>
 </members>
 </doc>
