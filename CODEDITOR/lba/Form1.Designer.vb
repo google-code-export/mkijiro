@@ -422,7 +422,7 @@ Partial Class Form1
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ファイルToolStripMenuItem, Me.設定ToolStripMenuItem, Me.バージョンToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(919, 29)
+        Me.MenuStrip1.Size = New System.Drawing.Size(914, 29)
         Me.MenuStrip1.TabIndex = 21
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -523,6 +523,7 @@ Partial Class Form1
         Me.Panel3.Size = New System.Drawing.Size(123, 115)
         Me.Panel3.TabIndex = 28
         Me.Panel3.UseWaitCursor = True
+        Me.Panel3.Visible = False
         '
         'vlistmax
         '
@@ -549,7 +550,7 @@ Partial Class Form1
         Me.AllowDrop = True
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(919, 578)
+        Me.ClientSize = New System.Drawing.Size(914, 578)
         Me.Controls.Add(Me.tree)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Controls.Add(Me.Panel3)
@@ -572,8 +573,8 @@ Partial Class Form1
         Me.Controls.Add(Me.ListView1)
         Me.Controls.Add(Me.uid_seek)
         Me.MainMenuStrip = Me.MenuStrip1
-        Me.MaximumSize = New System.Drawing.Size(937, 621)
-        Me.MinimumSize = New System.Drawing.Size(937, 621)
+        Me.MaximumSize = New System.Drawing.Size(1500, 621)
+        Me.MinimumSize = New System.Drawing.Size(932, 621)
         Me.Name = "Form1"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "DROP_IMAGE"
