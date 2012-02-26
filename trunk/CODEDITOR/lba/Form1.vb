@@ -866,7 +866,7 @@ Public Class Form1
         Dim itemx As New ListViewItem
         Dim errorm As New StringBuilder
 
-        startpath = Application.StartupPath & "\"
+        startpath = Application.StartupPath
         Select Case SAVEMODE.Text
             Case "S"
                 startpath = sdir.Text
@@ -892,6 +892,8 @@ Public Class Form1
         If sender Is SAVEDATA Then
             m = 0
         End If
+
+        startpath = startpath_fix(startpath)
 
         For k = 0 To z
             itemx = ListView1.Items(ListView1.SelectedIndices(k))
@@ -1029,7 +1031,7 @@ Public Class Form1
                 title_st = title_st.Replace(dosmoji(i), "")
             Next
 
-            startpath = Application.StartupPath & "\"
+            startpath = Application.StartupPath
             Select Case SAVEMODE.Text
                 Case "S"
                     startpath = sdir.Text
@@ -1048,6 +1050,8 @@ Public Class Form1
             If sender Is OFFSETPATHToolStripMenuItem Then
                 switch = 1
             End If
+
+            startpath = startpath_fix(startpath)
 
             Dim sw As New System.IO.StreamWriter(startpath & title_st & ".txt", False, System.Text.Encoding.GetEncoding(65001))
             Dim sb As New StringBuilder
@@ -1094,7 +1098,7 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub 絶対パスで展開ToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles 絶対パスで展開ToolStripMenuItem.Click, 相対パスで展開ToolStripMenuItem.Click
+    Private Sub EXTRACTDATA_TREE(sender As System.Object, e As System.EventArgs) Handles 絶対パスで展開ToolStripMenuItem.Click, 相対パスで展開ToolStripMenuItem.Click
         If TreeView1.Nodes.Count > 0 Then
             Dim start As DateTime = Now
             Dim Ar As New ArrayList
@@ -1104,7 +1108,7 @@ Public Class Form1
                 m = 1
             End If
 
-            startpath = Application.StartupPath & "\"
+            startpath = Application.StartupPath
             Select Case SAVEMODE.Text
                 Case "S"
                     startpath = sdir.Text
@@ -1119,10 +1123,13 @@ Public Class Form1
                     End If
             End Select
 
+
             If m = 1 Then
-                startpath &= TreeView1.SelectedNode.Text & "\"
+                startpath = startpath_fix(startpath)
+                startpath &= TreeView1.SelectedNode.Text
             End If
 
+            startpath = startpath_fix(startpath)
 
             buffer = CInt(fsbuf.Text) * 1024 * 1024
 
@@ -1401,6 +1408,13 @@ Public Class Form1
             MessageBox.Show(ex.Message)
             Return True
         End Try
+    End Function
+
+    Function startpath_fix(ByVal p As String) As String
+        If p(p.Length - 1) <> "\" Then
+            p &= "\"
+        End If
+        Return p
     End Function
 
     Private Sub ListView1_RetrieveVirtualItem(ByVal sender As Object, ByVal e As System.Windows.Forms.RetrieveVirtualItemEventArgs) Handles ListView1.RetrieveVirtualItem
