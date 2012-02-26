@@ -422,7 +422,7 @@ Partial Class Form1
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ファイルToolStripMenuItem, Me.設定ToolStripMenuItem, Me.バージョンToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(914, 29)
+        Me.MenuStrip1.Size = New System.Drawing.Size(918, 29)
         Me.MenuStrip1.TabIndex = 21
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -550,7 +550,7 @@ Partial Class Form1
         Me.AllowDrop = True
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(914, 578)
+        Me.ClientSize = New System.Drawing.Size(918, 578)
         Me.Controls.Add(Me.tree)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Controls.Add(Me.Panel3)
