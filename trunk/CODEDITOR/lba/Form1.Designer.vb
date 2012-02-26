@@ -30,6 +30,8 @@ Partial Class Form1
         Me.TREEEXPANDToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.EXTRACTDATAToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.絶対パスで展開ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.相対パスで展開ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.EXTRACTLBAToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ABSOLUTPATHToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OFFSETPATHToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -40,7 +42,10 @@ Partial Class Form1
         Me.Button2 = New System.Windows.Forms.Button()
         Me.ListView1 = New System.Windows.Forms.ListView()
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.GETDATAToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RUNAPPToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
+        Me.SAVEDATA = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SAVEDATAOFFSET = New System.Windows.Forms.ToolStripMenuItem()
         Me.dir = New System.Windows.Forms.Label()
         Me.ListView2 = New System.Windows.Forms.ListView()
         Me.Panel1 = New System.Windows.Forms.Panel()
@@ -65,11 +70,20 @@ Partial Class Form1
         Me.設定ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.バージョンToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.tree = New System.Windows.Forms.CheckBox()
+        Me.fsbuf = New System.Windows.Forms.TextBox()
+        Me.SAVEMODE = New System.Windows.Forms.Label()
+        Me.sdir = New System.Windows.Forms.TextBox()
+        Me.nodemax = New System.Windows.Forms.TextBox()
+        Me.addlistmax = New System.Windows.Forms.TextBox()
+        Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.vlistmax = New System.Windows.Forms.TextBox()
+        Me.Label6 = New System.Windows.Forms.Label()
         Me.ContextMenuStrip2.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
+        Me.Panel3.SuspendLayout()
         Me.SuspendLayout()
         '
         'TreeView1
@@ -89,7 +103,7 @@ Partial Class Form1
         '
         Me.ContextMenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TREECOLLASEToolStripMenuItem, Me.TREEEXPANDToolStripMenuItem, Me.ToolStripSeparator1, Me.EXTRACTDATAToolStripMenuItem, Me.EXTRACTLBAToolStripMenuItem})
         Me.ContextMenuStrip2.Name = "ContextMenuStrip2"
-        Me.ContextMenuStrip2.Size = New System.Drawing.Size(194, 136)
+        Me.ContextMenuStrip2.Size = New System.Drawing.Size(194, 114)
         '
         'TREECOLLASEToolStripMenuItem
         '
@@ -110,9 +124,22 @@ Partial Class Form1
         '
         'EXTRACTDATAToolStripMenuItem
         '
+        Me.EXTRACTDATAToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.絶対パスで展開ToolStripMenuItem, Me.相対パスで展開ToolStripMenuItem})
         Me.EXTRACTDATAToolStripMenuItem.Name = "EXTRACTDATAToolStripMenuItem"
         Me.EXTRACTDATAToolStripMenuItem.Size = New System.Drawing.Size(193, 26)
         Me.EXTRACTDATAToolStripMenuItem.Text = "EXTRACT DATA"
+        '
+        '絶対パスで展開ToolStripMenuItem
+        '
+        Me.絶対パスで展開ToolStripMenuItem.Name = "絶対パスで展開ToolStripMenuItem"
+        Me.絶対パスで展開ToolStripMenuItem.Size = New System.Drawing.Size(178, 26)
+        Me.絶対パスで展開ToolStripMenuItem.Text = "絶対パスで展開"
+        '
+        '相対パスで展開ToolStripMenuItem
+        '
+        Me.相対パスで展開ToolStripMenuItem.Name = "相対パスで展開ToolStripMenuItem"
+        Me.相対パスで展開ToolStripMenuItem.Size = New System.Drawing.Size(178, 26)
+        Me.相対パスで展開ToolStripMenuItem.Text = "相対パスで展開"
         '
         'EXTRACTLBAToolStripMenuItem
         '
@@ -124,14 +151,14 @@ Partial Class Form1
         'ABSOLUTPATHToolStripMenuItem
         '
         Me.ABSOLUTPATHToolStripMenuItem.Name = "ABSOLUTPATHToolStripMenuItem"
-        Me.ABSOLUTPATHToolStripMenuItem.Size = New System.Drawing.Size(194, 26)
-        Me.ABSOLUTPATHToolStripMenuItem.Text = "ABSOLUTE PATH"
+        Me.ABSOLUTPATHToolStripMenuItem.Size = New System.Drawing.Size(178, 26)
+        Me.ABSOLUTPATHToolStripMenuItem.Text = "絶対パスで出力"
         '
         'OFFSETPATHToolStripMenuItem
         '
         Me.OFFSETPATHToolStripMenuItem.Name = "OFFSETPATHToolStripMenuItem"
-        Me.OFFSETPATHToolStripMenuItem.Size = New System.Drawing.Size(194, 26)
-        Me.OFFSETPATHToolStripMenuItem.Text = "OFFSET PATH"
+        Me.OFFSETPATHToolStripMenuItem.Size = New System.Drawing.Size(178, 26)
+        Me.OFFSETPATHToolStripMenuItem.Text = "相対パスで出力"
         '
         'ImageList1
         '
@@ -179,12 +206,13 @@ Partial Class Form1
         '
         'ListView1
         '
+        Me.ListView1.AllowDrop = True
         Me.ListView1.ContextMenuStrip = Me.ContextMenuStrip1
         Me.ListView1.FullRowSelect = True
         Me.ListView1.HideSelection = False
         Me.ListView1.Location = New System.Drawing.Point(353, 76)
         Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(535, 356)
+        Me.ListView1.Size = New System.Drawing.Size(548, 356)
         Me.ListView1.SmallImageList = Me.ImageList1
         Me.ListView1.TabIndex = 5
         Me.ListView1.UseCompatibleStateImageBehavior = False
@@ -192,20 +220,37 @@ Partial Class Form1
         '
         'ContextMenuStrip1
         '
-        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GETDATAToolStripMenuItem})
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RUNAPPToolStripMenuItem, Me.ToolStripSeparator2, Me.SAVEDATA, Me.SAVEDATAOFFSET})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(158, 30)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(224, 88)
         '
-        'GETDATAToolStripMenuItem
+        'RUNAPPToolStripMenuItem
         '
-        Me.GETDATAToolStripMenuItem.Name = "GETDATAToolStripMenuItem"
-        Me.GETDATAToolStripMenuItem.Size = New System.Drawing.Size(157, 26)
-        Me.GETDATAToolStripMenuItem.Text = "SAVE DATA"
+        Me.RUNAPPToolStripMenuItem.Name = "RUNAPPToolStripMenuItem"
+        Me.RUNAPPToolStripMenuItem.Size = New System.Drawing.Size(223, 26)
+        Me.RUNAPPToolStripMenuItem.Text = "RUN APP"
+        '
+        'ToolStripSeparator2
+        '
+        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(220, 6)
+        '
+        'SAVEDATA
+        '
+        Me.SAVEDATA.Name = "SAVEDATA"
+        Me.SAVEDATA.Size = New System.Drawing.Size(223, 26)
+        Me.SAVEDATA.Text = "SAVE DATA"
+        '
+        'SAVEDATAOFFSET
+        '
+        Me.SAVEDATAOFFSET.Name = "SAVEDATAOFFSET"
+        Me.SAVEDATAOFFSET.Size = New System.Drawing.Size(223, 26)
+        Me.SAVEDATAOFFSET.Text = "SAVE DATA(OFFSET)"
         '
         'dir
         '
         Me.dir.AutoSize = True
-        Me.dir.Location = New System.Drawing.Point(365, 39)
+        Me.dir.Location = New System.Drawing.Point(350, 44)
         Me.dir.Name = "dir"
         Me.dir.Size = New System.Drawing.Size(22, 14)
         Me.dir.TabIndex = 6
@@ -213,9 +258,9 @@ Partial Class Form1
         '
         'ListView2
         '
-        Me.ListView2.Location = New System.Drawing.Point(393, 34)
+        Me.ListView2.Location = New System.Drawing.Point(378, 34)
         Me.ListView2.Name = "ListView2"
-        Me.ListView2.Size = New System.Drawing.Size(495, 36)
+        Me.ListView2.Size = New System.Drawing.Size(523, 36)
         Me.ListView2.TabIndex = 7
         Me.ListView2.UseCompatibleStateImageBehavior = False
         Me.ListView2.View = System.Windows.Forms.View.SmallIcon
@@ -377,7 +422,7 @@ Partial Class Form1
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ファイルToolStripMenuItem, Me.設定ToolStripMenuItem, Me.バージョンToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(901, 29)
+        Me.MenuStrip1.Size = New System.Drawing.Size(919, 29)
         Me.MenuStrip1.TabIndex = 21
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -416,14 +461,97 @@ Partial Class Form1
         Me.tree.Text = "TREEOPEN"
         Me.tree.UseVisualStyleBackColor = True
         '
+        'fsbuf
+        '
+        Me.fsbuf.Location = New System.Drawing.Point(65, 29)
+        Me.fsbuf.MaxLength = 2
+        Me.fsbuf.Name = "fsbuf"
+        Me.fsbuf.Size = New System.Drawing.Size(17, 21)
+        Me.fsbuf.TabIndex = 23
+        Me.fsbuf.Text = "0"
+        Me.fsbuf.UseWaitCursor = True
+        Me.fsbuf.Visible = False
+        '
+        'SAVEMODE
+        '
+        Me.SAVEMODE.AutoSize = True
+        Me.SAVEMODE.Location = New System.Drawing.Point(3, 9)
+        Me.SAVEMODE.Name = "SAVEMODE"
+        Me.SAVEMODE.Size = New System.Drawing.Size(16, 14)
+        Me.SAVEMODE.TabIndex = 24
+        Me.SAVEMODE.Text = "A"
+        Me.SAVEMODE.UseWaitCursor = True
+        '
+        'sdir
+        '
+        Me.sdir.Location = New System.Drawing.Point(4, 29)
+        Me.sdir.Name = "sdir"
+        Me.sdir.Size = New System.Drawing.Size(49, 21)
+        Me.sdir.TabIndex = 25
+        Me.sdir.Text = "SDIR"
+        Me.sdir.UseWaitCursor = True
+        '
+        'nodemax
+        '
+        Me.nodemax.Location = New System.Drawing.Point(4, 56)
+        Me.nodemax.Name = "nodemax"
+        Me.nodemax.Size = New System.Drawing.Size(49, 21)
+        Me.nodemax.TabIndex = 26
+        Me.nodemax.Text = "50000"
+        Me.nodemax.UseWaitCursor = True
+        '
+        'addlistmax
+        '
+        Me.addlistmax.Location = New System.Drawing.Point(66, 56)
+        Me.addlistmax.Name = "addlistmax"
+        Me.addlistmax.Size = New System.Drawing.Size(45, 21)
+        Me.addlistmax.TabIndex = 27
+        Me.addlistmax.Text = "3000"
+        Me.addlistmax.UseWaitCursor = True
+        '
+        'Panel3
+        '
+        Me.Panel3.Controls.Add(Me.vlistmax)
+        Me.Panel3.Controls.Add(Me.sdir)
+        Me.Panel3.Controls.Add(Me.fsbuf)
+        Me.Panel3.Controls.Add(Me.nodemax)
+        Me.Panel3.Controls.Add(Me.addlistmax)
+        Me.Panel3.Controls.Add(Me.Label6)
+        Me.Panel3.Controls.Add(Me.SAVEMODE)
+        Me.Panel3.Location = New System.Drawing.Point(919, 35)
+        Me.Panel3.Name = "Panel3"
+        Me.Panel3.Size = New System.Drawing.Size(123, 115)
+        Me.Panel3.TabIndex = 28
+        Me.Panel3.UseWaitCursor = True
+        '
+        'vlistmax
+        '
+        Me.vlistmax.Location = New System.Drawing.Point(4, 83)
+        Me.vlistmax.Name = "vlistmax"
+        Me.vlistmax.Size = New System.Drawing.Size(49, 21)
+        Me.vlistmax.TabIndex = 28
+        Me.vlistmax.Text = "50000"
+        Me.vlistmax.UseWaitCursor = True
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Location = New System.Drawing.Point(62, 9)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(46, 14)
+        Me.Label6.TabIndex = 29
+        Me.Label6.Text = "Label6"
+        Me.Label6.Visible = False
+        '
         'Form1
         '
         Me.AllowDrop = True
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(901, 578)
+        Me.ClientSize = New System.Drawing.Size(919, 578)
         Me.Controls.Add(Me.tree)
         Me.Controls.Add(Me.MenuStrip1)
+        Me.Controls.Add(Me.Panel3)
         Me.Controls.Add(Me.VIRTUAL)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.Label3)
@@ -432,17 +560,19 @@ Partial Class Form1
         Me.Controls.Add(Me.Panel2)
         Me.Controls.Add(Me.gridview)
         Me.Controls.Add(Me.uid_parent)
-        Me.Controls.Add(Me.ListView2)
         Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.TextBox1)
-        Me.Controls.Add(Me.dir)
+        Me.Controls.Add(Me.ListView2)
         Me.Controls.Add(Me.TreeView1)
+        Me.Controls.Add(Me.dir)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.ListView1)
         Me.Controls.Add(Me.uid_seek)
         Me.MainMenuStrip = Me.MenuStrip1
+        Me.MaximumSize = New System.Drawing.Size(937, 621)
+        Me.MinimumSize = New System.Drawing.Size(937, 621)
         Me.Name = "Form1"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "DROP_IMAGE"
@@ -454,6 +584,8 @@ Partial Class Form1
         Me.Panel2.PerformLayout()
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
+        Me.Panel3.ResumeLayout(False)
+        Me.Panel3.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -468,7 +600,7 @@ Partial Class Form1
     Friend WithEvents dir As System.Windows.Forms.Label
     Friend WithEvents ListView2 As System.Windows.Forms.ListView
     Friend WithEvents ContextMenuStrip1 As System.Windows.Forms.ContextMenuStrip
-    Friend WithEvents GETDATAToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents SAVEDATA As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ContextMenuStrip2 As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents TREECOLLASEToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents TREEEXPANDToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
@@ -499,5 +631,18 @@ Partial Class Form1
     Friend WithEvents 設定ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents バージョンToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents tree As System.Windows.Forms.CheckBox
+    Friend WithEvents fsbuf As System.Windows.Forms.TextBox
+    Friend WithEvents SAVEMODE As System.Windows.Forms.Label
+    Friend WithEvents 絶対パスで展開ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents 相対パスで展開ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents SAVEDATAOFFSET As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents sdir As System.Windows.Forms.TextBox
+    Friend WithEvents nodemax As System.Windows.Forms.TextBox
+    Friend WithEvents addlistmax As System.Windows.Forms.TextBox
+    Friend WithEvents Panel3 As System.Windows.Forms.Panel
+    Friend WithEvents vlistmax As System.Windows.Forms.TextBox
+    Friend WithEvents RUNAPPToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents Label6 As System.Windows.Forms.Label
 
 End Class

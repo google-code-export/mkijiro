@@ -8,16 +8,22 @@ Imports System.Runtime.InteropServices
 
 Public Class Form1
     Dim iso As String = "NULL"
+    Dim confver As Integer = 1 'version
     Dim cso As Boolean = False
     Dim lssort As Integer = 1
+    Dim force_offset As Boolean
     Dim virtual_item As ListViewItem()
     Dim arraylistdir() As ListViewItem
+    Dim startpath As String
     Dim ArG As New ArrayList
     Dim cFormat As New System.Globalization.CultureInfo("ja-JP", False)
+    Dim buffer As Integer
+    Dim col_len As Integer() = {180, 60, 80, 140, 80}
 
 #Region "FORM"
     Private Sub ffload(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
         Dim start As DateTime = Now
+
 
         Dim cmds() As String
         cmds = System.Environment.GetCommandLineArgs()
@@ -30,14 +36,15 @@ Public Class Form1
             i += 1
         Next
         'LBA
-        'Me.ListView1.ListViewItemSorter = New ListViewItemComparer(1)
         DoubleBuffered = True
 
         If File.Exists(Application.StartupPath & "\conf") Then
             Dim fs As New System.IO.FileStream(Application.StartupPath & "\conf", System.IO.FileMode.Open, System.IO.FileAccess.Read)
             Dim bs(CInt(fs.Length - 1)) As Byte
-            fs.Read(bs, 0, bs.Length)
-            If bs.Length >= 6 Then
+            Dim conf(3) As Byte
+            fs.Read(conf, 0, 4)
+            If confver = BitConverter.ToInt32(conf, 0) AndAlso fs.Length >= 28 Then
+                fs.Read(bs, 0, bs.Length - 4)
                 If bs(0) = 1 Then
                     uid_parent.Checked = True
                 End If
@@ -47,7 +54,6 @@ Public Class Form1
                 If bs(2) = 1 Then
                     localtime.Checked = True
                 End If
-                'Me.ListView1.ListViewItemSorter = New ListViewItemComparer(bs(3))
                 lssort = bs(3)
                 If bs(4) = 1 Then
                     VIRTUAL.Checked = True
@@ -55,10 +61,35 @@ Public Class Form1
                 If bs(5) = 1 Then
                     tree.Checked = True
                 End If
+                If bs(5) = 1 Then
+                    tree.Checked = True
+                End If
+                fsbuf.Text = bs(6).ToString
+                SAVEMODE.Text = Chr(bs(7))
+                Dim int(3) As Byte
+                Array.Copy(bs, 8, int, 0, 4)
+                nodemax.Text = BitConverter.ToInt32(int, 0).ToString
+                Array.Copy(bs, 12, int, 0, 4)
+                addlistmax.Text = BitConverter.ToInt32(int, 0).ToString
+                Array.Copy(bs, 16, int, 0, 4)
+                vlistmax.Text = BitConverter.ToInt32(int, 0).ToString
+                For i = 0 To 3
+                    If bs(i + 20) > 50 Then
+                        col_len(i) = bs(i + 20)
+                    End If
+                Next
+                If bs.Length - 24 > 0 Then
+                    Dim dr(bs.Length - 24 - 1) As Byte
+                    Array.Copy(bs, 24, dr, 0, dr.Length)
+                    sdir.Text = Encoding.GetEncoding(65001).GetString(dr)
+                End If
             End If
             fs.Close()
         End If
 
+        If Directory.Exists(sdir.Text) = False Then
+            sdir.Text = Application.StartupPath & "\"
+        End If
 
 
         Dim psf As New psf
@@ -85,7 +116,9 @@ Public Class Form1
         ArG.Clear()
 
         Dim fs As New FileStream(Application.StartupPath & "\conf", System.IO.FileMode.Create, FileAccess.Write)
-        Dim bs(5) As Byte
+        Dim bs(23) As Byte
+        Dim conf As Byte() = BitConverter.GetBytes(confver)
+        fs.Write(conf, 0, 4)
         If uid_parent.Checked = True Then
             bs(0) = 1
         End If
@@ -103,11 +136,32 @@ Public Class Form1
         If tree.Checked = True Then
             bs(5) = 1
         End If
-        fs.Write(bs, 0, 6)
+        bb = BitConverter.GetBytes(CInt(fsbuf.Text))
+        Array.Copy(bb, 0, bs, 6, 1)
+        Dim bb2 As Byte() = System.Text.Encoding.GetEncoding(0).GetBytes(SAVEMODE.Text)
+        Array.Copy(bb2, 0, bs, 7, 1)
+        bb = BitConverter.GetBytes(CInt(nodemax.Text))
+        Array.Copy(bb, 0, bs, 8, 4)
+        bb = BitConverter.GetBytes(CInt(addlistmax.Text))
+        Array.Copy(bb, 0, bs, 12, 4)
+        bb = BitConverter.GetBytes(CInt(vlistmax.Text))
+        Array.Copy(bb, 0, bs, 16, 4)
+        For i = 0 To 3
+            If col_len(i) > 255 Then
+                col_len(i) = 255
+            End If
+            bb = BitConverter.GetBytes(col_len(i))
+            Array.Copy(bb, 0, bs, i + 20, 1)
+        Next
+        fs.Write(bs, 0, 24)
+        If Directory.Exists(sdir.Text) Then
+            Dim dr() As Byte = Encoding.GetEncoding(65001).GetBytes(sdir.Text)
+            fs.Write(dr, 0, dr.Length)
+        End If
         fs.Close()
     End Sub
 
-    Private Sub ffDragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles Me.DragEnter
+    Private Sub ffDragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles Me.DragEnter, ListView1.DragEnter
         'コントロール内にドラッグされたとき実行される
         If e.Data.GetDataPresent(DataFormats.FileDrop) Then
             'ドラッグされたデータ形式を調べ、ファイルのときはコピーとする
@@ -120,7 +174,7 @@ Public Class Form1
 
     Private Sub ffDragDrop(ByVal sender As Object, _
             ByVal e As System.Windows.Forms.DragEventArgs) _
-            Handles Me.DragDrop
+            Handles Me.DragDrop, ListView1.DragDrop
         'コントロール内にドロップされたとき実行される
         'ドロップされたすべてのファイル名を取得する
         Dim start As DateTime = Now
@@ -152,10 +206,13 @@ Public Class Form1
         If File.Exists(iso) Then
             Dim fs As New FileStream(iso, FileMode.Open, FileAccess.Read)
             Dim str_len As Integer
-            Dim num(50000) As Integer
-            Dim parent(50000) As Integer
-            Dim level(50000) As Integer
+            Dim max As Integer = CInt(nodemax.Text)
+            Dim num(max) As Integer
+            Dim parent(max) As Integer
+            Dim level(max) As Integer
             Dim lba As Integer
+            Dim lba_bk As Integer = 99
+            Dim sort As Boolean = False
             Dim table_len As Integer
             Dim parent_node As New TreeNode
             Dim name As String
@@ -259,6 +316,11 @@ Public Class Form1
                 '検索リストに追加したノードを追加
                 Ar.Add(seek_parent_node.Nodes(seek_parent_node.Nodes.Count - 1))
 
+                If k = max Then
+                    MessageBox.Show("ノード数限界に達しました")
+                    Exit While
+                End If
+
                 k += 1
                 i += 8
                 i += str_len
@@ -279,6 +341,7 @@ Public Class Form1
             fs.Close()
 
             '検索リストをキャッシュしておく
+            'Ar.Sort()
             ArG = Ar
 
         ElseIf iso <> "NULL" Then
@@ -427,29 +490,35 @@ Public Class Form1
     Private Sub VIRTUAL_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles VIRTUAL.CheckedChanged
         If TreeView1.SelectedNode IsNot Nothing Then
             If VIRTUAL.Checked = False Then
-                If virtual_item.Length < 3000 Then
+                If virtual_item.Length < CInt(addlistmax.Text) Then
                     getlist(CInt(TreeView1.SelectedNode.Tag))
                 Else
-                    MessageBox.Show("3000項目以上あるのでVIRTUALMODE以外では表示できません")
+                    MessageBox.Show(CInt(addlistmax.Text) & "項目以上あるのでVIRTUALMODE以外では表示できません")
                 End If
             Else
                 getlist_virtual(CInt(TreeView1.SelectedNode.Tag))
             End If
-            End If
+        End If
     End Sub
+
+    Private Sub 設定ToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles 設定ToolStripMenuItem.Click
+        Dim f As New Form3
+        f.ShowDialog(Me)
+        f.Dispose()
+    End Sub
+
 #End Region
 
 #Region "TREE_LIST"
     Private Sub TreeView1_AfterSelect(sender As System.Object, e As System.Windows.Forms.TreeViewEventArgs) Handles TreeView1.AfterSelect
         If VIRTUAL.Checked = False Then
-
             getlist(CInt(TreeView1.SelectedNode.Tag))
         Else
             getlist_virtual(CInt(TreeView1.SelectedNode.Tag))
         End If
     End Sub
 
-    Private Sub ListView1_SelectedIndexChanged(sender As System.Object, ByVal e As System.EventArgs) Handles ListView1.DoubleClick
+    Private Sub ListView1_Doubleclick(sender As System.Object, ByVal e As System.EventArgs) Handles RUNAPPToolStripMenuItem.Click, ListView1.DoubleClick
 
         Dim itemx As New ListViewItem
         If VIRTUAL.Checked = False Then
@@ -464,42 +533,167 @@ Public Class Form1
             itemx = ListView1.Items(ListView1.SelectedIndices(0))
         End If
 
-        If itemx.Index = 0 AndAlso itemx.Text = ".." Then
-            TreeView1.SelectedNode = TreeView1.SelectedNode.Parent
-            If VIRTUAL.Checked = False Then
-                getlist(CInt(TreeView1.SelectedNode.Tag))
-            Else
-                getlist_virtual(CInt(TreeView1.SelectedNode.Tag))
-            End If
-        ElseIf itemx.ImageIndex = 0 Then
-            Dim seek_node As New TreeNode
-            Dim s As String = ListView1.Items(itemx.Index).SubItems(1).Text
-            For Each ss As TreeNode In TreeView1.SelectedNode.Nodes
-                If s = ss.Tag.ToString Then
-                    TreeView1.SelectedNode = ss
-                    Exit For
+        If sender Is ListView1 Then
+            If itemx.Index = 0 AndAlso itemx.Text = ".." Then
+                TreeView1.SelectedNode = TreeView1.SelectedNode.Parent
+                If VIRTUAL.Checked = False Then
+                    getlist(CInt(TreeView1.SelectedNode.Tag))
+                Else
+                    getlist_virtual(CInt(TreeView1.SelectedNode.Tag))
                 End If
-            Next
-            If VIRTUAL.Checked = False Then
-                getlist(CInt(TreeView1.SelectedNode.Tag))
-            Else
-                getlist_virtual(CInt(TreeView1.SelectedNode.Tag))
+            ElseIf itemx.ImageIndex = 0 Then
+                Dim seek_node As New TreeNode
+                Dim s As String = ListView1.Items(itemx.Index).SubItems(1).Text
+                For Each ss As TreeNode In TreeView1.SelectedNode.Nodes
+                    If s = ss.Tag.ToString Then
+                        TreeView1.SelectedNode = ss
+                        Exit For
+                    End If
+                Next
+                If VIRTUAL.Checked = False Then
+                    getlist(CInt(TreeView1.SelectedNode.Tag))
+                Else
+                    getlist_virtual(CInt(TreeView1.SelectedNode.Tag))
+                End If
+            ElseIf itemx.ImageIndex = 2 Then
+                runapp(itemx)
             End If
+        ElseIf itemx.ImageIndex = 2 Then
+            runapp(itemx)
         End If
     End Sub
 
+    Public Shared Function FindAssociatedExecutableFile( _
+    ByVal fileName As String, ByVal extra As String) As String
+        '拡張子を取得
+        Dim extName As String = System.IO.Path.GetExtension(fileName)
+        'ファイルタイプを取得
+        Dim regKey As Microsoft.Win32.RegistryKey = _
+            Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(extName)
+        If regKey Is Nothing Then
+            Return ""
+            'Throw New Exception("見つかりませんでした。")
+        End If
+        Dim fileType As String = CStr(regKey.GetValue(""))
+        regKey.Close()
+
+        '「アクションを実行するアプリケーション」を取得
+        Dim regKey2 As Microsoft.Win32.RegistryKey = _
+            Microsoft.Win32.Registry.ClassesRoot.OpenSubKey( _
+            String.Format("{0}\shell\{1}\command", fileType, extra))
+        If regKey2 Is Nothing Then
+            ' Throw New Exception("見つかりませんでした。")
+            Return ""
+        End If
+        Dim command As String = CStr(regKey2.GetValue(""))
+        regKey2.Close()
+
+        Return command
+    End Function
+
+    ''' <summary>
+    ''' ファイルに関連付けられた実行ファイルのパスを取得する
+    ''' </summary>
+    ''' <param name="fileName">関連付けを調べるファイル</param>
+    ''' <returns>実行ファイルのパス + コマンドライン引数</returns>
+    Public Shared Function FindAssociatedExecutableFile( _
+        ByVal fileName As String) As String
+        Return FindAssociatedExecutableFile(fileName, "open")
+    End Function
+
+    Function runapp(ByVal itemx As ListViewItem) As Boolean
+        Dim temp As String = Application.StartupPath & "\tmp\" & (itemx.Text)
+        Dim filess As String() = System.IO.Directory.GetFiles((Application.StartupPath & "\tmp"), "*", System.IO.SearchOption.AllDirectories)
+        For i = 0 To filess.Length - 1
+            File.Delete(filess(i))
+        Next
+        Dim exe As String = FindAssociatedExecutableFile(itemx.Text)
+        If exe = "" Then
+            MessageBox.Show("関連付けられたプログラムが見つかりませんでした。")
+            Return False
+        End If
+        If File.Exists(iso) Then
+            Dim fs As New FileStream(iso, FileMode.Open, FileAccess.Read)
+            Dim s As String = ListView1.Items(itemx.Index).SubItems(1).Text
+            Dim ss As String = ListView1.Items(itemx.Index).SubItems(2).Text
+            Dim lba As Integer = CInt(s)
+            Dim filesize As Integer = CInt(ss)
+            Dim iso_len As Long = fs.Length
+            If cso = True Then
+                Dim bbbb(3) As Byte
+                fs.Seek(8, SeekOrigin.Begin)
+                fs.Read(bbbb, 0, 4)
+                iso_len = cvt32bit(bbbb)
+            End If
+            If ((CLng(s) << 11) + CLng(ss)) > iso_len Then
+                fs.Close()
+            Else
+                If File.Exists(temp) Then
+                    File.Delete(temp)
+                End If
+                Dim save As New FileStream(temp, FileMode.CreateNew, FileAccess.Write)
+                If cso = False Then
+                    fs.Seek(lba << 11, SeekOrigin.Begin)
+
+                    If filesize > buffer AndAlso buffer <> 0 Then
+                        Dim bss(buffer - 1) As Byte
+                        Dim ct As Integer
+
+                        While True
+                            Dim readSize As Integer = fs.Read(bss, 0, bss.Length)
+                            If readSize = 0 Then
+                                Exit While
+                            End If
+
+                            ct += readSize
+                            If ct > filesize Then
+                                readSize = filesize - (ct - readSize)
+                                save.Write(bss, 0, readSize)
+                                Exit While
+                            End If
+
+                            save.Write(bss, 0, readSize)
+                        End While
+                    Else
+                        Dim bss(filesize - 1) As Byte
+                        fs.Read(bss, 0, bss.Length)
+                        save.Write(bss, 0, bss.Length)
+                    End If
+                Else
+                    Dim count As Integer = (filesize >> 11) + 1
+                    If (filesize And &H7FF) = 0 AndAlso filesize > 0 Then
+                        count -= 1
+                    End If
+                    Dim binn(2047) As Byte
+                    For j = 1 To count
+                        binn = unpack_cso(lba)
+                        If (lba + 1) << 11 < iso_len Then
+                            lba += 1
+                        End If
+                        If j = count Then
+                            save.Write(binn, 0, filesize - (j << 11) + 2048)
+                            Exit For
+                        End If
+                        save.Write(binn, 0, 2048)
+                    Next
+                End If
+                save.Close()
+                fs.Close()
+            End If
+        End If
+        Process.Start(temp)
+        Return (True)
+    End Function
+
     Private Sub ColumnClick(ByVal o As Object, ByVal e As ColumnClickEventArgs) Handles ListView1.ColumnClick
-        ' Set the ListViewItemSorter property to a new ListViewItemComparer 
-        ' object. Setting this property immediately sorts the 
-        ' ListView using the ListViewItemComparer object.
         Dim total As Integer = TreeView1.SelectedNode.Nodes.Count
         If TreeView1.SelectedNode.Parent IsNot Nothing Then
             total += 1
         End If
 
         If e.Column < 4 Then
-            'Me.ListView1.ListViewItemSorter = New ListViewItemComparer(e.Column)
             Dim templist(total - 1) As ListViewItem
+            ListView1.Columns(lssort).Text = ListView1.Columns(lssort).Text.Replace(" ▼", "")
             lssort = e.Column
             ListView1.BeginUpdate()
 
@@ -511,6 +705,8 @@ Public Class Form1
                 templist = list_item_sort(total, templist)
                 virtual_item = list_item_sort(virtual_item.Length, virtual_item)
                 virtual_item = templist.Union(virtual_item).ToArray()
+
+                ListView1.Columns(lssort).Text &= " ▼"
 
                 ListView1.VirtualListSize = virtual_item.Length
 
@@ -532,17 +728,18 @@ Public Class Form1
                 templist = list_item_sort(templist.Length, templist)
                 ls = list_item_sort(ls.Length, ls)
 
-                ListView1.Columns.Add("NAME", -1, HorizontalAlignment.Left)
-                ListView1.Columns.Add("LBA", -1, HorizontalAlignment.Left)
-                ListView1.Columns.Add("SIZE", -1, HorizontalAlignment.Left)
+                ListView1.Columns.Add("NAME", col_len(0), HorizontalAlignment.Right)
+                ListView1.Columns.Add("LBA", col_len(1), HorizontalAlignment.Right)
+                ListView1.Columns.Add("SIZE", col_len(2), HorizontalAlignment.Right)
                 If localtime.Checked Then
-                    ListView1.Columns.Add("DATE(LOCAL)", -1, HorizontalAlignment.Left)
+                    ListView1.Columns.Add("DATE(LOCAL)", col_len(3), HorizontalAlignment.Right)
                     finalcol = 150
                 Else
-                    ListView1.Columns.Add("DATE", -1, HorizontalAlignment.Left)
-                    ListView1.Columns.Add("UTCDIFF", -1, HorizontalAlignment.Left)
+                    ListView1.Columns.Add("DATE", col_len(3), HorizontalAlignment.Right)
+                    ListView1.Columns.Add("UTCDIFF", col_len(4), HorizontalAlignment.Right)
                     finalcol = 80
                 End If
+                ListView1.Columns(lssort).Text &= " ▼"
 
                 ls = templist.Union(ls).ToArray
                 ListView1.Items.AddRange(ls)
@@ -551,6 +748,14 @@ Public Class Form1
                 ListView1.Columns(zz).Width = finalcol
             End If
             ListView1.EndUpdate()
+        End If
+    End Sub
+
+    Private Sub Columnlen(ByVal o As Object, ByVal e As ColumnWidthChangedEventArgs) Handles ListView1.ColumnWidthChanged
+        If ListView1.Columns.Count > 0 Then
+            For i = 0 To ListView1.Columns.Count - 1
+                col_len(i) = ListView1.Columns(i).Width
+            Next
         End If
     End Sub
 
@@ -573,15 +778,61 @@ Public Class Form1
         End If
     End Sub
 
+    Private Sub ListView1_ItemDrag(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ItemDragEventArgs) Handles ListView1.ItemDrag
+
+        If TreeView1.Nodes.Count > 0 Then
+            Dim z As Integer
+            If VIRTUAL.Checked = False Then
+                If ListView1.SelectedItems.Count = 0 Then
+                    Exit Sub
+                End If
+                z = ListView1.SelectedItems.Count - 1
+            Else
+                If ListView1.SelectedIndices.Count = 0 Then
+                    Exit Sub
+                End If
+                z = ListView1.SelectedIndices.Count - 1
+            End If
+            If z >= 0 Then
+                Dim itemx As New ListViewItem
+                Dim files As String = ""
+                Dim FileName(z) As String
+                Dim kk As Integer = 0
+                For k = 0 To z
+                    itemx = ListView1.Items(ListView1.SelectedIndices(k))
+                    files = itemx.Text
+                    If files <> ".." AndAlso files.Trim <> "" Then
+                        FileName(kk) = Application.StartupPath & "\tmp\" & files
+                        kk += 1
+                    End If
+                Next
+                Array.Resize(FileName, kk)
+                Dim null As System.EventArgs = Nothing
+                Dim myDataObject As New DataObject(DataFormats.FileDrop, FileName)
+                'ListView1.DoDragDrop(myDataObject, DragDropEffects.Move)
+
+                GETDATAToolStripMenuItem_Click(TextBox1, null)
+                ListView1.DoDragDrop(myDataObject, DragDropEffects.Move)
+                Dim filess As String() = System.IO.Directory.GetFiles((Application.StartupPath & "\tmp"), "*", System.IO.SearchOption.AllDirectories)
+                For i = 0 To filess.Length - 1
+                    File.Delete(filess(i))
+                Next
+            End If
+        End If
+    End Sub
+
+    'ドラッグをキャンセルする
+    Private Sub ListBox1_QueryContinueDrag(ByVal sender As Object, ByVal e As QueryContinueDragEventArgs) Handles ListView1.QueryContinueDrag, Me.QueryContinueDrag
+        'マウスの右ボタンが押されていればドラッグをキャンセル
+        '"2"はマウスの右ボタンを表す
+        If (e.KeyState And 2) = 2 Then
+            e.Action = DragAction.Cancel
+        End If
+    End Sub
+
 #End Region
 
 #Region "CONTEXT"
-
-    Private Sub TREECOLLASEToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles TREECOLLASEToolStripMenuItem.Click
-        TreeView1.BeginUpdate()
-        TreeView1.CollapseAll()
-        TreeView1.EndUpdate()
-    End Sub
 
     Private Sub TREEEXPANDToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles TREEEXPANDToolStripMenuItem.Click
         TreeView1.BeginUpdate()
@@ -589,9 +840,11 @@ Public Class Form1
         TreeView1.EndUpdate()
     End Sub
 
-    Private Sub GETDATAToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles GETDATAToolStripMenuItem.Click
+    Private Sub GETDATAToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles SAVEDATA.Click, SAVEDATAOFFSET.Click
 
+        Dim start As DateTime = Now
         Dim z As Integer
+        buffer = CInt(fsbuf.Text) * 1024 * 1024
         If VIRTUAL.Checked = False Then
             If ListView1.SelectedItems.Count = 0 Then
                 Exit Sub
@@ -607,6 +860,33 @@ Public Class Form1
         Dim itemx As New ListViewItem
         Dim errorm As New StringBuilder
 
+        startpath = Application.StartupPath & "\"
+        Select Case SAVEMODE.Text
+            Case "S"
+                startpath = sdir.Text
+            Case "F"
+                Dim fbd As New FolderBrowserDialog
+                fbd.Description = "保存先を選んで下さい"
+                fbd.ShowNewFolderButton = True
+                If fbd.ShowDialog = Windows.Forms.DialogResult.OK Then
+                    startpath = fbd.SelectedPath
+                Else
+                    Exit Sub
+                End If
+        End Select
+
+        Dim m As Integer = 0
+        If sender Is TextBox1 Then
+            startpath = Application.StartupPath & "\tmp\"
+            m = 1
+        End If
+        If sender Is SAVEDATAOFFSET Then
+            m = 1
+        End If
+        If sender Is SAVEDATA Then
+            m = 0
+        End If
+
         For k = 0 To z
             itemx = ListView1.Items(ListView1.SelectedIndices(k))
 
@@ -615,6 +895,8 @@ Public Class Form1
                     Dim fs As New FileStream(iso, FileMode.Open, FileAccess.Read)
                     Dim s As String = ListView1.Items(itemx.Index).SubItems(1).Text
                     Dim ss As String = ListView1.Items(itemx.Index).SubItems(2).Text
+                    Dim lba As Integer = CInt(s)
+                    Dim filesize As Integer = CInt(ss)
                     Dim iso_len As Long = fs.Length
                     If cso = True Then
                         Dim bbbb(3) As Byte
@@ -631,33 +913,64 @@ Public Class Form1
                         errorm.Append(ss)
                         errorm.AppendLine()
                     Else
-                        Dim p As String = Application.StartupPath & "\" & TreeView1.SelectedNode.FullPath & "\" & itemx.Text
+                        Dim p As String = startpath
+                        Dim dirpath As String = TreeView1.SelectedNode.FullPath & "\"
+                        If m = 1 Then
+                            dirpath = ""
+                        End If
+                        p &= dirpath
+                        p &= itemx.Text
                         Directory.CreateDirectory(Path.GetDirectoryName(p))
                         If File.Exists(p) Then
                             File.Delete(p)
                         End If
                         Dim save As New FileStream(p, FileMode.CreateNew, FileAccess.Write)
-                        Dim bs(CInt(ss) - 1) As Byte
                         If cso = False Then
-                            fs.Seek(CInt(s) << 11, SeekOrigin.Begin)
-                            fs.Read(bs, 0, bs.Length)
+                            fs.Seek(lba << 11, SeekOrigin.Begin)
+
+                            If filesize > buffer AndAlso buffer <> 0 Then
+                                Dim bss(buffer - 1) As Byte
+                                Dim ct As Integer
+
+                                While True
+                                    Dim readSize As Integer = fs.Read(bss, 0, bss.Length)
+                                    If readSize = 0 Then
+                                        Exit While
+                                    End If
+
+                                    ct += readSize
+                                    If ct > filesize Then
+                                        readSize = filesize - (ct - readSize)
+                                        save.Write(bss, 0, readSize)
+                                        Exit While
+                                    End If
+
+                                    save.Write(bss, 0, readSize)
+                                End While
+                            Else
+                                Dim bss(filesize - 1) As Byte
+                                fs.Read(bss, 0, bss.Length)
+                                save.Write(bss, 0, bss.Length)
+                            End If
                         Else
-                            Dim filesize As Integer = CInt(ss)
                             Dim count As Integer = (filesize >> 11) + 1
-                            Dim lba As Integer = CInt(s)
+                            If (filesize And &H7FF) = 0 AndAlso filesize > 0 Then
+                                count -= 1
+                            End If
                             Dim binn(2047) As Byte
-                            Array.Resize(bs, count << 11)
-                            For j = 0 To count - 1
+                            For j = 1 To count
                                 binn = unpack_cso(lba)
                                 If (lba + 1) << 11 < iso_len Then
                                     lba += 1
                                 End If
-                                Array.Copy(binn, 0, bs, j << 11, 2048)
+                                If j = count Then
+                                    save.Write(binn, 0, filesize - (j << 11) + 2048)
+                                    Exit For
+                                End If
+                                save.Write(binn, 0, 2048)
                             Next
-                            Array.Resize(bs, filesize)
                         End If
                         fs.Close()
-                        save.Write(bs, 0, bs.Length)
                         save.Close()
                     End If
                 End If
@@ -676,9 +989,9 @@ Public Class Form1
                         Dim Ar As New ArrayList
                         Ar = GetAllNodes(seek_node.Nodes)
 
-                        errorm.Append(getfile(seek_node))
+                        errorm.Append(getfile(seek_node, m))
                         For Each tt As TreeNode In Ar
-                            errorm.Append(getfile(tt))
+                            errorm.Append(getfile(tt, m))
                         Next
 
                     End If
@@ -687,92 +1000,150 @@ Public Class Form1
         Next
 
         Beep()
-        If errorm.Length > 0 Then
+        If errorm.Length > 0 AndAlso sender IsNot Me Then
             errorm.Insert(0, vbCrLf)
             errorm.Insert(0, "!!破損ファイルがありました")
             MessageBox.Show(errorm.ToString)
         End If
 
-    End Sub
-
-    Private Sub EXTRACTDATAToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles EXTRACTDATAToolStripMenuItem.Click
-        Dim Ar As New ArrayList
-        Dim errorm As New StringBuilder
-        Ar = GetAllNodes(TreeView1.SelectedNode.Nodes)
-        If TreeView1.SelectedNode.Level > 0 Then
-            errorm.Append(getfile(TreeView1.SelectedNode))
-        End If
-
-        For Each tt As TreeNode In Ar
-            errorm.Append(getfile(tt))
-        Next
-
-        Beep()
-        If errorm.Length > 0 Then
-            errorm.Insert(0, vbCrLf)
-            errorm.Insert(0, "!!破損ファイルがありました")
-            MessageBox.Show(errorm.ToString)
-        End If
-
+        Label5.Text = (Now - start).TotalSeconds.ToString
     End Sub
 
     Private Sub EXTRACTLBAToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles ABSOLUTPATHToolStripMenuItem.Click, OFFSETPATHToolStripMenuItem.Click
-        Dim Ar As New ArrayList
-        Ar = GetAllNodes(TreeView1.SelectedNode.Nodes)
-        Dim title_st As String = title.Text
-        Dim stbyte As Byte() = System.Text.Encoding.GetEncoding(932).GetBytes(title_st)
-        title_st = System.Text.Encoding.GetEncoding(932).GetString(stbyte)
+        If TreeView1.Nodes.Count > 0 Then
+            Dim start As DateTime = Now
+            Dim Ar As New ArrayList
+            Ar = GetAllNodes(TreeView1.SelectedNode.Nodes)
+            Dim title_st As String = title.Text
+            Dim stbyte As Byte() = System.Text.Encoding.GetEncoding(932).GetBytes(title_st)
+            title_st = System.Text.Encoding.GetEncoding(932).GetString(stbyte)
 
-        Dim dosmoji As String() = {"\", "/", ":", "*", "?", """", "<", ">", "|", vbCr, vbLf}
-        For i = 0 To 10
-            title_st = title_st.Replace(dosmoji(i), "")
-        Next
+            Dim dosmoji As String() = {"\", "/", ":", "*", "?", """", "<", ">", "|", vbCr, vbLf}
+            For i = 0 To 10
+                title_st = title_st.Replace(dosmoji(i), "")
+            Next
 
-        Dim sw As New System.IO.StreamWriter(Application.StartupPath & "\" & title_st & ".txt", False, System.Text.Encoding.GetEncoding(65001))
-        Dim sb As New StringBuilder
-        Dim error_m As New StringBuilder
-        If TreeView1.SelectedNode.Level > 0 Then
-            sb.Append(getlba(TreeView1.SelectedNode, sender))
+            startpath = Application.StartupPath & "\"
+            Select Case SAVEMODE.Text
+                Case "S"
+                    startpath = sdir.Text
+                Case "F"
+                    Dim fbd As New FolderBrowserDialog
+                    fbd.Description = "保存先を選んで下さい"
+                    fbd.ShowNewFolderButton = True
+                    If fbd.ShowDialog = Windows.Forms.DialogResult.OK Then
+                        startpath = fbd.SelectedPath
+                    Else
+                        Exit Sub
+                    End If
+            End Select
+
+            Dim switch As Integer = 0
+            If sender Is OFFSETPATHToolStripMenuItem Then
+                switch = 1
+            End If
+
+            Dim sw As New System.IO.StreamWriter(startpath & title_st & ".txt", False, System.Text.Encoding.GetEncoding(65001))
+            Dim sb As New StringBuilder
+            Dim error_m As New StringBuilder
+            If TreeView1.SelectedNode.Level > 0 Then
+                sb.Append(getlba(TreeView1.SelectedNode, switch))
+            End If
+
+            For Each tt As TreeNode In Ar
+                sb.Append(getlba(tt, switch))
+            Next
+
+            Dim ss As String() = sb.ToString().Split(CChar(vbLf))
+            Array.Sort(ss)
+            sb.Clear()
+            For j = 0 To ss.Length - 1
+                sb.Append(ss(j))
+                sb.Append(vbLf)
+            Next
+            If sb(0) = vbLf Then
+                sb.Remove(0, 1)
+            End If
+            sw.Write(sb.ToString)
+
+            sw.Close()
+
+            Beep()
+
+            Dim er As New Regex("(^|\n)!!\d+\t.*?\t", RegexOptions.ECMAScript)
+            Dim mm As Match = er.Match(sb.ToString)
+            While mm.Success
+                error_m.Append(mm.Value)
+                mm = mm.NextMatch
+            End While
+            If error_m.Length > 0 Then
+                error_m.Insert(0, vbCrLf)
+                error_m.Insert(0, "破損ファイルがありました")
+                MessageBox.Show(error_m.ToString)
+            End If
+
+
+
+            Label5.Text = (Now - start).TotalSeconds.ToString
         End If
-
-        For Each tt As TreeNode In Ar
-            sb.Append(getlba(tt, sender))
-        Next
-
-        Dim ss As String() = sb.ToString().Split(CChar(vbLf))
-        Array.Sort(ss)
-        sb.Clear()
-        For j = 0 To ss.Length - 1
-            sb.Append(ss(j))
-            sb.Append(vbLf)
-        Next
-        If sb(0) = vbLf Then
-            sb.Remove(0, 1)
-        End If
-        sw.Write(sb.ToString)
-
-        sw.Close()
-
-        Beep()
-
-        Dim er As New Regex("(^|\n)!!\d+\t.*?\t", RegexOptions.ECMAScript)
-        Dim mm As Match = er.Match(sb.ToString)
-        While mm.Success
-            error_m.Append(mm.Value)
-            mm = mm.NextMatch
-        End While
-        If error_m.Length > 0 Then
-            error_m.Insert(0, vbCrLf)
-            error_m.Insert(0, "破損ファイルがありました")
-            MessageBox.Show(error_m.ToString)
-        End If
-
-
-
     End Sub
+
+    Private Sub 絶対パスで展開ToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles 絶対パスで展開ToolStripMenuItem.Click, 相対パスで展開ToolStripMenuItem.Click
+        If TreeView1.Nodes.Count > 0 Then
+            Dim start As DateTime = Now
+            Dim Ar As New ArrayList
+            Dim errorm As New StringBuilder
+            Dim m As Integer = 0
+            If sender Is 相対パスで展開ToolStripMenuItem Then
+                m = 1
+            End If
+
+            startpath = Application.StartupPath & "\"
+            Select Case SAVEMODE.Text
+                Case "S"
+                    startpath = sdir.Text
+                Case "F"
+                    Dim fbd As New FolderBrowserDialog
+                    fbd.Description = "保存先を選んで下さい"
+                    fbd.ShowNewFolderButton = True
+                    If fbd.ShowDialog = Windows.Forms.DialogResult.OK Then
+                        startpath = fbd.SelectedPath
+                    Else
+                        Exit Sub
+                    End If
+            End Select
+
+            If m = 1 Then
+                startpath &= TreeView1.SelectedNode.Text & "\"
+            End If
+
+
+            buffer = CInt(fsbuf.Text) * 1024 * 1024
+
+            Ar = GetAllNodes(TreeView1.SelectedNode.Nodes)
+            If TreeView1.SelectedNode.Level > 0 Then
+                errorm.Append(getfile(TreeView1.SelectedNode, m))
+            End If
+
+            For Each tt As TreeNode In Ar
+                errorm.Append(getfile(tt, m))
+            Next
+
+            Beep()
+            If errorm.Length > 0 Then
+                errorm.Insert(0, vbCrLf)
+                errorm.Insert(0, "!!破損ファイルがありました")
+                MessageBox.Show(errorm.ToString)
+            End If
+
+            Label5.Text = (Now - start).TotalSeconds.ToString
+        End If
+    End Sub
+
 #End Region
 
 #Region "GETFUNC"
+
 
     Function cvt16bit(ByVal b As Byte()) As Integer
         Return BitConverter.ToInt16(b, 0)
@@ -833,20 +1204,21 @@ Public Class Form1
                 Return True
             End If
 
-            Array.Resize(virtual_item, 500000)
+            Array.Resize(virtual_item, CInt(vlistmax.Text))
             Array.Resize(arraylistdir, TreeView1.SelectedNode.Nodes.Count + 1)
 
             ListView1.BeginUpdate()
 
-            ListView1.Columns.Insert(0, "NAME", 150, HorizontalAlignment.Left)
-            ListView1.Columns.Insert(1, "LBA", 60, HorizontalAlignment.Left)
-            ListView1.Columns.Add("SIZE", 80, HorizontalAlignment.Left)
+            ListView1.Columns.Insert(0, "NAME", col_len(0), HorizontalAlignment.Right)
+            ListView1.Columns.Insert(1, "LBA", col_len(1), HorizontalAlignment.Right)
+            ListView1.Columns.Add("SIZE", col_len(2), HorizontalAlignment.Right)
             If localtime.Checked Then
-                ListView1.Columns.Add("DATE(LOCAL)", 150, HorizontalAlignment.Left)
+                ListView1.Columns.Add("DATE(LOCAL)", col_len(3), HorizontalAlignment.Right)
             Else
-                ListView1.Columns.Add("DATE", 150, HorizontalAlignment.Left)
-                ListView1.Columns.Add("UTCDIFF", 50, HorizontalAlignment.Left)
+                ListView1.Columns.Add("DATE", col_len(3), HorizontalAlignment.Right)
+                ListView1.Columns.Add("UTCDIFF", 80, HorizontalAlignment.Right)
             End If
+            ListView1.Columns(lssort).Text &= " ▼"
 
             Dim lba As Integer = 0
             Dim lba_base As Integer = dst << 11
@@ -1015,7 +1387,7 @@ Public Class Form1
 
             updatedir()
             fs.Close()
-            
+
             Label5.Text = (Now - start).TotalSeconds.ToString
             Return True
 
@@ -1070,7 +1442,8 @@ Public Class Form1
             If dst < 0 Then
                 Return True
             End If
-            Dim arraylist(3000) As ListViewItem
+            Dim max As Integer = CInt(addlistmax.Text)
+            Dim arraylist(max) As ListViewItem
             Dim arraylistdir(TreeView1.SelectedNode.Nodes.Count + 1) As ListViewItem
 
             If File.Exists(iso) Then
@@ -1082,19 +1455,20 @@ Public Class Form1
                 Dim zz As Integer
                 Dim finalcol As Integer
 
-                ListView1.Columns.Add("NAME", -1, HorizontalAlignment.Left)
-                ListView1.Columns.Add("LBA", -1, HorizontalAlignment.Left)
-                ListView1.Columns.Add("SIZE", -1, HorizontalAlignment.Left)
+                ListView1.Columns.Add("NAME", col_len(0), HorizontalAlignment.Right)
+                ListView1.Columns.Add("LBA", col_len(1), HorizontalAlignment.Right)
+                ListView1.Columns.Add("SIZE", col_len(2), HorizontalAlignment.Right)
                 If localtime.Checked Then
-                    ListView1.Columns.Add("DATE(LOCAL)", -1, HorizontalAlignment.Left)
+                    ListView1.Columns.Add("DATE(LOCAL)", col_len(3), HorizontalAlignment.Right)
                     zz = 3
                     finalcol = 150
                 Else
-                    ListView1.Columns.Add("DATE", -1, HorizontalAlignment.Left)
-                    ListView1.Columns.Add("UTCDIFF", -1, HorizontalAlignment.Left)
+                    ListView1.Columns.Add("DATE", col_len(3), HorizontalAlignment.Right)
+                    ListView1.Columns.Add("UTCDIFF", col_len(4), HorizontalAlignment.Right)
                     zz = 4
                     finalcol = 80
                 End If
+                ListView1.Columns(lssort).Text &= " ▼"
 
                 Dim lba As Integer = 0
                 Dim lba_base As Integer = dst << 11
@@ -1228,12 +1602,7 @@ Public Class Form1
                             End If
                             arraylist(ni) = itemx
                             ni += 1
-                            If ni = 3000 Then
-                                fs.Close()
-                                MessageBox.Show("3000項目以上あるので表示できません,VIRTUALMODEを使用して下さい")
-                                Return True
-                                Exit Function
-                            End If
+                            max -= 1
                         Else
                             itemx.ImageIndex = 0
                             If ((lba << 11) + filesize) > iso_len Then
@@ -1242,6 +1611,12 @@ Public Class Form1
 
                             arraylistdir(mi) = itemx
                             mi += 1
+                            max -= 1
+                        End If
+                        If 0 = max Then
+                            fs.Close()
+                            MessageBox.Show(addlistmax.Text & "項目以上あるので表示できません,VIRTUALMODEを使用して下さい")
+                            Exit While
                         End If
 
                     End If
@@ -1273,7 +1648,6 @@ Public Class Form1
 
                 ListView1.Items.AddRange(arraylist)
 
-                ListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize)
                 ListView1.Columns(zz).Width = finalcol
 
                 ListView1.EndUpdate()
@@ -1348,12 +1722,17 @@ Public Class Form1
         Return sb.ToString
     End Function
 
-    Function getfile(ByVal tt As TreeNode) As String
-        Dim basepath As String = Application.StartupPath & "\" & tt.FullPath & "\"
-        Directory.CreateDirectory(Application.StartupPath & "\" & tt.FullPath)
+    Function getfile(ByVal tt As TreeNode, ByVal sender As Integer) As String
+        Dim basepath As String = startpath
+        Dim dirpath As String = tt.FullPath & "\"
+        If sender = 1 Then
+            dirpath = dirpath.Replace(TreeView1.SelectedNode.FullPath & "\", "")
+        End If
+        basepath &= dirpath
+        Directory.CreateDirectory(startpath & dirpath)
         Dim dst As Integer = CInt(tt.Tag.ToString)
         Dim lba As Integer = 0
-        Dim lba_base As Integer = dst << 11
+        Dim lba_base As Long = dst << 11
         Dim dst_next As Integer = dst
 
         Dim fs As New FileStream(iso, FileMode.Open, FileAccess.Read)
@@ -1459,26 +1838,69 @@ Public Class Form1
                         If File.Exists(basepath & name) Then
                             File.Delete(basepath & name)
                         End If
-                        Dim bss(filesize - 1) As Byte
+
                         Dim save As New FileStream(basepath & name, FileMode.CreateNew, FileAccess.Write)
                         If cso = False Then
                             fss.Seek(lba << 11, SeekOrigin.Begin)
-                            fss.Read(bss, 0, bss.Length)
+                            If buffer <> 0 Then
+                                If filesize > buffer Then
+                                    Dim bss(buffer - 1) As Byte
+                                    Dim ct As Integer
+
+                                    While True
+                                        Dim readSize As Integer = fs.Read(bss, 0, bss.Length)
+                                        If readSize = 0 Then
+                                            Exit While
+                                        End If
+
+                                        ct += readSize
+                                        If ct > filesize Then
+                                            readSize = filesize - (ct - readSize)
+                                            save.Write(bss, 0, readSize)
+                                            Exit While
+                                        End If
+
+                                        save.Write(bss, 0, readSize)
+                                    End While
+                                End If
+                            Else
+                                Dim bss(filesize - 1) As Byte
+                                fss.Read(bss, 0, bss.Length)
+                                save.Write(bss, 0, bss.Length)
+                            End If
                         Else
                             Dim count As Integer = (filesize >> 11) + 1
+                            If (filesize And &H7FF) = 0 AndAlso filesize > 0 Then
+                                count -= 1
+                            End If
                             Dim binn(2047) As Byte
-                            Array.Resize(bss, count << 11)
-                            For k = 0 To count - 1
+                            For j = 1 To count
                                 binn = unpack_cso(lba)
                                 If (lba + 1) << 11 < iso_len Then
                                     lba += 1
                                 End If
-                                Array.Copy(binn, 0, bss, k << 11, 2048)
+                                If j = count Then
+                                    save.Write(binn, 0, filesize - (j << 11) + 2048)
+                                    Exit For
+                                End If
+                                save.Write(binn, 0, 2048)
                             Next
-                            Array.Resize(bss, filesize)
                         End If
+                        'Dim bss(filesize - 1) As Byte
+                        'Dim count As Integer = (filesize >> 11) + 1
+                        'Dim binn(2047) As Byte
+                        'Array.Resize(bss, count << 11)
+                        'For k = 0 To count - 1
+                        '    binn = unpack_cso(lba)
+                        '    If (lba + 1) << 11 < iso_len Then
+                        '        lba += 1
+                        '    End If
+                        '    Array.Copy(binn, 0, bss, k << 11, 2048)
+                        'Next
+                        'Array.Resize(bss, filesize)
+                        'save.Write(bss, 0, bss.Length)
+                        'End If
                         fss.Close()
-                        save.Write(bss, 0, bss.Length)
                         save.Close()
                     End If
                 End If
@@ -1506,10 +1928,10 @@ Public Class Form1
         Return error_file.ToString
     End Function
 
-    Function getlba(ByVal tt As TreeNode, ByRef sender As Object) As String
-        Dim base As String = tt.FullPath & "\"
-        If sender Is OFFSETPATHToolStripMenuItem Then
-            base = base.Replace(TreeView1.SelectedNode.FullPath, "")
+    Function getlba(ByVal tt As TreeNode, ByVal sender As Integer) As String
+        Dim dirpath As String = tt.FullPath & "\"
+        If sender = 1 Then
+            dirpath = dirpath.Replace(TreeView1.SelectedNode.FullPath & "\", "")
         End If
 
         Dim dst As Integer = CInt(tt.Tag.ToString)
@@ -1624,7 +2046,7 @@ Public Class Form1
                     End If
                     sb.Append(lba.ToString.PadLeft(7, "0"c))
                     sb.Append(vbTab)
-                    sb.Append(base)
+                    sb.Append(dirpath)
                     sb.Append(name)
                     sb.Append(vbTab)
                     sb.Append(filesize)
@@ -1683,33 +2105,3 @@ Public Class Form1
 End Class
 
 
-
-'Class ListViewItemComparer
-'    Implements IComparer
-
-'    Private col As Integer
-
-'    Public Sub New()
-'        col = 0
-'    End Sub
-
-'    Public Sub New(ByVal column As Integer)
-'        col = column
-'        If col = 5 Then
-'            col = 4
-'        End If
-'    End Sub
-
-'    Public Function Compare(ByVal x As Object, ByVal y As Object) As Integer _
-'       Implements IComparer.Compare
-'            Dim xx As String = CType(x, ListViewItem).SubItems(col).Text
-'            Dim yy As String = CType(y, ListViewItem).SubItems(col).Text
-'            If xx.Length <> yy.Length AndAlso col > 0 Then
-'                xx = xx.PadLeft(yy.Length, " "c)
-'                yy = yy.PadLeft(xx.Length, " "c)
-'                xx = xx.PadLeft(yy.Length, " "c)
-'            End If
-'            Return [String].Compare(xx, yy)
-'    End Function
-
-'End Class
