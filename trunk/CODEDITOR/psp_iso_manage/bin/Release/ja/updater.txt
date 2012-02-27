@@ -1,0 +1,4 @@
+DL="http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/psp_iso_manage/bin/Release/ja/umd_rawimage_manager.resources.dll","umd_rawimage_manager.resources.dll"
+DL="http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/psp_iso_manage/bin/Release/ja/ja.txt","ja.txt"
+DL="http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/psp_iso_manage/bin/Release/ja/en.txt","en.txt"
+BOOT="http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/psp_iso_manage/bin/Release/umd_rawimage_manager.exe","../umd_rawimage_manager.exe"

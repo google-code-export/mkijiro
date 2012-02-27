@@ -82,6 +82,7 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="class\up.vb" />
     <Compile Include="class\sort.vb" />
     <Compile Include="class\crc.vb" />
     <Compile Include="class\psf.vb" />

@@ -37,11 +37,17 @@ Partial Class umdisomanger
         Me.GAMEID = New System.Windows.Forms.Button()
         Me.PFS = New System.Windows.Forms.Button()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.ContextMenuStrip3 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.changeimage = New System.Windows.Forms.ToolStripMenuItem()
+        Me.editimage = New System.Windows.Forms.ToolStripMenuItem()
         Me.managename = New System.Windows.Forms.TextBox()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
+        Me.ContextMenuStrip4 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ChangeImage2 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EditImage2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.movepsp = New System.Windows.Forms.Button()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.google = New System.Windows.Forms.Button()
         Me.drivelettter = New System.Windows.Forms.TextBox()
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.lockdriveletter = New System.Windows.Forms.CheckBox()
@@ -118,11 +124,13 @@ Partial Class umdisomanger
         Me.t_gid = New System.Windows.Forms.CheckBox()
         Me.crc_xml = New System.Windows.Forms.Button()
         Me.free = New System.Windows.Forms.Label()
-        Me.Button2 = New System.Windows.Forms.Button()
+        Me.sony = New System.Windows.Forms.Button()
         Me.SAVELS2 = New System.Windows.Forms.Button()
         Me.ContextMenuStrip2.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.ContextMenuStrip3.SuspendLayout()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.ContextMenuStrip4.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -195,9 +203,26 @@ Partial Class umdisomanger
         '
         'PictureBox1
         '
+        Me.PictureBox1.ContextMenuStrip = Me.ContextMenuStrip3
         resources.ApplyResources(Me.PictureBox1, "PictureBox1")
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.TabStop = False
+        '
+        'ContextMenuStrip3
+        '
+        Me.ContextMenuStrip3.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.changeimage, Me.editimage})
+        Me.ContextMenuStrip3.Name = "ContextMenuStrip3"
+        resources.ApplyResources(Me.ContextMenuStrip3, "ContextMenuStrip3")
+        '
+        'changeimage
+        '
+        Me.changeimage.Name = "changeimage"
+        resources.ApplyResources(Me.changeimage, "changeimage")
+        '
+        'editimage
+        '
+        Me.editimage.Name = "editimage"
+        resources.ApplyResources(Me.editimage, "editimage")
         '
         'managename
         '
@@ -206,10 +231,27 @@ Partial Class umdisomanger
         '
         'PictureBox2
         '
+        Me.PictureBox2.ContextMenuStrip = Me.ContextMenuStrip4
         Me.PictureBox2.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.PictureBox2, "PictureBox2")
         Me.PictureBox2.Name = "PictureBox2"
         Me.PictureBox2.TabStop = False
+        '
+        'ContextMenuStrip4
+        '
+        Me.ContextMenuStrip4.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ChangeImage2, Me.EditImage2})
+        Me.ContextMenuStrip4.Name = "ContextMenuStrip4"
+        resources.ApplyResources(Me.ContextMenuStrip4, "ContextMenuStrip4")
+        '
+        'ChangeImage2
+        '
+        Me.ChangeImage2.Name = "ChangeImage2"
+        resources.ApplyResources(Me.ChangeImage2, "ChangeImage2")
+        '
+        'EditImage2
+        '
+        Me.EditImage2.Name = "EditImage2"
+        resources.ApplyResources(Me.EditImage2, "EditImage2")
         '
         'Label1
         '
@@ -222,11 +264,11 @@ Partial Class umdisomanger
         Me.movepsp.Name = "movepsp"
         Me.movepsp.UseVisualStyleBackColor = True
         '
-        'Button1
+        'google
         '
-        resources.ApplyResources(Me.Button1, "Button1")
-        Me.Button1.Name = "Button1"
-        Me.Button1.UseVisualStyleBackColor = True
+        resources.ApplyResources(Me.google, "google")
+        Me.google.Name = "google"
+        Me.google.UseVisualStyleBackColor = True
         '
         'drivelettter
         '
@@ -634,11 +676,11 @@ Partial Class umdisomanger
         resources.ApplyResources(Me.free, "free")
         Me.free.Name = "free"
         '
-        'Button2
+        'sony
         '
-        resources.ApplyResources(Me.Button2, "Button2")
-        Me.Button2.Name = "Button2"
-        Me.Button2.UseVisualStyleBackColor = True
+        resources.ApplyResources(Me.sony, "sony")
+        Me.sony.Name = "sony"
+        Me.sony.UseVisualStyleBackColor = True
         '
         'SAVELS2
         '
@@ -669,7 +711,7 @@ Partial Class umdisomanger
         Me.Controls.Add(Me.calc_md5)
         Me.Controls.Add(Me.drivelettter)
         Me.Controls.Add(Me.Label3)
-        Me.Controls.Add(Me.Button2)
+        Me.Controls.Add(Me.sony)
         Me.Controls.Add(Me.movepsp)
         Me.Controls.Add(Me.tree_apply)
         Me.Controls.Add(Me.TreeView1)
@@ -679,7 +721,7 @@ Partial Class umdisomanger
         Me.Controls.Add(Me.all_hash)
         Me.Controls.Add(Me.isolba)
         Me.Controls.Add(Me.PictureBox2)
-        Me.Controls.Add(Me.Button1)
+        Me.Controls.Add(Me.google)
         Me.Controls.Add(Me.CRCimage)
         Me.Controls.Add(Me.isosize)
         Me.Controls.Add(Me.PFS)
@@ -690,7 +732,9 @@ Partial Class umdisomanger
         Me.Name = "umdisomanger"
         Me.ContextMenuStrip2.ResumeLayout(False)
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.ContextMenuStrip3.ResumeLayout(False)
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.ContextMenuStrip4.ResumeLayout(False)
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
         Me.ResumeLayout(False)
@@ -706,7 +750,7 @@ Partial Class umdisomanger
     Friend WithEvents PictureBox2 As System.Windows.Forms.PictureBox
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents movepsp As System.Windows.Forms.Button
-    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents google As System.Windows.Forms.Button
     Friend WithEvents drivelettter As System.Windows.Forms.TextBox
     Friend WithEvents lockdriveletter As System.Windows.Forms.CheckBox
     Friend WithEvents Label2 As System.Windows.Forms.Label
@@ -767,7 +811,7 @@ Partial Class umdisomanger
     Friend WithEvents CLOSEToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents PpriorUSAToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents PriorEUToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents sony As System.Windows.Forms.Button
     Friend WithEvents RENAME As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents RMXML As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents RMDAT As System.Windows.Forms.ToolStripMenuItem
@@ -793,5 +837,11 @@ Partial Class umdisomanger
     Friend WithEvents cnt_install As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator6 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents ToolStripMenuItem2 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ContextMenuStrip3 As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents changeimage As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents editimage As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ContextMenuStrip4 As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents ChangeImage2 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents EditImage2 As System.Windows.Forms.ToolStripMenuItem
 
 End Class
