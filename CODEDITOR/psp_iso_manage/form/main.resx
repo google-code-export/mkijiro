@@ -1506,6 +1506,9 @@ if you have big ramdisk,it's bsest dir.</value>
   <data name="&gt;&gt;SAVELS2.ZOrder" xml:space="preserve">
     <value>4</value>
   </data>
+  <metadata name="$this.Language" type="System.Globalization.CultureInfo, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>ja</value>
+  </metadata>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>

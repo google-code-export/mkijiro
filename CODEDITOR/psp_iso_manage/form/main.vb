@@ -2251,6 +2251,8 @@ Public Class umdisomanger
             If m.Success Then
                 Process.Start(m.Value, impath)
             End If
+        Else
+            MessageBox.Show("ユーザー画像が見つかりません")
         End If
         Return True
     End Function
