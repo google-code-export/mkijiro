@@ -2183,7 +2183,7 @@ Public Class umdisomanger
                 treenode = treenode.Parent
             End If
 
-            Dim picture As String = Application.StartupPath & "\imgs\user\" & treenode.Tag.ToString & "b.png"
+            Dim picture As String = "imgs\user\" & treenode.Tag.ToString & "b.png"
             runapp(picture)
         End If
     End Sub
@@ -2195,7 +2195,7 @@ Public Class umdisomanger
                 treenode = treenode.Parent
             End If
 
-            Dim picture As String = Application.StartupPath & "\imgs\user\" & treenode.Tag.ToString & "a.png"
+            Dim picture As String = "imgs\user\" & treenode.Tag.ToString & "a.png"
             runapp(picture)
         End If
     End Sub
@@ -2240,20 +2240,26 @@ Public Class umdisomanger
     End Function
 
     Function runapp(ByVal impath As String) As Boolean
-        Dim exe As String = FindAssociatedExecutableFile(impath)
-        If exe = "" Then
-            MessageBox.Show("関連付けられたプログラムが見つかりませんでした。")
-            Return False
-        End If
-        If File.Exists(impath) = True Then
-            Dim boot As New Regex(""".*?""", RegexOptions.ECMAScript)
-            Dim m As Match = boot.Match(exe)
-            If m.Success Then
-                Process.Start(m.Value, impath)
+        Try
+            Dim exe As String = FindAssociatedExecutableFile(impath)
+            If exe = "" Then
+                MessageBox.Show("関連付けられたプログラムが見つかりませんでした。")
+                Return False
             End If
-        Else
-            MessageBox.Show("ユーザー画像が見つかりません")
-        End If
+            If File.Exists(impath) = True Then
+                Dim boot As New Regex(""".*?""")
+                Dim m As Match = boot.Match(exe)
+                If m.Success Then
+                    Dim p As String = "%1"
+                    Process.Start(m.Value, p.Replace("%1", impath))
+                End If
+            Else
+                MessageBox.Show("ユーザー画像が見つかりません")
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+        End Try
+
         Return True
     End Function
 
