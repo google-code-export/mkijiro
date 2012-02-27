@@ -59,8 +59,6 @@ Public Class updater
             sr.Close()
 
 
-            File.Delete(uppath)
-
             Process.Start(boot)
         Else
             MessageBox.Show("updater.txtが見つかりませんでした", "うｐ失敗")
