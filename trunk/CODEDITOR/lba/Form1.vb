@@ -197,6 +197,25 @@ Public Class Form1
         Label5.Text = (Now - start).TotalSeconds.ToString
     End Sub
 
+    Private Structure SHFILEINFO
+        Public hIcon As IntPtr ' : icon
+        Public iIcon As Integer ' : icondex
+        Public dwAttributes As Integer ' : SFGAO_ flags
+        <MarshalAs(UnmanagedType.ByValTStr, SizeConst:=260)> _
+        Public szDisplayName As String
+        <MarshalAs(UnmanagedType.ByValTStr, SizeConst:=80)> _
+        Public szTypeName As String
+    End Structure
+
+    Private Declare Ansi Function SHGetFileInfo Lib "shell32.dll" (ByVal pszPath As String, _
+    ByVal dwFileAttributes As Integer, ByRef psfi As SHFILEINFO, ByVal cbFileInfo As Integer, _
+    ByVal uFlags As Integer) As IntPtr
+
+    Private Const SHGFI_ICON = &H100
+    Private Const SHGFI_SMALLICON = &H1
+    Private Const SHGFI_LARGEICON = &H0         ' Large icon
+    Private nIndex As Integer = 0
+
 #End Region
 
 #Region "BUTTON"
@@ -1331,6 +1350,8 @@ Public Class Form1
                 mi = 1
             End If
 
+            Dim nindex As Integer = 5
+
             While i < bs.Length
                 next_len = bs(i)
                 If bs(i + 33) >= 32 Then
@@ -1355,6 +1376,7 @@ Public Class Form1
                     End If
                     If ((bs(i + 25) >> 1) And 1) = 0 Then
                         itemx.ImageIndex = 2
+
                         If ((lba << 11) + filesize) > iso_len Then
                             itemx.ImageIndex = itemx.ImageIndex Or 1
                         End If
@@ -1410,6 +1432,10 @@ Public Class Form1
             Return True
         End Try
     End Function
+
+    Private Declare Function ExtractAssociatedIcon Lib "shell32" Alias "ExtractAssociatedIconA" (ByVal hInst As System.IntPtr, <MarshalAs(UnmanagedType.LPStr)> ByVal lpIconPath As String, ByRef lpiIcon As Integer) As System.IntPtr
+    Private Declare Function DestroyIcon Lib "user32" (ByVal hIcon As System.IntPtr) As Long
+
 
     Function startpath_fix(ByVal p As String) As String
         If p(p.Length - 1) <> "\" Then
@@ -2123,5 +2149,4 @@ Public Class Form1
 #End Region
 
 End Class
-
 

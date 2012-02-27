@@ -220,7 +220,7 @@ Partial Class MERGE
         'file_new
         '
         Me.file_new.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.new_psp, Me.new_psx})
-        Me.file_new.Image = Global.CWcheat_Database_Editor.My.Resources.Resources._new
+        Me.file_new.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.new_
         Me.file_new.Name = "file_new"
         Me.file_new.Size = New System.Drawing.Size(186, 26)
         Me.file_new.Text = "新規(&N)"
