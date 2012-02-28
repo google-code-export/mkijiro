@@ -9,6 +9,9 @@ Public Class datagrid
 
     Private Sub datagrid_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Try
+            Dim start As DateTime = Now
+            DoubleBuffered = True
+
             Dim m As MERGE
             m = CType(Me.Owner, MERGE)
 
@@ -20,6 +23,13 @@ Public Class datagrid
                 gridsave.Checked = True
             Else
                 gridsave.Checked = False
+            End If
+            If m.PSX = True Then
+                ComboBox1.Items.RemoveAt(0)
+                ComboBox1.Items.RemoveAt(1)
+                ComboBox1.Items.RemoveAt(3)
+
+
             End If
 
             Dim b1 As String = m.cl_tb.Text
@@ -39,19 +49,28 @@ Public Class datagrid
     System.Text.RegularExpressions.RegexOptions.IgnoreCase)
             Dim ed As System.Text.RegularExpressions.Match = r.Match(b1)
 
+            Dim list As DataGridViewRow() = Nothing
+            Array.Resize(list, 3000)
+            Dim dgitem As New DataGridViewRow
+            dgitem.CreateCells(DataGridView1)
+
             While ed.Success
-                DataGridView1.Rows.Add()
+                dgitem = CType(dgitem.Clone, DataGridViewRow)
                 If m.PSX = False Then
-                    DataGridView1.Rows(i).Cells(0).Value = ed.Value.Substring(0, 10)
-                    DataGridView1.Rows(i).Cells(1).Value = ed.Value.Substring(11, 10)
+                    dgitem.Cells(0).Value = ed.Value.Substring(0, 10)
+                    dgitem.Cells(1).Value = ed.Value.Substring(11, 10)
                 Else
-                    DataGridView1.Rows(i).Cells(0).Value = ed.Value.Substring(0, 8)
-                    DataGridView1.Rows(i).Cells(1).Value = ed.Value.Substring(9, 4)
+                    dgitem.Cells(0).Value = ed.Value.Substring(0, 8)
+                    dgitem.Cells(1).Value = ed.Value.Substring(9, 4)
                 End If
-                DataGridView1.Rows(i).Cells(2).Value = "DEC"
+                dgitem.Cells(2).Value = "DEC"
+                list(i) = dgitem
+                list = hex2str_rows("DEC", i, list, 1)
                 ed = ed.NextMatch()
                 i += 1
             End While
+            Array.Resize(list, i)
+
 
             mask = "<DGLINE[0-9]{1,3}='.*?'>"
 
@@ -70,7 +89,7 @@ Public Class datagrid
                     b1 = b1.Replace("<DGLINE", "")
                     l = CInt(b1) - 1
                     If l < zz AndAlso l >= 0 AndAlso k < z Then
-                        DataGridView1.Rows(l).Cells(4).Value = dg_comment.Value.Substring(k, z - k)
+                        list(l).Cells(4).Value = dg_comment.Value.Substring(k, z - k).ToString
                     End If
                 End If
                 dg_comment = dg_comment.NextMatch()
@@ -81,10 +100,10 @@ Public Class datagrid
             mask = "<DGMODE[0-9]{1,3}='.*?'>"
             Dim dm As New System.Text.RegularExpressions.Regex(mask, System.Text.RegularExpressions.RegexOptions.IgnoreCase)
             Dim dg_mode As System.Text.RegularExpressions.Match = dm.Match(m.dmtext.Text)
-            Dim float As String = ""
+            Dim mode As String = ""
             zz = i
             i = 0
-            While dg_mode.Success Or i < zz
+            While dg_mode.Success AndAlso i < zz
                 k = dg_mode.Value.IndexOf("'") + 1
                 z = dg_mode.Value.LastIndexOf("'")
                 If k > 0 Then
@@ -92,17 +111,20 @@ Public Class datagrid
                     b1 = b1.Replace("<DGMODE", "")
                     l = CInt(b1) - 1
                     If l < zz AndAlso l >= 0 AndAlso k < z Then
-                        float = dg_mode.Value.Substring(k, z - k)
-                        DataGridView1.Rows(l).Cells(2).Value = float
-                        hex2str(float, i)
+                        mode = dg_mode.Value.Substring(k, z - k)
+                        list(l).Cells(2).Value = mode
+                        list = hex2str_rows(mode, l, list, 1)
                     End If
                 End If
                 dg_mode = dg_mode.NextMatch()
                 i += 1
             End While
 
+            DataGridView1.Rows.AddRange(list)
+
             DataGridView1.Columns(4).Width = 591 - (DataGridView1.Columns(0).Width + DataGridView1.Columns(1).Width + DataGridView1.Columns(2).Width + DataGridView1.Columns(3).Width)
 
+            timer.Text = (Now - start).TotalSeconds.ToString
         Catch ex As Exception
             MessageBox.Show(ex.Message)
         End Try
@@ -211,40 +233,40 @@ Public Class datagrid
                     ElseIf str = "" Then
 
                     Else
-                            '行にエラーテキストを設定 
-                            Label1.Text = "0x付き16進数ではありまえん"
-                            '入力した値をキャンセルして元に戻すには、次のようにする 
-                            dgv.CancelEdit()
-                            'キャンセルする 
-                            e.Cancel = True
+                        '行にエラーテキストを設定 
+                        Label1.Text = "0x付き16進数ではありまえん"
+                        '入力した値をキャンセルして元に戻すには、次のようにする 
+                        dgv.CancelEdit()
+                        'キャンセルする 
+                        e.Cancel = True
                     End If
                 ElseIf check.Contains("BIN") Then
-                        DirectCast(DataGridView1.Columns(3), DataGridViewTextBoxColumn).MaxInputLength = 11
-                        Dim str As String = e.FormattedValue.ToString()
+                    DirectCast(DataGridView1.Columns(3), DataGridViewTextBoxColumn).MaxInputLength = 11
+                    Dim str As String = e.FormattedValue.ToString()
                     Dim r As New System.Text.RegularExpressions.Regex( _
                      "^[-|+]?\d+\.?\d*", _
                                 System.Text.RegularExpressions.RegexOptions.IgnoreCase)
-                        Dim m As System.Text.RegularExpressions.Match = r.Match(str)
-                        If m.Success Then
-                            Label1.Text = ""
-                            DataGridView1.Rows(d).Cells(3).Value = m.Value
-                        ElseIf str = "" Then
+                    Dim m As System.Text.RegularExpressions.Match = r.Match(str)
+                    If m.Success Then
+                        Label1.Text = ""
+                        DataGridView1.Rows(d).Cells(3).Value = m.Value
+                    ElseIf str = "" Then
 
-                        Else
-                            '行にエラーテキストを設定 
-                            Label1.Text = "不正な値です"
-                            '入力した値をキャンセルして元に戻すには、次のようにする 
-                            dgv.CancelEdit()
-                            'キャンセルする 
-                            e.Cancel = True
+                    Else
+                        '行にエラーテキストを設定 
+                        Label1.Text = "不正な値です"
+                        '入力した値をキャンセルして元に戻すには、次のようにする 
+                        dgv.CancelEdit()
+                        'キャンセルする 
+                        e.Cancel = True
                     End If
                 ElseIf check.Contains("ASM") Then
                     Dim str As String = e.FormattedValue.ToString()
                     DirectCast(DataGridView1.Columns(3), DataGridViewTextBoxColumn).MaxInputLength = 40
                     'Label1.Text = assembler(str)
                 Else
-                        dgv.CancelEdit()
-                        Label1.Text = "編集タイプが選択されてません"
+                    dgv.CancelEdit()
+                    Label1.Text = "編集タイプが選択されてません"
                 End If
             End If
         ElseIf dgv.Columns(e.ColumnIndex).Name = "アドレス" Or dgv.Columns(e.ColumnIndex).Name = "値" Then
@@ -483,45 +505,45 @@ Public Class datagrid
                         'DataGridView1.Rows(d).Cells(4).Value = decoders(DataGridView1.Rows(d).Cells(add_val).Value.ToString)
                     End If
                 End If
-                Else 'BINARY32/16
+            Else 'BINARY32/16
                 Dim r As New System.Text.RegularExpressions.Regex( _
                  "^[-+]?\d+\.?\d*", _
                             System.Text.RegularExpressions.RegexOptions.IgnoreCase)
-                    Dim v As System.Text.RegularExpressions.Match = r.Match(str)
-                    If v.Success AndAlso v.Value.Length = str.Length Then
-                        Dim f As Single = Convert.ToSingle(v.Value)
-                        Dim bit() As Byte = BitConverter.GetBytes(f)
-                        Dim sb As New System.Text.StringBuilder()
-                        Dim i As Integer = 3
-                        While i >= 0
-                            sb.Append(Convert.ToString(bit(i), 16).PadLeft(2, "0"c))
-                            i -= 1
-                        End While
-                        Dim half As String = ""
-                        If check = "BINARY32" Then
-                            DataGridView1.Rows(d).Cells(add_val).Value = "0x" + sb.ToString.ToUpper
-                        ElseIf check = "BIN32>>16" Then
-                            If m.PSX = True AndAlso g_value.Checked = True Then
-                                DataGridView1.Rows(d).Cells(add_val).Value = sb.ToString.Substring(0, 4).ToUpper
-                            Else
-                                half = DataGridView1.Rows(d).Cells(add_val).Value.ToString.Substring(0, 6)
-                                DataGridView1.Rows(d).Cells(add_val).Value = half & sb.ToString.Substring(0, 4).ToUpper
-                            End If
-                        ElseIf check = "BINARY16" Then
-                            Dim hf As String = sb.ToString
-                            hf = converthalffloat(hf)
-                            If m.PSX = True AndAlso g_value.Checked = True Then
-                                DataGridView1.Rows(d).Cells(add_val).Value = hf
-                            Else
-                                half = DataGridView1.Rows(d).Cells(add_val).Value.ToString.Substring(0, 6)
-                                DataGridView1.Rows(d).Cells(add_val).Value = half & hf
-                            End If
+                Dim v As System.Text.RegularExpressions.Match = r.Match(str)
+                If v.Success AndAlso v.Value.Length = str.Length Then
+                    Dim f As Single = Convert.ToSingle(v.Value)
+                    Dim bit() As Byte = BitConverter.GetBytes(f)
+                    Dim sb As New System.Text.StringBuilder()
+                    Dim i As Integer = 3
+                    While i >= 0
+                        sb.Append(Convert.ToString(bit(i), 16).PadLeft(2, "0"c))
+                        i -= 1
+                    End While
+                    Dim half As String = ""
+                    If check = "BINARY32" Then
+                        DataGridView1.Rows(d).Cells(add_val).Value = "0x" + sb.ToString.ToUpper
+                    ElseIf check = "BIN32>>16" Then
+                        If m.PSX = True AndAlso g_value.Checked = True Then
+                            DataGridView1.Rows(d).Cells(add_val).Value = sb.ToString.Substring(0, 4).ToUpper
+                        Else
+                            half = DataGridView1.Rows(d).Cells(add_val).Value.ToString.Substring(0, 6)
+                            DataGridView1.Rows(d).Cells(add_val).Value = half & sb.ToString.Substring(0, 4).ToUpper
                         End If
-
-                    Else
-                        Label1.Text = "不正な値です"
+                    ElseIf check = "BINARY16" Then
+                        Dim hf As String = sb.ToString
+                        hf = converthalffloat(hf)
+                        If m.PSX = True AndAlso g_value.Checked = True Then
+                            DataGridView1.Rows(d).Cells(add_val).Value = hf
+                        Else
+                            half = DataGridView1.Rows(d).Cells(add_val).Value.ToString.Substring(0, 6)
+                            DataGridView1.Rows(d).Cells(add_val).Value = half & hf
+                        End If
                     End If
+
+                Else
+                    Label1.Text = "不正な値です"
                 End If
+            End If
         End If
         Dim gridtx As String = Nothing
         'Dim comment As String = ""
@@ -551,7 +573,6 @@ Public Class datagrid
         End If
     End Sub
 
-
     Private Sub DataGridView1_CellEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles DataGridView1.CellEnter
 
         Dim dgv As DataGridView = CType(sender, DataGridView)
@@ -567,7 +588,6 @@ Public Class datagrid
         End If
 
     End Sub
-
 
     Private Sub DataGridView1_Cellch(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles DataGridView1.CellValueChanged
         If DataGridView1.CurrentCell IsNot Nothing Then
@@ -692,7 +712,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                 DataGridView1.CurrentCell = DataGridView1.Rows(destination).Cells(0)
                 DataGridView1.Focus()
             Next
-            
+
             If movedown.Text.Contains("☆") = True Then
                 DataGridView1.Rows.RemoveAt(d + 1)
             End If
@@ -732,7 +752,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                 DataGridView1.CurrentCell = DataGridView1.Rows(destination).Cells(0)
                 DataGridView1.Focus()
             Next
-            
+
             If movedown.Text.Contains("☆") = True Then
                 DataGridView1.Rows.RemoveAt(d)
             End If
@@ -778,152 +798,173 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
     End Sub
 
     Private Sub cut_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cut.Click
+        Try
+            Dim d As Integer = DataGridView1.CurrentCell.RowIndex
+            Dim row As DataGridViewRow
+            Dim st As New StringBuilder
+            Dim cursor(3000) As String
+            Dim index(3000) As Integer
+            Dim indexb As Integer() = Nothing
+            Array.Resize(dgcp, 3000)
+            Dim i As Integer = 0
+            Dim jj As Integer = 0
 
-        Dim d As Integer = DataGridView1.CurrentCell.RowIndex
-        Dim row As DataGridViewRow
-        Dim st As New StringBuilder
-        Dim stc As New StringBuilder
-        stc.Append("#")
-        Dim cursor(0) As String
-        Dim i As Integer = 0
-        Dim jj As Integer = 0
-
-        If d < DataGridView1.RowCount Then
-            For Each r As DataGridViewRow In DataGridView1.SelectedRows
-                If r.Index < DataGridView1.RowCount - 1 Then
-                    If jj = 0 Then
-                        jj = r.Index
+            If d < DataGridView1.RowCount Then
+                For Each r As DataGridViewRow In DataGridView1.SelectedRows
+                    If r.Index < DataGridView1.RowCount - 1 Then
+                        If jj = 0 Then
+                            jj = r.Index
+                        End If
+                        row = DataGridView1.Rows(r.Index)
+                        'st.Append("<DGLINE")
+                        'st.Append((r.Index + 1).ToString.PadLeft(3, "0"c))
+                        'st.Append("='")
+                        'If Not row.Cells(4).Value Is Nothing Then
+                        '    st.Append(row.Cells(4).Value.ToString)
+                        'End If
+                        'st.Append("'>")
+                        'st.Append("<DGMODE")
+                        'st.Append((r.Index + 1).ToString.PadLeft(3, "0"c))
+                        'st.Append("='")
+                        'st.Append(row.Cells(2).Value.ToString)
+                        'st.Append("'>")
+                        'st.Append("<DGVAL")
+                        'st.Append((r.Index + 1).ToString.PadLeft(3, "0"c))
+                        'st.Append("='")
+                        'If Not row.Cells(3).Value Is Nothing Then
+                        '    st.Append(row.Cells(3).Value.ToString)
+                        'End If
+                        'st.Append("'>")
+                        'st.Append(vbCrLf)
+                        st.Append(edmode)
+                        st.Append(row.Cells(0).Value.ToString)
+                        st.Append(" ")
+                        st.AppendLine(row.Cells(1).Value.ToString)
+                        cursor(i) = st.ToString
+                        dgcp(i) = CloneWithValues(row)
+                        index(i) = r.Index
+                        st.Clear()
+                        i += 1
                     End If
-                    row = DataGridView1.Rows(r.Index)
-                    st.Append("<DGLINE")
-                    st.Append((r.Index + 1).ToString.PadLeft(3, "0"c))
-                    st.Append("='")
-                    If Not row.Cells(4).Value Is Nothing Then
-                        st.Append(row.Cells(4).Value.ToString)
+                Next r
+                Array.Resize(cursor, i)
+                Array.Resize(index, i)
+                Array.Resize(indexb, i)
+                Array.Resize(dgcp, i)
+                Array.Copy(index, 0, indexb, 0, i)
+
+                Array.Sort(index, cursor)
+                Array.Sort(indexb, dgcp)
+
+                For k = 0 To i - 1
+                    DataGridView1.Rows.RemoveAt(index(0))
+                Next
+
+
+                For Each s As String In cursor
+                    If s <> "" Then
+                        st.Append(s)
                     End If
-                    st.Append("'>")
-                    st.Append("<DGMODE")
-                    st.Append((r.Index + 1).ToString.PadLeft(3, "0"c))
-                    st.Append("='")
-                    st.Append(row.Cells(2).Value.ToString)
-                    st.Append("'>")
-                    st.Append("<DGVAL")
-                    st.Append((r.Index + 1).ToString.PadLeft(3, "0"c))
-                    st.Append("='")
-                    If Not row.Cells(3).Value Is Nothing Then
-                        st.Append(row.Cells(3).Value.ToString)
+                Next
+                If st.ToString <> "" Then
+                    Clipboard.SetText(st.ToString)
+                End If
+
+                If cursor(0) <> Nothing Then
+                    If d - i >= 0 Then
+                        d = d - i
+                    Else
+                        d = jj
                     End If
-                    st.Append("'>")
-                    st.Append(vbCrLf)
-                    st.Append(edmode)
-                    st.Append(row.Cells(0).Value.ToString)
-                    st.Append(" ")
-                    st.Append(row.Cells(1).Value.ToString)
-                    st.Append(vbCrLf)
-                    Array.Resize(cursor, i + 1)
-                    cursor(i) = st.ToString
-                    st.Clear()
-                    i += 1
+                    If d >= DataGridView1.RowCount Then
+                        d = DataGridView1.RowCount - 1
+                    End If
+                    DataGridView1.Rows(d).Selected = True
+                    DataGridView1.CurrentCell = DataGridView1.Rows(d).Cells(0)
+                    DataGridView1.Focus()
                 End If
-            Next r
-
-        Array.Sort(cursor)
-
-            Dim k = 0
-            Dim del = 0
-            For Each s As String In cursor
-                If s <> "" Then
-                    st.Append(s)
-                    del = CInt(s.Substring(7, 3)) - k - 1
-                    DataGridView1.Rows.RemoveAt(del)
-                    k += 1
-                End If
-            Next
-        If st.ToString <> "" Then
-                Clipboard.SetText(st.ToString)
-        End If
-
-            If cursor(0) <> Nothing Then
-                If d - i >= 0 Then
-                    d = d - i
-                Else
-                    d = jj
-                End If
-                If d >= DataGridView1.RowCount Then
-                    d = DataGridView1.RowCount - 1
-                End If
-                DataGridView1.Rows(d).Selected = True
-                DataGridView1.CurrentCell = DataGridView1.Rows(d).Cells(0)
-                DataGridView1.Focus()
             End If
-        End If
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+        End Try
 
     End Sub
 
+    Dim dgcp As DataGridViewRow()
+
     Private Sub コピーToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles copy.Click
+        Try
+            Dim d As Integer = DataGridView1.CurrentCell.RowIndex
+            Dim row As DataGridViewRow
+            Dim st As New StringBuilder
+            Dim cursor(3000) As String
+            Dim index(3000) As Integer
+            Dim indexb As Integer() = Nothing
+            Array.Resize(dgcp, 3000)
+            Dim i As Integer = 0
+            Dim jj As Integer = 0
 
-        Dim d As Integer = DataGridView1.CurrentCell.RowIndex
-        Dim row As DataGridViewRow
-        Dim st As New StringBuilder
-        Dim stc As New StringBuilder
-        stc.Append("#")
-        Dim cursor(0) As String
-        Dim cursor2(0) As String
-        Dim i As Integer = 0
-        Dim jj As Integer = 0
+            If d < DataGridView1.RowCount Then
+                For Each r As DataGridViewRow In DataGridView1.SelectedRows
+                    If r.Index < DataGridView1.RowCount - 1 Then
+                        If jj = 0 Then
+                            jj = r.Index
+                        End If
+                        row = DataGridView1.Rows(r.Index)
+                        'st.Append("<DGLINE")
+                        'st.Append((r.Index + 1).ToString.PadLeft(3, "0"c))
+                        'st.Append("='")
+                        'If Not row.Cells(4).Value Is Nothing Then
+                        '    st.Append(row.Cells(4).Value.ToString)
+                        'End If
+                        'st.Append("'>")
+                        'st.Append("<DGMODE")
+                        'st.Append((r.Index + 1).ToString.PadLeft(3, "0"c))
+                        'st.Append("='")
+                        'st.Append(row.Cells(2).Value.ToString)
+                        'st.Append("'>")
+                        'st.Append("<DGVAL")
+                        'st.Append((r.Index + 1).ToString.PadLeft(3, "0"c))
+                        'st.Append("='")
+                        'If Not row.Cells(3).Value Is Nothing Then
+                        '    st.Append(row.Cells(3).Value.ToString)
+                        'End If
+                        'st.Append("'>")
+                        'st.Append(vbCrLf)
+                        st.Append(edmode)
+                        st.Append(row.Cells(0).Value.ToString)
+                        st.Append(" ")
+                        st.AppendLine(row.Cells(1).Value.ToString)
+                        cursor(i) = st.ToString
+                        dgcp(i) = CloneWithValues(row)
+                        index(i) = r.Index
+                        st.Clear()
+                        i += 1
+                    End If
+                Next r
+                Array.Resize(cursor, i)
+                Array.Resize(index, i)
+                Array.Resize(indexb, i)
+                Array.Resize(dgcp, i)
+                Array.Copy(index, 0, indexb, 0, i)
 
-        If d < DataGridView1.RowCount Then
-            For Each r As DataGridViewRow In DataGridView1.SelectedRows
-                If r.Index < DataGridView1.RowCount - 1 Then
-                    If jj = 0 Then
-                        jj = r.Index
+                Array.Sort(index, cursor)
+                Array.Sort(indexb, dgcp)
+
+                For Each s As String In cursor
+                    If s <> "" Then
+                        st.Append(s)
                     End If
-                    row = DataGridView1.Rows(r.Index)
-                    st.Append("<DGLINE")
-                    st.Append((r.Index + 1).ToString.PadLeft(3, "0"c))
-                    st.Append("='")
-                    If Not row.Cells(4).Value Is Nothing Then
-                        st.Append(row.Cells(4).Value.ToString)
-                    End If
-                    st.Append("'>")
-                    st.Append("<DGMODE")
-                    st.Append((r.Index + 1).ToString.PadLeft(3, "0"c))
-                    st.Append("='")
-                    st.Append(row.Cells(2).Value.ToString)
-                    st.Append("'>")
-                    st.Append("<DGVAL")
-                    st.Append((r.Index + 1).ToString.PadLeft(3, "0"c))
-                    st.Append("='")
-                    If Not row.Cells(3).Value Is Nothing Then
-                        st.Append(row.Cells(3).Value.ToString)
-                    End If
-                    st.Append("'>")
-                    st.Append(vbCrLf)
-                    st.Append(edmode)
-                    st.Append(row.Cells(0).Value.ToString)
-                    st.Append(" ")
-                    st.Append(row.Cells(1).Value.ToString)
-                    st.Append(vbCrLf)
-                    Array.Resize(cursor, i + 1)
-                    cursor(i) = st.ToString
-                    st.Clear()
-                    i += 1
+                Next
+                If st.ToString <> "" Then
+                    Clipboard.SetText(st.ToString)
                 End If
-            Next r
 
-            Array.Sort(cursor)
-
-            For Each s As String In cursor
-                If s <> "" Then
-                    st.Append(s)
-                End If
-            Next
-            If st.ToString <> "" Then
-                Clipboard.SetText(st.ToString)
+                DataGridView1.Focus()
             End If
-
-            DataGridView1.Focus()
-        End If
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+        End Try
     End Sub
 
     Private Sub paste_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles paste.Click
@@ -936,98 +977,156 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         Dim hex As System.Text.RegularExpressions.Match = r.Match(Clipboard.GetText)
         Dim psx As New System.Text.RegularExpressions.Regex("[0-9a-fA-F]\x20[0-9a-fA-F]{4}", RegularExpressions.RegexOptions.ECMAScript)
         Dim phex As System.Text.RegularExpressions.Match = psx.Match(Clipboard.GetText)
-        Dim dg As New System.Text.RegularExpressions.Regex("<DGLINE[0-9]{3}='.*?'>", RegularExpressions.RegexOptions.ECMAScript)
-        Dim line As System.Text.RegularExpressions.Match = dg.Match(Clipboard.GetText)
-        Dim dm As New System.Text.RegularExpressions.Regex("<DGMODE[0-9]{3}='.*?'>", RegularExpressions.RegexOptions.ECMAScript)
-        Dim dmm As System.Text.RegularExpressions.Match = dm.Match(Clipboard.GetText)
-        Dim dv As New System.Text.RegularExpressions.Regex("<DGVAL[0-9]{3}='.*?'>", RegularExpressions.RegexOptions.ECMAScript)
-        Dim dvm As System.Text.RegularExpressions.Match = dv.Match(Clipboard.GetText)
-        If d < DataGridView1.RowCount AndAlso (hex.Success Or (m.PSX = True AndAlso phex.Success AndAlso hex.Success = True)) Then
-            While hex.Success
-                DataGridView1.Rows.Insert(d + i)
-                If m.PSX = False Then
-                    DataGridView1.Rows(d + i).Cells(0).Value = "0x" & hex.Value
+        'Dim dg As New System.Text.RegularExpressions.Regex("<DGLINE[0-9]{3}='.*?'>", RegularExpressions.RegexOptions.ECMAScript)
+        'Dim line As System.Text.RegularExpressions.Match = dg.Match(Clipboard.GetText)
+        'Dim dm As New System.Text.RegularExpressions.Regex("<DGMODE[0-9]{3}='.*?'>", RegularExpressions.RegexOptions.ECMAScript)
+        'Dim dmm As System.Text.RegularExpressions.Match = dm.Match(Clipboard.GetText)
+        'Dim dv As New System.Text.RegularExpressions.Regex("<DGVAL[0-9]{3}='.*?'>", RegularExpressions.RegexOptions.ECMAScript)
+        'Dim dvm As System.Text.RegularExpressions.Match = dv.Match(Clipboard.GetText)
+        If dgcp IsNot Nothing Then
+            Dim z As Integer = DataGridView1.RowCount - 1
+            Dim a As Integer = DataGridView1.CurrentCell.RowIndex
+            Dim b As Integer = DataGridView1.FirstDisplayedCell.RowIndex
+            Dim cp As Integer = dgcp.Length
+
+            Dim list As DataGridViewRow() = Nothing
+            Array.Resize(list, 3000)
+            For i = 0 To z - 1
+                list(i) = CloneWithValues(DataGridView1.Rows(i))
+            Next
+            Array.Resize(list, z + cp)
+            Array.ConstrainedCopy(list, d, list, d + cp, z - d)
+            Array.Copy(dgcp, 0, list, d, cp)
+            DataGridView1.Rows.Clear()
+            DataGridView1.Rows.AddRange(list)
+            
+            DataGridView1.CurrentCell = DataGridView1(0, a)
+            DataGridView1.FirstDisplayedCell = DataGridView1(0, b)
+
+        Else
+            'クリップボード
+            If d < DataGridView1.RowCount AndAlso (hex.Success Or (m.PSX = True AndAlso phex.Success AndAlso hex.Success = True)) Then
+                While hex.Success
+                    DataGridView1.Rows.Insert(d + i)
+                    If m.PSX = False Then
+                        DataGridView1.Rows(d + i).Cells(0).Value = "0x" & hex.Value
+                        hex = hex.NextMatch
+                        DataGridView1.Rows(d + i).Cells(1).Value = "0x" & hex.Value
+                    Else
+                        DataGridView1.Rows(d + i).Cells(0).Value = hex.Value
+                        DataGridView1.Rows(d + i).Cells(1).Value = phex.Value.Remove(0, 2)
+                        phex = phex.NextMatch
+                    End If
                     hex = hex.NextMatch
-                    DataGridView1.Rows(d + i).Cells(1).Value = "0x" & hex.Value
-                Else
-                    DataGridView1.Rows(d + i).Cells(0).Value = hex.Value
-                    DataGridView1.Rows(d + i).Cells(1).Value = phex.Value.Remove(0, 2)
-                    phex = phex.NextMatch
-                End If
-                hex = hex.NextMatch
 
-                'DataGridView1.Rows(d + i).Cells(2).Value = "DEC"
+                    'DataGridView1.Rows(d + i).Cells(2).Value = "DEC"
 
-                Dim k As Integer = dmm.Value.IndexOf("'") + 1
-                Dim z As Integer = dmm.Value.LastIndexOf("'")
-                If k <= z Then
-                    DataGridView1.Rows(d + i).Cells(2).Value = dmm.Value.Substring(k, z - k)
-                End If
+                    'Dim k As Integer = dmm.Value.IndexOf("'") + 1
+                    'Dim z As Integer = dmm.Value.LastIndexOf("'")
+                    'If k <= z Then
+                    '    DataGridView1.Rows(d + i).Cells(2).Value = dmm.Value.Substring(k, z - k)
+                    'End If
 
-                k = line.Value.IndexOf("'") + 1
-                z = line.Value.LastIndexOf("'")
-                If k <= z Then
-                    DataGridView1.Rows(d + i).Cells(4).Value = line.Value.Substring(k, z - k)
-                End If
+                    'k = line.Value.IndexOf("'") + 1
+                    'z = line.Value.LastIndexOf("'")
+                    'If k <= z Then
+                    '    DataGridView1.Rows(d + i).Cells(4).Value = line.Value.Substring(k, z - k)
+                    'End If
 
-                k = dvm.Value.IndexOf("'") + 1
-                z = dvm.Value.LastIndexOf("'")
-                If k <= z Then
-                    DataGridView1.Rows(d + i).Cells(3).Value = dvm.Value.Substring(k, z - k)
-                End If
+                    'k = dvm.Value.IndexOf("'") + 1
+                    'z = dvm.Value.LastIndexOf("'")
+                    'If k <= z Then
+                    '    DataGridView1.Rows(d + i).Cells(3).Value = dvm.Value.Substring(k, z - k)
+                    'End If
 
 
-                line = line.NextMatch
-                dmm = dmm.NextMatch
-                dvm = dvm.NextMatch
-                i += 1
-            End While
+                    'line = line.NextMatch
+                    'dmm = dmm.NextMatch
+                    'dvm = dvm.NextMatch
+                    i += 1
+                End While
+            End If
             DataGridView1.Rows(d).Selected = True
             DataGridView1.CurrentCell = DataGridView1.Rows(d).Cells(0)
             DataGridView1.Focus()
         End If
     End Sub
 
+
     Private Sub ComboBox1_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles ComboBox1.SelectedIndexChanged
         Try
-            Dim z As Integer = DataGridView1.RowCount - 2
-            For i = 0 To z
-                DataGridView1.Rows(i).Cells(2).Value = ComboBox1.Text
-                hex2str(ComboBox1.Text, i)
+
+            Dim add_val As Integer = 1
+            If g_address.Checked = True Then
+                add_val = 0
+            End If
+            Dim start As DateTime = Now
+            Dim parse As String = ComboBox1.Text
+            Dim z As Integer = DataGridView1.RowCount - 1
+            Dim a As Integer = DataGridView1.CurrentCell.RowIndex
+            Dim b As Integer = DataGridView1.FirstDisplayedCell.RowIndex
+
+            Dim list As DataGridViewRow() = Nothing
+            Array.Resize(list, 3000)
+            For i = 0 To z - 1
+                list(i) = CloneWithValues(DataGridView1.Rows(i))
+                list(i).Cells(2).Value = parse
+                list = hex2str_rows(parse, i, list, add_val)
             Next
+            Array.Resize(list, z)
+            DataGridView1.Rows.Clear()
+            DataGridView1.Rows.AddRange(list)
+
+            DataGridView1.CurrentCell = DataGridView1(0, a)
+            DataGridView1.FirstDisplayedCell = DataGridView1(0, b)
+
+            timer.Text = (Now - start).TotalSeconds.ToString
         Catch ex As Exception
             MessageBox.Show(ex.Message)
         End Try
     End Sub
 
+    Public Function CloneWithValues(ByVal row As DataGridViewRow) _
+    As DataGridViewRow
+        CloneWithValues = CType(row.Clone(), DataGridViewRow)
+        For index = 0 To 4
+            CloneWithValues.Cells(index).Value = row.Cells(index).Value
+        Next
 
-    Function hex2str(ByVal float As String, ByVal l As Integer) As String
-        If float = "BINARY32" Then
-            Dim bytes As Byte() = str2bin(DataGridView1.Rows(l).Cells(1).Value.ToString)
+    End Function
+
+    Dim dgaddress As String
+
+    Function hex2str_rows(ByVal float As String, ByVal l As Integer, ByVal list As DataGridViewRow(), ByVal x As Integer) As DataGridViewRow()
+        If float = "DEC" Then
+            list(l).Cells(3).Value = (Convert.ToInt64(list(l).Cells(x).Value.ToString, 16) And &HFFFFFFFF).ToString
+        ElseIf float = "DEC16BIT" Then
+            list(l).Cells(3).Value = (Convert.ToInt64(list(l).Cells(x).Value.ToString, 16) And &HFFFF).ToString
+        ElseIf float = "BINARY32" Then
+            Dim bytes As Byte() = str2bin(list(l).Cells(x).Value.ToString)
             If (bytes(3) And &H7F) > &H31 AndAlso (bytes(3) And &H7F) < &H52 Then
-                DataGridView1.Rows(l).Cells(3).Value = BitConverter.ToSingle(bytes, 0)
-                'DataGridView1.Rows(l).Cells(3).Value = float_noma(DataGridView1.Rows(l).Cells(1).Value.ToString)
+                list(l).Cells(3).Value = BitConverter.ToSingle(bytes, 0)
             End If
         ElseIf float = "BIN32>>16" Then
-            Dim ss As String = DataGridView1.Rows(l).Cells(1).Value.ToString
+            Dim ss As String = list(l).Cells(x).Value.ToString
             Dim bytes As Byte() = str2bin(ss.Remove(0, ss.Length - 4).PadRight(8, "0"c))
             If (bytes(3) And &H7F) > &H31 AndAlso (bytes(3) And &H7F) < &H52 Then
-                DataGridView1.Rows(l).Cells(3).Value = BitConverter.ToSingle(bytes, 0)
-                'DataGridView1.Rows(l).Cells(3).Value = float_noma(ss.Remove(0, ss.Length - 4).PadRight(8, "0"c))
+                list(l).Cells(3).Value = BitConverter.ToSingle(bytes, 0)
             End If
         ElseIf float = "BINARY16" Then
-            Dim ss As String = DataGridView1.Rows(l).Cells(1).Value.ToString
+            Dim ss As String = list(l).Cells(x).Value.ToString
             Dim bytes As Byte() = str2bin(ss.Remove(0, ss.Length - 4).PadRight(8, "0"c))
             Array.ConstrainedCopy(bytes, 2, bytes, 0, 2)
             Array.Resize(bytes, 2)
             If (bytes(1) And &H7F) < &H7C Then
                 Dim bytes2 As Byte() = str2bin(converthalffloat2(bytes))
-                DataGridView1.Rows(l).Cells(3).Value = BitConverter.ToSingle(bytes2, 0)
+                list(l).Cells(3).Value = BitConverter.ToSingle(bytes2, 0)
             End If
         ElseIf float = "ASM" Then
-            DataGridView1.Rows(l).Cells(3).Value = decoders(DataGridView1.Rows(l).Cells(1).Value.ToString, l)
+            list(l).Cells(3).Value = decoders(list(l).Cells(x).Value.ToString, l)
+            dgaddress = list(l).Cells(0).Value.ToString
         End If
-        Return ""
+        Return list
     End Function
 
     Function str2bin(ByVal temp As String) As Byte()
@@ -1138,16 +1237,9 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         Return hf
     End Function
 
-    'decoder PRXTOOLの移植
+    'decoder 配列
 #Region "decoder"
-    Function decoders(ByVal str As String, ByVal l As Integer) As String
-        Try
-            Dim hex As UInteger = Convert.ToUInt32(str, 16)
-            Dim mask As UInteger = 0
-            Dim mips As UInteger = 0
-            Dim asm As String = ""
-
-            Dim decoder As String() = {"nop", "0x00000000", "0xFFFFFFFF", "", _
+    Dim decoder As String() = {"nop", "0x00000000", "0xFFFFFFFF", "", _
 "li", "0x24000000", "0xFFE00000", "%t,%i", _
 "li", "0x34000000", "0xFFE00000", "%t,%I", _
 "move", "0x00000021", "0xFC1F07FF", "%d,%s", _
@@ -1585,9 +1677,22 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 "mfvme", "0x68000000", "0xFC000000", "%t,%i", _
 "mtvme", "0xb0000000", "0xFC000000", "%t,%i"}
 
-            Dim z As Integer = 0
+#End Region
 
-            While z < decoder.Length
+    'decoder PRXTOOLの移植
+#Region "decoderaser"
+
+    Function decoders(ByVal str As String, ByVal l As Integer) As String
+        Try
+            Dim hex As UInteger = Convert.ToUInt32(str, 16)
+            Dim mask As UInteger = 0
+            Dim mips As UInteger = 0
+            Dim asm As String = ""
+
+            Dim z As Integer = 0
+            Dim zz As Integer = decoder.Length
+
+            While z < zz
                 mips = Convert.ToUInt32(decoder(z + 1), 16)
                 mask = Convert.ToUInt32(decoder(z + 2), 16)
                 If (hex And mask) = mips Then
@@ -1689,7 +1794,12 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                             k -= &H10000
                         End If
                         k = (k << 2) + 4
-                        k += (Convert.ToInt32(DataGridView1.Rows(l).Cells(0).Value.ToString, 16) And &HFFFFFFF)
+                        If DataGridView1.RowCount > 1 Then
+                            k += (Convert.ToInt32(DataGridView1.Rows(l).Cells(0).Value.ToString, 16) And &HFFFFFFF)
+                        Else
+                            k += (Convert.ToInt32(dgaddress, 16) And &HFFFFFFF)
+                        End If
+
                         If k < &H1800000 Then
                             k += &H8800000
                         End If
@@ -1811,7 +1921,6 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         Return str
     End Function
 
-
     Function print_cop2(ByVal reg As Integer) As String
         Dim vfpu_extra_regs As String() = {"VFPU_PFXS",
          "VFPU_PFXT",
@@ -1915,7 +2024,6 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 
     End Function
 
-
     Function print_vfpu_rotator(ByVal l As UInteger) As String
 
         Dim elements(4) As String
@@ -2008,8 +2116,6 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 
         Return ss
     End Function
-
-
 
     Function print_vfpu_reg(ByVal reg As Integer, ByVal offset As Integer, ByVal one As String, ByVal two As String) As String
         Dim ss As String
@@ -3056,3 +3162,4 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
     'End Function
 
 End Class
+

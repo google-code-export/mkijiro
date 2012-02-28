@@ -129,7 +129,7 @@ Public Class MERGE
                 My.Settings.lastcodepath = cmd
         Next
 
-        If System.IO.File.Exists(My.Settings.lastcodepath) Then
+        If System.IO.File.Exists(My.Settings.lastcodepath) = True Then
             Dim open As New load_db
             database = My.Settings.lastcodepath
             PSX = open.check_db(database, 932) ' Check the file's format
@@ -153,42 +153,42 @@ Public Class MERGE
                 reset_PSX()
                 Application.DoEvents()
                 open.read_PSX(database, enc1)
-            Else
+            ElseIf open.no_db(database, enc1) = False Then
                 enc1 = open.check_enc(database)
                 reset_PSP()
                 Application.DoEvents()
                 open.read_PSP(database, enc1)
             End If
 
-            If enc1 = 1201 Then
-                saveas_cwcheat.Enabled = True
-                saveas_psx.Enabled = False
-                saveas_codefreak.Enabled = True
-                UTF16BECP1201ToolStripMenuItem.Enabled = True
-            Else
-                If PSX = False Then
+            If codetree.Nodes IsNot Nothing Then
+                If enc1 = 1201 Then
                     saveas_cwcheat.Enabled = True
                     saveas_psx.Enabled = False
+                    saveas_codefreak.Enabled = True
+                    UTF16BECP1201ToolStripMenuItem.Enabled = True
                 Else
-                    saveas_cwcheat.Enabled = False
-                    saveas_psx.Enabled = True
+                    If PSX = False Then
+                        saveas_cwcheat.Enabled = True
+                        saveas_psx.Enabled = False
+                    Else
+                        saveas_cwcheat.Enabled = False
+                        saveas_psx.Enabled = True
+                    End If
+                    saveas_codefreak.Enabled = False
+                    UTF16BECP1201ToolStripMenuItem.Enabled = False
                 End If
-                saveas_codefreak.Enabled = False
-                UTF16BECP1201ToolStripMenuItem.Enabled = False
+
+                If codetree.Nodes.Count >= 1 Then
+                    codetree.Nodes(0).Expand()
+                End If
+                error_window.list_load_error.EndUpdate()
+                loaded = True
+                file_saveas.Enabled = True
+                overwrite_db.Enabled = True
+                overwrite_db.ToolTipText = "対象;" & database
             End If
 
-            If codetree.Nodes.Count >= 1 Then
-                codetree.Nodes(0).Expand()
-            End If
             codetree.EndUpdate()
-            error_window.list_load_error.EndUpdate()
-            loaded = True
-            file_saveas.Enabled = True
-            overwrite_db.Enabled = True
-            overwrite_db.ToolTipText = "対象;" & database
-            'If DATEL = True Then
-            '    overwrite_db.ToolTipText &= vbCrLf & "ARMAX用BINは.arテキストに変換されます"
-            'End If
         Else
             codetree.Nodes.Add("NEW_DB").ImageIndex = 0
         End If
@@ -368,7 +368,7 @@ Public Class MERGE
                 reset_PSX()
                 Application.DoEvents()
                 open.read_PSX(database, enc1)
-            Else
+            ElseIf open.no_db(database, enc1) = False Then
                 enc1 = open.check_enc(database)
                 reset_PSP()
                 Application.DoEvents()
@@ -480,7 +480,6 @@ Public Class MERGE
         End If
     End Sub
 
-
     Private Sub ACTONREPLAYToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles saveas_actionreplay.Click
         Dim open As New load_db
         Dim s As New save_db
@@ -502,7 +501,6 @@ Public Class MERGE
             End If
         End If
     End Sub
-
 
     Private Sub file_exit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles file_exit.Click
         Close()
@@ -1903,7 +1901,6 @@ Public Class MERGE
 
     End Sub
 
-
     Private Sub TextBox1_KeyDown(ByVal sender As Object, _
         ByVal e As KeyEventArgs) Handles Me.KeyDown
 
@@ -2017,6 +2014,7 @@ Public Class MERGE
         codetree.Nodes(0).Nodes(z).Nodes(0).Remove()
         Return True
     End Function
+
 #End Region
     'ツリー操作
 #Region "Code tree procedures"
@@ -2055,6 +2053,10 @@ Public Class MERGE
         move_up.Enabled = True
         move_down.Enabled = True
         merge_codes.Enabled = True
+        Dim sdg As New StringBuilder
+        Dim sdm As New StringBuilder
+        Dim scmt As New StringBuilder
+        Dim scode As New StringBuilder
 
         Select Case codetree.SelectedNode.Level
 
@@ -2125,13 +2127,13 @@ Public Class MERGE
                             If s.Length >= 2 Then
 
                                 If s.Contains("#<DGLINE") Then
-                                    dgtext.Text &= s.Substring(1, s.Length - 1) & vbCrLf
+                                    sdg.AppendLine(s.Remove(0, 1))
                                 ElseIf s.Contains("#<DGMODE") Then
-                                    dmtext.Text &= s.Substring(1, s.Length - 1) & vbCrLf
+                                    sdm.AppendLine(s.Remove(0, 1))
                                 ElseIf s.Contains("#") Then
-                                    cmt_tb.Text &= s.Substring(1, s.Length - 1) & vbCrLf
+                                    scmt.AppendLine(s.Remove(0, 1))
                                 Else
-                                    cl_tb.Text &= s & vbCrLf
+                                    scode.AppendLine(s)
                                 End If
 
                             End If
@@ -2144,9 +2146,15 @@ Public Class MERGE
 
                 Next
 
+                dgtext.Text = sdg.ToString
+                dmtext.Text = sdm.ToString
+                cmt_tb.Text = scmt.ToString
+                cl_tb.Text = scode.ToString
+
         End Select
 
     End Sub
+
     Private Sub codetree_DragEnter(ByVal sender As Object, _
         ByVal e As System.Windows.Forms.DragEventArgs) _
         Handles codetree.DragEnter
@@ -2205,7 +2213,8 @@ Public Class MERGE
             End If
 
             Dim open As New load_db
-            If codetree.Nodes(0).Nodes.Count > 0 AndAlso MessageBox.Show("ドロップされたデータベースを開くと現在のデータベースが消えてしまいます。このまま開いてもよろしいですか？", "データベース保存の確認", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) = Windows.Forms.DialogResult.Cancel Then
+            If codetree.Nodes IsNot Nothing AndAlso MessageBox.Show("ドロップされたデータベースを開くと現在のデータベースが消えてしまいます。このまま開いてもよろしいですか？", _
+                                                                    "データベース保存の確認", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) = Windows.Forms.DialogResult.Cancel Then
                 Exit Sub
             End If
             Me.AutoSize = False
@@ -2240,7 +2249,7 @@ Public Class MERGE
                 Application.DoEvents()
                 open.read_PSX(database, enc1)
                 PSX = True
-            Else
+            ElseIf open.no_db(database, enc1) = False Then
                 enc1 = open.check_enc(database)
                 reset_PSP()
                 Application.DoEvents()
@@ -2675,7 +2684,6 @@ Public Class MERGE
     Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DATAGRID.Click, dgedit.Click
         Dim f As New datagrid
 
-
         If TEMP.Checked = True Then
             f.edmode = "_N "
         ElseIf PSPAR.Checked = True Then
@@ -2940,4 +2948,3 @@ Public Class MERGE
             Label2.Text = temp.ToString & "行目"
     End Sub
 End Class
-
