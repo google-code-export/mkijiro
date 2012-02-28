@@ -233,20 +233,22 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         Return True
     End Function
 #End Region
+
     'リスト配列作成
     Function listtextadd(ByVal lsfile As String, ByVal z As Integer) As Boolean
         'リストボックスに追加する文字列配列を作成
         Dim sr As New System.IO.StreamReader(lsfile, _
     System.Text.Encoding.GetEncoding(932))
         Dim n As Integer = 0
-        Dim l As Integer = 0
         Dim i As Integer = 0
         Dim b1 As String = Nothing
         Dim b2 As String = Nothing
         Dim blen As Integer = 0
         Dim p As Integer = 0
-        Dim s1(8000) As String
-        Dim s2(8000) As String
+        Dim list As ListViewItem() = Nothing
+        Array.Resize(list, 8000)
+        Dim itemx As New ListViewItem
+        itemx.SubItems.Add("")
         getpositions(z)
         While sr.Peek() > -1
             b1 = sr.ReadLine()
@@ -267,29 +269,28 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
             End If
             If blen > 1 And m.Success Then
                 If n = 7999 Then
+                    MessageBox.Show("配列数が8000を超えました")
                     Exit While
                 End If
+
+                itemx = CType(itemx.Clone, ListViewItem)
                 b2 = m.Value.ToUpper.Trim
                 b2 = b2.PadLeft(rmlen, "0"c)
-                s1(n) = b2
+                itemx.Text = b2
+                itemx.SubItems(1).Text = mleft.Trim
+                list(n) = itemx
                 n += 1
-                s2(l) = mleft.Trim
-                l += 1
+                'l += 1
             End If
         End While
         sr.Close()
-        n = n - 1
+        Array.Resize(list, n)
+
+        ListView1.BeginUpdate()
 
         ListView1.Items.Clear()
+        ListView1.Items.AddRange(list)
 
-        '再描画しないようにする
-        ListView1.BeginUpdate()
-        '配列の内容を一つ一つ追加する
-        For i = 0 To n
-            ListView1.Items.Add(s1(i))
-            ListView1.Items(i).SubItems.Add(s2(i))
-        Next
-        '再描画するようにする
         ListView1.EndUpdate()
 
         ListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize)

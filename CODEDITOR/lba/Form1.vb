@@ -620,6 +620,7 @@ Public Class Form1
         Return FindAssociatedExecutableFile(fileName, "open")
     End Function
 
+
     Function runapp(ByVal itemx As ListViewItem) As Boolean
         Dim temp As String = Application.StartupPath & "\tmp\" & (itemx.Text)
         Dim filess As String() = System.IO.Directory.GetFiles((Application.StartupPath & "\tmp"), "*", System.IO.SearchOption.AllDirectories)
@@ -1230,6 +1231,7 @@ Public Class Form1
     Function getlist_virtual(ByVal dst As Integer) As Boolean
         Try
             Dim start As DateTime = Now
+            ListView1.BeginUpdate()
             ListView1.Clear()
             ListView1.View = View.Details
             ListView1.VirtualMode = True
@@ -1240,7 +1242,6 @@ Public Class Form1
             Array.Resize(virtual_item, CInt(vlistmax.Text))
             Array.Resize(arraylistdir, TreeView1.SelectedNode.Nodes.Count + 1)
 
-            ListView1.BeginUpdate()
 
             ListView1.Columns.Insert(0, "NAME", col_len(0), HorizontalAlignment.Right)
             ListView1.Columns.Insert(1, "LBA", col_len(1), HorizontalAlignment.Right)
@@ -1433,9 +1434,14 @@ Public Class Form1
         End Try
     End Function
 
+    Protected Sub EndUpdate()
+    End Sub
+
+    Protected Sub beginUpdate()
+    End Sub
+
     Private Declare Function ExtractAssociatedIcon Lib "shell32" Alias "ExtractAssociatedIconA" (ByVal hInst As System.IntPtr, <MarshalAs(UnmanagedType.LPStr)> ByVal lpIconPath As String, ByRef lpiIcon As Integer) As System.IntPtr
     Private Declare Function DestroyIcon Lib "user32" (ByVal hIcon As System.IntPtr) As Long
-
 
     Function startpath_fix(ByVal p As String) As String
         If p(p.Length - 1) <> "\" Then
@@ -1483,6 +1489,7 @@ Public Class Form1
     Function getlist(ByVal dst As Integer) As Boolean
         Try
             Dim start As DateTime = Now
+            ListView1.BeginUpdate()
             ListView1.Clear()
             ListView1.View = View.Details
             ListView1.VirtualMode = False
@@ -1603,7 +1610,6 @@ Public Class Form1
                 Dim ni As Integer = 0
                 Dim mi As Integer = 0
 
-                ListView1.BeginUpdate()
 
                 Dim itemx As New ListViewItem
                 itemx.Text = ".."

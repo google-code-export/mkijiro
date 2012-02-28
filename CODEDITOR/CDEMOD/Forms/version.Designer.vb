@@ -26,17 +26,19 @@ Partial Class version
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.CDEupdate = New System.Windows.Forms.Button()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(14, 10)
+        Me.Label1.Location = New System.Drawing.Point(30, 9)
         Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(219, 70)
+        Me.Label1.Size = New System.Drawing.Size(180, 14)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = "CWCDATABASEEDITORMOD" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Original SRC pasky,modded BY (ﾟ∀ﾟ)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "License GNU GPL v3" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        Me.Label1.Text = "CWCDATABASEEDITORMOD"
         '
         'LinkLabel1
         '
@@ -53,12 +55,12 @@ Partial Class version
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(14, 98)
+        Me.Label2.Location = New System.Drawing.Point(46, 99)
         Me.Label2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(146, 14)
+        Me.Label2.Size = New System.Drawing.Size(153, 14)
         Me.Label2.TabIndex = 2
-        Me.Label2.Text = "BUILD:2012/02/06 0:12"
+        Me.Label2.Text = "BUILD:2012/02/28 19:39"
         '
         'CDEupdate
         '
@@ -70,11 +72,31 @@ Partial Class version
         Me.CDEupdate.Text = "CHECKVER"
         Me.CDEupdate.UseVisualStyleBackColor = True
         '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(14, 40)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(219, 14)
+        Me.Label3.TabIndex = 4
+        Me.Label3.Text = "Original SRC pasky,modded BY (ﾟ∀ﾟ)"
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(46, 69)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(133, 14)
+        Me.Label4.TabIndex = 5
+        Me.Label4.Text = "License GNU GPL v3"
+        '
         'version
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(249, 178)
+        Me.Controls.Add(Me.Label4)
+        Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.CDEupdate)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.LinkLabel1)
@@ -90,4 +112,6 @@ Partial Class version
     Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents CDEupdate As System.Windows.Forms.Button
+    Friend WithEvents Label3 As System.Windows.Forms.Label
+    Friend WithEvents Label4 As System.Windows.Forms.Label
 End Class

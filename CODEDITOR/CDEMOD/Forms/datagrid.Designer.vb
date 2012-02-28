@@ -49,6 +49,7 @@ Partial Class datagrid
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.Label2 = New System.Windows.Forms.Label()
+        Me.timer = New System.Windows.Forms.Label()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.CNVbikou.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -200,7 +201,7 @@ Partial Class datagrid
         '
         'APPLY
         '
-        Me.APPLY.Location = New System.Drawing.Point(153, 26)
+        Me.APPLY.Location = New System.Drawing.Point(382, 4)
         Me.APPLY.Margin = New System.Windows.Forms.Padding(4)
         Me.APPLY.Name = "APPLY"
         Me.APPLY.Size = New System.Drawing.Size(65, 27)
@@ -211,7 +212,7 @@ Partial Class datagrid
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(228, 11)
+        Me.Label1.Location = New System.Drawing.Point(16, 9)
         Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(11, 14)
@@ -221,7 +222,7 @@ Partial Class datagrid
         'gridsave
         '
         Me.gridsave.AutoSize = True
-        Me.gridsave.Location = New System.Drawing.Point(16, 38)
+        Me.gridsave.Location = New System.Drawing.Point(253, 373)
         Me.gridsave.Name = "gridsave"
         Me.gridsave.Size = New System.Drawing.Size(130, 18)
         Me.gridsave.TabIndex = 4
@@ -231,7 +232,7 @@ Partial Class datagrid
         'g_address
         '
         Me.g_address.AutoSize = True
-        Me.g_address.Location = New System.Drawing.Point(16, 11)
+        Me.g_address.Location = New System.Drawing.Point(231, 8)
         Me.g_address.Name = "g_address"
         Me.g_address.Size = New System.Drawing.Size(70, 18)
         Me.g_address.TabIndex = 5
@@ -243,7 +244,7 @@ Partial Class datagrid
         '
         Me.g_value.AutoSize = True
         Me.g_value.Checked = True
-        Me.g_value.Location = New System.Drawing.Point(92, 11)
+        Me.g_value.Location = New System.Drawing.Point(307, 8)
         Me.g_value.Name = "g_value"
         Me.g_value.Size = New System.Drawing.Size(56, 18)
         Me.g_value.TabIndex = 6
@@ -254,7 +255,7 @@ Partial Class datagrid
         'ComboBox1
         '
         Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {"DEC", "BINARY32", "BIN32>>16", "BINARY16", "ASM"})
+        Me.ComboBox1.Items.AddRange(New Object() {"DEC", "DEC16BIT", "BINARY32", "BIN32>>16", "BINARY16", "ASM"})
         Me.ComboBox1.Location = New System.Drawing.Point(355, 36)
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(121, 22)
@@ -268,7 +269,6 @@ Partial Class datagrid
         Me.Panel1.Controls.Add(Me.Label1)
         Me.Panel1.Controls.Add(Me.g_value)
         Me.Panel1.Controls.Add(Me.g_address)
-        Me.Panel1.Controls.Add(Me.gridsave)
         Me.Panel1.Location = New System.Drawing.Point(22, 12)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(502, 67)
@@ -283,13 +283,24 @@ Partial Class datagrid
         Me.Label2.TabIndex = 8
         Me.Label2.Text = "編集タイプ一括変更"
         '
+        'timer
+        '
+        Me.timer.AutoSize = True
+        Me.timer.Location = New System.Drawing.Point(452, 373)
+        Me.timer.Name = "timer"
+        Me.timer.Size = New System.Drawing.Size(46, 14)
+        Me.timer.TabIndex = 9
+        Me.timer.Text = "Label3"
+        '
         'datagrid
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(537, 372)
+        Me.ClientSize = New System.Drawing.Size(537, 393)
+        Me.Controls.Add(Me.timer)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.DataGridView1)
+        Me.Controls.Add(Me.gridsave)
         Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "datagrid"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
@@ -299,6 +310,7 @@ Partial Class datagrid
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
     Friend WithEvents DataGridView1 As System.Windows.Forms.DataGridView
@@ -327,4 +339,5 @@ Partial Class datagrid
     Friend WithEvents ComboBox1 As System.Windows.Forms.ComboBox
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents timer As System.Windows.Forms.Label
 End Class
