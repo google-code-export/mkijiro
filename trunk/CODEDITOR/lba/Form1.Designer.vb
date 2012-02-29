@@ -76,6 +76,8 @@ Partial Class Form1
         Me.nodemax = New System.Windows.Forms.TextBox()
         Me.addlistmax = New System.Windows.Forms.TextBox()
         Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.bool_exe = New System.Windows.Forms.Label()
+        Me.exe = New System.Windows.Forms.TextBox()
         Me.vlistmax = New System.Windows.Forms.TextBox()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.ContextMenuStrip2.SuspendLayout()
@@ -422,7 +424,7 @@ Partial Class Form1
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ファイルToolStripMenuItem, Me.設定ToolStripMenuItem, Me.バージョンToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(918, 29)
+        Me.MenuStrip1.Size = New System.Drawing.Size(917, 29)
         Me.MenuStrip1.TabIndex = 21
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -511,6 +513,8 @@ Partial Class Form1
         '
         'Panel3
         '
+        Me.Panel3.Controls.Add(Me.bool_exe)
+        Me.Panel3.Controls.Add(Me.exe)
         Me.Panel3.Controls.Add(Me.vlistmax)
         Me.Panel3.Controls.Add(Me.sdir)
         Me.Panel3.Controls.Add(Me.fsbuf)
@@ -520,10 +524,29 @@ Partial Class Form1
         Me.Panel3.Controls.Add(Me.SAVEMODE)
         Me.Panel3.Location = New System.Drawing.Point(919, 35)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(123, 115)
+        Me.Panel3.Size = New System.Drawing.Size(123, 135)
         Me.Panel3.TabIndex = 28
         Me.Panel3.UseWaitCursor = True
         Me.Panel3.Visible = False
+        '
+        'bool_exe
+        '
+        Me.bool_exe.AutoSize = True
+        Me.bool_exe.Location = New System.Drawing.Point(6, 111)
+        Me.bool_exe.Name = "bool_exe"
+        Me.bool_exe.Size = New System.Drawing.Size(14, 14)
+        Me.bool_exe.TabIndex = 31
+        Me.bool_exe.Text = "0"
+        Me.bool_exe.UseWaitCursor = True
+        '
+        'exe
+        '
+        Me.exe.Location = New System.Drawing.Point(66, 82)
+        Me.exe.Name = "exe"
+        Me.exe.Size = New System.Drawing.Size(45, 21)
+        Me.exe.TabIndex = 30
+        Me.exe.Text = "EXE"
+        Me.exe.UseWaitCursor = True
         '
         'vlistmax
         '
@@ -550,7 +573,7 @@ Partial Class Form1
         Me.AllowDrop = True
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(918, 578)
+        Me.ClientSize = New System.Drawing.Size(917, 578)
         Me.Controls.Add(Me.tree)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Controls.Add(Me.Panel3)
@@ -646,5 +669,7 @@ Partial Class Form1
     Friend WithEvents RUNAPPToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents Label6 As System.Windows.Forms.Label
+    Friend WithEvents exe As System.Windows.Forms.TextBox
+    Friend WithEvents bool_exe As System.Windows.Forms.Label
 
 End Class

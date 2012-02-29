@@ -8,14 +8,14 @@ Imports System.Runtime.InteropServices
 
 Public Class Form1
     Dim iso As String = "NULL"
-    Dim confver As Integer = 1 'version
+    Dim confver As Integer = 3 'version
     Dim cso As Boolean = False
     Dim lssort As Integer = 1
-    Dim force_offset As Boolean
+    Dim force_offset As Boolean = False
     Dim virtual_item As ListViewItem()
     Dim arraylistdir() As ListViewItem
-    Dim startpath As String
-    Dim ArG As New ArrayList
+    Dim startpath As String = ""
+    Dim isotree As New List(Of TreeNode)
     Dim cFormat As New System.Globalization.CultureInfo("ja-JP", False)
     Dim buffer As Integer
     Dim col_len As Integer() = {180, 60, 80, 140, 80}
@@ -41,50 +41,49 @@ Public Class Form1
         If File.Exists(Application.StartupPath & "\conf") Then
             Dim fs As New System.IO.FileStream(Application.StartupPath & "\conf", System.IO.FileMode.Open, System.IO.FileAccess.Read)
             Dim bs(CInt(fs.Length - 1)) As Byte
-            Dim conf(3) As Byte
-            fs.Read(conf, 0, 4)
-            If confver = BitConverter.ToInt32(conf, 0) AndAlso fs.Length >= 28 Then
-                fs.Read(bs, 0, bs.Length - 4)
-                If bs(0) = 1 Then
+            fs.Read(bs, 0, bs.Length)
+            fs.Close()
+            If confver = BitConverter.ToInt32(bs, 0) AndAlso bs.Length >= 32 Then
+                If bs(4) = 1 Then
                     uid_parent.Checked = True
                 End If
-                If bs(1) = 1 Then
+                If bs(5) = 1 Then
                     gridview.Checked = True
                 End If
-                If bs(2) = 1 Then
+                If bs(6) = 1 Then
                     localtime.Checked = True
                 End If
-                lssort = bs(3)
-                If bs(4) = 1 Then
+                lssort = (bs(7) >> 2) And 3
+                bool_exe.Text = (bs(7) And 3).ToString()
+                If bs(8) = 1 Then
                     VIRTUAL.Checked = True
                 End If
-                If bs(5) = 1 Then
+                If bs(9) = 1 Then
                     tree.Checked = True
                 End If
-                If bs(5) = 1 Then
-                    tree.Checked = True
-                End If
-                fsbuf.Text = bs(6).ToString
-                SAVEMODE.Text = Chr(bs(7))
-                Dim int(3) As Byte
-                Array.Copy(bs, 8, int, 0, 4)
-                nodemax.Text = BitConverter.ToInt32(int, 0).ToString
-                Array.Copy(bs, 12, int, 0, 4)
-                addlistmax.Text = BitConverter.ToInt32(int, 0).ToString
-                Array.Copy(bs, 16, int, 0, 4)
-                vlistmax.Text = BitConverter.ToInt32(int, 0).ToString
-                For i = 0 To 3
-                    If bs(i + 20) > 50 Then
-                        col_len(i) = bs(i + 20)
+                fsbuf.Text = bs(10).ToString
+                SAVEMODE.Text = Chr(bs(11))
+                nodemax.Text = cvt32bit(bs, 12).ToString
+                addlistmax.Text = cvt32bit(bs, 16).ToString
+                vlistmax.Text = cvt32bit(bs, 20).ToString
+            For i = 0 To 3
+                    If bs(i + 24) > 50 Then
+                        col_len(i) = bs(i + 24)
                     End If
                 Next
-                If bs.Length - 28 > 0 Then
-                    Dim dr(bs.Length - 24 - 1) As Byte
-                    Array.Copy(bs, 24, dr, 0, dr.Length)
+                Dim len As Integer = cvt32bit(bs, 28)
+                If bs.Length - 32 = len Then
+                    Dim dr(len - 1) As Byte
+                    Array.Copy(bs, 32, dr, 0, len)
                     sdir.Text = Encoding.GetEncoding(65001).GetString(dr).Replace(vbNullChar, "")
                 End If
+                'If bs.Length - 32 - len > 0 Then
+                '    Dim len2 As Integer = cvt32bit(bs, 29 + len)
+                '    Dim exp(len - 1) As Byte
+                '    Array.Copy(bs, 32 + len, exp, 0, len2)
+                '    sdir.Text = Encoding.GetEncoding(65001).GetString(exp).Replace(vbNullChar, "")
+                'End If
             End If
-            fs.Close()
         End If
 
         If Directory.Exists(sdir.Text) = False Then
@@ -100,6 +99,11 @@ Public Class Form1
                 discid.Text = psf.GETID(iso)
             Else
                 iso = ""
+                'Dim a As Integer = CInt(bool.Text)
+                'If (a And 2) = 2 Then
+                '    Process.Start(exe.Text, iso)
+                '    Me.Close()
+                'End If
             End If
             Button1_Click(sender, e)
         End If
@@ -110,10 +114,6 @@ Public Class Form1
     End Sub
 
     Private Sub ffclose(sender As System.Object, e As System.Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
-
-        Array.Resize(virtual_item, 0)
-        Array.Resize(arraylistdir, 0)
-        ArG.Clear()
 
         Dim fs As New FileStream(Application.StartupPath & "\conf", System.IO.FileMode.Create, FileAccess.Write)
         Dim bs(23) As Byte
@@ -128,7 +128,7 @@ Public Class Form1
         If localtime.Checked = True Then
             bs(2) = 1
         End If
-        Dim bb As Byte() = BitConverter.GetBytes(lssort)
+        Dim bb As Byte() = BitConverter.GetBytes((lssort << 2) + CInt(bool_exe.Text))
         Array.Copy(bb, 0, bs, 3, 1)
         If VIRTUAL.Checked = True Then
             bs(4) = 1
@@ -156,7 +156,15 @@ Public Class Form1
         fs.Write(bs, 0, 24)
         If Directory.Exists(sdir.Text) Then
             Dim dr() As Byte = Encoding.GetEncoding(65001).GetBytes(sdir.Text)
+            Dim bbb As Byte() = BitConverter.GetBytes(dr.Length)
+            fs.Write(bbb, 0, 4)
             fs.Write(dr, 0, dr.Length)
+            'If File.Exists(exe.Text) Then
+            '    Dim exp() As Byte = Encoding.GetEncoding(65001).GetBytes(exe.Text)
+            '    Dim bbbb As Byte() = BitConverter.GetBytes(exp.Length)
+            '    fs.Write(bbbb, 0, 4)
+            '    fs.Write(exp, 0, exp.Length)
+            'End If
         End If
         fs.Close()
     End Sub
@@ -265,11 +273,11 @@ Public Class Form1
                 fs.Seek(&H8084, SeekOrigin.Begin)
                 fs.Read(bbbb, 0, 4)
                 'パステーブルサイズ
-                table_len = cvt32bit(bbbb)
+                table_len = cvt32bit(bbbb, 0)
                 'リトルエンディアンパステーブル(L型)
                 fs.Seek(&H808C, SeekOrigin.Begin)
                 fs.Read(bbbb, 0, 4)
-                lba = cvt32bit(bbbb) << 11
+                lba = cvt32bit(bbbb, 0) << 11
                 fs.Seek(lba, SeekOrigin.Begin)
                 'LBA読み込みサイズを拡張
                 Array.Resize(bs, table_len + 1)
@@ -277,27 +285,24 @@ Public Class Form1
             Else
                 bs = unpack_cso(16)
                 Array.Copy(bs, &H84, bbbb, 0, 4)
-                table_len = cvt32bit(bbbb)
+                table_len = cvt32bit(bbbb, 0)
                 Array.Copy(bs, &H8C, bbbb, 0, 4)
-                lba = cvt32bit(bbbb)
+                lba = cvt32bit(bbbb, 0)
                 Array.Resize(bs, table_len)
                 bs = unpack_cso(lba)
             End If
 
             parent_node = TreeView1.Nodes(0)
 
-            Dim Ar As New ArrayList
-            Ar = GetAllNodes(TreeView1.Nodes)
+            isotree = GetAllNodes(TreeView1.Nodes)
 
             While i < table_len
                 '文字の長さ
                 str_len = bs(i)
                 'LBA
-                Array.Copy(bs, i + 2, bbbb, 0, 4)
-                lba = cvt32bit(bbbb)
+                lba = cvt32bit(bs, i + 2)
                 '親のUID番号
-                Array.Copy(bs, i + 6, bb, 0, 2)
-                parent(k) = cvt16bit(bb)
+                parent(k) = cvt16bit(bs, i + 6)
                 'ディレクトリの名前
                 Array.Resize(na, str_len)
                 Array.Copy(bs, i + 8, na, 0, str_len)
@@ -328,12 +333,11 @@ Public Class Form1
                 x.ImageIndex = 0
                 x.Name = k.ToString
                 '親ノードを検索し追加する
-                Dim seek_parent_node As New TreeNode
-                '検索リストからノードに変換する
-                seek_parent_node = CType(Ar(parent(k)), TreeNode)
-                seek_parent_node.Nodes.Add(x)
+                Dim y As New TreeNode
+                y = isotree(parent(k))
+                y.Nodes.Add(x)
                 '検索リストに追加したノードを追加
-                Ar.Add(seek_parent_node.Nodes(seek_parent_node.Nodes.Count - 1))
+                isotree.Add(y.Nodes(y.Nodes.Count - 1))
 
                 If k = max Then
                     MessageBox.Show("ノード数限界に達しました")
@@ -359,9 +363,6 @@ Public Class Form1
             TextBox1.Text = sb.ToString
             fs.Close()
 
-            '検索リストをキャッシュしておく
-            'Ar.Sort()
-            ArG = Ar
 
         ElseIf iso <> "NULL" Then
             MessageBox.Show("ファイルをドロップして下さい")
@@ -643,7 +644,7 @@ Public Class Form1
                 Dim bbbb(3) As Byte
                 fs.Seek(8, SeekOrigin.Begin)
                 fs.Read(bbbb, 0, 4)
-                iso_len = cvt32bit(bbbb)
+                iso_len = cvt32bit(bbbb, 0)
             End If
             If ((CLng(s) << 11) + CLng(ss)) > iso_len Then
                 fs.Close()
@@ -829,7 +830,6 @@ Public Class Form1
                 Array.Resize(FileName, kk)
                 Dim null As System.EventArgs = Nothing
                 Dim myDataObject As New DataObject(DataFormats.FileDrop, FileName)
-                'ListView1.DoDragDrop(myDataObject, DragDropEffects.Move)
 
                 GETDATAToolStripMenuItem_Click(TextBox1, null)
                 ListView1.DoDragDrop(myDataObject, DragDropEffects.Move)
@@ -887,19 +887,22 @@ Public Class Form1
         Dim errorm As New StringBuilder
 
         startpath = Application.StartupPath
-        Select Case SAVEMODE.Text
-            Case "S"
-                startpath = sdir.Text
-            Case "F"
-                Dim fbd As New FolderBrowserDialog
-                fbd.Description = "保存先を選んで下さい"
-                fbd.ShowNewFolderButton = True
-                If fbd.ShowDialog = Windows.Forms.DialogResult.OK Then
-                    startpath = fbd.SelectedPath
-                Else
-                    Exit Sub
-                End If
-        End Select
+
+        If sender IsNot TextBox1 Then
+            Select Case SAVEMODE.Text
+                Case "S"
+                    startpath = sdir.Text
+                Case "F"
+                    Dim fbd As New FolderBrowserDialog
+                    fbd.Description = "保存先を選んで下さい"
+                    fbd.ShowNewFolderButton = True
+                    If fbd.ShowDialog = Windows.Forms.DialogResult.OK Then
+                        startpath = fbd.SelectedPath
+                    Else
+                        Exit Sub
+                    End If
+            End Select
+        End If
 
         Dim m As Integer = 0
         If sender Is TextBox1 Then
@@ -930,7 +933,7 @@ Public Class Form1
                         Dim bbbb(3) As Byte
                         fs.Seek(8, SeekOrigin.Begin)
                         fs.Read(bbbb, 0, 4)
-                        iso_len = cvt32bit(bbbb)
+                        iso_len = cvt32bit(bbbb, 0)
                     End If
                     If ((CLng(s) << 11) + CLng(ss)) > iso_len Then
                         fs.Close()
@@ -1014,7 +1017,7 @@ Public Class Form1
                                 Exit For
                             End If
                         Next
-                        Dim Ar As New ArrayList
+                        Dim Ar As New List(Of TreeNode)
                         Ar = GetAllNodes(seek_node.Nodes)
 
                         errorm.Append(getfile(seek_node, m))
@@ -1040,7 +1043,7 @@ Public Class Form1
     Private Sub EXTRACTLBAToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles ABSOLUTPATHToolStripMenuItem.Click, OFFSETPATHToolStripMenuItem.Click
         If TreeView1.Nodes.Count > 0 Then
             Dim start As DateTime = Now
-            Dim Ar As New ArrayList
+            Dim Ar As New List(Of TreeNode)
             Ar = GetAllNodes(TreeView1.SelectedNode.Nodes)
             Dim title_st As String = title.Text
             Dim stbyte As Byte() = System.Text.Encoding.GetEncoding(932).GetBytes(title_st)
@@ -1072,8 +1075,8 @@ Public Class Form1
             End If
 
             startpath = startpath_fix(startpath)
-
-            Dim sw As New System.IO.StreamWriter(startpath & title_st & ".txt", False, System.Text.Encoding.GetEncoding(65001))
+            Dim path As String = startpath & title_st & ".txt"
+            Dim sw As New System.IO.StreamWriter(path, False, System.Text.Encoding.GetEncoding(65001))
             Dim sb As New StringBuilder
             Dim error_m As New StringBuilder
             If TreeView1.SelectedNode.Level > 0 Then
@@ -1099,6 +1102,15 @@ Public Class Form1
             sw.Close()
 
             Beep()
+            Dim a As Integer = CInt(bool_exe.Text)
+            If (a And 1) = 1 Then
+                Dim exe As String = FindAssociatedExecutableFile(path)
+                If exe = "" Then
+                    MessageBox.Show("関連付けられたプログラムが見つかりませんでした。")
+                End If
+                Dim exes As String() = exe.Split(""""c)
+                Process.Start(path)
+            End If
 
             Dim er As New Regex("(^|\n)!!\d+\t.*?\t", RegexOptions.ECMAScript)
             Dim mm As Match = er.Match(sb.ToString)
@@ -1121,7 +1133,7 @@ Public Class Form1
     Private Sub EXTRACTDATA_TREE(sender As System.Object, e As System.EventArgs) Handles 絶対パスで展開ToolStripMenuItem.Click, 相対パスで展開ToolStripMenuItem.Click
         If TreeView1.Nodes.Count > 0 Then
             Dim start As DateTime = Now
-            Dim Ar As New ArrayList
+            Dim Ar As New List(Of TreeNode)
             Dim errorm As New StringBuilder
             Dim m As Integer = 0
             If sender Is 相対パスで展開ToolStripMenuItem Then
@@ -1179,12 +1191,12 @@ Public Class Form1
 #Region "GETFUNC"
 
 
-    Function cvt16bit(ByVal b As Byte()) As Integer
-        Return BitConverter.ToInt16(b, 0)
+    Function cvt16bit(ByVal b As Byte(), ByVal pos As Integer) As Integer
+        Return BitConverter.ToInt16(b, pos)
     End Function
 
-    Function cvt32bit(ByVal b As Byte()) As Integer
-        Return BitConverter.ToInt32(b, 0)
+    Function cvt32bit(ByVal b As Byte(), ByVal pos As Integer) As Integer
+        Return BitConverter.ToInt32(b, pos)
     End Function
 
     Function unpack_cso(ByVal lba As Integer) As Byte()
@@ -1195,15 +1207,14 @@ Public Class Form1
         Dim bss(23) As Byte
         Dim seek As Integer = 0
         cfs.Read(bss, 0, 24)
-        Array.ConstrainedCopy(bss, 20, offset, 0, 4)
-        Dim align As Integer = cvt32bit(offset) >> 8
+        Dim align As Integer = cvt32bit(bss, 20) >> 8
 
         cfs.Seek(24 + lba * 4, System.IO.SeekOrigin.Begin)
         cfs.Read(offset, 0, 4)
-        seek = cvt32bit(offset)
+        seek = cvt32bit(offset, 0)
         Dim pos As Integer = (seek And &H7FFFFFFF) << align
         cfs.Read(offset, 0, 4)
-        Dim pos2 As Integer = (cvt32bit(offset) And &H7FFFFFFF) << align
+        Dim pos2 As Integer = (cvt32bit(offset, 0) And &H7FFFFFFF) << align
 
         cfs.Seek(pos, System.IO.SeekOrigin.Begin)
         cfs.Read(source, 0, pos2 - pos)
@@ -1231,7 +1242,6 @@ Public Class Form1
     Function getlist_virtual(ByVal dst As Integer) As Boolean
         Try
             Dim start As DateTime = Now
-            ListView1.BeginUpdate()
             ListView1.Clear()
             ListView1.View = View.Details
             ListView1.VirtualMode = True
@@ -1239,6 +1249,8 @@ Public Class Form1
                 Return True
             End If
 
+            'clearの前にはbeginupdateは使わない
+            ListView1.BeginUpdate()
             Array.Resize(virtual_item, CInt(vlistmax.Text))
             Array.Resize(arraylistdir, TreeView1.SelectedNode.Nodes.Count + 1)
 
@@ -1269,7 +1281,7 @@ Public Class Form1
             If cso = True Then
                 fs.Seek(8, SeekOrigin.Begin)
                 fs.Read(bbbb, 0, 4)
-                iso_len = cvt32bit(bbbb)
+                iso_len = cvt32bit(bbbb, 0)
             End If
 
             Dim name As String
@@ -1277,13 +1289,17 @@ Public Class Form1
             Dim yyyymmdd(6) As Byte
             Dim na As Byte() = Nothing
 
-
-            Dim seek_parent_node As New TreeNode
-            Dim arr As TreeNode() = TreeView1.Nodes.Find((CInt(TreeView1.SelectedNode.Name) + 1).ToString, True)
+            
+            Dim find As Boolean = False
             Dim nextlba As Integer = -dst
-            If arr.Length > 0 Then
-                nextlba += CInt(arr(0).Tag.ToString)
-            Else
+            If isotree.Count > CInt(TreeView1.SelectedNode.Name) + 1 Then
+                Dim seek_parent_node As New TreeNode
+                seek_parent_node = isotree(CInt(TreeView1.SelectedNode.Name) + 1)
+                nextlba += CInt(seek_parent_node.Tag.ToString)
+                find = True
+            End If
+
+            If find = False Then
                 If cso = False Then
                     fs.Seek((CInt(TreeView1.SelectedNode.Parent.Tag.ToString)) << 11, SeekOrigin.Begin)
                     fs.Read(bs, 0, 2048)
@@ -1296,11 +1312,9 @@ Public Class Form1
                     If bs(i + 33) >= 32 Then
                         'フォルダかつLBAがおなじ
                         If ((bs(i + 25) >> 1) And 1) = 1 Then
-                            Array.Copy(bs, i + 2, bbbb, 0, 4)
-                            lba = cvt32bit(bbbb)
+                            lba = cvt32bit(bs, i + 2)
                             If dst = lba Then
-                                Array.Copy(bs, i + 10, bbbb, 0, 4)
-                                filesize = cvt32bit(bbbb)
+                                filesize = cvt32bit(bs, i + 10)
                                 str_len = bs(i + 32)
                                 Array.Resize(na, str_len)
                                 Array.Copy(bs, i + 33, na, 0, str_len)
@@ -1356,10 +1370,8 @@ Public Class Form1
             While i < bs.Length
                 next_len = bs(i)
                 If bs(i + 33) >= 32 Then
-                    Array.Copy(bs, i + 2, bbbb, 0, 4)
-                    lba = cvt32bit(bbbb)
-                    Array.Copy(bs, i + 10, bbbb, 0, 4)
-                    filesize = cvt32bit(bbbb)
+                    lba = cvt32bit(bs, i + 2)
+                    filesize = cvt32bit(bs, i + 10)
                     str_len = bs(i + 32)
                     Array.Resize(na, str_len)
                     Array.Copy(bs, i + 33, na, 0, str_len)
@@ -1434,12 +1446,6 @@ Public Class Form1
         End Try
     End Function
 
-    Protected Sub EndUpdate()
-    End Sub
-
-    Protected Sub beginUpdate()
-    End Sub
-
     Private Declare Function ExtractAssociatedIcon Lib "shell32" Alias "ExtractAssociatedIconA" (ByVal hInst As System.IntPtr, <MarshalAs(UnmanagedType.LPStr)> ByVal lpIconPath As String, ByRef lpiIcon As Integer) As System.IntPtr
     Private Declare Function DestroyIcon Lib "user32" (ByVal hIcon As System.IntPtr) As Long
 
@@ -1451,10 +1457,8 @@ Public Class Form1
     End Function
 
     Private Sub ListView1_RetrieveVirtualItem(ByVal sender As Object, ByVal e As System.Windows.Forms.RetrieveVirtualItemEventArgs) Handles ListView1.RetrieveVirtualItem
-        'リストビューにリストをセット      
-        Dim itemx As New ListViewItem
-        itemx = CType(virtual_item(e.ItemIndex).Clone, ListViewItem)
-        e.Item = itemx
+        'リストビューにリストをセット 
+        e.Item = CType(virtual_item(e.ItemIndex).Clone, ListViewItem)
 
     End Sub
 
@@ -1539,7 +1543,7 @@ Public Class Form1
                 If cso = True Then
                     fs.Seek(8, SeekOrigin.Begin)
                     fs.Read(bbbb, 0, 4)
-                    iso_len = cvt32bit(bbbb)
+                    iso_len = cvt32bit(bbbb, 0)
                 End If
 
                 Dim name As String
@@ -1547,13 +1551,17 @@ Public Class Form1
                 Dim yyyymmdd(6) As Byte
                 Dim na As Byte() = Nothing
 
-
-                Dim seek_parent_node As New TreeNode
-                Dim arr As TreeNode() = TreeView1.Nodes.Find((CInt(TreeView1.SelectedNode.Name) + 1).ToString, True)
+                
+                Dim find As Boolean = False
                 Dim nextlba As Integer = -dst
-                If arr.Length > 0 Then
-                    nextlba += CInt(arr(0).Tag.ToString)
-                ElseIf cso = False Then
+                If isotree.Count > CInt(TreeView1.SelectedNode.Name) + 1 Then
+                    Dim seek_parent_node As New TreeNode
+                    seek_parent_node = isotree(CInt(TreeView1.SelectedNode.Name) + 1)
+                    nextlba += CInt(seek_parent_node.Tag.ToString)
+                    find = True
+                End If
+
+                If find = False Then
 
                     If cso = False Then
                         fs.Seek((CInt(TreeView1.SelectedNode.Parent.Tag.ToString)) << 11, SeekOrigin.Begin)
@@ -1565,10 +1573,8 @@ Public Class Form1
                     While True 'i < 2048
                         next_len = bs(i)
                         If bs(i + 33) >= 32 Then
-                            Array.Copy(bs, i + 2, bbbb, 0, 4)
-                            lba = cvt32bit(bbbb)
-                            Array.Copy(bs, i + 10, bbbb, 0, 4)
-                            filesize = cvt32bit(bbbb)
+                            lba = cvt32bit(bs, i + 2)
+                            filesize = cvt32bit(bs, i + 10)
                             str_len = bs(i + 32)
                             Array.Resize(na, str_len)
                             Array.Copy(bs, i + 33, na, 0, str_len)
@@ -1629,10 +1635,8 @@ Public Class Form1
                 While i < bs.Length
                     next_len = bs(i)
                     If bs(i + 33) >= 32 Then
-                        Array.Copy(bs, i + 2, bbbb, 0, 4)
-                        lba = cvt32bit(bbbb)
-                        Array.Copy(bs, i + 10, bbbb, 0, 4)
-                        filesize = cvt32bit(bbbb)
+                        lba = cvt32bit(bs, i + 2)
+                        filesize = cvt32bit(bs, i + 10)
                         Array.Copy(bs, i + 18, yyyymmdd, 0, 7)
                         str_len = bs(i + 32)
                         Array.Resize(na, str_len)
@@ -1800,7 +1804,7 @@ Public Class Form1
         If cso = True Then
             fs.Seek(8, SeekOrigin.Begin)
             fs.Read(bbbb, 0, 4)
-            iso_len = cvt32bit(bbbb)
+            iso_len = cvt32bit(bbbb, 0)
         End If
         Dim na As Byte() = Nothing
         Dim bs(2047) As Byte
@@ -1809,9 +1813,9 @@ Public Class Form1
 
         Dim find As Boolean = False
         Dim nextlba As Integer = -dst
-        If ArG.Count > CInt(tt.Name) + 1 Then
+        If isotree.Count > CInt(tt.Name) + 1 Then
             Dim seek_parent_node As New TreeNode
-            seek_parent_node = CType(ArG(CInt(tt.Name) + 1), TreeNode)
+            seek_parent_node = isotree(CInt(tt.Name) + 1)
             nextlba += CInt(seek_parent_node.Tag.ToString)
             find = True
         End If
@@ -1829,11 +1833,9 @@ Public Class Form1
                 'フォルダかつLBAがおなじ
                 If ((bs(i + 25) >> 1) And 1) = 1 Then
                     If bs(i + 33) >= 32 Then
-                        Array.Copy(bs, i + 2, bbbb, 0, 4)
-                        lba = cvt32bit(bbbb)
+                        lba = cvt32bit(bs, i + 2)
                         If dst = lba Then
-                            Array.Copy(bs, i + 10, bbbb, 0, 4)
-                            filesize = cvt32bit(bbbb)
+                            filesize = cvt32bit(bs, i + 10)
                             str_len = bs(i + 32)
                             Array.Resize(na, str_len)
                             Array.Copy(bs, i + 33, na, 0, str_len)
@@ -1872,10 +1874,8 @@ Public Class Form1
             If bs(i + 33) >= 32 Then
                 If ((bs(i + 25) >> 1) And 1) = 0 Then
                     'file
-                    Array.Copy(bs, i + 2, bbbb, 0, 4)
-                    lba = cvt32bit(bbbb)
-                    Array.Copy(bs, i + 10, bbbb, 0, 4)
-                    filesize = cvt32bit(bbbb)
+                    lba = cvt32bit(bs, i + 2)
+                    filesize = cvt32bit(bs, i + 10)
                     str_len = bs(i + 32)
                     Array.Resize(na, str_len)
                     Array.Copy(bs, i + 33, na, 0, str_len)
@@ -2004,7 +2004,7 @@ Public Class Form1
         If cso = True Then
             fs.Seek(8, SeekOrigin.Begin)
             fs.Read(bbbb, 0, 4)
-            iso_len = cvt32bit(bbbb)
+            iso_len = cvt32bit(bbbb, 0)
         End If
         Dim yyyymmdd(6) As Byte
         Dim na As Byte() = Nothing
@@ -2013,9 +2013,9 @@ Public Class Form1
 
         Dim find As Boolean = False
         Dim nextlba As Integer = -dst
-        If ArG.Count > CInt(tt.Name) + 1 Then
+        If isotree.Count > CInt(tt.Name) + 1 Then
             Dim seek_parent_node As New TreeNode
-            seek_parent_node = CType(ArG(CInt(tt.Name) + 1), TreeNode)
+            seek_parent_node = isotree(CInt(tt.Name) + 1)
             nextlba += CInt(seek_parent_node.Tag.ToString)
             find = True
         End If
@@ -2031,11 +2031,9 @@ Public Class Form1
             While i < 2048
                 next_len = bs(i)
                 If bs(i + 33) >= 32 Then
-                    Array.Copy(bs, i + 2, bbbb, 0, 4)
-                    lba = cvt32bit(bbbb)
+                    lba = cvt32bit(bs, i + 2)
                     If ((bs(i + 25) >> 1) And 1) = 1 Then
-                        Array.Copy(bs, i + 10, bbbb, 0, 4)
-                        filesize = cvt32bit(bbbb)
+                        filesize = cvt32bit(bs, i + 10)
                         str_len = bs(i + 32)
                         Array.Resize(na, str_len)
                         Array.Copy(bs, i + 33, na, 0, str_len)
@@ -2078,10 +2076,8 @@ Public Class Form1
             If ((bs(i + 25) >> 1) And 1) = 0 Then
                 If bs(i + 33) >= 32 Then
                     'file
-                    Array.Copy(bs, i + 2, bbbb, 0, 4)
-                    lba = cvt32bit(bbbb)
-                    Array.Copy(bs, i + 10, bbbb, 0, 4)
-                    filesize = cvt32bit(bbbb)
+                    lba = cvt32bit(bs, i + 2)
+                    filesize = cvt32bit(bs, i + 10)
                     str_len = bs(i + 32)
                     Array.Resize(na, str_len)
                     Array.Copy(bs, i + 33, na, 0, str_len)
@@ -2136,9 +2132,9 @@ Public Class Form1
         Return sb.ToString
     End Function
 
-    Private Function GetAllNodes(ByVal Nodes As TreeNodeCollection) As ArrayList
+    Private Function GetAllNodes(ByVal Nodes As TreeNodeCollection) As List(Of TreeNode)
 
-        Dim Ar As New ArrayList
+        Dim Ar As New List(Of TreeNode)
         Dim Node As TreeNode
 
         For Each Node In Nodes

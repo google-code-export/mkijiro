@@ -28,6 +28,7 @@ Partial Class Form3
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.Label1 = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.Button1 = New System.Windows.Forms.Button()
@@ -44,7 +45,10 @@ Partial Class Form3
         Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Button2 = New System.Windows.Forms.Button()
-        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.TXTBOOT = New System.Windows.Forms.CheckBox()
+        Me.NOUMD = New System.Windows.Forms.CheckBox()
+        Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.Button3 = New System.Windows.Forms.Button()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -52,6 +56,7 @@ Partial Class Form3
         Me.TabPage2.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
+        Me.GroupBox3.SuspendLayout()
         Me.SuspendLayout()
         '
         'TabControl1
@@ -94,7 +99,7 @@ Partial Class Form3
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(196, 145)
+        Me.Label2.Location = New System.Drawing.Point(196, 146)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(29, 14)
         Me.Label2.TabIndex = 3
@@ -104,7 +109,7 @@ Partial Class Form3
         '
         Me.TextBox1.ContextMenuStrip = Me.ContextMenuStrip1
         Me.TextBox1.ImeMode = System.Windows.Forms.ImeMode.Disable
-        Me.TextBox1.Location = New System.Drawing.Point(163, 142)
+        Me.TextBox1.Location = New System.Drawing.Point(163, 143)
         Me.TextBox1.MaxLength = 2
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.Size = New System.Drawing.Size(27, 21)
@@ -112,10 +117,15 @@ Partial Class Form3
         Me.TextBox1.Text = "0"
         Me.TextBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
+        'ContextMenuStrip1
+        '
+        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(61, 4)
+        '
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(17, 145)
+        Me.Label1.Location = New System.Drawing.Point(17, 146)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(140, 14)
         Me.Label1.TabIndex = 1
@@ -191,6 +201,7 @@ Partial Class Form3
         'Panel2
         '
         Me.Panel2.BackColor = System.Drawing.Color.WhiteSmoke
+        Me.Panel2.Controls.Add(Me.GroupBox3)
         Me.Panel2.Controls.Add(Me.GroupBox2)
         Me.Panel2.Location = New System.Drawing.Point(0, 0)
         Me.Panel2.Name = "Panel2"
@@ -205,9 +216,9 @@ Partial Class Form3
         Me.GroupBox2.Controls.Add(Me.Label4)
         Me.GroupBox2.Controls.Add(Me.TextBox2)
         Me.GroupBox2.Controls.Add(Me.Label3)
-        Me.GroupBox2.Location = New System.Drawing.Point(20, 6)
+        Me.GroupBox2.Location = New System.Drawing.Point(9, 6)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(200, 108)
+        Me.GroupBox2.Size = New System.Drawing.Size(195, 108)
         Me.GroupBox2.TabIndex = 3
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "表示限界数"
@@ -217,7 +228,7 @@ Partial Class Form3
         Me.TextBox4.ContextMenuStrip = Me.ContextMenuStrip1
         Me.TextBox4.ImeMode = System.Windows.Forms.ImeMode.Disable
         Me.TextBox4.Location = New System.Drawing.Point(122, 78)
-        Me.TextBox4.MaxLength = 4
+        Me.TextBox4.MaxLength = 5
         Me.TextBox4.Name = "TextBox4"
         Me.TextBox4.Size = New System.Drawing.Size(50, 21)
         Me.TextBox4.TabIndex = 5
@@ -284,10 +295,48 @@ Partial Class Form3
         Me.Button2.Text = "OK"
         Me.Button2.UseVisualStyleBackColor = True
         '
-        'ContextMenuStrip1
+        'TXTBOOT
         '
-        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(61, 4)
+        Me.TXTBOOT.AutoSize = True
+        Me.TXTBOOT.Location = New System.Drawing.Point(9, 20)
+        Me.TXTBOOT.Name = "TXTBOOT"
+        Me.TXTBOOT.Size = New System.Drawing.Size(206, 18)
+        Me.TXTBOOT.TabIndex = 4
+        Me.TXTBOOT.Text = "LBAリストをTXTエディターで起動"
+        Me.TXTBOOT.UseVisualStyleBackColor = True
+        '
+        'NOUMD
+        '
+        Me.NOUMD.AutoSize = True
+        Me.NOUMD.Location = New System.Drawing.Point(9, 44)
+        Me.NOUMD.Name = "NOUMD"
+        Me.NOUMD.Size = New System.Drawing.Size(145, 18)
+        Me.NOUMD.TabIndex = 5
+        Me.NOUMD.Text = "UMD以外の指定EXE"
+        Me.NOUMD.UseVisualStyleBackColor = True
+        Me.NOUMD.Visible = False
+        '
+        'GroupBox3
+        '
+        Me.GroupBox3.Controls.Add(Me.Button3)
+        Me.GroupBox3.Controls.Add(Me.TXTBOOT)
+        Me.GroupBox3.Controls.Add(Me.NOUMD)
+        Me.GroupBox3.Location = New System.Drawing.Point(8, 120)
+        Me.GroupBox3.Name = "GroupBox3"
+        Me.GroupBox3.Size = New System.Drawing.Size(226, 69)
+        Me.GroupBox3.TabIndex = 6
+        Me.GroupBox3.TabStop = False
+        Me.GroupBox3.Text = "EXE起動"
+        '
+        'Button3
+        '
+        Me.Button3.Location = New System.Drawing.Point(160, 41)
+        Me.Button3.Name = "Button3"
+        Me.Button3.Size = New System.Drawing.Size(24, 21)
+        Me.Button3.TabIndex = 6
+        Me.Button3.Text = ".."
+        Me.Button3.UseVisualStyleBackColor = True
+        Me.Button3.Visible = False
         '
         'Form3
         '
@@ -309,6 +358,8 @@ Partial Class Form3
         Me.Panel2.ResumeLayout(False)
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
+        Me.GroupBox3.ResumeLayout(False)
+        Me.GroupBox3.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -334,4 +385,8 @@ Partial Class Form3
     Friend WithEvents TextBox4 As System.Windows.Forms.TextBox
     Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents ContextMenuStrip1 As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents TXTBOOT As System.Windows.Forms.CheckBox
+    Friend WithEvents NOUMD As System.Windows.Forms.CheckBox
+    Friend WithEvents GroupBox3 As System.Windows.Forms.GroupBox
+    Friend WithEvents Button3 As System.Windows.Forms.Button
 End Class

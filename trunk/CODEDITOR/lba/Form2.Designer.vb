@@ -24,9 +24,10 @@ Partial Class ver
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.Label4 = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
+        Me.builddate = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
@@ -35,20 +36,30 @@ Partial Class ver
         '
         'Panel1
         '
+        Me.Panel1.Controls.Add(Me.Button1)
         Me.Panel1.Controls.Add(Me.LinkLabel1)
         Me.Panel1.Controls.Add(Me.Label4)
-        Me.Panel1.Controls.Add(Me.Label3)
+        Me.Panel1.Controls.Add(Me.builddate)
         Me.Panel1.Controls.Add(Me.Label2)
         Me.Panel1.Controls.Add(Me.Label1)
-        Me.Panel1.Location = New System.Drawing.Point(12, 12)
+        Me.Panel1.Location = New System.Drawing.Point(12, 3)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(243, 203)
+        Me.Panel1.Size = New System.Drawing.Size(243, 209)
         Me.Panel1.TabIndex = 0
+        '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(81, 177)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(75, 23)
+        Me.Button1.TabIndex = 10
+        Me.Button1.Text = "UPDATE"
+        Me.Button1.UseVisualStyleBackColor = True
         '
         'LinkLabel1
         '
         Me.LinkLabel1.AutoSize = True
-        Me.LinkLabel1.Location = New System.Drawing.Point(78, 162)
+        Me.LinkLabel1.Location = New System.Drawing.Point(78, 160)
         Me.LinkLabel1.Name = "LinkLabel1"
         Me.LinkLabel1.Size = New System.Drawing.Size(89, 14)
         Me.LinkLabel1.TabIndex = 9
@@ -64,14 +75,14 @@ Partial Class ver
         Me.Label4.TabIndex = 8
         Me.Label4.Text = "LICENCE: GPL v3"
         '
-        'Label3
+        'builddate
         '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(45, 99)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(145, 14)
-        Me.Label3.TabIndex = 7
-        Me.Label3.Text = "BUID:2012/02/26 23:50"
+        Me.builddate.AutoSize = True
+        Me.builddate.Location = New System.Drawing.Point(45, 99)
+        Me.builddate.Name = "builddate"
+        Me.builddate.Size = New System.Drawing.Size(153, 14)
+        Me.builddate.TabIndex = 7
+        Me.builddate.Text = "BUILD:2012/02/29 19:12"
         '
         'Label2
         '
@@ -114,8 +125,9 @@ Partial Class ver
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
     Friend WithEvents Label4 As System.Windows.Forms.Label
-    Friend WithEvents Label3 As System.Windows.Forms.Label
+    Friend WithEvents builddate As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents ImageList1 As System.Windows.Forms.ImageList
+    Friend WithEvents Button1 As System.Windows.Forms.Button
 End Class
