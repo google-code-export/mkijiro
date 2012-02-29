@@ -83,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.vb" />
+    <Compile Include="Class2.vb" />
     <Compile Include="Form1.vb">
       <SubType>Form</SubType>
     </Compile>
