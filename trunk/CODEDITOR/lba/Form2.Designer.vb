@@ -44,12 +44,12 @@ Partial Class ver
         Me.Panel1.Controls.Add(Me.Label1)
         Me.Panel1.Location = New System.Drawing.Point(12, 3)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(243, 209)
+        Me.Panel1.Size = New System.Drawing.Size(222, 209)
         Me.Panel1.TabIndex = 0
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(81, 177)
+        Me.Button1.Location = New System.Drawing.Point(70, 173)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 10
@@ -59,7 +59,7 @@ Partial Class ver
         'LinkLabel1
         '
         Me.LinkLabel1.AutoSize = True
-        Me.LinkLabel1.Location = New System.Drawing.Point(78, 160)
+        Me.LinkLabel1.Location = New System.Drawing.Point(67, 143)
         Me.LinkLabel1.Name = "LinkLabel1"
         Me.LinkLabel1.Size = New System.Drawing.Size(89, 14)
         Me.LinkLabel1.TabIndex = 9
@@ -69,7 +69,7 @@ Partial Class ver
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(63, 131)
+        Me.Label4.Location = New System.Drawing.Point(54, 110)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(113, 14)
         Me.Label4.TabIndex = 8
@@ -78,7 +78,7 @@ Partial Class ver
         'builddate
         '
         Me.builddate.AutoSize = True
-        Me.builddate.Location = New System.Drawing.Point(45, 99)
+        Me.builddate.Location = New System.Drawing.Point(32, 82)
         Me.builddate.Name = "builddate"
         Me.builddate.Size = New System.Drawing.Size(153, 14)
         Me.builddate.TabIndex = 7
@@ -87,7 +87,7 @@ Partial Class ver
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(63, 61)
+        Me.Label2.Location = New System.Drawing.Point(47, 52)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(120, 14)
         Me.Label2.TabIndex = 6
@@ -96,7 +96,7 @@ Partial Class ver
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(32, 27)
+        Me.Label1.Location = New System.Drawing.Point(23, 21)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(171, 14)
         Me.Label1.TabIndex = 5
@@ -112,7 +112,7 @@ Partial Class ver
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(264, 224)
+        Me.ClientSize = New System.Drawing.Size(245, 224)
         Me.Controls.Add(Me.Panel1)
         Me.Name = "ver"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
