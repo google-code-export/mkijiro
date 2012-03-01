@@ -140,16 +140,9 @@ Public Class Form1
         Return hf
     End Function
 
-    'decoder PRXTOOLの移植
-#Region "decoder"
-    Function decoders(ByVal str As String, ByVal l As Integer) As String
-        Try
-            Dim hex As UInteger = Convert.ToUInt32(str, 16)
-            Dim mask As UInteger = 0
-            Dim mips As UInteger = 0
-            Dim asm As String = ""
+#Region "decoder配列"
 
-            Dim decoder As String() = {"nop", "0x00000000", "0xFFFFFFFF", "", _
+    Dim decoder As String() = {"nop", "0x00000000", "0xFFFFFFFF", "", _
 "li", "0x24000000", "0xFFE00000", "%t,%i", _
 "li", "0x34000000", "0xFFE00000", "%t,%I", _
 "move", "0x00000021", "0xFC1F07FF", "%d,%s", _
@@ -586,14 +579,25 @@ Public Class Form1
 "vzero.t", "0xD0068000", "0xFFFFFF80", "%zt", _
 "mfvme", "0x68000000", "0xFC000000", "%t,%i", _
 "mtvme", "0xb0000000", "0xFC000000", "%t,%i"}
+#End Region
+
+    'decoder PRXTOOLの移植
+#Region "decoder"
+    Function decoders(ByVal str As String, ByVal l As Integer) As String
+        Try
+            Dim hex As UInteger = Convert.ToUInt32(str, 16)
+            Dim mask As UInteger = 0
+            Dim mips As UInteger = 0
+            Dim asm As String = ""
+
 
             Dim z As Integer = 0
 
-            While z < decoder.Length
-                mips = Convert.ToUInt32(decoder(z + 1), 16)
-                mask = Convert.ToUInt32(decoder(z + 2), 16)
+            While z < Decoder.Length
+                mips = Convert.ToUInt32(Decoder(z + 1), 16)
+                mask = Convert.ToUInt32(Decoder(z + 2), 16)
                 If (hex And mask) = mips Then
-                    asm = decoder(z) & " " & decoder(z + 3)
+                    asm = Decoder(z) & " " & Decoder(z + 3)
                     asm = decode_arg(asm, hex, l)
                     Exit While
                 End If
@@ -2042,7 +2046,7 @@ Public Class Form1
         Dim sb As New StringBuilder
         Dim st As Integer = Convert.ToInt32(ADDR.Text, 16)
         Dim i As Integer = Convert.ToInt32(ADDR.Text, 16)
-        If MODE.SelectedIndex < 2 Then
+        If MODE.SelectedIndex < 3 Then
             If st >= &H8800000 Then
                 i -= &H8800000
             End If
@@ -2061,7 +2065,7 @@ Public Class Form1
         Dim odd As Boolean = False
         For Each s As String In ss
             If s.Trim = "" Then
-            ElseIf s.Length > 3 AndAlso (s.Substring(0, 2) = "__" Or s.Substring(0, 3) = "FNC" Or s.Substring(0, 2) = "//") Then
+            ElseIf s.Length > 4 AndAlso (s.Substring(0, 2) = "__" Or s.Substring(0, 3) = "FNC" Or s.Substring(0, 2) = "//") Then
             Else
                 If MODE.Text = "NITEPR" Then
                     sb.Append("0x")
@@ -2072,6 +2076,13 @@ Public Class Form1
                 End If
                 If MODE.Text = "CWCHEAT" Then
                     sb.Append("_L ")
+                    sb.Append("0x")
+                    sb.Append(Convert.ToString(i Or &H20000000, 16).ToUpper.PadLeft(8, "0"c))
+                    sb.Append(" ")
+                    sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                    i += 4
+                End If
+                If MODE.Text = "JPCSP" Then
                     sb.Append("0x")
                     sb.Append(Convert.ToString(i Or &H20000000, 16).ToUpper.PadLeft(8, "0"c))
                     sb.Append(" ")

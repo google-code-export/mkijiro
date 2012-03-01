@@ -49,7 +49,7 @@ Partial Class Form1
         'MODE
         '
         Me.MODE.FormattingEnabled = True
-        Me.MODE.Items.AddRange(New Object() {"NITEPR", "CWCHEAT", "PSPAR", "PMETAN", "PSPAR(0xE)", "TEMPAR(0xC2)", "CMFUSION(0xF0)"})
+        Me.MODE.Items.AddRange(New Object() {"NITEPR", "CWCHEAT", "JPCSP", "PSPAR", "PMETAN", "PSPAR(0xE)", "TEMPAR(0xC2)", "CMFUSION(0xF0)"})
         Me.MODE.Location = New System.Drawing.Point(18, 97)
         Me.MODE.Name = "MODE"
         Me.MODE.Size = New System.Drawing.Size(117, 22)

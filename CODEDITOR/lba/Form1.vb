@@ -802,6 +802,7 @@ Public Class Form1
     Private Sub ListView1_ItemDrag(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ItemDragEventArgs) Handles ListView1.ItemDrag
 
         If TreeView1.Nodes.Count > 0 Then
+
             Dim z As Integer
             If VIRTUAL.Checked = False Then
                 If ListView1.SelectedItems.Count = 0 Then
@@ -828,26 +829,33 @@ Public Class Form1
                     End If
                 Next
                 Array.Resize(FileName, kk)
-                Dim null As System.EventArgs = Nothing
-                Dim myDataObject As New DataObject(DataFormats.FileDrop, FileName)
 
+                Dim dDragInfo As New DataObject
+                dDragInfo.SetData(DataFormats.FileDrop, FileName)
+                Dim null As System.EventArgs = Nothing
                 GETDATAToolStripMenuItem_Click(TextBox1, null)
-                ListView1.DoDragDrop(myDataObject, DragDropEffects.Move)
+                ListView1.DoDragDrop(dDragInfo, DragDropEffects.Move)
                 Dim filess As String() = System.IO.Directory.GetFiles((Application.StartupPath & "\tmp"), "*", System.IO.SearchOption.AllDirectories)
                 For i = 0 To filess.Length - 1
                     File.Delete(filess(i))
                 Next
+
             End If
         End If
     End Sub
 
+
     'ドラッグをキャンセルする
     Private Sub ListBox1_QueryContinueDrag(ByVal sender As Object, ByVal e As QueryContinueDragEventArgs) Handles ListView1.QueryContinueDrag, Me.QueryContinueDrag
-        'マウスの右ボタンが押されていればドラッグをキャンセル
-        '"2"はマウスの右ボタンを表す
-        If (e.KeyState And 2) = 2 Then
-            e.Action = DragAction.Cancel
-        End If
+      
+        'If e.Action = DragAction.Drop Then
+        '    Dim pt As Point = Me.PointToClient(Form1.MousePosition)
+        '    ' ListBox1以外でドロップされた場合
+        '    ' フォーム以外ならListBox1をForm1などに置き換えてください
+        '    If Me.ClientRectangle.Contains(pt) = False Then
+        '        e.Action = DragAction.Cancel
+        '    End If
+        'End If
     End Sub
 
 #End Region
@@ -1289,7 +1297,7 @@ Public Class Form1
             Dim yyyymmdd(6) As Byte
             Dim na As Byte() = Nothing
 
-            
+
             Dim find As Boolean = False
             Dim nextlba As Integer = -dst
             If isotree.Count > CInt(TreeView1.SelectedNode.Name) + 1 Then
@@ -1551,7 +1559,7 @@ Public Class Form1
                 Dim yyyymmdd(6) As Byte
                 Dim na As Byte() = Nothing
 
-                
+
                 Dim find As Boolean = False
                 Dim nextlba As Integer = -dst
                 If isotree.Count > CInt(TreeView1.SelectedNode.Name) + 1 Then
