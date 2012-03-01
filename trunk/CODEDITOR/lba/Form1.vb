@@ -55,6 +55,7 @@ Public Class Form1
                 End If
                 lssort = (bs(7) >> 2) And 3
                 bool_exe.Text = (bs(7) And 3).ToString()
+                enc.Text = (bs(7) >> 4).ToString
                 If bs(8) = 1 Then
                     VIRTUAL.Checked = True
                 End If
@@ -128,7 +129,7 @@ Public Class Form1
         If localtime.Checked = True Then
             bs(2) = 1
         End If
-        Dim bb As Byte() = BitConverter.GetBytes((lssort << 2) + CInt(bool_exe.Text))
+        Dim bb As Byte() = BitConverter.GetBytes((lssort << 2) + CInt(bool_exe.Text) + (CInt(enc.Text) << 4))
         Array.Copy(bb, 0, bs, 3, 1)
         If VIRTUAL.Checked = True Then
             bs(4) = 1
@@ -538,7 +539,7 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub ListView1_Doubleclick(sender As System.Object, ByVal e As System.EventArgs) Handles RUNAPPToolStripMenuItem.Click, ListView1.DoubleClick
+    Private Sub ListView1_Doubleclick(sender As System.Object, ByVal e As System.EventArgs) Handles RUNAPPZ.Click, ListView1.DoubleClick
 
         Dim itemx As New ListViewItem
         If VIRTUAL.Checked = False Then
@@ -1191,6 +1192,30 @@ Public Class Form1
             End If
 
             Label5.Text = (Now - start).TotalSeconds.ToString
+        End If
+    End Sub
+
+    Private Sub ToolStripMenuItem1_Click(sender As System.Object, e As System.EventArgs) Handles SECTORVIEW.Click
+        Dim itemx As New ListViewItem
+        If VIRTUAL.Checked = False Then
+            If ListView1.SelectedItems.Count = 0 Then
+                Exit Sub
+            End If
+            itemx = ListView1.SelectedItems(0)
+        Else
+            If ListView1.SelectedIndices.Count = 0 Then
+                Exit Sub
+            End If
+            itemx = ListView1.Items(ListView1.SelectedIndices(0))
+        End If
+
+        If itemx.Index = 0 AndAlso itemx.Text = ".." Then
+        ElseIf ListView1.SelectedIndices.Count = 1 Then
+            Dim f As New Form4
+            f.Text = iso
+            f.ComboBox1.SelectedIndex = CInt(enc.Text)
+            f.ShowDialog(Me)
+            f.Dispose()
         End If
     End Sub
 
