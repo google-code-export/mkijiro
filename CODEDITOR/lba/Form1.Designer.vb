@@ -42,7 +42,8 @@ Partial Class Form1
         Me.Button2 = New System.Windows.Forms.Button()
         Me.ListView1 = New System.Windows.Forms.ListView()
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.RUNAPPToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RUNAPPZ = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SECTORVIEW = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.SAVEDATA = New System.Windows.Forms.ToolStripMenuItem()
         Me.SAVEDATAOFFSET = New System.Windows.Forms.ToolStripMenuItem()
@@ -80,6 +81,7 @@ Partial Class Form1
         Me.exe = New System.Windows.Forms.TextBox()
         Me.vlistmax = New System.Windows.Forms.TextBox()
         Me.Label6 = New System.Windows.Forms.Label()
+        Me.enc = New System.Windows.Forms.Label()
         Me.ContextMenuStrip2.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -105,7 +107,7 @@ Partial Class Form1
         '
         Me.ContextMenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TREECOLLASEToolStripMenuItem, Me.TREEEXPANDToolStripMenuItem, Me.ToolStripSeparator1, Me.EXTRACTDATAToolStripMenuItem, Me.EXTRACTLBAToolStripMenuItem})
         Me.ContextMenuStrip2.Name = "ContextMenuStrip2"
-        Me.ContextMenuStrip2.Size = New System.Drawing.Size(194, 136)
+        Me.ContextMenuStrip2.Size = New System.Drawing.Size(194, 114)
         '
         'TREECOLLASEToolStripMenuItem
         '
@@ -222,15 +224,21 @@ Partial Class Form1
         '
         'ContextMenuStrip1
         '
-        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RUNAPPToolStripMenuItem, Me.ToolStripSeparator2, Me.SAVEDATA, Me.SAVEDATAOFFSET})
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RUNAPPZ, Me.SECTORVIEW, Me.ToolStripSeparator2, Me.SAVEDATA, Me.SAVEDATAOFFSET})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(224, 88)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(224, 136)
         '
-        'RUNAPPToolStripMenuItem
+        'RUNAPPZ
         '
-        Me.RUNAPPToolStripMenuItem.Name = "RUNAPPToolStripMenuItem"
-        Me.RUNAPPToolStripMenuItem.Size = New System.Drawing.Size(223, 26)
-        Me.RUNAPPToolStripMenuItem.Text = "RUN APP"
+        Me.RUNAPPZ.Name = "RUNAPPZ"
+        Me.RUNAPPZ.Size = New System.Drawing.Size(223, 26)
+        Me.RUNAPPZ.Text = "RUN APP"
+        '
+        'SECTORVIEW
+        '
+        Me.SECTORVIEW.Name = "SECTORVIEW"
+        Me.SECTORVIEW.Size = New System.Drawing.Size(223, 26)
+        Me.SECTORVIEW.Text = "SECTORVIEW"
         '
         'ToolStripSeparator2
         '
@@ -424,7 +432,7 @@ Partial Class Form1
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ファイルToolStripMenuItem, Me.設定ToolStripMenuItem, Me.バージョンToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(917, 29)
+        Me.MenuStrip1.Size = New System.Drawing.Size(916, 29)
         Me.MenuStrip1.TabIndex = 21
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -513,6 +521,7 @@ Partial Class Form1
         '
         'Panel3
         '
+        Me.Panel3.Controls.Add(Me.enc)
         Me.Panel3.Controls.Add(Me.bool_exe)
         Me.Panel3.Controls.Add(Me.exe)
         Me.Panel3.Controls.Add(Me.vlistmax)
@@ -568,12 +577,21 @@ Partial Class Form1
         Me.Label6.UseWaitCursor = True
         Me.Label6.Visible = False
         '
+        'enc
+        '
+        Me.enc.AutoSize = True
+        Me.enc.Location = New System.Drawing.Point(65, 110)
+        Me.enc.Name = "enc"
+        Me.enc.Size = New System.Drawing.Size(14, 14)
+        Me.enc.TabIndex = 32
+        Me.enc.Text = "0"
+        '
         'Form1
         '
         Me.AllowDrop = True
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(917, 578)
+        Me.ClientSize = New System.Drawing.Size(916, 578)
         Me.Controls.Add(Me.tree)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Controls.Add(Me.Panel3)
@@ -666,10 +684,12 @@ Partial Class Form1
     Friend WithEvents addlistmax As System.Windows.Forms.TextBox
     Friend WithEvents Panel3 As System.Windows.Forms.Panel
     Friend WithEvents vlistmax As System.Windows.Forms.TextBox
-    Friend WithEvents RUNAPPToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents RUNAPPZ As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents Label6 As System.Windows.Forms.Label
     Friend WithEvents exe As System.Windows.Forms.TextBox
     Friend WithEvents bool_exe As System.Windows.Forms.Label
+    Friend WithEvents SECTORVIEW As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents enc As System.Windows.Forms.Label
 
 End Class
