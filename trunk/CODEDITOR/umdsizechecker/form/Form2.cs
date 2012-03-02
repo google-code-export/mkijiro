@@ -121,8 +121,8 @@ namespace WindowsFormsApplication1
             listView1.Sorting = SortOrder.Ascending;
             listView1.View = View.Details;
 
-            ColumnHeader[] columnHead = new ColumnHeader[17];
-            for (int i = 0; i < 17; i++)
+            ColumnHeader[] columnHead = new ColumnHeader[18];
+            for (int i = 0; i < 18; i++)
                 columnHead[i] = new ColumnHeader();
 
             columnHead[0].Text = dic[0];//"オフセット      ";
@@ -133,6 +133,8 @@ namespace WindowsFormsApplication1
                 columnHead[k].Text = "0" + Convert.ToString(k - 1, 16).ToUpper();
                 columnHead[k].Width = 50;
             }
+            columnHead[17].Text = "STRING";
+            columnHead[17].Width = 100;
 
             listView1.Columns.AddRange(columnHead);
             listView1.HideSelection = false;
@@ -183,6 +185,14 @@ namespace WindowsFormsApplication1
             {
                 MessageBox.Show(dic[1],dic[2]);
             }
+        }
+
+        string[] kill = { "\x0","\t", "\n","\r" };
+
+        public string killst(string s) {
+            for (int i = 0; i < 4; i++)
+                s = s.Replace(kill[i], "");
+            return s;
         }
 
         public int hexview(string filepath,int pos)
@@ -306,8 +316,10 @@ namespace WindowsFormsApplication1
                          k += 1;
                     }
 
+
                     listView1.Items.Clear();
-                    string[] item = new string[17];
+                    string[] item = new string[18];
+                    byte[] str = new byte[16];
                     counter = 0;
                     while ((offset + 16 * counter) < size)
                     {
@@ -323,8 +335,10 @@ namespace WindowsFormsApplication1
                         }
                         for (int i = 1; i < 17; i++)
                         {
-                            item[i] = Convert.ToString(hex[i - 1], 16).ToUpper();
+                              item[i] = hex[i - 1].ToString("X2").ToUpper();
                         }
+                        Array.Copy(hex, 0, str, 0, 16);
+                        item[17] = killst(Encoding.GetEncoding(0).GetString(str));
 
                         listView1.Items.Add(new ListViewItem(item));
                         counter++;
@@ -340,12 +354,12 @@ namespace WindowsFormsApplication1
             fs.Seek(0x8050, SeekOrigin.Begin);
             fs.Read(x, 0, 3);
             trimsize = BitConverter.ToInt64(x, 0) << 11;
-            label1.Text = dic[2] + Convert.ToString(trimsize - 2048, 16).ToUpper(); ;
-            label2.Text = dic[3] + Convert.ToString(trimsize - 6144, 16).ToUpper(); ;
+            label1.Text = dic[3] + Convert.ToString(trimsize - 2048, 16).ToUpper(); ;
+            label2.Text = dic[4] + Convert.ToString(trimsize - 6144, 16).ToUpper(); ;
 
             if (fs.Length + 2048 < trimsize && pos > 128)
             {
-                MessageBox.Show(dic[5], dic[6]);//"-6kかけてるため選択できません", "範囲外エラー");
+                MessageBox.Show(dic[6], dic[7]);//"-6kかけてるため選択できません", "範囲外エラー");
                 button2.Enabled = false;
             }
             else
@@ -358,14 +372,15 @@ namespace WindowsFormsApplication1
                     isosize = trimsize + 2048;
                     label5.Enabled = true;
                     button3.Enabled = true;
-                    label5.Text = dic[4] + Convert.ToString(trimsize, 16).ToUpper();
+                    label5.Text = dic[5] + Convert.ToString(trimsize, 16).ToUpper();
                     Array.Resize(ref sector, Convert.ToInt32(get));
                 }
                 fs.Seek(offset, SeekOrigin.Begin);
                 fs.Read(sector, 0, Convert.ToInt32(get));
 
                 listView1.Items.Clear();
-                string[] item = new string[17];
+                string[] item = new string[18];
+                byte[] str = new byte[16];
 
                 while ((offset + 16 * counter) < isosize)
                 {
@@ -381,8 +396,10 @@ namespace WindowsFormsApplication1
                     }
                     for (int i = 1; i < 17; i++)
                     {
-                        item[i] = Convert.ToString(hex[i - 1], 16).ToUpper();
+                        item[i] = hex[i - 1].ToString("X2").ToUpper();
                     }
+                    Array.Copy(hex, 0, str, 0, 16);
+                    item[17] = killst(Encoding.GetEncoding(0).GetString(str));
 
                     listView1.Items.Add(new ListViewItem(item));
                     counter++;
@@ -396,6 +413,8 @@ namespace WindowsFormsApplication1
             fs.Close();
                 return 0;
         }
+
+        
 
         
         
