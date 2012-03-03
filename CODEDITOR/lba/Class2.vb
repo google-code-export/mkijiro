@@ -8,7 +8,7 @@ Public Class checkupdate
 
         If My.Computer.Network.IsAvailable Then
             Dim tx As String = "http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/lba/bin/Release/version.txt"
-            Dim uptx As String = "http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/lba/bin/Release/tmp/updater.txt"
+            Dim uptx As String = "http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/lba/bin/Release/updater.txt"
             Dim up As String = "http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/updater/bin/Release/updater.exe"
 
 
