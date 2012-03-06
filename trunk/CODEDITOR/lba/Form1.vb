@@ -19,11 +19,14 @@ Public Class Form1
     Dim cFormat As New System.Globalization.CultureInfo("ja-JP", False)
     Dim buffer As Integer
     Dim col_len As Integer() = {180, 60, 80, 140, 80}
+    Dim iLeft As Integer
+    Dim t As Integer
+    Dim tt As Boolean
 
 #Region "FORM"
     Private Sub ffload(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
         Dim start As DateTime = Now
-
+        DoubleBuffered = True
 
         Dim cmds() As String
         cmds = System.Environment.GetCommandLineArgs()
@@ -114,6 +117,35 @@ Public Class Form1
 
     End Sub
 
+
+    Private Sub Timer1_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Timer1.Tick
+        If tt = False Then
+            t += 1
+        End If
+        If t > 200 Then
+            tt = True
+            Dim objG As Graphics
+            objG = title.CreateGraphics()
+            'ここで一旦クリアしないと真っ黒になります
+            objG.Clear(title.BackColor)
+            '左端を決めて、文字を描画する
+            objG.DrawString(title.Text, title.Font, New SolidBrush(title.ForeColor), iLeft, 0)
+            '左端をずらす
+            iLeft -= 1
+            If iLeft + title.Width < 0 Then
+                '右端までいったら戻す
+                iLeft = 0
+                objG.Clear(title.BackColor)
+                objG.DrawString(title.Text, title.Font, New SolidBrush(title.ForeColor), iLeft, 0)
+                objG.Dispose()
+                t = 0
+                tt = False
+            End If
+            objG.Dispose()
+        End If
+
+    End Sub
+
     Private Sub ffclose(sender As System.Object, e As System.Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
 
         Dim fs As New FileStream(Application.StartupPath & "\conf", System.IO.FileMode.Create, FileAccess.Write)
@@ -198,6 +230,14 @@ Public Class Form1
                 Button1_Click(sender, e)
                 title.Text = psf.GETNAME(iso)
                 discid.Text = psf.GETID(iso)
+                If title.Text.Length > 22 Then
+                    t = 0
+                    Timer1.Interval = 30
+                    Timer1.Start()
+                Else
+                    Timer1.Dispose()
+                End If
+
             Else
                 iso = ""
             End If
@@ -431,6 +471,13 @@ Public Class Form1
                     Button1_Click(sender, e)
                     title.Text = psf.GETNAME(iso)
                     discid.Text = psf.GETID(iso)
+                    If title.Text.Length > 22 Then
+                        t = 0
+                        Timer1.Interval = 30
+                        Timer1.Start()
+                    Else
+                        Timer1.Dispose()
+                    End If
                 Else
                     iso = ""
                 End If
@@ -528,10 +575,17 @@ Public Class Form1
         f.Dispose()
     End Sub
 
+
 #End Region
 
 #Region "TREE_LIST"
     Private Sub TreeView1_AfterSelect(sender As System.Object, e As System.Windows.Forms.TreeViewEventArgs) Handles TreeView1.AfterSelect
+        If TreeView1.SelectedNode.Level = 0 Then
+            PATHTABLEToolStripMenuItem.Visible = True
+        Else
+            PATHTABLEToolStripMenuItem.Visible = False
+        End If
+
         If VIRTUAL.Checked = False Then
             getlist(CInt(TreeView1.SelectedNode.Tag))
         Else
@@ -617,11 +671,11 @@ Public Class Form1
     ''' </summary>
     ''' <param name="fileName">関連付けを調べるファイル</param>
     ''' <returns>実行ファイルのパス + コマンドライン引数</returns>
+    ''' 
     Public Shared Function FindAssociatedExecutableFile( _
         ByVal fileName As String) As String
         Return FindAssociatedExecutableFile(fileName, "open")
     End Function
-
 
     Function runapp(ByVal itemx As ListViewItem) As Boolean
         Dim temp As String = Application.StartupPath & "\tmp\" & (itemx.Text)
@@ -844,7 +898,6 @@ Public Class Form1
             End If
         End If
     End Sub
-
 
     'ドラッグをキャンセルする
     Private Sub ListBox1_QueryContinueDrag(ByVal sender As Object, ByVal e As QueryContinueDragEventArgs) Handles ListView1.QueryContinueDrag, Me.QueryContinueDrag
@@ -1195,7 +1248,7 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub ToolStripMenuItem1_Click(sender As System.Object, e As System.EventArgs) Handles SECTORVIEW.Click
+    Private Sub sectorlist(sender As System.Object, e As System.EventArgs) Handles SECTORVIEW.Click
         Dim itemx As New ListViewItem
         If VIRTUAL.Checked = False Then
             If ListView1.SelectedItems.Count = 0 Then
@@ -1219,6 +1272,46 @@ Public Class Form1
         End If
     End Sub
 
+    Private Sub SECTORVIEWTREE_Click(sender As System.Object, e As System.EventArgs) Handles SECTORVIEWTREE.Click, PATHTABLEToolStripMenuItem.Click
+
+        If TreeView1.SelectedNode IsNot Nothing Then
+            Dim f As New Form4
+            f.Text = iso
+            f.ComboBox1.SelectedIndex = CInt(enc.Text)
+            f.parse_mode.Text = "T"
+            If sender Is PATHTABLEToolStripMenuItem Then
+                f.parse_mode.Text = "P"
+                Dim fs As New FileStream(iso, FileMode.Open, FileAccess.Read)
+                Dim b(2047) As Byte
+                If cso = False Then
+                    fs.Seek(&H8000, SeekOrigin.Begin)
+                    fs.Read(b, 0, 2047)
+                Else
+                    b = unpack_cso(16)
+                End If
+                fs.Close()
+                f.fsize.Text = cvt32bit(b, &H84).ToString
+                f.lbas.Text = cvt32bit(b, &H8C).ToString
+            Else
+                If TreeView1.SelectedNode.Level = 0 Then
+                    Dim fs As New FileStream(iso, FileMode.Open, FileAccess.Read)
+                    Dim b(2047) As Byte
+                    If cso = False Then
+                        fs.Seek(&H8000, SeekOrigin.Begin)
+                        fs.Read(b, 0, 2047)
+                    Else
+                        b = unpack_cso(16)
+                    End If
+                    fs.Close()
+                    f.fsize.Text = (cvt32bit(b, &H8C) - 16).ToString
+                Else
+                    f.fsize.Text = (next_lba(CInt(TreeView1.SelectedNode.Tag.ToString))).ToString
+                End If
+            End If
+            f.ShowDialog(Me)
+            f.Dispose()
+        End If
+    End Sub
 #End Region
 
 #Region "GETFUNC"
@@ -1584,60 +1677,7 @@ Public Class Form1
                 Dim yyyymmdd(6) As Byte
                 Dim na As Byte() = Nothing
 
-
-                Dim find As Boolean = False
-                Dim nextlba As Integer = -dst
-                If isotree.Count > CInt(TreeView1.SelectedNode.Name) + 1 Then
-                    Dim seek_parent_node As New TreeNode
-                    seek_parent_node = isotree(CInt(TreeView1.SelectedNode.Name) + 1)
-                    nextlba += CInt(seek_parent_node.Tag.ToString)
-                    find = True
-                End If
-
-                If find = False Then
-
-                    If cso = False Then
-                        fs.Seek((CInt(TreeView1.SelectedNode.Parent.Tag.ToString)) << 11, SeekOrigin.Begin)
-                        fs.Read(bs, 0, 2048)
-                    Else
-                        bs = unpack_cso(CInt(TreeView1.SelectedNode.Parent.Tag.ToString))
-                    End If
-
-                    While True 'i < 2048
-                        next_len = bs(i)
-                        If bs(i + 33) >= 32 Then
-                            lba = cvt32bit(bs, i + 2)
-                            filesize = cvt32bit(bs, i + 10)
-                            str_len = bs(i + 32)
-                            Array.Resize(na, str_len)
-                            Array.Copy(bs, i + 33, na, 0, str_len)
-                            name = Encoding.GetEncoding(0).GetString(na)
-                            'フォルダかつLBAがおなじ
-                            If ((bs(i + 25) >> 1) And 1) = 1 Then
-                                If dst = lba Then
-                                    Exit While
-                                End If
-                            End If
-                        End If
-
-                        i += next_len
-
-                        '見つかるまで無限ループ
-                        If bs(i) = 0 Then
-                            If cso = False Then
-                                fs.Read(bs, 0, 2048)
-                            Else
-                                dst_next += 1
-                                bs = unpack_cso(dst_next)
-                            End If
-                            i = 0
-                        End If
-                    End While
-                    nextlba = (filesize >> 11) - 1
-                    i = 0
-                Else
-
-                End If
+                Dim nextlba As Integer = next_lba(dst)
 
                 If cso = False Then
                     fs.Seek(lba_base, SeekOrigin.Begin)
@@ -1756,6 +1796,66 @@ Public Class Form1
         Return True
     End Function
 
+    Function next_lba(ByVal dst As Integer) As Integer
+
+        Dim fs As New FileStream(iso, FileMode.Open, FileAccess.Read)
+        Dim bs(2047) As Byte
+        Dim lba As Integer = 0
+        Dim next_len As Integer
+        Dim filesize As Integer
+        Dim dst_next = dst
+        Dim I As Integer = 0
+        Dim find As Boolean = False
+        Dim nextlba As Integer = -dst
+        If isotree.Count > CInt(TreeView1.SelectedNode.Name) + 1 Then
+            Dim seek_parent_node As New TreeNode
+            seek_parent_node = isotree(CInt(TreeView1.SelectedNode.Name) + 1)
+            nextlba += CInt(seek_parent_node.Tag.ToString)
+            find = True
+        End If
+
+        If find = False Then
+
+            If cso = False Then
+                fs.Seek((CInt(TreeView1.SelectedNode.Parent.Tag.ToString)) << 11, SeekOrigin.Begin)
+                fs.Read(bs, 0, 2048)
+            Else
+                bs = unpack_cso(CInt(TreeView1.SelectedNode.Parent.Tag.ToString))
+            End If
+
+            While True 'i < 2048
+                next_len = bs(I)
+                If ((bs(I + 25) >> 1) And 1) = 1 Then
+                    lba = cvt32bit(bs, I + 2)
+                    'フォルダかつLBAがおなじ
+                    If dst = lba Then
+                        If bs(I + 33) >= 32 Then
+                            filesize = cvt32bit(bs, I + 10)
+                            Exit While
+                        End If
+                    End If
+                End If
+
+                I += next_len
+
+                '見つかるまで無限ループ
+                If bs(I) = 0 Then
+                    If cso = False Then
+                        fs.Read(bs, 0, 2048)
+                    Else
+                        dst_next += 1
+                        bs = unpack_cso(dst_next)
+                    End If
+                    I = 0
+                End If
+            End While
+            nextlba = (filesize >> 11) - 1
+            I = 0
+        End If
+
+        Return nextlba
+    End Function
+
     Function cvt_utc(ByVal utc As Byte) As String
         Dim sb As New StringBuilder
         Dim z As Integer = utc
@@ -1843,57 +1943,7 @@ Public Class Form1
         Dim bs(2047) As Byte
         Dim error_file As New StringBuilder
 
-
-        Dim find As Boolean = False
-        Dim nextlba As Integer = -dst
-        If isotree.Count > CInt(tt.Name) + 1 Then
-            Dim seek_parent_node As New TreeNode
-            seek_parent_node = isotree(CInt(tt.Name) + 1)
-            nextlba += CInt(seek_parent_node.Tag.ToString)
-            find = True
-        End If
-
-        If find = False Then
-            If cso = False Then
-                fs.Seek((CInt(tt.Parent.Tag.ToString)) << 11, SeekOrigin.Begin)
-                fs.Read(bs, 0, 2048)
-            Else
-                bs = unpack_cso(CInt(tt.Parent.Tag.ToString))
-            End If
-
-            While True
-                next_len = bs(i)
-                'フォルダかつLBAがおなじ
-                If ((bs(i + 25) >> 1) And 1) = 1 Then
-                    If bs(i + 33) >= 32 Then
-                        lba = cvt32bit(bs, i + 2)
-                        If dst = lba Then
-                            filesize = cvt32bit(bs, i + 10)
-                            str_len = bs(i + 32)
-                            Array.Resize(na, str_len)
-                            Array.Copy(bs, i + 33, na, 0, str_len)
-                            name = Encoding.GetEncoding(0).GetString(na)
-                            Exit While
-                        End If
-                    End If
-                End If
-
-                i += next_len
-
-                '見つかるまで無限ループ
-                If bs(i) = 0 Then
-                    If cso = False Then
-                        fs.Read(bs, 0, 2048)
-                    Else
-                        dst_next += 1
-                        bs = unpack_cso(dst_next)
-                    End If
-                    i = 0
-                End If
-            End While
-            nextlba = (filesize >> 11) - 1
-            i = 0
-        End If
+        Dim nextlba As Integer = next_lba(dst)
 
         If cso = False Then
             fs.Seek(lba_base, SeekOrigin.Begin)
@@ -2043,57 +2093,7 @@ Public Class Form1
         Dim na As Byte() = Nothing
         Dim bs(2047) As Byte
 
-
-        Dim find As Boolean = False
-        Dim nextlba As Integer = -dst
-        If isotree.Count > CInt(tt.Name) + 1 Then
-            Dim seek_parent_node As New TreeNode
-            seek_parent_node = isotree(CInt(tt.Name) + 1)
-            nextlba += CInt(seek_parent_node.Tag.ToString)
-            find = True
-        End If
-
-        If find = False Then
-            If cso = False Then
-                fs.Seek((CInt(tt.Parent.Tag.ToString)) << 11, SeekOrigin.Begin)
-                fs.Read(bs, 0, 2048)
-            Else
-                bs = unpack_cso(CInt(tt.Parent.Tag.ToString))
-            End If
-
-            While i < 2048
-                next_len = bs(i)
-                If bs(i + 33) >= 32 Then
-                    lba = cvt32bit(bs, i + 2)
-                    If ((bs(i + 25) >> 1) And 1) = 1 Then
-                        filesize = cvt32bit(bs, i + 10)
-                        str_len = bs(i + 32)
-                        Array.Resize(na, str_len)
-                        Array.Copy(bs, i + 33, na, 0, str_len)
-                        name = Encoding.GetEncoding(0).GetString(na)
-                        'フォルダかつLBAがおなじ
-                        If dst = lba Then
-                            Exit While
-                        End If
-                    End If
-                End If
-
-                i += next_len
-
-                '見つかるまで無限ループ
-                If bs(i) = 0 Then
-                    i = 0
-                    If cso = False Then
-                        fs.Read(bs, 0, 2048)
-                    Else
-                        dst_next += 1
-                        bs = unpack_cso(dst_next)
-                    End If
-                End If
-            End While
-            nextlba = (filesize >> 11) - 1
-            i = 0
-        End If
+        Dim nextlba As Integer = next_lba(dst)
 
         If cso = False Then
             fs.Seek(lba_base, SeekOrigin.Begin)
