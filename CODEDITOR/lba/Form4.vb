@@ -16,7 +16,7 @@ Public Class Form4
             Dim m As New Form1
             m = CType(Me.Owner, Form1)
             path = Me.Text
-            If parse_mode.Text <> "" Then
+            If parse_mode.Text = "T" Or parse_mode.Text = "P" Then
                 node = m.TreeView1.SelectedNode
             Else
                 itemx = m.ListView1.Items(m.ListView1.SelectedIndices(0))
@@ -40,6 +40,7 @@ Public Class Form4
             Else
                 filesize = CInt(itemx.SubItems(2).Text)
             End If
+
             lba_offsetmax = filesize >> 11
             If lba_offsetmax >= 1 AndAlso (filesize And &H7FF) = 0 Then
                 lba_offsetmax -= 1
