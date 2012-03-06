@@ -35,6 +35,7 @@ Partial Class Form1
         Me.EXTRACTLBAToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ABSOLUTPATHToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OFFSETPATHToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SECTORVIEWTREE = New System.Windows.Forms.ToolStripMenuItem()
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.Button1 = New System.Windows.Forms.Button()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
@@ -77,11 +78,13 @@ Partial Class Form1
         Me.nodemax = New System.Windows.Forms.TextBox()
         Me.addlistmax = New System.Windows.Forms.TextBox()
         Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.enc = New System.Windows.Forms.Label()
         Me.bool_exe = New System.Windows.Forms.Label()
         Me.exe = New System.Windows.Forms.TextBox()
         Me.vlistmax = New System.Windows.Forms.TextBox()
         Me.Label6 = New System.Windows.Forms.Label()
-        Me.enc = New System.Windows.Forms.Label()
+        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
+        Me.PATHTABLEToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ContextMenuStrip2.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -105,9 +108,9 @@ Partial Class Form1
         '
         'ContextMenuStrip2
         '
-        Me.ContextMenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TREECOLLASEToolStripMenuItem, Me.TREEEXPANDToolStripMenuItem, Me.ToolStripSeparator1, Me.EXTRACTDATAToolStripMenuItem, Me.EXTRACTLBAToolStripMenuItem})
+        Me.ContextMenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TREECOLLASEToolStripMenuItem, Me.TREEEXPANDToolStripMenuItem, Me.SECTORVIEWTREE, Me.ToolStripSeparator1, Me.EXTRACTDATAToolStripMenuItem, Me.EXTRACTLBAToolStripMenuItem})
         Me.ContextMenuStrip2.Name = "ContextMenuStrip2"
-        Me.ContextMenuStrip2.Size = New System.Drawing.Size(194, 114)
+        Me.ContextMenuStrip2.Size = New System.Drawing.Size(194, 162)
         '
         'TREECOLLASEToolStripMenuItem
         '
@@ -163,6 +166,13 @@ Partial Class Form1
         Me.OFFSETPATHToolStripMenuItem.Name = "OFFSETPATHToolStripMenuItem"
         Me.OFFSETPATHToolStripMenuItem.Size = New System.Drawing.Size(178, 26)
         Me.OFFSETPATHToolStripMenuItem.Text = "相対パスで出力"
+        '
+        'SECTORVIEWTREE
+        '
+        Me.SECTORVIEWTREE.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.PATHTABLEToolStripMenuItem})
+        Me.SECTORVIEWTREE.Name = "SECTORVIEWTREE"
+        Me.SECTORVIEWTREE.Size = New System.Drawing.Size(193, 26)
+        Me.SECTORVIEWTREE.Text = "SECTORVIEW"
         '
         'ImageList1
         '
@@ -226,7 +236,7 @@ Partial Class Form1
         '
         Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RUNAPPZ, Me.SECTORVIEW, Me.ToolStripSeparator2, Me.SAVEDATA, Me.SAVEDATAOFFSET})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(224, 136)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(224, 114)
         '
         'RUNAPPZ
         '
@@ -297,12 +307,11 @@ Partial Class Form1
         '
         'title
         '
-        Me.title.AutoSize = True
+        Me.title.AutoEllipsis = True
         Me.title.Location = New System.Drawing.Point(69, 3)
         Me.title.Name = "title"
-        Me.title.Size = New System.Drawing.Size(11, 14)
+        Me.title.Size = New System.Drawing.Size(224, 14)
         Me.title.TabIndex = 11
-        Me.title.Text = " "
         '
         'id_h
         '
@@ -315,7 +324,7 @@ Partial Class Form1
         '
         'title_h
         '
-        Me.title_h.AutoSize = True
+        Me.title_h.AutoEllipsis = True
         Me.title_h.Location = New System.Drawing.Point(15, 3)
         Me.title_h.Name = "title_h"
         Me.title_h.Size = New System.Drawing.Size(45, 14)
@@ -432,7 +441,7 @@ Partial Class Form1
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ファイルToolStripMenuItem, Me.設定ToolStripMenuItem, Me.バージョンToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(916, 29)
+        Me.MenuStrip1.Size = New System.Drawing.Size(914, 29)
         Me.MenuStrip1.TabIndex = 21
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -538,6 +547,16 @@ Partial Class Form1
         Me.Panel3.UseWaitCursor = True
         Me.Panel3.Visible = False
         '
+        'enc
+        '
+        Me.enc.AutoSize = True
+        Me.enc.Location = New System.Drawing.Point(65, 110)
+        Me.enc.Name = "enc"
+        Me.enc.Size = New System.Drawing.Size(14, 14)
+        Me.enc.TabIndex = 32
+        Me.enc.Text = "0"
+        Me.enc.UseWaitCursor = True
+        '
         'bool_exe
         '
         Me.bool_exe.AutoSize = True
@@ -577,26 +596,27 @@ Partial Class Form1
         Me.Label6.UseWaitCursor = True
         Me.Label6.Visible = False
         '
-        'enc
+        'Timer1
         '
-        Me.enc.AutoSize = True
-        Me.enc.Location = New System.Drawing.Point(65, 110)
-        Me.enc.Name = "enc"
-        Me.enc.Size = New System.Drawing.Size(14, 14)
-        Me.enc.TabIndex = 32
-        Me.enc.Text = "0"
+        '
+        'PATHTABLEToolStripMenuItem
+        '
+        Me.PATHTABLEToolStripMenuItem.Name = "PATHTABLEToolStripMenuItem"
+        Me.PATHTABLEToolStripMenuItem.Size = New System.Drawing.Size(158, 26)
+        Me.PATHTABLEToolStripMenuItem.Text = "PATHTABLE"
+        Me.PATHTABLEToolStripMenuItem.Visible = False
         '
         'Form1
         '
         Me.AllowDrop = True
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(916, 578)
+        Me.ClientSize = New System.Drawing.Size(914, 578)
         Me.Controls.Add(Me.tree)
         Me.Controls.Add(Me.MenuStrip1)
-        Me.Controls.Add(Me.Panel3)
         Me.Controls.Add(Me.VIRTUAL)
         Me.Controls.Add(Me.Label4)
+        Me.Controls.Add(Me.Panel3)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.localtime)
@@ -691,5 +711,8 @@ Partial Class Form1
     Friend WithEvents bool_exe As System.Windows.Forms.Label
     Friend WithEvents SECTORVIEW As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents enc As System.Windows.Forms.Label
+    Friend WithEvents Timer1 As System.Windows.Forms.Timer
+    Friend WithEvents SECTORVIEWTREE As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents PATHTABLEToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class
