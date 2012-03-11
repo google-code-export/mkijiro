@@ -1143,6 +1143,11 @@ Public Class Form1
             If psdism.Success Then
                 str = str.Substring(0, psdism.Index)
             End If
+            Dim llb As New Regex("^.*?:+( |\t|　)*")
+            Dim llbm As Match = llb.Match(str)
+            If llbm.Success Then
+                str = str.Remove(0, llbm.Length)
+            End If
             str &= " "
 
             Dim valhex As New Regex("(\$|0x)[0-9A-Fa-f]{1,8}")
@@ -1830,12 +1835,27 @@ Public Class Form1
         Return hex
     End Function
 
+    'type j/jal
     Function offset_boolean(ByVal str As String, ByVal hex As Integer) As Integer
         Dim valhex As New Regex("(\x20|,|\t)(\$|0x)[0-9A-Fa-f]{1,8}$")
         Dim valhexm As Match = valhex.Match(str)
         Dim k As Integer = 0
+        Dim j As Integer = 0
         If valhexm.Success Then
             k = Convert.ToInt32(valhexm.Value.Replace("$", "").Remove(0, 1), 16)
+            If k < &H1800000 Then
+                k += &H8800000
+            End If
+            hex = hex Or ((k >> 2) And &H3FFFFFF)
+        Else
+            Dim cma As Integer = str.Trim.LastIndexOf(" ")
+            str = str.Substring(cma + 1, str.Length - cma - 1).Trim
+            For j = 0 To 255
+                If label(j) = str Then
+                    Exit For
+                End If
+            Next
+            k = label_addr(j)
             If k < &H1800000 Then
                 k += &H8800000
             End If
@@ -1844,6 +1864,7 @@ Public Class Form1
         Return hex
     End Function
 
+    'type branch offset
     Function offset_boolean2(ByVal str As String, ByVal hex As Integer, ByVal hex2 As Integer) As Integer
         Dim valhex As New Regex("(\x20|,|\t)(\$|0x)[0-9A-Fa-f]{1,8}$")
         Dim valhexm As Match = valhex.Match(str)
@@ -1882,6 +1903,7 @@ Public Class Form1
         Return hex
     End Function
 
+    'type lw/sw offset
     Function offset_boolean3(ByVal str As String, ByVal hex As Integer) As Integer
         Dim valhex As New Regex("(\x20|,|\t)-?(\$|0x)[0-9A-Fa-f]{1,4}\(")
         Dim valhexm As Match = valhex.Match(str)
@@ -2061,7 +2083,7 @@ Public Class Form1
     Dim label_addr(255) As Integer
 
     Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles Button1.Click
-        Dim ss As String() = TextBox1.Text.Split(CChar(vbLf))
+        Dim ss As String() = (TextBox1.Text & vbCrLf).Split(CChar(vbLf))
         Dim sb As New StringBuilder
         Dim st As Integer = Convert.ToInt32(ADDR.Text, 16)
         Dim i As Integer = Convert.ToInt32(ADDR.Text, 16)
@@ -2089,10 +2111,19 @@ Public Class Form1
 
         For Each s As String In ss
             If s.Trim = "" Then
-            ElseIf s.Length > 4 AndAlso (s.Substring(0, 2) = "__" Or s.Substring(0, 3) = "FNC" Or s.Substring(0, 2) = "//") Then
-
-            ElseIf s.Length > 4 AndAlso s.Substring(s.Length - 2, 1) = ":" Then
+            ElseIf s.Length > 0 AndAlso (s(0) = "_" Or s(0) = "/" Or s(0) = "#" Or s(0) = ";") Then
+            ElseIf s.Length > 2 AndAlso (s.Substring(0, 3) = "FNC") Then
+            ElseIf s.Length > 2 AndAlso s.Substring(s.Length - 2, 1) = ":" Then
                 label(ct) = s.Remove(s.Length - 2, 2).ToLower.Trim
+                label_addr(ct) = ii
+                ct += 1
+            ElseIf s.Length > 2 AndAlso s.Contains(":") Then
+                label(ct) = s.Substring(0, s.IndexOf(":")).ToLower.Trim
+                label_addr(ct) = ii
+                ct += 1
+                ii += 4
+            ElseIf s.Length > 4 AndAlso s.Substring(0, 5) = "label" Then
+                label(ct) = s.Remove(0, 5).ToLower.Trim
                 label_addr(ct) = ii
                 ct += 1
             Else
@@ -2102,8 +2133,10 @@ Public Class Form1
 
         For Each s As String In ss
             If s.Trim = "" Then
-            ElseIf s.Length > 4 AndAlso (s.Substring(0, 2) = "__" Or s.Substring(0, 3) = "FNC" Or s.Substring(0, 2) = "//") Then
-            ElseIf s.Length > 4 AndAlso s.Substring(s.Length - 2, 1) = ":" Then
+            ElseIf s.Length > 0 AndAlso (s(0) = "_" Or s(0) = "/" Or s(0) = "#" Or s(0) = ";") Then
+            ElseIf s.Length > 2 AndAlso (s.Substring(0, 3) = "FNC") Then
+            ElseIf s.Length > 2 AndAlso s.Substring(s.Length - 2, 1) = ":" Then
+            ElseIf s.Length > 4 AndAlso s.Substring(0, 5) = "label" Then
             Else
                 If MODE.Text = "NITEPR" Then
                     sb.Append("0x")
