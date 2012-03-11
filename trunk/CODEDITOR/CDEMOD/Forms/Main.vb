@@ -1291,7 +1291,6 @@ Public Class MERGE
         Return Strings.StrConv(m.Value, VbStrConv.Wide, 0)
     End Function
 
-
     Private Sub 中国語文字化け対策ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles str_gbk.Click, CNchar.Click
 
         codetree.BeginUpdate() ' This will stop the tree view from constantly drawing the changes while we sort the nodes
@@ -1315,7 +1314,6 @@ Public Class MERGE
         Next
         codetree.EndUpdate()
     End Sub
-
 
     Public Function ConvCH(ByVal moto As String) As String
         Dim st As String() = {"ー", "∋", "⊆", "⊇", "⊂", "⊃", "￢", "⇒", "⇔", "∃", "∂", "∇", "≪", "≫", "∬", "Å", "♯", "♭", "♪", "†", "‡", "¶", "⑪", "⑫", "⑬", "⑭", "⑮", "⑯", "⑰", "⑱", "⑲", "⑳", "㍉", "㌔", "㌢", "㍍", "㌘", "㌧", "㌃", "㌶", "㍑", "㍗", "㌍", "㌦", "㌣", "㌫", "㍊", "㌻", "㍻", "〝", "〟", "㏍", "㊤", "㊥", "㊦", "㊧", "㊨", "㍾", "㍽", "㍼"}
@@ -2706,7 +2704,6 @@ Public Class MERGE
         s.clipboad("CMF")
     End Sub
 
-
     Private Sub txt出力ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles FCTXT.Click
         Dim s As New save_db
         s.clipboad("TXT")
@@ -2809,7 +2806,6 @@ Public Class MERGE
         sb.Append(cmt_tb.Text)
         cmt_tb.Text = sb.ToString
     End Sub
-
 
     Private Sub PSF_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PSF.Click
 
@@ -2922,7 +2918,7 @@ Public Class MERGE
 
     Private Sub cl_tb_TextChanged_1(sender As System.Object, e As System.EventArgs) Handles cl_tb.MouseClick, cl_tb.Validated, cl_tb.TextChanged
         Dim tl As New textline
-        Label2.Text = tl.linec(cl_tb.Text, cl_tb.SelectionStart).ToString & "行目"
+        curr_line.Text = tl.linec(cl_tb.Text, cl_tb.SelectionStart).ToString & "行目"
     End Sub
 
 
@@ -2940,11 +2936,11 @@ Public Class MERGE
                 temp += 1
             End If
         End If
-            If e.KeyData = Keys.Left AndAlso temp > 1 AndAlso cl_tb.Text.Substring(cl_tb.SelectionStart - 2, 2) = vbCrLf Then
-                temp -= 1
-            ElseIf e.KeyData = Keys.Right AndAlso cl_tb.SelectionStart < cl_tb.Text.Length AndAlso cl_tb.Text.Substring(cl_tb.SelectionStart, 2) = vbCrLf Then
-                temp += 1
-            End If
-            Label2.Text = temp.ToString & "行目"
+        If e.KeyData = Keys.Left AndAlso temp > 1 AndAlso cl_tb.Text.Substring(cl_tb.SelectionStart - 2, 2) = vbCrLf Then
+            temp -= 1
+        ElseIf e.KeyData = Keys.Right AndAlso cl_tb.SelectionStart < cl_tb.Text.Length AndAlso cl_tb.Text.Substring(cl_tb.SelectionStart, 2) = vbCrLf Then
+            temp += 1
+        End If
+        curr_line.Text = temp.ToString & "行目"
     End Sub
 End Class

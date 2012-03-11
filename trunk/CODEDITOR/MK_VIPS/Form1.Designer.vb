@@ -50,7 +50,7 @@ Partial Class Form1
         '
         Me.MODE.FormattingEnabled = True
         Me.MODE.Items.AddRange(New Object() {"NITEPR", "CWCHEAT", "JPCSP", "PSPAR", "PMETAN", "PSPAR(0xE)", "TEMPAR(0xC2)", "CMFUSION(0xF0)"})
-        Me.MODE.Location = New System.Drawing.Point(18, 97)
+        Me.MODE.Location = New System.Drawing.Point(18, 82)
         Me.MODE.Name = "MODE"
         Me.MODE.Size = New System.Drawing.Size(117, 22)
         Me.MODE.TabIndex = 1
@@ -58,7 +58,7 @@ Partial Class Form1
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(37, 135)
+        Me.Button1.Location = New System.Drawing.Point(163, 32)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 2
@@ -68,16 +68,16 @@ Partial Class Form1
         'TextBox2
         '
         Me.TextBox2.Font = New System.Drawing.Font("Verdana", 9.163636!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox2.Location = New System.Drawing.Point(522, 30)
+        Me.TextBox2.Location = New System.Drawing.Point(339, 30)
         Me.TextBox2.Multiline = True
         Me.TextBox2.Name = "TextBox2"
         Me.TextBox2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TextBox2.Size = New System.Drawing.Size(412, 415)
+        Me.TextBox2.Size = New System.Drawing.Size(412, 403)
         Me.TextBox2.TabIndex = 3
         '
         'ADDR
         '
-        Me.ADDR.Location = New System.Drawing.Point(18, 44)
+        Me.ADDR.Location = New System.Drawing.Point(18, 32)
         Me.ADDR.MaxLength = 10
         Me.ADDR.Name = "ADDR"
         Me.ADDR.Size = New System.Drawing.Size(117, 21)
@@ -87,7 +87,7 @@ Partial Class Form1
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(15, 80)
+        Me.Label1.Location = New System.Drawing.Point(15, 65)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(67, 14)
         Me.Label1.TabIndex = 5
@@ -96,7 +96,7 @@ Partial Class Form1
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(15, 27)
+        Me.Label2.Location = New System.Drawing.Point(15, 15)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(78, 14)
         Me.Label2.TabIndex = 6
@@ -109,9 +109,9 @@ Partial Class Form1
         Me.Panel1.Controls.Add(Me.Button1)
         Me.Panel1.Controls.Add(Me.Label2)
         Me.Panel1.Controls.Add(Me.MODE)
-        Me.Panel1.Location = New System.Drawing.Point(343, 130)
+        Me.Panel1.Location = New System.Drawing.Point(27, 439)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(161, 191)
+        Me.Panel1.Size = New System.Drawing.Size(266, 121)
         Me.Panel1.TabIndex = 7
         '
         'Label3
@@ -126,7 +126,7 @@ Partial Class Form1
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(522, 9)
+        Me.Label4.Location = New System.Drawing.Point(336, 10)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(60, 14)
         Me.Label4.TabIndex = 9
@@ -136,7 +136,7 @@ Partial Class Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(953, 481)
+        Me.ClientSize = New System.Drawing.Size(787, 572)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.Panel1)
@@ -145,7 +145,7 @@ Partial Class Form1
         Me.ImeMode = System.Windows.Forms.ImeMode.Disable
         Me.Name = "Form1"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "MK_VIPS（＾ω＾）2012/02/02"
+        Me.Text = "MK_VIPS（＾ω＾）2012/03/11"
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         Me.ResumeLayout(False)

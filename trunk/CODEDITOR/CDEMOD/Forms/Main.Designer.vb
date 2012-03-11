@@ -192,7 +192,7 @@ Partial Class MERGE
         Me.PSF = New System.Windows.Forms.Button()
         Me.dgtext = New System.Windows.Forms.TextBox()
         Me.dmtext = New System.Windows.Forms.TextBox()
-        Me.Label2 = New System.Windows.Forms.Label()
+        Me.curr_line = New System.Windows.Forms.Label()
         Me.コード形式 = New System.Windows.Forms.Label()
         Me.treeopen.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
@@ -1543,14 +1543,14 @@ Partial Class MERGE
         Me.dmtext.TabIndex = 34
         Me.dmtext.Visible = False
         '
-        'Label2
+        'curr_line
         '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(761, 515)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(11, 14)
-        Me.Label2.TabIndex = 35
-        Me.Label2.Text = " "
+        Me.curr_line.AutoSize = True
+        Me.curr_line.Location = New System.Drawing.Point(761, 515)
+        Me.curr_line.Name = "curr_line"
+        Me.curr_line.Size = New System.Drawing.Size(11, 14)
+        Me.curr_line.TabIndex = 35
+        Me.curr_line.Text = " "
         '
         'コード形式
         '
@@ -1569,7 +1569,7 @@ Partial Class MERGE
         Me.AutoScroll = True
         Me.ClientSize = New System.Drawing.Size(833, 655)
         Me.Controls.Add(Me.PSF)
-        Me.Controls.Add(Me.Label2)
+        Me.Controls.Add(Me.curr_line)
         Me.Controls.Add(Me.dmtext)
         Me.Controls.Add(Me.SELECTLIST)
         Me.Controls.Add(Me.dgtext)
@@ -1788,7 +1788,7 @@ Partial Class MERGE
     Friend WithEvents FCTXT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents dgedit As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents dmtext As System.Windows.Forms.TextBox
-    Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents curr_line As System.Windows.Forms.Label
     Friend WithEvents コード形式 As System.Windows.Forms.Label
 
 End Class
