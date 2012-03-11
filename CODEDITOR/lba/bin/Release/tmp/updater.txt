@@ -1,1 +1,0 @@
-BOOT="http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/lba/bin/Release/lba.exe","lba.exe"

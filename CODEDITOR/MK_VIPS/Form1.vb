@@ -1138,7 +1138,7 @@ Public Class Form1
             Dim asm As String = ""
             Dim mips As String = ""
 
-            Dim psdis As New Regex("(\t|\x20|　)*?#.+$")
+            Dim psdis As New Regex("(\t|\x20|　)*?(#|;).+$")
             Dim psdism As Match = psdis.Match(str)
             If psdism.Success Then
                 str = str.Substring(0, psdism.Index)
@@ -1850,6 +1850,7 @@ Public Class Form1
         Dim valdec As New Regex("(\x20|,|\t)(\+|-)?\d{1,4}$")
         Dim valdecm As Match = valdec.Match(str)
         Dim k As Integer = 0
+        Dim j As Integer = 0
         If valhexm.Success Then
             k = Convert.ToInt32(valhexm.Value.Replace("$", "").Remove(0, 1), 16)
             If k < &H1800000 Then
@@ -1859,9 +1860,24 @@ Public Class Form1
                 hex2 += &H8800000
             End If
             hex = hex Or ((k - hex2 - 4) >> 2 And &HFFFF)
-        End If
-        If valdecm.Success Then
+        ElseIf valdecm.Success Then
             hex = hex Or ((Convert.ToInt32(valdecm.Value.Remove(0, 1)) - 1) And &HFFFF)
+        Else
+            Dim cma As Integer = str.LastIndexOf(",")
+            str = str.Substring(cma + 1, str.Length - cma - 1).Trim
+            For j = 0 To 255
+                If label(j) = str Then
+                    Exit For
+                End If
+            Next
+            k = label_addr(j)
+            If k < &H1800000 Then
+                k += &H8800000
+            End If
+            If hex2 < &H1800000 Then
+                hex2 += &H8800000
+            End If
+            hex = hex Or ((k - hex2 - 4) >> 2 And &HFFFF)
         End If
         Return hex
     End Function
@@ -2041,6 +2057,9 @@ Public Class Form1
     End Function
 #End Region
 
+    Dim label(255) As String
+    Dim label_addr(255) As Integer
+
     Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles Button1.Click
         Dim ss As String() = TextBox1.Text.Split(CChar(vbLf))
         Dim sb As New StringBuilder
@@ -2062,10 +2081,29 @@ Public Class Form1
             End If
         End If
 
+        Dim ct As Integer = 0
+        Dim ii As Integer = i
         Dim odd As Boolean = False
+        Array.Clear(label, 0, 256)
+        Array.Clear(label_addr, 0, 256)
+
         For Each s As String In ss
             If s.Trim = "" Then
             ElseIf s.Length > 4 AndAlso (s.Substring(0, 2) = "__" Or s.Substring(0, 3) = "FNC" Or s.Substring(0, 2) = "//") Then
+
+            ElseIf s.Length > 4 AndAlso s.Substring(s.Length - 2, 1) = ":" Then
+                label(ct) = s.Remove(s.Length - 2, 2).ToLower.Trim
+                label_addr(ct) = ii
+                ct += 1
+            Else
+                ii += 4
+            End If
+        Next
+
+        For Each s As String In ss
+            If s.Trim = "" Then
+            ElseIf s.Length > 4 AndAlso (s.Substring(0, 2) = "__" Or s.Substring(0, 3) = "FNC" Or s.Substring(0, 2) = "//") Then
+            ElseIf s.Length > 4 AndAlso s.Substring(s.Length - 2, 1) = ":" Then
             Else
                 If MODE.Text = "NITEPR" Then
                     sb.Append("0x")
@@ -2139,7 +2177,7 @@ Public Class Form1
                         sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
                         odd = False
                     End If
-                    i += 8
+                    i += 4
                 End If
             End If
         Next
@@ -2152,6 +2190,7 @@ Public Class Form1
         ElseIf MODE.Text = "TEMPAR(0xC2)" Then
             sb.Insert(0, "_N 0xC2000000 0x000000" & Convert.ToString((i), 16).ToUpper.PadLeft(2, "0"c) & vbCrLf)
         ElseIf MODE.Text = "CMFUSION(0xF0)" Then
+            i = i * 2
             If odd = True Then
                 i += 8
             End If
@@ -2174,6 +2213,12 @@ Public Class Form1
 
     Private Sub MODE_SelectedIndexChanged(sender As System.Object, e As System.Windows.Forms.KeyPressEventArgs) Handles MODE.KeyPress
         e.Handled = True
+    End Sub
+
+    Private Sub TextBox1_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles TextBox1.KeyDown, TextBox2.KeyDown
+        If e.KeyCode = Keys.A AndAlso e.Control Then
+            DirectCast(sender, TextBox).SelectAll()
+        End If
     End Sub
 
 End Class

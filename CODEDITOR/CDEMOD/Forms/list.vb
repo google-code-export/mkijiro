@@ -2,7 +2,7 @@
     Friend rplen As Integer = 1
     Friend rmlen As Integer = 1
     Friend matchno As Integer = 1
-
+    Dim temp As String = ""
 
     '初期化
     Public Sub listview1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
@@ -54,8 +54,6 @@
         Dim itemx As New ListViewItem
         itemx = ListView1.SelectedItems(0)
         Dim b4 = itemx.Text
-        'b4 = b4.Replace("ListViewItem: {", "")
-        'b4 = b4.Replace("}", "")
         getpositions(matchno)
         Dim b3 As String = f.cl_tb.Text
         b3 = b3.Remove(rplen, rmlen)
@@ -70,6 +68,11 @@
         Else
             f.changed.Text = "リストデータが反映されました。"
         End If
+        f.cl_tb.SelectionStart = rplen
+        f.cl_tb.Focus()
+        'カレット位置までスクロール
+        f.cl_tb.ScrollToCaret()
+        f.curr_line.Text = temp
 
         ListView1.Focus()
     End Sub
@@ -139,7 +142,15 @@
                 End If
             End If
             l = l.NextMatch()
+            Dim f As MERGE
+            f = CType(Me.Owner, MERGE)
             rplen += (line - 1) * lslen + bit + 1
+            f.cl_tb.SelectionStart = rplen
+            f.cl_tb.Focus()
+            'カレット位置までスクロール
+            f.cl_tb.ScrollToCaret()
+            temp = line.ToString & "行目"
+            f.curr_line.Text = temp
             If z = y Then
                 matchno = y
                 Exit While
