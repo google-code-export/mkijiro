@@ -1143,7 +1143,7 @@ Public Class Form1
             If psdism.Success Then
                 str = str.Substring(0, psdism.Index)
             End If
-            Dim llb As New Regex("^.*?:+( |\t|　)*")
+            Dim llb As New Regex("^.*?:+( |\t|　)+")
             Dim llbm As Match = llb.Match(str)
             If llbm.Success Then
                 str = str.Remove(0, llbm.Length)
