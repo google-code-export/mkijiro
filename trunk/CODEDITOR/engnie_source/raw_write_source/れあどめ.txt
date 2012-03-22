@@ -1,0 +1,9 @@
+こちらはimah486氏作成のemuhaste用の改造エンジン追加プラグインです。
+PSPARCTIONREPLAYのこーどがそのまま使えるようになります。
+対応コードは0xC？以外は対応してると思います。
+http://unzu127xp.pa.land.to/data/cwc-ar.html
+
+2012/03/18
+とりあえず作成
+
+BY (ﾟ∀ﾟ)

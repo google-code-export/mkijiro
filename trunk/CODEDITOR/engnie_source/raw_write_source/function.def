@@ -1,0 +1,5 @@
+LIBRARY      "psp_ar"
+DESCRIPTION  'DATEL PSP ACTIONREPLAY DLL'
+EXPORTS
+	EngineType
+	CheatEngine
