@@ -355,6 +355,9 @@ static char ** apply_language(char *translate_file)
 }
 
 int cur_language = 0;
+extern int centermenu[];
+extern int pwidth;
+extern int yoko;
 
 static void select_language(void)
 {
@@ -418,6 +421,14 @@ static void select_language(void)
 	if(g_messages == g_messages_en) {
 		cur_language = PSP_SYSTEMPARAM_LANGUAGE_ENGLISH;
 	}
+	
+	blit_setup();
+	int i=0;
+	centermenu[0]=(pwidth-strlen(g_messages[MSG_PRO_VSH_MENU])*def_yoko+1)>>1;
+	for(i=1;i<7;i++){
+	centermenu[i]=(pwidth-strlen(g_messages[11+i])*def_yoko+1)>>1;
+	}
+	centermenu[7]=(pwidth-strlen(g_messages[MSG_CPU_CLOCK_XMB])*def_yoko-yoko*9+1)>>1;
 }
 
 int TSRThread(SceSize args, void *argp)

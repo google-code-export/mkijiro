@@ -69,9 +69,7 @@ const char *item_str[TMENU_MAX];
 
 static int menu_sel = TMENU_XMB_CLOCK;
 
-
-#define str_center (pwidth-strlen(msg)*def_yoko+1)>>1
-
+int centermenu[8];
 const int xyPoint[] ={0x98, 0x30, 0xC0, 0xA0, 0x70, 0x08, 0x0E, 0xA8};//data243C=
 const int xyPoint2[] ={0xB0, 0x30, 0xD8, 0xB8, 0x88, 0x08, 0x11, 0xC0};//data2458=
 
@@ -105,7 +103,7 @@ int menu_draw(void)
 		
 	//‚o‚q‚n@‚u‚r‚g@ƒƒjƒ…[‚Ì•\¦ˆÊ’u
 	//blit_string(pointer[0], pointer[1], g_messages[MSG_PRO_VSH_MENU]);
-	blit_string(str_center, pointer[1], msg);
+	blit_string(centermenu[0], pointer[1], msg);
 
 	for(max_menu=0;max_menu<TMENU_MAX;max_menu++) {
 		fc = 0xffffff;
@@ -117,13 +115,13 @@ int menu_draw(void)
 		if(msg) {
 			switch(max_menu) {
 				case TMENU_EXIT:
-					xPointer =str_center;//pointer[2];
+					xPointer =centermenu[6];//pointer[2];
 					break;
 				case TMENU_RESET_DEVICE:
 					//if (cur_language == PSP_SYSTEMPARAM_LANGUAGE_GERMAN) {
 					//	xPointer = pointer[3] - 2 * 8 - 1;
 					//} else {
-						xPointer =str_center;//pointer[3];
+						xPointer =centermenu[4];//pointer[3];
 					//}
 					
 					break;
@@ -131,20 +129,21 @@ int menu_draw(void)
 					//if (cur_language == PSP_SYSTEMPARAM_LANGUAGE_GERMAN) {
 					//	xPointer = pointer[7] - 2 * 8 - 1;
 					//} else {
-						xPointer = str_center;//pointer[7];
+						xPointer = centermenu[5];//pointer[7];
 					//}
 					
 					break;
 				case TMENU_RECOVERY_MENU:
-					xPointer = str_center;//168;
+					xPointer = centermenu[1];//168;
 					break;
 				case TMENU_SHUTDOWN_DEVICE:
-					xPointer = str_center;//176;
+					xPointer = centermenu[2];//176;
 					break;
 				case TMENU_SUSPEND_DEVICE:
-					xPointer = str_center;//menu_center[14];//176;
+					xPointer = centermenu[3];//176;
 					break;
-				default:					xPointer=(pwidth-strlen(msg)*def_yoko-yoko*9+1)/2;//menu_center[11];//pointer[4];
+				default:
+					xPointer=centermenu[7];//pointer[4];
 					break;
 			}
 
@@ -213,11 +212,8 @@ int menu_setup(void)
 		
 #ifdef CONFIG_660
 		if (psp_fw_version == FW_660){
-			//if(zenkaku==0){
 			scePaf_sprintf_660(freq_buf, "%d/%d", cnf.vshcpuspeed, cnf.vshbusspeed);
 			}
-			///else{
-			//scePaf_sprintf_660(freq_buf, "%s", clocks[(cnf.vshcpuspeed/33)]);}}
 #endif
 		
 		bridge = freq_buf;
@@ -246,12 +242,8 @@ int menu_setup(void)
 		
 #ifdef CONFIG_660
 		if (psp_fw_version == FW_660){
-			//if(zenkaku==0){
 			scePaf_sprintf_660(freq2_buf, "%d/%d", cnf.umdisocpuspeed, cnf.umdisobusspeed);
 			}
-			//else{
-			//scePaf_sprintf_660(freq2_buf, "%s", clocks[(cnf.umdisocpuspeed/33)]);
-			//}}
 #endif
 		
 		bridge = freq2_buf;
@@ -280,10 +272,7 @@ int menu_setup(void)
 
 #ifdef CONFIG_660
 		if (psp_fw_version == FW_660){
-			//if(zenkaku==0){
 			scePaf_sprintf_660(device_buf, "%s %d", g_messages[MSG_FLASH], cnf.usbdevice-1);}
-			//else{
-			//scePaf_sprintf_660(device_buf, "%s%s", g_messages[MSG_FLASH], usb[cnf.usbdevice-1]);}
 #endif
 
 		bridge = device_buf;
