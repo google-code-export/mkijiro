@@ -206,6 +206,7 @@ namespace WindowsFormsApplication1
                 if (zenkaku == false) {
                     fs.Write(header, 0, 17);
                 }
+                else
                 {
                     fs.Write(header, 0, 16);
                     if (SJIS.Checked == true)
