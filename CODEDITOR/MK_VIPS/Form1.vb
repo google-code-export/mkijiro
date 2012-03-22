@@ -1849,6 +1849,9 @@ Public Class Form1
             hex = hex Or ((k >> 2) And &H3FFFFFF)
         Else
             Dim cma As Integer = str.Trim.LastIndexOf(" ")
+            If cma < 0 Then
+                cma = str.Trim.LastIndexOf(vbTab)
+            End If
             str = str.Substring(cma + 1, str.Length - cma - 1).Trim
             For j = 0 To 255
                 If label(j) = str Then
