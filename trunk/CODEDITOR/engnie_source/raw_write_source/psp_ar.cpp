@@ -11,7 +11,7 @@
 // *CodeTyp: より後ろの文字列に改造コードツールの名前(PS2PARとかARDSとかを入れる)
 // *Comment: より後ろの文字列に作者コメントとか詳細を書く。1行あたり25文字×3行までを推奨
 static char m_cCodeTyp[]="*CodeTyp:PSP PRO ACTIONREPLAY";
-static char m_cComment[]="*Comment:PSPAR\r\nDLL拡張=nothing";
+static char m_cComment[]="*Comment:PSPAR20120323\r\nDLL拡張=nothing";
 
 
 // EngineType関数がリターンした値によってemuhaste側の挙動を変える予定ですが、
@@ -319,8 +319,10 @@ int CheatEngine(unsigned long m_ProcessID,				// プロセスID
 			//8bit書き込み
 			case 0xD8:
 			lpAddress = (LPVOID)(DWORD)(((m_ulWriteParam[i]+ar_offset)&0x0FFFFFFF)+m_ulRealStartAddress-m_ulVirtualStartAddress);
+			if((ar_flag &1)==0){
 			WriteProcessMemory(hnd,lpAddress,&ar_data,1,NULL);
 			ar_offset++;
+			}
 				break;
 
 				
@@ -333,8 +335,10 @@ int CheatEngine(unsigned long m_ProcessID,				// プロセスID
 			//16bit書き込み
 			case 0xD7:
 			lpAddress = (LPVOID)(DWORD)(((m_ulWriteParam[i]+ar_offset)&0x0FFFFFFE)+m_ulRealStartAddress-m_ulVirtualStartAddress);
+			if((ar_flag &1)==0){
 			WriteProcessMemory(hnd,lpAddress,&ar_data,2,NULL);
 			ar_offset+=2;
+			}
 				break;
 				
 			//32bit読み込み
@@ -346,8 +350,10 @@ int CheatEngine(unsigned long m_ProcessID,				// プロセスID
 			//32bit書き込み
 			case 0xD6:
 			lpAddress = (LPVOID)(DWORD)(((m_ulWriteParam[i]+ar_offset)&0x0FFFFFFC)+m_ulRealStartAddress-m_ulVirtualStartAddress);
+			if((ar_flag &1)==0){
 			WriteProcessMemory(hnd,lpAddress,&ar_data,4,NULL);
 			ar_offset+=4;
+			}
 			break;
 
 			//オフセットの加減(符号拡張考慮)

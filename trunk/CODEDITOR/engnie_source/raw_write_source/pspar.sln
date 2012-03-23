@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual C++ Express 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "raw_write", "raw_write.vcxproj", "{CCFE21BB-C589-4407-C8EE-11E7DFD3DACC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psp_ar", "raw_write.vcxproj", "{7AB45236-447B-818A-D22B-A0477445EB58}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -10,12 +10,12 @@ Global
 		Template|Win32 = Template|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CCFE21BB-C589-4407-C8EE-11E7DFD3DACC}.Debug|Win32.ActiveCfg = Debug|Win32
-		{CCFE21BB-C589-4407-C8EE-11E7DFD3DACC}.Debug|Win32.Build.0 = Debug|Win32
-		{CCFE21BB-C589-4407-C8EE-11E7DFD3DACC}.Release|Win32.ActiveCfg = Release|Win32
-		{CCFE21BB-C589-4407-C8EE-11E7DFD3DACC}.Release|Win32.Build.0 = Release|Win32
-		{CCFE21BB-C589-4407-C8EE-11E7DFD3DACC}.Template|Win32.ActiveCfg = Template|Win32
-		{CCFE21BB-C589-4407-C8EE-11E7DFD3DACC}.Template|Win32.Build.0 = Template|Win32
+		{7AB45236-447B-818A-D22B-A0477445EB58}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7AB45236-447B-818A-D22B-A0477445EB58}.Debug|Win32.Build.0 = Debug|Win32
+		{7AB45236-447B-818A-D22B-A0477445EB58}.Release|Win32.ActiveCfg = Release|Win32
+		{7AB45236-447B-818A-D22B-A0477445EB58}.Release|Win32.Build.0 = Release|Win32
+		{7AB45236-447B-818A-D22B-A0477445EB58}.Template|Win32.ActiveCfg = Template|Win32
+		{7AB45236-447B-818A-D22B-A0477445EB58}.Template|Win32.Build.0 = Template|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
