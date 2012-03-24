@@ -1,0 +1,18 @@
+M$の内部てーぶるをぱくって1:1のUTF8 VS SJIS,EUCJP,GBK,UTF16BE,UTF16LE
+の変換てーぶるを作成する鶴です。
+
+2012/03/25
+UTF8テーブルの最後に00000を書きだすようにした(シーク最終=失敗)
+SJIS以外にEUC,GBK,utf16を追加
+ファイルがない場合警告を追加
+
+2012/03/23
+とりあえず作成
+
+BY (ﾟ∀ﾟ)
+
+参考さいと
+http://charset.uic.jp/show/cp932/
+http://msdn.microsoft.com/ja-jp/library/aa288104%28v=vs.71%29.aspx
+http://www.gnu.org/software/libiconv/
+http://www.unicode.org/
