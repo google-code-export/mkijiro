@@ -264,6 +264,86 @@ static const char *get_recovery_fontname(size_t idx)
 
 	return fontname;
 }
+int ok=1;
+char stm[128];
+
+int utf82sjis(){
+	char space = 0x20;
+	char null = 0;
+	char buffer[2048];
+    int seek=0;
+    int k=0;
+    int kk=0;
+    int i=0;
+    int j=0;
+    int big=0;
+    int fd;
+    unsigned char code=0;
+	const char *msg;
+	const char *p;
+    p = get_recovery_fontname((size_t)(g_font_cur_sel));
+	msg = strrchr(p, '/');
+	if(msg != NULL) {
+	msg++;
+    int z= strlen(msg);
+	
+        while(i < z){
+        	code= (u8)msg[i];
+        	if(code <= 0x80){
+              	memcpy(&stm[k],&msg[i],1);
+                k++;
+                i++;
+        	}
+        	else if(code >= 0xE0){
+        		memcpy(&seek,&msg[i],3);
+                kk = 0;
+                fd = sceIoOpen("ms0:/seplugins/table/utf8", PSP_O_RDONLY, 0777);
+                 while(1){
+                 	sceIoRead(fd,buffer,2048);
+                    for( j = 0; j< 512;j++){
+        				memcpy(&big,&buffer[j*4],3);
+                        if(seek==big){
+                            kk +=j;
+                        	goto end;
+                        }
+                    }
+                    kk += 512;
+                  	if (kk>6656){
+                          	break;
+	                 }
+                 }
+                end:
+				sceIoClose(fd);
+                fd = sceIoOpen("ms0:/seplugins/table/sjis", PSP_O_RDONLY, 0777);
+				sceIoLseek(fd, 0, SEEK_SET);
+				sceIoLseek(fd, kk<<1,SEEK_CUR);
+                sceIoRead(fd,buffer,2);
+				sceIoClose(fd);
+                    //”¼ŠpƒJƒi
+                    if((u8)buffer[1]==0){
+                    	memcpy(&stm[k],&buffer[0],1);
+                        k++;
+                        }
+                    //‘SŠp
+                    else{
+                    	memcpy(&stm[k],&buffer[0],2);
+                        k = k+2;
+                    }
+				i= i+3;
+        	}
+        	else{
+                memcpy(&stm[k],&space,1);
+        		i++;
+        	}
+        }
+            
+            memcpy(&stm[k],&null,1);
+            memcpy(&stm[15],&null,1);
+        
+	}
+	
+return 0;
+}
 
 static int display_recovery_font(struct MenuEntry* entry, char *buf, int size)
 {
@@ -276,8 +356,16 @@ static int display_recovery_font(struct MenuEntry* entry, char *buf, int size)
 	if(p != NULL) {
 		fontname = p + 1;
 	}
-
-	sprintf(buf, "%s\t%s", g_messages[RECOVERY_FONT], fontname);
+	else{
+		ok=0;
+	}
+	if(ok==1){
+	 utf82sjis();ok=2;
+	}
+	if(ok==2){
+	fontname=stm;
+	}
+ 	sprintf(buf, "%s\t%s", g_messages[RECOVERY_FONT],fontname);
 
 	return 0;
 }
@@ -300,6 +388,7 @@ static int change_font_select_option(struct MenuEntry *entry, int direct)
 		proDebugScreenReleaseFont();
 	}
 	else {
+		ok=1;
 		proDebugScreenSetFontFile(fontname, 1);
 	}
 

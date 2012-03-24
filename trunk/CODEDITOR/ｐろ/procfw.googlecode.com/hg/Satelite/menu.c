@@ -170,6 +170,7 @@ int menu_draw(void)
 	return 0;
 }
 
+	
 static inline const char *get_enable_disable(int opt)
 {
 	if(opt) {
@@ -179,6 +180,8 @@ static inline const char *get_enable_disable(int opt)
 	return g_messages[MSG_DISABLE];
 }
 
+int ok=1;
+char stm[256];
 
 int menu_setup(void)
 {
@@ -290,12 +293,24 @@ int menu_setup(void)
 	umdvideo_disp = strrchr(umdvideo_path, '/');
 
 	if(umdvideo_disp == NULL) {
+		ok=0;
 		umdvideo_disp = umdvideo_path;
 	} else {
 		umdvideo_disp++;
 	}
 
+	if(ok==2){
+	item_str[TMENU_UMD_VIDEO] = stm;
+	}
+	if(ok==0){
 	item_str[TMENU_UMD_VIDEO] = umdvideo_disp;
+	}
+	if(ok==1){
+	item_str[TMENU_UMD_VIDEO] = umdvideo_disp;
+	utf8video();ok=2;
+	item_str[TMENU_UMD_VIDEO] = stm;
+	}
+	
 	item_str[TMENU_USB_DEVICE] = bridge;
 
 	switch(cnf.umdmode) {
@@ -311,6 +326,78 @@ int menu_setup(void)
 	}
 
 	return 0;
+}
+	
+int utf8video(){
+	char space = 0x20;
+	char null = '...\x0';
+	char buffer[2048];
+    int seek=0;
+    int k=0;
+    int kk=0;
+    int i=0;
+    int j=0;
+    int big=0;
+    int ct=0;
+    int fd;
+    unsigned char code=0;
+	const char *msg;
+    msg = item_str[TMENU_UMD_VIDEO];
+    int z= strlen(msg);
+	
+        while(i < z){
+        	code= (u8)msg[i];
+        	if(code <= 0x80){
+              	memcpy(&stm[k],&msg[i],1);
+                k++;
+                i++;
+        	}
+        	else if(code >= 0xE0){
+        		memcpy(&seek,&msg[i],3);
+                kk = 0;
+                fd = sceIoOpen("ms0:/seplugins/table/utf8", PSP_O_RDONLY, 0777);
+                 while(1){
+                 	sceIoRead(fd,buffer,2048);
+                    for( j = 0; j< 512;j++){
+        				memcpy(&big,&buffer[j*4],3);
+                        if(seek==big){
+                            kk +=j;
+                        	goto end;
+                        }
+                    }
+                    kk += 512;
+                  	if (kk>6656){
+                          	break;
+	                 }
+                 }
+                end:
+				sceIoClose(fd);
+                fd = sceIoOpen("ms0:/seplugins/table/sjis", PSP_O_RDONLY, 0777);
+				sceIoLseek(fd, 0, SEEK_SET);
+				sceIoLseek(fd, kk<<1,SEEK_CUR);
+                sceIoRead(fd,buffer,2);
+				sceIoClose(fd);
+                    //”¼ŠpƒJƒi
+                    if((u8)buffer[1]==0){
+                    	memcpy(&stm[k],&buffer[0],1);
+                        k++;
+                        }
+                    //‘SŠp
+                    else{
+                    	memcpy(&stm[k],&buffer[0],2);
+                        k = k+2;
+                    }
+				i= i+3;
+        	}
+        	else{
+                memcpy(&stm[k],&space,1);
+        		i++;
+        	}
+        }
+            
+            memcpy(&stm[20],&null,3);
+        
+return 0;
 }
 
 int menu_ctrl(u32 button_on)
@@ -365,6 +452,7 @@ int menu_ctrl(u32 button_on)
 					umdpath = umdvideolist_get(&g_umdlist, umdvideo_idx-1);
 
 					if(umdpath != NULL) {
+					ok=1;
 						strncpy(umdvideo_path, umdpath, sizeof(umdvideo_path));
 						umdvideo_path[sizeof(umdvideo_path)-1] = '\0';
 					} else {
@@ -373,6 +461,7 @@ int menu_ctrl(u32 button_on)
 				} else {
 none:
 					strcpy(umdvideo_path, g_messages[MSG_NONE]);
+				ok=0;
 				}
 			} else {
 				return 7; // Mount UMDVideo ISO flag

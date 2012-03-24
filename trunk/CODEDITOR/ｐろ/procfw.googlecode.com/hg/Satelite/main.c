@@ -306,6 +306,11 @@ int load_recovery_font_select(void)
 	}
 
 	sceIoRead(fd, g_cur_font_select, sizeof(g_cur_font_select));
+	
+	//バイトオブオーダー回避
+	if((u8)g_cur_font_select[0]==0xEF){
+	memmove(&g_cur_font_select[0],&g_cur_font_select[3],strlen(g_cur_font_select));
+	}
 	sceIoClose(fd);
 
 	return 0;
