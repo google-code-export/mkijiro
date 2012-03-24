@@ -330,7 +330,7 @@ int menu_setup(void)
 	
 int utf8video(){
 	char space = 0x20;
-	char null = '...\x0';
+	char null = 0;
 	char buffer[2048];
     int seek=0;
     int k=0;
@@ -395,7 +395,8 @@ int utf8video(){
         	}
         }
             
-            memcpy(&stm[20],&null,3);
+            memcpy(&stm[k],&null,1);
+            memcpy(&stm[20],&null,1);
         
 return 0;
 }
