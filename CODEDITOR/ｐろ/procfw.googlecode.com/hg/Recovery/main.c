@@ -249,7 +249,6 @@ int main_thread(SceSize size, void *argp)
 		proDebugScreenSetFontFile(g_cur_font_select, 1);
 	}
 	
-	
 	if(zenkaku!=0){
 	fontlist_init(&g_font_list);
 	get_fontlist(&g_font_list, kanji);
