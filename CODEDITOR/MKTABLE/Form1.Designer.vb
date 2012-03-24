@@ -22,6 +22,7 @@ Partial Class Form1
     'コード エディターを使って変更しないでください。
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
@@ -30,11 +31,16 @@ Partial Class Form1
         Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.TextBox3 = New System.Windows.Forms.TextBox()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.ENCODE = New System.Windows.Forms.ComboBox()
+        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(58, 21)
+        Me.Button1.Location = New System.Drawing.Point(67, 50)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(145, 23)
         Me.Button1.TabIndex = 0
@@ -43,77 +49,115 @@ Partial Class Form1
         '
         'Button2
         '
-        Me.Button2.Location = New System.Drawing.Point(58, 66)
+        Me.Button2.Location = New System.Drawing.Point(67, 93)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(145, 23)
         Me.Button2.TabIndex = 1
-        Me.Button2.Text = "TABEL SEEK"
+        Me.Button2.Text = "TABLE TEST"
         Me.Button2.UseVisualStyleBackColor = True
         '
         'TextBox1
         '
-        Me.TextBox1.Location = New System.Drawing.Point(88, 110)
+        Me.TextBox1.Location = New System.Drawing.Point(97, 8)
         Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(100, 21)
+        Me.TextBox1.Size = New System.Drawing.Size(159, 21)
         Me.TextBox1.TabIndex = 2
         '
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(38, 113)
+        Me.Label2.Location = New System.Drawing.Point(8, 11)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(35, 14)
+        Me.Label2.Size = New System.Drawing.Size(67, 14)
         Me.Label2.TabIndex = 4
-        Me.Label2.Text = "文字"
+        Me.Label2.Text = "UTF8文字"
         '
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(39, 143)
+        Me.Label1.Location = New System.Drawing.Point(12, 37)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(34, 14)
+        Me.Label1.Size = New System.Drawing.Size(63, 14)
         Me.Label1.TabIndex = 5
-        Me.Label1.Text = "SJIS"
+        Me.Label1.Text = "文字出力"
         '
         'TextBox2
         '
-        Me.TextBox2.Location = New System.Drawing.Point(88, 140)
+        Me.TextBox2.Location = New System.Drawing.Point(97, 34)
         Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(100, 21)
+        Me.TextBox2.Size = New System.Drawing.Size(159, 21)
         Me.TextBox2.TabIndex = 6
         '
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(19, 174)
+        Me.Label3.Location = New System.Drawing.Point(11, 64)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(63, 14)
+        Me.Label3.Size = New System.Drawing.Size(80, 14)
         Me.Label3.TabIndex = 7
-        Me.Label3.Text = "SJIS HEX"
+        Me.Label3.Text = "16進数コード"
         '
         'TextBox3
         '
-        Me.TextBox3.Location = New System.Drawing.Point(88, 171)
+        Me.TextBox3.Location = New System.Drawing.Point(97, 61)
+        Me.TextBox3.Multiline = True
         Me.TextBox3.Name = "TextBox3"
-        Me.TextBox3.Size = New System.Drawing.Size(100, 21)
+        Me.TextBox3.Size = New System.Drawing.Size(159, 48)
         Me.TextBox3.TabIndex = 8
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.Label2)
+        Me.Panel1.Controls.Add(Me.TextBox3)
+        Me.Panel1.Controls.Add(Me.TextBox1)
+        Me.Panel1.Controls.Add(Me.Label3)
+        Me.Panel1.Controls.Add(Me.Label1)
+        Me.Panel1.Controls.Add(Me.TextBox2)
+        Me.Panel1.Location = New System.Drawing.Point(31, 122)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(269, 121)
+        Me.Panel1.TabIndex = 9
+        '
+        'ENCODE
+        '
+        Me.ENCODE.ContextMenuStrip = Me.ContextMenuStrip1
+        Me.ENCODE.FormattingEnabled = True
+        Me.ENCODE.Items.AddRange(New Object() {"SHIFT-JIS(CP932)", "EUC-JP(CP51932)", "GBK(CP936)", "UTF16LE(CP1200)", "UTF16BE(CP1201)"})
+        Me.ENCODE.Location = New System.Drawing.Point(107, 12)
+        Me.ENCODE.Name = "ENCODE"
+        Me.ENCODE.Size = New System.Drawing.Size(139, 22)
+        Me.ENCODE.TabIndex = 10
+        Me.ENCODE.Text = "SHIFT-JIS(CP932)"
+        '
+        'ContextMenuStrip1
+        '
+        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(61, 4)
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(39, 15)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(59, 14)
+        Me.Label4.TabIndex = 11
+        Me.Label4.Text = "エンコード"
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(282, 197)
-        Me.Controls.Add(Me.TextBox3)
-        Me.Controls.Add(Me.Label3)
-        Me.Controls.Add(Me.TextBox2)
-        Me.Controls.Add(Me.Label1)
-        Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.TextBox1)
+        Me.ClientSize = New System.Drawing.Size(322, 255)
+        Me.Controls.Add(Me.Label4)
+        Me.Controls.Add(Me.ENCODE)
+        Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Button1)
         Me.Name = "Form1"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Form1"
+        Me.Text = "MKTABLE"
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -126,5 +170,9 @@ Partial Class Form1
     Friend WithEvents TextBox2 As System.Windows.Forms.TextBox
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents TextBox3 As System.Windows.Forms.TextBox
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents ENCODE As System.Windows.Forms.ComboBox
+    Friend WithEvents Label4 As System.Windows.Forms.Label
+    Friend WithEvents ContextMenuStrip1 As System.Windows.Forms.ContextMenuStrip
 
 End Class
