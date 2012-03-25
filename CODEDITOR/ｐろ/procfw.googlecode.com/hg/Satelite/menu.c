@@ -421,13 +421,13 @@ int utf8video(){
         	}
         	else{
                 fail: //BOM
-                memcpy(&stm[k],&space,1);
+                //memcpy(&stm[k],&space,1);
         		i++;
         	}
         }
             
             memcpy(&stm[k],&null,1);
-            memcpy(&stm[20],&null,1);
+            //memcpy(&stm[20],&null,1);
         
 return 0;
 }
