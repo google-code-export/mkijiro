@@ -40,6 +40,7 @@ Public Class Form1
                     Next
                     'End While
                     Array.Clear(bbb, 0, 4)
+                    fs.Write(bbb, 0, 2)
                     fss.Write(bbb, 0, 4)
                     sr.Close()
                     fs.Close()
@@ -80,7 +81,7 @@ Public Class Form1
                     Dim fail As Boolean = False
 
                     While i < bb.Length
-                        If bb(i) <= &H80 Then
+                        If bb(i) < &H80 Then
                             If enc = 1200 Then
                                 stm(k) = bb(i)
                                 stm(k + 1) = 0
@@ -94,8 +95,12 @@ Public Class Form1
                                 k += 1
                             End If
                             i += 1
-                        ElseIf bb(i) > &HE0 Then
-                            seek = CUInt(bb(i) + (bb(i + 1) * 256) + (bb(i + 2) * 65536))
+                        ElseIf bb(i) < &HF0 Then
+                            If (bb(i) < &HE0) Then
+                                seek = CUInt(bb(i) + (bb(i + 1) * 256))
+                            Else
+                                seek = CUInt(bb(i) + (bb(i + 1) * 256) + (bb(i + 2) * 65536))
+                            End If
                             kk = 0
                             fail = False
                             Dim fs As New System.IO.FileStream("table\utf8", System.IO.FileMode.Open, System.IO.FileAccess.Read)
@@ -124,7 +129,7 @@ Public Class Form1
                                 fss.Seek(2 * kk, IO.SeekOrigin.Begin)
                                 fss.Read(bs, 0, 2)
                                 fss.Close()
-                                'CP1201全角例外　∀=0x2200
+                                'CP1201全角
                                 If bs(1) = 0 AndAlso enc = 1201 Then
                                     Array.Copy(bs, 0, stm, k, 2)
                                     k += 2
@@ -143,8 +148,24 @@ Public Class Form1
                                 Array.Copy(dummy, 0, stm, k, 1)
                                 k += 1
                             End If
-                            i += 3
-                        End If
+                            If (bb(i) < &HE0) Then
+                                i += 2
+                            Else
+                                i += 3
+                            End If
+                        ElseIf bb(i) < &HF0 Then
+                            i += 4
+                        ElseIf bb(i) < &HF8 Then
+                            i += 5
+                        ElseIf bb(i) < &HFC Then
+                            i += 6
+                        ElseIf bb(i) < &HFE Then
+                            i += 7
+                        Else
+                            'BOM
+                            k += 1
+                            i += 1
+                            End If
                     End While
 
                     TextBox2.Text = System.Text.Encoding.GetEncoding(enc).GetString(stm)

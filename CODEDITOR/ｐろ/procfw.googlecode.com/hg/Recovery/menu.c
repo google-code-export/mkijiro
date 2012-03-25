@@ -300,13 +300,16 @@ int utf82sjis(){
 	
         while(i < z){
         	code= (u8)msg[i];
-        	if(code <= 0x80){
+        	if(code < 0x80){
               	memcpy(&stm[k],&msg[i],1);
                 k++;
                 i++;
         	}
-        	else if(code >= 0xE0){
+        	else if(code < 0xF0){
         		memcpy(&seek,&msg[i],3);
+        		if(code < 0xE0){
+       			seek &= 0xFFFF;
+        		}
                 kk = 0;
                 fd = sceIoOpen("ms0:/seplugins/table/utf8", PSP_O_RDONLY, 0777);
                  while(1){
@@ -340,10 +343,24 @@ int utf82sjis(){
                     	memcpy(&stm[k],&buffer[0],2);
                         k = k+2;
                     }
+        		if(code < 0xE0){
+				i= i+2;
+        		}
+        		else{
 				i= i+3;
+				}
+        	}
+        	else if(code < 0xF8){
+        		i+=4;
+        	}
+        	else if(code < 0xFC){
+        		i+=5;
+        	}
+        	else if(code < 0xFE){
+        		i+=6;
         	}
         	else{
-                fail:
+                fail: //BOM
                 memcpy(&stm[k],&space,1);
         		i++;
         	}
