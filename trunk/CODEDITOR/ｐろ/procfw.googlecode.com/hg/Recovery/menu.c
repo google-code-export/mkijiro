@@ -49,6 +49,7 @@ static int cpu_speed_menu(struct MenuEntry *entry);
 static int advanced_menu(struct MenuEntry *entry);
 
 const char ** g_messages = g_messages_en;
+int cur_language = 0;
 
 static int display_fake_region(struct MenuEntry* entry, char *buf, int size)
 {
@@ -266,6 +267,7 @@ static const char *get_recovery_fontname(size_t idx)
 }
 int ok=1;
 char stm[128];
+extern int zenkaku;
 
 int utf82sjis(){
 	char space = 0x20;
@@ -283,9 +285,18 @@ int utf82sjis(){
 	const char *p;
     p = get_recovery_fontname((size_t)(g_font_cur_sel));
 	msg = strrchr(p, '/');
+	if(zenkaku==1){
+	p = "ms0:/seplugins/table/sjis";
+	}
+	else{
+	p = "ms0:/seplugins/table/euc-jp";
+	}
 	if(msg != NULL) {
 	msg++;
     int z= strlen(msg);
+    if(z>128){
+    z=128;
+    }
 	
         while(i < z){
         	code= (u8)msg[i];
@@ -306,15 +317,15 @@ int utf82sjis(){
                             kk +=j;
                         	goto end;
                         }
+                        else if(big==0){
+                        	goto fail;
+                        }
                     }
                     kk += 512;
-                  	if (kk>6656){
-                          	break;
-	                 }
                  }
                 end:
 				sceIoClose(fd);
-                fd = sceIoOpen("ms0:/seplugins/table/sjis", PSP_O_RDONLY, 0777);
+                fd = sceIoOpen(p, PSP_O_RDONLY, 0777);
 				sceIoLseek(fd, 0, SEEK_SET);
 				sceIoLseek(fd, kk<<1,SEEK_CUR);
                 sceIoRead(fd,buffer,2);
@@ -332,6 +343,7 @@ int utf82sjis(){
 				i= i+3;
         	}
         	else{
+                fail:
                 memcpy(&stm[k],&space,1);
         		i++;
         	}
@@ -371,6 +383,121 @@ static int display_recovery_font(struct MenuEntry* entry, char *buf, int size)
 }
 
 
+void clear_language(void)
+{
+	if (g_messages != g_messages_en) {
+		free_translate_table((char**)g_messages, MSG_END);
+	}
+
+	g_messages = g_messages_en;
+}
+
+extern int zenkaku;
+
+static char ** apply_language(char *translate_file)
+{
+	char path[512];
+	char **message = NULL;
+	int ret;
+	
+	if(zenkaku==0){
+	sprintf(path, "ms0:/seplugins/%s", translate_file);
+	}
+	else if(zenkaku==1){
+	sprintf(path, "ms0:/seplugins/zenkaku_%s", translate_file);
+	}
+	else if(zenkaku==2){
+	sprintf(path, "ms0:/seplugins/zenkaku_euc_%s", translate_file);	
+	}
+	ret = load_translate_table(&message, path, MSG_END);
+
+	if(ret >= 0) {
+		return message;
+	}
+
+	if(zenkaku==0){
+	sprintf(path, "ef0:/seplugins/%s", translate_file);
+	}
+	else if(zenkaku==1){
+	sprintf(path, "ef0:/seplugins/zenkaku_%s", translate_file);	
+	}
+	else if(zenkaku==2){
+	sprintf(path, "ef0:/seplugins/zenkaku_euc_%s", translate_file);	
+	}
+	ret = load_translate_table(&message, path, MSG_END);
+
+	if(ret >= 0) {
+		return message;
+	}
+
+	return (char**) g_messages_en;
+}
+
+
+static void select_language(void)
+{
+	int ret, value;
+
+	if(g_config.language == -1) {
+		ret = sceUtilityGetSystemParamInt(PSP_SYSTEMPARAM_ID_INT_LANGUAGE, &value);
+
+		if(ret != 0) {
+			value = PSP_SYSTEMPARAM_LANGUAGE_ENGLISH;
+		}
+	} else {
+		value = g_config.language;
+	}
+
+	cur_language = value;
+	clear_language();
+
+	switch(value) {
+		case PSP_SYSTEMPARAM_LANGUAGE_JAPANESE:
+			g_messages = (const char**)apply_language("recovery_jp.txt");
+			break;
+		case PSP_SYSTEMPARAM_LANGUAGE_ENGLISH:
+			g_messages = (const char**)apply_language("recovery_en.txt");
+			break;
+		case PSP_SYSTEMPARAM_LANGUAGE_FRENCH:
+			g_messages = (const char**)apply_language("recovery_fr.txt");
+			break;
+		case PSP_SYSTEMPARAM_LANGUAGE_SPANISH:
+			g_messages = (const char**)apply_language("recovery_es.txt");
+			break;
+		case PSP_SYSTEMPARAM_LANGUAGE_GERMAN:
+			g_messages = (const char**)apply_language("recovery_de.txt");
+			break;
+		case PSP_SYSTEMPARAM_LANGUAGE_ITALIAN:
+			g_messages = (const char**)apply_language("recovery_it.txt");
+			break;
+		case PSP_SYSTEMPARAM_LANGUAGE_DUTCH:
+			g_messages = (const char**)apply_language("recovery_nu.txt");
+			break;
+		case PSP_SYSTEMPARAM_LANGUAGE_PORTUGUESE:
+			g_messages = (const char**)apply_language("recovery_pt.txt");
+			break;
+		case PSP_SYSTEMPARAM_LANGUAGE_RUSSIAN:
+			g_messages = (const char**)apply_language("recovery_ru.txt");
+			break;
+		case PSP_SYSTEMPARAM_LANGUAGE_KOREAN:
+			g_messages = (const char**)apply_language("recovery_kr.txt");
+			break;
+		case PSP_SYSTEMPARAM_LANGUAGE_CHINESE_TRADITIONAL:
+			g_messages = (const char**)apply_language("recovery_cht.txt");
+			break;
+		case PSP_SYSTEMPARAM_LANGUAGE_CHINESE_SIMPLIFIED:
+			g_messages = (const char**)apply_language("recovery_chs.txt");
+			break;
+		default:
+			g_messages = g_messages_en;
+			break;
+	}
+
+	if(g_messages == g_messages_en) {
+		cur_language = PSP_SYSTEMPARAM_LANGUAGE_ENGLISH;
+	}
+}
+
 static int change_font_select_option(struct MenuEntry *entry, int direct)
 {
 	struct ValueOption *c = (struct ValueOption*)entry->arg;
@@ -391,9 +518,11 @@ static int change_font_select_option(struct MenuEntry *entry, int direct)
 		ok=1;
 		proDebugScreenSetFontFile(fontname, 1);
 	}
+	
 
 	strcpy(g_cur_font_select, fontname);
-
+	select_language();
+	
 	return 0;
 }
 
@@ -418,6 +547,7 @@ static int change_font_select_option_by_enter(struct MenuEntry *entry)
 	
 	return 0;
 }
+
 
 static int display_slim_color(struct MenuEntry* entry, char *buf, int size)
 {
@@ -858,9 +988,9 @@ static int display_xmb(struct MenuEntry* entry, char *buf, int size)
 	sprintf(buf, "%s:", g_messages[XMB_CPU_BUS]);
 
 	if(cpu == 0 || bus == 0) {
-		sprintf(buf, "%-40s %s/%s", buf, g_messages[DEFAULT], g_messages[DEFAULT]);
+		sprintf(buf, "%s\t%s/%s", buf, g_messages[DEFAULT], g_messages[DEFAULT]);
 	} else {
-		sprintf(buf, "%-40s %d/%d", buf, cpu, bus);
+		sprintf(buf, "%s\t%d/%d", buf, cpu, bus);
 	}
 
 	return 0;
@@ -876,9 +1006,9 @@ static int display_game(struct MenuEntry* entry, char *buf, int size)
 	sprintf(buf, "%s:", g_messages[GAME_CPU_BUS]);
 
 	if(cpu == 0 || bus == 0) {
-		sprintf(buf, "%-40s %s/%s", buf, g_messages[DEFAULT], g_messages[DEFAULT]);
+		sprintf(buf, "%s\t%s/%s", buf, g_messages[DEFAULT], g_messages[DEFAULT]);
 	} else {
-		sprintf(buf, "%-40s %d/%d", buf, cpu, bus);
+		sprintf(buf, "%s\t%d/%d", buf, cpu, bus);
 	}
 
 	return 0;
@@ -1045,117 +1175,6 @@ static int registery_hack_menu(struct MenuEntry *entry)
 
 	return 0;
 }
-
-void clear_language(void)
-{
-	if (g_messages != g_messages_en) {
-		free_translate_table((char**)g_messages, MSG_END);
-	}
-
-	g_messages = g_messages_en;
-}
-
-extern int zenkaku;
-
-static char ** apply_language(char *translate_file)
-{
-	char path[512];
-	char **message = NULL;
-	int ret;
-	
-	if(zenkaku==0){
-	sprintf(path, "ms0:/seplugins/%s", translate_file);
-	}
-	else{
-	sprintf(path, "ms0:/seplugins/zenkaku_%s", translate_file);
-	}
-	ret = load_translate_table(&message, path, MSG_END);
-
-	if(ret >= 0) {
-		return message;
-	}
-
-	if(zenkaku==0){
-	sprintf(path, "ef0:/seplugins/%s", translate_file);
-	}
-	else{
-	sprintf(path, "ef0:/seplugins/zenkaku_%s", translate_file);	
-	}
-	ret = load_translate_table(&message, path, MSG_END);
-
-	if(ret >= 0) {
-		return message;
-	}
-
-	return (char**) g_messages_en;
-}
-
-int cur_language = 0;
-
-static void select_language(void)
-{
-	int ret, value;
-
-	if(g_config.language == -1) {
-		ret = sceUtilityGetSystemParamInt(PSP_SYSTEMPARAM_ID_INT_LANGUAGE, &value);
-
-		if(ret != 0) {
-			value = PSP_SYSTEMPARAM_LANGUAGE_ENGLISH;
-		}
-	} else {
-		value = g_config.language;
-	}
-
-	cur_language = value;
-	clear_language();
-
-	switch(value) {
-		case PSP_SYSTEMPARAM_LANGUAGE_JAPANESE:
-			g_messages = (const char**)apply_language("recovery_jp.txt");
-			break;
-		case PSP_SYSTEMPARAM_LANGUAGE_ENGLISH:
-			g_messages = (const char**)apply_language("recovery_en.txt");
-			break;
-		case PSP_SYSTEMPARAM_LANGUAGE_FRENCH:
-			g_messages = (const char**)apply_language("recovery_fr.txt");
-			break;
-		case PSP_SYSTEMPARAM_LANGUAGE_SPANISH:
-			g_messages = (const char**)apply_language("recovery_es.txt");
-			break;
-		case PSP_SYSTEMPARAM_LANGUAGE_GERMAN:
-			g_messages = (const char**)apply_language("recovery_de.txt");
-			break;
-		case PSP_SYSTEMPARAM_LANGUAGE_ITALIAN:
-			g_messages = (const char**)apply_language("recovery_it.txt");
-			break;
-		case PSP_SYSTEMPARAM_LANGUAGE_DUTCH:
-			g_messages = (const char**)apply_language("recovery_nu.txt");
-			break;
-		case PSP_SYSTEMPARAM_LANGUAGE_PORTUGUESE:
-			g_messages = (const char**)apply_language("recovery_pt.txt");
-			break;
-		case PSP_SYSTEMPARAM_LANGUAGE_RUSSIAN:
-			g_messages = (const char**)apply_language("recovery_ru.txt");
-			break;
-		case PSP_SYSTEMPARAM_LANGUAGE_KOREAN:
-			g_messages = (const char**)apply_language("recovery_kr.txt");
-			break;
-		case PSP_SYSTEMPARAM_LANGUAGE_CHINESE_TRADITIONAL:
-			g_messages = (const char**)apply_language("recovery_cht.txt");
-			break;
-		case PSP_SYSTEMPARAM_LANGUAGE_CHINESE_SIMPLIFIED:
-			g_messages = (const char**)apply_language("recovery_chs.txt");
-			break;
-		default:
-			g_messages = g_messages_en;
-			break;
-	}
-
-	if(g_messages == g_messages_en) {
-		cur_language = PSP_SYSTEMPARAM_LANGUAGE_ENGLISH;
-	}
-}
-
 
 void main_menu(void)
 {

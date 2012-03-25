@@ -16,7 +16,7 @@ PSP待機状態　
 PSP再起動
 VSH再起動
 閉じる
-PRO VSHメニュー
+PRO VSHメニュー(EUC)
 ﾌﾗｯｼｭ
 UMDﾃﾞｨｽｸ
 ﾒﾓﾘｰｽﾃｨｯｸ
