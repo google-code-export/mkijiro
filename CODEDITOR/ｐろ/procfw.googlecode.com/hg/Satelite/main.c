@@ -286,18 +286,15 @@ static char g_cur_font_select[256] __attribute((aligned(64)));
 int load_recovery_font_select(void)
 {
 	SceUID fd;
-
+	char zen[18];
 	g_cur_font_select[0] = '\0';
 
-		zenkaku=0;
 	fd = sceIoOpen("ef0:/seplugins/font_recovery.txt", PSP_O_RDONLY, 0777);
 
 	if(fd < 0 ) {
 		fd = sceIoOpen("ms0:/seplugins/font_recovery_zenkaku.txt", PSP_O_RDONLY, 0777);
-		zenkaku=1;
 	if(fd < 0) {
 		fd = sceIoOpen("ms0:/seplugins/font_recovery.txt", PSP_O_RDONLY, 0777);
-		zenkaku=0;
 
 		if(fd < 0) {
 			return fd;
@@ -307,12 +304,19 @@ int load_recovery_font_select(void)
 
 	sceIoRead(fd, g_cur_font_select, sizeof(g_cur_font_select));
 	
-	//バイトオブオーダー回避
+	//バイトオーダー回避
 	if((u8)g_cur_font_select[0]==0xEF){
 	memmove(&g_cur_font_select[0],&g_cur_font_select[3],strlen(g_cur_font_select));
 	}
 	sceIoClose(fd);
 
+	fd = sceIoOpen( g_cur_font_select, PSP_O_RDONLY, 0777);
+		if(fd >= 0) {
+		sceIoRead(fd, zen, 18);
+		memcpy(&zenkaku,&zen[16],1);
+		}
+	sceIoClose(fd);
+	
 	return 0;
 }
 
@@ -335,8 +339,11 @@ static char ** apply_language(char *translate_file)
 	if(zenkaku==0){
 	sprintf(path, "ms0:/seplugins/%s", translate_file);
 	}
-	else{
+	else if(zenkaku==1){
 	sprintf(path, "ms0:/seplugins/zenkaku_%s", translate_file);
+	}
+	else if(zenkaku==2){
+	sprintf(path, "ms0:/seplugins/zenkaku_euc_%s", translate_file);
 	}
 	ret = load_translate_table(&message, path, MSG_END);
 
@@ -347,8 +354,11 @@ static char ** apply_language(char *translate_file)
 	if(zenkaku==0){
 	sprintf(path, "ef0:/seplugins/%s", translate_file);
 	}
-	else{
+	else if(zenkaku==1){
 	sprintf(path, "ef0:/seplugins/zenkaku_%s", translate_file);
+	}
+	else if(zenkaku==2){
+	sprintf(path, "ef0:/seplugins/zenkaku_euc_%s", translate_file);
 	}
 	ret = load_translate_table(&message, path, MSG_END);
 

@@ -687,7 +687,7 @@ int proDebugScreenSetFontFile(const char *file, int is_user)
 	int ret;
 	void *buf;
 	
-	//バイトオブオーダー回避
+	//バイトオーダー回避
 	if((u8)file[0]==0xEF){
 	memmove(&file[0],&file[3],strlen(file));
 	}

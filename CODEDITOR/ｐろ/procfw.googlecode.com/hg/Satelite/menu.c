@@ -327,7 +327,9 @@ int menu_setup(void)
 
 	return 0;
 }
-	
+
+extern int zenkaku;
+
 int utf8video(){
 	char space = 0x20;
 	char null = 0;
@@ -342,9 +344,20 @@ int utf8video(){
     int fd;
     unsigned char code=0;
 	const char *msg;
+	const char *p;
+	if(zenkaku==1){
+		p="ms0:/seplugins/table/sjis";
+	}
+	else{
+		p="ms0:/seplugins/table/euc-jp";
+	}
+	
     msg = item_str[TMENU_UMD_VIDEO];
     int z= strlen(msg);
-	
+	if(z>128){
+	z=128;
+	}
+		
         while(i < z){
         	code= (u8)msg[i];
         	if(code <= 0x80){
@@ -364,15 +377,15 @@ int utf8video(){
                             kk +=j;
                         	goto end;
                         }
+                        else if(big==0){
+                        	goto fail;
+                        }
                     }
                     kk += 512;
-                  	if (kk>6656){
-                          	break;
-	                 }
                  }
                 end:
 				sceIoClose(fd);
-                fd = sceIoOpen("ms0:/seplugins/table/sjis", PSP_O_RDONLY, 0777);
+                fd = sceIoOpen(p, PSP_O_RDONLY, 0777);
 				sceIoLseek(fd, 0, SEEK_SET);
 				sceIoLseek(fd, kk<<1,SEEK_CUR);
                 sceIoRead(fd,buffer,2);
@@ -390,6 +403,7 @@ int utf8video(){
 				i= i+3;
         	}
         	else{
+                fail:
                 memcpy(&stm[k],&space,1);
         		i++;
         	}
