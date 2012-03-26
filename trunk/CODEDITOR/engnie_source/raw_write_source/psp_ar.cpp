@@ -11,7 +11,7 @@
 // *CodeTyp: より後ろの文字列に改造コードツールの名前(PS2PARとかARDSとかを入れる)
 // *Comment: より後ろの文字列に作者コメントとか詳細を書く。1行あたり25文字×3行までを推奨
 static char m_cCodeTyp[]="*CodeTyp:PSP PRO ACTIONREPLAY";
-static char m_cComment[]="*Comment:PSPAR20120323\r\nDLL拡張=nothing";
+static char m_cComment[]="*Comment:PSPAR20120327\r\nDLL拡張=nothing";
 
 
 // EngineType関数がリターンした値によってemuhaste側の挙動を変える予定ですが、
@@ -42,9 +42,9 @@ int CheatEngine(unsigned long m_ProcessID,				// プロセスID
 	unsigned int ar_returnpoint=0;
 	unsigned int ar_returnflag=0;
 	unsigned long ar_data=0;
-	unsigned int cmpdata[]={0,0};
+	unsigned long cmpdata[]={0,0};
 	unsigned int mask=0;
-	unsigned int patchtemp[500];
+	unsigned int patchtemp[16384];//0x10000
 
 	//int iSeriWriteByteSize=0,iSeriWriteCount=0;
 	//unsigned long ulSeriStepSize=0,ulSeriStepCount=0;
@@ -135,14 +135,14 @@ int CheatEngine(unsigned long m_ProcessID,				// プロセスID
 		case 5:
 			lpAddress = (LPVOID)(DWORD)(((m_ulWriteAddress[i]+ar_offset)&0x0FFFFFFC)+m_ulRealStartAddress-m_ulVirtualStartAddress);
 			if((ar_flag &1)==0){
-			ReadProcessMemory(hnd,lpAddress,&cmpdata[0],4,NULL);
 			cmpdata[1]=m_ulWriteParam[i];
+			ReadProcessMemory(hnd,lpAddress,&cmpdata[0],4,NULL);
 				if(cmpdata[1]==cmpdata[0]){			
 				ar_flag = ar_flag <<1 ;
-			}
-			else{
+				}
+				else{
 				ar_flag = (ar_flag <<1)| 1;
-			}
+				}
 			}
 			else{
 				ar_flag = (ar_flag <<1)| 1;
@@ -155,7 +155,7 @@ int CheatEngine(unsigned long m_ProcessID,				// プロセスID
 			if((ar_flag &1)==0){
 			ReadProcessMemory(hnd,lpAddress,&cmpdata[0],4,NULL);
 			cmpdata[1]=m_ulWriteParam[i];
-				if(cmpdata[1]!=cmpdata[0]){			
+				if(cmpdata[1]!=cmpdata[0]){
 				ar_flag = ar_flag <<1 ;
 				}
 				else{
@@ -173,10 +173,11 @@ int CheatEngine(unsigned long m_ProcessID,				// プロセスID
 			lpAddress = (LPVOID)(DWORD)(((m_ulWriteAddress[i]+ar_offset)&0x0FFFFFFE)+m_ulRealStartAddress-m_ulVirtualStartAddress);
 			if((ar_flag &1)==0){
 			ReadProcessMemory(hnd,lpAddress,&cmpdata[0],2,NULL);
+			cmpdata[0]= cmpdata[0] & 0xFFFF;
 			mask=m_ulWriteParam[i]>>16;
 			cmpdata[1]=m_ulWriteParam[i] & 0xFFFF;
-				if(cmpdata[1]<(~mask & cmpdata[0])){			
-				ar_flag = ar_flag <<1 ;
+				if(cmpdata[1]<(~mask & cmpdata[0])){
+					ar_flag = ar_flag <<1 ;
 				}
 				else{
 				ar_flag = (ar_flag <<1)| 1;
@@ -193,6 +194,7 @@ int CheatEngine(unsigned long m_ProcessID,				// プロセスID
 			lpAddress = (LPVOID)(DWORD)(((m_ulWriteAddress[i]+ar_offset)&0x0FFFFFFE)+m_ulRealStartAddress-m_ulVirtualStartAddress);
 			if((ar_flag &1)==0){
 			ReadProcessMemory(hnd,lpAddress,&cmpdata[0],2,NULL);
+			cmpdata[0]= cmpdata[0] & 0xFFFF;
 			mask=m_ulWriteParam[i]>>16;
 			cmpdata[1]=m_ulWriteParam[i] & 0xFFFF;
 				if(cmpdata[1]>(~mask & cmpdata[0])){			
@@ -212,6 +214,7 @@ int CheatEngine(unsigned long m_ProcessID,				// プロセスID
 			lpAddress = (LPVOID)(DWORD)(((m_ulWriteAddress[i]+ar_offset)&0x0FFFFFFE)+m_ulRealStartAddress-m_ulVirtualStartAddress);
 			if((ar_flag &1)==0){
 			ReadProcessMemory(hnd,lpAddress,&cmpdata[0],2,NULL);
+			cmpdata[0]= cmpdata[0] & 0xFFFF;
 			mask=m_ulWriteParam[i]>>16;
 			cmpdata[1]=m_ulWriteParam[i] & 0xFFFF;
 			if(cmpdata[1]==(~mask & cmpdata[0])){			
@@ -231,6 +234,7 @@ int CheatEngine(unsigned long m_ProcessID,				// プロセスID
 			lpAddress = (LPVOID)(DWORD)(((m_ulWriteAddress[i]+ar_offset)&0x0FFFFFFE)+m_ulRealStartAddress-m_ulVirtualStartAddress);
 			if((ar_flag &1)==0){
 			ReadProcessMemory(hnd,lpAddress,&cmpdata[0],2,NULL);
+			cmpdata[0]= cmpdata[0] & 0xFFFF;
 			mask=m_ulWriteParam[i]>>16;
 			cmpdata[1]=m_ulWriteParam[i] & 0xFFFF;
 				if(cmpdata[1]!=(~mask & cmpdata[0])){			
@@ -371,7 +375,8 @@ int CheatEngine(unsigned long m_ProcessID,				// プロセスID
 		
 			//パッチ
 		case 0xE:
-			l=m_ulWriteParam[i];
+			l=m_ulWriteParam[i]& 0xFFFF;
+			if((ar_flag &1)==0){
 			i++;
 			for(m=0 ; 8*m<l ; m++){
 			ulReadParam=m_ulWriteAddress[i+m];
@@ -381,19 +386,23 @@ int CheatEngine(unsigned long m_ProcessID,				// プロセスID
 			}
 			i--;
 			lpAddress = (LPVOID)(DWORD)(((m_ulWriteAddress[i]+ar_offset)&0x0FFFFFFF)+m_ulRealStartAddress-m_ulVirtualStartAddress);
-			WriteProcessMemory(hnd,lpAddress,&patchtemp[0],m_ulWriteParam[i],NULL);
-			i+=(m_ulWriteParam[i]>>3) +1;
-			if((m_ulWriteParam[i]&7)==0){
+			WriteProcessMemory(hnd,lpAddress,&patchtemp[0],l,NULL);
+			}
+			i+=(l>>3) +1;
+			if((l&7)==0){
 				i--;
 			}
 			break;
 
 			//コピー
 		case 0xF:
+			if((ar_flag &1)==0){
+			l=m_ulWriteParam[i]& 0xFFFF;
 			lpAddress = (LPVOID)(DWORD)(((ar_offset)&0x0FFFFFFF)+m_ulRealStartAddress-m_ulVirtualStartAddress);
-			ReadProcessMemory(hnd,lpAddress,&patchtemp[0],m_ulWriteParam[i],NULL);
+			ReadProcessMemory(hnd,lpAddress,&patchtemp[0],l,NULL);
 			lpAddress = (LPVOID)(DWORD)(((m_ulWriteAddress[i])&0x0FFFFFFF)+m_ulRealStartAddress-m_ulVirtualStartAddress);
-			WriteProcessMemory(hnd,lpAddress,&patchtemp[0],m_ulWriteParam[i],NULL);
+			WriteProcessMemory(hnd,lpAddress,&patchtemp[0],l,NULL);
+			}
 			break;
 
 		}

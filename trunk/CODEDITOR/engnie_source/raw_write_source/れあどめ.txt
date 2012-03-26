@@ -4,6 +4,11 @@ PSPARCTIONREPLAYのこーどがそのまま使えるようになります。
 http://unzu127xp.pa.land.to/data/cwc-ar.html
 
 
+2012/03/27
+16bit判定読み込み値の16bitマスクが抜けてたので修正
+0xE,0xFにもフラグ判定追加
+0xE,0xFのコピー上限を65535バイトに変更
+
 2012/03/23
 D8,D7,D6にフラグ判定が抜けてたので修正
 
