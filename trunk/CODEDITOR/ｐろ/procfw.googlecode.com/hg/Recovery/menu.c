@@ -265,6 +265,7 @@ static const char *get_recovery_fontname(size_t idx)
 
 	return fontname;
 }
+
 int ok=1;
 char stm[128];
 extern int zenkaku;
@@ -312,26 +313,31 @@ int utf82sjis(){
         		}
                 kk = 0;
                 fd = sceIoOpen("ms0:/seplugins/table/utf8", PSP_O_RDONLY, 0777);
+		if(fd>=0){
                  while(1){
                  	sceIoRead(fd,buffer,2048);
                     for( j = 0; j< 512;j++){
-        				memcpy(&big,&buffer[j*4],3);
+        				memcpy(&big,&buffer[j*4],4);
                         if(seek==big){
                             kk +=j;
                         	goto end;
                         }
                         else if(big==0){
+				sceIoClose(fd);
                         	goto fail;
                         }
                     }
                     kk += 512;
                  }
+		}
                 end:
 				sceIoClose(fd);
                 fd = sceIoOpen(p, PSP_O_RDONLY, 0777);
+		if(fd>=0){
 				sceIoLseek(fd, 0, SEEK_SET);
 				sceIoLseek(fd, kk<<1,SEEK_CUR);
                 sceIoRead(fd,buffer,2);
+		}
 				sceIoClose(fd);
                     //”¼ŠpƒJƒi
                     if((u8)buffer[1]==0){
@@ -361,13 +367,14 @@ int utf82sjis(){
         	}
         	else{
                 fail: //BOM
-                memcpy(&stm[k],&space,1);
+                //memcpy(&stm[k],&space,1);
         		i++;
         	}
         }
             
             memcpy(&stm[k],&null,1);
             memcpy(&stm[15],&null,1);
+            memcpy(&stm[16],&null,1);
         
 	}
 	

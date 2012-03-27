@@ -19,6 +19,61 @@ Public Class Form1
             If m.Success Then
                 Dim enc As Integer = CInt(m.Value.Remove(0, 2))
                 If File.Exists(output) Then
+                    'If CheckBox.Checked = True Then
+
+                    '    Dim sr As New System.IO.FileStream(output, System.IO.FileMode.Open, System.IO.FileAccess.Read)
+                    '    Dim fs As New System.IO.FileStream("table\cmp_" & Path.GetFileNameWithoutExtension(output), System.IO.FileMode.Create, System.IO.FileAccess.Write)
+                    '    Dim fss As New System.IO.FileStream("table\cmp_utf8", System.IO.FileMode.Create, System.IO.FileAccess.Write)
+                    '    Dim bb As Byte() = Nothing
+                    '    Dim bbb As Byte() = Nothing
+                    '    Dim b(1) As Byte
+                    '    Dim st As Integer = &H8000 '&HC2a7
+                    '    Dim en As Integer = &HDFFF '&HD191
+                    '    Dim hatena As Integer = 0
+                    '    Dim i As Integer = 0
+                    '    Dim s As String = ""
+                    '    While st < en
+                    '        b(1) = CByte(st And &HFF)
+                    '        b(0) = CByte((st >> 8) And &HFF)
+                    '        s = System.Text.Encoding.GetEncoding(65001).GetString(b)
+                    '        bb = System.Text.Encoding.GetEncoding(enc).GetBytes(s)
+                    '        bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(s)
+                    '        Array.Resize(bb, 2)
+                    '        Array.Resize(bbb, 4)
+                    '        hatena = BitConverter.ToInt16(bb, 0)
+                    '        If bbb(0) < &HE0 AndAlso hatena > 127 Then
+                    '            fs.Write(bb, 0, 2)
+                    '            fss.Write(bbb, 0, 4)
+                    '        End If
+                    '        st += 1
+                    '    End While
+                    '    st = &HE00000
+                    '    en = &HF00000
+                    '    Array.Resize(b, 8)
+                    '    While st < en
+                    '        b(2) = CByte(st And &HFF)
+                    '        b(1) = CByte((st >> 8) And &HFF)
+                    '        b(0) = CByte((st >> 16) And &HFF)
+                    '        s = System.Text.Encoding.GetEncoding(65001).GetString(b)
+                    '        bb = System.Text.Encoding.GetEncoding(enc).GetBytes(s)
+                    '        bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(s)
+                    '        Array.Resize(bb, 4)
+                    '        Array.Resize(bbb, 4)
+                    '        hatena = BitConverter.ToInt32(bb, 0)
+                    '        If hatena > 127 Then
+                    '            fs.Write(bb, 0, 2)
+                    '            fss.Write(bbb, 0, 3)
+                    '        End If
+                    '        st += 1
+                    '    End While
+                    '    Array.Clear(bbb, 0, 4)
+                    '    fs.Write(bbb, 0, 2)
+                    '    fss.Write(bbb, 0, 4)
+                    '    sr.Close()
+                    '    fs.Close()
+                    '    fss.Close()
+
+                    'Else
                     Dim sr As New System.IO.FileStream(output, System.IO.FileMode.Open, System.IO.FileAccess.Read)
                     Dim fs As New System.IO.FileStream("table\" & Path.GetFileNameWithoutExtension(output), System.IO.FileMode.Create, System.IO.FileAccess.Write)
                     Dim fss As New System.IO.FileStream("table\utf8", System.IO.FileMode.Create, System.IO.FileAccess.Write)
@@ -45,6 +100,8 @@ Public Class Form1
                     sr.Close()
                     fs.Close()
                     fss.Close()
+
+                    'End If
                     Beep()
                 Else
                     MessageBox.Show(output & ",変換対象テキストがありません")
