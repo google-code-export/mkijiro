@@ -112,7 +112,7 @@ void blit_set_color(int fg_col,int bg_col)
 	bcolor = bg_col;
 }
 
-int z=0;
+//int z=0;
 
 /////////////////////////////////////////////////////////////////////////////
 // blit text
@@ -140,6 +140,7 @@ for(x=0;msg[x] && x<(pwidth/8);)
 {
 		code = (u8)msg[x]; // no truncate now
 
+//SJIS ,EUC
 if( ((zenkaku==1)&& ( ((code>=0x81) && (code<=0x9F)) || ((code>=0xE0) && (code<=0xEA)) || ((code>=0xFA) && (code<=0xFC)))) ||
 ((zenkaku==2) && ( ((code>=0xA1) && (code<=0xAD)) || ((code>=0xB0) && (code<=0xF4)) || ((code>=0xF9) && (code<=0xFC)) ) ) ){
 
@@ -366,7 +367,11 @@ int load_external_font(const char *file)
 	if(zenkaku==0){k=0;}
 	memmove(&g_cur_font[0],&g_cur_font[17+k],f_si-17);
 	if(yoko>8){fakezenkaku=1;}
-	else{fakezenkaku=0;}
+	else{
+	fakezenkaku=0;
+	}}
+	else{
+	zenkaku=0;fakezenkaku=0;yoko=8;tate=8;
 	}
 
 	return 0;

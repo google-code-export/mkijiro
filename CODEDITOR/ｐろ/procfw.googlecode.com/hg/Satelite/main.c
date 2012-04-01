@@ -313,7 +313,9 @@ int load_recovery_font_select(void)
 	fd = sceIoOpen( g_cur_font_select, PSP_O_RDONLY, 0777);
 		if(fd >= 0) {
 		sceIoRead(fd, zen, 18);
+		if(*(unsigned int*)(&zen[0])==0x544E4F46){
 		memcpy(&zenkaku,&zen[16],1);
+		}
 		}
 	sceIoClose(fd);
 	

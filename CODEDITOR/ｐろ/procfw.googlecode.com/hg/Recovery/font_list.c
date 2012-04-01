@@ -168,15 +168,17 @@ int save_recovery_font_select(void)
 
 	fd = sceIoOpen("ef0:/seplugins/font_recovery.txt", PSP_O_WRONLY | PSP_O_TRUNC | PSP_O_CREAT, 0777);
 
-	if((zenkaku!=0) && (fd < 0)) {
-		fd = sceIoOpen("ms0:/seplugins/font_recovery_zenkaku.txt",  PSP_O_WRONLY | PSP_O_TRUNC | PSP_O_CREAT, 0777);
 	if(fd < 0) {
+	if(zenkaku!=0) {
+		fd = sceIoOpen("ms0:/seplugins/font_recovery_zenkaku.txt",  PSP_O_WRONLY | PSP_O_TRUNC | PSP_O_CREAT, 0777);
+	}
+	else{
 		fd = sceIoOpen("ms0:/seplugins/font_recovery.txt",  PSP_O_WRONLY | PSP_O_TRUNC | PSP_O_CREAT, 0777);
+	}
 
 		if(fd < 0) {
 			return fd;
 		}
-	}
 	}
 
 	sceIoWrite(fd, g_cur_font_select, strlen(g_cur_font_select));
