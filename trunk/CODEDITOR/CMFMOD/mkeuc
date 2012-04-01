@@ -45,7 +45,7 @@ INCDIR =
 endif
 
 
-CFLAGS = -Os -G0 -Wall -fno-strict-aliasing -fno-builtin-printf -DENABLE_CLANG
+CFLAGS = -Os -G0 -Wall -fno-strict-aliasing -fno-builtin-printf -DENABLE_CLANG -DEXTEND_UINX_CODE
 ifdef PSP_SLIM
 CFLAGS += -DGAME3XX
 else
