@@ -23,6 +23,16 @@
 #include "common.h"
 #include <psputility.h>
 #include "blit.h"
+
+
+//0xTTBBGGRR 透明度/青/緑/赤
+//メニューの文字色
+#define MENU_STRING 0x00FFFFFF
+//背景色　PROタイトル/選択時/非選択時
+#define MENU_BG 0x8000FF00
+#define MENU_SEL 0xFF8080
+#define MENU_DISP 0xC00000CC
+
 int yoko=def_yoko;
 int tate=def_tate;
 char sfo=0;
@@ -98,7 +108,7 @@ int menu_draw(void)
 	zure=(yoko-8);
 
 	// show menu list
-	blit_set_color(0xffffff,0x8000ff00);
+	blit_set_color(MENU_STRING,MENU_BG);
 	
 		msg = g_messages[MSG_PRO_VSH_MENU];
 		
@@ -107,8 +117,8 @@ int menu_draw(void)
 	blit_string(centermenu[0], pointer[1], msg);
 
 	for(max_menu=0;max_menu<TMENU_MAX;max_menu++) {
-		fc = 0xffffff;
-		bc = (max_menu==menu_sel) ? 0xff8080 : 0xc00000ff;
+		fc = MENU_STRING;
+		bc = (max_menu==menu_sel) ? MENU_SEL : MENU_DISP;
 		blit_set_color(fc,bc);
 
 		msg = g_messages[MSG_CPU_CLOCK_XMB + max_menu];
@@ -330,7 +340,6 @@ int menu_setup(void)
 	return 0;
 }
 
-extern int zenkaku;
 
 int utf8video(){
 	char space = 0x20;

@@ -32,12 +32,18 @@
             this.SJIS = new System.Windows.Forms.RadioButton();
             this.EUC = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.CP = new System.Windows.Forms.RadioButton();
+            this.NOREMAP = new System.Windows.Forms.RadioButton();
+            this.CMFUSION = new System.Windows.Forms.GroupBox();
+            this.CMF = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
+            this.CMFUSION.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(89, 68);
+            this.button1.Location = new System.Drawing.Point(88, 173);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
@@ -49,7 +55,7 @@
             // 
             this.SJIS.AutoSize = true;
             this.SJIS.Checked = true;
-            this.SJIS.Location = new System.Drawing.Point(6, 20);
+            this.SJIS.Location = new System.Drawing.Point(96, 20);
             this.SJIS.Name = "SJIS";
             this.SJIS.Size = new System.Drawing.Size(85, 18);
             this.SJIS.TabIndex = 1;
@@ -60,7 +66,7 @@
             // EUC
             // 
             this.EUC.AutoSize = true;
-            this.EUC.Location = new System.Drawing.Point(97, 20);
+            this.EUC.Location = new System.Drawing.Point(6, 44);
             this.EUC.Name = "EUC";
             this.EUC.Size = new System.Drawing.Size(84, 18);
             this.EUC.TabIndex = 2;
@@ -69,20 +75,76 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.textBox1);
+            this.groupBox1.Controls.Add(this.CP);
+            this.groupBox1.Controls.Add(this.NOREMAP);
             this.groupBox1.Controls.Add(this.SJIS);
             this.groupBox1.Controls.Add(this.EUC);
             this.groupBox1.Location = new System.Drawing.Point(29, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(200, 50);
+            this.groupBox1.Size = new System.Drawing.Size(227, 79);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "文字テーブル";
+            this.groupBox1.Text = "FONTX2文字テーブル";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(173, 43);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(48, 21);
+            this.textBox1.TabIndex = 5;
+            this.textBox1.Visible = false;
+            // 
+            // CP
+            // 
+            this.CP.AutoSize = true;
+            this.CP.Location = new System.Drawing.Point(96, 44);
+            this.CP.Name = "CP";
+            this.CP.Size = new System.Drawing.Size(71, 18);
+            this.CP.TabIndex = 4;
+            this.CP.TabStop = true;
+            this.CP.Text = "CP指定";
+            this.CP.UseVisualStyleBackColor = true;
+            this.CP.Visible = false;
+            // 
+            // NOREMAP
+            // 
+            this.NOREMAP.AutoSize = true;
+            this.NOREMAP.Location = new System.Drawing.Point(6, 20);
+            this.NOREMAP.Name = "NOREMAP";
+            this.NOREMAP.Size = new System.Drawing.Size(67, 18);
+            this.NOREMAP.TabIndex = 3;
+            this.NOREMAP.TabStop = true;
+            this.NOREMAP.Text = "無変換";
+            this.NOREMAP.UseVisualStyleBackColor = true;
+            // 
+            // CMFUSION
+            // 
+            this.CMFUSION.Controls.Add(this.CMF);
+            this.CMFUSION.Location = new System.Drawing.Point(29, 111);
+            this.CMFUSION.Name = "CMFUSION";
+            this.CMFUSION.Size = new System.Drawing.Size(200, 56);
+            this.CMFUSION.TabIndex = 5;
+            this.CMFUSION.TabStop = false;
+            this.CMFUSION.Text = "CMFUSIONふぉんと";
+            // 
+            // CMF
+            // 
+            this.CMF.AutoSize = true;
+            this.CMF.Location = new System.Drawing.Point(32, 20);
+            this.CMF.Name = "CMF";
+            this.CMF.Size = new System.Drawing.Size(153, 18);
+            this.CMF.TabIndex = 5;
+            this.CMF.TabStop = true;
+            this.CMF.Text = "CMFUSION12x12作成";
+            this.CMF.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(268, 103);
+            this.ClientSize = new System.Drawing.Size(268, 201);
+            this.Controls.Add(this.CMFUSION);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button1);
             this.Name = "Form1";
@@ -90,6 +152,8 @@
             this.Text = "BDF2FONTX2";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.CMFUSION.ResumeLayout(false);
+            this.CMFUSION.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -100,6 +164,11 @@
         private System.Windows.Forms.RadioButton SJIS;
         private System.Windows.Forms.RadioButton EUC;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox CMFUSION;
+        private System.Windows.Forms.RadioButton NOREMAP;
+        private System.Windows.Forms.RadioButton CMF;
+        private System.Windows.Forms.RadioButton CP;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 

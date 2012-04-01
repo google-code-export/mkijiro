@@ -29,266 +29,463 @@ namespace WindowsFormsApplication1
             ofd.InitialDirectory = Application.StartupPath;
             }
             ofd.Filter = "bdfファイル(*.bdf)|*.bdf";
-            ofd.Title =  "開くファイルを選択してください";
+            ofd.Title = "開くファイルを選択してください";
 
-            //ダイアログを表示する
-            if (ofd.ShowDialog() == DialogResult.OK)
-            {
-                lastdir = Path.GetDirectoryName(ofd.FileName);
-                string path = ofd.FileName;
-                string s = "";
-                bool parse = false;
-                int stpos = 0;
-                int tmp = 0;
-                int basepos = 0;
-                int yoko = 0;
-                int tate = 0;
-                int total = 0;
-                bool zenkaku = false;
-                byte[] hex = new byte[4];
-                byte[] header = { 0x46, 0x4F, 0x4E, 0x54, 0x58, 0x32, 0x42, 0x44, 0x46, 0x32, 0x46, 0x54, 0x58, 0x32, 0x8, 0x10, 0 };
-                UInt16[] ftable = new UInt16[1024*50];
-                byte[] font = new byte[1024 * 1024];
-                StreamReader sr = new System.IO.StreamReader(path, System.Text.Encoding.GetEncoding(932));
-                while (sr.Peek() > -1)
+            if ((CMF.Checked == true && EUC.Checked == true)|| CMF.Checked==false) { 
+
+                //ダイアログを表示する
+                if (ofd.ShowDialog() == DialogResult.OK)
                 {
-                    s = sr.ReadLine();
+                    lastdir = Path.GetDirectoryName(ofd.FileName);
+                    string path = ofd.FileName;
+                    string s = "";
+                    bool parse = false;
+                    int stpos = 0;
+                    int sttpos = 0;
+                    int tmp = 0;
+                    int tmp2 = 0;
+                    int basepos = 0;
+                    int yoko = 0;
+                    int tate = 0;
+                    int total = 0;
+                    bool fail = false;
+                    bool zenkaku = false;
+                    byte[] hex = new byte[4];
+                    byte[] hexcmf = new byte[3];
+                    byte[] header = { 0x46, 0x4F, 0x4E, 0x54, 0x58, 0x32, 0x42, 0x44, 0x46, 0x32, 0x46, 0x54, 0x58, 0x32, 0x8, 0x10, 0 };
+                    UInt16[] ftable = new UInt16[1024 * 50];
+                    byte[] font = new byte[1024 * 1024];
+
+                    StreamReader sr = new System.IO.StreamReader(path, System.Text.Encoding.GetEncoding(932));
+                    while (sr.Peek() > -1)
+                    {
+                        s = sr.ReadLine();
+                        if (zenkaku == false && CMF.Checked == false)
+                        {
+                            if (s.Contains("CHARSET")) { }
+                            else if (s.Contains("ENCODING"))
+                            {
+                                basepos = Convert.ToInt32(s.Replace("ENCODING", "").Trim(), 10);
+                                if (zenkaku == false && basepos > 255)
+                                {
+                                    zenkaku = true;
+                                    ftable[0] = Convert.ToUInt16(basepos);
+                                }
+                            }
+                            else if ((s.Contains("BBX") == true) && (yoko == 0))
+                            {
+                                Regex r = new System.Text.RegularExpressions.Regex("\\d+", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                                Match m = r.Match(s);
+                                int l = 0;
+
+                                while (m.Success)
+                                {
+                                    if (l == 0)
+                                    {
+                                        yoko = Convert.ToInt32(m.Value);
+                                    }
+                                    if (l == 1)
+                                    {
+                                        tate = Convert.ToInt32(m.Value);
+                                    }
+                                    l++;
+                                    m = m.NextMatch();
+                                }
+
+                            }
+                            else if (s.Contains("BITMAP"))
+                            {
+                                parse = true;
+                            }
+                            else if (s.Contains("ENDCHAR"))
+                            {
+                                stpos = 0;
+                                parse = false;
+                            }
+                            else if (parse)
+                            {
+                                tmp = Convert.ToInt32(s, 16);
+                                hex = BitConverter.GetBytes(tmp);
+                                if (yoko > 8)
+                                {
+                                    Array.Copy(hex, 1, font, (basepos * tate * 2) + stpos, 1);
+                                    Array.Copy(hex, 0, font, (basepos * tate * 2) + stpos + 1, 1);
+                                    stpos += 2;
+                                }
+                                else
+                                {
+                                    Array.Copy(hex, 0, font, (basepos * tate) + stpos, 1);
+                                    stpos++;
+                                }
+                            }
+                        }
+                        else if (zenkaku == true && CMF.Checked == false)
+                        {
+                            if (s.Contains("ENCODING"))
+                            {
+                                total++;
+                                ftable[total] = Convert.ToUInt16(s.Replace("ENCODING", "").Trim(), 10);
+                            }
+                            else if ((s.Contains("BBX") == true) && (yoko == 0))
+                            {
+                                Regex r = new System.Text.RegularExpressions.Regex("\\d+", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                                Match m = r.Match(s);
+                                int l = 0;
+
+                                while (m.Success)
+                                {
+                                    if (l == 0)
+                                    {
+                                        yoko = Convert.ToInt32(m.Value);
+                                    }
+                                    if (l == 1)
+                                    {
+                                        tate = Convert.ToInt32(m.Value);
+                                    }
+                                    l++;
+                                    m = m.NextMatch();
+                                }
+
+                            }
+                            else if (s.Contains("BITMAP"))
+                            {
+                                parse = true;
+                            }
+                            else if (s.Contains("ENDCHAR"))
+                            {
+                                stpos = 0;
+                                parse = false;
+                            }
+                            else if (parse)
+                            {
+                                tmp = Convert.ToInt32(s, 16);
+                                hex = BitConverter.GetBytes(tmp);
+                                if (yoko > 8)
+                                {
+                                    Array.Copy(hex, 1, font, (total * tate * 2) + stpos, 1);
+                                    Array.Copy(hex, 0, font, (total * tate * 2) + stpos + 1, 1);
+                                    stpos += 2;
+                                }
+                                else
+                                {
+                                    Array.Copy(hex, 0, font, (total * tate) + stpos, 1);
+                                    stpos++;
+                                }
+                            }
+
+                        }
+                        else if (CMF.Checked == true)
+                        {
+
+                            if (s.Contains("CHARSET")) { }
+                            else if (s.Contains("ENCODING"))
+                            {
+
+                                total++;
+                                ftable[total - 1] = Convert.ToUInt16(s.Replace("ENCODING", "").Trim(), 10);
+
+                            }
+                            else if ((s.Contains("BBX") == true) && (yoko == 0))
+                            {
+                                Regex r = new System.Text.RegularExpressions.Regex("\\d+", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                                Match m = r.Match(s);
+                                int l = 0;
+
+                                while (m.Success)
+                                {
+                                    if (l == 0)
+                                    {
+                                        yoko = Convert.ToInt32(m.Value);
+                                        if (yoko != 12)
+                                        {
+                                            MessageBox.Show("12x12(13)以外は変換できません。");
+                                            fail = true;
+                                            break;
+                                        }
+                                    }
+                                    if (l == 1)
+                                    {
+                                        tate = Convert.ToInt32(m.Value);
+                                        if (tate < 12 || tate > 13)
+                                        {
+                                            MessageBox.Show("12x12(13)以外は変換できません。");
+                                            fail = true;
+                                            break;
+                                        }
+                                    }
+                                    l++;
+                                    m = m.NextMatch();
+                                }
+
+                            }
+                            else if (s.Contains("BITMAP"))
+                            {
+                                parse = true;
+                            }
+                            else if (s.Contains("ENDCHAR"))
+                            {
+                                stpos = 0;
+                                sttpos = 0;
+                                parse = false;
+                            }
+                            else if (parse)
+                            {
+                                tmp = Convert.ToInt32(s, 16);
+                                if (yoko == 12)
+                                {
+                                    if ((stpos & 1) == 0)
+                                    {
+                                        tmp2 = tmp / 0x100;
+                                        //tmp2 = (tmp2 & 0xf) * 0x10 + tmp2 / 0x10;
+                                        hex = BitConverter.GetBytes(tmp2);
+                                        Array.Copy(hex, 0, hexcmf, 0, 1);
+                                        tmp2 = tmp;
+                                    }
+                                    if ((stpos & 1) == 1)
+                                    {
+                                        tmp2 = (tmp2 / 0x10) & 0xf;
+                                        tmp2 += (tmp / 0x1000) * 0x10;
+                                        tmp2 = (tmp2 & 0xf) * 0x10 + tmp2 / 0x10;
+                                        hex = BitConverter.GetBytes(tmp2);
+                                        Array.Copy(hex, 0, hexcmf, 1, 1);
+                                        tmp2 = (tmp / 0x10) & 0xff;
+                                        //tmp2 = (tmp2 & 0xf)*0x10 + tmp2/0x10;
+                                        hex = BitConverter.GetBytes(tmp2);
+                                        Array.Copy(hex, 0, hexcmf, 2, 1);
+                                        Array.Copy(hexcmf, 0, font, (total * 18) + sttpos, 3);
+                                        sttpos += 3;
+                                    }
+                                    stpos += 1;
+                                }
+                            }
+                        }
+
+                    }
+                    sr.Close();
+                    hex = BitConverter.GetBytes(yoko);
+                    Array.Copy(hex, 0, header, 14, 1);
+                    hex = BitConverter.GetBytes(tate);
+                    Array.Copy(hex, 0, header, 15, 1);
+
                     if (zenkaku == false)
                     {
-                        if (s.Contains("CHARSET")) { }
-                        else if (s.Contains("ENCODING"))
+                        if (yoko > 8)
                         {
-                            basepos = Convert.ToInt32(s.Replace("ENCODING", "").Trim(), 10);
-                            if (zenkaku == false && basepos > 255)
+                            if (CMF.Checked == true)
                             {
                                 zenkaku = true;
-                                ftable[0] = Convert.ToUInt16(basepos);
-                            }
-                        }
-                        else if ((s.Contains("BBX") == true) && (yoko == 0))
-                        {
-                            Regex r = new System.Text.RegularExpressions.Regex("\\d+", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-                            Match m = r.Match(s);
-                            int l = 0;
-
-                            while (m.Success)
-                            {
-                                if (l == 0)
-                                {
-                                    yoko = Convert.ToInt32(m.Value);
-                                }
-                                if (l == 1)
-                                {
-                                    tate = Convert.ToInt32(m.Value);
-                                }
-                                l++;
-                                m = m.NextMatch();
-                            }
-
-                        }
-                        else if (s.Contains("BITMAP"))
-                        {
-                            parse = true;
-                        }
-                        else if (s.Contains("ENDCHAR"))
-                        {
-                            stpos = 0;
-                            parse = false;
-                        }
-                        else if (parse)
-                        {
-                            tmp = Convert.ToInt32(s, 16);
-                            hex = BitConverter.GetBytes(tmp);
-                            if (yoko > 8)
-                            {
-                                Array.Copy(hex, 1, font, (basepos * tate * 2) + stpos, 1);
-                                Array.Copy(hex, 0, font, (basepos * tate * 2) + stpos + 1, 1);
-                                stpos += 2;
+                                Array.Resize(ref font, (total + 1) * 18);
                             }
                             else
                             {
-                                Array.Copy(hex, 0, font, (basepos * tate) + stpos, 1);
-                                stpos++;
+                                Array.Resize(ref font, tate * 255 * 2);
                             }
+                        }
+                        else
+                        {
+                            Array.Resize(ref font, tate * 255);
                         }
                     }
                     else
                     {
-                        if (s.Contains("ENCODING"))
-                        {
-                            total++;
-                            ftable[total] = Convert.ToUInt16(s.Replace("ENCODING", "").Trim(), 10);
-                        }
-                        else if ((s.Contains("BBX") == true) && (yoko == 0))
-                        {
-                            Regex r = new System.Text.RegularExpressions.Regex("\\d+", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-                            Match m = r.Match(s);
-                            int l = 0;
 
-                            while (m.Success)
-                            {
-                                if (l == 0)
-                                {
-                                    yoko = Convert.ToInt32(m.Value);
-                                }
-                                if (l == 1)
-                                {
-                                    tate = Convert.ToInt32(m.Value);
-                                }
-                                l++;
-                                m = m.NextMatch();
-                            }
-
-                        }
-                        else if (s.Contains("BITMAP"))
+                        if (yoko > 8)
                         {
-                            parse = true;
+                            Array.Resize(ref ftable, total + 1);
+                            Array.Resize(ref font, tate * (total + 1) * 2);
                         }
-                        else if (s.Contains("ENDCHAR"))
+                        else
                         {
-                            stpos = 0;
-                            parse = false;
-                        }
-                        else if (parse)
-                        {
-                            tmp = Convert.ToInt32(s, 16);
-                            hex = BitConverter.GetBytes(tmp);
-                            if (yoko > 8)
-                            {
-                                Array.Copy(hex, 1, font, (total * tate * 2) + stpos, 1);
-                                Array.Copy(hex, 0, font, (total * tate * 2) + stpos + 1, 1);
-                                stpos += 2;
-                            }
-                            else
-                            {
-                                Array.Copy(hex, 0, font, (total * tate) + stpos, 1);
-                                stpos++;
-                            }
+                            Array.Resize(ref ftable, total + 1);
+                            Array.Resize(ref font, (total + 1) * 255);
                         }
 
-                    }
-                }
-                sr.Close();
-                hex = BitConverter.GetBytes(yoko);
-                Array.Copy(hex, 0, header, 14, 1);
-                hex = BitConverter.GetBytes(tate);
-                Array.Copy(hex, 0, header, 15, 1);
 
-                if (zenkaku == false)
-                {
-                    if (yoko > 8)
-                    {
-                        Array.Resize(ref font, tate * 255 * 2);
                     }
-                    else
-                    {
-                        Array.Resize(ref font, tate * 255);
-                    }
-                }
-                else{
 
-                    if (yoko > 8)
+                    string fname = Path.GetFileNameWithoutExtension(path) + ".fnt";
+                    string fontable = Path.GetFileNameWithoutExtension(path) + ".table";
+                    if (CMF.Checked == true)
                     {
-                        Array.Resize(ref ftable,  total+1);
-                        Array.Resize(ref font, tate * (total+1) * 2);
+                        fname = "base.fnt";
+                        fontable = "base.table";
                     }
-                    else
+                    FileStream fs = new System.IO.FileStream(fname, FileMode.Create, FileAccess.Write);
+                    FileStream ffs = new System.IO.FileStream(fontable, FileMode.Create, FileAccess.Write);
+                    //FileStream fffs = new System.IO.FileStream(Path.GetFileNameWithoutExtension(path) + ".sjis", FileMode.Create, FileAccess.Write);
+                    if (zenkaku == false && CMF.Checked == false)
                     {
-                        Array.Resize(ref ftable, total+1);
-                        Array.Resize(ref font, (total+1) * 255);
+                        fs.Write(header, 0, 17);
                     }
-                
-                
-                }
-                FileStream fs = new System.IO.FileStream(Path.GetFileNameWithoutExtension(path) + ".fnt", FileMode.Create, FileAccess.Write);
-               // FileStream ffs = new System.IO.FileStream(Path.GetFileNameWithoutExtension(path) + ".table", FileMode.Create, FileAccess.Write);
-                //FileStream fffs = new System.IO.FileStream(Path.GetFileNameWithoutExtension(path) + ".sjis", FileMode.Create, FileAccess.Write);
-                if (zenkaku == false) {
-                    fs.Write(header, 0, 17);
-                }
-                else
-                {
-                    fs.Write(header, 0, 16);
-                    if (SJIS.Checked == true)
+                    else if (zenkaku == true)
                     {
-                        hex[0] = 1;
-                    }
-                    else {
-                        hex[0] = 2;
-                    }
-                    fs.Write(hex, 0, 1);
-                    byte[] hex3 = new byte[2];
-                    byte[] hex4 = new byte[1024*50];
-                    int c1=0;
-                    int c2=0;
-                    int bk = 0;
-                    int st = 0;
-                    int en = 0;
-                    int kk = 0;
-
-                    for (int k = 0; k < total+1; k++)
-                    {
-                        c1=ftable[k]>>8;
-                        c2 = ftable[k]&0xFF;
+                        fs.Write(header, 0, 16);
                         if (SJIS.Checked == true)
                         {
-                            //http://www.tohoho-web.com/wwwkanji.htm
-                            if ((c1 & 1) == 1)
+                            hex[0] = 1;
+                        }
+                        else
+                        {
+                            hex[0] = 2;
+                        }
+                        fs.Write(hex, 0, 1);
+                        byte[] hex3 = new byte[2];
+                        byte[] hex4 = new byte[1024 * 50];
+                        int c1 = 0;
+                        int c2 = 0;
+                        int bk = 0;
+                        int st = 0;
+                        int en = 0;
+                        int kk = 0;
+
+                        for (int k = 0; k < total + 1; k++)
+                        {
+                            c1 = ftable[k] >> 8;
+                            c2 = ftable[k] & 0xFF;
+                            if (SJIS.Checked == true)
                             {
-                                c1 = ((c1 + 1) >> 1) + 0x70;
-                                c2 = c2 + 0x1f;
+                                //http://www.tohoho-web.com/wwwkanji.htm
+                                if ((c1 & 1) == 1)
+                                {
+                                    c1 = ((c1 + 1) >> 1) + 0x70;
+                                    c2 = c2 + 0x1f;
+                                }
+                                else
+                                {
+                                    c1 = (c1 >> 1) + 0x70;
+                                    c2 = c2 + 0x7d;
+                                }
+                                if (c1 >= 0xa0) { c1 = c1 + 0x40; }
+                                if (c2 >= 0x7f) { c2 = c2 + 1; }
+                            }
+                            else if (EUC.Checked==true)
+                            {
+                                c1 += 0x80;
+                                c2 += 0x80;
+                            }
+
+
+                            c1 = (c1 << 8) + c2;
+                            if (bk == 0)
+                            {
+                                st = c1;
+                            }
+                            else if (c1 - bk != 1)
+                            {
+                                hex3 = BitConverter.GetBytes(st);
+                                //fss.Write(hex3, 0, 2);
+                                Array.Copy(hex3, 0, hex4, kk * 4, 2);
+                                hex3 = BitConverter.GetBytes(st + en);
+                                //fss.Write(hex3, 0, 2);
+                                Array.Copy(hex3, 0, hex4, (kk * 4) + 2, 2);
+                                st = c1;
+                                en = 0;
+                                kk++;
                             }
                             else
                             {
-                                c1 = (c1 >> 1) + 0x70;
-                                c2 = c2 + 0x7d;
+                                en++;
                             }
-                            if (c1 >= 0xa0) { c1 = c1 + 0x40; }
-                            if (c2 >= 0x7f) { c2 = c2 + 1; }
-                        }
-                        else {
-                            c1 += 0x80;
-                            c2 += 0x80;
-                        }
 
 
-                        c1 = (c1 << 8) + c2;
-                        if (bk == 0) {
-                            st = c1;
-                        }
-                        else if(c1-bk !=1){
-                            hex3 = BitConverter.GetBytes(st);
-                            //fs.Write(hex3, 0, 2);
-                            Array.Copy(hex3,0,hex4,kk*4,2);
-                            hex3 = BitConverter.GetBytes(st+en);
-                            //fs.Write(hex3, 0, 2);
-                            Array.Copy(hex3, 0, hex4, (kk * 4)+2, 2);
-                            st = c1;
-                            en = 0;
-                            kk++;
-                        }
-                        else{
-                            en++;
+                            bk = c1;
+
+                            if (CMF.Checked)
+                            {
+                                hex3 = BitConverter.GetBytes(c1);
+                                ffs.Write(hex3, 0, 2);
+                            }
                         }
 
+                        hex = BitConverter.GetBytes(kk);
+                        fs.Write(hex, 0, 1);
+                        fs.Write(hex4, 0, kk * 4);
 
-                        bk = c1;
-
-                        //hex3 = BitConverter.GetBytes(c1);             
-                        //ffs.Write(hex3, 0, 2);
                     }
-                    
-                    hex= BitConverter.GetBytes(kk);
-                    fs.Write(hex, 0, 1);
-                    fs.Write(hex4, 0, kk*4);
+                    if (fail == false)
+                    {
+                        if (CMF.Checked == true)
+                        {
+                            fs.Write(font, 18, font.Length - 18);
+                            if (File.Exists("newfont.dat") == true)
+                            {
+                                fs.Close();
+                                ffs.Close();
+                                FileStream ffffs = new System.IO.FileStream("base.table", FileMode.Open, FileAccess.Read);
+                                byte[] table = new byte[ffffs.Length];
+                                ffffs.Read(table, 0, table.Length);
+                                ffffs.Close();
+                                FileStream fon = new System.IO.FileStream("newfont.dat", FileMode.Open, FileAccess.Read);
+                                byte[] ff = new byte[fon.Length];
+                                fon.Read(ff, 0, ff.Length);
+                                int bk = ff.Length;
+                                Array.Resize(ref ff, bk * 100);
+                                fon.Close();
+                                FileStream fontx = new System.IO.FileStream("base.fnt", FileMode.Open, FileAccess.Read);
+                                byte[] ftx = new byte[fontx.Length];
+                                fontx.Read(ftx, 0, ftx.Length);
+                                total = ftx[17];
+                                long bkk = ftx.Length;
+                                fontx.Close();
+                                int ct = 0;
+                                long pos = 0;
+                                int dest = 0;
+                                int seek2 = 0;
+                                for (int t = 0; t < table.Length; t += 2, ct++)
+                                {
+                                    pos = 18 + (total * 4) + (ct * 18);
+                                    seek2 = BitConverter.ToUInt16(table, t);
+                                    if (pos < bkk-18)
+                                    {
+                                        if (seek2 >= 0xA1A1 && seek2 <= 0xA8FF)
+                                        {
+                                            dest = (((seek2 / 0x100) - 0xa1) * 94) + ((seek2 & 0xff) - 0xa1);
+                                        }
+                                        else if (seek2 >= 0xADA1 && seek2 <= 0xADFF)
+                                        {
+                                            dest = 846 - 96 + ((seek2 & 0xff) - 0xa1);
+                                        }
+                                        else if (seek2 >= 0xB0A1 && seek2 <= 0xf4FF)
+                                        {
+                                            dest = 846 + (((seek2 / 0x100) - 0xb0) * 94) + ((seek2 & 0xff) - 0xa1);
+                                        }
+                                        else if (seek2 >= 0xF9A1)
+                                        {
+                                            dest = 846 + 6624 + (((seek2 / 0x100) - 0xf9) * 94) + ((seek2 & 0xff) - 0xa1);
+                                        }
 
+                                        Array.Copy(ftx, pos, ff, 2048 + dest * 18, 18);
+                                    }
+                                }
+                                FileStream fss = new System.IO.FileStream("font_euc.dat", FileMode.Create, FileAccess.Write);
+                                Array.Resize(ref ff, bk);
+                                fss.Write(ff, 0, ff.Length);
+                                fss.Close();
+                            }
+                            else
+                            {
+                                MessageBox.Show("newfont.datがありません。");
+                            }
+                        }
+                        else
+                        {
+                            fs.Write(font, 0, font.Length);
+                        }
+                    }
+                    fs.Close();
+                    ffs.Close();
+                    //fffs.Close();
                 }
-                fs.Write(font, 0, font.Length);
-                fs.Close();
-                //ffs.Close();
-                //fffs.Close();
-
             }
+            else
+            {
+                MessageBox.Show("CMFフォント作成する場合はJIS->EUCを選んで下さい");
+            }
+        }
+
+        private void CMF_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

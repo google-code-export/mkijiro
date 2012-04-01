@@ -253,7 +253,6 @@ void proDebugScreenSetBase(u32* base)
 
 extern u8 msx[];
 static u8 *g_cur_font = msx;
-//int z=0;
 
 static void debug_put_char_32(int x, int y, u32 color, u32 bgc, u8 ch)
 {
@@ -549,14 +548,14 @@ int proDebugScreenPrintData(const char *buff, int size)
 						break;
 			default:
 
-if((zenkaku==1)&& ( ((c>=0x81) && (c<=0x9F)) || ((c>=0xE0) && (c<=0xEA)) || ((c>=0xFA) && (c<=0xFC)))  ){
 //SJIS‘SŠp
+if((zenkaku==1)&& ( ((c>=0x81) && (c<=0x9F)) || ((c>=0xE0) && (c<=0xEA)) || ((c>=0xFA) && (c<=0xFC)))  ){
 debug_put_char_32_zenakaku(XX, Y * tate, fg_col,bg_col, c, buff[i+1]);
 XX+=yoko;
 i++;
 }
-else if((zenkaku==2) && ( (c==0x8E) || ((c>=0xA1) && (c<=0xAD)) || ((c>=0xB0) && (c<=0xF4)) || ((c>=0xF9) && (c<=0xFC)))){
 //EUC”¼ŠpƒJƒi@0x8E‚Í–³Ž‹
+else if((zenkaku==2) && ( (c==0x8E) || ((c>=0xA1) && (c<=0xAD)) || ((c>=0xB0) && (c<=0xF4)) || ((c>=0xF9) && (c<=0xFC)))){
 if(c==0x8E){
 	proDebugScreenPutChar( XX , Y * tate, fg_col, buff[i+1]);
 	XX+=yoko_def;
@@ -568,14 +567,12 @@ XX+=yoko;
 }
 i++;
 }
+//”¼Šp
 else{
-							if(zenkaku==0){
-							XX=X*7;}
-	proDebugScreenPutChar( XX , Y * tate, fg_col, c);
 
-if(zenkaku!=0){
-XX+=yoko_def;}
-else{XX+=yoko;}
+	proDebugScreenPutChar( XX , Y * tate, fg_col, c);
+	if(zenkaku!=0){XX+=yoko_def;}
+	else{XX+=yoko;}
 }
 						X++;
 						if (X == MX)
@@ -675,6 +672,12 @@ static void proDebugScreenSetFont(u8 *font)
 	memcpy(&tate,&g_cur_font[15],1);
 	memcpy(&zenkaku,&g_cur_font[16],1);
 	memcpy(&total,&g_cur_font[17],1);
+	if(tate>tate_def+2){
+	proDebugScreenReleaseFont();
+	}
+	}
+	else{
+	yoko=8;tate=8;zenkaku=0;
 	}
 }
 
