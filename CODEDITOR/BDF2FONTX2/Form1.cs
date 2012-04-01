@@ -443,7 +443,7 @@ namespace WindowsFormsApplication1
                                         }
                                         else if (seek2 >= 0xADA1 && seek2 <= 0xADFF)
                                         {
-                                            dest = 846 - 96 + ((seek2 & 0xff) - 0xa1);
+                                            dest = 846 - 94 + ((seek2 & 0xff) - 0xa1);
                                         }
                                         else if (seek2 >= 0xB0A1 && seek2 <= 0xf4FF)
                                         {
