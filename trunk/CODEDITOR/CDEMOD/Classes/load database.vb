@@ -1153,7 +1153,7 @@ Public Class load_db
             file.Seek(0, SeekOrigin.Begin)
             file.Read(cp, 0, 8)
             str = Encoding.GetEncoding(0).GetString(cp)
-            Dim r As New Regex("\[CP\d\d\d\]", RegexOptions.ECMAScript)
+            Dim r As New Regex("\[CP\d+]", RegexOptions.ECMAScript)
             Dim m As Match = r.Match(str)
             If m.Success Then
                 file.Close()
@@ -1164,6 +1164,8 @@ Public Class load_db
                     Return 936
                 ElseIf str = "[CP1201]" Then
                     Return 1201
+                ElseIf str = "[CP51932]" Then
+                    Return 51932
                 End If
             End If
         End If

@@ -49,9 +49,10 @@ Partial Class MERGE
         Me.ToolStripSeparator10 = New System.Windows.Forms.ToolStripSeparator()
         Me.gname_country = New System.Windows.Forms.ToolStripMenuItem()
         Me.codepage_select = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CP932ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.GBKToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.UTF16BECP1201ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SJIS = New System.Windows.Forms.ToolStripMenuItem()
+        Me.GBK = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EUCJP = New System.Windows.Forms.ToolStripMenuItem()
+        Me.UTF16BE = New System.Windows.Forms.ToolStripMenuItem()
         Me.codetreeview = New System.Windows.Forms.ToolStripMenuItem()
         Me.paserToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator7 = New System.Windows.Forms.ToolStripSeparator()
@@ -312,7 +313,7 @@ Partial Class MERGE
         Me.sort_GID.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Sort_GID１, Me.Sort_GID2, Me.ToolStripSeparator9, Me.gid_country})
         Me.sort_GID.Image = CType(resources.GetObject("sort_GID.Image"), System.Drawing.Image)
         Me.sort_GID.Name = "sort_GID"
-        Me.sort_GID.Size = New System.Drawing.Size(138, 26)
+        Me.sort_GID.Size = New System.Drawing.Size(152, 26)
         Me.sort_GID.Text = "ゲームID"
         '
         'Sort_GID１
@@ -348,7 +349,7 @@ Partial Class MERGE
         Me.name_sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Sort_GTitle1, Me.Sort_GTitle2, Me.ToolStripSeparator10, Me.gname_country})
         Me.name_sort.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.abc
         Me.name_sort.Name = "name_sort"
-        Me.name_sort.Size = New System.Drawing.Size(138, 26)
+        Me.name_sort.Size = New System.Drawing.Size(152, 26)
         Me.name_sort.Text = "ゲーム名"
         '
         'Sort_GTitle1
@@ -381,34 +382,40 @@ Partial Class MERGE
         '
         'codepage_select
         '
-        Me.codepage_select.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CP932ToolStripMenuItem, Me.GBKToolStripMenuItem, Me.UTF16BECP1201ToolStripMenuItem})
+        Me.codepage_select.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SJIS, Me.GBK, Me.EUCJP, Me.UTF16BE})
         Me.codepage_select.Name = "codepage_select"
         Me.codepage_select.Size = New System.Drawing.Size(114, 25)
         Me.codepage_select.Text = "エンコード(&D)"
         Me.codepage_select.ToolTipText = "コードデータベースの読み込み保存エンコードを指定します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "CP932≒日本語SJIS Cwcijiro/Tempar/Jpcheat用" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "CP936=中国語GBK" & _
     " CheatmasterやFreecheat用"
         '
-        'CP932ToolStripMenuItem
+        'SJIS
         '
-        Me.CP932ToolStripMenuItem.Name = "CP932ToolStripMenuItem"
-        Me.CP932ToolStripMenuItem.Size = New System.Drawing.Size(208, 26)
-        Me.CP932ToolStripMenuItem.Text = "SJIS(CP932)"
-        Me.CP932ToolStripMenuItem.ToolTipText = "日本語シフトJISのDBを編集します"
+        Me.SJIS.Name = "SJIS"
+        Me.SJIS.Size = New System.Drawing.Size(208, 26)
+        Me.SJIS.Text = "SJIS(CP932)"
+        Me.SJIS.ToolTipText = "日本語シフトJISのDBを編集します"
         '
-        'GBKToolStripMenuItem
+        'GBK
         '
-        Me.GBKToolStripMenuItem.Name = "GBKToolStripMenuItem"
-        Me.GBKToolStripMenuItem.Size = New System.Drawing.Size(208, 26)
-        Me.GBKToolStripMenuItem.Text = "GBK(CP936)"
-        Me.GBKToolStripMenuItem.ToolTipText = "簡体中国語GBKのDBを編集します"
+        Me.GBK.Name = "GBK"
+        Me.GBK.Size = New System.Drawing.Size(208, 26)
+        Me.GBK.Text = "GBK(CP936)"
+        Me.GBK.ToolTipText = "簡体中国語GBKのDBを編集します"
         '
-        'UTF16BECP1201ToolStripMenuItem
+        'EUCJP
         '
-        Me.UTF16BECP1201ToolStripMenuItem.Enabled = False
-        Me.UTF16BECP1201ToolStripMenuItem.Name = "UTF16BECP1201ToolStripMenuItem"
-        Me.UTF16BECP1201ToolStripMenuItem.Size = New System.Drawing.Size(208, 26)
-        Me.UTF16BECP1201ToolStripMenuItem.Text = "UTF16BE(CP1201)"
-        Me.UTF16BECP1201ToolStripMenuItem.ToolTipText = "マルチバイトUTF16ビッグエンディアン" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "コードフリーク専用DBのみ対象"
+        Me.EUCJP.Name = "EUCJP"
+        Me.EUCJP.Size = New System.Drawing.Size(208, 26)
+        Me.EUCJP.Text = "EUC-JP(CP51932)"
+        '
+        'UTF16BE
+        '
+        Me.UTF16BE.Enabled = False
+        Me.UTF16BE.Name = "UTF16BE"
+        Me.UTF16BE.Size = New System.Drawing.Size(208, 26)
+        Me.UTF16BE.Text = "UTF16BE(CP1201)"
+        Me.UTF16BE.ToolTipText = "マルチバイトUTF16ビッグエンディアン" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "コードフリーク専用DBのみ対象"
         '
         'codetreeview
         '
@@ -1662,8 +1669,8 @@ Partial Class MERGE
     Friend WithEvents saveas_cwcheat As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents saveas_psx As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents codepage_select As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents CP932ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents GBKToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents SJIS As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents GBK As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents codetreeview As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents tree_collapse As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents tree_expand As System.Windows.Forms.ToolStripMenuItem
@@ -1691,7 +1698,7 @@ Partial Class MERGE
     Friend WithEvents TEMP As System.Windows.Forms.RadioButton
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents changed As System.Windows.Forms.Label
-    Friend WithEvents UTF16BECP1201ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents UTF16BE As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents USELIST As System.Windows.Forms.Button
     Friend WithEvents SHIFLIST As System.Windows.Forms.Button
     Friend WithEvents SELECTLIST As System.Windows.Forms.Button
@@ -1790,5 +1797,6 @@ Partial Class MERGE
     Friend WithEvents dmtext As System.Windows.Forms.TextBox
     Friend WithEvents curr_line As System.Windows.Forms.Label
     Friend WithEvents コード形式 As System.Windows.Forms.Label
+    Friend WithEvents EUCJP As System.Windows.Forms.ToolStripMenuItem
 
 End Class

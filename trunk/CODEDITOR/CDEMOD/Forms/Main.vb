@@ -165,7 +165,7 @@ Public Class MERGE
                     saveas_cwcheat.Enabled = True
                     saveas_psx.Enabled = False
                     saveas_codefreak.Enabled = True
-                    UTF16BECP1201ToolStripMenuItem.Enabled = True
+                    UTF16BE.Enabled = True
                 Else
                     If PSX = False Then
                         saveas_cwcheat.Enabled = True
@@ -175,7 +175,7 @@ Public Class MERGE
                         saveas_psx.Enabled = True
                     End If
                     saveas_codefreak.Enabled = False
-                    UTF16BECP1201ToolStripMenuItem.Enabled = False
+                    UTF16BE.Enabled = False
                 End If
 
                 If codetree.Nodes.Count >= 1 Then
@@ -193,13 +193,7 @@ Public Class MERGE
             codetree.Nodes.Add("NEW_DB").ImageIndex = 0
         End If
 
-        If enc1 = 932 Then
-            CP932ToolStripMenuItem.Checked = True
-        ElseIf enc1 = 1201 Then
-            UTF16BECP1201ToolStripMenuItem.Checked = True
-        ElseIf enc1 = 936 Then
-            GBKToolStripMenuItem.Checked = True
-        End If
+        reset_codepage()
 
         'イベントハンドラを追加する
         AddHandler codetree.ItemDrag, AddressOf codetree_ItemDrag
@@ -287,7 +281,7 @@ Public Class MERGE
             ok = True
         End If
         If ok = True Then
-            UTF16BECP1201ToolStripMenuItem.Enabled = False
+            UTF16BE.Enabled = False
             saveas_codefreak.Enabled = False
             PSX = False
             saveas_cwcheat.Enabled = True
@@ -320,7 +314,7 @@ Public Class MERGE
         End If
         If ok = True Then
             file_saveas.Enabled = True
-            UTF16BECP1201ToolStripMenuItem.Enabled = False
+            UTF16BE.Enabled = False
             saveas_codefreak.Enabled = False
             PSX = True
             saveas_cwcheat.Enabled = False
@@ -378,6 +372,7 @@ Public Class MERGE
                 codetree.Nodes(0).Expand()
             End If
             codetree.EndUpdate()
+            reset_codepage()
             error_window.list_load_error.EndUpdate()
             loaded = True
             file_saveas.Enabled = True
@@ -1045,34 +1040,55 @@ Public Class MERGE
 
 #Region "MSCODEPAGE"
 
-    Private Sub CP932ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CP932ToolStripMenuItem.Click
+    Function reset_codepage() As Integer
+
+        GBK.Checked = False
+        EUCJP.Checked = False
+        SJIS.Checked = False
+        UTF16BE.Enabled = False
+
+        If enc1 = 932 Then
+            SJIS.Checked = True
+        ElseIf enc1 = 1201 Then
+            UTF16BE.Checked = True
+        ElseIf enc1 = 936 Then
+            GBK.Checked = True
+        ElseIf enc1 = 51932 Then
+            EUCJP.Checked = True
+        End If
+
+        Return 0
+
+    End Function
+
+    Private Sub CP932ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SJIS.Click
 
         'エンコードを指定する場合
         My.Settings.MSCODEPAGE = 932
         enc1 = 932
-        GBKToolStripMenuItem.Checked = False
-        CP932ToolStripMenuItem.Checked = True
-        UTF16BECP1201ToolStripMenuItem.Enabled = False
+        reset_codepage()
+    End Sub
+    Private Sub EUCJPCP51932ToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles EUCJP.Click
+
+        My.Settings.MSCODEPAGE = 51932
+        enc1 = 51932
+        reset_codepage()
 
     End Sub
 
-    Private Sub GBKToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GBKToolStripMenuItem.Click
+    Private Sub GBKToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GBK.Click
 
         'エンコードを指定する場合
         My.Settings.MSCODEPAGE = 936
         enc1 = 936
-        GBKToolStripMenuItem.Checked = True
-        CP932ToolStripMenuItem.Checked = False
-        UTF16BECP1201ToolStripMenuItem.Enabled = False
+        reset_codepage()
     End Sub
 
 
-    Private Sub UTF16BECP1201ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles UTF16BECP1201ToolStripMenuItem.Click
+    Private Sub UTF16BECP1201ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles UTF16BE.Click
         'エンコードを指定する場合
         enc1 = 1201
-        GBKToolStripMenuItem.Checked = False
-        CP932ToolStripMenuItem.Checked = False
-        UTF16BECP1201ToolStripMenuItem.Checked = True
+        reset_codepage()
     End Sub
 
 #End Region
@@ -1805,23 +1821,23 @@ Public Class MERGE
                 codetree.Focus()
             End If
 
-                If codetree.SelectedNode.Level = 2 Then
+            If codetree.SelectedNode.Level = 2 Then
 
-                    With newcode
-                        .ImageIndex = 2
-                        .SelectedImageIndex = 3
-                        .Name = codetree.SelectedNode.Name
-                        .Text = codetree.SelectedNode.Text
-                        .Tag = codetree.SelectedNode.Tag
-                    End With
+                With newcode
+                    .ImageIndex = 2
+                    .SelectedImageIndex = 3
+                    .Name = codetree.SelectedNode.Name
+                    .Text = codetree.SelectedNode.Text
+                    .Tag = codetree.SelectedNode.Tag
+                End With
 
-                    codetree.BeginUpdate()
-                    If move_up.Text.Contains("☆") = True Then
+                codetree.BeginUpdate()
+                If move_up.Text.Contains("☆") = True Then
                     codetree.SelectedNode.Parent.Nodes.Insert(0, newcode)
-                    Else
-                        codetree.SelectedNode.Parent.Nodes.Insert(codetree.SelectedNode.Index - 1, newcode)
-                    End If
-                    codetree.SelectedNode.Remove()
+                Else
+                    codetree.SelectedNode.Parent.Nodes.Insert(codetree.SelectedNode.Index - 1, newcode)
+                End If
+                codetree.SelectedNode.Remove()
                 codetree.SelectedNode = newcode
                 codetree.EndUpdate()
                 Dim z As Integer = codetree.SelectedNode.Index - 15
@@ -1831,7 +1847,7 @@ Public Class MERGE
                     codetree.TopNode = codetree.SelectedNode.Parent.Nodes(z)
                 End If
                 codetree.Focus()
-                End If
+            End If
 
         Catch ex As Exception
 
@@ -2227,7 +2243,7 @@ Public Class MERGE
 
             error_window.list_load_error.BeginUpdate()
 
-            UTF16BECP1201ToolStripMenuItem.Enabled = False
+            UTF16BE.Enabled = False
             saveas_codefreak.Enabled = False
 
             If CODEFREAK = True Then
@@ -2257,10 +2273,11 @@ Public Class MERGE
                 codetree.Nodes(0).Expand()
             End If
             If enc1 = 1201 Then
-                UTF16BECP1201ToolStripMenuItem.Enabled = True
+                UTF16BE.Enabled = True
                 saveas_codefreak.Enabled = True
             End If
             codetree.EndUpdate()
+            reset_codepage()
             error_window.list_load_error.EndUpdate()
             loaded = True
             file_saveas.Enabled = True
@@ -2943,4 +2960,5 @@ Public Class MERGE
         End If
         curr_line.Text = temp.ToString & "行目"
     End Sub
+
 End Class
