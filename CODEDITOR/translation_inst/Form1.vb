@@ -6,6 +6,7 @@ Imports System.Threading
 Imports System.Net.Sockets
 
 Public Class Form1
+    Friend error_fnt As String = ""
 
     Private Sub form1load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         drivelettter.Text = My.Settings.drivepath
@@ -161,6 +162,11 @@ Public Class Form1
             MessageBox.Show("指定されたフォントファイルが存在しません", "ファイルエラー")
             GroupBox3.Enabled = False
         End If
+        If My.Settings.cfont = error_fnt Then
+            System.Media.SystemSounds.Beep.Play()
+            MessageBox.Show("指定されたフォントファイルは使用できません", "ファイルエラー")
+            GroupBox3.Enabled = False
+        End If
     End Sub
 
     Private Sub AUTOPSP_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AUTOPSP.CheckedChanged, lockdriveletter.CheckedChanged
@@ -169,11 +175,33 @@ Public Class Form1
 
     Private Sub Button1_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
         Dim ofd As New OpenFileDialog
+        GroupBox3.Enabled = False
         ofd.Filter = "すべてのファイル|*.*"
         ofd.Title = "開くファイルを選択してください"
         If ofd.ShowDialog = Windows.Forms.DialogResult.OK Then
             My.Settings.cfont = ofd.FileName
-            GroupBox3.Enabled = True
+            Dim fs As New System.IO.FileStream(ofd.FileName, System.IO.FileMode.Open, System.IO.FileAccess.Read)
+            'ファイルを読み込むバイト型配列を作成する
+            Dim bs(2048 + 18) As Byte
+            fs.Read(bs, 0, bs.Length)
+            fs.Close()
+            If (BitConverter.ToInt32(bs, 0) = &H544E4F46) Then
+                If bs(16) = 0 AndAlso bs(14) = 8 AndAlso bs(15) = 8 Then
+                    Dim ws As New System.IO.FileStream("tmp.fnt", System.IO.FileMode.Create, System.IO.FileAccess.Write)
+                    ws.Write(bs, 17, 2048)
+                    ws.Close()
+                    My.Settings.cfont = "tmp.fnt"
+                    GroupBox3.Enabled = True
+                ElseIf bs(16) > 0 Then
+                    MessageBox.Show("全角FONTXは使用できません")
+                    error_fnt = ofd.FileName
+                Else
+                    MessageBox.Show("8x8以外は使用できません")
+                    error_fnt = ofd.FileName
+                End If
+            Else
+                GroupBox3.Enabled = True
+            End If
         End If
 
     End Sub

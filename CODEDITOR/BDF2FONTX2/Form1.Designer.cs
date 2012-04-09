@@ -36,16 +36,16 @@
             this.CP = new System.Windows.Forms.RadioButton();
             this.NOREMAP = new System.Windows.Forms.RadioButton();
             this.CMFUSION = new System.Windows.Forms.GroupBox();
-            this.CMF = new System.Windows.Forms.RadioButton();
-            this.FILER = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.FILER = new System.Windows.Forms.RadioButton();
+            this.CMF = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.CMFUSION.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(88, 202);
+            this.button1.Location = new System.Drawing.Point(88, 219);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
@@ -95,7 +95,7 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(48, 21);
             this.textBox1.TabIndex = 5;
-            this.textBox1.Visible = false;
+            this.textBox1.Text = "0";
             // 
             // CP
             // 
@@ -107,7 +107,6 @@
             this.CP.TabStop = true;
             this.CP.Text = "CP指定";
             this.CP.UseVisualStyleBackColor = true;
-            this.CP.Visible = false;
             // 
             // NOREMAP
             // 
@@ -127,33 +126,10 @@
             this.CMFUSION.Controls.Add(this.CMF);
             this.CMFUSION.Location = new System.Drawing.Point(29, 97);
             this.CMFUSION.Name = "CMFUSION";
-            this.CMFUSION.Size = new System.Drawing.Size(200, 99);
+            this.CMFUSION.Size = new System.Drawing.Size(200, 116);
             this.CMFUSION.TabIndex = 5;
             this.CMFUSION.TabStop = false;
             this.CMFUSION.Text = "圧縮ふぉんと";
-            // 
-            // CMF
-            // 
-            this.CMF.AutoSize = true;
-            this.CMF.Location = new System.Drawing.Point(32, 44);
-            this.CMF.Name = "CMF";
-            this.CMF.Size = new System.Drawing.Size(153, 18);
-            this.CMF.TabIndex = 5;
-            this.CMF.TabStop = true;
-            this.CMF.Text = "CMFUSION12x12作成";
-            this.CMF.UseVisualStyleBackColor = true;
-            // 
-            // FILER
-            // 
-            this.FILER.AutoSize = true;
-            this.FILER.Location = new System.Drawing.Point(32, 68);
-            this.FILER.Name = "FILER";
-            this.FILER.Size = new System.Drawing.Size(152, 18);
-            this.FILER.TabIndex = 6;
-            this.FILER.TabStop = true;
-            this.FILER.Text = "6x12作成(FILER互換)";
-            this.FILER.UseVisualStyleBackColor = true;
-            this.FILER.CheckedChanged += new System.EventHandler(this.FILER_CheckedChanged);
             // 
             // radioButton1
             // 
@@ -167,11 +143,34 @@
             this.radioButton1.Text = "無圧縮(通常ラスター)";
             this.radioButton1.UseVisualStyleBackColor = true;
             // 
+            // FILER
+            // 
+            this.FILER.AutoSize = true;
+            this.FILER.Location = new System.Drawing.Point(32, 68);
+            this.FILER.Name = "FILER";
+            this.FILER.Size = new System.Drawing.Size(152, 18);
+            this.FILER.TabIndex = 6;
+            this.FILER.TabStop = true;
+            this.FILER.Text = "6x12作成(FILER互換)";
+            this.FILER.UseVisualStyleBackColor = true;
+            this.FILER.CheckedChanged += new System.EventHandler(this.FILER_CheckedChanged);
+            // 
+            // CMF
+            // 
+            this.CMF.AutoSize = true;
+            this.CMF.Location = new System.Drawing.Point(32, 44);
+            this.CMF.Name = "CMF";
+            this.CMF.Size = new System.Drawing.Size(153, 18);
+            this.CMF.TabIndex = 5;
+            this.CMF.TabStop = true;
+            this.CMF.Text = "CMFUSION12x12作成";
+            this.CMF.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(261, 237);
+            this.ClientSize = new System.Drawing.Size(261, 254);
             this.Controls.Add(this.CMFUSION);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button1);

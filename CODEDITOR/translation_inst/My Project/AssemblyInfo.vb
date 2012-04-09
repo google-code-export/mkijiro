@@ -10,10 +10,10 @@ Imports System.Runtime.InteropServices
 
 ' アセンブリ属性の値を確認します。
 
-<Assembly: AssemblyTitle("tempar update checker")> 
+<Assembly: AssemblyTitle("cfw_jap_traslation_installer")> 
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("tempar update checker")> 
+<Assembly: AssemblyProduct("cfw_jap_traslation_installer")> 
 <Assembly: AssemblyCopyright("(ﾟ∀ﾟ)")> 
 <Assembly: AssemblyTrademark("")> 
 
