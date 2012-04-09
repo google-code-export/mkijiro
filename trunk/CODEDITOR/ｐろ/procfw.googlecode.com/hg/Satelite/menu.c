@@ -380,8 +380,9 @@ int utf8video(){
                 lba=lba*2048;
 		sceIoLseek(fd, lba, PSP_SEEK_SET);
                 sceIoRead(fd,buffer,2048);
-                    i = 6;
-                    while (1)
+                i = 6;
+                
+		while (1)
                     {
                         //if (buffer[i] == 0x50 && buffer[i + 1] == 0x53 && buffer[i + 2] == 0x50 && buffer[i + 3] == 0x5f && buffer[i + 4] == 0x47) break;
                         if (buffer[i] == 0x55 && buffer[i + 1] == 0x4D &&buffer[i + 2] == 0x44 && buffer[i + 3] == 0x5f && buffer[i + 4] == 0x56) {break;}
@@ -399,6 +400,7 @@ int utf8video(){
 		sceIoLseek(fd, lba, PSP_SEEK_SET);
                 sceIoRead(fd,buffer,2048);
                     i = 31;
+
                     while (1)
                     {
                         if (buffer[i] == 0x50 && buffer[i + 1] == 0x41 && buffer[i + 2] == 0x52 && buffer[i + 3] == 0x41) {break;}
@@ -411,6 +413,7 @@ int utf8video(){
   return 0; }
                         i++;
                     }
+
 		memcpy(&lba,&buffer[i-31],4);
                 lba=lba*2048;
 		sceIoLseek(fd, lba, PSP_SEEK_SET);
@@ -419,6 +422,7 @@ int utf8video(){
 		memcpy(&k,&buffer[8],4);
 		memcpy(&z,&buffer[16],4);
 		    int ct=0;
+
                     while (1)
                     {
 if (buffer[k]==0x54 && buffer[k+1]==0x49 && buffer[k+2]==0x54 && buffer[k+3]==0x4C){break;}
@@ -426,19 +430,21 @@ if (buffer[k]==0x54 && buffer[k+1]==0x49 && buffer[k+2]==0x54 && buffer[k+3]==0x
                         if (ct == z)
                         {
 				sceIoClose(fd);
-	/*	fd=sceIoOpen("ms0:/log", PSP_O_CREAT | PSP_O_WRONLY , 0777);
+		/* fd=sceIoOpen("ms0:/log", PSP_O_CREAT | PSP_O_WRONLY , 0777);
 		sceIoWrite(fd, buffer,2048);
 		sceIoClose(fd);*/
 
   return 0;
                         }
+
 			k++;
                     }
-                    z = (ct+2) * 16;
-		    memcpy(&kk,&buffer[z],4);
-		    memcpy(&stm[0],&buffer[kk+i],100);
-			msg=stm;
-		/*		sceIoClose(fd);
+                 z = (ct+2) * 16;
+		memcpy(&kk,&buffer[z],4);
+		memcpy(&stm[0],&buffer[kk+i],100);
+		msg=stm;
+		
+		/*sceIoClose(fd);
 		fd=sceIoOpen("ms0:/log", PSP_O_CREAT | PSP_O_WRONLY , 0777);
 		sprintf(buffer,"ct %d,k %d,z %d,i %d,kk %d,%s",ct,k,z,i,kk,msg);
 		sceIoWrite(fd, buffer,2048);

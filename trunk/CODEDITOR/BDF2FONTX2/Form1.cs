@@ -451,10 +451,21 @@ namespace WindowsFormsApplication1
                                 else
                                 {
                                     c1 = (c1 >> 1) + 0x70;
-                                    c2 = c2 + 0x7d;
+                                    c2 = c2 + 0x7D;
                                 }
                                 if (c1 >= 0xa0) { c1 = c1 + 0x40; }
                                 if (c2 >= 0x7f) { c2 = c2 + 1; }
+
+                                ////http://oku.edu.mie-u.ac.jp/~okumura/algo/
+                                //if ((c1 & 1)==1)
+                                //{
+                                //    if (c2 < 0x60) c2 += 0x1F;
+                                //    else c2 += 0x20;
+                                //}
+                                //else c2 += 0x7E;
+                                //if (c1 < 0x5F) c1 = (c1 + 0xE1) >> 1;
+                                //else c1 = (c1 + 0x161) >> 1;
+
                             }
                             else if (EUC.Checked==true)
                             {
