@@ -5,7 +5,7 @@ Imports System.Text.RegularExpressions
 
 Public Class Form1
 
-    Dim p As String() = {"sjis.txt", "euc-jp.txt", "gbk.txt", "utf16le.txt", "utf16be.txt"}
+    Dim p As String() = {"sjis.txt", "euc-jp.txt", "gbk.txt", "utf16le.txt", "utf16be.txt", "utf8.txt"}
 
     Private Sub TextBox1_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles ENCODE.KeyPress
         e.Handled = True
@@ -18,62 +18,22 @@ Public Class Form1
             Dim m As Match = mm.Match(ENCODE.Text)
             If m.Success Then
                 Dim enc As Integer = CInt(m.Value.Remove(0, 2))
-                If File.Exists(output) Then
-                    'If CheckBox.Checked = True Then
-
-                    '    Dim sr As New System.IO.FileStream(output, System.IO.FileMode.Open, System.IO.FileAccess.Read)
-                    '    Dim fs As New System.IO.FileStream("table\cmp_" & Path.GetFileNameWithoutExtension(output), System.IO.FileMode.Create, System.IO.FileAccess.Write)
-                    '    Dim fss As New System.IO.FileStream("table\cmp_utf8", System.IO.FileMode.Create, System.IO.FileAccess.Write)
-                    '    Dim bb As Byte() = Nothing
-                    '    Dim bbb As Byte() = Nothing
-                    '    Dim b(1) As Byte
-                    '    Dim st As Integer = &H8000 '&HC2a7
-                    '    Dim en As Integer = &HDFFF '&HD191
-                    '    Dim hatena As Integer = 0
-                    '    Dim i As Integer = 0
-                    '    Dim s As String = ""
-                    '    While st < en
-                    '        b(1) = CByte(st And &HFF)
-                    '        b(0) = CByte((st >> 8) And &HFF)
-                    '        s = System.Text.Encoding.GetEncoding(65001).GetString(b)
-                    '        bb = System.Text.Encoding.GetEncoding(enc).GetBytes(s)
-                    '        bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(s)
-                    '        Array.Resize(bb, 2)
-                    '        Array.Resize(bbb, 4)
-                    '        hatena = BitConverter.ToInt16(bb, 0)
-                    '        If bbb(0) < &HE0 AndAlso hatena > 127 Then
-                    '            fs.Write(bb, 0, 2)
-                    '            fss.Write(bbb, 0, 4)
-                    '        End If
-                    '        st += 1
-                    '    End While
-                    '    st = &HE00000
-                    '    en = &HF00000
-                    '    Array.Resize(b, 8)
-                    '    While st < en
-                    '        b(2) = CByte(st And &HFF)
-                    '        b(1) = CByte((st >> 8) And &HFF)
-                    '        b(0) = CByte((st >> 16) And &HFF)
-                    '        s = System.Text.Encoding.GetEncoding(65001).GetString(b)
-                    '        bb = System.Text.Encoding.GetEncoding(enc).GetBytes(s)
-                    '        bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(s)
-                    '        Array.Resize(bb, 4)
-                    '        Array.Resize(bbb, 4)
-                    '        hatena = BitConverter.ToInt32(bb, 0)
-                    '        If hatena > 127 Then
-                    '            fs.Write(bb, 0, 2)
-                    '            fss.Write(bbb, 0, 3)
-                    '        End If
-                    '        st += 1
-                    '    End While
-                    '    Array.Clear(bbb, 0, 4)
-                    '    fs.Write(bbb, 0, 2)
-                    '    fss.Write(bbb, 0, 4)
-                    '    sr.Close()
-                    '    fs.Close()
-                    '    fss.Close()
-
-                    'Else
+                If ENCODE.SelectedIndex = 5 Then
+                    Dim ucs2 As New System.IO.FileStream("table\utf16_eucjp.dat", System.IO.FileMode.Create, System.IO.FileAccess.Write)
+                    Dim bs(65535 * 2) As Byte
+                    Dim bb(1) As Byte
+                    Dim s As String = ""
+                    Dim bbb As Byte() = Nothing
+                    For i = 0 To &HFFFF
+                        bb(0) = CByte(i And &HFF)
+                        bb(1) = CByte(i >> 8)
+                        s = System.Text.Encoding.GetEncoding(1200).GetString(bb)
+                        bbb = System.Text.Encoding.GetEncoding(51932).GetBytes(s)
+                        Array.Resize(bbb, 2)
+                        ucs2.Write(bbb, 0, 2)
+                    Next
+                    ucs2.Close()
+                ElseIf File.Exists(output) Then
                     Dim sr As New System.IO.FileStream(output, System.IO.FileMode.Open, System.IO.FileAccess.Read)
                     Dim fs As New System.IO.FileStream("table\" & Path.GetFileNameWithoutExtension(output), System.IO.FileMode.Create, System.IO.FileAccess.Write)
                     Dim fss As New System.IO.FileStream("table\utf8", System.IO.FileMode.Create, System.IO.FileAccess.Write)
@@ -95,7 +55,12 @@ Public Class Form1
                     Next
                     'End While
                     Array.Clear(bbb, 0, 4)
-                    fs.Write(bbb, 0, 2)
+                    If (textbox4.Text <> "") Then
+                        bb = System.Text.Encoding.GetEncoding(enc).GetBytes(textbox4.Text)
+                        fs.Write(bb, 0, 2)
+                    Else
+                        fs.Write(bbb, 0, 2)
+                    End If
                     fss.Write(bbb, 0, 4)
                     sr.Close()
                     fs.Close()
@@ -129,6 +94,9 @@ Public Class Form1
                     Dim bs(2047) As Byte
                     Dim stm(256) As Byte
                     Dim dummy As Byte() = {32, 0}
+                    If (TextBox4.Text <> "") Then
+                        dummy = System.Text.Encoding.GetEncoding(enc).GetBytes(TextBox4.Text)
+                    End If
                     Dim seek As UInteger
                     Dim i As Integer = 0
                     Dim k As Integer = 0
@@ -170,7 +138,8 @@ Public Class Form1
                                         Exit While
                                     End If
                                     If big = 0 Then
-                                        fail = True
+                                        kk += j
+                                        'fail = True
                                         Exit While
                                     End If
                                 Next
@@ -202,8 +171,8 @@ Public Class Form1
                                 End If
                             Else
                                 '失敗
-                                Array.Copy(dummy, 0, stm, k, 1)
-                                k += 1
+                                Array.Copy(dummy, 0, stm, k, 2)
+                                k += 2
                             End If
                             If (bb(i) < &HE0) Then
                                 i += 2

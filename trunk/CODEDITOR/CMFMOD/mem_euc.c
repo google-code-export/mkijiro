@@ -44,8 +44,8 @@ typedef struct
 typedef struct
 {
 	int addition;  //this number will be added to the command portion
-	int XOR;       //this number will XOR'ed against the command portion
-	int value;     //this number will be added to the value portion
+	int XOR;	   //this number will XOR'ed against the command portion
+	int value;	 //this number will be added to the value portion
 }  CBSEED;
 
 //define constant, global seeds for Codebreaker codes.  16 possibilities.
@@ -1354,9 +1354,59 @@ extern void mem_table_savecw()
 	ui_cls();
 	if(ui_input_string(120, 68, fn, 29) < 0)
 		return ;
-	filter_filename(fn);
+	filter_filename(fn); //ULJM-00000 -ÉôÊ¬
+
+
+	int z = strlen(fn);
+	char stm[30];
+	u8 code=0;
+	u8 code2=0;
+	int i=0;
+	int k=0;
+	int j=0;
+	int fd;
+		while(i < z){
+			code= (u8)fn[i];
+			code2=(u8)fn[i+1];
+			if(code < 0x80){
+			  	memcpy(&stm[k],&fn[i],1);
+				k++;
+				i++;
+			}
+			else if(code == 0xE8 && code2>=0xa1){
+			  	memcpy(&stm[k],&fn[i+1],1);
+				k++;
+				i+=2;
+			
+			}
+			else if(code>=0xA1 && code <=0xFC && code2>=0xA1){
+			//http://oku.edu.mie-u.ac.jp/~okumura/algo/
+			code &=0x7F;
+			code2 &=0x7F;
+
+			if (code & 1) {
+				if (code2 < 0x60)  code2 += 0x1F;
+				else             code2 += 0x20;
+			}
+			else               code2 += 0x7E;
+				if (code < 0x5F)      code = (code + 0xE1) >> 1;
+				else                 code = (code + 0x161) >> 1;
+
+				stm[k]=code;
+				stm[k+1]=code2;
+				k+=2;
+				i+=2;
+			}
+			else{
+			i++;
+			}
+		}
+			stm[k]=0;
+			memcpy(&fn[0],&stm[0],strlen(stm));
+
+
 	sprintf(s, "%s/%s.cmf", CMF_DIR, fn);
-	int fd = sceIoOpen(s, PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
+	fd = sceIoOpen(s, PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
 	if(fd < 0) return;
 	
 		mips_memcpy(fn,ui_get_gamename(),10);
@@ -1367,7 +1417,7 @@ extern void mem_table_savecw()
 		fn[64]=0;
 		sprintf(s,"_G %s\n",fn);
 		sceIoWrite(fd, s, strlen(s));
-	int i,j;
+	//int i,j;
 	for(i = 0; i < mem_gv.mem_table_size;){
 		sprintf(fn,"_C%d ",mem_gv.mem_table[i].lock);
 		int k = mem_table_walkforward(i);

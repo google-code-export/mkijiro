@@ -80,7 +80,8 @@ void ui_init()
 		if(p)
 			mips_memcpy(ui_gv.ui_gname, p-11, 11);
 		else strcpy(ui_gv.ui_gname,"PSX");
-		break;		
+		break;
+
 	case PSP_INIT_KEYCONFIG_GAME:
 		fd = sceIoOpen(ISOFS_UMDDATA, PSP_O_RDONLY, 0777);
 		if (fd >= 0)
@@ -91,6 +92,7 @@ void ui_init()
 		fd = sceIoOpen(ISOFS_SFO, PSP_O_RDONLY, 0777);
 		if (fd >= 0)
 		{
+			//変なので修正予定
 			sceIoLseek32(fd, 0x8, PSP_SEEK_SET);
 			unsigned char flag;
 			sceIoRead(fd, &flag, 1);
@@ -103,6 +105,7 @@ void ui_init()
 			t_encodepack pack;
 	 		if(encode_init(&pack) == 0)
 			{
+				//UCS2(utf16BE)化後テーブル検索し、EUC変換
 				encode_utf8_conv((unsigned char *)&ui_gv.ui_gname[12], NULL,&pack);
 				encode_free(&pack);
 			}

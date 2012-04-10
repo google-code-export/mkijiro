@@ -50,6 +50,8 @@ static int encode_id = -1;
 static unsigned char * UNI_CJK;
  */
 
+
+//ワイド関数　utf8をutf16beに戻す
 static int utf8_mbtowc(ucs4_t *pwc, const unsigned char *s, int n)
 {
 	unsigned char c = s[0];
@@ -130,6 +132,7 @@ static int encode_uni2cjk(const unsigned char *uni,unsigned char *cjk, p_encodep
 		transcount = 1;
 	}else{
 		int pos = (int)(*(unsigned short*)uni)*2;
+		//テーブルから2バイト差し替え用
 		cjk[0]=pack->UNI_CJK[pos];
 		cjk[1]=pack->UNI_CJK[pos+1];
 		transcount = 2;
@@ -180,10 +183,10 @@ extern int encode_utf8_conv(const unsigned char *ucs, unsigned char *cjk, p_enco
 
 extern int encode_init(p_encodepack pack)
 {
-	int fd = sceIoOpen("ms0:/CheatMaster/encode.dat", PSP_O_RDONLY, 0777);
+	int fd = sceIoOpen("ms0:/CheatMaster/utf16_eucjp.dat", PSP_O_RDONLY, 0777);
 	if(fd < 0)
 		return 1;
-	pack->UNI_CJK = malloc(131072);
+	pack->UNI_CJK = malloc(131072);//UTF16　0x0〜0xffffまでの変換表
 	if(pack->UNI_CJK == NULL)
 	{
 		sceIoClose(fd);
