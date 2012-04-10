@@ -2557,6 +2557,7 @@ static void * layout_readdir(char *tempdir, char *ext, int *c, int *dc, int fatr
 	di = 1;
 	dl = sceIoDopen(tempdir);
 	memset(&sid, 0, sizeof(SceIoDirent));
+
 	while(sceIoDread(dl, &sid) > 0)
 	{
 		if((sid.d_stat.st_attr & FAT_FILEATTR_VOLUME) > 0 || sid.d_name[0]=='.')
@@ -2575,8 +2576,49 @@ static void * layout_readdir(char *tempdir, char *ext, int *c, int *dc, int fatr
 	}
 	sceIoDclose(dl);
 	strcpy((char *)dir_array[0],"../");
-	
-	for(i=0;i<tempc;i++) strcpy((char*)decode_text_array[i], (char*)text_array[i]);
+
+	char stm[36];
+	char msg[40];
+	u8 c1=0;u8 c2=0;
+	int k=0;int j=0;
+
+	for(i=0;i<tempc;i++){
+
+			//ファイル名表示 http://www.tohoho-web.com/wwwkanji.htm
+			k=0;j=0;
+			 strcpy(msg, (char*)text_array[i]);
+			while(j<36){
+			c1=(u8)msg[j];
+			c2=(u8)msg[j+1];
+			if(c1<0x80){
+			memcpy(&stm[k],&c1,1);
+			k++;j++;
+			}
+			else if(c1>=0xa1 && c1 <0xE0){
+			memcpy(&stm[k],&c2,1);
+			k++;j+=2;
+			}
+			else{
+			if (c1 >= 0xe0) { c1 = c1 - 0x40; }
+			if (c2 >= 0x80) { c2 = c2 - 1; }
+			if (c2 >= 0x9e) {
+			    c1 = (c1 - 0x70) * 2;
+			    c2 = c2 - 0x7d;
+			} else {
+			    c1 = ((c1 - 0x70) * 2) - 1;
+			    c2 = c2 - 0x1f;
+			}
+			stm[k]=c1 | 0x80;
+			stm[k+1]=c2 | 0x80;
+			k+=2;j+=2;
+			}
+			}
+			stm[k]=0;
+
+			 strcpy((char*)decode_text_array[i], stm);
+			// strcpy((char*)decode_text_array[i], (char*)text_array[i]);
+
+	}
 	for(i=0;i<tempdc;i++) strcpy((char*)decode_dir_array[i], (char*)dir_array[i]);	
 	
 	if(fatread && (img_Loadprx(fatprx)==0))

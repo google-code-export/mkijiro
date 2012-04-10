@@ -16,14 +16,14 @@ endif
 TARGET = CMFMOD_EUC
 
 ifdef PSP_SLIM
-OBJS = conf_euc.o main_euc.o ctrl_euc.o encode.o font_euc.o layout_euc.o mem_euc.o\
+OBJS = conf_euc.o main_euc.o ctrl_euc.o encode_euc.o font_euc.o layout_euc.o mem_euc.o\
 	screenshot.o text.o ui_euc.o dict_euc.o lang_zh_euc.o allocmem.o convert_cw.o\
 	blend_euc.o rgb_color.o minifloat.o usb.o common.o\
 	ctrl_driver.o display_driver.o power_driver.o ge_driver.o syscon_driver.o\
 	MySUB.o MyIMG.o MyJPG.o SNAPJPG.o SNAPPNG.o FAT.o CMF_STATE.o\
 	smsutils.o
 else
-OBJS = conf_euc.o main_euc.o ctrl_euc.o encode.o font_euc.o layout_euc.o mem_euc.o\
+OBJS = conf_euc.o main_euc.o ctrl_euc.o encode_euc.o font_euc.o layout_euc.o mem_euc.o\
 	screenshot.o text.o ui_euc.o dict_euc.o lang_zh_euc.o allocmem.o convert_cw.o\
 	blend_euc.o rgb_color.o minifloat.o usb.o common.o\
 	MySUB.o MyIMG.o MyJPG.o SNAPJPG.o SNAPPNG.o FAT.o CMF_STATE.o\
