@@ -124,7 +124,7 @@ Partial Class Form1
         '
         Me.ENCODE.ContextMenuStrip = Me.ContextMenuStrip1
         Me.ENCODE.FormattingEnabled = True
-        Me.ENCODE.Items.AddRange(New Object() {"SHIFT-JIS(CP932)", "EUC-JP(CP51932)", "GBK(CP936)", "UTF16LE(CP1200)", "UTF16BE(CP1201)", "UTF8->EUC-JP(CP65001)"})
+        Me.ENCODE.Items.AddRange(New Object() {"SHIFT-JIS(CP932)", "EUC-JP(CP51932)", "GBK(CP936)", "UTF16LE(CP1200)", "UTF16BE(CP1201)", "CMFUSION_EUC(UTF8->UTF16BE->CP51932)"})
         Me.ENCODE.Location = New System.Drawing.Point(107, 12)
         Me.ENCODE.Name = "ENCODE"
         Me.ENCODE.Size = New System.Drawing.Size(139, 22)
