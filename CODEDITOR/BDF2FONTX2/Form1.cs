@@ -239,7 +239,7 @@ namespace WindowsFormsApplication1
                                     for (int l = 0; l < 9; l++)
                                     {
                                         ss.Append("0x");
-                                        ss.Append(font[((total-1) * 9) + l].ToString("X2"));
+                                        ss.Append(font[((total) * 9) + l].ToString("X2"));
                                         ss.Append(",");
                                     }
                                     ss.AppendLine();
