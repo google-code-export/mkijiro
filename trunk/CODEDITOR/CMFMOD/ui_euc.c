@@ -552,33 +552,34 @@ int ui_input_string(int x, int y, char * s, int len)
 			}
 
 
-		font_output(x + dx * 12, y + 14 + dy * 12, "_");
-		font_fillrect(x, y-3, x + 6 * len + 5, y + 9);
+		font_output(x + dx * 12, y + 14 + dy * 12, "_");//OSK
+		font_fillrect(x, y-3, x + 6 * len + 5, y + 9+2);//こーど名
 		font_output(x, y, str);
-		font_output(x + pos * 6, y + 2, "_");
+		font_output(x + pos * 6, y + 2, "_");//こーど名
 		//font_refresh();
 		switch(ctrl_waitmask(PSP_CTRL_LEFT | PSP_CTRL_RIGHT | PSP_CTRL_UP | PSP_CTRL_DOWN | PSP_CTRL_CIRCLE | PSP_CTRL_CROSS | PSP_CTRL_SQUARE | PSP_CTRL_TRIANGLE | PSP_CTRL_SELECT | PSP_CTRL_START | PSP_CTRL_LTRIGGER | PSP_CTRL_RTRIGGER))
 		{
+		#define IME_LINECLEAR 22 //20
 		case PSP_CTRL_LEFT:
-			font_fillrect(x + dx * 12, y + 20 + dy * 12, x + 11 + dx * 12, y + 23 + dy * 12);
+			font_fillrect(x + dx * 12, y + IME_LINECLEAR + dy * 12, x + 11 + dx * 12, y + 23 + dy * 12);
 			dx --;
 			if(dx < 0)
 				dx = 9;
 			break;
 		case PSP_CTRL_RIGHT:
-			font_fillrect(x + dx * 12, y + 20 + dy * 12, x + 11 + dx * 12, y + 23 + dy * 12);
+			font_fillrect(x + dx * 12, y + IME_LINECLEAR + dy * 12, x + 11 + dx * 12, y + 23 + dy * 12);
 			dx ++;
 			if(dx > 9)
 				dx = 0;
 			break;
 		case PSP_CTRL_UP:
-			font_fillrect(x + dx * 12, y + 20 + dy * 12, x + 11 + dx * 12, y + 23 + dy * 12);
+			font_fillrect(x + dx * 12, y + IME_LINECLEAR + dy * 12, x + 11 + dx * 12, y + 23 + dy * 12);
 			dy --;
 			if(dy < 0)
 				dy = 3;
 			break;
 		case PSP_CTRL_DOWN:
-			font_fillrect(x + dx * 12, y + 20 + dy * 12, x + 11 + dx * 12, y + 23 + dy * 12);
+			font_fillrect(x + dx * 12, y + IME_LINECLEAR + dy * 12, x + 11 + dx * 12, y + 23 + dy * 12);
 			dy ++;
 			if(dy > 3)
 				dy = 0;
@@ -648,10 +649,20 @@ int ui_input_string(int x, int y, char * s, int len)
 		case PSP_CTRL_SQUARE:
 			if(pos > 0)
 			{
+				//EUC全角
+				u8 code=str[pos-1];
+				if(pos > 1 &&((code==0x8E) || (code>=0xA1 && code<=0xF4) || (code>=0xF9 && code<=0xFC)))							{
+					if(pos < len)
+						memmove(&str[pos - 2], &str[pos], len - pos);
+				str[pos-1] = 0;
+				pos -=2;
+				}
+				else{
 				if(pos < len)
 					memmove(&str[pos - 1], &str[pos], len - pos);
 				str[pos] = 0;
 				pos --;
+				}
 			}
 			break;
 		case PSP_CTRL_SELECT:
