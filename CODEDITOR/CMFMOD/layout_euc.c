@@ -49,6 +49,9 @@
 #include "smsutils.h"
 #include "screenshot.h"
 
+#define MEMCLEARLINE_END 92
+#define MEMCLEARLINE_START 90
+
 #include "ja_layout_euc.c"
 
 typedef struct{
@@ -92,7 +95,7 @@ static int layout_ivalue(unsigned int addr, int x18, int y12)
 	char s[80];	
 	unsigned char vv = MEM_VALUE(addr);
 	unsigned int key;
-	font_fillrect(VIEW_BASE_X+10*6 + x18, y12 + 88, VIEW_BASE_X+10*6 + 11 + x18, y12 + 90);
+	font_fillrect(VIEW_BASE_X+10*6 + x18, y12 + MEMCLEARLINE_START, VIEW_BASE_X+10*6 + 11 + x18, y12 +  MEMCLEARLINE_END);
 	font_output(VIEW_BASE_X+10*6 + x18, 83 + y12, "_");
 	while(((key = ctrl_waitmask(PSP_CTRL_UP | PSP_CTRL_DOWN | PSP_CTRL_LEFT | PSP_CTRL_RIGHT | PSP_CTRL_CIRCLE | PSP_CTRL_CROSS)) & (PSP_CTRL_CIRCLE | PSP_CTRL_CROSS)) == 0)
 	{
@@ -130,7 +133,7 @@ static int layout_ivalue(unsigned int addr, int x18, int y12)
 			z = 1 - z;
 			break;
 		}
-		font_fillrect(VIEW_BASE_X+10*6 + x18, y12 + 80, VIEW_BASE_X+10*6 + 11 + x18, y12 + 90);
+		font_fillrect(VIEW_BASE_X+10*6 + x18, y12 + 80, VIEW_BASE_X+10*6 + 11 + x18, y12 +  MEMCLEARLINE_END);
 		sprintf(s, "%02X", vv);
 		font_output(VIEW_BASE_X+10*6 + x18, y12 + 80, s);
 		font_output(VIEW_BASE_X+10*6 + x18 + z * 6, 83 + y12, "_");
@@ -307,8 +310,8 @@ static void layout_view(int flag)
 		y12 = y*12;
 		font_output(VIEW_BASE_X+10*6 + x18, 83 + y12, "__");
 		font_output(VIEW_BASE_X+60*6 + x6, 83 + y12 , "_");
-		y1 = y12+88;
-		y2 = y12+90;
+		y1 = y12+MEMCLEARLINE_START;
+		y2 = y12+MEMCLEARLINE_END;
 		
 		switch(ctrl_waitmask(PSP_ANA_UP|PSP_ANA_LEFT|PSP_ANA_RIGHT|PSP_CTRL_TRIANGLE | PSP_CTRL_SQUARE | PSP_CTRL_LTRIGGER | PSP_CTRL_RTRIGGER | PSP_CTRL_UP | PSP_CTRL_DOWN | PSP_CTRL_LEFT | PSP_CTRL_RIGHT | PSP_CTRL_CIRCLE | PSP_CTRL_CROSS | PSP_CTRL_SELECT | PSP_CTRL_START | PSP_CTRL_NOTE))
 		{
