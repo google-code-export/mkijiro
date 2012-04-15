@@ -1045,12 +1045,14 @@ Public Class MERGE
         GBK.Checked = False
         EUCJP.Checked = False
         SJIS.Checked = False
+        UTF16BE.Checked = False
         UTF16BE.Enabled = False
 
         If enc1 = 932 Then
             SJIS.Checked = True
         ElseIf enc1 = 1201 Then
             UTF16BE.Checked = True
+            UTF16BE.Enabled = True
         ElseIf enc1 = 936 Then
             GBK.Checked = True
         ElseIf enc1 = 51932 Then
@@ -1068,6 +1070,7 @@ Public Class MERGE
         enc1 = 932
         reset_codepage()
     End Sub
+
     Private Sub EUCJPCP51932ToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles EUCJP.Click
 
         My.Settings.MSCODEPAGE = 51932
