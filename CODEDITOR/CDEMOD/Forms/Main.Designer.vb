@@ -313,7 +313,7 @@ Partial Class MERGE
         Me.sort_GID.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Sort_GID１, Me.Sort_GID2, Me.ToolStripSeparator9, Me.gid_country})
         Me.sort_GID.Image = CType(resources.GetObject("sort_GID.Image"), System.Drawing.Image)
         Me.sort_GID.Name = "sort_GID"
-        Me.sort_GID.Size = New System.Drawing.Size(152, 26)
+        Me.sort_GID.Size = New System.Drawing.Size(138, 26)
         Me.sort_GID.Text = "ゲームID"
         '
         'Sort_GID１
@@ -349,7 +349,7 @@ Partial Class MERGE
         Me.name_sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Sort_GTitle1, Me.Sort_GTitle2, Me.ToolStripSeparator10, Me.gname_country})
         Me.name_sort.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.abc
         Me.name_sort.Name = "name_sort"
-        Me.name_sort.Size = New System.Drawing.Size(152, 26)
+        Me.name_sort.Size = New System.Drawing.Size(138, 26)
         Me.name_sort.Text = "ゲーム名"
         '
         'Sort_GTitle1
@@ -408,6 +408,7 @@ Partial Class MERGE
         Me.EUCJP.Name = "EUCJP"
         Me.EUCJP.Size = New System.Drawing.Size(208, 26)
         Me.EUCJP.Text = "EUC-JP(CP51932)"
+        Me.EUCJP.ToolTipText = "日本語EUC-JPのDBを編集します"
         '
         'UTF16BE
         '
