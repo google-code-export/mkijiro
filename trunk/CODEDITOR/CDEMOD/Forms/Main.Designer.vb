@@ -51,6 +51,7 @@ Partial Class MERGE
         Me.codepage_select = New System.Windows.Forms.ToolStripMenuItem()
         Me.SJIS = New System.Windows.Forms.ToolStripMenuItem()
         Me.GBK = New System.Windows.Forms.ToolStripMenuItem()
+        Me.BIG5 = New System.Windows.Forms.ToolStripMenuItem()
         Me.EUCJP = New System.Windows.Forms.ToolStripMenuItem()
         Me.UTF16BE = New System.Windows.Forms.ToolStripMenuItem()
         Me.codetreeview = New System.Windows.Forms.ToolStripMenuItem()
@@ -382,7 +383,7 @@ Partial Class MERGE
         '
         'codepage_select
         '
-        Me.codepage_select.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SJIS, Me.GBK, Me.EUCJP, Me.UTF16BE})
+        Me.codepage_select.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SJIS, Me.GBK, Me.BIG5, Me.EUCJP, Me.UTF16BE})
         Me.codepage_select.Name = "codepage_select"
         Me.codepage_select.Size = New System.Drawing.Size(114, 25)
         Me.codepage_select.Text = "エンコード(&D)"
@@ -402,6 +403,13 @@ Partial Class MERGE
         Me.GBK.Size = New System.Drawing.Size(208, 26)
         Me.GBK.Text = "GBK(CP936)"
         Me.GBK.ToolTipText = "簡体中国語GBKのDBを編集します"
+        '
+        'BIG5
+        '
+        Me.BIG5.Name = "BIG5"
+        Me.BIG5.Size = New System.Drawing.Size(208, 26)
+        Me.BIG5.Text = "BIG5(CP950)"
+        Me.BIG5.ToolTipText = "繁体字中国語BIG5のDBを編集します"
         '
         'EUCJP
         '
@@ -1799,5 +1807,6 @@ Partial Class MERGE
     Friend WithEvents curr_line As System.Windows.Forms.Label
     Friend WithEvents コード形式 As System.Windows.Forms.Label
     Friend WithEvents EUCJP As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents BIG5 As System.Windows.Forms.ToolStripMenuItem
 
 End Class
