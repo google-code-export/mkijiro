@@ -1162,6 +1162,8 @@ Public Class load_db
                     Return 932
                 ElseIf str = "[CP936]" Then
                     Return 936
+                ElseIf str = "[CP950]" Then
+                    Return 950
                 ElseIf str = "[CP1201]" Then
                     Return 1201
                 ElseIf str = "[CP51932]" Then

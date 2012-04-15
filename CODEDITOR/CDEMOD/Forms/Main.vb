@@ -1045,6 +1045,7 @@ Public Class MERGE
         GBK.Checked = False
         EUCJP.Checked = False
         SJIS.Checked = False
+        BIG5.Checked = False
         UTF16BE.Checked = False
         UTF16BE.Enabled = False
 
@@ -1057,6 +1058,8 @@ Public Class MERGE
             GBK.Checked = True
         ElseIf enc1 = 51932 Then
             EUCJP.Checked = True
+        ElseIf enc1 = 950 Then
+            BIG5.Checked = True
         End If
 
         Return 0
@@ -1085,6 +1088,16 @@ Public Class MERGE
         My.Settings.MSCODEPAGE = 936
         enc1 = 936
         reset_codepage()
+    End Sub
+
+
+    Private Sub BIG5CPToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles BIG5.Click
+
+        'エンコードを指定する場合
+        My.Settings.MSCODEPAGE = 950
+        enc1 = 950
+        reset_codepage()
+
     End Sub
 
 
