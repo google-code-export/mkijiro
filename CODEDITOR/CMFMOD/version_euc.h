@@ -24,7 +24,7 @@
 #define VER_BUILD 37
 
 //#define VER_STR "(http://koro.3322.org:8081/)"
-#define VER_STR "EUCMOD 20120414(unzu127xp.pa.land.to)"
+#define VER_STR "EUCMOD 20120418(unzu127xp.pa.land.to)"
 
 
 #endif
