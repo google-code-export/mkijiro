@@ -29,24 +29,27 @@
         private void InitializeComponent()
         {
             this.button1 = new System.Windows.Forms.Button();
-            this.SJIS = new System.Windows.Forms.RadioButton();
-            this.EUC = new System.Windows.Forms.RadioButton();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.CP = new System.Windows.Forms.RadioButton();
-            this.NOREMAP = new System.Windows.Forms.RadioButton();
             this.CMFUSION = new System.Windows.Forms.GroupBox();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.FC = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.FILER = new System.Windows.Forms.RadioButton();
             this.CMF = new System.Windows.Forms.RadioButton();
-            this.groupBox1.SuspendLayout();
+            this.EUC = new System.Windows.Forms.RadioButton();
+            this.SJIS = new System.Windows.Forms.RadioButton();
+            this.NOREMAP = new System.Windows.Forms.RadioButton();
+            this.CP = new System.Windows.Forms.RadioButton();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.JIS2SJIS = new System.Windows.Forms.ComboBox();
             this.CMFUSION.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(88, 219);
+            this.button1.Location = new System.Drawing.Point(95, 266);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
@@ -54,99 +57,29 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // SJIS
-            // 
-            this.SJIS.AutoSize = true;
-            this.SJIS.Checked = true;
-            this.SJIS.Location = new System.Drawing.Point(96, 20);
-            this.SJIS.Name = "SJIS";
-            this.SJIS.Size = new System.Drawing.Size(85, 18);
-            this.SJIS.TabIndex = 1;
-            this.SJIS.TabStop = true;
-            this.SJIS.Text = "JIS→SJIS";
-            this.SJIS.UseVisualStyleBackColor = true;
-            // 
-            // EUC
-            // 
-            this.EUC.AutoSize = true;
-            this.EUC.Location = new System.Drawing.Point(6, 44);
-            this.EUC.Name = "EUC";
-            this.EUC.Size = new System.Drawing.Size(84, 18);
-            this.EUC.TabIndex = 2;
-            this.EUC.Text = "JIS→EUC";
-            this.EUC.UseVisualStyleBackColor = true;
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.textBox1);
-            this.groupBox1.Controls.Add(this.CP);
-            this.groupBox1.Controls.Add(this.NOREMAP);
-            this.groupBox1.Controls.Add(this.SJIS);
-            this.groupBox1.Controls.Add(this.EUC);
-            this.groupBox1.Location = new System.Drawing.Point(29, 12);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(227, 79);
-            this.groupBox1.TabIndex = 3;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "FONTX2文字テーブル";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(173, 43);
-            this.textBox1.MaxLength = 5;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(47, 21);
-            this.textBox1.TabIndex = 5;
-            this.textBox1.Text = "0";
-            this.textBox1.Visible = false;
-            // 
-            // CP
-            // 
-            this.CP.AutoSize = true;
-            this.CP.Location = new System.Drawing.Point(96, 44);
-            this.CP.Name = "CP";
-            this.CP.Size = new System.Drawing.Size(71, 18);
-            this.CP.TabIndex = 4;
-            this.CP.TabStop = true;
-            this.CP.Text = "CP指定";
-            this.CP.UseVisualStyleBackColor = true;
-            this.CP.Visible = false;
-            // 
-            // NOREMAP
-            // 
-            this.NOREMAP.AutoSize = true;
-            this.NOREMAP.Location = new System.Drawing.Point(6, 20);
-            this.NOREMAP.Name = "NOREMAP";
-            this.NOREMAP.Size = new System.Drawing.Size(67, 18);
-            this.NOREMAP.TabIndex = 3;
-            this.NOREMAP.TabStop = true;
-            this.NOREMAP.Text = "無変換";
-            this.NOREMAP.UseVisualStyleBackColor = true;
-            // 
             // CMFUSION
             // 
-            this.CMFUSION.Controls.Add(this.radioButton2);
+            this.CMFUSION.Controls.Add(this.FC);
             this.CMFUSION.Controls.Add(this.radioButton1);
             this.CMFUSION.Controls.Add(this.FILER);
             this.CMFUSION.Controls.Add(this.CMF);
-            this.CMFUSION.Location = new System.Drawing.Point(29, 97);
+            this.CMFUSION.Location = new System.Drawing.Point(35, 144);
             this.CMFUSION.Name = "CMFUSION";
             this.CMFUSION.Size = new System.Drawing.Size(200, 116);
             this.CMFUSION.TabIndex = 5;
             this.CMFUSION.TabStop = false;
             this.CMFUSION.Text = "圧縮ふぉんと";
             // 
-            // radioButton2
+            // FC
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(33, 92);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(53, 18);
-            this.radioButton2.TabIndex = 8;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "自動";
-            this.radioButton2.UseVisualStyleBackColor = true;
-            this.radioButton2.Visible = false;
+            this.FC.AutoSize = true;
+            this.FC.Location = new System.Drawing.Point(32, 68);
+            this.FC.Name = "FC";
+            this.FC.Size = new System.Drawing.Size(163, 18);
+            this.FC.TabIndex = 8;
+            this.FC.TabStop = true;
+            this.FC.Text = "FREECHEAT12x12作成";
+            this.FC.UseVisualStyleBackColor = true;
             // 
             // radioButton1
             // 
@@ -163,7 +96,7 @@
             // FILER
             // 
             this.FILER.AutoSize = true;
-            this.FILER.Location = new System.Drawing.Point(32, 68);
+            this.FILER.Location = new System.Drawing.Point(32, 92);
             this.FILER.Name = "FILER";
             this.FILER.Size = new System.Drawing.Size(152, 18);
             this.FILER.TabIndex = 6;
@@ -182,22 +115,119 @@
             this.CMF.TabStop = true;
             this.CMF.Text = "CMFUSION12x12作成";
             this.CMF.UseVisualStyleBackColor = true;
+            this.CMF.CheckedChanged += new System.EventHandler(this.CMF_CheckedChanged_1);
+            // 
+            // EUC
+            // 
+            this.EUC.AutoSize = true;
+            this.EUC.Location = new System.Drawing.Point(6, 44);
+            this.EUC.Name = "EUC";
+            this.EUC.Size = new System.Drawing.Size(84, 18);
+            this.EUC.TabIndex = 2;
+            this.EUC.Text = "JIS→EUC";
+            this.EUC.UseVisualStyleBackColor = true;
+            // 
+            // SJIS
+            // 
+            this.SJIS.AutoSize = true;
+            this.SJIS.Checked = true;
+            this.SJIS.Location = new System.Drawing.Point(92, 20);
+            this.SJIS.Name = "SJIS";
+            this.SJIS.Size = new System.Drawing.Size(85, 18);
+            this.SJIS.TabIndex = 1;
+            this.SJIS.TabStop = true;
+            this.SJIS.Text = "JIS→SJIS";
+            this.SJIS.UseVisualStyleBackColor = true;
+            // 
+            // NOREMAP
+            // 
+            this.NOREMAP.AutoSize = true;
+            this.NOREMAP.Location = new System.Drawing.Point(6, 20);
+            this.NOREMAP.Name = "NOREMAP";
+            this.NOREMAP.Size = new System.Drawing.Size(67, 18);
+            this.NOREMAP.TabIndex = 3;
+            this.NOREMAP.TabStop = true;
+            this.NOREMAP.Text = "無変換";
+            this.NOREMAP.UseVisualStyleBackColor = true;
+            // 
+            // CP
+            // 
+            this.CP.AutoSize = true;
+            this.CP.Location = new System.Drawing.Point(96, 44);
+            this.CP.Name = "CP";
+            this.CP.Size = new System.Drawing.Size(71, 18);
+            this.CP.TabIndex = 4;
+            this.CP.TabStop = true;
+            this.CP.Text = "CP指定";
+            this.CP.UseVisualStyleBackColor = true;
+            this.CP.Visible = false;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(173, 43);
+            this.textBox1.MaxLength = 5;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(47, 21);
+            this.textBox1.TabIndex = 5;
+            this.textBox1.Text = "0";
+            this.textBox1.Visible = false;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.textBox1);
+            this.groupBox1.Controls.Add(this.CP);
+            this.groupBox1.Controls.Add(this.NOREMAP);
+            this.groupBox1.Controls.Add(this.SJIS);
+            this.groupBox1.Controls.Add(this.EUC);
+            this.groupBox1.Location = new System.Drawing.Point(29, 12);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(240, 70);
+            this.groupBox1.TabIndex = 3;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "FONTX2文字テーブル";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.JIS2SJIS);
+            this.groupBox2.Location = new System.Drawing.Point(29, 88);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(240, 50);
+            this.groupBox2.TabIndex = 7;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "JIS->SJIS変換方法";
+            // 
+            // JIS2SJIS
+            // 
+            this.JIS2SJIS.FormattingEnabled = true;
+            this.JIS2SJIS.Items.AddRange(new object[] {
+            "上位バイト奇数判定後上下ともに変更",
+            "上位バイト奇数判定後下位バイトのみ変更",
+            "上位バイト-0x21後奇数判定",
+            "最初に-0x2121後奇数判定",
+            "外部変換テーブル使用(Unicode Consortium仕様)",
+            "M$内部テーブル使用"});
+            this.JIS2SJIS.Location = new System.Drawing.Point(6, 17);
+            this.JIS2SJIS.Name = "JIS2SJIS";
+            this.JIS2SJIS.Size = new System.Drawing.Size(228, 22);
+            this.JIS2SJIS.TabIndex = 6;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(261, 254);
+            this.ClientSize = new System.Drawing.Size(277, 298);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.CMFUSION);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button1);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "BDF2FONTX2";
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.CMFUSION.ResumeLayout(false);
             this.CMFUSION.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -205,17 +235,19 @@
         #endregion
 
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.RadioButton SJIS;
-        private System.Windows.Forms.RadioButton EUC;
-        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox CMFUSION;
-        private System.Windows.Forms.RadioButton NOREMAP;
         private System.Windows.Forms.RadioButton CMF;
-        private System.Windows.Forms.RadioButton CP;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.RadioButton FILER;
         private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.RadioButton FC;
+        private System.Windows.Forms.RadioButton EUC;
+        private System.Windows.Forms.RadioButton SJIS;
+        private System.Windows.Forms.RadioButton NOREMAP;
+        private System.Windows.Forms.RadioButton CP;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.ComboBox JIS2SJIS;
     }
 }
 
