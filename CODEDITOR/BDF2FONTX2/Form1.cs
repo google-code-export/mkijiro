@@ -18,11 +18,17 @@ namespace WindowsFormsApplication1
         public Form1()
         {
             InitializeComponent();
+            JIS2SJIS.SelectedIndex = 0;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
+            bool uni = false;
+            if((JIS2SJIS.SelectedIndex == 4) && (File.Exists("JIS0208.txt")==false)){
+                uni = true;
+            }
+
             if(lastdir != ""){
             ofd.InitialDirectory = lastdir;}
             else{
@@ -31,14 +37,21 @@ namespace WindowsFormsApplication1
             ofd.Filter = "bdfファイル(*.bdf)|*.bdf";
             ofd.Title = "開くファイルを選択してください";
 
-            if ((CMF.Checked == true && EUC.Checked == true)|| CMF.Checked==false) { 
+            if (((CMF.Checked == true && EUC.Checked == true) || (FC.Checked == true && SJIS.Checked == true) || (CMF.Checked == false)) && (uni == false))
+            { 
 
                 //ダイアログを表示する
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
                     lastdir = Path.GetDirectoryName(ofd.FileName);
                     string path = ofd.FileName;
-                    string s = ""; 
+                    string s = "";
+                    string sss = "";
+                    if((JIS2SJIS.SelectedIndex == 4)){
+                    StreamReader ssr = new StreamReader("JIS0208.TXT", Encoding.GetEncoding(932));
+                    sss = ssr.ReadToEnd();
+                    ssr.Close();
+                    }
                     StringBuilder ss = new System.Text.StringBuilder();
                     bool parse = false;
                     int stpos = 0;
@@ -64,7 +77,7 @@ namespace WindowsFormsApplication1
                     while (sr.Peek() > -1)
                     {
                         s = sr.ReadLine();
-                        if (zenkaku == false && CMF.Checked == false && FILER.Checked==false)
+                        if (zenkaku == false && CMF.Checked == false && FILER.Checked == false && FC.Checked == false)
                         {
                             if (s.Contains("CHARSET")) { }
                             else if (s.Contains("ENCODING"))
@@ -123,7 +136,7 @@ namespace WindowsFormsApplication1
                                 }
                             }
                         }
-                        else if (zenkaku == true && CMF.Checked == false && FILER.Checked==false)
+                        else if (zenkaku == true && CMF.Checked == false && FILER.Checked == false && FC.Checked == false)
                         {
                             if (s.Contains("ENCODING"))
                             {
@@ -178,7 +191,7 @@ namespace WindowsFormsApplication1
                             }
 
                         }
-                        else if (CMF.Checked == true || FILER.Checked == true)
+                        else if (CMF.Checked == true || FILER.Checked == true || FC.Checked == true)
                         {
 
                             if (s.Contains("CHARSET")) { }
@@ -248,7 +261,7 @@ namespace WindowsFormsApplication1
                             else if (parse)
                             {
                                 tmp = Convert.ToInt32(s, 16);
-                                if (CMF.Checked == true)
+                                if (CMF.Checked == true || FC.Checked == true)
                                 {
                                     if (yoko == 12)
                                     {
@@ -366,7 +379,7 @@ namespace WindowsFormsApplication1
                     {
                         if (yoko > 8)
                         {
-                            if (CMF.Checked == true || FILER.Checked==true)
+                            if (CMF.Checked == true || FILER.Checked==true || FC.Checked==true)
                             {
                                 zenkaku = true;
                                 Array.Resize(ref font, (total + 1) * 18);
@@ -405,6 +418,11 @@ namespace WindowsFormsApplication1
                         fname = "base.fnt";
                         fontable = "base.table";
                     }
+                    if (FC.Checked == true)
+                    {
+                        fname = "base.fnt";
+                        fontable = "base.table";
+                    }
                     if (FILER.Checked == true)
                     {
                         fname = "filer.fnt";
@@ -412,7 +430,8 @@ namespace WindowsFormsApplication1
                     }
                     FileStream fs = new System.IO.FileStream(fname, FileMode.Create, FileAccess.Write);
                     FileStream ffs = new System.IO.FileStream(fontable, FileMode.Create, FileAccess.Write);
-                    if (zenkaku == false && CMF.Checked == false && FILER.Checked == false){
+                    //FileStream eee = new System.IO.FileStream("a.txt", FileMode.Create, FileAccess.Write);
+                    if (zenkaku == false && CMF.Checked == false && FILER.Checked == false && FC.Checked== false){
                         fs.Write(header, 0, 17);
                     }
                     else if (zenkaku == true)
@@ -428,13 +447,18 @@ namespace WindowsFormsApplication1
                         }
                         fs.Write(hex, 0, 1);
                         byte[] hex3 = new byte[2];
+                        byte[] crlf = new byte[2];
+                        crlf[0] = 0xd;
+                        crlf[1] = 0xa;
                         byte[] hex4 = new byte[1024 * 50];
                         int c1 = 0;
                         int c2 = 0;
+                        int code = 0;
                         int bk = 0;
                         int st = 0;
                         int en = 0;
                         int kk = 0;
+                        string nn = "";
 
                         for (int k = 0; k < total + 1; k++)
                         {
@@ -443,28 +467,134 @@ namespace WindowsFormsApplication1
                             if (SJIS.Checked == true)
                             {
                                 //http://www.tohoho-web.com/wwwkanji.htm
-                                if ((c1 & 1) == 1)
+                                if (JIS2SJIS.SelectedIndex == 0)
                                 {
-                                    c1 = ((c1 + 1) >> 1) + 0x70;
-                                    c2 = c2 + 0x1f;
+                                    if ((c1 & 1) == 1)
+                                    {
+                                        c1 = ((c1 + 1) >> 1) + 0x70;
+                                        c2 = c2 + 0x1f;
+                                    }
+                                    else
+                                    {
+                                        c1 = (c1 >> 1) + 0x70;
+                                        c2 = c2 + 0x7D;
+                                    }
+                                    if (c1 >= 0xa0) { c1 = c1 + 0x40; }
+                                    if (c2 >= 0x7f) { c2 = c2 + 1; }
                                 }
-                                else
-                                {
-                                    c1 = (c1 >> 1) + 0x70;
-                                    c2 = c2 + 0x7D;
-                                }
-                                if (c1 >= 0xa0) { c1 = c1 + 0x40; }
-                                if (c2 >= 0x7f) { c2 = c2 + 1; }
 
-                                ////http://oku.edu.mie-u.ac.jp/~okumura/algo/
-                                //if ((c1 & 1)==1)
-                                //{
-                                //    if (c2 < 0x60) c2 += 0x1F;
-                                //    else c2 += 0x20;
-                                //}
-                                //else c2 += 0x7E;
-                                //if (c1 < 0x5F) c1 = (c1 + 0xE1) >> 1;
-                                //else c1 = (c1 + 0x161) >> 1;
+                                //http://oku.edu.mie-u.ac.jp/~okumura/algo/
+                                if (JIS2SJIS.SelectedIndex == 1)
+                                {
+                                    if ((c1 & 1) == 1)
+                                    {
+                                        if (c2 < 0x60) c2 += 0x1F;
+                                        else c2 += 0x20;
+                                    }
+                                    else c2 += 0x7E;
+                                    if (c1 < 0x5F) c1 = (c1 + 0xE1) >> 1;
+                                    else c1 = (c1 + 0x161) >> 1;
+                                }
+                         
+                                //http://www.unixuser.org/~euske/doc/kanjicode/
+                                if (JIS2SJIS.SelectedIndex == 2)
+                                {
+                                    c1 -= 0x21;
+                                    if ((c1 & 1) == 0)
+                                    {
+                                        c2 +=0x1f;
+                                    }
+                                    else c2 += 0x7E;
+
+                                    c1 >>= 1;
+                                    if(c1>=0 && c1<=0x1e){
+                                        c1 += 0x81;
+                                    }
+                                    else if (c1 >= 0x1f && c1 <= 0x2e)
+                                    {
+                                        c1 += 0xc1;
+                                    }
+                                    if (c2 >= 0x7f && c2 <= 0x9d)
+                                    {
+                                        c2 += 1;
+                                    }
+
+                                }
+
+                                //http://www.d2.dion.ne.jp/~imady/charset/charcode_mame.html#SJIS_JIS
+                                 //■ JISX0208 → SJIS
+                                 //   コードから 0x2121 を引く
+                                 //   (コード & 0x100) が０でなければ コードに 0x9E, ０ならばコードに 0x40 を足す
+                                 //   下位バイトが 0x7F 以上ならば コードに 1 を足す
+                                 //   [上位バイトだけの処理] 上位バイトを右に１ビット シフトし、それに 0x81 を足す
+                                //   (0xA000 <= コード) ならばコードに 0x4000 を足す 
+                                if (JIS2SJIS.SelectedIndex == 3)
+                                {
+                                    code = (c1 << 8) + c2;
+                                    code -= 0x2121;
+                                    if ((code & 0x100) == 0)
+                                    {
+                                        code += 0x40;
+                                    }
+                                    else
+                                    {
+                                        code += 0x9e;
+                                    }
+                                    if ((code & 0xff) >= 0x7f)
+                                    {
+                                        code += 1;
+                                    }
+                                    c1 = (code >> 9) + 0x81;
+                                    c2 = code & 0xFF;
+                                    code = (c1 << 8) + c2;
+                                    if (code >= 0xA000)
+                                    {
+                                        code += 0x4000;
+                                    }
+                                    c1 = code >> 8;
+                                }
+
+                                if (JIS2SJIS.SelectedIndex == 4)
+                                {
+                                    code = (c1 << 8) + c2;
+                                    nn = "\n0x[0-9A-F]{4}\t0x" + code.ToString("X4");
+                                    Regex r =   new Regex(nn,  RegexOptions.ECMAScript);
+                                    Match m = r.Match(sss);
+                                    if (m.Success){
+                                        code = Convert.ToInt32(m.Value.Substring(3, 4), 16);
+                                        c1 = code >>8;
+                                        c2 = code & 0xff;
+                                    }
+                                    else
+                                    {
+                                        if ((c1 & 1) == 1)
+                                        {
+                                            if (c2 < 0x60) c2 += 0x1F;
+                                            else c2 += 0x20;
+                                        }
+                                        else c2 += 0x7E;
+                                        if (c1 < 0x5F) c1 = (c1 + 0xE1) >> 1;
+                                        else c1 = (c1 + 0x161) >> 1;
+                                    }
+
+                                }
+
+                                //M＄
+                                if (JIS2SJIS.SelectedIndex == 5)
+                                {
+                                    c1 += 0x80;
+                                    c2 += 0x80;
+                                    hex3[0] = (byte)c1;
+                                    hex3[1] = (byte)c2;
+                                    nn = System.Text.Encoding.GetEncoding(51932).GetString(hex3);
+                                    hex3 = System.Text.Encoding.GetEncoding(932).GetBytes(nn);
+                                    //eee.Write(hex3, 0, 2);
+                                    //eee.Write(crlf, 0, 2);
+                                    c1 = hex3[0];
+                                    c2 = hex3[1];
+
+                                }
+
 
                             }
                             else if (EUC.Checked==true)
@@ -500,6 +630,11 @@ namespace WindowsFormsApplication1
                             bk = c1;
 
                             if (CMF.Checked)
+                            {
+                                hex3 = BitConverter.GetBytes(c1);
+                                ffs.Write(hex3, 0, 2);
+                            }
+                            if (FC.Checked)
                             {
                                 hex3 = BitConverter.GetBytes(c1);
                                 ffs.Write(hex3, 0, 2);
@@ -560,7 +695,7 @@ namespace WindowsFormsApplication1
                                 {
                                     pos = 18 + (total * 4) + (ct * 18);
                                     seek2 = BitConverter.ToUInt16(table, t);
-                                    if (pos < bkk-18)
+                                    if (pos <= bkk-18)
                                     {
                                         if (seek2 >= 0xA1A1 && seek2 <= 0xA8FF)
                                         {
@@ -591,6 +726,61 @@ namespace WindowsFormsApplication1
                             {
                                 MessageBox.Show("newfont.datがありません。");
                             }
+                        } 
+                        if (FC.Checked == true)
+                        {
+                            fs.Write(font, 18, font.Length - 18);
+                            if (File.Exists("newfont.dat") == true)
+                            {
+                                fs.Close();
+                                ffs.Close();
+                                FileStream ffffs = new System.IO.FileStream("base.table", FileMode.Open, FileAccess.Read);
+                                byte[] table = new byte[ffffs.Length];
+                                ffffs.Read(table, 0, table.Length);
+                                ffffs.Close();
+                                FileStream fon = new System.IO.FileStream("newfont.dat", FileMode.Open, FileAccess.Read);
+                                byte[] ff = new byte[fon.Length];
+                                fon.Read(ff, 0, ff.Length);
+                                int bk = ff.Length;
+                                Array.Resize(ref ff, bk * 100);
+                                fon.Close();
+                                FileStream fontx = new System.IO.FileStream("base.fnt", FileMode.Open, FileAccess.Read);
+                                byte[] ftx = new byte[fontx.Length];
+                                fontx.Read(ftx, 0, ftx.Length);
+                                total = ftx[17];
+                                long bkk = ftx.Length;
+                                fontx.Close();
+                                int ct = 0;
+                                long pos = 0;
+                                int dest = 0;
+                                int seek2 = 0;
+                                for (int t = 0; t < table.Length; t += 2, ct++)
+                                {
+                                    pos = 18 + (total * 4) + (ct * 18);
+                                    seek2 = BitConverter.ToUInt16(table, t);
+                                    if (pos <= bkk - 18)
+                                    {
+                                        if (seek2 >= 0x8140 && seek2 <= 0x9FFF)
+                                        {
+                                            dest = (((seek2 >> 8) - 0x81) * 192) + ((seek2 & 0xff) - 0x40);
+                                        }
+                                        else if (seek2 >= 0xE040 && seek2 <= 0xFCFF)
+                                        {
+                                            dest = (192 * 31) + (((seek2 >> 8) - 0xE0) * 192) + ((seek2 & 0xff) - 0x40);//0xBF80
+                                        }
+
+                                        Array.Copy(ftx, pos, ff, 2048 + dest * 18, 18);
+                                    }
+                                }
+                                FileStream fss = new System.IO.FileStream("sjis.dat", FileMode.Create, FileAccess.Write);
+                                Array.Resize(ref ff, bk);
+                                fss.Write(ff, 0, ff.Length);
+                                fss.Close();
+                            }
+                            else
+                            {
+                                MessageBox.Show("newfont.datがありません。");
+                            }
                         }
                         else
                         {
@@ -605,17 +795,20 @@ namespace WindowsFormsApplication1
                     }
                     sw.Close();
                     fs.Close();
-                    ffs.Close();
+                    ffs.Close(); System.Media.SystemSounds.Beep.Play();
 
                     if (FILER.Checked == false)
                     {
                         File.Delete("filer_src.c");
                     }
-                    if (CMF.Checked == false)
+                    if (CMF.Checked == false || FC.Checked ==false)
                     {
                         File.Delete(fontable);
                     }
                 }
+            }
+            else if (uni == true) {
+                MessageBox.Show("JIS0208.TXTがありません。Unicode Consortiumからダウンロードしてください。\nftp://ftp.unicode.org/Public/MAPPINGS/OBSOLETE/EASTASIA/JIS/JIS0208.TXT");
             }
             else
             {
@@ -629,6 +822,11 @@ namespace WindowsFormsApplication1
         }
 
         private void FILER_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void CMF_CheckedChanged_1(object sender, EventArgs e)
         {
 
         }

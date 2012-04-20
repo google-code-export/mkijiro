@@ -76,6 +76,7 @@ static u8 * _get_hzfont(u16 offset)
 		return hzinfo;
 }
 
+//EUC-JPÈ½Äê
 int IsHzcode(int x, const char *msg)
 {
 	return (((((unsigned char)msg[x] > 0xA0 && (unsigned char)msg[x] < 0xA9) || ((unsigned char)msg[x] > 0xAF && (unsigned char)msg[x] < 0xF5) || ((unsigned char)msg[x] > 0xF8 && (unsigned char)msg[x] < 0xFD) || ((unsigned char)msg[x] == 0xAD)) && (unsigned char)msg[x + 1] > 0xA0)
