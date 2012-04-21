@@ -19,6 +19,7 @@ namespace WindowsFormsApplication1
         {
             InitializeComponent();
             JIS2SJIS.SelectedIndex = 0;
+            sekitxt.SelectedIndex = 0;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -451,6 +452,7 @@ namespace WindowsFormsApplication1
                         crlf[0] = 0xd;
                         crlf[1] = 0xa;
                         byte[] hex4 = new byte[1024 * 50];
+                        int strpos = 3;
                         int c1 = 0;
                         int c2 = 0;
                         int code = 0;
@@ -459,6 +461,14 @@ namespace WindowsFormsApplication1
                         int en = 0;
                         int kk = 0;
                         string nn = "";
+                        string sekitmp = "";
+                        if (SEIKI.Checked == true)
+                        {
+                            strpos = Convert.ToInt32(pos.Text);
+                            sekitmp = sekitxt.Text;
+                            sekitmp = sekitmp.Replace("\\t","\t");
+                            sekitmp = sekitmp.Replace("\\n","\n");
+                        }
 
                         for (int k = 0; k < total + 1; k++)
                         {
@@ -557,11 +567,17 @@ namespace WindowsFormsApplication1
                                 if (JIS2SJIS.SelectedIndex == 4)
                                 {
                                     code = (c1 << 8) + c2;
-                                    nn = "\n0x[0-9A-F]{4}\t0x" + code.ToString("X4");
+                                    if (SEIKI.Checked == true) {
+                                        nn = sekitmp.Replace("%J", code.ToString("X4"));
+                                    }
+                                    else
+                                    {
+                                        nn = "\n0x[0-9A-F]{4}\t0x" + code.ToString("X4");
+                                    }
                                     Regex r =   new Regex(nn,  RegexOptions.ECMAScript);
                                     Match m = r.Match(sss);
                                     if (m.Success){
-                                        code = Convert.ToInt32(m.Value.Substring(3, 4), 16);
+                                        code = Convert.ToInt32(m.Value.Substring(strpos, 4), 16);
                                         c1 = code >>8;
                                         c2 = code & 0xff;
                                     }
@@ -697,21 +713,9 @@ namespace WindowsFormsApplication1
                                     seek2 = BitConverter.ToUInt16(table, t);
                                     if (pos <= bkk-18)
                                     {
-                                        if (seek2 >= 0xA1A1 && seek2 <= 0xA8FF)
+                                        if (seek2 >= 0xA1A1 && seek2 <= 0xFCFF)
                                         {
                                             dest = (((seek2 / 0x100) - 0xa1) * 94) + ((seek2 & 0xff) - 0xa1);
-                                        }
-                                        else if (seek2 >= 0xADA1 && seek2 <= 0xADFF)
-                                        {
-                                            dest = 846 - 94 + ((seek2 & 0xff) - 0xa1);
-                                        }
-                                        else if (seek2 >= 0xB0A1 && seek2 <= 0xf4FF)
-                                        {
-                                            dest = 846 + (((seek2 / 0x100) - 0xb0) * 94) + ((seek2 & 0xff) - 0xa1);
-                                        }
-                                        else if (seek2 >= 0xF9A1)
-                                        {
-                                            dest = 846 + 6624 + (((seek2 / 0x100) - 0xf9) * 94) + ((seek2 & 0xff) - 0xa1);
                                         }
 
                                         Array.Copy(ftx, pos, ff, 2048 + dest * 18, 18);
@@ -727,7 +731,7 @@ namespace WindowsFormsApplication1
                                 MessageBox.Show("newfont.datがありません。");
                             }
                         } 
-                        if (FC.Checked == true)
+                        else if (FC.Checked == true)
                         {
                             fs.Write(font, 18, font.Length - 18);
                             if (File.Exists("newfont.dat") == true)
@@ -808,11 +812,11 @@ namespace WindowsFormsApplication1
                 }
             }
             else if (uni == true) {
-                MessageBox.Show("JIS0208.TXTがありません。Unicode Consortiumからダウンロードしてください。\nftp://ftp.unicode.org/Public/MAPPINGS/OBSOLETE/EASTASIA/JIS/JIS0208.TXT");
+                MessageBox.Show("JIS0208.TXTがありません。Unicode Consortiumからダウンロードしてください。\nftp://ftp.unicode.org/Public/MAPPINGS/OBSOLETE/EASTASIA/JIS/JIS0208.TXT\nまた正規表現を変更すればほかサイトのものでも使用可能です");
             }
             else
             {
-                MessageBox.Show("CMFフォント作成する場合はJIS->EUCを選んで下さい");
+                MessageBox.Show("CMFEUC用フォント作成する場合はJIS->EUCを選んで下さい。\nFREECHEATSJIS用フォントはJIS->SJISを選んで下さい");
             }
         }
 
@@ -828,6 +832,35 @@ namespace WindowsFormsApplication1
 
         private void CMF_CheckedChanged_1(object sender, EventArgs e)
         {
+
+        }
+
+        private void JIS2SJIS_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (JIS2SJIS.SelectedIndex == 4) {
+                SEIKI.Enabled = true;
+                pos.Enabled = true;
+                sekitxt.Enabled= true;
+                label1.Enabled = true;
+            }
+            else
+            {
+                SEIKI.Enabled = false;
+                pos.Enabled = false;
+                sekitxt.Enabled = false;
+                label1.Enabled = false;
+            }
+        }
+
+        private void sekitxt_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (sekitxt.SelectedIndex == 0) {
+                pos.Text = "3";
+            }
+            if (sekitxt.SelectedIndex == 1)
+            {
+                pos.Text = "5";
+            }
 
         }
     }
