@@ -42,6 +42,10 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.JIS2SJIS = new System.Windows.Forms.ComboBox();
+            this.SEIKI = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.pos = new System.Windows.Forms.TextBox();
+            this.sekitxt = new System.Windows.Forms.ComboBox();
             this.CMFUSION.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -49,7 +53,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(95, 266);
+            this.button1.Location = new System.Drawing.Point(98, 321);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
@@ -63,7 +67,7 @@
             this.CMFUSION.Controls.Add(this.radioButton1);
             this.CMFUSION.Controls.Add(this.FILER);
             this.CMFUSION.Controls.Add(this.CMF);
-            this.CMFUSION.Location = new System.Drawing.Point(35, 144);
+            this.CMFUSION.Location = new System.Drawing.Point(35, 199);
             this.CMFUSION.Name = "CMFUSION";
             this.CMFUSION.Size = new System.Drawing.Size(200, 116);
             this.CMFUSION.TabIndex = 5;
@@ -188,10 +192,14 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.sekitxt);
+            this.groupBox2.Controls.Add(this.pos);
+            this.groupBox2.Controls.Add(this.label1);
+            this.groupBox2.Controls.Add(this.SEIKI);
             this.groupBox2.Controls.Add(this.JIS2SJIS);
             this.groupBox2.Location = new System.Drawing.Point(29, 88);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(240, 50);
+            this.groupBox2.Size = new System.Drawing.Size(240, 105);
             this.groupBox2.TabIndex = 7;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "JIS->SJIS変換方法";
@@ -204,18 +212,62 @@
             "上位バイト奇数判定後下位バイトのみ変更",
             "上位バイト-0x21後奇数判定",
             "最初に-0x2121後奇数判定",
-            "外部変換テーブル使用(Unicode Consortium仕様)",
+            "外部TXT変換テーブル使用",
             "M$内部テーブル使用"});
             this.JIS2SJIS.Location = new System.Drawing.Point(6, 17);
             this.JIS2SJIS.Name = "JIS2SJIS";
             this.JIS2SJIS.Size = new System.Drawing.Size(228, 22);
             this.JIS2SJIS.TabIndex = 6;
+            this.JIS2SJIS.SelectedIndexChanged += new System.EventHandler(this.JIS2SJIS_SelectedIndexChanged);
+            // 
+            // SEIKI
+            // 
+            this.SEIKI.AutoSize = true;
+            this.SEIKI.Enabled = false;
+            this.SEIKI.Location = new System.Drawing.Point(6, 47);
+            this.SEIKI.Name = "SEIKI";
+            this.SEIKI.Size = new System.Drawing.Size(82, 18);
+            this.SEIKI.TabIndex = 7;
+            this.SEIKI.Text = "正規変更";
+            this.SEIKI.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Enabled = false;
+            this.label1.Location = new System.Drawing.Point(6, 75);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(90, 14);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "SJIS抽出位置";
+            // 
+            // pos
+            // 
+            this.pos.Enabled = false;
+            this.pos.Location = new System.Drawing.Point(102, 72);
+            this.pos.MaxLength = 1;
+            this.pos.Name = "pos";
+            this.pos.Size = new System.Drawing.Size(32, 21);
+            this.pos.TabIndex = 10;
+            this.pos.Text = "3";
+            // 
+            // sekitxt
+            // 
+            this.sekitxt.FormattingEnabled = true;
+            this.sekitxt.Items.AddRange(new object[] {
+            "\\n0x[0-9A-F]{4}\\t0x%J",
+            "%J [0-9A-Fa-f]{4}"});
+            this.sekitxt.Location = new System.Drawing.Point(99, 44);
+            this.sekitxt.Name = "sekitxt";
+            this.sekitxt.Size = new System.Drawing.Size(135, 22);
+            this.sekitxt.TabIndex = 11;
+            this.sekitxt.SelectedIndexChanged += new System.EventHandler(this.sekitxt_SelectedIndexChanged);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(277, 298);
+            this.ClientSize = new System.Drawing.Size(277, 356);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.CMFUSION);
             this.Controls.Add(this.groupBox1);
@@ -228,6 +280,7 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -248,6 +301,10 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.ComboBox JIS2SJIS;
+        private System.Windows.Forms.CheckBox SEIKI;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox pos;
+        private System.Windows.Forms.ComboBox sekitxt;
     }
 }
 
