@@ -140,10 +140,11 @@ for(x=0;msg[x] && x<(pwidth/8);)
 {
 		code = (u8)msg[x]; // no truncate now
 
-//SJIS ,EUC
-if( ((zenkaku==1)&& ( ((code>=0x81) && (code<=0x9F)) || ((code>=0xE0) && (code<=0xEA)) || ((code>=0xFA) && (code<=0xFC)))) ||
-((zenkaku==2) && ( ((code>=0xA1) && (code<=0xAD)) || ((code>=0xB0) && (code<=0xF4)) || ((code>=0xF9) && (code<=0xFC)) ) ) ){
-
+//SJIS,EUC
+//if( ((zenkaku==1)&& ( ((code>=0x81) && (code<=0x9F)) || ((code>=0xE0) && (code<=0xEA)) || ((code>=0xFA) && (code<=0xFC)))) ||
+//((zenkaku==2) && ( ((code>=0xA1) && (code<=0xAD)) || ((code>=0xB0) && (code<=0xF4)) || ((code>=0xF9) && (code<=0xFC)) ) ) ){
+if( ((zenkaku==1)&& ((u8)((code ^ 0x20) -0xA1) < (u8)0x3C)) ||
+((zenkaku==2) && ((u8)(code - 0xA1) < (u8)0x5E)) ){
 code2 = (u8)msg[x+1];
 
 int big=code*256 + code2;

@@ -549,28 +549,29 @@ int proDebugScreenPrintData(const char *buff, int size)
 			default:
 
 //SJIS‘SŠp
-if((zenkaku==1)&& ( ((c>=0x81) && (c<=0x9F)) || ((c>=0xE0) && (c<=0xEA)) || ((c>=0xFA) && (c<=0xFC)))  ){
+//if((zenkaku==1)&& ( ((c>=0x81) && (c<=0x9F)) || ((c>=0xE0) && (c<=0xEA)) || ((c>=0xFA) && (c<=0xFC)))  ){
+if((zenkaku==1)&& ((u8)((c ^ 0x20) -0xA1) < (u8)0x3C)){
 debug_put_char_32_zenakaku(XX, Y * tate, fg_col,bg_col, c, buff[i+1]);
 XX+=yoko;
 i++;
 }
-//EUC”¼ŠpƒJƒi@0x8E‚Í–³Ž‹
-else if((zenkaku==2) && ( (c==0x8E) || ((c>=0xA1) && (c<=0xAD)) || ((c>=0xB0) && (c<=0xF4)) || ((c>=0xF9) && (c<=0xFC)))){
-if(c==0x8E){
-	proDebugScreenPutChar( XX , Y * tate, fg_col, buff[i+1]);
-	XX+=yoko_def;
-}
-else{
 //EUC‘SŠp
+//else if((zenkaku==2) && (((c>=0xA1) && (c<=0xAD)) || ((c>=0xB0) && (c<=0xF4)) || ((c>=0xF9) && (c<=0xFC)))){
+else if((zenkaku==2) && ((u8)(c - 0xA1) < (u8)0x5E)){
 debug_put_char_32_zenakaku(XX, Y * tate, fg_col,bg_col, c, buff[i+1]);
 XX+=yoko;
-}
 i++;
 }
 //”¼Šp
 else{
-
+	//EUC”¼Šp
+	if((zenkaku==2) &&(c==0x8E)){
+	proDebugScreenPutChar( XX , Y * tate, fg_col, buff[i+1]);
+	i++;
+	}
+	else{
 	proDebugScreenPutChar( XX , Y * tate, fg_col, c);
+	}
 	if(zenkaku!=0){XX+=yoko_def;}
 	else{XX+=yoko;}
 }
