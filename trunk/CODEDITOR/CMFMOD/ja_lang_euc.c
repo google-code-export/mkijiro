@@ -34,9 +34,9 @@ char LANG_CINP2 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) =
 char LANG_CINP3 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) ="□ 戻る";
 char LANG_CINP4 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) ="START確定  L英語切替";
 char LANG_CINP5 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) ="R+上下 選択";
-char LANG_CINP6 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) ="<ー選択文字";
+char LANG_CINP6 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) ="←選択文字";
 char LANG_CINP8 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) ="R 発音削除";
-char LANG_CINP7 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) ="?音:";
+char LANG_CINP7 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) ="発音:";
 char LANG_CINP1 [][19] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) ={
 "SELECT  大小  英文",
 "SELECT  全角入力"
@@ -45,9 +45,9 @@ char LANG_CINPHEX [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )
 char LANG_CINPDEC [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) ={"10進数   "};
 char LANG_CINPFLOATDEC [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) ={"浮動小数点"};
 //layout.c
-char LAYOUT_READ_HELP [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "START りねーむ,SEL 削除  ,□中国文字切替";
+char LAYOUT_READ_HELP [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "START りねーむ,SEL 削除,□ FATロング名切替";
 char LAYOUT_READTEXT_SAVEHELP [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "START らべる,SEL/△ 中断,LR すくろーる,○× 終了  ";
-char LAYOUT_MEM_WRITEOK [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "ok";
+char LAYOUT_MEM_WRITEOK [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "OK";
 
 //dict.c
 char LANG_DICT0 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "L/R   選択";

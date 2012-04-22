@@ -92,7 +92,6 @@ void ui_init()
 		fd = sceIoOpen(ISOFS_SFO, PSP_O_RDONLY, 0777);
 		if (fd >= 0)
 		{
-			//変なので修正予定
 			sceIoLseek32(fd, 0x8, PSP_SEEK_SET);
 			unsigned char flag;
 			sceIoRead(fd, &flag, 1);
@@ -456,7 +455,7 @@ int ui_input_string(int x, int y, char * s, int len)
 		{'Z', 'X', 'C', 'V', 'B', 'N', 'M', '*', '?', '+'},
 	};
 	const char ikey[4][10] __attribute__(   (  aligned( 1 ))  ) = {
-		{'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'},
+		{'!', '"', '#', '$', '%', '&', 0x27, 0x28 , 0x29, '.'},
 		{'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'},
 		{'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', '-'},
 		{'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '_'},
@@ -650,8 +649,9 @@ int ui_input_string(int x, int y, char * s, int len)
 			if(pos > 0)
 			{
 				//EUC全角
-				u8 code=str[pos-1];
-				if(pos > 1 &&((code==0x8E) || (code>=0xA1 && code<=0xF4) || (code>=0xF9 && code<=0xFC)))							{
+				u8 code2=str[pos-1];
+				u8 code=str[pos-2];
+				if((pos > 1) && ((code==0x8E) || ((((code +0x5F)&0xFF) < 0x5E) && (code2>0xA0))))						{
 					if(pos < len)
 						memmove(&str[pos - 2], &str[pos], len - pos);
 				str[pos-1] = 0;
