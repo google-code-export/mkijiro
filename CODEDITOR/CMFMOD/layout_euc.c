@@ -2488,7 +2488,7 @@ layout_read_text,write_psfont,keyset_load,convert_cmf,write_mem,img_popsdoc,img_
 #define FAT_FILEATTR_VOLUME		0x08
 #define FAT_FILEATTR_DIRECTORY	0x10
 #define FAT_FILEATTR_ARCHIVE	0x20
-static char fatprx [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "ms0:/CheatMaster/prx/fat.prx";
+static char fatprx [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "ms0:/CheatMaster/prx/fat_euc.prx";
 static void * layout_readdir(char *tempdir, char *ext, int *c, int *dc, int fatread)
 {
 	const char ** text_array;
@@ -2574,40 +2574,32 @@ static void * layout_readdir(char *tempdir, char *ext, int *c, int *dc, int fatr
 		else{
 			if(strcmpi(&sid.d_name[l - 3], ext) != 0)
 				continue;
-			sprintf((char *)text_array[i++],"%-36s%4dKB",sid.d_name,(int)(sid.d_stat.st_size)>>10);
+			sprintf((char *)text_array[i++],"%-36s%4dKiB\x0",sid.d_name,(int)(sid.d_stat.st_size)>>10);
 		}
 	}
 	sceIoDclose(dl);
 	strcpy((char *)dir_array[0],"../");
 
-	char stm[36];
-	char msg[40];
+	char stm[45];
+	char msg[45];
 	u8 c1=0;u8 c2=0;
 	int k=0;int j=0;
 
 	for(i=0;i<tempc;i++){
-
 			//ファイル名表示 http://www.tohoho-web.com/wwwkanji.htm
 			k=0;j=0;
 			 strcpy(msg, (char*)text_array[i]);
 			while(j<36){
 			c1=(u8)msg[j];
 			c2=(u8)msg[j+1];
-			if(c1<0x80){
-			memcpy(&stm[k],&c1,1);
-			k++;j++;
-			}
-			else if(c1>=0xa1 && c1 <0xE0){
-			memcpy(&stm[k],&c2,1);
-			k++;j+=2;
-			}
-			else{
+			if( (u8)((c1^ 0x20)-0xA1) < (u8)0x3C ){
 			if (c1 >= 0xe0) { c1 = c1 - 0x40; }
 			if (c2 >= 0x80) { c2 = c2 - 1; }
 			if (c2 >= 0x9e) {
 			    c1 = (c1 - 0x70) * 2;
 			    c2 = c2 - 0x7d;
-			} else {
+			}
+			else {
 			    c1 = ((c1 - 0x70) * 2) - 1;
 			    c2 = c2 - 0x1f;
 			}
@@ -2615,8 +2607,19 @@ static void * layout_readdir(char *tempdir, char *ext, int *c, int *dc, int fatr
 			stm[k+1]=c2 | 0x80;
 			k+=2;j+=2;
 			}
+			else{
+			if(c1<0x80){
+			memcpy(&stm[k],&c1,1);
+			k++;j++;
 			}
-			stm[k]=0;
+			else{//EUC半角
+			stm[k]=0x8E;
+			stm[k+1]=c1;
+			k+=2;j++;
+			}
+			}
+			}
+			memcpy(&stm[36],&msg[36],8);
 
 			 strcpy((char*)decode_text_array[i], stm);
 			// strcpy((char*)decode_text_array[i], (char*)text_array[i]);

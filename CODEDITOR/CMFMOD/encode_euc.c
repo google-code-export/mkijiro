@@ -130,7 +130,8 @@ static int encode_uni2cjk(const unsigned char *uni,unsigned char *cjk, p_encodep
 	if(uni[0]<0x81 && uni[1]==0){
 		cjk[0]=uni[0];
 		transcount = 1;
-	}else{
+	}
+	else{
 		int pos = (int)(*(unsigned short*)uni)*2;
 		//テーブルから2バイト差し替え用
 		cjk[0]=pack->UNI_CJK[pos];
@@ -138,8 +139,8 @@ static int encode_uni2cjk(const unsigned char *uni,unsigned char *cjk, p_encodep
 		transcount = 2;
 		if(cjk[0]==0x3f && cjk[1]==0) //豆腐
 		{
-			cjk[0]=0xa1;
-			cjk[1]=0xf6;
+			cjk[0]=0xA2;
+			cjk[1]=0xA2;
 		}
 	}
 	return transcount;
@@ -183,7 +184,7 @@ extern int encode_utf8_conv(const unsigned char *ucs, unsigned char *cjk, p_enco
 
 extern int encode_init(p_encodepack pack)
 {
-	int fd = sceIoOpen("ms0:/CheatMaster/utf16_eucjp.dat", PSP_O_RDONLY, 0777);
+	int fd = sceIoOpen("ms0:/CheatMaster/euc-jp.dat", PSP_O_RDONLY, 0777);
 	if(fd < 0)
 		return 1;
 	pack->UNI_CJK = malloc(131072);//UTF16　0x0〜0xffffまでの変換表

@@ -19,7 +19,7 @@ Public Class Form1
             If m.Success Then
                 Dim enc As Integer = CInt(m.Value.Remove(0, 2))
                 If ENCODE.SelectedIndex = 5 Then
-                    Dim ucs2 As New System.IO.FileStream("table\utf16_eucjp.dat", System.IO.FileMode.Create, System.IO.FileAccess.Write)
+                    Dim ucs2 As New System.IO.FileStream("table\euc-jp.dat", System.IO.FileMode.Create, System.IO.FileAccess.Write)
                     Dim bs(65535 * 2) As Byte
                     Dim bb(1) As Byte
                     Dim s As String = ""
