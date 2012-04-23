@@ -2483,11 +2483,16 @@ layout_read_text,write_psfont,keyset_load,convert_cmf,write_mem,img_popsdoc,img_
 };
 
 #define FAT_FILEATTR_READONLY	0x01
-#define FAT_FILEATTR_HIDDEN		0x02
-#define FAT_FILEATTR_SYSTEM		0x04
-#define FAT_FILEATTR_VOLUME		0x08
+#define FAT_FILEATTR_HIDDEN	0x02
+#define FAT_FILEATTR_SYSTEM	0x04
+#define FAT_FILEATTR_VOLUME	0x08
 #define FAT_FILEATTR_DIRECTORY	0x10
 #define FAT_FILEATTR_ARCHIVE	0x20
+#define SJIS 1
+#define UTF8 2
+
+char fbuffer[2048];
+
 static char fatprx [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "ms0:/CheatMaster/prx/fat_euc.prx";
 static void * layout_readdir(char *tempdir, char *ext, int *c, int *dc, int fatread)
 {
@@ -2580,15 +2585,113 @@ static void * layout_readdir(char *tempdir, char *ext, int *c, int *dc, int fatr
 	sceIoDclose(dl);
 	strcpy((char *)dir_array[0],"../");
 
-	char stm[45];
+	char stm[45]="                                             ";
 	char msg[45];
 	u8 c1=0;u8 c2=0;
 	int k=0;int j=0;
+	int z=0;
+	char filename_encode=0;
+	int seek=0;
+	int kk=0;
+    	int big=0;
+	int fd;
+	fd= sceIoOpen("ms0:/CheatMaster/table/\x82\xA0", PSP_O_RDONLY, 0777);
+	if(fd>=0){filename_encode=SJIS;}
+	sceIoClose(fd);
+	fd= sceIoOpen("ms0:/CheatMaster/table/\xE3\x81\x82", PSP_O_RDONLY, 0777);
+	if(fd>=0){filename_encode=UTF8;}
+	sceIoClose(fd);
+	if(filename_encode==0){
+	 fd = sceIoOpen("ms0:/CheatMaster/unknown_encode", PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
+	if(fd >= 0)
+	{
+		strcpy(msg, (char*)text_array[0]);
+		sceIoWrite(fd, &msg, strlen(msg));
+	}
+	sceIoClose(fd);
+	}
 
 	for(i=0;i<tempc;i++){
 			//ファイル名表示 http://www.tohoho-web.com/wwwkanji.htm
-			k=0;j=0;
 			 strcpy(msg, (char*)text_array[i]);
+		if(filename_encode==UTF8){
+			k=0;j=0;
+   		     while(j < 36){
+        	c1= (u8)msg[j];
+        	if(c1 < 0x80){
+              	memcpy(&stm[k],&msg[j],1);
+                k++;
+                j++;
+        	}
+        	else if(c1 < 0xF0){
+        		memcpy(&seek,&msg[j],3);
+        		if(c1 < 0xE0){
+       			seek &= 0xFFFF;
+        		}
+               	 kk = 0;
+                fd = sceIoOpen("ms0:/cheatmaster/table/utf8", PSP_O_RDONLY, 0777);
+		if(fd>=0){
+                 while(1){
+                 	sceIoRead(fd,fbuffer,2048);
+                    for( z = 0; z< 512;z++){
+        		memcpy(&big,&fbuffer[z*4],4);
+                        if(seek==big){
+                            kk +=z;
+                        	goto end;
+                        }
+                        else if(big==0){
+                            kk +=z;
+				sceIoClose(fd);
+                        	goto fail;
+                        }
+                    }
+                    kk += 512;
+                 }
+		}
+		end:
+		sceIoClose(fd);
+                fd = sceIoOpen("ms0:/cheatmaster/table/euc-jp", PSP_O_RDONLY, 0777);
+		if(fd>=0){
+		sceIoLseek(fd, 0, SEEK_SET);
+		sceIoLseek(fd, kk<<1,SEEK_CUR);
+                sceIoRead(fd,fbuffer,2);
+		}
+		sceIoClose(fd);
+                    //半角カナ
+                    if((u8)fbuffer[1]==0){
+                    	memcpy(&stm[k],&fbuffer[0],1);
+                        k++;
+                        }
+                    //全角
+                    else{
+                    	memcpy(&stm[k],&fbuffer[0],2);
+                        k = k+2;
+                    }
+        		if(c1 < 0xE0){
+				j+=2;
+        		}
+        		else{
+				j+=3;
+			}
+        	}
+        	else if(c1 < 0xF8){
+        		j+=4;
+        	}
+        	else if(c1 < 0xFC){
+        		j+=5;
+        	}
+        	else if(c1 < 0xFE){
+        		j+=6;
+        	}
+        	else{
+                //BOM他
+		fail:
+        		j++;
+        	}
+	        }
+		}
+		else if(filename_encode==SJIS){
+			k=0;j=0;
 			while(j<36){
 			c1=(u8)msg[j];
 			c2=(u8)msg[j+1];
@@ -2619,7 +2722,8 @@ static void * layout_readdir(char *tempdir, char *ext, int *c, int *dc, int fatr
 			}
 			}
 			}
-			memcpy(&stm[36],&msg[36],8);
+			}
+			memcpy(&stm[36],&msg[strlen(msg)-7],8);
 
 			 strcpy((char*)decode_text_array[i], stm);
 			// strcpy((char*)decode_text_array[i], (char*)text_array[i]);

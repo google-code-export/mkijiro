@@ -92,47 +92,54 @@
                 Dim cmpmevsh(71) As Byte
                 Dim hashpro As String = "", hashme As String = "", hashmevsh As String = ""
                 Dim fontpatch As Boolean = False
-                While i < bs.Length - 2048
+                If UNPACK.Checked Then
 
-                    If CheckBox1.Checked = True AndAlso bs(i) = &H6D AndAlso bs(i + 1) = &H73 AndAlso bs(i + 2) = &H30 AndAlso bs(i + 3) = &H3A AndAlso bs(i + 4) = &H2F AndAlso bs(i + 5) = &H73 AndAlso bs(i + 6) = &H65 AndAlso bs(i + 7) = &H70 Then
-                        Array.ConstrainedCopy(bs, i, cmppro, 0, 40)
-                        Array.ConstrainedCopy(bs, i, cmpme, 0, 48)
-                        Array.ConstrainedCopy(bs, i, cmpmevsh, 0, 72)
+                Else
+                    While i < bs.Length - 2048
 
-                        Dim md5 As System.Security.Cryptography.MD5 = _
-                            System.Security.Cryptography.MD5.Create()
+                        If CheckBox1.Checked = True AndAlso bs(i) = &H6D AndAlso bs(i + 1) = &H73 AndAlso bs(i + 2) = &H30 AndAlso bs(i + 3) = &H3A AndAlso bs(i + 4) = &H2F AndAlso bs(i + 5) = &H73 AndAlso bs(i + 6) = &H65 AndAlso bs(i + 7) = &H70 Then
+                            Array.ConstrainedCopy(bs, i, cmppro, 0, 40)
+                            Array.ConstrainedCopy(bs, i, cmpme, 0, 48)
+                            Array.ConstrainedCopy(bs, i, cmpmevsh, 0, 72)
 
-                        Dim b As Byte() = md5.ComputeHash(cmppro)
-                        Dim b2 As Byte() = md5.ComputeHash(cmpme)
-                        Dim b3 As Byte() = md5.ComputeHash(cmpmevsh)
+                            Dim md5 As System.Security.Cryptography.MD5 = _
+                                System.Security.Cryptography.MD5.Create()
 
-                        hashpro = BitConverter.ToString(b).ToUpper().Replace("-", "")
-                        hashme = BitConverter.ToString(b2).ToUpper().Replace("-", "")
-                        hashmevsh = BitConverter.ToString(b3).ToUpper().Replace("-", "")
-                    End If
+                            Dim b As Byte() = md5.ComputeHash(cmppro)
+                            Dim b2 As Byte() = md5.ComputeHash(cmpme)
+                            Dim b3 As Byte() = md5.ComputeHash(cmpmevsh)
 
-                    '3C 42 A5 81 A5 99 42 3C
-                    If fontpatch = False AndAlso bs(i) = &H3C AndAlso bs(i + 1) = &H42 AndAlso bs(i + 2) = &HA5 AndAlso bs(i + 3) = &H81 AndAlso bs(i + 4) = &HA5 AndAlso bs(i + 5) = &H99 AndAlso bs(i + 6) = &H42 AndAlso bs(i + 7) = &H3C Then
-                        Array.ConstrainedCopy(patchfont, 0, bs, i - 8, 2048)
-                        fontpatch = True
-                    ElseIf fontpatch = False AndAlso bs(i) = &H7E AndAlso bs(i + 1) = &H81 AndAlso bs(i + 2) = &HA5 AndAlso bs(i + 3) = &H81 AndAlso bs(i + 4) = &HBD AndAlso bs(i + 5) = &H99 AndAlso bs(i + 6) = &H81 AndAlso bs(i + 7) = &H7E Then
-                        Array.ConstrainedCopy(patchfont, 0, bs, i - 8, 2048)
-                        fontpatch = True
-                    ElseIf CheckBox1.Checked = True AndAlso hashpro = "124A1070E5575E0414AE190986C74622" Then
-                        Array.ConstrainedCopy(proflash, 0, bs, i, 40)
-                        hashpro = ""
-                    ElseIf CheckBox1.Checked = True AndAlso hashme = "EB79B8C89EA5319BF005AAC44F8FD649" Then
-                        Array.ConstrainedCopy(meflash, 0, bs, i, 48)
-                        hashme = ""
-                    ElseIf CheckBox1.Checked = True AndAlso hashmevsh = "C6D16D80F8886B8197B086377789247F" Then
-                        Array.ConstrainedCopy(meflashvsh, 0, bs, i, 72)
-                        hashmevsh = ""
-                    End If
+                            hashpro = BitConverter.ToString(b).ToUpper().Replace("-", "")
+                            hashme = BitConverter.ToString(b2).ToUpper().Replace("-", "")
+                            hashmevsh = BitConverter.ToString(b3).ToUpper().Replace("-", "")
+                        End If
 
-                    i += 1
-                End While
+                        '3C 42 A5 81 A5 99 42 3C
+                        If fontpatch = False AndAlso bs(i) = &H3C AndAlso bs(i + 1) = &H42 AndAlso bs(i + 2) = &HA5 AndAlso bs(i + 3) = &H81 AndAlso bs(i + 4) = &HA5 AndAlso bs(i + 5) = &H99 AndAlso bs(i + 6) = &H42 AndAlso bs(i + 7) = &H3C Then
+                            Array.ConstrainedCopy(patchfont, 0, bs, i - 8, 2048)
+                            fontpatch = True
+                        ElseIf fontpatch = False AndAlso bs(i) = &H7E AndAlso bs(i + 1) = &H81 AndAlso bs(i + 2) = &HA5 AndAlso bs(i + 3) = &H81 AndAlso bs(i + 4) = &HBD AndAlso bs(i + 5) = &H99 AndAlso bs(i + 6) = &H81 AndAlso bs(i + 7) = &H7E Then
+                            Array.ConstrainedCopy(patchfont, 0, bs, i - 8, 2048)
+                            fontpatch = True
+                        ElseIf CheckBox1.Checked = True AndAlso hashpro = "124A1070E5575E0414AE190986C74622" Then
+                            Array.ConstrainedCopy(proflash, 0, bs, i, 40)
+                            hashpro = ""
+                        ElseIf CheckBox1.Checked = True AndAlso hashme = "EB79B8C89EA5319BF005AAC44F8FD649" Then
+                            Array.ConstrainedCopy(meflash, 0, bs, i, 48)
+                            hashme = ""
+                        ElseIf CheckBox1.Checked = True AndAlso hashmevsh = "C6D16D80F8886B8197B086377789247F" Then
+                            Array.ConstrainedCopy(meflashvsh, 0, bs, i, 72)
+                            hashmevsh = ""
+                        End If
+
+                        i += 1
+                    End While
+                End If
                 Dim index As Integer = ofd.FileName.LastIndexOf(".")
                 Dim newfile As String = ofd.FileName.Insert(index, "_patched")
+                If UNPACK.Checked Then
+                    newfile = ofd.FileName.Insert(index, "_unpacked")
+                End If
                 Dim save As New System.IO.FileStream(newfile, _
         System.IO.FileMode.Create, _
         System.IO.FileAccess.Write)
@@ -181,4 +188,5 @@
             My.Settings.customfont = ofd.FileName
         End If
     End Sub
+
 End Class
