@@ -101,8 +101,8 @@ extern void conf_load()
 	if(fd >= 0)
 	{
 		sceIoRead(fd, &config, sizeof(config));
-		sceIoClose(fd);
 	}
+		sceIoClose(fd);
 }
 
 extern void conf_save()
@@ -111,6 +111,6 @@ extern void conf_save()
 	if(fd >= 0)
 	{
 		sceIoWrite(fd, &config, sizeof(config));
-		sceIoClose(fd);
 	}
+		sceIoClose(fd);
 }
