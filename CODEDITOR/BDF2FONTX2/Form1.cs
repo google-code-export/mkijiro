@@ -448,6 +448,10 @@ namespace WindowsFormsApplication1
                         }
                         fs.Write(hex, 0, 1);
                         byte[] hex3 = new byte[2];
+                        byte[] hexjis = new byte[5];
+                        hexjis[0] = 0x1B;
+                        hexjis[1] = 0x24;
+                        hexjis[2] = 0x42;
                         byte[] crlf = new byte[2];
                         crlf[0] = 0xd;
                         crlf[1] = 0xa;
@@ -476,38 +480,53 @@ namespace WindowsFormsApplication1
                             c2 = ftable[k] & 0xFF;
                             if (SJIS.Checked == true)
                             {
-                                //http://www.tohoho-web.com/wwwkanji.htm
+
+                                //http://oku.edu.mie-u.ac.jp/~okumura/algo/
+                                //http://www.st.rim.or.jp/~phinloda/cqa/cqa15.html#Q4 合成
                                 if (JIS2SJIS.SelectedIndex == 0)
+                                {
+                                    if ((c1 & 1) != 0)
+                                    {
+                                        c2 += 0x20;
+                                        if ((c2 & 0x80) == 0) c2--;
+                                    }
+                                    else c2 += 0x7E;
+
+                                    c1 = (((c1 - 1) >> 1) + 0x91) ^ 0x20;
+                                }
+                                //http://www.tohoho-web.com/wwwkanji.htm
+                                if (JIS2SJIS.SelectedIndex == 1)
                                 {
                                     if ((c1 & 1) == 1)
                                     {
                                         c1 = ((c1 + 1) >> 1) + 0x70;
-                                        c2 = c2 + 0x1f;
+                                        c2 +=  0x1f;
                                     }
                                     else
                                     {
                                         c1 = (c1 >> 1) + 0x70;
-                                        c2 = c2 + 0x7D;
+                                        c2 += 0x7D;
                                     }
-                                    if (c1 >= 0xa0) { c1 = c1 + 0x40; }
-                                    if (c2 >= 0x7f) { c2 = c2 + 1; }
+                                    if (c1 >= 0xa0) { c1 += 0x40; }
+                                    if (c2 >= 0x7f) { c2 ++; }
                                 }
 
                                 //http://oku.edu.mie-u.ac.jp/~okumura/algo/
-                                if (JIS2SJIS.SelectedIndex == 1)
+                                if (JIS2SJIS.SelectedIndex == 2)
                                 {
-                                    if ((c1 & 1) == 1)
+                                    if ((c1 & 1) != 0)
                                     {
                                         if (c2 < 0x60) c2 += 0x1F;
                                         else c2 += 0x20;
                                     }
                                     else c2 += 0x7E;
+
                                     if (c1 < 0x5F) c1 = (c1 + 0xE1) >> 1;
                                     else c1 = (c1 + 0x161) >> 1;
                                 }
                          
                                 //http://www.unixuser.org/~euske/doc/kanjicode/
-                                if (JIS2SJIS.SelectedIndex == 2)
+                                if (JIS2SJIS.SelectedIndex == 3)
                                 {
                                     c1 -= 0x21;
                                     if ((c1 & 1) == 0)
@@ -516,19 +535,42 @@ namespace WindowsFormsApplication1
                                     }
                                     else c2 += 0x7E;
 
+                                    if (c2 >= 0x7f && c2 <= 0x9d)
+                                    {
+                                        c2 += 1;
+                                    }
+
                                     c1 >>= 1;
-                                    if(c1>=0 && c1<=0x1e){
+                                    if (c1 >= 0 && c1 <= 0x1e)
+                                    {
                                         c1 += 0x81;
                                     }
                                     else if (c1 >= 0x1f && c1 <= 0x2e)
                                     {
                                         c1 += 0xc1;
                                     }
-                                    if (c2 >= 0x7f && c2 <= 0x9d)
-                                    {
-                                        c2 += 1;
-                                    }
 
+                                }
+
+                                //SJIS　区点番号
+                                if (JIS2SJIS.SelectedIndex == 4)
+                                {
+                                    c1 -= 0x20;
+                                    c2 -= 0x20;
+                                    if ((c1 & 1) == 0)
+                                    {
+                                        c2 += 0x9e;
+                                    }
+                                    else {
+                                        if (c2 >= 1 && c2 <= 63) {
+                                            c2 += 0x3f; 
+                                        }
+                                        else if (c2 >= 64 && c2 <= 94){
+                                            c2 += 0x40;
+                                        }
+                                    }
+                                    if (c1 >= 1 && c1 <= 62) { c1 = ((c1-1)>>1) + 0x81; }
+                                    if (c1 >= 63 && c1 <= 94) { c1 =((c1-1)>>1) + 0xc1; }
                                 }
 
                                 //http://www.d2.dion.ne.jp/~imady/charset/charcode_mame.html#SJIS_JIS
@@ -538,33 +580,32 @@ namespace WindowsFormsApplication1
                                  //   下位バイトが 0x7F 以上ならば コードに 1 を足す
                                  //   [上位バイトだけの処理] 上位バイトを右に１ビット シフトし、それに 0x81 を足す
                                 //   (0xA000 <= コード) ならばコードに 0x4000 を足す 
-                                if (JIS2SJIS.SelectedIndex == 3)
+                                if (JIS2SJIS.SelectedIndex == 5)
                                 {
-                                    code = (c1 << 8) + c2;
-                                    code -= 0x2121;
-                                    if ((code & 0x100) == 0)
+                                    c1 -= 0x21;
+                                    c2 -= 0x21;
+                                    if ((c1 & 1) !=0)
                                     {
-                                        code += 0x40;
+                                        c2 += 0x9e;
                                     }
                                     else
                                     {
-                                        code += 0x9e;
+                                        c2 += 0x40;
                                     }
-                                    if ((code & 0xff) >= 0x7f)
+                                    if (c2 >= 0x7f)
                                     {
-                                        code += 1;
+                                        c2 += 1;
                                     }
-                                    c1 = (code >> 9) + 0x81;
-                                    c2 = code & 0xFF;
-                                    code = (c1 << 8) + c2;
-                                    if (code >= 0xA000)
+                                                                       
+                                    c1 = (c1 >> 1) + 0x81;
+                                    if (c1 >= 0xA0)
                                     {
-                                        code += 0x4000;
+                                        c1 += 0x40;
                                     }
-                                    c1 = code >> 8;
                                 }
 
-                                if (JIS2SJIS.SelectedIndex == 4)
+                                //TXTテーブル正規表現
+                                if (JIS2SJIS.SelectedIndex ==6)
                                 {
                                     code = (c1 << 8) + c2;
                                     if (SEIKI.Checked == true) {
@@ -583,6 +624,7 @@ namespace WindowsFormsApplication1
                                     }
                                     else
                                     {
+					//例外の補完
                                         if ((c1 & 1) == 1)
                                         {
                                             if (c2 < 0x60) c2 += 0x1F;
@@ -595,8 +637,8 @@ namespace WindowsFormsApplication1
 
                                 }
 
-                                //M＄
-                                if (JIS2SJIS.SelectedIndex == 5)
+                                //M＄ EUCJP経由
+                                if (JIS2SJIS.SelectedIndex == 8)
                                 {
                                     c1 += 0x80;
                                     c2 += 0x80;
@@ -606,9 +648,37 @@ namespace WindowsFormsApplication1
                                     hex3 = System.Text.Encoding.GetEncoding(932).GetBytes(nn);
                                     //eee.Write(hex3, 0, 2);
                                     //eee.Write(crlf, 0, 2);
-                                    c1 = hex3[0];
-                                    c2 = hex3[1];
+                                    if (hex3.Length == 2)
+                                    {
+                                        c1 = hex3[0];
+                                        c2 = hex3[1];
+                                    }
 
+                                }
+                                //M$ ISO2022経由
+                                if (JIS2SJIS.SelectedIndex == 7)
+                                {
+                                    //JIS C 6226-1978(第1・第2水準漢字) 	1B 24 40 	ESC $ @
+                                    //JIS X 0208-1983(第1・第2水準漢字) 	1B 24 42 	ESC $ B
+                                    //JIS X 0208-1990(第1・第2水準漢字) 	1B 26 40 1B 24 42 	ESC & @ ESC $ B
+                                    //JIS X 0212-1990(補助漢字) 	1B 24 28 44 	ESC $ ( D
+                                    //JIS X 0213:2000 1面(第1・第2水準漢字) 	1B 24 28 4F 	ESC $ ( O
+                                    //JIS X 0213:2004 1面(第1・第2水準漢字) 	1B 24 28 51 	ESC $ ( Q
+                                    //JIS X 0213:2000 2面(第3・第4水準漢字) 	1B 24 28 50 	ESC $ ( P
+                                    //JIS X 0201 ラテン(半角英数) 	1B 28 4A 	ESC ( J
+                                    //JIS X 0201 カナ(半角カナ) 	1B 28 49 	ESC ( I
+                                    //ISO/IEC 646(ASCII) 	1B 28 42 	ESC ( B
+                                    hexjis[3] = (byte)c1;
+                                    hexjis[4] = (byte)c2;
+                                    nn = System.Text.Encoding.GetEncoding(50222).GetString(hexjis);
+                                    hex3 = System.Text.Encoding.GetEncoding(932).GetBytes(nn);
+                                    //eee.Write(hex3, 0, 2);
+                                    //eee.Write(crlf, 0, 2);
+                                    if (hex3.Length == 2)
+                                    {
+                                        c1 = hex3[0];
+                                        c2 = hex3[1];
+                                    }
                                 }
 
 
@@ -837,7 +907,7 @@ namespace WindowsFormsApplication1
 
         private void JIS2SJIS_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (JIS2SJIS.SelectedIndex == 4) {
+            if (JIS2SJIS.SelectedIndex == 6) {
                 SEIKI.Enabled = true;
                 pos.Enabled = true;
                 sekitxt.Enabled= true;
@@ -860,6 +930,18 @@ namespace WindowsFormsApplication1
             if (sekitxt.SelectedIndex == 1)
             {
                 pos.Text = "5";
+            }
+
+        }
+
+        private void SJIS_CheckedChanged(object sender, EventArgs e)
+        {
+            if (SJIS.Checked == true)
+            {
+                groupBox2.Enabled = true;
+            }
+            else {
+                groupBox2.Enabled = false;
             }
 
         }

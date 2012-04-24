@@ -41,11 +41,11 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.JIS2SJIS = new System.Windows.Forms.ComboBox();
-            this.SEIKI = new System.Windows.Forms.CheckBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.pos = new System.Windows.Forms.TextBox();
             this.sekitxt = new System.Windows.Forms.ComboBox();
+            this.pos = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.SEIKI = new System.Windows.Forms.CheckBox();
+            this.JIS2SJIS = new System.Windows.Forms.ComboBox();
             this.CMFUSION.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -142,6 +142,7 @@
             this.SJIS.TabStop = true;
             this.SJIS.Text = "JIS→SJIS";
             this.SJIS.UseVisualStyleBackColor = true;
+            this.SJIS.CheckedChanged += new System.EventHandler(this.SJIS_CheckedChanged);
             // 
             // NOREMAP
             // 
@@ -202,54 +203,7 @@
             this.groupBox2.Size = new System.Drawing.Size(240, 105);
             this.groupBox2.TabIndex = 7;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "JIS->SJIS変換方法";
-            // 
-            // JIS2SJIS
-            // 
-            this.JIS2SJIS.FormattingEnabled = true;
-            this.JIS2SJIS.Items.AddRange(new object[] {
-            "上位バイト奇数判定後上下ともに変更",
-            "上位バイト奇数判定後下位バイトのみ変更",
-            "上位バイト-0x21後奇数判定",
-            "最初に-0x2121後奇数判定",
-            "外部TXT変換テーブル使用",
-            "M$内部テーブル使用"});
-            this.JIS2SJIS.Location = new System.Drawing.Point(6, 17);
-            this.JIS2SJIS.Name = "JIS2SJIS";
-            this.JIS2SJIS.Size = new System.Drawing.Size(228, 22);
-            this.JIS2SJIS.TabIndex = 6;
-            this.JIS2SJIS.SelectedIndexChanged += new System.EventHandler(this.JIS2SJIS_SelectedIndexChanged);
-            // 
-            // SEIKI
-            // 
-            this.SEIKI.AutoSize = true;
-            this.SEIKI.Enabled = false;
-            this.SEIKI.Location = new System.Drawing.Point(6, 47);
-            this.SEIKI.Name = "SEIKI";
-            this.SEIKI.Size = new System.Drawing.Size(82, 18);
-            this.SEIKI.TabIndex = 7;
-            this.SEIKI.Text = "正規変更";
-            this.SEIKI.UseVisualStyleBackColor = true;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Enabled = false;
-            this.label1.Location = new System.Drawing.Point(6, 75);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(90, 14);
-            this.label1.TabIndex = 9;
-            this.label1.Text = "SJIS抽出位置";
-            // 
-            // pos
-            // 
-            this.pos.Enabled = false;
-            this.pos.Location = new System.Drawing.Point(102, 72);
-            this.pos.MaxLength = 1;
-            this.pos.Name = "pos";
-            this.pos.Size = new System.Drawing.Size(32, 21);
-            this.pos.TabIndex = 10;
-            this.pos.Text = "3";
+            this.groupBox2.Text = "JIS->SJIS変換(JISこーど=0xS1S2)";
             // 
             // sekitxt
             // 
@@ -262,6 +216,56 @@
             this.sekitxt.Size = new System.Drawing.Size(135, 22);
             this.sekitxt.TabIndex = 11;
             this.sekitxt.SelectedIndexChanged += new System.EventHandler(this.sekitxt_SelectedIndexChanged);
+            // 
+            // pos
+            // 
+            this.pos.Enabled = false;
+            this.pos.Location = new System.Drawing.Point(102, 72);
+            this.pos.MaxLength = 1;
+            this.pos.Name = "pos";
+            this.pos.Size = new System.Drawing.Size(32, 21);
+            this.pos.TabIndex = 10;
+            this.pos.Text = "3";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Enabled = false;
+            this.label1.Location = new System.Drawing.Point(6, 75);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(90, 14);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "SJIS抽出位置";
+            // 
+            // SEIKI
+            // 
+            this.SEIKI.AutoSize = true;
+            this.SEIKI.Enabled = false;
+            this.SEIKI.Location = new System.Drawing.Point(6, 47);
+            this.SEIKI.Name = "SEIKI";
+            this.SEIKI.Size = new System.Drawing.Size(82, 18);
+            this.SEIKI.TabIndex = 7;
+            this.SEIKI.Text = "正規抽出";
+            this.SEIKI.UseVisualStyleBackColor = true;
+            // 
+            // JIS2SJIS
+            // 
+            this.JIS2SJIS.FormattingEnabled = true;
+            this.JIS2SJIS.Items.AddRange(new object[] {
+            "S1奇数判定+S2シフト,S1を0xA1以上にシフトしXOR0x20でリマップ",
+            "(S1奇数判定+S1S2ともにシフト),S1S2を調整",
+            "(S1奇数判定+S2シフト),S1シフト",
+            "S1-0x21,(S1奇数判定+S2シフト),S1シフト",
+            "S1S2-0x2020,(S1奇数判定+S2シフト),S1シフト",
+            "S1S2-0x2121,(S1奇数判定+S2シフト),S1シフト",
+            "外部TXT変換テーブル使用",
+            "M$テーブル(ESC$B,ISO-2022-JP経由)",
+            "M$テーブル(+0x8080,EUC-JP経由)"});
+            this.JIS2SJIS.Location = new System.Drawing.Point(6, 17);
+            this.JIS2SJIS.Name = "JIS2SJIS";
+            this.JIS2SJIS.Size = new System.Drawing.Size(228, 22);
+            this.JIS2SJIS.TabIndex = 6;
+            this.JIS2SJIS.SelectedIndexChanged += new System.EventHandler(this.JIS2SJIS_SelectedIndexChanged);
             // 
             // Form1
             // 
