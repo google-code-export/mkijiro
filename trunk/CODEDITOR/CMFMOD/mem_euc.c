@@ -1315,9 +1315,12 @@ extern void filter_filename(char *s)
 		for(j=0;j<9;j++)
 		{
 			if(s[i]==extra_ch[j]){
-				s[i]='-';
+				s[i]=' ';
 				break;
 			}
+		}
+		if((u8)s[i] < (u8)0x20){
+			s[i]=' ';
 		}
 		i++;
 	}
@@ -1341,6 +1344,9 @@ static unsigned int mem_table_ConvertTabType(p_mem_table p)
 	}
 	return adr;
 }
+extern char fbuffer[];
+#define SJIS 1
+#define UTF8 2
 
 extern void mem_table_savecw()
 {
@@ -1354,46 +1360,114 @@ extern void mem_table_savecw()
 	ui_cls();
 	if(ui_input_string(120, 68, fn, 29) < 0)
 		return ;
-	filter_filename(fn); //ULJM-00000 -部分
 
-
-	int z = strlen(fn);
-	char stm[30];
-	u8 code=0;
-	u8 code2=0;
+	char stm[45];
+	char cmf[]=".cmf\x0";
+	u8 c1=0;
+	u8 c2=0;
 	int i=0;
-	int k=0;
 	int j=0;
+	int k=0;
+	int kk=0;
+	int z=0;
+	int seek=0;
+ 	int big=0;
 	int fd;
-		while(i < z){
-			code= (u8)fn[i];
-			code2=(u8)fn[i+1];
-			if(code < 0x80){
-			  	memcpy(&stm[k],&fn[i],1);
+	char filename_encode=FILE_ENCODE();
+
+	if(filename_encode==UTF8){
+   		while(i < 40){
+        	c1= (u8)fn[i];
+		c2= (u8)fn[i+1];
+        	if(c1 < 0x80){
+		stm[k]=c1;
+                k++;i++;
+        	}
+		else if( (((c1+0x5F)&0xFF) < 0x4C) && (c2>=0xA1) ){
+        	memcpy(&seek,&fn[i],2);
+               	kk = 0;
+                fd = sceIoOpen("ms0:/cheatmaster/table/euc-jp", PSP_O_RDONLY, 0777);
+		if(fd>=0){
+                 while(1){
+                 	sceIoRead(fd,fbuffer,2048);
+		for( z = 0; z< 1024;z++){
+        		memcpy(&big,&fbuffer[z*2],2);
+		    if(seek==big){
+		        kk +=z;
+		    	goto end;
+		    }
+		    else if(big==0){
+		        kk +=z;
+			sceIoClose(fd);
+		    	goto fail;
+		    }
+		}
+		kk += 1024;
+                 }
+		}
+		end:
+		sceIoClose(fd);
+                fd = sceIoOpen("ms0:/cheatmaster/table/utf8", PSP_O_RDONLY, 0777);
+		if(fd>=0){
+		sceIoLseek(fd, 0, SEEK_SET);
+		sceIoLseek(fd, kk<<2,SEEK_CUR);
+   		sceIoRead(fd,fbuffer,4);
+		}
+		sceIoClose(fd);
+		c1=(u8)fbuffer[0];
+		if(c1 < 0x80){
+			memcpy(&stm[k],&fbuffer[0],1);
+		    k++;
+		    }
+		else if(c1 < 0xE0){
+			memcpy(&stm[k],&fbuffer[0],2);
+		    k +=2;
+		}
+		else if(c1 < 0xF0){
+			memcpy(&stm[k],&fbuffer[0],3);
+		    k +=3;
+		}
+		fail:
+		i+=2;
+        	}
+        	else{
+       		i++;
+        	}
+	    }
+	}
+	else if(filename_encode==SJIS){
+		while(i < 30){
+			c1= (u8)fn[i];
+			c2= (u8)fn[i+1];
+			if((c1 & 0x80) ==0){
+				stm[k]=fn[i];
 				k++;
 				i++;
 			}
-			else if(code == 0xE8 && code2>=0xa1){
-			  	memcpy(&stm[k],&fn[i+1],1);
+			else if(c1 == 0xE8 && c2>=0xA1){
+				stm[k]=fn[i+1];
 				k++;
 				i+=2;
-			
 			}
-			else if(code>=0xA1 && code <=0xFC && code2>=0xA1){
+			else if( (((c1+0x5F)&0xFF) < 0x4C) && (c2>=0xA1) ){
 			//http://oku.edu.mie-u.ac.jp/~okumura/algo/
-			code &=0x7F;
-			code2 &=0x7F;
-
-			if (code & 1) {
-				if (code2 < 0x60)  code2 += 0x1F;
-				else             code2 += 0x20;
+			c1 &=0x7F;
+			c2 &=0x7F;
+			if ((c1 & 1) != 0)
+			{
+			c2 += 0x20;
+				if ((c2 & 0x80) == 0) {
+					c2--;
+				}
 			}
-			else               code2 += 0x7E;
-				if (code < 0x5F)      code = (code + 0xE1) >> 1;
-				else                 code = (code + 0x161) >> 1;
+			else {
+					c2 += 0x7E;
+			}
+			
+			c1 = (((c1 - 1) >> 1) + 0x91) ^ 0x20;
 
-				stm[k]=code;
-				stm[k+1]=code2;
+				stm[k]=c1;
+				stm[k+1]=c2;
 				k+=2;
 				i+=2;
 			}
@@ -1401,11 +1475,19 @@ extern void mem_table_savecw()
 			i++;
 			}
 		}
-			stm[k]=0;
-			memcpy(&fn[0],&stm[0],strlen(stm));
+	}
+	stm[k]=0;
+	memcpy(&stm[strlen(stm)],&cmf[0],5);
 
+	memcpy(&fn[0],&stm[0],45);
+	filter_filename(fn); //DOS文字排除
 
-	sprintf(s, "%s/%s.cmf", CMF_DIR, fn);
+	sprintf(s, "%s/%s", CMF_DIR, fn);
+
+	//fd = sceIoOpen("ms0:/log", PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
+	//sceIoWrite(fd, fn, 80);
+	//sceIoClose(fd);
+
 	fd = sceIoOpen(s, PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
 	if(fd < 0) return;
 	

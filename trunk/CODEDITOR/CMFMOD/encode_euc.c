@@ -42,6 +42,9 @@ typedef unsigned short word;
 #define RET_TOOFEW(n)  (-2-(n))
 #define RET_ILUNI      -1
 #define RET_TOOSMALL   -2
+#define SJIS 1
+#define UTF8 2
+
 /* 
 #ifdef BIG5_ENCODE_TEXT
 static unsigned short *buf = NULL;
@@ -50,6 +53,22 @@ static int encode_id = -1;
 static unsigned char * UNI_CJK;
  */
 
+char FILE_ENCODE(){
+	int fd;
+	char filemode=0;
+	fd= sceIoOpen("ms0:/CheatMaster/table/\x82\xA0", PSP_O_RDONLY, 0777);
+	if(fd>=0){
+	filemode=SJIS;
+	}
+	sceIoClose(fd);
+	fd= sceIoOpen("ms0:/CheatMaster/table/\xE3\x81\x82", PSP_O_RDONLY, 0777);
+	if(fd>=0){
+	filemode=UTF8;
+	}
+	sceIoClose(fd);
+
+	return filemode;
+}
 
 //ワイド関数　utf8をutf16beに戻す
 static int utf8_mbtowc(ucs4_t *pwc, const unsigned char *s, int n)
