@@ -1305,13 +1305,27 @@ extern void mem_table_save(int idx)
 	sceIoClose(fd);
 }
 
+//DOS_STRING_KILLER
 static char extra_ch[9] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )={'|','+',':','*','?','<','>','/','\\'};
 extern void filter_filename(char *s)
 {
 	int i,j;
 	i = 0;
+	char filename_encode=FILE_ENCODE();
 	while(s[i]!=0)
 	{
+		//SJISスキップ
+		if((filename_encode==1)&&((u8)((s[i] ^ 0x20)-0xA1) <(u8)0x3C)){
+			//SJIS範囲外
+			if((((s[i+1]+0xC0)&0xFF)<0xBC) || (s[i+1]==0x7F)){
+			}
+			else{
+			s[i]=0x81;
+			s[i+1]=0xA0;
+			}
+		i+=2;
+		}
+		else{
 		for(j=0;j<9;j++)
 		{
 			if(s[i]==extra_ch[j]){
@@ -1323,6 +1337,7 @@ extern void filter_filename(char *s)
 			s[i]=' ';
 		}
 		i++;
+		}
 	}
 }
 
@@ -1344,6 +1359,7 @@ static unsigned int mem_table_ConvertTabType(p_mem_table p)
 	}
 	return adr;
 }
+
 extern char fbuffer[];
 #define SJIS 1
 #define UTF8 2
@@ -1361,8 +1377,8 @@ extern void mem_table_savecw()
 	if(ui_input_string(120, 68, fn, 29) < 0)
 		return ;
 
-	char stm[45];
 	char cmf[]=".cmf\x0";
+	char stm[45];
 	u8 c1=0;
 	u8 c2=0;
 	int i=0;
