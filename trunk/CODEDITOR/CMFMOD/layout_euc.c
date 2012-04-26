@@ -55,6 +55,10 @@
 
 #include "ja_layout_euc.c"
 
+char fbuffer[2048];
+#define SJIS 1
+#define UTF8 2
+
 typedef struct{
 	int width;
 	int height;
@@ -2439,6 +2443,7 @@ static int img_view(char* filename)
 	return 1;
 }
 
+
 static int	layout_read_cb(unsigned int key, int *id, int *topid)
 {
 	if(key == PSP_CTRL_SQUARE)
@@ -2461,13 +2466,273 @@ static int	layout_read_cb(unsigned int key, int *id, int *topid)
 		else
 		{
 			char newfn[80];
-			int l = strlen(fileinfo.g_dir);
+			char *str = fn;
+			str = strrchr(fn, 0x2F);
+			int len = str-fn+1;
+			//len=strlen(fileinfo.g_dir);
 			memset(newfn,0,80);
 			mips_memcpy(newfn, fn, p-fn-4);
+
+	char stm[80];
+	char stm2[80];
+	u8 c1=0;
+	u8 c2=0;
+	int i=0;
+	int k=0;
+	int kk=0;
+	int z=0;
+	int seek=0;
+ 	int big=0;
+	int fd;
+	char filename_encode=0;
+	filename_encode=FILE_ENCODE();
+
+		if(filename_encode==UTF8){
+   		     while(i < 80){
+        	c1= (u8)newfn[i];
+        	if(c1 < 0x80){
+              	stm[k]=c1;
+                k++;
+                i++;
+        	}
+        	else if(c1 < 0xF8){
+        		memcpy(&seek,&newfn[i],4);
+        		if(c1 < 0xE0){
+       			seek &= 0xFFFF;
+        		}
+        		else if(c1 < 0xF0){
+       			seek &= 0xFFFFFF;
+        		}
+               	 kk = 0;
+                fd = sceIoOpen("ms0:/cheatmaster/table/utf8", PSP_O_RDONLY, 0777);
+		if(fd>=0){
+                 while(1){
+                 	sceIoRead(fd,fbuffer,2048);
+                    for( z = 0; z< 512;z++){
+        		memcpy(&big,&fbuffer[z*4],4);
+                        if(seek==big){
+                            kk +=z;
+                        	goto end1;
+                        }
+                        else if(big==0){
+                            kk +=z;
+				sceIoClose(fd);
+                        	goto fail2;
+                        }
+                    }
+                    kk += 512;
+                 }
+		}
+		end1:
+		sceIoClose(fd);
+                fd = sceIoOpen("ms0:/cheatmaster/table/euc-jp", PSP_O_RDONLY, 0777);
+		if(fd>=0){
+		sceIoLseek(fd, 0, SEEK_SET);
+		sceIoLseek(fd, kk<<1,SEEK_CUR);
+                sceIoRead(fd,fbuffer,2);
+		}
+		sceIoClose(fd);
+
+                    	memcpy(&stm[k],&fbuffer[0],2);
+                        k = k+2;
+
+        		if(c1 < 0xE0){
+			fail2:
+				i+=2;
+        		}
+        		else if(c1 < 0xF0){
+				i+=3;
+			}
+        		else{
+        			i+=4;
+        		}
+        	}
+        	else if(c1 < 0xFC){
+        		i+=5;
+        	}
+        	else if(c1 < 0xFE){
+        		i+=6;
+        	}
+        	else{
+        		i++;
+        	}
+	        }
+		}
+		else if(filename_encode==SJIS){
+			while(i<80){
+		//¥Õ¥¡¥¤¥ëÌ¾É½¼¨ http://www.tohoho-web.com/wwwkanji.htm
+			c1=(u8)newfn[i];
+			c2=(u8)newfn[i+1];
+			if( (u8)((c1^ 0x20)-0xA1) < (u8)0x3C ){
+			if (c1 >= 0xe0) { c1 = c1 - 0x40; }
+			if (c2 >= 0x80) { c2 = c2 - 1; }
+			if (c2 >= 0x9e) {
+			    c1 = (c1 - 0x70) * 2;
+			    c2 = c2 - 0x7d;
+			}
+			else {
+			    c1 = ((c1 - 0x70) * 2) - 1;
+			    c2 = c2 - 0x1f;
+			}
+			stm[k]=c1 | 0x80;
+			stm[k+1]=c2 | 0x80;
+			k+=2;i+=2;
+			}
+			else{
+			if(c1<0x80){
+			stm[k]=c1;
+			k++;i++;
+			}
+			else{//EUCÈ¾³Ñ
+			stm[k]=0x8E;
+			stm[k+1]=c1;
+			k+=2;i++;
+			}
+			}
+			}
+		}
+	stm[k]=0;
+	memcpy(&newfn[0],&stm[0],80);
+
+	/*fd = sceIoOpen("ms0:/log1", PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
+	sceIoWrite(fd, newfn, 80);
+	sceIoClose(fd);*/
+
 			ui_cls();
-			if(ui_input_string(120, 68, newfn+l, 29) >= 0){
-				filter_filename(newfn+l);
-				strcat(newfn, p-4);
+			if(ui_input_string(120, 68, newfn+len, 29) >= 0){
+				//filter_filename(newfn+len);
+				//strcat(newfn, p-4);
+
+	/*fd = sceIoOpen("ms0:/log2", PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
+	sceIoWrite(fd, newfn, 80);
+	sceIoClose(fd);*/
+
+	memcpy(&stm2[0],&newfn[0],80);
+	k=0;
+	i=0;
+	big=0;
+	seek=0;
+	if(filename_encode==UTF8){
+   		while(i < 80){
+			c1= (u8)stm2[i];
+			c2= (u8)stm2[i+1];
+        	//c1= (u8)newfn[i];
+		//c2= (u8)newfn[i+1];
+        	if(c1 < 0x80){
+		stm[k]=c1;
+                k++;i++;
+        	}
+		else if( (((c1+0x5F)&0xFF) < 0x4C) && (c2>=0xA1) ){
+        	//memcpy(&seek,&newfn[i],2);
+        	memcpy(&seek,&stm2[i],2);
+               	kk = 0;
+                fd = sceIoOpen("ms0:/cheatmaster/table/euc-jp", PSP_O_RDONLY, 0777);
+		if(fd>=0){
+                 while(1){
+                 	sceIoRead(fd,fbuffer,2048);
+		for( z = 0; z< 1024;z++){
+        		memcpy(&big,&fbuffer[z*2],2);
+		    if(seek==big){
+		        kk +=z;
+		    	goto end;
+		    }
+		    else if(big==0){
+		        kk +=z;
+			sceIoClose(fd);
+		    	goto fail;
+		    }
+		}
+		kk += 1024;
+                 }
+		}
+		end:
+		sceIoClose(fd);
+                fd = sceIoOpen("ms0:/cheatmaster/table/utf8", PSP_O_RDONLY, 0777);
+		if(fd>=0){
+		sceIoLseek(fd, 0, SEEK_SET);
+		sceIoLseek(fd, kk<<2,SEEK_CUR);
+   		sceIoRead(fd,fbuffer,4);
+		}
+		sceIoClose(fd);
+		c1=(u8)fbuffer[0];
+		if(c1 < 0x80){
+			memcpy(&stm[k],&fbuffer[0],1);
+		    k++;
+		    }
+		else if(c1 < 0xE0){
+			memcpy(&stm[k],&fbuffer[0],2);
+		    k +=2;
+		}
+		else if(c1 < 0xF0){
+			memcpy(&stm[k],&fbuffer[0],3);
+		    k +=3;
+		}
+		fail:
+		i+=2;
+        	}
+        	else{
+       		i++;
+        	}
+	    }
+	}
+	else if(filename_encode==SJIS){
+		while(i < 80){
+			//c1= newfn[i];
+			//c2= newfn[i+1];
+			c1= (u8)stm2[i];
+			c2= (u8)stm2[i+1];
+			if(c1 < 0x80){
+				stm[k]=c1;
+				k++;
+				i++;
+			}
+			else if(c1 == 0xE8 && c2>=0xA1){
+				stm[k]=c2;
+				k++;
+				i+=2;
+			}
+			else if( (((c1+0x5F)&0xFF) < 0x4C) && (c2>=0xA1) ){
+			//http://oku.edu.mie-u.ac.jp/~okumura/algo/
+			c1 &=0x7F;
+			c2 &=0x7F;
+			if ((c1 & 1) != 0)
+			{
+			c2 += 0x20;
+				if ((c2 & 0x80) == 0) {
+					c2--;
+				}
+			}
+			else {
+					c2 += 0x7E;
+			}
+			
+			c1 = (((c1 - 1) >> 1) + 0x91) ^ 0x20;
+
+				stm[k]=c1;
+				stm[k+1]=c2;
+				k+=2;
+				i+=2;
+			}
+			else{
+			i++;
+			}
+		}
+	}
+	stm[k]=0;
+	memcpy(&newfn[0],&stm[0],80);
+	filter_filename(newfn+len);
+	memcpy(&newfn[strlen(newfn)],&fn[strlen(fn)-4],5);
+
+	/*fd = sceIoOpen("ms0:/log3", PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
+	sceIoWrite(fd, stm, 80);
+	sceIoClose(fd);
+	fd = sceIoOpen("ms0:/log4", PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
+	sceIoWrite(fd, stm2, 80);
+	sceIoClose(fd);
+	fd = sceIoOpen("ms0:/log5", PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
+	sceIoWrite(fd, newfn, 80);
+	sceIoClose(fd);*/
+
 				sceIoRename(fn, newfn);
 			}
 		}
@@ -2489,8 +2754,6 @@ layout_read_text,write_psfont,keyset_load,convert_cmf,write_mem,img_popsdoc,img_
 #define FAT_FILEATTR_VOLUME	0x08
 #define FAT_FILEATTR_DIRECTORY	0x10
 #define FAT_FILEATTR_ARCHIVE	0x20
-
-char fbuffer[2048];
 
 static char fatprx [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "ms0:/CheatMaster/prx/fat_euc.prx";
 static void * layout_readdir(char *tempdir, char *ext, int *c, int *dc, int fatread)
@@ -2578,18 +2841,17 @@ static void * layout_readdir(char *tempdir, char *ext, int *c, int *dc, int fatr
 		else{
 			if(strcmpi(&sid.d_name[l - 3], ext) != 0)
 				continue;
-			sprintf((char *)text_array[i++],"%-36s%4dKiB\x0",sid.d_name,(int)(sid.d_stat.st_size)>>10);
+			sprintf((char *)text_array[i++],"%-40s%4dKiB\x0",sid.d_name,(int)(sid.d_stat.st_size)>>10);
 		}
 	}
 	sceIoDclose(dl);
 	strcpy((char *)dir_array[0],"../");
 
-#define SJIS 1
-#define UTF8 2
-	char stm[45]="                                             ";
-	char msg[45];
+	char stmm[45]="                                             ";
+	char stmn[45];
 	u8 c1=0;u8 c2=0;
-	int k=0;int j=0;
+	int k=0;
+	int j=0;
 	int z=0;
 	char filename_encode=0;
 	int seek=0;
@@ -2599,21 +2861,24 @@ static void * layout_readdir(char *tempdir, char *ext, int *c, int *dc, int fatr
 	filename_encode= FILE_ENCODE();
 
 	for(i=0;i<tempc;i++){
-		strcpy(msg, (char *)text_array[i]);
+		strcpy(stmn, (char *)text_array[i]);
 		if(filename_encode==UTF8){
-			k=0;j=0;
-   		     while(j < 36){
-        	c1= (u8)msg[j];
+		k=0;j=0;
+   			while(j < 36){
+        	c1= (u8)stmn[j];
         	if(c1 < 0x80){
-              	memcpy(&stm[k],&msg[j],1);
+		stmm[k]=c1;
                 k++;
                 j++;
         	}
         	else if(c1 < 0xF8){
-        		memcpy(&seek,&msg[j],4);
+        	memcpy(&seek,&stmn[j],4);
         		if(c1 < 0xE0){
        			seek &= 0xFFFF;
         		}
+        		else if(c1 < 0xF0){
+       			seek &= 0xFFFFFF;
+			}
                	 kk = 0;
                 fd = sceIoOpen("ms0:/cheatmaster/table/utf8", PSP_O_RDONLY, 0777);
 		if(fd>=0){
@@ -2623,39 +2888,30 @@ static void * layout_readdir(char *tempdir, char *ext, int *c, int *dc, int fatr
         		memcpy(&big,&fbuffer[z*4],4);
                         if(seek==big){
                             kk +=z;
-                        	goto end;
+                        	goto endd;
                         }
                         else if(big==0){
-                            kk +=z;
 				sceIoClose(fd);
-                        	goto fail;
+                        	goto fails;
                         }
                     }
                     kk += 512;
                  }
 		}
-		end:
+		endd:
 		sceIoClose(fd);
                 fd = sceIoOpen("ms0:/cheatmaster/table/euc-jp", PSP_O_RDONLY, 0777);
 		if(fd>=0){
-		sceIoLseek(fd, 0, SEEK_SET);
-		sceIoLseek(fd, kk<<1,SEEK_CUR);
+		sceIoLseek(fd, kk<<1,SEEK_SET);
                 sceIoRead(fd,fbuffer,2);
 		}
 		sceIoClose(fd);
-                    //È¾³Ñ
-                    //if((u8)fbuffer[1]==0){
-                    //	memcpy(&stm[k],&fbuffer[0],1);
-                    //    k++;
-                    //}
-                    //Á´³Ñ
-                    //else{
-                    	memcpy(&stm[k],&fbuffer[0],2);
+
+                    	memcpy(&stmm[k],&fbuffer[0],2);
                         k = k+2;
-                    //}
 
         		if(c1 < 0xE0){
-			fail:
+			fails:
 				j+=2;
         		}
         		else if(c1 < 0xF0){
@@ -2665,23 +2921,23 @@ static void * layout_readdir(char *tempdir, char *ext, int *c, int *dc, int fatr
         			j+=4;
         		}
         	}
-        	//else if(c1 < 0xFC){
-        	//	j+=5;
-        	//}
-        	//else if(c1 < 0xFE){
-        	//	j+=6;
-        	//}
+        	else if(c1 < 0xFC){
+        		j+=5;
+        	}
+        	else if(c1 < 0xFE){
+        		j+=6;
+        	}
         	else{
         		j++;
         	}
 	        }
-		}
+			}
 		else if(filename_encode==SJIS){
-			k=0;j=0;
+		k=0;j=0;
 			while(j<36){
 		//¥Õ¥¡¥¤¥ëÌ¾É½¼¨ http://www.tohoho-web.com/wwwkanji.htm
-			c1=(u8)msg[j];
-			c2=(u8)msg[j+1];
+			c1=(u8)stmn[j];
+			c2=(u8)stmn[j+1];
 			if( (u8)((c1^ 0x20)-0xA1) < (u8)0x3C ){
 			if (c1 >= 0xe0) { c1 = c1 - 0x40; }
 			if (c2 >= 0x80) { c2 = c2 - 1; }
@@ -2693,26 +2949,27 @@ static void * layout_readdir(char *tempdir, char *ext, int *c, int *dc, int fatr
 			    c1 = ((c1 - 0x70) * 2) - 1;
 			    c2 = c2 - 0x1f;
 			}
-			stm[k]=c1 | 0x80;
-			stm[k+1]=c2 | 0x80;
+			stmm[k]= c1 | 0x80;
+			stmm[k+1]= c2 | 0x80;
 			k+=2;j+=2;
 			}
 			else{
-			if(c1<0x80){
-			memcpy(&stm[k],&c1,1);
-			k++;j++;
+				if(c1<0x80){
+				stmm[k]=c1;
+				k++;j++;
+				}
+				else{//EUCÈ¾³Ñ
+				stmm[k]=0x8E;
+				stmm[k+1]=c1;
+				k+=2;j++;
+				}
 			}
-			else{//EUCÈ¾³Ñ
-			stm[k]=0x8E;
-			stm[k+1]=c1;
-			k+=2;j++;
 			}
-			}
-			}
-			}
-			memcpy(&stm[36],&msg[strlen(msg)-7],8);
+		}
+			memcpy(&stmm[36],&stmn[strlen(stmn)-7],8);
+			//stmm[36]=filename_encode+0x30; //MODE³ÎÇ§ÍÑ
 
-			 strcpy((char*)decode_text_array[i], stm);
+			 strcpy((char*)decode_text_array[i], stmm);
 			// strcpy((char*)decode_text_array[i], (char*)text_array[i]);
 
 	}
