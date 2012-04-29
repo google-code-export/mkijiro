@@ -1360,9 +1360,6 @@ static unsigned int mem_table_ConvertTabType(p_mem_table p)
 	return adr;
 }
 
-extern char fbuffer[];
-#define SJIS 1
-#define UTF8 2
 
 extern void mem_table_savecw()
 {
@@ -1378,131 +1375,17 @@ extern void mem_table_savecw()
 		return ;
 
 	char cmf[]=".cmf\x0";
-	char stm[45];
-	u8 c1=0;
-	u8 c2=0;
 	int i=0;
 	int j=0;
-	int k=0;
-	int kk=0;
-	int z=0;
-	int seek=0;
- 	int big=0;
 	int fd;
-	char filename_encode=FILE_ENCODE();
+	
+	EUC_UTF8SJIS(fn,40);
+	memcpy(&fn[strlen(fn)],&cmf[0],5);
 
-	if(filename_encode==UTF8){
-   		while(i < 40){
-        	c1= (u8)fn[i];
-		c2= (u8)fn[i+1];
-        	if(c1 < 0x80){
-		stm[k]=c1;
-                k++;i++;
-        	}
-		else if( (((c1+0x5F)&0xFF) < 0x4C) && (c2>=0xA1) ){
-        	memcpy(&seek,&fn[i],2);
-               	kk = 0;
-                fd = sceIoOpen("ms0:/cheatmaster/table/euc-jp", PSP_O_RDONLY, 0777);
-		if(fd>=0){
-                 while(1){
-                 	sceIoRead(fd,fbuffer,2048);
-		for( z = 0; z< 1024;z++){
-        		memcpy(&big,&fbuffer[z*2],2);
-		    if(seek==big){
-		        kk +=z;
-		    	goto end;
-		    }
-		    else if(big==0){
-		        kk +=z;
-			sceIoClose(fd);
-		    	goto fail;
-		    }
-		}
-		kk += 1024;
-                 }
-		}
-		end:
-		sceIoClose(fd);
-                fd = sceIoOpen("ms0:/cheatmaster/table/utf8", PSP_O_RDONLY, 0777);
-		if(fd>=0){
-		sceIoLseek(fd, 0, SEEK_SET);
-		sceIoLseek(fd, kk<<2,SEEK_CUR);
-   		sceIoRead(fd,fbuffer,4);
-		}
-		sceIoClose(fd);
-		c1=(u8)fbuffer[0];
-		if(c1 < 0x80){
-			memcpy(&stm[k],&fbuffer[0],1);
-		    k++;
-		    }
-		else if(c1 < 0xE0){
-			memcpy(&stm[k],&fbuffer[0],2);
-		    k +=2;
-		}
-		else if(c1 < 0xF0){
-			memcpy(&stm[k],&fbuffer[0],3);
-		    k +=3;
-		}
-		fail:
-		i+=2;
-        	}
-        	else{
-       		i++;
-        	}
-	    }
-	}
-	else if(filename_encode==SJIS){
-		while(i < 30){
-			c1= (u8)fn[i];
-			c2= (u8)fn[i+1];
-			if((c1 & 0x80) ==0){
-				stm[k]=fn[i];
-				k++;
-				i++;
-			}
-			else if(c1 == 0xE8 && c2>=0xA1){
-				stm[k]=fn[i+1];
-				k++;
-				i+=2;
-			}
-			else if( (((c1+0x5F)&0xFF) < 0x4C) && (c2>=0xA1) ){
-			//http://oku.edu.mie-u.ac.jp/~okumura/algo/
-			c1 &=0x7F;
-			c2 &=0x7F;
-			if ((c1 & 1) != 0)
-			{
-			c2 += 0x20;
-				if ((c2 & 0x80) == 0) {
-					c2--;
-				}
-			}
-			else {
-					c2 += 0x7E;
-			}
-			
-			c1 = (((c1 - 1) >> 1) + 0x91) ^ 0x20;
-
-				stm[k]=c1;
-				stm[k+1]=c2;
-				k+=2;
-				i+=2;
-			}
-			else{
-			i++;
-			}
-		}
-	}
-	stm[k]=0;
-	memcpy(&stm[strlen(stm)],&cmf[0],5);
-
-	memcpy(&fn[0],&stm[0],45);
 	filter_filename(fn); //DOSÊ¸»úÇÓ½ü
 
 	sprintf(s, "%s/%s", CMF_DIR, fn);
 
-	//fd = sceIoOpen("ms0:/log", PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
-	//sceIoWrite(fd, fn, 80);
-	//sceIoClose(fd);
 
 	fd = sceIoOpen(s, PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
 	if(fd < 0) return;

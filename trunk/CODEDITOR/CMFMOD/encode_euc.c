@@ -38,9 +38,9 @@ typedef unsigned int ucs4_t;
 typedef unsigned int dword;
 typedef unsigned char byte;
 typedef unsigned short word;
-#define RET_ILSEQ      -1
+#define RET_ILSEQ	  -1
 #define RET_TOOFEW(n)  (-2-(n))
-#define RET_ILUNI      -1
+#define RET_ILUNI	  -1
 #define RET_TOOSMALL   -2
 #define SJIS 1
 #define UTF8 2
@@ -53,6 +53,7 @@ static int encode_id = -1;
 static unsigned char * UNI_CJK;
  */
 
+//ゲームによってSJISかUTF8どちらのファイル名が使われてるか不明なため"あ"で判定する
 char FILE_ENCODE(){
 	int fd;
 	char filemode=0;
@@ -70,7 +71,262 @@ char FILE_ENCODE(){
 	return filemode;
 }
 
-//ワイド関数　utf8をutf16beに戻す
+//UTF8+SJISから直EUC変換表
+int UTF8SJIS_EUC(unsigned char *msg,int len){
+	char stm[80];
+	char fbuffer[2048];
+	u8 c1=0;
+	u8 c2=0;
+	int i=0;
+	int k=0;
+	int kk=0;
+	int z=0;
+	int seek=0;
+ 	int big=0;
+	int fd;
+	char filename_encode=FILE_ENCODE();
+
+		if(filename_encode==UTF8){
+
+   		  while(i < len){
+			c1= (u8)msg[i];
+			if((c1 & 0x80) ==0){
+			stm[k]=c1;
+			k++;
+			i++;
+			}
+			else if(c1 < 0xF8){
+				memcpy(&seek,&msg[i],4);
+				if(c1 < 0xE0){
+	   			seek &= 0xFFFF;
+				}
+				else if(c1 < 0xF0){
+	   			seek &= 0xFFFFFF;
+				}
+ 				kk = 0;
+				fd = sceIoOpen("ms0:/cheatmaster/table/utf8", PSP_O_RDONLY, 0777);
+				if(fd>0){
+				 while(1){
+   				sceIoRead(fd,fbuffer,2048);
+	  				for( z = 0; z< 512;z++){
+					memcpy(&big,&fbuffer[z*4],4);
+		  				if(seek==big){
+			 			kk +=z;
+			  			goto end1;
+						}
+						else if(big==0){
+						sceIoClose(fd);
+		  				goto fail2;
+						}
+					}
+					kk += 512;
+				 }
+				}
+				end1:
+				sceIoClose(fd);
+				fd = sceIoOpen("ms0:/cheatmaster/table/euc-jp", PSP_O_RDONLY, 0777);
+				if(fd>0){
+				sceIoLseek32(fd, kk<<1,PSP_SEEK_SET);
+		  		sceIoRead(fd,fbuffer,2);
+				}
+				sceIoClose(fd);
+	
+	  			memcpy(&stm[k],&fbuffer[0],2);
+				k = k+2;
+
+				if(c1 < 0xE0){
+				fail2:
+				i+=2;
+				}
+				else if(c1 < 0xF0){
+				i+=3;
+				}
+				else{
+				i+=4;
+				}
+			}
+			else if(c1 < 0xFC){
+			i+=5;
+			}
+			else if(c1 < 0xFE){
+			i+=6;
+			}
+			else{
+			i++;
+			}
+		  }
+		}
+		//ファイル名表示 http://www.tohoho-web.com/wwwkanji.htm
+		else if(filename_encode==SJIS){
+		  while(i<len){
+			c1=(u8)msg[i];
+			c2=(u8)msg[i+1];
+			if( (u8)((c1^ 0x20)-0xA1) < (u8)0x3C ){
+			if (c1 >= 0xe0) { c1 = c1 - 0x40; }
+			if (c2 >= 0x80) { c2 = c2 - 1; }
+			if (c2 >= 0x9e) {
+				c1 = (c1 - 0x70) * 2;
+				c2 = c2 - 0x7d;
+			}
+			else {
+				c1 = ((c1 - 0x70) * 2) - 1;
+				c2 = c2 - 0x1f;
+			}
+			stm[k]=c1 | 0x80;
+			stm[k+1]=c2 | 0x80;
+			k+=2;i+=2;
+			}
+			else{
+				if((c1 & 0x80) ==0){
+				stm[k]=c1;
+				k++;i++;
+				}
+				else{//EUC半角
+				stm[k]=0x8E;
+				stm[k+1]=c1;
+				k+=2;i++;
+				}
+			}
+		  }
+		}
+	stm[k]=0;
+	memcpy(&msg[0],&stm[0],len);
+
+	return k;
+}
+
+//EUCから直UTF8＋SJIS変換表
+int EUC_UTF8SJIS(unsigned char *msg, int len)
+{
+	char stm[80];
+	char fbuffer[2048];
+	u8 c1=0;
+	u8 c2=0;
+	int i=0;
+	int k=0;
+	int kk=0;
+	int z=0;
+	int seek=0;
+ 	int big=0;
+	int fd;
+	char filename_encode=FILE_ENCODE();
+
+	if(filename_encode==UTF8){
+   	  while(i < len){
+		c1= (u8)msg[i];
+		c2= (u8)msg[i+1];
+		if((c1 & 0x80) ==0){
+		stm[k]=c1;
+		k++;i++;
+		}
+		else if( (((c1+0x5F)&0xFF) < 0x4C) && (c2>=0xA1) ){
+		memcpy(&seek,&msg[i],2);
+ 		kk = 0;
+		fd = sceIoOpen("ms0:/cheatmaster/table/euc-jp", PSP_O_RDONLY, 0777);
+			if(fd>0){
+			 while(1){
+   				sceIoRead(fd,fbuffer,2048);
+				for( z = 0; z< 1024;z++){
+				memcpy(&big,&fbuffer[z*2],2);
+					if(seek==big){
+					kk +=z;
+					goto end;
+					}
+					else if(big==0){
+					sceIoClose(fd);
+					goto fail;
+					}
+				}
+				kk += 1024;
+			 }
+			}
+			end:
+			sceIoClose(fd);
+			fd = sceIoOpen("ms0:/cheatmaster/table/utf8", PSP_O_RDONLY, 0777);
+				if(fd>0){
+				sceIoLseek32(fd, kk<<2,PSP_SEEK_SET);
+   				sceIoRead(fd,fbuffer,4);
+				}
+			sceIoClose(fd);
+			c1=(u8)fbuffer[0];
+
+			if((c1 & 0x80) ==0){
+			memcpy(&stm[k],&fbuffer[0],1);
+			k++;
+			}
+			else if(c1 < 0xE0){
+			memcpy(&stm[k],&fbuffer[0],2);
+			k +=2;
+			}
+			else if(c1 < 0xF0){
+			memcpy(&stm[k],&fbuffer[0],3);
+			k +=3;
+			}
+			//else if(c1 < 0xF8){
+			//k+=4;
+			//}
+			//else if(c1 < 0xFC){
+			//k+=5;
+			//}
+			//else if(c1 < 0xFE){
+			//k+=6;
+			//}
+		fail:
+		i+=2;
+		}
+		else{
+	   	i++;
+		}
+	  }
+	}
+	else if(filename_encode==SJIS){
+		while(i < len){
+			c1= (u8)msg[i];
+			c2= (u8)msg[i+1];
+			if((c1 & 0x80) ==0){
+			stm[k]=c1;
+			k++;
+			i++;
+			}
+			else if(c1 == 0xE8 && c2>=0xA1){
+				stm[k]=c2;
+				k++;
+				i+=2;
+			}
+			else if( (((c1+0x5F)&0xFF) < 0x4C) && (c2>=0xA1) ){
+			//http://oku.edu.mie-u.ac.jp/~okumura/algo/
+			c1 &=0x7F;
+			c2 &=0x7F;
+			if ((c1 & 1) != 0)
+			{
+			c2 += 0x20;
+				if ((c2 & 0x80) == 0) {
+				c2--;
+				}
+			}
+			else {
+				c2 += 0x7E;
+			}
+			
+			c1 = (((c1 - 1) >> 1) + 0x91) ^ 0x20;
+
+				stm[k]=c1;
+				stm[k+1]=c2;
+				k+=2;
+				i+=2;
+			}
+			else{
+			i++;
+			}
+		}
+	}
+	stm[k]=0;
+	memcpy(&msg[0],&stm[0],len);
+
+	return k;
+}
+
+//ワイド関数　utf8をutf16beに戻す,libconvのコピペ
 static int utf8_mbtowc(ucs4_t *pwc, const unsigned char *s, int n)
 {
 	unsigned char c = s[0];
@@ -142,7 +398,7 @@ static int utf8_mbtowc(ucs4_t *pwc, const unsigned char *s, int n)
 		return RET_ILSEQ;
 }
 
-/* unicode -> cjk */
+/* unicode -> cjk */ //UTF16巨大テーブルからEUC文字コードを取得
 static int encode_uni2cjk(const unsigned char *uni,unsigned char *cjk, p_encodepack pack){
 	int transcount = 0;
 
@@ -156,7 +412,7 @@ static int encode_uni2cjk(const unsigned char *uni,unsigned char *cjk, p_encodep
 		cjk[0]=pack->UNI_CJK[pos];
 		cjk[1]=pack->UNI_CJK[pos+1];
 		transcount = 2;
-		if(cjk[0]==0x3f && cjk[1]==0) //豆腐
+		if(cjk[0]==0x3f && cjk[1]==0) //豆腐,u003f自体は"？"の文字
 		{
 			cjk[0]=0xA2;
 			cjk[1]=0xA2;
@@ -350,7 +606,7 @@ int big5_init(char *s,p_encodepack pack)
 {
 	int fd = sceIoOpen("ms0:/CheatMaster/big5.dat", PSP_O_RDONLY, 0777);
 	if(fd < 0)	return 1;
-    pack->buf = (unsigned short *)s;
+	pack->buf = (unsigned short *)s;
 	sceIoRead(fd, (unsigned char *)pack->buf, 41688);
 	sceIoClose(fd);
 	return 0;
