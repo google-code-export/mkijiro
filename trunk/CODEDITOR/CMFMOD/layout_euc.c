@@ -2616,7 +2616,17 @@ static void * layout_readdir(char *tempdir, char *ext, int *c, int *dc, int fatr
 		// strcpy((char*)decode_text_array[i], (char*)text_array[i]);
 	}
 	
-	for(i=0;i<tempdc;i++) strcpy((char*)decode_dir_array[i], (char*)dir_array[i]);
+	for(i=0;i<tempdc;i++){
+		strcpy(stmm,(char*)dir_array[i]);
+		stend=UTF8SJIS_EUC(stmm,36);
+		for(k=stend;k<36;k++){
+		stmm[k]=0;
+		}
+		stmm[36]=0;
+
+		strcpy((char*)decode_dir_array[i], stmm);
+	//strcpy((char*)decode_dir_array[i], (char*)dir_array[i]);
+	}
 	
 	if(fatread && (img_Loadprx(fatprx)==0))
 	{
