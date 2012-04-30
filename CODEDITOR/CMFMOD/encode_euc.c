@@ -219,7 +219,7 @@ int EUC_UTF8SJIS(unsigned char *msg, int len)
 		stm[k]=c1;
 		k++;i++;
 		}
-		else if( (((c1+0x5F)&0xFF) < 0x4C) && (c2>=0xA1) ){
+		else if( (((c1+0x5F)&0xFF) < 0x5C) && (c2>=0xA1) ){
 		memcpy(&seek,&msg[i],2);
  		kk = 0;
 		fd = sceIoOpen("ms0:/cheatmaster/table/euc-jp", PSP_O_RDONLY, 0777);
