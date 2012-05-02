@@ -269,113 +269,112 @@ static const char *get_recovery_fontname(size_t idx)
 int ok=1;
 char stm[128];
 extern int zenkaku;
+char *toufuarray[]={"  ","\x81\xA0","\xA2\xA2"};
+char *convert_table[]={"\x0","ms0:/seplugins/table/sjis","ms0:/seplugins/table/euc-jp"};
 
-int utf82sjis(){
-	char space = 0x20;
-	char null = 0;
+int utf82sjis()
+{
 	char buffer[2048];
-    int seek=0;
-    int k=0;
-    int kk=0;
-    int i=0;
-    int j=0;
-    int big=0;
-    int fd;
-    unsigned char code=0;
+	int seek=0;
+	int k=0;
+	int kk=0;
+	int i=0;
+	int j=0;
+	int big=0;
+	int fd;
+	unsigned char code=0;
 	const char *msg;
 	const char *p;
-    p = get_recovery_fontname((size_t)(g_font_cur_sel));
+	p = get_recovery_fontname((size_t)(g_font_cur_sel));
 	msg = strrchr(p, '/');
-	if(zenkaku==1){
-	p = "ms0:/seplugins/table/sjis";
-	}
-	else{
-	p = "ms0:/seplugins/table/euc-jp";
-	}
+	p=convert_table[zenkaku];
 	if(msg != NULL) {
 	msg++;
-    int z= strlen(msg);
-    if(z>128){
-    z=128;
-    }
+	int z= strlen(msg);
+	if(z>128){
+	z=128;
+	}
 	
-        while(i < z){
-        	code= (u8)msg[i];
-        	if(code < 0x80){
-              	memcpy(&stm[k],&msg[i],1);
-                k++;
-                i++;
-        	}
-        	else if(code < 0xF0){
-        		memcpy(&seek,&msg[i],3);
-        		if(code < 0xE0){
-       			seek &= 0xFFFF;
-        		}
-                kk = 0;
-                fd = sceIoOpen("ms0:/seplugins/table/utf8", PSP_O_RDONLY, 0777);
-		if(fd>=0){
-                 while(1){
-                 	sceIoRead(fd,buffer,2048);
-                    for( j = 0; j< 512;j++){
-        				memcpy(&big,&buffer[j*4],4);
-                        if(seek==big){
-                            kk +=j;
-                        	goto end;
-                        }
-                        else if(big==0){
-				sceIoClose(fd);
-                        	goto fail;
-                        }
-                    }
-                    kk += 512;
-                 }
-		}
-                end:
-				sceIoClose(fd);
-                fd = sceIoOpen(p, PSP_O_RDONLY, 0777);
-		if(fd>=0){
-				sceIoLseek(fd, 0, SEEK_SET);
-				sceIoLseek(fd, kk<<1,SEEK_CUR);
-                sceIoRead(fd,buffer,2);
-		}
-				sceIoClose(fd);
-                    //”¼ŠpƒJƒi
-                    if((u8)buffer[1]==0){
-                    	memcpy(&stm[k],&buffer[0],1);
-                        k++;
-                        }
-                    //‘SŠp
-                    else{
-                    	memcpy(&stm[k],&buffer[0],2);
-                        k = k+2;
-                    }
-        		if(code < 0xE0){
-				i= i+2;
-        		}
-        		else{
-				i= i+3;
+		while(i < z){
+			code= (u8)msg[i];
+			if(code < 0x80){
+			stm[k]=code;
+				k++;
+				i++;
+			}
+			else if(code < 0xC2){
+			i+=2;
+			}
+			else if(code < 0xF0){
+				memcpy(&seek,&msg[i],3);
+				if(code < 0xE0){
+	   			seek &= 0xFFFF;
 				}
-        	}
-        	else if(code < 0xF8){
-        		i+=4;
-        	}
-        	else if(code < 0xFC){
-        		i+=5;
-        	}
-        	else if(code < 0xFE){
-        		i+=6;
-        	}
-        	else{
-                fail: //BOM
-                //memcpy(&stm[k],&space,1);
-        		i++;
-        	}
-        }
-            
-            memcpy(&stm[k],&null,1);
-            memcpy(&stm[15],&null,1);
-            memcpy(&stm[16],&null,1);
-        
+				kk = 0;
+				fd = sceIoOpen("ms0:/seplugins/table/utf8", PSP_O_RDONLY, 0777);
+				if(fd>=0){
+				 while(1){
+				 	sceIoRead(fd,buffer,2048);
+					for( j = 0; j< 512;j++){
+					memcpy(&big,&buffer[j*4],4);
+						if(seek==big){
+						kk +=j;
+						goto end;
+						}
+						else if(big==0){
+						sceIoClose(fd);
+						memcpy(&buffer[0],&toufuarray[zenkaku][0],2);
+						goto TOUFU;
+						}
+					}
+					kk += 512;
+				 }
+				}
+				end:
+				sceIoClose(fd);
+				fd = sceIoOpen(p, PSP_O_RDONLY, 0777);
+				if(fd>0){
+				sceIoLseek(fd, kk<<1,SEEK_SET);
+				sceIoRead(fd,buffer,2);
+				}
+				sceIoClose(fd);
+
+				//”¼ŠpƒJƒi
+				if((u8)buffer[1]==0){
+				stm[k]=buffer[0];
+				k++;
+				}
+				//‘SŠp
+				else{
+				TOUFU:
+				memcpy(&stm[k],&buffer[0],2);
+				k = k+2;
+				}
+
+				if(code < 0xE0){
+				i= i+2;
+				}
+				else{
+				i= i+3;
+			}
+			}
+			else if(code < 0xF8){
+				i+=4;
+			}
+			else if(code < 0xFC){
+				i+=5;
+			}
+			else if(code < 0xFE){
+				i+=6;
+			}
+			else{
+				//BOM
+			i+=3;
+			}
+		}
+	stm[k]=0;
+	stm[15]=0;
+	stm[16]=0;
 	}
 	
 return 0;

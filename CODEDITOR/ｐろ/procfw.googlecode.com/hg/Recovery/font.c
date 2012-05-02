@@ -20,7 +20,8 @@
 //#include "../fonts/misaki.h"		//8x8
 //#include "../fonts/misaki_hira.h"	//8x8
 //#include "../fonts/akagi.h"		//8x11
-//#include "../fonts/paw.h"			//8x16
+//#include "../fonts/paw.h"		//8x16
+//#include "../fonts/mplus5x10.h"	//5x10
 //#include "../fonts/naga5x10a.h"	//5x10 ‰¼–¼–³
 //#include "../fonts/naga5x10rk.h"	//5x10
 //#include "../fonts/shnm6x12a.h"	//6x12 ‰¼–¼–³

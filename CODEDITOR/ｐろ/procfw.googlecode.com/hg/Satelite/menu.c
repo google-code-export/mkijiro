@@ -340,106 +340,101 @@ int menu_setup(void)
 	return 0;
 }
 
+char *toufuarray[]={"  ","\x81\xA0","\xA2\xA2"};
+char *convert_table[]={"\x0","ms0:/seplugins/table/sjis","ms0:/seplugins/table/euc-jp"};
 
 int utf8video(){
-	char space = 0x20;
-	char null = 0;
 	char nulls[] = "NULL\x0";
 	char buffer[2048];
-    int seek=0;
-    int k=0;
-    int z=0;
-    int kk=0;
-    int i=0;
-    int j=0;
-    int big=0;
-    int lba=0;
-    int fd;
-    unsigned char code=0;
+	int seek=0;
+	int k=0;
+	int z=0;
+	int kk=0;
+	int i=0;
+	int j=0;
+	int big=0;
+	int lba=0;
+	int fd;
+	unsigned char code=0;
 	const char *msg;
 	const char *p;
-	if(zenkaku==1){
-		p="ms0:/seplugins/table/sjis";
-	}
-	else{
-		p="ms0:/seplugins/table/euc-jp";
-	}
+	p=convert_table[zenkaku];
 	if(sfo==0){
-	    msg =item_str[TMENU_UMD_VIDEO];
+		msg =item_str[TMENU_UMD_VIDEO];
 	}
 	else{
 		memcpy(&stm[0],&nulls[0],5);
-                fd = sceIoOpen(umdvideo_path, PSP_O_RDONLY, 0777);
+				fd = sceIoOpen(umdvideo_path, PSP_O_RDONLY, 0777);
 		if(fd>=0){
 		sceIoLseek(fd, 0, PSP_SEEK_END);
 		big = sceIoLseek(fd, 0, PSP_SEEK_CUR);
 		if(big>0x8800){
 		sceIoLseek(fd, 0x8000, PSP_SEEK_SET);
-                sceIoRead(fd,buffer,2048);
+				sceIoRead(fd,buffer,2048);
 		memcpy(&lba,&buffer[0x8C],4);
-                lba=lba*2048;
+				lba=lba*2048;
 		sceIoLseek(fd, lba, PSP_SEEK_SET);
-                sceIoRead(fd,buffer,2048);
-                i = 6;
-                
+				sceIoRead(fd,buffer,2048);
+				i = 6;
+				
 		while (1)
-                    {
-                        //if (buffer[i] == 0x50 && buffer[i + 1] == 0x53 && buffer[i + 2] == 0x50 && buffer[i + 3] == 0x5f && buffer[i + 4] == 0x47) break;
-                        if (buffer[i] == 0x55 && buffer[i + 1] == 0x4D &&buffer[i + 2] == 0x44 && buffer[i + 3] == 0x5f && buffer[i + 4] == 0x56) {break;}
-                        if (i > 2038) {
+					{
+						//if (buffer[i] == 0x50 && buffer[i + 1] == 0x53 && buffer[i + 2] == 0x50 && buffer[i + 3] == 0x5f && buffer[i + 4] == 0x47) break;
+						if (buffer[i] == 0x55 && buffer[i + 1] == 0x4D &&buffer[i + 2] == 0x44 && buffer[i + 3] == 0x5f && buffer[i + 4] == 0x56) {break;}
+						if (i > 2038) {
 		sceIoClose(fd);
 	/*	sprintf(buffer,"root");
 		fd=sceIoOpen("ms0:/log", PSP_O_CREAT | PSP_O_WRONLY , 0777);
 		sceIoWrite(fd, buffer,4);
 		sceIoClose(fd);*/
 				 return 0;}
-                        i++;
-                    }
+						i++;
+					}
 		memcpy(&lba,&buffer[i-6],4);
-                lba=lba*2048;
+				lba=lba*2048;
 		sceIoLseek(fd, lba, PSP_SEEK_SET);
-                sceIoRead(fd,buffer,2048);
-                    i = 31;
+				sceIoRead(fd,buffer,2048);
+					i = 31;
 
-                    while (1)
-                    {
-                        if (buffer[i] == 0x50 && buffer[i + 1] == 0x41 && buffer[i + 2] == 0x52 && buffer[i + 3] == 0x41) {break;}
-                        if (i > 2038) { 
+					while (1)
+					{
+						if (buffer[i] == 0x50 && buffer[i + 1] == 0x41 && buffer[i + 2] == 0x52 && buffer[i + 3] == 0x41) {break;}
+						if (i > 2038) { 
 				sceIoClose(fd);
 	/*	sprintf(buffer,"psf");
 		fd=sceIoOpen("ms0:/log", PSP_O_CREAT | PSP_O_WRONLY , 0777);
 		sceIoWrite(fd, buffer,4);
 		sceIoClose(fd);*/
   return 0; }
-                        i++;
-                    }
+						i++;
+					}
 
 		memcpy(&lba,&buffer[i-31],4);
-                lba=lba*2048;
+				lba=lba*2048;
 		sceIoLseek(fd, lba, PSP_SEEK_SET);
-                sceIoRead(fd,buffer,2048);
+				sceIoRead(fd,buffer,2048);
 		memcpy(&i,&buffer[12],4);
 		memcpy(&k,&buffer[8],4);
 		memcpy(&z,&buffer[16],4);
-		    int ct=0;
+			int ct=0;
 
-                    while (1)
-                    {
+					while (1)
+					{
 if (buffer[k]==0x54 && buffer[k+1]==0x49 && buffer[k+2]==0x54 && buffer[k+3]==0x4C){break;}
-                        if (buffer[k] == 0){ct++;}
-                        if (ct == z)
-                        {
+						if (buffer[k] == 0){ct++;}
+						if (ct == z)
+						{
 				sceIoClose(fd);
 		/* fd=sceIoOpen("ms0:/log", PSP_O_CREAT | PSP_O_WRONLY , 0777);
 		sceIoWrite(fd, buffer,2048);
 		sceIoClose(fd);*/
 
-  return 0;
-                        }
+						  return 0;
+						}
 
-			k++;
-                    }
-                 z = (ct+2) * 16;
+					k++;
+					}
+				 z = (ct+2) * 16;
 		memcpy(&kk,&buffer[z],4);
 		memcpy(&stm[0],&buffer[kk+i],100);
 		msg=stm;
@@ -457,91 +452,93 @@ if (buffer[k]==0x54 && buffer[k+1]==0x49 && buffer[k+2]==0x54 && buffer[k+3]==0x
 		else{
 		sceIoClose(fd);return 0;
 		}
-		i=0;k=0;big=0;
 		sceIoClose(fd);
 	}
-    	z= strlen(msg);
+	i=0;k=0;big=0;
+	z= strlen(msg);
 	if(z>128){
 	z=128;
 	}
 		
-        while(i < z){
-        	code= (u8)msg[i];
-        	if(code < 0x80){
-              	memcpy(&stm[k],&msg[i],1);
-                k++;
-                i++;
-        	}
-        	else if(code < 0xF0){
-        		memcpy(&seek,&msg[i],3);
-        		if(code < 0xE0){
-       			seek &= 0xFFFF;
-        		}
-                kk = 0;
-                fd = sceIoOpen("ms0:/seplugins/table/utf8", PSP_O_RDONLY, 0777);
-		if(fd>=0){
-                 while(1){
-                 	sceIoRead(fd,buffer,2048);
-                    for( j = 0; j< 512;j++){
-        				memcpy(&big,&buffer[j*4],3);
-                        if(seek==big){
-                            kk +=j;
-                        	goto end;
-                        }
-                        else if(big==0){
-			sceIoClose(fd);
-                        	goto fail;
-                        }
-                    }
-                    kk += 512;
-                 }
-		}
-                end:
-		sceIoClose(fd);
-                fd = sceIoOpen(p, PSP_O_RDONLY, 0777);
-		if(fd>=0){
-				sceIoLseek(fd, 0, SEEK_SET);
-				sceIoLseek(fd, kk<<1,SEEK_CUR);
-                sceIoRead(fd,buffer,2);
-		}
-				sceIoClose(fd);
-                    //”¼ŠpƒJƒi
-                    if((u8)buffer[1]==0){
-                    	memcpy(&stm[k],&buffer[0],1);
-                        k++;
-                        }
-                    //‘SŠp
-                    else{
-                    	memcpy(&stm[k],&buffer[0],2);
-                        k = k+2;
-                    }
-        		if(code < 0xE0){
-				i= i+2;
-        		}
-        		else{
-				i= i+3;
+		while(i < z){
+			code= (u8)msg[i];
+			if(code < 0x80){
+			stm[k]=code;
+				k++;
+				i++;
+			}
+			else if(code < 0xC2){
+			i+=2;
+			}
+			else if(code < 0xF0){
+				memcpy(&seek,&msg[i],3);
+				if(code < 0xE0){
+	   			seek &= 0xFFFF;
 				}
-        	}
-        	else if(code < 0xF8){
-        		i+=4;
-        	}
-        	else if(code < 0xFC){
-        		i+=5;
-        	}
-        	else if(code < 0xFE){
-        		i+=6;
-        	}
-        	else{
-                fail: //BOM
-               	//memcpy(&stm[k],&space,1);
-        	i++;
-        	}
-        }
-            
-            memcpy(&stm[k],&null,1);
-            memcpy(&stm[20],&null,1);
-            memcpy(&stm[21],&null,1);
-        
+				kk = 0;
+				fd = sceIoOpen("ms0:/seplugins/table/utf8", PSP_O_RDONLY, 0777);
+				if(fd>0){
+				 while(1){
+				 	sceIoRead(fd,buffer,2048);
+					for( j = 0; j< 512;j++){
+						memcpy(&big,&buffer[j*4],3);
+						if(seek==big){
+						kk +=j;
+						goto end;
+						}
+						else if(big==0){
+						sceIoClose(fd);
+						memcpy(&buffer[0],&toufuarray[zenkaku][0],2);
+						goto TOUFU;
+						}
+					}
+					kk += 512;
+				 }
+				}
+				end:
+				sceIoClose(fd);
+				fd = sceIoOpen(p, PSP_O_RDONLY, 0777);
+				if(fd>0){
+				sceIoLseek(fd, kk<<1,SEEK_SET);
+				sceIoRead(fd,buffer,2);
+				}
+				sceIoClose(fd);
+					//”¼ŠpƒJƒi
+					if((u8)buffer[1]==0){
+						memcpy(&stm[k],&buffer[0],1);
+						k++;
+						}
+					//‘SŠp
+					else{
+					TOUFU:
+						memcpy(&stm[k],&buffer[0],2);
+						k = k+2;
+					}
+				if(code < 0xE0){
+				i= i+2;
+				}
+				else{
+				i= i+3;
+			}
+			}
+			else if(code < 0xF8){
+				i+=4;
+			}
+			else if(code < 0xFC){
+				i+=5;
+			}
+			else if(code < 0xFE){
+				i+=6;
+			}
+			else{
+			//BOM
+			i+=3;
+			}
+		}
+			stm[k]=0;
+			stm[20]=0;
+			stm[21]=0;
+		
 return 1;
 }
 
