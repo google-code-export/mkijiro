@@ -61,6 +61,7 @@ Partial Class Form1
         'TextBox1
         '
         Me.TextBox1.Location = New System.Drawing.Point(97, 8)
+        Me.TextBox1.MaxLength = 200
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.Size = New System.Drawing.Size(159, 21)
         Me.TextBox1.TabIndex = 2
@@ -124,7 +125,7 @@ Partial Class Form1
         '
         Me.ENCODE.ContextMenuStrip = Me.ContextMenuStrip1
         Me.ENCODE.FormattingEnabled = True
-        Me.ENCODE.Items.AddRange(New Object() {"SHIFT-JIS(CP932)", "EUC-JP(CP51932)", "GBK(CP936)", "UTF16LE(CP1200)", "UTF16BE(CP1201)", "CMFUSION_EUC(UTF8->UTF16BE->CP51932)"})
+        Me.ENCODE.Items.AddRange(New Object() {"SHIFT-JIS(CP932)", "EUC-JP(CP51932)", "GBK(CP936)", "UTF16LE(CP1200)", "UTF16BE(CP1201)", "UTF16BE→EUC-JP(UTF8->UTF16BE->CP51932)", "UTF16BE→SJIS(UTF8->UTF16BE->CP932)", "UTF16BE→GBK(UTF8->UTF16BE->CP936)"})
         Me.ENCODE.Location = New System.Drawing.Point(107, 12)
         Me.ENCODE.Name = "ENCODE"
         Me.ENCODE.Size = New System.Drawing.Size(139, 22)
