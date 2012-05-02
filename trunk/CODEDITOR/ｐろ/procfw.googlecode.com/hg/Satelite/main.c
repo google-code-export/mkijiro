@@ -306,7 +306,7 @@ int load_recovery_font_select(void)
 	
 	//バイトオーダー回避
 	if((u8)g_cur_font_select[0]==0xEF){
-	memmove(&g_cur_font_select[0],&g_cur_font_select[3],strlen(g_cur_font_select));
+	memmove(&g_cur_font_select[0],&g_cur_font_select[3],strlen(g_cur_font_select)-3);
 	}
 	sceIoClose(fd);
 
@@ -314,7 +314,7 @@ int load_recovery_font_select(void)
 		if(fd >= 0) {
 		sceIoRead(fd, zen, 18);
 		if(*(unsigned int*)(&zen[0])==0x544E4F46){
-		memcpy(&zenkaku,&zen[16],1);
+		zenkaku=zen[16];
 		}
 		}
 	sceIoClose(fd);

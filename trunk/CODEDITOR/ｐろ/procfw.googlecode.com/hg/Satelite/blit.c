@@ -27,7 +27,8 @@
 //#include "../fonts/misaki.h"		//8x8
 //#include "../fonts/misaki_hira.h"	//8x8
 //#include "../fonts/akagi.h"		//8x11
-//#include "../fonts/paw.h"			//8x16
+//#include "../fonts/paw.h"		//8x16
+//#include "../fonts/mplus5x10.h"	//5x10
 //#include "../fonts/naga5x10a.h"	//5x10 ‰¼–¼–³
 //#include "../fonts/naga5x10rk.h"	//5x10
 //#include "../fonts/shnm6x12a.h"	//6x12 ‰¼–¼–³
@@ -36,7 +37,7 @@
 //#include "../fonts/shnm6x12rb.h"	//6x12
 //#include "../fonts/shnm7x14a.h"	//7x14 ‰¼–¼–³
 //#include "../fonts/shnm7x14ab.h"	//7x14 ‰¼–¼–³
-#include "../fonts/shnm7x14r.h"		//7x14
+#include "../fonts/shnm7x14r.h"	//7x14
 //#include "../fonts/shnm7x14rb.h"	//7x14
 //#include "../fonts/shnm8x16a.h"	//8x16 ‰¼–¼–³
 //#include "../fonts/shnm8x16ab.h"	//8x16 ‰¼–¼–³
@@ -141,8 +142,6 @@ for(x=0;msg[x] && x<(pwidth/8);)
 		code = (u8)msg[x]; // no truncate now
 
 //SJIS,EUC
-//if( ((zenkaku==1)&& ( ((code>=0x81) && (code<=0x9F)) || ((code>=0xE0) && (code<=0xEA)) || ((code>=0xFA) && (code<=0xFC)))) ||
-//((zenkaku==2) && ( ((code>=0xA1) && (code<=0xAD)) || ((code>=0xB0) && (code<=0xF4)) || ((code>=0xF9) && (code<=0xFC)) ) ) ){
 if( ((zenkaku==1)&& ((u8)((code ^ 0x20) -0xA1) < (u8)0x3C)) ||
 ((zenkaku==2) && ((u8)(code - 0xA1) < (u8)0x5E)) ){
 code2 = (u8)msg[x+1];
@@ -361,10 +360,10 @@ int load_external_font(const char *file)
 
 	if((*(unsigned int *)(&g_cur_font[0]))==0x544E4F46){
 	char k=1;
-	memcpy(&yoko,&g_cur_font[14],1);
-	memcpy(&tate,&g_cur_font[15],1);
-	memcpy(&zenkaku,&g_cur_font[16],1);
-	memcpy(&total,&g_cur_font[17],1);
+	yoko=g_cur_font[14];
+	tate=g_cur_font[15];
+	zenkaku=g_cur_font[16];
+	total=g_cur_font[17];
 	if(zenkaku==0){k=0;}
 	memmove(&g_cur_font[0],&g_cur_font[17+k],f_si-17);
 	if(yoko>8){fakezenkaku=1;}

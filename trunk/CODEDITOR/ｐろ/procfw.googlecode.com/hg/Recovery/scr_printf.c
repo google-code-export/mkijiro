@@ -396,6 +396,7 @@ else{
       vram += PSP_LINE_SIZE;
    }
 }
+
 }
 
 static void debug_put_char_16(int x, int y, u16 color, u16 bgc, u8 ch)
@@ -549,14 +550,12 @@ int proDebugScreenPrintData(const char *buff, int size)
 			default:
 
 //SJIS全角
-//if((zenkaku==1)&& ( ((c>=0x81) && (c<=0x9F)) || ((c>=0xE0) && (c<=0xEA)) || ((c>=0xFA) && (c<=0xFC)))  ){
 if((zenkaku==1)&& ((u8)((c ^ 0x20) -0xA1) < (u8)0x3C)){
 debug_put_char_32_zenakaku(XX, Y * tate, fg_col,bg_col, c, buff[i+1]);
 XX+=yoko;
 i++;
 }
 //EUC全角
-//else if((zenkaku==2) && (((c>=0xA1) && (c<=0xAD)) || ((c>=0xB0) && (c<=0xF4)) || ((c>=0xF9) && (c<=0xFC)))){
 else if((zenkaku==2) && ((u8)(c - 0xA1) < (u8)0x5E)){
 debug_put_char_32_zenakaku(XX, Y * tate, fg_col,bg_col, c, buff[i+1]);
 XX+=yoko;
@@ -669,10 +668,10 @@ static void proDebugScreenSetFont(u8 *font)
 	proDebugScreenReleaseFont();
 	g_cur_font = font;
 	if((*(unsigned int *)(&g_cur_font[0]))==0x544E4F46){
-	memcpy(&yoko,&g_cur_font[14],1);
-	memcpy(&tate,&g_cur_font[15],1);
-	memcpy(&zenkaku,&g_cur_font[16],1);
-	memcpy(&total,&g_cur_font[17],1);
+	yoko=g_cur_font[14];
+	tate=g_cur_font[15];
+	zenkaku=g_cur_font[16];
+	total=g_cur_font[17];
 	if(tate>tate_def+2){
 	proDebugScreenReleaseFont();
 	}
@@ -689,11 +688,12 @@ int proDebugScreenSetFontFile(const char *file, int is_user)
 	SceUID fd;
 	size_t f_si;
 	int ret;
+	int file_len=strlen(file);
 	void *buf;
 	
 	//バイトオーダー回避
-	if((u8)file[0]==0xEF){
-	memmove(&file[0],&file[3],strlen(file)-3);
+	if(((u8)file[0]==0xEF) &&(file_len >3)){
+	memmove(&file[0],&file[3],file_len-3);
 	}
 
 	fd = sceIoOpen(file, PSP_O_RDONLY, 0777);
