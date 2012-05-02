@@ -1,0 +1,67 @@
+テキストベースのBITMAPフォントBDFの半角/全角フォントをFONTX2に変換する鶴です。
+対応コードはJIS208のみ。
+
+//変換確認済み
+東雲全角14 shnmk14.bdf
+MPLUS　12x13
+蕨     12x12
+
+2012/05/01
+FCSJISのフォントにUTF16テーブルを追加
+
+2012/04/25
+JIS->SJIS変換方法に追加
+XOR 0x20リマップ
+-0x2020
+M$ ISO-2022-JP経由
+
+2012/04/22
+CMFUSIONEUCの出力を変更
+TXTテーブルの正規表現+SJIS抽出位置を変更できるようにした
+
+2012/04/21
+FREECHEATSJIS用フォントを作成できるようにした
+
+2012/04/19
+CMFUSIONフォント作成で最後の文字コードがパッチされてなかったので修正
+JIS->SJIS変換方法を選べるようにした
+
+http://www.tohoho-web.com/wwwkanji.htm
+http://oku.edu.mie-u.ac.jp/~okumura/algo/
+http://www.unixuser.org/~euske/doc/kanjicode/
+http://www.d2.dion.ne.jp/~imady/charset/charcode_mame.html#SJIS_JIS
+ftp://ftp.unicode.org/Public/MAPPINGS/OBSOLETE/EASTASIA/JIS/JIS0208.TXT TXTテーブル
+M$のやつ　｜0x80後51932->932
+
+2012/04/14
+6x12半角圧縮フォントのそーす出力がずれてたので修正
+
+2012/04/04
+半角6x12の圧縮フォント作成に対応
+PSPFILERも同じ描写方法みたいなのでFTX2ヘッダ付き圧縮バイナリとそーすっぽいのを出せるようにした
+(全角は半角6x12を2セット)
+
+2012/04/01
+CMFUSION_EUCMODのフォント作成に対応
+JIS-EUCを選択しCMF12x12でBDFを選択
+CMFのフォルダにfont_euc.datを置く
+
+CMFのUIにあう12x12(13)のフォントのみ(東雲かMPLUSで確認など)作成可能
+
+2012/03/30
+CMFUSIONの12x12っぽい出力に対応
+(GBKエンコードとあわないので上書きパッチ予定)
+
+2012/03/22
+半角の変換ができなくなっていたので修正
+
+2012/03/19
+全角の変換に対応
+JIS-SJIS変換、JIS-EUCを追加
+EUCの場合FONTX2の&へっだ[16]が2になります
+
+
+2012/03/13
+とりあえず作成。
+
+BY　(ﾟ∀ﾟ)

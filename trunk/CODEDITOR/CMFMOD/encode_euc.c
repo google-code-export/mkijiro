@@ -58,12 +58,12 @@ char FILE_ENCODE(){
 	int fd;
 	char filemode=0;
 	fd= sceIoOpen("ms0:/CheatMaster/table/\x82\xA0", PSP_O_RDONLY, 0777);
-	if(fd>=0){
+	if(fd>0){
 	filemode=SJIS;
 	}
 	sceIoClose(fd);
 	fd= sceIoOpen("ms0:/CheatMaster/table/\xE3\x81\x82", PSP_O_RDONLY, 0777);
-	if(fd>=0){
+	if(fd>0){
 	filemode=UTF8;
 	}
 	sceIoClose(fd);

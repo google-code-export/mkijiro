@@ -846,8 +846,23 @@ namespace WindowsFormsApplication1
                                         Array.Copy(ftx, pos, ff, 2048 + dest * 18, 18);
                                     }
                                 }
+
+                                
+                        byte[] bb = new byte[2];
+                        byte[] bsss = new byte[65535*2];
+                        string utf16st ="";
+                        byte[] bbb ;
+                        for(UInt16 i=0;i<0xFFFF;i++){
+                            bb[0] = Convert.ToByte(i & 0xff);
+                            bb[1] = Convert.ToByte(i >>8);
+                            utf16st = System.Text.Encoding.GetEncoding(1200).GetString(bb);
+                            bbb = System.Text.Encoding.GetEncoding(932).GetBytes(utf16st);
+                        Array.Resize(ref bbb,2);
+                        Array.Copy(bbb,0,ff,0x610d6+ i*2,2);//0x610D6 table 開始
+                        }
+
                                 FileStream fss = new System.IO.FileStream("sjis.dat", FileMode.Create, FileAccess.Write);
-                                Array.Resize(ref ff, bk);
+                                Array.Resize(ref ff, 528598);
                                 fss.Write(ff, 0, ff.Length);
                                 fss.Close();
                             }
