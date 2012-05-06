@@ -80,6 +80,7 @@ int UTF8SJIS_EUC(unsigned char *msg,int len){
 	int i=0;
 	int k=0;
 	int kk=0;
+	int slen=0;
 	int z=0;
 	int seek=0;
  	int big=0;
@@ -112,6 +113,7 @@ int UTF8SJIS_EUC(unsigned char *msg,int len){
 					memcpy(&big,&fbuffer[z*4],4);
 		  				if(seek==big){
 			 			kk +=z;
+						memcpy(&slen,&fbuffer[z*4+4],1);
 			  			goto end1;
 						}
 						else if(big==0){
@@ -127,12 +129,19 @@ int UTF8SJIS_EUC(unsigned char *msg,int len){
 				fd = sceIoOpen("ms0:/cheatmaster/table/euc-jp", PSP_O_RDONLY, 0777);
 				if(fd>0){
 				sceIoLseek32(fd, kk<<1,PSP_SEEK_SET);
-		  		sceIoRead(fd,fbuffer,2);
+				if (slen<16){
+		  		sceIoRead(fd,fbuffer,slen);	
+	  			memcpy(&stm[k],&fbuffer[0],slen);
+				k = k+slen;
 				}
-				sceIoClose(fd);
-	
+				else{
+				sceIoLseek32(fd, kk<<1,PSP_SEEK_SET);
+		  		sceIoRead(fd,fbuffer,2);	
 	  			memcpy(&stm[k],&fbuffer[0],2);
 				k = k+2;
+				}
+				}
+				sceIoClose(fd);
 
 				if(c1 < 0xE0){
 				fail2:
