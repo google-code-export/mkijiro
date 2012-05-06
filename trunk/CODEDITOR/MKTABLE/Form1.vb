@@ -5,7 +5,7 @@ Imports System.Text.RegularExpressions
 
 Public Class Form1
 
-    Dim p As String() = {"sjis.txt", "euc-jp.txt", "gbk.txt", "utf16le.txt", "utf16be.txt", "table\euc-jp.dat", "table\shift-jis.dat", "table\gbk.dat"}
+    Dim p As String() = {"sjis.txt", "euc-jp.txt", "gbk.txt", "utf16le.txt", "utf16be.txt", "table\euc-jp.dat", "table\shift-jis.dat", "table\gbk.dat", "unicode.txt"}
 
     Private Sub TextBox1_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles ENCODE.KeyPress
         e.Handled = True
@@ -18,7 +18,7 @@ Public Class Form1
             Dim m As Match = mm.Match(ENCODE.Text)
             If m.Success Then
                 Dim enc As Integer = CInt(m.Value.Remove(0, 2))
-                If ENCODE.SelectedIndex >= 6 Then
+                If (ENCODE.SelectedIndex >= 5 AndAlso ENCODE.SelectedIndex <= 7) Then
                     Dim ucs2 As New System.IO.FileStream(output, System.IO.FileMode.Create, System.IO.FileAccess.Write)
                     Dim bs(65535 * 2) As Byte
                     Dim bb(1) As Byte
@@ -34,26 +34,156 @@ Public Class Form1
                     Next
                     ucs2.Close()
                     Beep()
-                ElseIf File.Exists(output) Then
-                    Dim sr As New System.IO.FileStream(output, System.IO.FileMode.Open, System.IO.FileAccess.Read)
-                    Dim fs As New System.IO.FileStream("table\" & Path.GetFileNameWithoutExtension(output), System.IO.FileMode.Create, System.IO.FileAccess.Write)
-                    Dim fss As New System.IO.FileStream("table\utf8", System.IO.FileMode.Create, System.IO.FileAccess.Write)
-                    Dim bs(CInt(sr.Length) - 1) As Byte
-                    sr.Read(bs, 0, bs.Length)
-                    Dim ss As String = System.Text.Encoding.GetEncoding(enc).GetString(bs)
-                    Dim sss As String() = ss.Split(CChar(vbLf))
-                    Dim i As Integer = 0
-                    Dim bb As Byte() = Nothing
-                    Dim bbb As Byte() = Nothing
-                    For Each s As String In sss
-                        s = s.Replace(vbCr, "")
-                        bb = System.Text.Encoding.GetEncoding(enc).GetBytes(s)
-                        bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(s)
-                        Array.Resize(bb, 2)
-                        Array.Resize(bbb, 4)
-                        fs.Write(bb, 0, 2)
-                        fss.Write(bbb, 0, 4)
-                    Next
+                ElseIf ENCODE.SelectedIndex = 8 Then
+                    Dim ofd As New OpenFileDialog()
+                    ofd.Filter = _
+                        "TXTファイル(*.txt)|*.txt"
+                    ofd.Title = "開くファイルを選択してください"
+                    If ofd.ShowDialog() = DialogResult.OK Then
+                        output = ofd.FileName
+                        Dim sr As New System.IO.StreamReader(output, System.Text.Encoding.GetEncoding(65001))
+                        Dim fsjis As New System.IO.FileStream("txt_table\sjis", System.IO.FileMode.Create, System.IO.FileAccess.Write)
+                        Dim fjis As New System.IO.FileStream("txt_table\jis", System.IO.FileMode.Create, System.IO.FileAccess.Write)
+                        Dim feuc As New System.IO.FileStream("txt_table\euc-jp", System.IO.FileMode.Create, System.IO.FileAccess.Write)
+                        Dim fube As New System.IO.FileStream("txt_table\utf16be", System.IO.FileMode.Create, System.IO.FileAccess.Write)
+                        Dim fule As New System.IO.FileStream("txt_table\utf16le", System.IO.FileMode.Create, System.IO.FileAccess.Write)
+                        Dim futf8 As New System.IO.FileStream("txt_table\utf8", System.IO.FileMode.Create, System.IO.FileAccess.Write)
+                        Dim s As String = ""
+                        Dim r As New Regex("0x[0-9A-F]{4}\t0x[0-9A-F]{4}\t0x[0-9A-F]{4}", RegexOptions.ECMAScript)
+                        Dim hexm As Match
+                        Dim sjis(1) As Byte
+                        Dim jis(1) As Byte
+                        Dim euc(1) As Byte
+                        Dim utf16be(1) As Byte
+                        Dim utf16le(1) As Byte
+                        Dim null(4) As Byte
+                        Dim utf8 As Byte()
+                        Dim x As UInt16 = 0
+                        Dim y As UInt16 = 0
+                        Dim z As UInt16 = 0
+                        While sr.Peek() > -1
+                            s = sr.ReadLine()
+                            hexm = r.Match(s)
+                            If hexm.Success AndAlso s.Contains("//") = False Then
+                                s = hexm.Value
+                                x = Convert.ToUInt16(s.Substring(0, 6), 16)
+                                y = Convert.ToUInt16(s.Substring(7, 6), 16)
+                                z = Convert.ToUInt16(s.Substring(14, 6), 16)
+                                sjis(1) = CByte(x And &HFF)
+                                sjis(0) = CByte(x >> 8)
+                                jis(1) = CByte(y And &HFF)
+                                jis(0) = CByte(y >> 8)
+                                If jis(0) = 0 Then
+                                    sjis(0) = CByte(x And &HFF)
+                                    sjis(1) = CByte(x >> 8)
+                                    jis(0) = CByte(y And &HFF)
+                                    jis(1) = CByte(y >> 8)
+                                    If ((jis(0) + &H5F) And &HFF) < &H40 Then
+                                        euc(0) = &H8E
+                                        euc(1) = jis(0)
+                                    Else
+                                        euc(0) = jis(0)
+                                        euc(1) = jis(1)
+                                    End If
+                                Else
+                                    euc(1) = CByte((y Or &H80) And &HFF)
+                                    euc(0) = CByte((y >> 8) Or &H80)
+                                End If
+                                utf16be(1) = CByte(z And &HFF)
+                                utf16be(0) = CByte(z >> 8)
+                                utf16le(1) = utf16be(0)
+                                utf16le(0) = utf16be(1)
+                                s = Encoding.GetEncoding(1201).GetString(utf16be)
+                                utf8 = Encoding.GetEncoding(65001).GetBytes(s)
+                                Array.Resize(utf8, 4)
+                                fsjis.Write(sjis, 0, 2)
+                                fjis.Write(jis, 0, 2)
+                                feuc.Write(euc, 0, 2)
+                                fube.Write(utf16be, 0, 2)
+                                fule.Write(utf16le, 0, 2)
+                                futf8.Write(utf8, 0, 4)
+                            End If
+                        End While
+                        fsjis.Write(null, 0, 2)
+                        fjis.Write(null, 0, 2)
+                        feuc.Write(null, 0, 2)
+                        fube.Write(null, 0, 2)
+                        fule.Write(null, 0, 2)
+                        futf8.Write(null, 0, 4)
+                        sr.Close()
+                        fsjis.Close()
+                        fjis.Close()
+                        fule.Close()
+                        fube.Close()
+                        futf8.Close()
+                        feuc.Close()
+                        Beep()
+                    End If
+                    ElseIf File.Exists(output) Then
+                        Dim sr As New System.IO.FileStream(output, System.IO.FileMode.Open, System.IO.FileAccess.Read)
+                        Dim fs As New System.IO.FileStream("table\" & Path.GetFileNameWithoutExtension(output), System.IO.FileMode.Create, System.IO.FileAccess.Write)
+                        Dim fss As New System.IO.FileStream("table\utf8", System.IO.FileMode.Create, System.IO.FileAccess.Write)
+                        Dim bs(CInt(sr.Length) - 1) As Byte
+                        sr.Read(bs, 0, bs.Length)
+                        Dim ss As String = System.Text.Encoding.GetEncoding(enc).GetString(bs)
+                        Dim sss As String() = ss.Split(CChar(vbLf))
+                        Dim i As Integer = 0
+                        Dim bb As Byte() = Nothing
+                        Dim bbb As Byte() = Nothing
+                        For Each s As String In sss
+                            s = s.Replace(vbCr, "")
+                            bb = System.Text.Encoding.GetEncoding(enc).GetBytes(s)
+                            bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(s)
+                            Array.Resize(bb, 2)
+                            Array.Resize(bbb, 4)
+                            fs.Write(bb, 0, 2)
+                            fss.Write(bbb, 0, 4)
+                        Next
+                    
+                    If EX.Checked = True Then
+                        Dim s As String = ""
+                        Dim ssss As String()
+                        Dim len As Integer
+                        Dim len2 As Integer
+                        Dim ssr As New System.IO.StreamReader("extra.txt", System.Text.Encoding.GetEncoding(65001))
+                        While ssr.Peek() > -1
+                            s = ssr.ReadLine()
+                            ssss = s.Split(CChar(vbTab))
+                            bb = System.Text.Encoding.GetEncoding(enc).GetBytes(ssss(1))
+                            bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(ssss(0))
+                            len = bb.Length
+                            If len <= 2 Then
+                                Array.Resize(bb, 2)
+                                fs.Write(bb, 0, 2)
+                                Array.Resize(bbb, 4)
+                                fss.Write(bbb, 0, 4)
+                            Else
+                                len2 = len
+                                If (len And 1) = 1 Then
+                                    len += 1
+                                End If
+                                Array.Resize(bb, len)
+                                fs.Write(bb, 0, len)
+                                Array.Resize(bbb, 4)
+                                fss.Write(bbb, 0, 4)
+                                Array.Clear(bbb, 0, 4)
+                                bbb(0) = CByte(len2)
+                                len = len >> 1
+                                For i = 0 To len - 2
+                                    fss.Write(bbb, 0, 4)
+                                Next
+                            End If
+                        End While
+                        If len <= 2 Then
+                            Array.Resize(bbb, 4)
+                            Array.Clear(bbb, 0, 4)
+                            fs.Write(bbb, 0, 2)
+                            bbb(0) = CByte(len)
+                            fss.Write(bbb, 0, 4)
+                        End If
+                        ssr.Close()
+                    End If
+
                     Array.Clear(bbb, 0, 4)
                     fs.Write(bbb, 0, 2)
                     fss.Write(bbb, 0, 4)
@@ -61,11 +191,11 @@ Public Class Form1
                     fs.Close()
                     fss.Close()
                     Beep()
-                Else
-                    MessageBox.Show(output & ",変換対象テキストがありません")
-                End If
+                    Else
+                        MessageBox.Show(output & ",変換対象テキストがありません")
+                    End If
             Else
-                MessageBox.Show("文字コードが指定できません")
+            MessageBox.Show("文字コードが指定できません")
             End If
         Catch ex As Exception
             MessageBox.Show(ex.Message)
@@ -196,6 +326,7 @@ Public Class Form1
                         Dim bs(2047) As Byte
                         Dim stm(256) As Byte
                         Dim dummy As Byte() = {32, 0}
+                        Dim skiplen As Integer = 0
                         If (textbox4.Text <> "") Then
                             dummy = System.Text.Encoding.GetEncoding(enc).GetBytes(textbox4.Text)
                         End If
@@ -204,7 +335,7 @@ Public Class Form1
                         Dim k As Integer = 0
                         Dim kk As Integer = 0
                         Dim tm As Integer = 0
-                        Dim big As Integer = 0
+                        Dim big As UInteger = 0
                         Dim fail As Boolean = False
                         Dim tofu As Boolean = False
 
@@ -224,12 +355,14 @@ Public Class Form1
                                 End If
                                 i += 1
                             ElseIf bb(i) < &HC2 Then
-                                i += 2
-                            ElseIf bb(i) < &HF0 Then
+                                Exit While
+                            ElseIf bb(i) < &HF8 Then
                                 If (bb(i) < &HE0) Then
                                     seek = CUInt(bb(i) + (bb(i + 1) * 256))
-                                Else
+                                ElseIf (bb(i) < &HF0) Then
                                     seek = CUInt(bb(i) + (bb(i + 1) * 256) + (bb(i + 2) * 65536))
+                                Else
+                                    seek = BitConverter.ToUInt32(bb, i)
                                 End If
                                 kk = 0
                                 fail = False
@@ -237,9 +370,10 @@ Public Class Form1
                                 While True
                                     Dim readSize As Integer = fs.Read(bs, 0, bs.Length)
                                     For j = 0 To 512 - 1
-                                        big = BitConverter.ToInt32(bs, 4 * j)
+                                        big = BitConverter.ToUInt32(bs, 4 * j)
                                         If seek = big Then
                                             kk += j
+                                            skiplen = bs(4 * j + 4)
                                             Exit While
                                         End If
                                         If big = 0 Then
@@ -256,46 +390,51 @@ Public Class Form1
                                 End While
                                 fs.Close()
                                 If fail = False Then
-                                    Dim fss As New System.IO.FileStream(enctable, System.IO.FileMode.Open, System.IO.FileAccess.Read)
-                                    fss.Seek(2 * kk, IO.SeekOrigin.Begin)
-                                    fss.Read(bs, 0, 2)
-                                    fss.Close()
-                                    'CP1201全角
-                                    If bs(1) = 0 AndAlso enc = 1201 Then
-                                        Array.Copy(bs, 0, stm, k, 2)
-                                        k += 2
-                                        '半角カナ
-                                    ElseIf bs(1) = 0 Then
-                                        Array.Copy(bs, 0, stm, k, 1)
-                                        k += 1
-
-                                        '全角
+                                    If skiplen < 16 Then
+                                        Dim fss As New System.IO.FileStream(enctable, System.IO.FileMode.Open, System.IO.FileAccess.Read)
+                                        fss.Seek(2 * kk, IO.SeekOrigin.Begin)
+                                        fss.Read(bs, 0, skiplen)
+                                        fss.Close()
+                                        Array.Copy(bs, 0, stm, k, skiplen)
+                                        k += skiplen
                                     Else
-                                        Array.Copy(bs, 0, stm, k, 2)
+                                        Dim fss As New System.IO.FileStream(enctable, System.IO.FileMode.Open, System.IO.FileAccess.Read)
+                                        fss.Seek(2 * kk, IO.SeekOrigin.Begin)
+                                        fss.Read(bs, 0, 2)
+                                        fss.Close()
+                                        'CP1201全角
+                                        If bs(1) = 0 AndAlso enc = 1201 Then
+                                            Array.Copy(bs, 0, stm, k, 2)
+                                            k += 2
+                                            '半角カナ
+                                        ElseIf bs(1) = 0 Then
+                                            Array.Copy(bs, 0, stm, k, 1)
+                                            k += 1
+                                            '全角
+                                        Else
+                                            Array.Copy(bs, 0, stm, k, 2)
+                                            k += 2
+                                        End If
+                                        End If
+                                    Else
+                                        '失敗
+                                        Array.Copy(dummy, 0, stm, k, 2)
                                         k += 2
                                     End If
-                                Else
-                                    '失敗
-                                    Array.Copy(dummy, 0, stm, k, 2)
-                                    k += 2
-                                End If
                                 If (bb(i) < &HE0) Then
                                     i += 2
-                                Else
+                                ElseIf bb(i) < &HF0 Then
                                     i += 3
+                                Else
+                                    i += 4
                                 End If
-                            ElseIf bb(i) < &HF0 Then
-                                i += 4
-                            ElseIf bb(i) < &HF8 Then
-                                i += 5
                             ElseIf bb(i) < &HFC Then
-                                i += 6
+                                i += 5
                             ElseIf bb(i) < &HFE Then
-                                i += 7
+                                i += 6
                             Else
                                 'BOM
-                                k += 1
-                                i += 1
+                                i += 3
                             End If
                         End While
 
@@ -329,4 +468,5 @@ Public Class Form1
         End Try
 
     End Sub
+
 End Class
