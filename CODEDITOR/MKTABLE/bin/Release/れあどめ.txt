@@ -1,6 +1,19 @@
 M$の内部てーぶるをぱくって1:1のUTF8 VS SJIS,EUCJP,GBK,UTF16BE,UTF16LE
 の変換てーぶるを作成する鶴です。
 
+2012/05/07
+可変長テーブルに対応
+
+2012/05/06
+UTF8TXTから追加置換テーブルを作れるようにした
+GB(機種依存文字)→GB
+
+2012/05/04
+UNICODEのTXT表の変換を追加
+TXTテーブル変換に対応、とりあえずUNICOEのjios208表
+SJIS SJIS UTF16BE　の順　やつのみ
+JIS/SJIS/EUCJP/UTF16BELE/UTF8まとめて出力
+
 2012/05/03
 UTF16->SJIS
 UTF16->GBK
