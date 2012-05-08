@@ -130,7 +130,7 @@ int UTF8SJIS_EUC(unsigned char *msg,int len){
 				if(fd>0){
 				sceIoLseek32(fd, kk<<1,PSP_SEEK_SET);
 				if (slen<16){
-		  		sceIoRead(fd,fbuffer,slen);	
+		  		sceIoRead(fd,fbuffer,slen);
 	  			memcpy(&stm[k],&fbuffer[0],slen);
 				k = k+slen;
 				}
