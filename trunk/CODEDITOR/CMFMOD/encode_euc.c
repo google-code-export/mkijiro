@@ -96,6 +96,9 @@ int UTF8SJIS_EUC(unsigned char *msg,int len){
 			k++;
 			i++;
 			}
+			else if(c1 < 0xC2){
+			i+=2;
+			}
 			else if(c1 < 0xF8){
 				memcpy(&seek,&msg[i],4);
 				if(c1 < 0xE0){

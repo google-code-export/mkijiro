@@ -352,6 +352,7 @@ int utf8video(){
 	int kk=0;
 	int i=0;
 	int j=0;
+	int slen=0;
 	int big=0;
 	int lba=0;
 	int fd;
@@ -470,10 +471,13 @@ if (buffer[k]==0x54 && buffer[k+1]==0x49 && buffer[k+2]==0x54 && buffer[k+3]==0x
 			else if(code < 0xC2){
 			i+=2;
 			}
-			else if(code < 0xF0){
-				memcpy(&seek,&msg[i],3);
+			else if(code < 0xF8){
+				memcpy(&seek,&msg[i],4);
 				if(code < 0xE0){
 	   			seek &= 0xFFFF;
+				}
+				else if(code < 0xF0){
+	   			seek &= 0xFFFFFF;
 				}
 				kk = 0;
 				fd = sceIoOpen("ms0:/seplugins/table/utf8", PSP_O_RDONLY, 0777);
@@ -481,9 +485,10 @@ if (buffer[k]==0x54 && buffer[k+1]==0x49 && buffer[k+2]==0x54 && buffer[k+3]==0x
 				 while(1){
 				 	sceIoRead(fd,buffer,2048);
 					for( j = 0; j< 512;j++){
-						memcpy(&big,&buffer[j*4],3);
+						memcpy(&big,&buffer[j*4],4);
 						if(seek==big){
 						kk +=j;
+						memcpy(&slen,&buffer[j*4+4],1);
 						goto end;
 						}
 						else if(big==0){
@@ -499,30 +504,37 @@ if (buffer[k]==0x54 && buffer[k+1]==0x49 && buffer[k+2]==0x54 && buffer[k+3]==0x
 				sceIoClose(fd);
 				fd = sceIoOpen(p, PSP_O_RDONLY, 0777);
 				if(fd>0){
-				sceIoLseek(fd, kk<<1,SEEK_SET);
-				sceIoRead(fd,buffer,2);
-				}
-				sceIoClose(fd);
-					//”¼ŠpƒJƒi
-					if((u8)buffer[1]==0){
-						memcpy(&stm[k],&buffer[0],1);
-						k++;
-						}
-					//‘SŠp
-					else{
-					TOUFU:
-						memcpy(&stm[k],&buffer[0],2);
-						k = k+2;
-					}
-				if(code < 0xE0){
-				i= i+2;
+				sceIoLseek32(fd, kk<<1,PSP_SEEK_SET);
+				if (slen<16){
+		  		sceIoRead(fd,buffer,slen);
+	  			memcpy(&stm[k],&buffer[0],slen);
+				k = k+slen;
 				}
 				else{
-				i= i+3;
-			}
-			}
-			else if(code < 0xF8){
-				i+=4;
+		  		sceIoRead(fd,buffer,2);
+				//”¼ŠpƒJƒi
+				if((u8)buffer[1]==0){
+				stm[k]=buffer[0];
+				k++;
+				}
+				//‘SŠp
+				else{
+				TOUFU:
+				memcpy(&stm[k],&buffer[0],2);
+				k = k+2;
+				}
+				}
+				}
+				sceIoClose(fd);
+				if(code < 0xE0){
+				i +=2;
+				}
+				else if(code < 0xF0){
+				i +=3;
+				}
+				else{
+				i +=4;
+				}
 			}
 			else if(code < 0xFC){
 				i+=5;

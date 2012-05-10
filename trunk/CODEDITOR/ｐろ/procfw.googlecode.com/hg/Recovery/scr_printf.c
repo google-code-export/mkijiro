@@ -324,6 +324,7 @@ static void debug_put_char_32(int x, int y, u32 color, u32 bgc, u8 ch)
 static void debug_put_char_32_zenakaku(int x, int y, u32 color, u32 bgc, u8 ch,u8 ch2)
 {
    int 	i,j, l,p;
+   int add=2;
    u8	*font;
    u32 *vram_ptr;
    u32 *vram;
@@ -347,11 +348,11 @@ memcpy(&num[0],&g_cur_font[(p*4)+18 ],2);
 memcpy(&num[1],&g_cur_font[(p*4)+20],2);
 
 if((big>=num[0]) && (big<=num[1])){
-fontpos += (big-num[0]);
+fontpos += (big-num[0]+p);
 break;
 }
 else{
-fontpos += (num[1]-num[0]+1);
+fontpos += (num[1]-num[0]);
 }
 }
 
@@ -360,7 +361,13 @@ if(p==total){
 }
 else{
 
-	 font = &g_cur_font[(fontpos*tate)*2+4*total+18];
+			if(yoko>8){
+			font = &g_cur_font[(fontpos*tate)*2+4*total+18];
+			}
+			else{
+			font = &g_cur_font[(fontpos*tate)+4*total+18];
+			add=1;
+			}
 
       /* if(z<100){//loggger
 	char buffer[64];
@@ -371,7 +378,7 @@ else{
 	z++;
 	}*/
 
-   for (i=l=0; i < tate; i++, l+= yoko, font+=2)
+   for (i=l=0; i < tate; i++, l+= yoko, font+=add)
    {
       vram_ptr  = vram;
       for (j=0; j < yoko; j++)
