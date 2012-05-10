@@ -281,6 +281,7 @@ int utf82sjis()
 	int i=0;
 	int j=0;
 	int big=0;
+	int slen=0;
 	int fd;
 	unsigned char code=0;
 	const char *msg;
@@ -305,10 +306,13 @@ int utf82sjis()
 			else if(code < 0xC2){
 			i+=2;
 			}
-			else if(code < 0xF0){
-				memcpy(&seek,&msg[i],3);
+			else if(code < 0xF8){
+				memcpy(&seek,&msg[i],4);
 				if(code < 0xE0){
 	   			seek &= 0xFFFF;
+				}
+				if(code < 0xF0){
+	   			seek &= 0xFFFFFF;
 				}
 				kk = 0;
 				fd = sceIoOpen("ms0:/seplugins/table/utf8", PSP_O_RDONLY, 0777);
@@ -319,6 +323,7 @@ int utf82sjis()
 					memcpy(&big,&buffer[j*4],4);
 						if(seek==big){
 						kk +=j;
+						memcpy(&slen,&buffer[j*4+4],1);
 						goto end;
 						}
 						else if(big==0){
@@ -334,11 +339,14 @@ int utf82sjis()
 				sceIoClose(fd);
 				fd = sceIoOpen(p, PSP_O_RDONLY, 0777);
 				if(fd>0){
-				sceIoLseek(fd, kk<<1,SEEK_SET);
-				sceIoRead(fd,buffer,2);
+				sceIoLseek32(fd, kk<<1,PSP_SEEK_SET);
+				if (slen<16){
+		  		sceIoRead(fd,buffer,slen);
+	  			memcpy(&stm[k],&buffer[0],slen);
+				k = k+slen;
 				}
-				sceIoClose(fd);
-
+				else{
+		  		sceIoRead(fd,buffer,2);	
 				//”¼ŠpƒJƒi
 				if((u8)buffer[1]==0){
 				stm[k]=buffer[0];
@@ -350,16 +358,20 @@ int utf82sjis()
 				memcpy(&stm[k],&buffer[0],2);
 				k = k+2;
 				}
+				}
+				}
+				sceIoClose(fd);
+
 
 				if(code < 0xE0){
-				i= i+2;
+				i+=2;
+				}
+				else if(code < 0xF0){
+				i+=3;
 				}
 				else{
-				i= i+3;
-			}
-			}
-			else if(code < 0xF8){
 				i+=4;
+				}
 			}
 			else if(code < 0xFC){
 				i+=5;
@@ -368,7 +380,7 @@ int utf82sjis()
 				i+=6;
 			}
 			else{
-				//BOM
+			//BOM
 			i+=3;
 			}
 		}

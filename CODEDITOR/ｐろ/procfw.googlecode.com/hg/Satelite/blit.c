@@ -155,11 +155,11 @@ memcpy(&num[0],&g_cur_font[p*4],2);
 memcpy(&num[1],&g_cur_font[(p*4) +2],2);
 
 if((big>=num[0]) && (big<=num[1])){
-fontpos += (big-num[0]);
+fontpos += (big-num[0]+p);
 break;
 }
 else{
-fontpos += (num[1]-num[0]+1);
+fontpos += (num[1]-num[0]);
 }
 }
 
@@ -175,8 +175,12 @@ else{
 			//font[0]=0x00;
 			//}
 			//else{
+			if(yoko>8){
 			memcpy(&font[0],&g_cur_font[(((fontpos*tate)+y)*2)+(4*total)],2);
-
+			}
+			else{
+			memcpy(&font[0],&g_cur_font[(((fontpos*tate)+y))+(4*total)],2);
+			}
 
       /*if(z<100){
 	char buffer[64];
