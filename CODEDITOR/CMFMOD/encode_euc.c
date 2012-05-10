@@ -135,13 +135,18 @@ int UTF8SJIS_EUC(unsigned char *msg,int len){
 				if (slen<16){
 		  		sceIoRead(fd,fbuffer,slen);
 	  			memcpy(&stm[k],&fbuffer[0],slen);
-				k = k+slen;
+				k +=slen;
 				}
 				else{
-				sceIoLseek32(fd, kk<<1,PSP_SEEK_SET);
-		  		sceIoRead(fd,fbuffer,2);	
+		  		sceIoRead(fd,fbuffer,2);
+				if(fbuffer[1]==0){
+				stm[k]=fbuffer[0];
+				k++;
+				}
+				else{
 	  			memcpy(&stm[k],&fbuffer[0],2);
 				k = k+2;
+				}
 				}
 				}
 				sceIoClose(fd);
