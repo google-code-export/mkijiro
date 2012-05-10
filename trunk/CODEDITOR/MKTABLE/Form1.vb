@@ -142,15 +142,117 @@ Public Class Form1
                     
                     If EX.Checked = True Then
                         Dim s As String = ""
+                        Dim st As String = ""
+                        Dim sth As Integer = 0
+                        Dim sth2 As Integer = 0
+                        Dim sth3 As UInt64 = 0
+                        Dim swap(3) As Byte
                         Dim ssss As String()
+                        Dim z As Integer = 0
                         Dim len As Integer
                         Dim len2 As Integer
+                        Dim uni As New Regex("(0x[0-9A-fa-f]+|&#x[0-9a-fA-F]+|&#[0-9]+|u\+?[0-9A-fa-f]+|U\+?[0-9A-fa-f]+)")
+                        Dim unim As Match
                         Dim ssr As New System.IO.StreamReader("extra.txt", System.Text.Encoding.GetEncoding(65001))
                         While ssr.Peek() > -1
                             s = ssr.ReadLine()
                             ssss = s.Split(CChar(vbTab))
-                            bb = System.Text.Encoding.GetEncoding(enc).GetBytes(ssss(1))
-                            bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(ssss(0))
+                            unim = uni.Match(ssss(0))
+                            If unim.Success Then
+                                st = unim.Value
+                                If st.Contains("x") Then
+                                    st = st.Replace("&#", "0")
+                                    sth = Convert.ToInt32(st, 16)
+                                ElseIf st.Contains("u") Or st.Contains("U") Then
+                                    st = st.Remove(0, 1)
+                                    st = st.Replace("+", "")
+                                    sth = Convert.ToInt32(st, 16)
+                                Else
+                                    st = st.Remove(0, 2)
+                                    sth = Convert.ToInt32(st)
+                                End If
+
+                                'サロゲートペア
+                                If sth >= &HD800 And sth <= &HDBFF Then
+                                    unim = unim.NextMatch
+                                    If unim.Success Then
+                                        st = unim.Value
+                                        If st.Contains("x") Then
+                                            st = st.Replace("&#", "0")
+                                            sth2 = Convert.ToInt32(st, 16)
+                                        ElseIf st.Contains("u") Or st.Contains("U") Then
+                                            st = st.Remove(0, 1)
+                                            st = st.Replace("+", "")
+                                            sth2 = Convert.ToInt32(st, 16)
+                                        Else
+                                            st = st.Remove(0, 2)
+                                            sth2 = Convert.ToInt32(st)
+                                        End If
+                                        If sth2 >= &HDC00 And sth2 <= &HDFFF Then
+                                            sth = sth And &H3FF
+                                            sth2 = sth2 And &H3FF
+                                            sth = (sth << 10) + sth2 + &H10000
+                                        Else
+                                            MessageBox.Show("サロゲートペアが見つかりません")
+                                            sth = &H3F
+                                        End If
+                                    Else
+                                        MessageBox.Show("サロゲートペアが見つかりません")
+                                        sth = &H3F
+                                    End If
+                                End If
+                                bbb = BitConverter.GetBytes(sth)
+                                st = System.Text.Encoding.GetEncoding(12000).GetString(bbb)
+
+                                bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(st)
+                            Else
+                                bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(ssss(0))
+                            End If
+
+                            unim = uni.Match(ssss(1))
+                            If unim.Success Then
+                                st = unim.Value
+                                If st.Contains("x") Then
+                                    st = st.Replace("&#", "0")
+                                    sth3 = Convert.ToUInt64(st, 16)
+                                ElseIf st.Contains("u") Then
+                                    st = st.Remove(0, 1)
+                                    st = st.Replace("+", "")
+                                    sth3 = Convert.ToUInt64(st, 16)
+                                Else
+                                    st = st.Remove(0, 2)
+                                    sth3 = Convert.ToUInt64(st)
+                                End If
+
+                                bb = BitConverter.GetBytes(sth3)
+                                Array.Resize(bb, 4)
+                                z = bb.Length - 1
+                                For i = 0 To z
+                                    swap(i) = bb(z - i)
+                                Next
+
+                                If sth3 > &HFFFFFF Then
+                                    bb(0) = swap(0)
+                                    bb(1) = swap(1)
+                                    bb(2) = swap(2)
+                                    bb(3) = swap(3)
+                                ElseIf sth3 > &HFFFF Then
+                                    Array.Resize(bb, 3)
+                                    bb(0) = swap(1)
+                                    bb(1) = swap(2)
+                                    bb(2) = swap(3)
+                                ElseIf sth3 > &HFF Then
+                                    Array.Resize(bb, 2)
+                                    bb(0) = swap(2)
+                                    bb(1) = swap(3)
+                                Else
+                                    Array.Resize(bb, 2)
+                                    bb(0) = swap(3)
+                                    bb(1) = 0
+                                End If
+                            Else
+                                bb = System.Text.Encoding.GetEncoding(enc).GetBytes(ssss(1))
+                            End If
                             len = bb.Length
                             If len <= 2 Then
                                 Array.Resize(bb, 2)
