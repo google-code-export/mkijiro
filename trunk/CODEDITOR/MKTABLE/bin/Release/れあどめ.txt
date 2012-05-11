@@ -1,5 +1,11 @@
-M$の内部てーぶるをぱくって1:1のUTF8 VS SJIS,EUCJP,GBK,UTF16BE,UTF16LE
-の変換てーぶるを作成する鶴です。
+M$の内部てーぶるをぱくって1:1のUTF8 VS SJIS,EUCJP,GBK,UTF16BE,UTF16LEの変換てーぶるを作成する鶴です。
+TXTテーブルは下記の正規表現で抜いたもの変換
+EXTRA　:(0x[0-9A-fa-f]+|&#x[0-9a-fA-F]+|&#[0-9]+|u\+?[0-9A-fa-f]+|U\+?[0-9A-fa-f]+)
+UNICODE;0x[0-9A-F]{4}\t0x[0-9A-F]{4}\t0x[0-9A-F]{4} //sjis,jis,utf16の順
+JIS203 ;0x[0-9A-F]{2,6}\tU\+[0-9A-F]{4,6}\t"　//(コードポイント)、UTF32の順
+
+2012/05/11
+utf32のテーブル作成を追加
 
 2012/05/10
 10進、16進HTML/0xコードから指定した16進コードに変換したテーブルを作れるようにした。
@@ -47,6 +53,7 @@ BY (ﾟ∀ﾟ)
 
 参考さいと
 http://charset.uic.jp/show/cp932/
+http://x0213.org/codetable/
 http://msdn.microsoft.com/ja-jp/library/aa288104%28v=vs.71%29.aspx
 http://www.gnu.org/software/libiconv/
 http://www.unicode.org/
