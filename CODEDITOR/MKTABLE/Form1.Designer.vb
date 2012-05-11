@@ -38,6 +38,7 @@ Partial Class Form1
         Me.Label5 = New System.Windows.Forms.Label()
         Me.textbox4 = New System.Windows.Forms.ComboBox()
         Me.EX = New System.Windows.Forms.CheckBox()
+        Me.sp = New System.Windows.Forms.CheckBox()
         Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -126,7 +127,7 @@ Partial Class Form1
         '
         Me.ENCODE.ContextMenuStrip = Me.ContextMenuStrip1
         Me.ENCODE.FormattingEnabled = True
-        Me.ENCODE.Items.AddRange(New Object() {"SHIFT-JIS(CP932)", "EUC-JP(CP51932)", "GBK(CP936)", "UTF16LE(CP1200)", "UTF16BE(CP1201)", "UTF16BE→EUC-JP(UTF8->UTF16BE->CP51932)", "UTF16BE→SJIS(UTF8->UTF16BE->CP932)", "UTF16BE→GBK(UTF8->UTF16BE->CP936)", "Unicode Consortiumテキストテーブル(CP1201)"})
+        Me.ENCODE.Items.AddRange(New Object() {"SHIFT-JIS(CP932)", "EUC-JP(CP51932)", "GBK(CP936)", "UTF16LE(CP1200)", "UTF16BE(CP1201)", "UTF16BE→EUC-JP(UTF8->UTF16BE->CP51932)", "UTF16BE→SJIS(UTF8->UTF16BE->CP932)", "UTF16BE→GBK(UTF8->UTF16BE->CP936)", "Unicode Consortiumテキストテーブル(CP1201)", "JIS213_2004テキストテーブル(CP12001)"})
         Me.ENCODE.Location = New System.Drawing.Point(107, 12)
         Me.ENCODE.Name = "ENCODE"
         Me.ENCODE.Size = New System.Drawing.Size(139, 22)
@@ -150,7 +151,7 @@ Partial Class Form1
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(232, 54)
+        Me.Label5.Location = New System.Drawing.Point(228, 97)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(35, 14)
         Me.Label5.TabIndex = 12
@@ -160,7 +161,7 @@ Partial Class Form1
         '
         Me.textbox4.FormattingEnabled = True
         Me.textbox4.Items.AddRange(New Object() {"□", "■", "〓", "・"})
-        Me.textbox4.Location = New System.Drawing.Point(273, 51)
+        Me.textbox4.Location = New System.Drawing.Point(269, 94)
         Me.textbox4.Name = "textbox4"
         Me.textbox4.Size = New System.Drawing.Size(39, 22)
         Me.textbox4.TabIndex = 13
@@ -169,21 +170,33 @@ Partial Class Form1
         'EX
         '
         Me.EX.AutoSize = True
-        Me.EX.Location = New System.Drawing.Point(253, 15)
+        Me.EX.Location = New System.Drawing.Point(254, 11)
         Me.EX.Name = "EX"
         Me.EX.Size = New System.Drawing.Size(75, 18)
         Me.EX.TabIndex = 14
         Me.EX.Text = "えくすとら"
         Me.EX.UseVisualStyleBackColor = True
         '
+        'sp
+        '
+        Me.sp.AutoSize = True
+        Me.sp.Location = New System.Drawing.Point(254, 33)
+        Me.sp.Name = "sp"
+        Me.sp.Size = New System.Drawing.Size(79, 18)
+        Me.sp.TabIndex = 15
+        Me.sp.Text = "さろげーと"
+        Me.sp.UseVisualStyleBackColor = True
+        Me.sp.Visible = False
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(341, 255)
-        Me.Controls.Add(Me.EX)
+        Me.Controls.Add(Me.sp)
         Me.Controls.Add(Me.textbox4)
         Me.Controls.Add(Me.Label5)
+        Me.Controls.Add(Me.EX)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.ENCODE)
         Me.Controls.Add(Me.Panel1)
@@ -213,5 +226,6 @@ Partial Class Form1
     Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents textbox4 As System.Windows.Forms.ComboBox
     Friend WithEvents EX As System.Windows.Forms.CheckBox
+    Friend WithEvents sp As System.Windows.Forms.CheckBox
 
 End Class

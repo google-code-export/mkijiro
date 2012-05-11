@@ -5,7 +5,7 @@ Imports System.Text.RegularExpressions
 
 Public Class Form1
 
-    Dim p As String() = {"sjis.txt", "euc-jp.txt", "gbk.txt", "utf16le.txt", "utf16be.txt", "table\euc-jp.dat", "table\shift-jis.dat", "table\gbk.dat", "unicode.txt"}
+    Dim p As String() = {"sjis.txt", "euc-jp.txt", "gbk.txt", "utf16le.txt", "utf16be.txt", "table\euc-jp.dat", "table\shift-jis.dat", "table\gbk.dat", "unicode.txt", ""}
 
     Private Sub TextBox1_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles ENCODE.KeyPress
         e.Handled = True
@@ -24,14 +24,39 @@ Public Class Form1
                     Dim bb(1) As Byte
                     Dim s As String = ""
                     Dim bbb As Byte() = Nothing
-                    For i = 0 To &HFFFF
-                        bb(0) = CByte(i And &HFF)
-                        bb(1) = CByte(i >> 8)
-                        s = System.Text.Encoding.GetEncoding(1200).GetString(bb)
-                        bbb = System.Text.Encoding.GetEncoding(enc).GetBytes(s)
-                        Array.Resize(bbb, 2)
-                        ucs2.Write(bbb, 0, 2)
-                    Next
+                    If sp.Checked Then
+                        Array.Resize(bb, 4)
+                        For i = 0 To &H2FFFF
+                            bb(0) = CByte(i And &HFF)
+                            bb(1) = CByte((i >> 8) And &HFF)
+                            bb(2) = CByte((i >> 16) And &HFF)
+                            bb(3) = CByte((i >> 24) And &HFF)
+                            s = System.Text.Encoding.GetEncoding(12000).GetString(bb)
+                            bbb = System.Text.Encoding.GetEncoding(enc).GetBytes(s)
+                            Array.Resize(bbb, 2)
+                            ucs2.Write(bbb, 0, 2)
+                        Next
+                        For i = &HE0000 To &HE0FFF
+                            bb(0) = CByte(i And &HFF)
+                            bb(1) = CByte((i >> 8) And &HFF)
+                            bb(2) = CByte((i >> 16) And &HFF)
+                            bb(3) = CByte((i >> 24) And &HFF)
+                            s = System.Text.Encoding.GetEncoding(12000).GetString(bb)
+                            bbb = System.Text.Encoding.GetEncoding(enc).GetBytes(s)
+                            Array.Resize(bbb, 2)
+                            ucs2.Write(bbb, 0, 2)
+                        Next
+
+                    Else
+                        For i = 0 To &HFFFF
+                            bb(0) = CByte(i And &HFF)
+                            bb(1) = CByte(i >> 8)
+                            s = System.Text.Encoding.GetEncoding(1200).GetString(bb)
+                            bbb = System.Text.Encoding.GetEncoding(enc).GetBytes(s)
+                            Array.Resize(bbb, 2)
+                            ucs2.Write(bbb, 0, 2)
+                        Next
+                    End If
                     ucs2.Close()
                     Beep()
                 ElseIf ENCODE.SelectedIndex = 8 Then
@@ -119,27 +144,79 @@ Public Class Form1
                         feuc.Close()
                         Beep()
                     End If
-                    ElseIf File.Exists(output) Then
-                        Dim sr As New System.IO.FileStream(output, System.IO.FileMode.Open, System.IO.FileAccess.Read)
-                        Dim fs As New System.IO.FileStream("table\" & Path.GetFileNameWithoutExtension(output), System.IO.FileMode.Create, System.IO.FileAccess.Write)
-                        Dim fss As New System.IO.FileStream("table\utf8", System.IO.FileMode.Create, System.IO.FileAccess.Write)
-                        Dim bs(CInt(sr.Length) - 1) As Byte
-                        sr.Read(bs, 0, bs.Length)
-                        Dim ss As String = System.Text.Encoding.GetEncoding(enc).GetString(bs)
-                        Dim sss As String() = ss.Split(CChar(vbLf))
-                        Dim i As Integer = 0
-                        Dim bb As Byte() = Nothing
-                        Dim bbb As Byte() = Nothing
-                        For Each s As String In sss
-                            s = s.Replace(vbCr, "")
-                            bb = System.Text.Encoding.GetEncoding(enc).GetBytes(s)
-                            bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(s)
-                            Array.Resize(bb, 2)
-                            Array.Resize(bbb, 4)
-                            fs.Write(bb, 0, 2)
-                            fss.Write(bbb, 0, 4)
-                        Next
-                    
+                ElseIf ENCODE.SelectedIndex = 9 Then
+                    Dim ofd As New OpenFileDialog()
+                    ofd.Filter = _
+                        "TXTファイル(*.txt)|*.txt"
+                    ofd.Title = "開くファイルを選択してください"
+                    If ofd.ShowDialog() = DialogResult.OK Then
+                        output = ofd.FileName
+                        Dim sr As New System.IO.StreamReader(output, System.Text.Encoding.GetEncoding(65001))
+                        Dim fjis As New System.IO.FileStream("txt_table\custom_utf32", System.IO.FileMode.Create, System.IO.FileAccess.Write)
+                        Dim s As String = ""
+                        Dim r As New Regex("0x[0-9A-F]{2,6}\tU\+[0-9A-F]{4,6}\t", RegexOptions.ECMAScript)
+                        Dim hexm As Match
+                        Dim btbl(4 * (&H30FFF)) As Byte
+                        Dim ss As String()
+                        Dim bbb As Byte()
+                        Dim sw(3) As Byte
+                        Dim x As UInt32 = 0
+                        Dim y As UInt32 = 0
+                        Dim z As Integer = 0
+                        While sr.Peek() > -1
+                            s = sr.ReadLine()
+                            hexm = r.Match(s)
+                            If hexm.Success AndAlso s.Contains("//") = False Then
+                                s = hexm.Value.Replace("U+", "")
+                                ss = s.Split(CChar(vbTab))
+                                x = Convert.ToUInt32(ss(0), 16)
+                                y = Convert.ToUInt32(ss(1), 16)
+                                If x > &HFFFFFF Then
+                                ElseIf x > &HFFFF Then
+                                    x = x << 8
+                                ElseIf x > &HFF Then
+                                    x = x << 16
+                                Else
+                                    x = x << 24
+                                End If
+                                bbb = BitConverter.GetBytes(x)
+                                Array.Resize(sw, bbb.Length)
+                                z = bbb.Length - 1
+                                For i = 0 To z
+                                    sw(i) = bbb(z - i)
+                                Next
+                                If y > &H30000 Then
+                                    y = CUInt(y - &HB0000)
+                                End If
+                                Array.Copy(sw, 0, btbl, y * 4, bbb.Length)
+                            End If
+                        End While
+                        fjis.Write(btbl, 0, btbl.Length)
+                        sr.Close()
+                        fjis.Close()
+                        Beep()
+                    End If
+                ElseIf File.Exists(output) Then
+                    Dim sr As New System.IO.FileStream(output, System.IO.FileMode.Open, System.IO.FileAccess.Read)
+                    Dim fs As New System.IO.FileStream("table\" & Path.GetFileNameWithoutExtension(output), System.IO.FileMode.Create, System.IO.FileAccess.Write)
+                    Dim fss As New System.IO.FileStream("table\utf8", System.IO.FileMode.Create, System.IO.FileAccess.Write)
+                    Dim bs(CInt(sr.Length) - 1) As Byte
+                    sr.Read(bs, 0, bs.Length)
+                    Dim ss As String = System.Text.Encoding.GetEncoding(enc).GetString(bs)
+                    Dim sss As String() = ss.Split(CChar(vbLf))
+                    Dim i As Integer = 0
+                    Dim bb As Byte() = Nothing
+                    Dim bbb As Byte() = Nothing
+                    For Each s As String In sss
+                        s = s.Replace(vbCr, "")
+                        bb = System.Text.Encoding.GetEncoding(enc).GetBytes(s)
+                        bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(s)
+                        Array.Resize(bb, 2)
+                        Array.Resize(bbb, 4)
+                        fs.Write(bb, 0, 2)
+                        fss.Write(bbb, 0, 4)
+                    Next
+
                     If EX.Checked = True Then
                         Dim s As String = ""
                         Dim st As String = ""
@@ -193,11 +270,11 @@ Public Class Form1
                                             sth2 = sth2 And &H3FF
                                             sth = (sth << 10) + sth2 + &H10000
                                         Else
-                                            MessageBox.Show("サロゲートペアが見つかりません")
+                                            MessageBox.Show(st & "はサロゲートペアではありません")
                                             sth = &H3F
                                         End If
                                     Else
-                                        MessageBox.Show("サロゲートペアが見つかりません")
+                                        MessageBox.Show(st & "はサロゲートペアではありません")
                                         sth = &H3F
                                     End If
                                 End If
@@ -293,12 +370,12 @@ Public Class Form1
                     fs.Close()
                     fss.Close()
                     Beep()
-                    Else
-                        MessageBox.Show(output & ",変換対象テキストがありません")
-                    End If
-            Else
-            MessageBox.Show("文字コードが指定できません")
-            End If
+                Else
+                    MessageBox.Show(output & ",変換対象テキストがありません")
+                End If
+                Else
+                    MessageBox.Show("文字コードが指定できません")
+                End If
         Catch ex As Exception
             MessageBox.Show(ex.Message)
         End Try
