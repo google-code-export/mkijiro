@@ -624,7 +624,7 @@ namespace WindowsFormsApplication1
                                     }
                                     else
                                     {
-					//例外の補完
+				                    	//例外の補完
                                         if ((c1 & 1) == 1)
                                         {
                                             if (c2 < 0x60) c2 += 0x1F;
@@ -777,22 +777,33 @@ namespace WindowsFormsApplication1
                                 long pos = 0;
                                 int dest = 0;
                                 int seek2 = 0;
+                                int bmode = 0;
+                                Array.Resize(ref ff, 1274432+18);
                                 for (int t = 0; t < table.Length; t += 2, ct++)
                                 {
                                     pos = 18 + (total * 4) + (ct * 18);
                                     seek2 = BitConverter.ToUInt16(table, t);
                                     if (pos <= bkk-18)
                                     {
-                                        if (seek2 >= 0xA1A1 && seek2 <= 0xFCFF)
+                                        if(seek2>=0x810f && seek2 <= 0x8116){
+                                            bmode++;
+                                        }
+                                        else{
+                                        if (bmode==0 && seek2 >= 0xA1A1 && seek2 <= 0xFEFE)
                                         {
                                             dest = (((seek2 / 0x100) - 0xa1) * 94) + ((seek2 & 0xff) - 0xa1);
                                         }
+                                        else if (bmode != 0 && seek2 >= 0xA1A1 && seek2 <= 0xFEFE)
+                                        {
+                                            dest = (bmode * 8836) + (((seek2 / 0x100) - 0xa1) * 94) + ((seek2 & 0xff) - 0xa1);
+                                        }
 
                                         Array.Copy(ftx, pos, ff, 2048 + dest * 18, 18);
+                                        }
                                     }
                                 }
                                 FileStream fss = new System.IO.FileStream("font_euc.dat", FileMode.Create, FileAccess.Write);
-                                Array.Resize(ref ff, bk);
+                                if(bmode==0){Array.Resize(ref ff, bk);}
                                 fss.Write(ff, 0, ff.Length);
                                 fss.Close();
                             }
