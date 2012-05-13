@@ -207,15 +207,17 @@ Public Class Form1
                     Dim i As Integer = 0
                     Dim bb As Byte() = Nothing
                     Dim bbb As Byte() = Nothing
-                    For Each s As String In sss
-                        s = s.Replace(vbCr, "")
-                        bb = System.Text.Encoding.GetEncoding(enc).GetBytes(s)
-                        bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(s)
-                        Array.Resize(bb, 2)
-                        Array.Resize(bbb, 4)
-                        fs.Write(bb, 0, 2)
-                        fss.Write(bbb, 0, 4)
-                    Next
+                    If sp.Checked = False Then
+                        For Each s As String In sss
+                            s = s.Replace(vbCr, "")
+                            bb = System.Text.Encoding.GetEncoding(enc).GetBytes(s)
+                            bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(s)
+                            Array.Resize(bb, 2)
+                            Array.Resize(bbb, 4)
+                            fs.Write(bb, 0, 2)
+                            fss.Write(bbb, 0, 4)
+                        Next
+                    End If
 
                     If EX.Checked = True Then
                         Dim s As String = ""
@@ -228,7 +230,7 @@ Public Class Form1
                         Dim z As Integer = 0
                         Dim len As Integer
                         Dim len2 As Integer
-                        Dim uni As New Regex("(0x[0-9A-fa-f]+|&#x[0-9a-fA-F]+|&#[0-9]+|u\+?[0-9A-fa-f]+|U\+?[0-9A-fa-f]+)")
+                        Dim uni As New Regex("(^0x[0-9A-fa-f]+|^&#x[0-9a-fA-F]+|&#[0-9]+|^u\+?[0-9A-fa-f]+|^U\+?[0-9A-fa-f]+)")
                         Dim unim As Match
                         Dim ssr As New System.IO.StreamReader("extra.txt", System.Text.Encoding.GetEncoding(65001))
                         While ssr.Peek() > -1
@@ -333,9 +335,11 @@ Public Class Form1
                             len = bb.Length
                             If len <= 2 Then
                                 Array.Resize(bb, 2)
-                                fs.Write(bb, 0, 2)
                                 Array.Resize(bbb, 4)
-                                fss.Write(bbb, 0, 4)
+                                If BitConverter.ToUInt16(bb, 0) <> 0 AndAlso BitConverter.ToUInt32(bbb, 0) <> 0 Then
+                                    fs.Write(bb, 0, 2)
+                                    fss.Write(bbb, 0, 4)
+                                End If
                             Else
                                 len2 = len
                                 If (len And 1) = 1 Then
@@ -370,9 +374,9 @@ Public Class Form1
                     fs.Close()
                     fss.Close()
                     Beep()
-                Else
-                    MessageBox.Show(output & ",変換対象テキストがありません")
-                End If
+                    Else
+                        MessageBox.Show(output & ",変換対象テキストがありません")
+                    End If
                 Else
                     MessageBox.Show("文字コードが指定できません")
                 End If
