@@ -182,11 +182,10 @@ Partial Class Form1
         Me.sp.AutoSize = True
         Me.sp.Location = New System.Drawing.Point(254, 33)
         Me.sp.Name = "sp"
-        Me.sp.Size = New System.Drawing.Size(79, 18)
+        Me.sp.Size = New System.Drawing.Size(62, 18)
         Me.sp.TabIndex = 15
-        Me.sp.Text = "さろげーと"
+        Me.sp.Text = "NOM$"
         Me.sp.UseVisualStyleBackColor = True
-        Me.sp.Visible = False
         '
         'Form1
         '
