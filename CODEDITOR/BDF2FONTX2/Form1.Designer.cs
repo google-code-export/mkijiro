@@ -256,11 +256,12 @@
             "(S1奇数判定+S1S2ともにシフト),S1S2を調整",
             "(S1奇数判定+S2シフト),S1シフト",
             "S1-0x21,(S1奇数判定+S2シフト),S1シフト",
-            "S1S2-0x2020,(S1奇数判定+S2シフト),S1シフト",
+            "S1S2-0x2020,(S1奇数判定+S2シフト),S1シフト(JIS208 規定)",
             "S1S2-0x2121,(S1奇数判定+S2シフト),S1シフト",
             "外部TXT変換テーブル使用",
             "M$テーブル(ESC$B,ISO-2022-JP経由)",
-            "M$テーブル(+0x8080,EUC-JP経由)"});
+            "M$テーブル(+0x8080,EUC-JP経由)",
+            "SHIFT_JIS_2004(JIS213 2004規定)"});
             this.JIS2SJIS.Location = new System.Drawing.Point(6, 17);
             this.JIS2SJIS.Name = "JIS2SJIS";
             this.JIS2SJIS.Size = new System.Drawing.Size(228, 22);
