@@ -457,6 +457,7 @@ namespace WindowsFormsApplication1
                         crlf[1] = 0xa;
                         byte[] hex4 = new byte[1024 * 50];
                         int strpos = 3;
+                        int nimen=0;
                         int c1 = 0;
                         int c2 = 0;
                         int code = 0;
@@ -681,6 +682,100 @@ namespace WindowsFormsApplication1
                                     }
                                 }
 
+                                //SHIFT_JIS_2004
+                                if (JIS2SJIS.SelectedIndex == 9)
+                                {
+                                    if (c1==0 && c2 == 0x8f) {
+                                        nimen = 1;
+                                        c1 = 0;
+                                        c2 = c2 - 0x8f + 2;
+                                    }
+                                    else if (c1 == 0 && c2 > 0x8f)
+                                    {
+                                        nimen = 2;
+                                        c1 = 0;
+                                        c2 = c2 - 0x8f+ 2;
+                                    }
+                                    else
+                                    {
+                                        c1 -= 0x20;//k
+                                        c2 -= 0x20;//t
+                                        if (nimen == 0)
+                                        {
+                                            //第1バイト(S1)は、以下による:
+                                            //  m = 1 で 1 ≦ k ≦ 62 のとき, S1 = (k + 0x101) ÷ 2.
+                                            //m = 1 で 63 ≦ k ≦ 94 のとき, S1 = (k + 0x181) ÷ 2.
+                                            //第2バイト(S2)は、以下による:
+                                            //  k が奇数の場合:
+                                            //    1 ≦ t ≦ 63 のとき, S2 = t + 0x3f.
+                                            //  64 ≦ t ≦ 94 のとき, S2 = t + 0x40.
+                                            //k が偶数の場合, S2 = t + 0x9e.
+                                            if ((c1 & 1) != 0)
+                                            {
+                                                if (c2 >= 1 && c2 <= 63)
+                                                {
+                                                    c2 += 0x3f;
+                                                }
+                                                else if (c2 >= 64 && c2 <= 94)
+                                                {
+                                                    c2 += 0x40;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                c2 += 0x9e;
+                                            }
+
+                                            if (c1 >= 1 && c1 <= 62) { c1 = (c1 + 0x101) >> 1; }
+                                            else if (c1 >= 63 && c1 <= 94) { c1 = (c1 + 0x181) >> 1; }
+                                        }
+                                        else if (nimen == 1)
+                                        {
+                                            //第2バイト(S2)は、以下による:
+                                            //  k が奇数の場合:
+                                            //    1 ≦ t ≦ 63 のとき, S2 = t + 0x3f.
+                                            //  64 ≦ t ≦ 94 のとき, S2 = t + 0x40.
+                                            //k が偶数の場合, S2 = t + 0x9e.
+                                            if ((c1 & 1) != 0)
+                                            {
+                                                if (c2 >= 1 && c2 <= 63)
+                                                {
+                                                    c2 += 0x3f;
+                                                }
+                                                else if (c2 >= 64 && c2 <= 94)
+                                                {
+                                                    c2 += 0x40;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                c2 += 0x9e;
+                                            }
+
+                                            // m = 2 で, k = 1, 3, 4, 5, 8, 12, 13, 14, 15 のとき, S1 = (k + 0x1df) ÷ 2 － (k ÷ 8) × 3.
+                                            // m = 2 で, 78 ≦ k ≦ 94 のとき, S1 = (k + 0x19b) ÷ 2.
+                                            if (c1 == 1 || c1 == 3 || c1 == 4 || c1 == 5 || c1 == 8 || (c1 >= 12 && c1 <= 15))
+                                            {
+                                                c1 = ((c1 + 0x1df) >> 1) - ((c1 >> 3) * 3);
+                                            }
+                                            else if (c1 >= 78 && c1 <= 94)
+                                            {
+                                                c1 = (c1 + 0x19b) >> 1;
+                                            }
+                                            else
+                                            {
+                                                c1 = 0xff;
+                                                c2 = 0xff;
+                                            }
+                                        }
+
+                                        else
+                                        {
+                                            c1 = 0xff;
+                                            c2 = 0xff;
+                                        }
+                                    }
+                                }
 
                             }
                             else if (EUC.Checked==true)
@@ -786,7 +881,7 @@ namespace WindowsFormsApplication1
                                     if (pos <= bkk-18)
                                     {
                                         if(seek2>=0x810f && seek2 <= 0x8116){
-                                            bmode++;
+                                            bmode=seek2-0x810f +1;
                                         }
                                         else{
                                         if (bmode==0 && seek2 >= 0xA1A1 && seek2 <= 0xFEFE)
@@ -797,8 +892,14 @@ namespace WindowsFormsApplication1
                                         {
                                             dest = (bmode * 8836) + (((seek2 / 0x100) - 0xa1) * 94) + ((seek2 & 0xff) - 0xa1);
                                         }
+                                        else {
+                                            dest = 0;
+                                        }
 
+                                        if(dest>0){
                                         Array.Copy(ftx, pos, ff, 2048 + dest * 18, 18);
+                                        }
+
                                         }
                                     }
                                 }
@@ -853,8 +954,13 @@ namespace WindowsFormsApplication1
                                         {
                                             dest = (192 * 31) + (((seek2 >> 8) - 0xE0) * 192) + ((seek2 & 0xff) - 0x40);//0xBF80
                                         }
-
-                                        Array.Copy(ftx, pos, ff, 2048 + dest * 18, 18);
+                                        else {
+                                            dest = 0;
+                                        }
+                                        if (dest > 0)
+                                        {
+                                            Array.Copy(ftx, pos, ff, 2048 + dest * 18, 18);
+                                        }
                                     }
                                 }
 

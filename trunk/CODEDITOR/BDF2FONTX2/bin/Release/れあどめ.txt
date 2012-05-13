@@ -6,6 +6,9 @@
 MPLUS　12x13
 蕨     12x12
 
+2012/05/13
+jis->SJIS変化方法にSHIFT_JIS_2004を追加
+
 2012/05/12
 CMF3バイトEUCに対応
 
@@ -29,10 +32,6 @@ FREECHEATSJIS用フォントを作成できるようにした
 CMFUSIONフォント作成で最後の文字コードがパッチされてなかったので修正
 JIS->SJIS変換方法を選べるようにした
 
-http://www.tohoho-web.com/wwwkanji.htm
-http://oku.edu.mie-u.ac.jp/~okumura/algo/
-http://www.unixuser.org/~euske/doc/kanjicode/
-http://www.d2.dion.ne.jp/~imady/charset/charcode_mame.html#SJIS_JIS
 ftp://ftp.unicode.org/Public/MAPPINGS/OBSOLETE/EASTASIA/JIS/JIS0208.TXT TXTテーブル
 M$のやつ　｜0x80後51932->932
 
@@ -68,3 +67,15 @@ EUCの場合FONTX2の&へっだ[16]が2になります
 とりあえず作成。
 
 BY　(ﾟ∀ﾟ)
+
+参考リンク
+SJIS変換
+http://www.tohoho-web.com/wwwkanji.htm
+http://oku.edu.mie-u.ac.jp/~okumura/algo/
+http://www.unixuser.org/~euske/doc/kanjicode/
+http://www.d2.dion.ne.jp/~imady/charset/charcode_mame.html#SJIS_JIS
+JIS213 2004
+http://www.itscj.ipsj.or.jp/ISO-IR/229.pdf
+http://x0213.org/codetable/
+UNICODE
+ftp://ftp.unicode.org/Public/MAPPINGS/OBSOLETE/EASTASIA/JIS/JIS0208.TXT T
