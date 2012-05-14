@@ -139,7 +139,8 @@ namespace WindowsFormsApplication1
                         }
                         else if (zenkaku == true && CMF.Checked == false && FILER.Checked == false && FC.Checked == false)
                         {
-                            if (s.Contains("ENCODING"))
+                            if (s.Contains("CHARSET")) { }
+                            else if (s.Contains("ENCODING"))
                             {
                                 total++;
                                 ftable[total] = Convert.ToUInt16(s.Replace("ENCODING", "").Trim(), 10);
