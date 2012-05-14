@@ -1287,7 +1287,7 @@ extern void mem_table_save(int idx)
 	char fn[80];
 	if(mem_gv.mem_table_size==0) return;	
 	ui_cls();	
-	if(ui_input_string(120, 68, ui_get_gamename(), 36) < 0)
+	if(ui_input_string(120, 68, ui_get_gamename(), 36) < 1)
 		return ;
 	
 	sprintf(fn, "%s/%02d.tab", TAB_DIR, idx);
@@ -1371,7 +1371,7 @@ extern void mem_table_savecw()
 	fn[28]=0;
 	fn[29]=0;
 	ui_cls();
-	if(ui_input_string(120, 68, fn, 29) < 0)
+	if(ui_input_string(120, 68, fn, 29) < 1)
 		return ;
 
 	char cmf[]=".cmf\x0";

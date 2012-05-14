@@ -537,7 +537,7 @@ static int layout_get_table_item(const char * prompt, p_mem_table table)
 		memset(table->name, 0, 12);
 		strcpy(table->name, "New");
 		font_output(110, 68, LANG_COMMENT);
-		if(ui_input_string(164, 68, table->name, 10) < 0)
+		if(ui_input_string(164, 68, table->name, 10) < 1)
 			return -1;
 		if(table->addr != 0xFFFFFFFF)
 		{
@@ -2171,7 +2171,7 @@ static void keyset_save()
 	mips_memcpy(namestr,ui_get_gamename(),10);
 	sceIoMkdir(SET_DIR, 0777);
 	ui_cls();
-	if(ui_input_string(120, 68, namestr, 29) < 0)
+	if(ui_input_string(120, 68, namestr, 29) < 1)
 		return;
 	filter_filename(namestr);
 	sprintf(s, "%s/%s.set", SET_DIR, namestr);
@@ -2471,9 +2471,8 @@ static int	layout_read_cb(unsigned int key, int *id, int *topid)
 
 			UTF8SJIS_EUC(newfn,80);
 
-
 			ui_cls();
-			if(ui_input_string(120, 68, newfn+len, 29) >= 0){
+			if(ui_input_string(120, 68, newfn+len, 29) > 0){
 				//filter_filename(newfn+len);
 				//strcat(newfn, p-4);
 
