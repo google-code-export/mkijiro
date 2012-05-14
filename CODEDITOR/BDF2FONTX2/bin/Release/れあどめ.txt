@@ -1,10 +1,41 @@
 テキストベースのBITMAPフォントBDFの半角/全角フォントをFONTX2に変換する鶴です。
-対応コードはJIS208のみ。
+対応コードはJIS208/JIS213のみ。
+
+
+※JIS２面は１面と２面をつなげたあと間にENC143(ねたでEUCだけ3面(144～)以降も可能)のだみーを入れてください
+ENDCHAR
+～～1面のフォント～
+
+//2面開始
+STARTCHAR 008f
+ENCODING 143
+SWIDTH 960 0
+DWIDTH 12 0
+BBX 12 12 0 -2
+BITMAP
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+ENDCHAR
+
+～～2面のフォント～
 
 //変換確認済み
 東雲全角14 shnmk14.bdf
 MPLUS　12x13
 蕨     12x12
+JIS漢　12x12(JIS213)
+
+2012/05/14
+SJIS2004でエラーが出てたので修正
 
 2012/05/13
 jis->SJIS変化方法にSHIFT_JIS_2004を追加
@@ -69,6 +100,11 @@ EUCの場合FONTX2の&へっだ[16]が2になります
 BY　(ﾟ∀ﾟ)
 
 参考リンク
+BDFフォント
+http://openlab.ring.gr.jp/efont/shinonome/
+http://mplus-fonts.sourceforge.jp/
+http://www.gelgoog.org/warabi12/
+http://www12.ocn.ne.jp/~imamura/jisx0213.html
 SJIS変換
 http://www.tohoho-web.com/wwwkanji.htm
 http://oku.edu.mie-u.ac.jp/~okumura/algo/
