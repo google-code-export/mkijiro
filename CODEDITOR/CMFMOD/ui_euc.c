@@ -685,7 +685,7 @@ int ui_input_string(int x, int y, char * s, int len)
 			mips_memcpy(s, str, len);
 			font_fillrect(x, y + 10, 379, y + 112);
 			sfree(idx_buf);
-			return 0;
+			return strlen(str);
 		case PSP_CTRL_LTRIGGER:
 			if(idx_buf!=NULL){
 				gb_mode = 1 - gb_mode;

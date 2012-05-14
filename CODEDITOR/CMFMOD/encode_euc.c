@@ -71,10 +71,12 @@ char FILE_ENCODE(){
 	return filemode;
 }
 
+
 //UTF8+SJISから直EUC変換表
 int UTF8SJIS_EUC(unsigned char *msg,int len){
 	char stm[80];
 	char fbuffer[2048];
+	char tofu[]="\xA2\xA2";
 	u8 c1=0;
 	u8 c2=0;
 	int i=0;
@@ -121,6 +123,8 @@ int UTF8SJIS_EUC(unsigned char *msg,int len){
 						}
 						else if(big==0){
 						sceIoClose(fd);
+						memcpy(&stm[k],&tofu[0],2);
+						k = k+2;
 		  				goto fail2;
 						}
 					}
@@ -151,8 +155,8 @@ int UTF8SJIS_EUC(unsigned char *msg,int len){
 				}
 				sceIoClose(fd);
 
-				if(c1 < 0xE0){
 				fail2:
+				if(c1 < 0xE0){
 				i+=2;
 				}
 				else if(c1 < 0xF0){
