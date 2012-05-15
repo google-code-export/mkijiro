@@ -432,7 +432,6 @@ namespace WindowsFormsApplication1
                     }
                     FileStream fs = new System.IO.FileStream(fname, FileMode.Create, FileAccess.Write);
                     FileStream ffs = new System.IO.FileStream(fontable, FileMode.Create, FileAccess.Write);
-                    //FileStream eee = new System.IO.FileStream("a.txt", FileMode.Create, FileAccess.Write);
                     if (zenkaku == false && CMF.Checked == false && FILER.Checked == false && FC.Checked== false){
                         fs.Write(header, 0, 17);
                     }
@@ -769,7 +768,6 @@ namespace WindowsFormsApplication1
                                                 c2 = 0xff;
                                             }
                                         }
-
                                         else
                                         {
                                             c1 = 0xff;
@@ -794,10 +792,8 @@ namespace WindowsFormsApplication1
                             else if (c1 - bk != 1)
                             {
                                 hex3 = BitConverter.GetBytes(st);
-                                //fss.Write(hex3, 0, 2);
                                 Array.Copy(hex3, 0, hex4, kk * 4, 2);
                                 hex3 = BitConverter.GetBytes(st + en);
-                                //fss.Write(hex3, 0, 2);
                                 Array.Copy(hex3, 0, hex4, (kk * 4) + 2, 2);
                                 st = c1;
                                 en = 0;
@@ -811,17 +807,17 @@ namespace WindowsFormsApplication1
 
                             bk = c1;
 
-                            if (CMF.Checked)
+                            if (CMF.Checked == true)
                             {
                                 hex3 = BitConverter.GetBytes(c1);
                                 ffs.Write(hex3, 0, 2);
                             }
-                            if (FC.Checked)
+                            else if (FC.Checked == true)
                             {
                                 hex3 = BitConverter.GetBytes(c1);
                                 ffs.Write(hex3, 0, 2);
                             }
-                            if (FILER.Checked == true && yoko == 12)
+                            else if (FILER.Checked == true && yoko == 12)
                             {
                                 if (k < total)
                                 {
@@ -947,21 +943,23 @@ namespace WindowsFormsApplication1
                                     seek2 = BitConverter.ToUInt16(table, t);
                                     if (pos <= bkk - 18)
                                     {
-                                        if (seek2 >= 0x8140 && seek2 <= 0x9FFF)
+                                        if (seek2 >= 0x8140 && seek2 <= 0x9FFC)
                                         {
                                             dest = (((seek2 >> 8) - 0x81) * 192) + ((seek2 & 0xff) - 0x40);
                                         }
-                                        else if (seek2 >= 0xE040 && seek2 <= 0xFCFF)
+                                        else if (seek2 >= 0xE040 && seek2 <= 0xFCFC)
                                         {
-                                            dest = (192 * 31) + (((seek2 >> 8) - 0xE0) * 192) + ((seek2 & 0xff) - 0x40);//0xBF80
+                                            dest = (192 * 31) + (((seek2 >> 8) - 0xE0) * 192) + ((seek2 & 0xff) - 0x40);
                                         }
                                         else {
                                             dest = 0;
                                         }
+
                                         if (dest > 0)
                                         {
                                             Array.Copy(ftx, pos, ff, 2048 + dest * 18, 18);
                                         }
+
                                     }
                                 }
 
