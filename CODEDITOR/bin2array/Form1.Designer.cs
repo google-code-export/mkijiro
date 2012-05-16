@@ -39,13 +39,17 @@
             this.byteloop = new System.Windows.Forms.RadioButton();
             this.MD5 = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.HEX = new System.Windows.Forms.RadioButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.CS = new System.Windows.Forms.RadioButton();
             this.VBNET = new System.Windows.Forms.RadioButton();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -104,7 +108,7 @@
             // textBox1
             // 
             this.textBox1.AllowDrop = true;
-            this.textBox1.Location = new System.Drawing.Point(17, 181);
+            this.textBox1.Location = new System.Drawing.Point(17, 194);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -115,7 +119,7 @@
             // ANDs
             // 
             this.ANDs.AutoSize = true;
-            this.ANDs.Location = new System.Drawing.Point(127, 19);
+            this.ANDs.Location = new System.Drawing.Point(63, 19);
             this.ANDs.Name = "ANDs";
             this.ANDs.Size = new System.Drawing.Size(54, 18);
             this.ANDs.TabIndex = 7;
@@ -126,7 +130,7 @@
             // byteloop
             // 
             this.byteloop.AutoSize = true;
-            this.byteloop.Location = new System.Drawing.Point(214, 19);
+            this.byteloop.Location = new System.Drawing.Point(123, 19);
             this.byteloop.Name = "byteloop";
             this.byteloop.Size = new System.Drawing.Size(79, 18);
             this.byteloop.TabIndex = 8;
@@ -136,57 +140,77 @@
             // MD5
             // 
             this.MD5.AutoSize = true;
-            this.MD5.Checked = true;
-            this.MD5.Location = new System.Drawing.Point(8, 19);
+            this.MD5.Location = new System.Drawing.Point(208, 19);
             this.MD5.Name = "MD5";
-            this.MD5.Size = new System.Drawing.Size(96, 18);
+            this.MD5.Size = new System.Drawing.Size(51, 18);
             this.MD5.TabIndex = 9;
-            this.MD5.TabStop = true;
-            this.MD5.Text = "MD5+安藤４";
+            this.MD5.Text = "MD5";
             this.MD5.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.HEX);
             this.groupBox1.Controls.Add(this.ANDs);
             this.groupBox1.Controls.Add(this.byteloop);
             this.groupBox1.Controls.Add(this.MD5);
-            this.groupBox1.Location = new System.Drawing.Point(20, 129);
+            this.groupBox1.Location = new System.Drawing.Point(20, 144);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(299, 44);
             this.groupBox1.TabIndex = 12;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "出力タイプ";
             // 
+            // HEX
+            // 
+            this.HEX.AutoSize = true;
+            this.HEX.Checked = true;
+            this.HEX.Location = new System.Drawing.Point(8, 19);
+            this.HEX.Name = "HEX";
+            this.HEX.Size = new System.Drawing.Size(38, 18);
+            this.HEX.TabIndex = 10;
+            this.HEX.TabStop = true;
+            this.HEX.Text = "0x";
+            this.HEX.UseVisualStyleBackColor = true;
+            // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.CS);
             this.groupBox2.Controls.Add(this.VBNET);
-            this.groupBox2.Location = new System.Drawing.Point(20, 89);
+            this.groupBox2.Location = new System.Drawing.Point(20, 93);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(299, 34);
+            this.groupBox2.Size = new System.Drawing.Size(299, 45);
             this.groupBox2.TabIndex = 13;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "言語";
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(169, 14);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(0, 14);
+            this.label4.TabIndex = 2;
+            // 
             // CS
             // 
             this.CS.AutoSize = true;
-            this.CS.Location = new System.Drawing.Point(87, 13);
+            this.CS.Checked = true;
+            this.CS.Location = new System.Drawing.Point(8, 16);
             this.CS.Name = "CS";
             this.CS.Size = new System.Drawing.Size(41, 18);
             this.CS.TabIndex = 1;
+            this.CS.TabStop = true;
             this.CS.Text = "C#";
             this.CS.UseVisualStyleBackColor = true;
             // 
             // VBNET
             // 
             this.VBNET.AutoSize = true;
-            this.VBNET.Checked = true;
-            this.VBNET.Location = new System.Drawing.Point(8, 14);
+            this.VBNET.Location = new System.Drawing.Point(69, 16);
             this.VBNET.Name = "VBNET";
             this.VBNET.Size = new System.Drawing.Size(71, 18);
             this.VBNET.TabIndex = 0;
-            this.VBNET.TabStop = true;
             this.VBNET.Text = "VB.NET";
             this.VBNET.UseVisualStyleBackColor = true;
             // 
@@ -230,11 +254,37 @@
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Checked = true;
+            this.radioButton1.Location = new System.Drawing.Point(220, 13);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(104, 18);
+            this.radioButton1.TabIndex = 18;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "BIN→ARRAY";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
+            // radioButton2
+            // 
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Location = new System.Drawing.Point(220, 40);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(104, 18);
+            this.radioButton2.TabIndex = 19;
+            this.radioButton2.Text = "ARRAY→BIN";
+            this.radioButton2.UseVisualStyleBackColor = true;
+            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(341, 393);
+            this.ClientSize = new System.Drawing.Size(345, 393);
+            this.Controls.Add(this.radioButton2);
+            this.Controls.Add(this.radioButton1);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
@@ -250,7 +300,7 @@
             this.Controls.Add(this.label1);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "bin2array";
+            this.Text = "bin<->array(ファイルをドロップして下さい)";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -280,6 +330,10 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.RadioButton HEX;
     }
 }
 

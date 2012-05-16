@@ -34,291 +34,340 @@ namespace WindowsFormsApplication1
 
         private void textBox1_DragDrop(object sender, System.Windows.Forms.DragEventArgs e)
         {
-            string[] s = (string[])e.Data.GetData(DataFormats.FileDrop, false);
-            string filepath = s[0];
-            pp = filepath;
-            string LANG = "&H";
-            if (CS.Checked == true) { LANG = "0x"; }
-            string tmp = "";
-            
-            FileStream fs = new FileStream(filepath,FileMode.Open, FileAccess.Read);
-            long fsize = fs.Length;
-
-            if (fs.Length > 1 && fs.Length < 1024*1024)
+            if (radioButton1.Checked == true)
             {
-                byte[] bs = new byte[fs.Length];
-                fs.Read(bs, 0, bs.Length);
-                StringBuilder st = new StringBuilder();
 
-                if (MD5.Checked ==false){
-                if (CS.Checked == true)
-                {
-                    st.Append("byte[] ");
-                    st.Append(hairetu.Text);
-                    st.Append(" = {");
-                }
-                else
-                {
-                    st.Append("Dim ");
-                    st.Append(hairetu.Text);
-                    st.Append("() As byte = {");
-                }
+                string[] s = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+                string filepath = s[0];
+                pp = filepath;
+                string LANG = "&H";
+                if (CS.Checked == true) { LANG = "0x"; }
+                string tmp = "";
 
-                for (int i = 0; i < bs.Length; i++)
-                {
-                    st.Append(LANG);
-                    tmp = Convert.ToString(bs[i], 16).ToUpper();
-                    st.Append(tmp);
-                    if (i + 1 != bs.Length) st.Append(", ");
-                }
-                st.Append("}");
+                FileStream fs = new FileStream(filepath, FileMode.Open, FileAccess.Read);
+                long fsize = fs.Length;
 
-                if (CS.Checked == true)
+                if (fs.Length > 1 && fs.Length < 1024 * 1024)
                 {
-                    st.Append(";");
-                }
-            }
-                st.AppendLine();
+                    byte[] bs = new byte[fs.Length];
+                    fs.Read(bs, 0, bs.Length);
+                    StringBuilder st = new StringBuilder();
 
-
-                if (ANDs.Checked == true)
-                {
-                    if (CS.Checked == true)
+                    if (MD5.Checked == false)
                     {
-                        string s1 = global::bin2array.Properties.Resources.f1;
-                        s1 = s1.Replace("i", fileoffset.Text);
-                        s1 = s1.Replace("bs", hairetu.Text);
-                        s1 = s1.Replace("kazu", bs.Length.ToString());
-                        st.Append(s1);
-                    }
-                    else
-                    {
-                        string s1 = global::bin2array.Properties.Resources.f2;
-                        s1 = s1.Replace("i", fileoffset.Text);
-                        s1 = s1.Replace("bs", hairetu.Text);
-                        s1 = s1.Replace("kazu", (bs.Length-1).ToString());
-                        st.Append(s1);
-                    }
-
-
-                    st.Append("if ");
-                    string LANG2 = " andalso ";
-                    if (CS.Checked == true) { LANG2 = " && "; st.Append("("); }
-                    for (int i = 0; i < bs.Length; i++)
-                    {
-                        st.Append(kensaku.Text);
                         if (CS.Checked == true)
                         {
-                            st.Append("[");
-                            st.Append(fileoffset.Text);
-                            if (i > 0) { st.Append("+"); st.Append(i.ToString()); }
-                            st.Append("]==");
+                            st.Append("byte[] ");
+                            st.Append(hairetu.Text);
+                            st.Append(" = {");
                         }
                         else
                         {
-                            st.Append("(");
-                            st.Append(fileoffset.Text);
-                            if (i > 0) { st.Append("+");st.Append(i.ToString()); }
-                            st.Append(")=");
+                            st.Append("Dim ");
+                            st.Append(hairetu.Text);
+                            st.Append("() As byte = {");
                         }
-                        tmp = LANG + Convert.ToString(bs[i], 16).ToUpper();
-                        st.Append(tmp);
-                        if (i + 1 != bs.Length) st.Append(LANG2);
+
+                        for (int i = 0; i < bs.Length; i++)
+                        {
+                            st.Append(LANG);
+                            tmp = bs[i].ToString("X2").ToUpper();
+                            st.Append(tmp);
+                            if (i + 1 != bs.Length) st.Append(", ");
+                        }
+                        st.Append("}");
+
+                        if (CS.Checked == true)
+                        {
+                            st.Append(";");
+                        }
+                    }
+                    st.AppendLine();
+
+
+
+                    if (ANDs.Checked == true)
+                    {
+                        if (CS.Checked == true)
+                        {
+                            string s1 = global::bin2array.Properties.Resources.f1;
+                            s1 = s1.Replace("i", fileoffset.Text);
+                            s1 = s1.Replace("bs", hairetu.Text);
+                            s1 = s1.Replace("kazu", bs.Length.ToString());
+                            st.Append(s1);
+                        }
+                        else
+                        {
+                            string s1 = global::bin2array.Properties.Resources.f2;
+                            s1 = s1.Replace("i", fileoffset.Text);
+                            s1 = s1.Replace("bs", hairetu.Text);
+                            s1 = s1.Replace("kazu", (bs.Length - 1).ToString());
+                            st.Append(s1);
+                        }
+
+
+                        st.Append("if ");
+                        string LANG2 = " andalso ";
+                        if (CS.Checked == true) { LANG2 = " && "; st.Append("("); }
+                        for (int i = 0; i < bs.Length; i++)
+                        {
+                            st.Append(kensaku.Text);
+                            if (CS.Checked == true)
+                            {
+                                st.Append("[");
+                                st.Append(fileoffset.Text);
+                                if (i > 0) { st.Append("+"); st.Append(i.ToString()); }
+                                st.Append("]==");
+                            }
+                            else
+                            {
+                                st.Append("(");
+                                st.Append(fileoffset.Text);
+                                if (i > 0) { st.Append("+"); st.Append(i.ToString()); }
+                                st.Append(")=");
+                            }
+                            tmp = LANG + Convert.ToString(bs[i], 16).ToUpper();
+                            st.Append(tmp);
+                            if (i + 1 != bs.Length) st.Append(LANG2);
+                        }
+
+                        if (CS.Checked == true)
+                        {
+                            st.Append("){\r\n}\r\n}");
+                        }
+                        else
+                        {
+                            st.Append(" Then\r\nEnd If\r\nNext");
+                        }
+                    }
+                    else if (byteloop.Checked == true)
+                    {
+                        if (CS.Checked == true)
+                        {
+                            string s1 = global::bin2array.Properties.Resources.f1;
+                            s1 = s1.Replace("i", fileoffset.Text);
+                            s1 = s1.Replace("bs", hairetu.Text);
+                            s1 = s1.Replace("kazu", bs.Length.ToString());
+                            st.Append("byte[] ");
+                            st.Append(hairetu.Text);
+                            st.Append("2");
+                            st.Append(" = new byte[");
+                            st.Append(bs.Length.ToString());
+                            st.AppendLine("];");
+                            st.Append(s1);
+                            st.Append("Buffer.BlockCopy(");
+                            st.Append(kensaku.Text);
+                            st.Append(", ");
+                            st.Append(fileoffset.Text);
+                            st.Append(", ");
+                            st.Append(hairetu.Text);
+                            st.Append("2");
+                            st.Append(", 0, ");
+                            st.Append(bs.Length.ToString());
+                            st.AppendLine(");");
+                            st.Append("if(");
+                            st.Append(hairetu.Text);
+                            st.Append(".SequenceEqual(");
+                            st.Append(hairetu.Text);
+                            st.Append("2");
+                            st.Append(")== true){\r\n}\r\n}");
+                        }
+                        else
+                        {
+                            string s1 = global::bin2array.Properties.Resources.f2;
+                            s1 = s1.Replace("i", fileoffset.Text);
+                            s1 = s1.Replace("bs", hairetu.Text);
+                            s1 = s1.Replace("kazu", (bs.Length - 1).ToString());
+                            st.Append("Dim ");
+                            st.Append(hairetu.Text);
+                            st.Append("2");
+                            st.Append("(");
+                            st.Append((bs.Length - 1).ToString());
+                            st.AppendLine(") As byte = nothing");
+                            st.Append(s1);
+                            st.Append("Buffer.BlockCopy(");
+                            st.Append(kensaku.Text);
+                            st.Append(", ");
+                            st.Append(fileoffset.Text);
+                            st.Append(", ");
+                            st.Append(hairetu.Text);
+                            st.Append("2");
+                            st.Append(", 0, ");
+                            st.Append(bs.Length.ToString());
+                            st.AppendLine(")");
+                            st.Append("If ");
+                            st.Append(hairetu.Text);
+                            st.Append(".SequenceEqual(");
+                            st.Append(hairetu.Text);
+                            st.Append("2");
+                            st.Append(")= True Then\r\nEnd If\r\nNext");
+                        }
+
+                    }
+                    else if (MD5.Checked == true)
+                    {
+
+                        System.IO.FileStream ffs = new System.IO.FileStream(filepath, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read);
+
+                        System.Security.Cryptography.MD5CryptoServiceProvider md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
+                        byte[] md = md5.ComputeHash(ffs);
+                        string result2 = BitConverter.ToString(md).ToUpper().Replace("-", "");
+                        ffs.Close();
+
+                        if (CS.Checked == true)
+                        {
+                            string s1 = global::bin2array.Properties.Resources.f1;
+                            s1 = s1.Replace("i", fileoffset.Text);
+                            s1 = s1.Replace("bs", hairetu.Text);
+                            s1 = s1.Replace("kazu", bs.Length.ToString());
+                            st.Append("string md5hash =\"");
+                            st.Append(result2);
+                            st.AppendLine("\";");
+                            st.Append("byte[] ");
+                            st.Append(hairetu.Text);
+                            st.Append(" = new byte[");
+                            st.Append(bs.Length.ToString());
+                            st.AppendLine("];");
+                            st.Append(s1);
+                            st.Append("Buffer.BlockCopy(");
+                            st.Append(kensaku.Text);
+                            st.Append(", ");
+                            st.Append(fileoffset.Text);
+                            st.Append(", ");
+                            st.Append(hairetu.Text);
+                            st.Append(", 0, ");
+                            st.Append(bs.Length.ToString());
+                            st.AppendLine(");");
+                        }
+                        else
+                        {
+                            string s1 = global::bin2array.Properties.Resources.f2;
+                            s1 = s1.Replace("i", fileoffset.Text);
+                            s1 = s1.Replace("bs", hairetu.Text);
+                            s1 = s1.Replace("kazu", (bs.Length - 1).ToString());
+                            st.Append("Dim md5hash As string = \"");
+                            st.Append(result2);
+                            st.AppendLine("\"");
+                            st.Append("Dim ");
+                            st.Append(hairetu.Text);
+                            st.Append("(");
+                            st.Append((bs.Length - 1).ToString());
+                            st.AppendLine(") As byte");
+                            st.Append(s1);
+                            st.Append("Buffer.BlockCopy(");
+                            st.Append(kensaku.Text);
+                            st.Append(", ");
+                            st.Append(fileoffset.Text);
+                            st.Append(", ");
+                            st.Append(hairetu.Text);
+                            st.Append(", 0, ");
+                            st.Append(bs.Length.ToString());
+                            st.AppendLine(")");
+                        }
+
+                        st.Append("if ");
+                        string LANG2 = " andalso ";
+                        int z = bs.Length;
+                        if (z > 4) { z = 4; }
+
+                        if (CS.Checked == true) { LANG2 = " && "; st.Append("("); }
+
+                        for (int i = 0; i < z; i++)
+                        {
+                            st.Append(kensaku.Text);
+                            if (CS.Checked == true)
+                            {
+                                st.Append("[");
+                                st.Append(fileoffset.Text);
+                                if (i > 0) { st.Append("+"); st.Append(i.ToString()); }
+                                st.Append("]==");
+                            }
+                            else
+                            {
+                                st.Append("(");
+                                st.Append(fileoffset.Text);
+                                if (i > 0) { st.Append("+"); st.Append(i.ToString()); }
+                                st.Append(")=");
+                            }
+                            tmp = LANG + Convert.ToString(bs[i], 16).ToUpper();
+                            st.Append(tmp);
+                            if (i + 1 != z) st.Append(LANG2);
+                        }
+
+                        if (CS.Checked == true)
+                        {
+                            string ss = global::bin2array.Properties.Resources.md2;
+                            ss = ss.Replace("data", hairetu.Text);
+                            ss = ss.Replace("bs", "temphash");
+                            st.Append("){\r\n");
+                            st.Append(ss);
+
+                            st.Append("if(result == md5hash){\r\n}\r\n");
+                            st.Append("}\r\n}");
+                        }
+                        else
+                        {
+                            string ss = global::bin2array.Properties.Resources.md;
+                            ss = ss.Replace("data", hairetu.Text);
+                            ss = ss.Replace("bs", "temphash");
+                            st.Append(" then\r\n");
+                            st.Append(ss);
+                            st.Append("If result = md5hash then\r\nend if\r\n");
+                            st.Append("End If\r\nNext");
+                        }
+
+
                     }
 
-                    if (CS.Checked == true)
-                    {
-                        st.Append("){\r\n}\r\n}");
-                    }
-                    else
-                    {
-                        st.Append(" Then\r\nEnd If\r\nNext");
-                    }
-
+                    textBox1.Text = st.ToString();
+                    st.Clear();
                 }
-                else if (byteloop.Checked==true){
+                fs.Close();
+                System.IO.StreamWriter sw = new System.IO.StreamWriter("output.txt",false,System.Text.Encoding.GetEncoding(0));
+                sw.Write(textBox1.Text);
+                sw.Close(); 
+                System.Media.SystemSounds.Beep.Play();
+            }
+            else {
 
+                string[] sw = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+                string filepath = sw[0];
+                System.IO.StreamReader sr = new System.IO.StreamReader(filepath,System.Text.Encoding.GetEncoding(0));
+                //内容をすべて読み込む
+                textBox1.Text = sr.ReadToEnd();
+                sr.Close();
 
-                    if (CS.Checked == true)
-                    {
-                        string s1 = global::bin2array.Properties.Resources.f1;
-                        s1 = s1.Replace("i", fileoffset.Text);
-                        s1 = s1.Replace("bs", hairetu.Text);
-                        s1 = s1.Replace("kazu", bs.Length.ToString());
-                        st.Append("byte[] ");
-                        st.Append(hairetu.Text);
-                        st.Append("2");
-                        st.Append(" = new byte[");
-                        st.Append(bs.Length.ToString());
-                        st.AppendLine("];");
-                        st.Append(s1);
-                        st.Append("Buffer.BlockCopy(");
-                        st.Append(kensaku.Text);
-                        st.Append(", ");
-                        st.Append(fileoffset.Text);
-                        st.Append(", ");
-                        st.Append(hairetu.Text);
-                        st.Append("2");
-                        st.Append(", 0, ");
-                        st.Append(bs.Length.ToString());
-                        st.AppendLine(");");
-                        st.Append("if(");
-                        st.Append(hairetu.Text);
-                        st.Append(".SequenceEqual(");
-                        st.Append(hairetu.Text);
-                        st.Append("2");
-                        st.Append(")== true){\r\n}\r\n}");
-                    }
-                    else
-                    {
-                        string s1 = global::bin2array.Properties.Resources.f2;
-                        s1 = s1.Replace("i", fileoffset.Text);
-                        s1 = s1.Replace("bs", hairetu.Text);
-                        s1 = s1.Replace("kazu", (bs.Length-1).ToString());
-                        st.Append("Dim ");
-                        st.Append(hairetu.Text);
-                        st.Append("2");
-                        st.Append("(");
-                        st.Append((bs.Length - 1).ToString());
-                        st.AppendLine(") As byte = nothing");
-                        st.Append(s1);
-                        st.Append("Buffer.BlockCopy(");
-                        st.Append(kensaku.Text);
-                        st.Append(", ");
-                        st.Append(fileoffset.Text);
-                        st.Append(", ");
-                        st.Append(hairetu.Text);
-                        st.Append("2");
-                        st.Append(", 0, ");
-                        st.Append(bs.Length.ToString());
-                        st.AppendLine(")");
-                        st.Append("If ");
-                        st.Append(hairetu.Text);
-                        st.Append(".SequenceEqual(");
-                        st.Append(hairetu.Text);
-                        st.Append("2");
-                        st.Append(")= True Then\r\nEnd If\r\nNext");
-                    }
-                                        
-                }
-                else if (MD5.Checked==true){
+            System.Text.RegularExpressions.Regex r =
+    new System.Text.RegularExpressions.Regex("[0-9A-Fa-f]{2}",
+        System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            string s = textBox1.Text;
+            string[] ss = s.Split('\n');;
+            byte[] bs = new byte[0];
+            byte[] hh = new byte[4];
+            Array.Resize(ref bs, 1024 * 1024);
+            int x = 0;
+            int y = 0;
 
-                System.IO.FileStream ffs = new System.IO.FileStream(filepath,System.IO.FileMode.Open,System.IO.FileAccess.Read,System.IO.FileShare.Read);
-
-                System.Security.Cryptography.MD5CryptoServiceProvider md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
-                byte[] md = md5.ComputeHash(ffs);
-                string result2 = BitConverter.ToString(md).ToUpper().Replace("-","");
-                ffs.Close();
-
-                if (CS.Checked == true)
+            for (int i = 0; i < ss.Length; i++)
+            {
+                System.Text.RegularExpressions.Match m = r.Match(ss[i]);
+                while (m.Success)
                 {
-                    string s1 = global::bin2array.Properties.Resources.f1;
-                    s1 = s1.Replace("i", fileoffset.Text);
-                    s1=s1.Replace("bs",hairetu.Text);
-                    s1=s1.Replace("kazu",bs.Length.ToString());
-                    st.Append("string md5hash =\"");
-                    st.Append(result2);
-                    st.AppendLine("\";");
-                    st.Append("byte[] ");
-                    st.Append(hairetu.Text);
-                     st.Append(" = new byte[");
-                    st.Append(bs.Length.ToString());
-                    st.AppendLine("];");
-                    st.Append(s1);
-                    st.Append("Buffer.BlockCopy(");
-                    st.Append(kensaku.Text);
-                    st.Append(", ");
-                    st.Append(fileoffset.Text);
-                    st.Append(", ");
-                    st.Append(hairetu.Text);
-                    st.Append(", 0, ");
-                    st.Append(bs.Length.ToString());
-                    st.AppendLine(");");
+                    y = (Convert.ToInt16(m.Value, 16) & 0xFF);
+                    hh = BitConverter.GetBytes(y);
+                    bs[x] = hh[0];
+                    x++;
+                    m = m.NextMatch();
                 }
-                else
-                {
-                    string s1 = global::bin2array.Properties.Resources.f2;
-                    s1 = s1.Replace("i", fileoffset.Text);
-                    s1 = s1.Replace("bs", hairetu.Text);
-                    s1 = s1.Replace("kazu", (bs.Length-1).ToString());
-                    st.Append("Dim md5hash As string = \"");
-                    st.Append(result2);
-                    st.AppendLine("\"");
-                    st.Append("Dim ");
-                    st.Append(hairetu.Text);
-                    st.Append("(");
-                    st.Append((bs.Length-1).ToString());
-                    st.AppendLine(") As byte");
-                    st.Append(s1);
-                    st.Append("Buffer.BlockCopy(");
-                    st.Append(kensaku.Text);
-                    st.Append(", ");
-                    st.Append(fileoffset.Text);
-                    st.Append(", ");
-                    st.Append(hairetu.Text);
-                    st.Append(", 0, ");
-                    st.Append(bs.Length.ToString());
-                    st.AppendLine(")");
-                }
-
-                st.Append("if ");
-                string LANG2 = " andalso ";
-                int z = bs.Length;
-                if(z > 4) {z = 4;}
-
-                if (CS.Checked == true) { LANG2 = " && "; st.Append("("); }
-                
-                for (int i = 0; i < z; i++)
-                {
-                    st.Append(kensaku.Text);
-                    if (CS.Checked == true)
-                    {
-                        st.Append("[");
-                        st.Append(fileoffset.Text);
-                        if (i > 0) { st.Append("+"); st.Append(i.ToString()); }
-                        st.Append("]==");
-                    }
-                    else
-                    {
-                        st.Append("(");
-                        st.Append(fileoffset.Text);
-                        if (i > 0) { st.Append("+"); st.Append(i.ToString()); }
-                        st.Append(")=");
-                    }
-                    tmp = LANG + Convert.ToString(bs[i], 16).ToUpper();
-                    st.Append(tmp);
-                    if (i+1  != z) st.Append(LANG2);
-                }
-
-                if (CS.Checked == true)
-                {
-                    string ss = global::bin2array.Properties.Resources.md2;
-                    ss = ss.Replace("data", hairetu.Text);
-                    ss = ss.Replace("bs", "temphash");
-                    st.Append("){\r\n");
-                    st.Append(ss);
-
-                    st.Append("if(result == md5hash){\r\n}\r\n");
-                    st.Append("}\r\n}");
-                }
-                else
-                {
-                    string ss = global::bin2array.Properties.Resources.md;
-                    ss = ss.Replace("data", hairetu.Text);
-                    ss = ss.Replace("bs", "temphash");
-                    st.Append(" then\r\n");
-                    st.Append(ss);
-                    st.Append("If result = md5hash then\r\nend if\r\n");
-                    st.Append("End If\r\nNext");
-                }
-
-
-                }
-                textBox1.Text = st.ToString();
-                st.Clear();
             }
 
+            Array.Resize(ref bs, x); System.IO.FileStream fs = new System.IO.FileStream("output.bin",System.IO.FileMode.Create,System.IO.FileAccess.Write);
+            fs.Write(bs, 0, bs.Length);
             fs.Close();
+                System.Media.SystemSounds.Beep.Play();
+
+            }
+
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -454,6 +503,19 @@ for (int i = 0; i < bs.Length - 9; i++)
                 if ((l & 1) != 0) if (*((byte*)x1) != *((byte*)x2)) return false;
                 return true;
             }
+        }
+
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+            groupBox1.Enabled = false;
+            groupBox2.Enabled = false;
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+
+            groupBox1.Enabled = true;
+            groupBox2.Enabled = true;
         }
 
     }
