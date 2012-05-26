@@ -59,6 +59,7 @@ Public Class Form1
                     End If
                     ucs2.Close()
                     Beep()
+                    'てきすとからいっぱい
                 ElseIf ENCODE.SelectedIndex = 8 Then
                     Dim ofd As New OpenFileDialog()
                     ofd.Filter = _
@@ -73,16 +74,24 @@ Public Class Form1
                         Dim fube As New System.IO.FileStream("txt_table\utf16be", System.IO.FileMode.Create, System.IO.FileAccess.Write)
                         Dim fule As New System.IO.FileStream("txt_table\utf16le", System.IO.FileMode.Create, System.IO.FileAccess.Write)
                         Dim futf8 As New System.IO.FileStream("txt_table\utf8", System.IO.FileMode.Create, System.IO.FileAccess.Write)
+                        Dim usj As New System.IO.FileStream("txt_table\utf16_sjis", System.IO.FileMode.Create, System.IO.FileAccess.Write)
+                        Dim ue As New System.IO.FileStream("txt_table\utf16_euc", System.IO.FileMode.Create, System.IO.FileAccess.Write)
+                        Dim uj As New System.IO.FileStream("txt_table\utf16_jis", System.IO.FileMode.Create, System.IO.FileAccess.Write)
                         Dim s As String = ""
                         Dim r As New Regex("0x[0-9A-F]{4}\t0x[0-9A-F]{4}\t0x[0-9A-F]{4}", RegexOptions.ECMAScript)
                         Dim hexm As Match
                         Dim sjis(1) As Byte
                         Dim jis(1) As Byte
                         Dim euc(1) As Byte
+                        Dim bs1(65535 * 2) As Byte
+                        Dim bs2(65535 * 2) As Byte
+                        Dim bs3(65535 * 2) As Byte
+                        Dim bs4(65535 * 2) As Byte
                         Dim utf16be(1) As Byte
                         Dim utf16le(1) As Byte
                         Dim null(4) As Byte
                         Dim utf8 As Byte()
+                        Dim srg As Boolean = False
                         Dim x As UInt16 = 0
                         Dim y As UInt16 = 0
                         Dim z As UInt16 = 0
@@ -127,8 +136,25 @@ Public Class Form1
                                 fube.Write(utf16be, 0, 2)
                                 fule.Write(utf16le, 0, 2)
                                 futf8.Write(utf8, 0, 4)
+                                If (z < 65536) Then
+                                    Array.Copy(jis, 0, bs1, z * 2, 2)
+                                    Array.Copy(sjis, 0, bs2, z * 2, 2)
+                                    Array.Copy(euc, 0, bs3, z * 2, 2)
+                                ElseIf (z < 65536 * 2) Then
+                                    'sjis2004
+                                    Array.Copy(sjis, 0, bs4, (z - &H10000) * 2, 2)
+                                    srg = True
+                                End If
                             End If
                         End While
+
+                        uj.Write(bs1, 0, 65535 * 2)
+                        usj.Write(bs2, 0, 65535 * 2)
+                        If srg = True Then
+                            usj.Write(bs4, 0, 65535 * 2)
+                        End If
+                        ue.Write(bs3, 0, 65535 * 2)
+
                         fsjis.Write(null, 0, 2)
                         fjis.Write(null, 0, 2)
                         feuc.Write(null, 0, 2)
@@ -144,6 +170,7 @@ Public Class Form1
                         feuc.Close()
                         Beep()
                     End If
+                    'utf32
                 ElseIf ENCODE.SelectedIndex = 9 Then
                     Dim ofd As New OpenFileDialog()
                     ofd.Filter = _
