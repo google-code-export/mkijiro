@@ -2,7 +2,10 @@ M$‚Ì“à•”‚Ä[‚Ô‚é‚ð‚Ï‚­‚Á‚Ä1:1‚ÌUTF8 VS SJIS,EUCJP,GBK,UTF16BE,UTF16LE‚Ì•ÏŠ·‚Ä[‚
 TXTƒe[ƒuƒ‹‚Í‰º‹L‚Ì³‹K•\Œ»‚Å”²‚¢‚½‚à‚Ì•ÏŠ·
 EXTRA@:(0x[0-9A-fa-f]+|&#x[0-9a-fA-F]+|&#[0-9]+|u\+?[0-9A-fa-f]+|U\+?[0-9A-fa-f]+)
 UNICODE;0x[0-9A-F]{4}\t0x[0-9A-F]{4}\t0x[0-9A-F]{4} //sjis,jis,utf16‚Ì‡
-JIS203 ;0x[0-9A-F]{2,6}\tU\+[0-9A-F]{4,6}\t"@//(ƒR[ƒhƒ|ƒCƒ“ƒg)AUTF32‚Ì‡
+JIS213 ;0x[0-9A-F]{2,6}\tU\+[0-9A-F]{4,6}\t"@//(ƒR[ƒhƒ|ƒCƒ“ƒg)AUTF32‚Ì‡
+
+2012/05/27
+UNICODE•ÏŠ·‚ÉUTF16”Ô†‘Î‰žƒe[ƒuƒ‹o—Í‚ð’Ç‰Á
 
 2012/05/11
 utf32‚Ìƒe[ƒuƒ‹ì¬‚ð’Ç‰Á
@@ -25,7 +28,7 @@ GB(‹@ŽíˆË‘¶•¶Žš)¨GB
 
 2012/05/04
 UNICODE‚ÌTXT•\‚Ì•ÏŠ·‚ð’Ç‰Á
-TXTƒe[ƒuƒ‹•ÏŠ·‚É‘Î‰žA‚Æ‚è‚ ‚¦‚¸UNICOE‚Ìjios208•\
+TXTƒe[ƒuƒ‹•ÏŠ·‚É‘Î‰žA‚Æ‚è‚ ‚¦‚¸UNICOE‚Ìjis208•\
 SJIS SJIS UTF16BE@‚Ì‡@‚â‚Â‚Ì‚Ý
 JIS/SJIS/EUCJP/UTF16BELE/UTF8‚Ü‚Æ‚ß‚Äo—Í
 
