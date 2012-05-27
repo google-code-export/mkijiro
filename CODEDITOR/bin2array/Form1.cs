@@ -77,6 +77,28 @@ namespace WindowsFormsApplication1
                         }
                         st.Append("}");
 
+                        if (checkBox1.Checked == true)
+                        {
+                            st.AppendLine();
+                            string bdfh ="STARTCHAR 0x0000\nENCODING 00000\nSWIDTH 886 0\nDWIDTH 12 0\nBBX 12 12 0 -2\nBITMAP\n";
+                            string bdff ="ENDCHAR\n";
+                            int k = 0;
+                            for (int i = 0; i < bs.Length; i++)
+                            {
+                                if (k == 0) { st.Append(bdfh);}
+                                tmp = bs[i].ToString("X2").ToUpper();
+                                st.Append(tmp);
+                                if ((k & 1 )== 1)
+                                {
+                                    st.AppendLine();
+                                }
+                                k++;
+                                if (k == 24) { st.Append(bdff); k = 0; }
+                            }
+                        }
+
+
+
                         if (CS.Checked == true)
                         {
                             st.Append(";");
@@ -359,6 +381,32 @@ namespace WindowsFormsApplication1
                     x++;
                     m = m.NextMatch();
                 }
+            }
+            if (checkBox1.Checked == true) {
+                byte[] bs2 = new byte[bs.Length+48];
+                int kkk = 0;
+                for (int k = 0; k < bs.Length;k+=24)
+                {
+
+                    while (kkk < 24)
+                    {
+                        if (k + kkk < bs.Length)
+                        {
+                            if (kkk < 12)
+                            {
+                                Array.Copy(bs, k + kkk, bs2, k + 2 * kkk, 1);
+                            }
+                            else
+                            {
+                                Array.Copy(bs, k + kkk, bs2, k + 2 * (kkk - 12) + 1, 1);
+                            }
+                        }
+                        kkk++;
+                    }
+                    kkk = 0;
+                }
+
+                Array.Copy(bs2, 0, bs, 0, bs.Length);
             }
 
             Array.Resize(ref bs, x); System.IO.FileStream fs = new System.IO.FileStream("output.bin",System.IO.FileMode.Create,System.IO.FileAccess.Write);
