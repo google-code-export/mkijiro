@@ -17,6 +17,11 @@ extern int UTF8SJIS_EUC(unsigned char *msg, int len);
 extern int EUC_UTF8SJIS(unsigned char *msg, int len);
 #endif
 
+#ifdef SHIFT-JIS
+extern int UTF8SJIS_SJIS(unsigned char *msg, int len);
+extern int SJIS_UTF8SJIS(unsigned char *msg, int len);
+#endif
+
 #ifdef BIG5_ENCODE_TEXT
 extern void charsets_big5_conv(char *,p_encodepack);
 extern int big5_init(char *,p_encodepack);
