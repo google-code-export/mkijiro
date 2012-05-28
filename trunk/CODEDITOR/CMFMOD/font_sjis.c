@@ -24,7 +24,7 @@
 #include <pspsysmem_kernel.h>
 #include <pspgu.h>
 #include "font.h"
-#include "lang_zh_euc.h"
+#include "lang_zh_sjis.h"
 #include "conf.h"
 #include "blend.h"
 #include "rgb_color.h"
@@ -76,24 +76,18 @@ static u8 * _get_hzfont(u16 offset)
 		return hzinfo;
 }
 
-//EUC-JPÈ½Äê
-//0x8F¡Á0x95¤Þ¤Ç³ÈÄ¥EUC(JIS213¤Ç¤Ï0x8F¤Î¤ß)
+//SJISÈ½Äê
 int IsHzcode(int x, const char *msg)
 {
-	return (((((((unsigned char)msg[x] +0x5F)&0xFF)<0x5E)) && ((unsigned char)msg[x + 1] > 0xA0))
-		|| ((((((unsigned char)msg[x] +0x71)&0xFF)<0x6)) && ((unsigned char)msg[x + 1] > 0xA0) && ((unsigned char)msg[x + 2] > 0xA0)));
+	return ( ((((((unsigned char)msg[x]^0x20) +0x5F)&0xFF)<0x3C)) && ((unsigned char)msg[x + 1] >= 0x40));
 }
 
 static u8 * GetHz(int x, const char *msg)
 {
-			//http://charset.uic.jp/show/cp51932/
-			#define NEXTCODE 94
-			#define CODESKIP 8836
-			if((((((unsigned char)msg[x] +0x5F)&0xFF)<0x5E)) && ((unsigned char)msg[x + 1] > 0xA0))
-				return _get_hzfont( (int)((unsigned char)msg[x] - 0xA1) * NEXTCODE + (int)((unsigned char)msg[x + 1] - 0xA1) );
-			//0x8F¡Á0x95¤Þ¤Ç³ÈÄ¥EUC(JIS213¤Ç¤Ï0x8F¤Î¤ß)
-			else if((((((unsigned char)msg[x] +0x71)&0xFF)<0x6)) && ((unsigned char)msg[x + 1] > 0xA0)&& ((unsigned char)msg[x + 2] > 0xA0))
-				return _get_hzfont( + (int)((unsigned char)msg[x] - 0x8F +1) * CODESKIP + (int)((unsigned char)msg[x+1] - 0xA1) * NEXTCODE + (int)((unsigned char)msg[x + 2] - 0xA1) );
+			//http://charset.uic.jp/show/cp932/
+			#define NEXTCODE 192
+			if(((((((unsigned char)msg[x]^0x20) +0x5F)&0xFF)<0x3C)) && ((unsigned char)msg[x + 1] >= 0x40))
+				return _get_hzfont( (int)(((unsigned char)msg[x]^ 0x20) - 0xA1) * NEXTCODE + (int)((unsigned char)msg[x + 1] - 0x40) );
 			else 
 				return _get_hzfont(0);//¥À¥ß¡¼
 }
@@ -293,8 +287,6 @@ static int font_output_32bit(int sx, int sy, const char *msg, int count)
 		if(IsHzcode(x,msg))
 		{
 			hz = GetHz(x,msg);
-			if((((unsigned char)msg[x] +0x71)&0xFF)<0x6){
-			x++;}
 			pmap = *hz ++;
 			for(y = 0; y < 12; y ++)
 			{
@@ -318,13 +310,14 @@ static int font_output_32bit(int sx, int sy, const char *msg, int count)
 		{
 #endif
 
-		code = (msg[x]-0x20);
 		
-	if(code<0xE0){
-		//EUCÈ¾³Ñ
-		if(code == 0x6E){//0x8E-0x20
-		code= (msg[x+1]-0x40);
-		x++;
+		code = (msg[x]-0x20);
+	if(code < 0xC0){
+		if(code > 0x80){
+		code= code-0x20;
+		}
+		else if(code > 0x5E){
+		code=0;
 		}
 
 		pmap = efont[code*9];
@@ -369,8 +362,6 @@ static int font_output_16bit(int sx, int sy, const char *msg, int count)
 		if(IsHzcode(x,msg))
 		{
 			hz = GetHz(x,msg);
-			if((((unsigned char)msg[x] +0x71)&0xFF)<0x6){
-			x++;}
 			pmap = *hz ++;
 			for(y = 0; y < 12; y ++)
 			{
@@ -393,13 +384,14 @@ static int font_output_16bit(int sx, int sy, const char *msg, int count)
 		else
 		{
 #endif
-		code = (msg[x]-0x20);
 
-	if(code<0xE0){
-		//EUCÈ¾³Ñ
-		if(code == 0x6E){//0x8E-0x20
-		code= (msg[x+1]-0x40);
-		x++;
+		code = (msg[x]-0x20);
+	if(code < 0xC0){
+		if(code > 0x80){
+		code= code-0x20;
+		}
+		else if(code > 0x5E){
+		code=0;
 		}
 
 		pmap =  efont[code*9];
