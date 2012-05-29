@@ -2502,7 +2502,7 @@ layout_read_text,write_psfont,keyset_load,convert_cmf,write_mem,img_popsdoc,img_
 #define FAT_FILEATTR_DIRECTORY	0x10
 #define FAT_FILEATTR_ARCHIVE	0x20
 
-static char fatprx [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "ms0:/CheatMaster/prx/fat_sjis.prx";
+static char fatprx [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "ms0:/CheatMaster/prx/fat.prx";
 static void * layout_readdir(char *tempdir, char *ext, int *c, int *dc, int fatread)
 {
 	const char ** text_array;
