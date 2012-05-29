@@ -1352,11 +1352,22 @@ extern void mem_table_savecw()
 	fn[28]=0;
 	fn[29]=0;
 	ui_cls();
-	if(ui_input_string(120, 68, fn, 29) < 0)
+	if(ui_input_string(120, 68, fn, 29) < 1)
 		return ;
-	filter_filename(fn);
-	sprintf(s, "%s/%s.cmf", CMF_DIR, fn);
-	int fd = sceIoOpen(s, PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
+
+	char cmf[]=".cmf\x0";
+	int i=0;
+	int j=0;
+	int fd;
+	
+	GBK_UTF8SJIS(fn,40);
+	memcpy(&fn[strlen(fn)],&cmf[0],5);
+
+	filter_filename(fn); //DOSKILLER
+	
+	sprintf(s, "%s/%s", CMF_DIR, fn);
+	
+	fd = sceIoOpen(s, PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
 	if(fd < 0) return;
 	
 		mips_memcpy(fn,ui_get_gamename(),10);
@@ -1367,7 +1378,7 @@ extern void mem_table_savecw()
 		fn[64]=0;
 		sprintf(s,"_G %s\n",fn);
 		sceIoWrite(fd, s, strlen(s));
-	int i,j;
+	//int i,j;
 	for(i = 0; i < mem_gv.mem_table_size;){
 		sprintf(fn,"_C%d ",mem_gv.mem_table[i].lock);
 		int k = mem_table_walkforward(i);
