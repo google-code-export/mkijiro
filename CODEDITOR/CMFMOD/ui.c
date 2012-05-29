@@ -80,7 +80,8 @@ void ui_init()
 		if(p)
 			mips_memcpy(ui_gv.ui_gname, p-11, 11);
 		else strcpy(ui_gv.ui_gname,"PSX");
-		break;		
+		break;
+
 	case PSP_INIT_KEYCONFIG_GAME:
 		fd = sceIoOpen(ISOFS_UMDDATA, PSP_O_RDONLY, 0777);
 		if (fd >= 0)
@@ -103,6 +104,7 @@ void ui_init()
 			t_encodepack pack;
 	 		if(encode_init(&pack) == 0)
 			{
+				//UCS2(utf16BE)化後テーブル検索し、EUC変換
 				encode_utf8_conv((unsigned char *)&ui_gv.ui_gname[12], NULL,&pack);
 				encode_free(&pack);
 			}
@@ -251,7 +253,7 @@ int ui_menu(int x, int y, const char ** item, int count, int pagecount, int sidx
 				ctrl_waitrelease();
 				return sidx;
 			case 3:
-				rp = 2;			//ﾋ｢ﾐﾂﾏﾔﾊｾ
+				rp = 2;			//泡仟ﾏﾔ幣
 			}
 		}
 	}
@@ -453,7 +455,7 @@ int ui_input_string(int x, int y, char * s, int len)
 		{'Z', 'X', 'C', 'V', 'B', 'N', 'M', '*', '?', '+'},
 	};
 	const char ikey[4][10] __attribute__(   (  aligned( 1 ))  ) = {
-		{'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'},
+		{'!', '"', '#', '$', '%', '&', 0x27, 0x28 , 0x29, '.'},
 		{'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'},
 		{'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', '-'},
 		{'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '_'},
@@ -549,33 +551,34 @@ int ui_input_string(int x, int y, char * s, int len)
 			}
 
 
-		font_output(x + dx * 12, y + 14 + dy * 12, "_");
-		font_fillrect(x, y-3, x + 6 * len + 5, y + 9);
+		font_output(x + dx * 12, y + 14 + dy * 12, "_");//OSK
+		font_fillrect(x, y-3, x + 6 * len + 5, y + 9+2);//こーど名
 		font_output(x, y, str);
-		font_output(x + pos * 6, y + 2, "_");
+		font_output(x + pos * 6, y + 2, "_");//こーど名
 		//font_refresh();
 		switch(ctrl_waitmask(PSP_CTRL_LEFT | PSP_CTRL_RIGHT | PSP_CTRL_UP | PSP_CTRL_DOWN | PSP_CTRL_CIRCLE | PSP_CTRL_CROSS | PSP_CTRL_SQUARE | PSP_CTRL_TRIANGLE | PSP_CTRL_SELECT | PSP_CTRL_START | PSP_CTRL_LTRIGGER | PSP_CTRL_RTRIGGER))
 		{
+		#define IME_LINECLEAR 22 //20
 		case PSP_CTRL_LEFT:
-			font_fillrect(x + dx * 12, y + 20 + dy * 12, x + 11 + dx * 12, y + 23 + dy * 12);
+			font_fillrect(x + dx * 12, y + IME_LINECLEAR + dy * 12, x + 11 + dx * 12, y + 23 + dy * 12);
 			dx --;
 			if(dx < 0)
 				dx = 9;
 			break;
 		case PSP_CTRL_RIGHT:
-			font_fillrect(x + dx * 12, y + 20 + dy * 12, x + 11 + dx * 12, y + 23 + dy * 12);
+			font_fillrect(x + dx * 12, y + IME_LINECLEAR + dy * 12, x + 11 + dx * 12, y + 23 + dy * 12);
 			dx ++;
 			if(dx > 9)
 				dx = 0;
 			break;
 		case PSP_CTRL_UP:
-			font_fillrect(x + dx * 12, y + 20 + dy * 12, x + 11 + dx * 12, y + 23 + dy * 12);
+			font_fillrect(x + dx * 12, y + IME_LINECLEAR + dy * 12, x + 11 + dx * 12, y + 23 + dy * 12);
 			dy --;
 			if(dy < 0)
 				dy = 3;
 			break;
 		case PSP_CTRL_DOWN:
-			font_fillrect(x + dx * 12, y + 20 + dy * 12, x + 11 + dx * 12, y + 23 + dy * 12);
+			font_fillrect(x + dx * 12, y + IME_LINECLEAR + dy * 12, x + 11 + dx * 12, y + 23 + dy * 12);
 			dy ++;
 			if(dy > 3)
 				dy = 0;
@@ -645,10 +648,21 @@ int ui_input_string(int x, int y, char * s, int len)
 		case PSP_CTRL_SQUARE:
 			if(pos > 0)
 			{
+				//GBK
+				u8 code2=str[pos-1];
+				u8 code=str[pos-2];
+				if((pos > 1) && (((((code +0x7F)&0xFF) < 0x7E) && (code2>=0x40)))){
+					if(pos < len)
+						memmove(&str[pos - 2], &str[pos], len - pos);
+				str[pos-1] = 0;
+				pos -=2;
+				}
+				else{
 				if(pos < len)
 					memmove(&str[pos - 1], &str[pos], len - pos);
 				str[pos] = 0;
 				pos --;
+				}
 			}
 			break;
 		case PSP_CTRL_SELECT:
@@ -671,7 +685,7 @@ int ui_input_string(int x, int y, char * s, int len)
 			mips_memcpy(s, str, len);
 			font_fillrect(x, y + 10, 379, y + 112);
 			sfree(idx_buf);
-			return 0;
+			return strlen(str);
 		case PSP_CTRL_LTRIGGER:
 			if(idx_buf!=NULL){
 				gb_mode = 1 - gb_mode;
