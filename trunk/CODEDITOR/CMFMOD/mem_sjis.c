@@ -1130,7 +1130,7 @@ fuzzy_OUT:
 			
 			unsigned int difingbyte,difingword;
 			difingbyte = difing>=0xff ? 0xff: difing;
-			difingword = difing>=0xffff ? 0xffff: difing;			
+			difingword = difing>=0xffff ? 0xffff: difing;
 			
 			unsigned int i;
 			for(i=low;i<high;(apx==0) ? (i++):(i+=apx))

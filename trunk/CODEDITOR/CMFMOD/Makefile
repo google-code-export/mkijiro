@@ -58,6 +58,7 @@ endif
 
 ifdef JAPANESE_UI
 CFLAGS += -DJAPANESE_UI
+CFFLAG += -DGBK
 endif
 
 ifdef BIG5_TXT

@@ -33,7 +33,7 @@ char DICT_IDX_DIR [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )
 char DICT_DCT_DIR [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) =  "ms0:/CheatMaster/DCT/en.dct";
 
 //font.c
-char FONT_DIR [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "ms0:/CheatMaster/font.dat";
+char FONT_DIR [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "ms0:/CheatMaster/font_gbk.dat";
 
 //ui.c
 char ISOFS_UMDDATA[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) ="disc0:/UMD_DATA.BIN";

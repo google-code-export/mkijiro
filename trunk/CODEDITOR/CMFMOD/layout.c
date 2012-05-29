@@ -42,6 +42,7 @@
 #include "allocmem.h"
 #include "blend.h"
 #include "minifloat.h"
+#include "encode.h"
 #include "usb.h"
 #include "common.h"
 #include <jpeglib.h>
@@ -49,15 +50,10 @@
 #include "smsutils.h"
 #include "screenshot.h"
 
-#ifdef ENGLISH_UI
-#include "en_layout.c"
-#elif JAPANESE_UI
+#define MEMCLEARLINE_END 92
+#define MEMCLEARLINE_START 90
+
 #include "ja_layout.c"
-#elif BIG5_ENCODE_TEXT
-#include "big5_layout.c"
-#else
-#include "gbk_layout.c"
-#endif
 
 typedef struct{
 	int width;
@@ -100,7 +96,7 @@ static int layout_ivalue(unsigned int addr, int x18, int y12)
 	char s[80];	
 	unsigned char vv = MEM_VALUE(addr);
 	unsigned int key;
-	font_fillrect(VIEW_BASE_X+10*6 + x18, y12 + 88, VIEW_BASE_X+10*6 + 11 + x18, y12 + 90);
+	font_fillrect(VIEW_BASE_X+10*6 + x18, y12 + MEMCLEARLINE_START, VIEW_BASE_X+10*6 + 11 + x18, y12 +  MEMCLEARLINE_END);
 	font_output(VIEW_BASE_X+10*6 + x18, 83 + y12, "_");
 	while(((key = ctrl_waitmask(PSP_CTRL_UP | PSP_CTRL_DOWN | PSP_CTRL_LEFT | PSP_CTRL_RIGHT | PSP_CTRL_CIRCLE | PSP_CTRL_CROSS)) & (PSP_CTRL_CIRCLE | PSP_CTRL_CROSS)) == 0)
 	{
@@ -138,7 +134,7 @@ static int layout_ivalue(unsigned int addr, int x18, int y12)
 			z = 1 - z;
 			break;
 		}
-		font_fillrect(VIEW_BASE_X+10*6 + x18, y12 + 80, VIEW_BASE_X+10*6 + 11 + x18, y12 + 90);
+		font_fillrect(VIEW_BASE_X+10*6 + x18, y12 + 80, VIEW_BASE_X+10*6 + 11 + x18, y12 +  MEMCLEARLINE_END);
 		sprintf(s, "%02X", vv);
 		font_output(VIEW_BASE_X+10*6 + x18, y12 + 80, s);
 		font_output(VIEW_BASE_X+10*6 + x18 + z * 6, 83 + y12, "_");
@@ -315,8 +311,8 @@ static void layout_view(int flag)
 		y12 = y*12;
 		font_output(VIEW_BASE_X+10*6 + x18, 83 + y12, "__");
 		font_output(VIEW_BASE_X+60*6 + x6, 83 + y12 , "_");
-		y1 = y12+88;
-		y2 = y12+90;
+		y1 = y12+MEMCLEARLINE_START;
+		y2 = y12+MEMCLEARLINE_END;
 		
 		switch(ctrl_waitmask(PSP_ANA_UP|PSP_ANA_LEFT|PSP_ANA_RIGHT|PSP_CTRL_TRIANGLE | PSP_CTRL_SQUARE | PSP_CTRL_LTRIGGER | PSP_CTRL_RTRIGGER | PSP_CTRL_UP | PSP_CTRL_DOWN | PSP_CTRL_LEFT | PSP_CTRL_RIGHT | PSP_CTRL_CIRCLE | PSP_CTRL_CROSS | PSP_CTRL_SELECT | PSP_CTRL_START | PSP_CTRL_NOTE))
 		{
@@ -541,7 +537,7 @@ static int layout_get_table_item(const char * prompt, p_mem_table table)
 		memset(table->name, 0, 12);
 		strcpy(table->name, "New");
 		font_output(110, 68, LANG_COMMENT);
-		if(ui_input_string(164, 68, table->name, 10) < 0)
+		if(ui_input_string(164, 68, table->name, 10) < 1)
 			return -1;
 		if(table->addr != 0xFFFFFFFF)
 		{
@@ -2175,7 +2171,7 @@ static void keyset_save()
 	mips_memcpy(namestr,ui_get_gamename(),10);
 	sceIoMkdir(SET_DIR, 0777);
 	ui_cls();
-	if(ui_input_string(120, 68, namestr, 29) < 0)
+	if(ui_input_string(120, 68, namestr, 29) < 1)
 		return;
 	filter_filename(namestr);
 	sprintf(s, "%s/%s.set", SET_DIR, namestr);
@@ -2443,6 +2439,7 @@ static int img_view(char* filename)
 	return 1;
 }
 
+
 static int	layout_read_cb(unsigned int key, int *id, int *topid)
 {
 	if(key == PSP_CTRL_SQUARE)
@@ -2465,14 +2462,25 @@ static int	layout_read_cb(unsigned int key, int *id, int *topid)
 		else
 		{
 			char newfn[80];
-			int l = strlen(fileinfo.g_dir);
+			char *str = fn;
+			str = strrchr(fn, 0x2F);
+			int len = str-fn+1;
+			//len=strlen(fileinfo.g_dir);
 			memset(newfn,0,80);
 			mips_memcpy(newfn, fn, p-fn-4);
+
+			UTF8SJIS_GBK(newfn,80);
+
 			ui_cls();
-			if(ui_input_string(120, 68, newfn+l, 29) >= 0){
-				filter_filename(newfn+l);
-				strcat(newfn, p-4);
-				sceIoRename(fn, newfn);
+			if(ui_input_string(120, 68, newfn+len, 29) > 0){
+				//filter_filename(newfn+len);
+				//strcat(newfn, p-4);
+
+			GBK_UTF8SJIS(newfn,80);
+			filter_filename(newfn+len);
+			memcpy(&newfn[strlen(newfn)],&fn[strlen(fn)-4],5);
+
+			sceIoRename(fn, newfn);
 			}
 		}
 
@@ -2488,12 +2496,13 @@ layout_read_text,write_psfont,keyset_load,convert_cmf,write_mem,img_popsdoc,img_
 };
 
 #define FAT_FILEATTR_READONLY	0x01
-#define FAT_FILEATTR_HIDDEN		0x02
-#define FAT_FILEATTR_SYSTEM		0x04
-#define FAT_FILEATTR_VOLUME		0x08
+#define FAT_FILEATTR_HIDDEN	0x02
+#define FAT_FILEATTR_SYSTEM	0x04
+#define FAT_FILEATTR_VOLUME	0x08
 #define FAT_FILEATTR_DIRECTORY	0x10
 #define FAT_FILEATTR_ARCHIVE	0x20
-static char fatprx [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "ms0:/CheatMaster/prx/fat.prx";
+
+static char fatprx [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "ms0:/CheatMaster/prx/fat_sjis.prx";
 static void * layout_readdir(char *tempdir, char *ext, int *c, int *dc, int fatread)
 {
 	const char ** text_array;
@@ -2565,6 +2574,7 @@ static void * layout_readdir(char *tempdir, char *ext, int *c, int *dc, int fatr
 	di = 1;
 	dl = sceIoDopen(tempdir);
 	memset(&sid, 0, sizeof(SceIoDirent));
+
 	while(sceIoDread(dl, &sid) > 0)
 	{
 		if((sid.d_stat.st_attr & FAT_FILEATTR_VOLUME) > 0 || sid.d_name[0]=='.')
@@ -2578,14 +2588,44 @@ static void * layout_readdir(char *tempdir, char *ext, int *c, int *dc, int fatr
 		else{
 			if(strcmpi(&sid.d_name[l - 3], ext) != 0)
 				continue;
-			sprintf((char *)text_array[i++],"%-36s%4dKB",sid.d_name,(int)(sid.d_stat.st_size)>>10);
+			sprintf((char *)text_array[i++],"%-36s%4dKiB\x0",sid.d_name,(int)(sid.d_stat.st_size)>>10);
 		}
 	}
 	sceIoDclose(dl);
 	strcpy((char *)dir_array[0],"../");
+
+	char stmm[45]="                                             ";
+	char stmn[8]="       \x0";
+	int stend=0;
+	int k=0;
+
+	for(i=0;i<tempc;i++){
+		strcpy(stmm, (char *)text_array[i]);
+		memcpy(&stmn[0],&stmm[strlen(stmm)-7],7);
+
+		stend=UTF8SJIS_GBK(stmm,36);
+		for(k=stend;k<36;k++){
+		stmm[k]=0x20;
+		}
+
+		memcpy(&stmm[36],&stmn[0],8);
+		//stmm[36]=filename_encode+0x30; //MODE³ÎÇ§ÍÑ
+
+		strcpy((char*)decode_text_array[i], stmm);
+		// strcpy((char*)decode_text_array[i], (char*)text_array[i]);
+	}
 	
-	for(i=0;i<tempc;i++) strcpy((char*)decode_text_array[i], (char*)text_array[i]);
-	for(i=0;i<tempdc;i++) strcpy((char*)decode_dir_array[i], (char*)dir_array[i]);	
+	for(i=0;i<tempdc;i++){
+		strcpy(stmm,(char*)dir_array[i]);
+		stend=UTF8SJIS_GBK(stmm,36);
+		for(k=stend;k<36;k++){
+		stmm[k]=0;
+		}
+		stmm[36]=0;
+
+		strcpy((char*)decode_dir_array[i], stmm);
+	//strcpy((char*)decode_dir_array[i], (char*)dir_array[i]);
+	}
 	
 	if(fatread && (img_Loadprx(fatprx)==0))
 	{
