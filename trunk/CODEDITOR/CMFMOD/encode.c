@@ -262,7 +262,7 @@ int GBK_UTF8SJIS(unsigned char *msg, int len)
 		stm[k]=c1;
 		k++;i++;
 		}
-		else if(  ((((c1^0x20)+0x7F)&0xFF) < 0x7E) && (c2>=0x40) ){
+		else if((((c1+0x7F)&0xFF) < 0x7E) && (c2>=0x40) ){
 		memcpy(&seek,&msg[i],2);
  		kk = 0;
 		fd = sceIoOpen("ms0:/cheatmaster/table/gbk", PSP_O_RDONLY, 0777);
