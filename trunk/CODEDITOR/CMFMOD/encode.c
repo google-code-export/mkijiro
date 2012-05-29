@@ -523,7 +523,7 @@ extern int encode_utf8_conv(const unsigned char *ucs, unsigned char *cjk, p_enco
 
 extern int encode_init(p_encodepack pack)
 {
-	int fd = sceIoOpen("ms0:/CheatMaster/sjis.dat", PSP_O_RDONLY, 0777);
+	int fd = sceIoOpen("ms0:/CheatMaster/encode.dat", PSP_O_RDONLY, 0777);
 	if(fd < 0)
 		return 1;
 	pack->UNI_CJK = malloc(131072);//UTF16　0x0〜0xffffまでの変換表
