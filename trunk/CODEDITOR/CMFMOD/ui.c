@@ -253,7 +253,7 @@ int ui_menu(int x, int y, const char ** item, int count, int pagecount, int sidx
 				ctrl_waitrelease();
 				return sidx;
 			case 3:
-				rp = 2;			//–A˜ÀÏÔ•¼
+				rp = 2;
 			}
 		}
 	}

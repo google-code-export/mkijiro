@@ -1,4 +1,4 @@
-#define LAYOUT_VIEW_ADD "%dつコ-ド追加"
+#define LAYOUT_VIEW_ADD "%dつコード追加"
 #define LAYOUT_SEARCH_DIFF "\"增大\"\"减小\"値:%d"
 #define LAYOUT_KEY_MACRO_LIST "設定%-3dボタン:%-12s  反転:%-6s"
 #define LAYOUT_KEY_MACRO_SET " KEY%-3d間隔%-6d%-12s"
@@ -28,9 +28,9 @@ static const char *layout_menu_img[]  __attribute__(   (  aligned( 1 ), section(
 };
 
 static char menu_main1[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "数値検索";
-static char menu_main2[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "コ-ド表  ";
-static char menu_main3[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "コ-ド保存";
-static char menu_main4[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "コ-ド追加";
+static char menu_main2[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "コード表  ";
+static char menu_main3[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "コード保存";
+static char menu_main4[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "コード追加";
 static char menu_main5[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "メモリ管理";
 static char menu_main6[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "メモリ編集";
 static char menu_main7[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "テキスト";
@@ -60,8 +60,8 @@ static const char * menu_main[] __attribute__(   (  aligned( 1 ), section( ".dat
 	menu_main14,
 };
 
-static char menu_search21[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "再サ-チ";
-static char menu_search22[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "新規サ-チ ";
+static char menu_search21[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "再サーチ";
+static char menu_search22[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "新規サーチ ";
 static char menu_search23[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "bit変更 ";
 static char menu_search24[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "範囲変更";
 static char menu_search25[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "結果を見る";
@@ -184,7 +184,7 @@ static const char * layout_menu_save[] __attribute__(   (  aligned( 1 ), section
 static char layout_menu_load1 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "CMF読込";
 static char layout_menu_load2 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "TAB読込";
 static char layout_menu_load3 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "CWC読込 ";
-static char layout_menu_load4 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "コ-ド削除";
+static char layout_menu_load4 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "コード削除";
 
 static const char * layout_menu_load[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) =
 {
@@ -236,16 +236,16 @@ static char menu_conf5 [] __attribute__(   (  aligned( 1 ), section( ".data" )  
 static char menu_conf6 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "実行間隔:     最短";
 static char menu_conf7 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "画像保存有効: Y ";
 static char menu_conf8 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "画像保存　: [音量+]+[音量+]+[音量+]+[音量+]";
-static char menu_conf9 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "TXTの行スクロ-ル:    ";
+static char menu_conf9 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "TXTの行スクロール:  ";
 static char menu_conf10 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "背景TRGB:        ";
 static char menu_conf11 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "文字RGB:      ";
 static char menu_conf12 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )= "画像形式: bmp";
 static char menu_conf13 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )= "JPG画像品質: 100";
 static char menu_conf14 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )= "待機ボタン: [音量+]+[音量+]+[音量+]+[音量+]";
 static char menu_conf15 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )= "電切ボタン:                               ";
-static char menu_conf16 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )= "ステ-ト作成:                                  ";
-static char menu_conf17 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )= "ステ-ト読込:                                  ";
-static char menu_conf18 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )= "ステ-トバグ回避 : Y ";
+static char menu_conf16 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )= "ステート作成:                                  ";
+static char menu_conf17 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )= "ステート読込:                                  ";
+static char menu_conf18 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )= "ステートバグ回避 : Y ";
 static char menu_conf19 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )= "全体半透明: Y ";
 static const char * menu_conf[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) =
 {
@@ -271,16 +271,16 @@ static const char * menu_conf[] __attribute__(   (  aligned( 1 ), section( ".dat
 };
 
 static char view_search_string[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )  = {
-"TXTサ-チ  "
+"TXTサーチ  "
 };
 static char view_search_hexstr[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )  = {
-"16進数サ-チ   "
+"16進数サーチ   "
 };
 
-static char layout_table_str1[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "右　コ-ド名変更;□実行/解除;SEL 削除  ";
-static char layout_table_str2[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "LR  上下移動;△ メモリ;START コ-ド追加 ";
+static char layout_table_str1[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "右 コード名変更;□実行/解除;SEL 削除  ";
+static char layout_table_str2[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "LR 上下移動;△ メモリ;START コード追加 ";
 static char layout_table_str3[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "左 全実行/解除;△ １度だけ実行";
-static char LANG_TABLESUM[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "実行  コ-ド名";
+static char LANG_TABLESUM[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "実行  コード名";
 
 static char LANG_SEARCH_DIFFHELP[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "□で変更,値が0で無効      ";
 
@@ -316,7 +316,7 @@ static char key_symbol15[] __attribute__(   (  aligned( 1 ), section( ".data" ) 
 static char key_symbol16[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )  = "→";
 static char key_symbol17[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )  = "[音量+]";
 static char key_symbol18[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )  = "[音量-]";
-static char key_symbol19[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )  = "ミュ-ト";
+static char key_symbol19[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )  = "ミュート";
 static char key_symbol20[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )  = "[画面]";
 
 static char turbo_key_help1[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )  = {
@@ -326,11 +326,11 @@ static char turbo_key_help2[] __attribute__(   (  aligned( 1 ), section( ".data"
 "START:ボタン設置 SEL:初期"
 };
 static char keymap_str[][17] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )={
-"十字キ-が連動",
-"十字キ-と交換",
+"十字キーが連動",
+"十字キーと交換",
 };
 static char turbo_map_help1[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )  = {
-"左:開始設置   右:キ-配置   "
+"左:開始設置   右:キー配置   "
 };
 static char turbo_map_help2[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )  = {
 "SEL:削除"
