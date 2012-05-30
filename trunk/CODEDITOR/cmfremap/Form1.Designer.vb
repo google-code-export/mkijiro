@@ -27,19 +27,21 @@ Partial Class Form1
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(84, 29)
+        Me.Button1.Location = New System.Drawing.Point(74, 12)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
+        Me.Button1.Size = New System.Drawing.Size(105, 23)
         Me.Button1.TabIndex = 0
-        Me.Button1.Text = "Button1"
+        Me.Button1.Text = "FONT_REMAP!!"
         Me.Button1.UseVisualStyleBackColor = True
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(284, 84)
+        Me.ClientSize = New System.Drawing.Size(259, 47)
         Me.Controls.Add(Me.Button1)
+        Me.MaximumSize = New System.Drawing.Size(275, 85)
+        Me.MinimumSize = New System.Drawing.Size(275, 85)
         Me.Name = "Form1"
         Me.Text = "CMF_GBK FONTREMAP"
         Me.ResumeLayout(False)
