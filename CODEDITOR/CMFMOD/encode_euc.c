@@ -283,9 +283,9 @@ int EUC_UTF8SJIS(unsigned char *msg, int len)
 			memcpy(&stm[k],&fbuffer[0],3);
 			k +=3;
 			}
-			//else if(c1 < 0xF8){
-			//k+=4;
-			//}
+			else if(c1 < 0xF8){
+			k+=4;
+			}
 			//else if(c1 < 0xFC){
 			//k+=5;
 			//}
