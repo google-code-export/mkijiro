@@ -36,6 +36,10 @@ Public Class MERGE
 
         End If
 
+        If My.Settings.GBKOP = True Then
+            GBKOP.Checked = True
+        End If
+
 
         If My.Settings.codepathwhensave = True Then
             update_save_filepass.Checked = True
@@ -1344,12 +1348,16 @@ Public Class MERGE
             i += 1
             z = 0
         Next
+
+        If GBKOP.Checked = True Then
+            半角カナ全角ToolStripMenuItem_Click(sender, e)
+        End If
         codetree.EndUpdate()
     End Sub
 
     Public Function ConvCH(ByVal moto As String) As String
         Dim st As String() = {"ー", "∋", "⊆", "⊇", "⊂", "⊃", "￢", "⇒", "⇔", "∃", "∂", "∇", "≪", "≫", "∬", "Å", "♯", "♭", "♪", "†", "‡", "¶", "⑪", "⑫", "⑬", "⑭", "⑮", "⑯", "⑰", "⑱", "⑲", "⑳", "㍉", "㌔", "㌢", "㍍", "㌘", "㌧", "㌃", "㌶", "㍑", "㍗", "㌍", "㌦", "㌣", "㌫", "㍊", "㌻", "㍻", "〝", "〟", "㏍", "㊤", "㊥", "㊦", "㊧", "㊨", "㍾", "㍽", "㍼"}
-        Dim sr As String() = {"-", " ", " ", " ", " ", " ", " ", "→", "←→", "ヨ", "", "", "<<", ">>", "ダブルインテグラル", "オングストローム", "シャ-プ", "フラット", "8分音符", "ダガー", "ダブルダガー", "パラグラフ", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "ミリ", "キロ", "センチ", "メ-トル", "グラム", "トン", "ア-ル", "ヘクタ-ル", "リットル", "ワｯト", "カロリ-", "ドル", "セント", "パ-セント", "ミリバ-ル", "ペ-ジ", "平成", " ", " ", "KK", "上", "中", "下", "左", "右", "明治", "大正", "昭和"}
+        Dim sr As String() = {"ー", " ", " ", " ", " ", " ", " ", "→", "←→", "ヨ", "", "", "<<", ">>", "ダブルインテグラル", "オングストローム", "シャープ", "フラット", "8分音符", "ダガー", "ダブルダガー", "パラグラフ", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "ミリ", "キロ", "センチ", "メートル", "グラム", "トン", "ア-ル", "ヘクタール", "リットル", "ワｯト", "カロリー", "ドル", "セント", "パ-セント", "ミリバール", "ページ", "平成", " ", " ", "KK", "上", "中", "下", "左", "右", "明治", "大正", "昭和"}
         Dim i As Integer = 0
         For i = 0 To 59
             If moto.Contains(st(i)) Then
@@ -2932,6 +2940,19 @@ Public Class MERGE
             My.Settings.updatesever = True
         End If
 
+
+    End Sub
+
+
+    Private Sub GBKOP_Click(sender As System.Object, e As System.EventArgs) Handles GBKOP.Click
+
+        If GBKOP.Checked = False Then
+            GBKOP.Checked = True
+            My.Settings.GBKOP = False
+        Else
+            GBKOP.Checked = False
+            My.Settings.GBKOP = True
+        End If
 
     End Sub
 
