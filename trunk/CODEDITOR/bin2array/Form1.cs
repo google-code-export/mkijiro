@@ -80,12 +80,23 @@ namespace WindowsFormsApplication1
                         if (checkBox1.Checked == true)
                         {
                             st.AppendLine();
-                            string bdfh ="STARTCHAR 0x0000\nENCODING 00000\nSWIDTH 886 0\nDWIDTH 12 0\nBBX 12 12 0 -2\nBITMAP\n";
+                            int enc = Convert.ToInt32(textBox2.Text,16);
+                            string bdfh ="STARTCHAR 0x";
+                            string bdfh1 = "ENCODING ";
+                            string bdfh2 = "SWIDTH 886 0\nDWIDTH 12 0\nBBX 12 12 0 -2\nBITMAP";
                             string bdff ="ENDCHAR\n";
                             int k = 0;
                             for (int i = 0; i < bs.Length; i++)
                             {
-                                if (k == 0) { st.Append(bdfh);}
+                                if (k == 0) {
+                                    st.Append(bdfh);
+                                    st.AppendLine(enc.ToString("X4"));
+                                    st.Append(bdfh1);
+                                    st.AppendLine(enc.ToString());
+                                    st.AppendLine(bdfh2);
+                                    enc++;
+                              
+                                }
                                 tmp = bs[i].ToString("X2").ToUpper();
                                 st.Append(tmp);
                                 if ((k & 1 )== 1)
