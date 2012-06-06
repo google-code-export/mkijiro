@@ -89,12 +89,12 @@ static u8 * GetHz(int x, const char *msg)
 			//http://charset.uic.jp/show/cp51932/
 			#define NEXTCODE 94
 			#define CODESKIP 8836
-			if((((((unsigned char)msg[x] +0x5F)&0xFF)<0x5E)) && ((unsigned char)msg[x + 1] > 0xA0))
+			if(((((unsigned char)msg[x] +0x5F)&0xFF)<0x5E) && ((unsigned char)msg[x+1] !=0xFF) )
 				return _get_hzfont( (int)((unsigned char)msg[x] - 0xA1) * NEXTCODE + (int)((unsigned char)msg[x + 1] - 0xA1) );
 			//0x8F〜0x95まで拡張EUC(JIS213では0x8Fのみ)
-			else if((((((unsigned char)msg[x] +0x71)&0xFF)<0x6)) && ((unsigned char)msg[x + 1] > 0xA0)&& ((unsigned char)msg[x + 2] > 0xA0))
-				return _get_hzfont( + (int)((unsigned char)msg[x] - 0x8F +1) * CODESKIP + (int)((unsigned char)msg[x+1] - 0xA1) * NEXTCODE + (int)((unsigned char)msg[x + 2] - 0xA1) );
-			else 
+			else if((((((unsigned char)msg[x] +0x71)&0xFF)<0x6)) && ((unsigned char)msg[x+2] !=0xFF) )
+				return _get_hzfont( (int)((unsigned char)msg[x] - 0x8F +1) * CODESKIP + (int)((unsigned char)msg[x+1] - 0xA1) * NEXTCODE + (int)((unsigned char)msg[x + 2] - 0xA1) );
+			else
 				return _get_hzfont(0);//ダミー
 }
 

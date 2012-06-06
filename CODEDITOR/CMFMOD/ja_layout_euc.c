@@ -315,7 +315,7 @@ static char key_symbol14[] __attribute__(   (  aligned( 1 ), section( ".data" ) 
 static char key_symbol15[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )  = "¢«";
 static char key_symbol16[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )  = "¢ª";
 static char key_symbol17[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )  = "[²»ÎÌ+]";
-static char key_symbol18[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )  = "[²»ÎÌ¡¼]";
+static char key_symbol18[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )  = "[²»ÎÌ-]";
 static char key_symbol19[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )  = "¤ß¤å¡¼¤È";
 static char key_symbol20[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   )  = "[²èÌÌ]";
 
