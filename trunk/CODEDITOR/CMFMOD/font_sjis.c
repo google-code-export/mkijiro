@@ -84,9 +84,10 @@ int IsHzcode(int x, const char *msg)
 
 static u8 * GetHz(int x, const char *msg)
 {
+			//http://msdn.microsoft.com/en-us/goglobal/cc305152
 			//http://charset.uic.jp/show/cp932/
 			#define NEXTCODE 192
-			if(((((((unsigned char)msg[x]^0x20) +0x5F)&0xFF)<0x3C)) && ((unsigned char)msg[x + 1] >= 0x40))
+			if(((unsigned char)msg[x + 1] <= 0xFC) && ((unsigned char)msg[x + 1] != 0x7F))
 				return _get_hzfont( (int)(((unsigned char)msg[x]^ 0x20) - 0xA1) * NEXTCODE + (int)((unsigned char)msg[x + 1] - 0x40) );
 			else 
 				return _get_hzfont(0);//¥À¥ß¡¼

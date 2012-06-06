@@ -223,6 +223,7 @@ int EUC_UTF8SJIS(unsigned char *msg, int len)
 	char fbuffer[2048];
 	u8 c1=0;
 	u8 c2=0;
+	//int cmp=0;
 	int i=0;
 	int k=0;
 	int kk=0;
@@ -240,7 +241,11 @@ int EUC_UTF8SJIS(unsigned char *msg, int len)
 		stm[k]=c1;
 		k++;i++;
 		}
-		else if( (((c1+0x5F)&0xFF) < 0x5C) && (c2>=0xA1) ){
+		//else if ((((c1 +0x71)&0xFF)<0x6)){
+		//cmp=3;
+  		//goto euc2men;
+   	  	//}
+		else if((((c1+0x5F)&0xFF) < 0x5E) || c1 == 0xE8){
 		memcpy(&seek,&msg[i],2);
  		kk = 0;
 		fd = sceIoOpen("ms0:/cheatmaster/table/euc-jp", PSP_O_RDONLY, 0777);
@@ -314,8 +319,8 @@ int EUC_UTF8SJIS(unsigned char *msg, int len)
 				k++;
 				i+=2;
 			}
-			else if( (((c1+0x5F)&0xFF) < 0x4C) && (c2>=0xA1) ){
 			//http://oku.edu.mie-u.ac.jp/~okumura/algo/
+			else if( (((c1+0x5F)&0xFF) < 0x5C) && (c2>=0xA1) ){
 			c1 &=0x7F;
 			c2 &=0x7F;
 			if ((c1 & 1) != 0)
