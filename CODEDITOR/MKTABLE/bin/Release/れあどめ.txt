@@ -1,8 +1,12 @@
-M$の内部てーぶるをぱくって1:1のUTF8 VS SJIS,EUCJP,GBK,UTF16BE,UTF16LEの変換てーぶるを作成する鶴です。
+M$の内部てーぶるをぱくって1:1もしくは一方通行のUTF8,SJIS,EUCJP,GBK,UTF16/32,UTF16/32の変換てーぶるを作成する鶴です。
 TXTテーブルは下記の正規表現で抜いたもの変換
 EXTRA　:(0x[0-9A-fa-f]+|&#x[0-9a-fA-F]+|&#[0-9]+|u\+?[0-9A-fa-f]+|U\+?[0-9A-fa-f]+)
 UNICODE;0x[0-9A-F]{4}\t0x[0-9A-F]{4}\t0x[0-9A-F]{4} //sjis,jis,utf16の順
 JIS213 ;0x[0-9A-F]{2,6}\tU\+[0-9A-F]{4,6}\t"　//(コードポイント)、UTF32の順
+
+2012/06/09
+コンボからutf16/beを削除
+unicode以外の文字てすと対応
 
 2012/06/05
 オフセット直打テーブル作成を追加
@@ -63,3 +67,4 @@ http://x0213.org/codetable/
 http://msdn.microsoft.com/ja-jp/library/aa288104%28v=vs.71%29.aspx
 http://www.gnu.org/software/libiconv/
 http://www.unicode.org/
+http://www.asahi-net.or.jp/~CI5M-NMR/w3/utf-8.html
