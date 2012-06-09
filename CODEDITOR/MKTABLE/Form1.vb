@@ -264,7 +264,7 @@ Public Class Form1
                         Dim ssss As String()
                         Dim z As Integer = 0
                         Dim len As Integer = 0
-                        Dim uni As New Regex("(^0x[0-9A-fa-f]+$|^&#x[0-9a-fA-F]+$|&#[0-9]+$|^u\+?[0-9A-fa-f]+$|^U\+?[0-9A-fa-f]+$)")
+                        Dim uni As New Regex("(^0x[0-9A-fa-f]+|^&#x[0-9a-fA-F]+$|&#[0-9]+|^u\+?[0-9A-fa-f]+|^U\+?[0-9A-fa-f]+)")
                         Dim unim As Match
                         Dim ssr As New System.IO.StreamReader("extra.txt", System.Text.Encoding.GetEncoding(65001))
 
@@ -321,6 +321,12 @@ Public Class Form1
                                 bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(st)
                             ElseIf sp.Checked = False Then
                                 bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(ssss(0))
+                            Else
+                                Array.Resize(bbb, 4)
+                                bbb(0) = 0
+                                bbb(1) = 0
+                                bbb(2) = 0
+                                bbb(3) = 0
                             End If
 
                             unim = uni.Match(ssss(1))
@@ -366,6 +372,11 @@ Public Class Form1
                                 End If
                             ElseIf sp.Checked = False Then
                                 bb = System.Text.Encoding.GetEncoding(enc).GetBytes(ssss(1))
+                            Else
+                                Array.Resize(bb, 3)
+                                bb(0) = 0
+                                bb(1) = 0
+                                bb(2) = 0
                             End If
 
                             Array.Resize(bb, 3)
