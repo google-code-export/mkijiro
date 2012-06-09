@@ -4,6 +4,14 @@ Imports System.IO
 
 Public Class Form1
 
+    Private Sub INI(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
+
+        TextBox1.Font = My.Settings.font
+
+    End Sub
+
+
+
     Private Sub Button3_Click(sender As System.Object, e As System.EventArgs) Handles READ.Click
 
         If File.Exists("sjis2004test.txt") Then
@@ -186,5 +194,38 @@ Public Class Form1
 
     Private Sub Button5_Click(sender As System.Object, e As System.EventArgs) Handles CLEAR.Click
         TextBox1.Text = ""
+    End Sub
+
+    Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles Button1.Click
+        Dim fd As New FontDialog()
+
+        '初期のフォントを設定
+        fd.Font = TextBox1.Font
+        '初期の色を設定
+        fd.Color = TextBox1.ForeColor
+        '存在しないフォントやスタイルをユーザーが選択すると
+        'エラーメッセージを表示する
+        fd.FontMustExist = True
+        '横書きフォントだけを表示する
+        fd.AllowVerticalFonts = False
+        '色を選択できるようにする
+        fd.ShowColor = True
+        '取り消し線、下線、テキストの色などのオプションを指定可能にする
+        'デフォルトがTrueのため必要はない
+        fd.ShowEffects = True
+        '固定ピッチフォント以外も表示する
+        'デフォルトがFalseのため必要はない
+        fd.FixedPitchOnly = False
+        'ベクタ フォントを選択できるようにする
+        'デフォルトがTrueのため必要はない
+        fd.AllowVectorFonts = True
+
+        'ダイアログを表示する
+        If fd.ShowDialog() <> DialogResult.Cancel Then
+            'TextBox1のフォントと色を変える
+            TextBox1.Font = fd.Font
+            My.Settings.font = fd.Font
+            TextBox1.ForeColor = fd.Color
+        End If
     End Sub
 End Class
