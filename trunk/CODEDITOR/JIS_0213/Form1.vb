@@ -28,6 +28,7 @@ Public Class Form1
                 Dim tofu As Byte() = {&HE2, &H96, &HA1}
                 Dim maru As Byte() = {&HE3, &H82, &H9A}
                 Dim ac As Byte() = {&HCC, &H80}
+                Dim ac2 As Byte() = {&HCC, &H81}
                 Dim gousei As Byte() = {&HCB, &HA9, &HCB, &HA5}
                 Dim jis201 As Byte() = {0, 0, 0}
                 Dim c1 As Integer = 0
@@ -74,7 +75,7 @@ Public Class Form1
                                             Array.Copy(ac, 0, bss, k, 2)
                                             k += 2
                                         ElseIf c1 = &H86 AndAlso (c2 And 1) = 0 AndAlso c2 >= &H68 AndAlso c2 <= &H6E Then
-                                            Array.Copy(ac, 0, bss, k, 2)
+                                            Array.Copy(ac2, 0, bss, k, 2)
                                             k += 2
                                         ElseIf c1 = &H86 AndAlso (c2 = &H85 Or c2 = &H86) Then
                                             Array.Copy(gousei, (c2 And 1) * 2, bss, k, 2)
