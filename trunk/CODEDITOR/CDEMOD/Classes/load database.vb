@@ -123,7 +123,7 @@ Public Class load_db
                             code.AppendLine()
                             'buffer(3) &= "" & vbCrLf
                         End If
-                        If buffer(0).Length > 1 AndAlso buffer(0).Substring(0, 1) = "#" Then
+                        If buffer(0).Trim.Length > 1 AndAlso buffer(0).Substring(0, 1) = "#" Then
                             cmt.AppendLine(buffer(0))
                             'b4 &= buffer(0) & vbCrLf
                         End If
@@ -227,7 +227,7 @@ Public Class load_db
                                     buffer(0) = buffer(0).Replace(" 0A", " 0x")
                                     code.AppendLine(buffer(0).Substring(3, 21).Trim)
                                     'buffer(3) &= buffer(0).Substring(3, 21).Trim & vbCrLf
-                                ElseIf buffer(0).Substring(0, 1) = "#" Then
+                                ElseIf buffer(0).Substring(0, 1) = "#" AndAlso buffer(0).Trim <> "#" Then
                                     cmt.AppendLine(buffer(0))
                                     'b4 &= buffer(0) & vbCrLf
                                 Else ' If it is incorrectly formed, ignore it.
@@ -302,7 +302,7 @@ Public Class load_db
 
                                             End If
 
-                                        ElseIf buffer(0).Substring(0, 1) = "#" Then
+                                        ElseIf buffer(0).Substring(0, 1) = "#" AndAlso buffer(0).Trim <> "#" Then
                                             cmt.AppendLine(buffer(0))
                                             'b4 &= buffer(0) & vbCrLf
 
@@ -332,7 +332,7 @@ Public Class load_db
 
                             Case Else ' This will catch anything that is out of place
 
-                                If buffer(0).Substring(0, 1) = "#" Then
+                                If buffer(0).Substring(0, 1) = "#" AndAlso buffer(0).Trim <> "#" Then
                                     cmt.AppendLine(buffer(0))
                                     'b4 &= buffer(0) & vbCrLf
 
@@ -377,8 +377,8 @@ Public Class load_db
                             'Determine if it's a blank line
                             If buffer(0).Trim = Nothing Then
                                 write_errors(counts(0), counts(2), "<空白しかない行です>", gnode.Text, cnode.Text)
-                            Else
-                                write_errors(counts(0), counts(2), buffer(0) & " <追加されませんでした>", gnode.Text, cnode.Text)
+                                'Else
+                                '    write_errors(counts(0), counts(2), buffer(0) & " <追加されませんでした>", gnode.Text, cnode.Text)
                             End If
                         End If
                         skip = False
