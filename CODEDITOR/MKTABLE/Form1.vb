@@ -252,7 +252,7 @@ Public Class Form1
                                 End If
                             Next
                         End If
-                        llen = (&HFC - &HA1 + 1) * 94
+                        llen = (&HFE - &HA1 + 1) * 94
                     End If
 
                     If EX.Checked = True Then
@@ -264,7 +264,7 @@ Public Class Form1
                         Dim ssss As String()
                         Dim z As Integer = 0
                         Dim len As Integer = 0
-                        Dim uni As New Regex("(^0x[0-9A-fa-f]+|^&#x[0-9a-fA-F]+$|&#[0-9]+|^u\+?[0-9A-fa-f]+|^U\+?[0-9A-fa-f]+)")
+                        Dim uni As New Regex("(^0x[0-9A-fa-f]+|^&#x[0-9a-fA-F]+|&#[0-9]+|^u\+?[0-9A-fa-f]+|^U\+?[0-9A-fa-f]+)")
                         Dim unim As Match
                         Dim ssr As New System.IO.StreamReader("extra.txt", System.Text.Encoding.GetEncoding(65001))
 
@@ -422,7 +422,7 @@ Public Class Form1
                             End If
                         End While
                         If over = True Then
-                            llen *= c3
+                            llen += c3 * llen
                         End If
                         ssr.Close()
                     End If

@@ -127,7 +127,7 @@ Partial Class Form1
         '
         Me.ENCODE.ContextMenuStrip = Me.ContextMenuStrip1
         Me.ENCODE.FormattingEnabled = True
-        Me.ENCODE.Items.AddRange(New Object() {"SHIFT-JIS(UTF8<->CP932)", "EUC-JP(UTF8<->CP51932)", "GBK(UTF8<->CP936)", "UTF16/32→EUC-JP(UTF8→UTF16/32→CP51932)", "UTF16/32→SJIS(UTF8→UTF16/32→CP932)", "UTF16/32→GBK(UTF8→UTF16/32→CP936)", "Unicode Consortiumテキストテーブル(CP1201→JIS/EUC/SJIS)", "JIS213_2004テキストテーブル(CP12001→JIS/SJS/EUC)", "(c1^0x20-0xA1)*192+c2-0x40(SJIS→CP936/CP65001)", "(c1-0x81)*192+c2-0x40(GBK→CP932/CP65001)", "(c1-0xA1)*94+c2-0xa1(EUC→CP936/CP65001)"})
+        Me.ENCODE.Items.AddRange(New Object() {"SHIFT-JIS(UTF8<->CP932)", "EUC-JP(UTF8<->CP51932)", "GBK(UTF8<->CP936)", "UTF16/32→EUC-JP(UTF8→UTF16/32→CP51932)", "UTF16/32→SJIS(UTF8→UTF16/32→CP932)", "UTF16/32→GBK(UTF8→UTF16/32→CP936)", "Unicode Consortiumテキストテーブル(CP1201→JIS/EUC/SJIS)", "JIS213_2004テキストテーブル(CP12001→JIS/SJS/EUC)", "(c1^0x20-0xA1)*192+c2-0x40(SJIS→CP936/CP65001)", "(c1-0x81)*192+c2-0x40(GBK→CP932/CP65001)", "c3*94*94+(c1-0xA1)*94+c2-0xa1(EUC→CP936/CP65001)"})
         Me.ENCODE.Location = New System.Drawing.Point(68, 10)
         Me.ENCODE.Name = "ENCODE"
         Me.ENCODE.Size = New System.Drawing.Size(144, 20)
