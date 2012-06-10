@@ -89,7 +89,9 @@ Public Class save_db
 
                                             str = s.Trim & vbCrLf
                                             bs = ctbl.unicode2custom(str, tbl, sel)
-                                            tw.Write(bs, 0, bs.Length)
+                                            If bs.Length > 2 Then
+                                                tw.Write(bs, 0, bs.Length)
+                                            End If
 
                                         Else
                                             '0x00000000 0x00000000
@@ -108,7 +110,7 @@ Public Class save_db
 
                                         End If
 
-                                    End If
+                                        End If
 
                                 Next
 
@@ -345,7 +347,9 @@ Public Class save_db
                                         'tw.Write(s & vbCrLf)
                                         str = s & vbCrLf
                                         bs = ctbl.unicode2custom(str, tbl, sel)
-                                        tw.Write(bs, 0, bs.Length)
+                                        If bs.Length > 2 Then
+                                            tw.Write(bs, 0, bs.Length)
+                                        End If
 
                                     Else
                                         If System.Text.RegularExpressions.Regex.IsMatch(s, "[0-9A-Fa-f]{8} [0-9A-Fa-f?]{4}", System.Text.RegularExpressions.RegexOptions.ECMAScript) Then
