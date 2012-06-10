@@ -1,6 +1,8 @@
-M$にないJIS213てーぶるでTXT書きだす鶴です
-合成文字の出力だけみ対応
+M$にないJIS213てーぶるでTXT書きだす鶴です。
 
+2012/06/10
+合成出力出来る場合はするようにした
+euc_JIS2004追加
 
 2012/06/10
 アキュートだかグラーブ付きが変だったので修正
@@ -14,3 +16,4 @@ by (ﾟ∀ﾟ)
 参考リンク
 http://x0213.org/codetable/
 http://charset.uic.jp/show/shiftjis2004/
+http://www.gnu.org/software/libiconv/
