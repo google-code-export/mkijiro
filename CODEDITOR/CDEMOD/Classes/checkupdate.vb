@@ -4,17 +4,30 @@ Imports System.IO
 Public Class checkupdate
 
 
+    Dim extable As String() = {"table\sjisvsutf8", "table\eucvsutf8", "table\custom_utf32", "table\custom_utf32_2"}
+
     Public Sub CDEupater(ByVal mode As String)
 
         If My.Computer.Network.IsAvailable Then
             Dim tx As String = "http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/CDEMOD/bin/Release/version"
             Dim exe As String = "http://unzu127xp.pa.land.to/data/IJIRO/CDEMOD/bin/Release/CDE_CP932_FM4.exe"
             Dim up As String = "http://unzu127xp.pa.land.to/data/IJIRO/CDEMOD/bin/Release/APP/updater.exe"
+            Dim tblbase = "http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/CDEMOD/bin/Release/"
 
             If My.Settings.updatesever = False Then
                 exe = "http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/CDEMOD/bin/Release/CDE_CP932_FM4.exe"
                 up = "http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/CDEMOD/updater/bin/Release//updater.exe"
             End If
+
+            If Directory.Exists("table") = False Then
+                Directory.CreateDirectory("table")
+            End If
+
+            For i = 0 To 3
+                If File.Exists(extable(i)) = False Then
+                    getweb(extable(i), tblbase & extable(i), 1)
+                End If
+            Next
 
             '保存先のファイル名
             Dim fileName As String = "CDEMOD.exe"

@@ -6,12 +6,27 @@ Public Class load_db
 
     Public Sub read_PSP(ByVal filename As String, ByVal enc1 As Integer)
         Try
+            Dim filenamebk As String = filename
+            If enc1 = 9322004 Or enc1 = 519322004 Then
+                Dim ctbl As New customtable
+                Dim tw As New StreamWriter("table\tmp", False, _
+                                           System.Text.Encoding.GetEncoding(65001))
+                tw.Write(ctbl.custom_pasrse(filename, enc1))
+                tw.Close()
+                filename = "table\tmp"
+                enc1 = 65001
+            End If
+
             Dim m As MERGE = MERGE
             Dim ew As error_window = error_window
             Dim memory As New MemoryManagement
             Dim file As New FileStream(filename, FileMode.Open, FileAccess.Read)
             Dim sr As New StreamReader(file, _
                                        System.Text.Encoding.GetEncoding(enc1))
+            If filename = "table\tmp" Then
+                filename = filenamebk
+            End If
+
             Dim buffer(2) As String ' 0 = stream buffer, 1 = Game ID address, 2 = Game name, 3 = Codes 4= comment
             Dim code As New StringBuilder
             Dim cmt As New StringBuilder
@@ -407,12 +422,28 @@ Public Class load_db
 
     Public Sub read_PSX(ByVal filename As String, ByVal enc1 As Integer)
         Try
+            Dim filenamebk As String = filename
+            If enc1 = 9322004 Or enc1 = 519322004 Then
+                Dim ctbl As New customtable
+                Dim tw As New StreamWriter("table\tmp", False, _
+                                           System.Text.Encoding.GetEncoding(65001))
+                tw.Write(ctbl.custom_pasrse(filename, enc1))
+                tw.Close()
+                filename = "table\tmp"
+                enc1 = 65001
+            End If
+
             Dim m As MERGE = MERGE
             Dim ew As error_window = error_window
             Dim memory As New MemoryManagement
             Dim file As New FileStream(filename, FileMode.Open, FileAccess.Read)
             Dim sr As New StreamReader(file, _
                                        System.Text.Encoding.GetEncoding(enc1))
+
+            If filename = "table\tmp" Then
+                filename = filenamebk
+            End If
+
             Dim buffer(4) As String ' 0 = stream buffer, 1 = SLUS address, 2 = Game name, 3 = Codes, 4 = fixed codes
             Dim code As New StringBuilder
             Dim cmt As New StringBuilder
@@ -1145,13 +1176,13 @@ Public Class load_db
 
         Dim file As New FileStream(filename, FileMode.Open, FileAccess.Read)
         Dim codepage As Integer = 932
-        Dim cp(7) As Byte
+        Dim cp(16) As Byte
         Dim bs(1) As Byte
         Dim str As String
         '5B 43 50 39 33 36 5D
         If file.ReadByte = &H5B Then
             file.Seek(0, SeekOrigin.Begin)
-            file.Read(cp, 0, 8)
+            file.Read(cp, 0, 15)
             str = Encoding.GetEncoding(0).GetString(cp)
             Dim r As New Regex("\[CP\d+]", RegexOptions.ECMAScript)
             Dim m As Match = r.Match(str)
@@ -1168,6 +1199,10 @@ Public Class load_db
                     Return 1201
                 ElseIf str = "[CP51932]" Then
                     Return 51932
+                ElseIf str = "[CP519322004]" Then
+                    Return 519322004
+                ElseIf str = "[CP9322004]" Then
+                    Return 9322004
                 End If
             End If
         End If
@@ -1217,6 +1252,9 @@ Public Class load_db
     Public Function no_db(ByVal filename As String, ByVal enc1 As Integer) As Boolean
 
         Dim file As New FileStream(filename, FileMode.Open, FileAccess.Read)
+        If enc1 > 655535 Or enc1 = 1201 Then
+            enc1 = 0
+        End If
         Dim sr As New StreamReader(file, System.Text.Encoding.GetEncoding(enc1))
         Dim buffer As String = Nothing
         Dim nodb As Boolean = True

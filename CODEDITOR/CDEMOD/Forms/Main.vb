@@ -185,6 +185,7 @@ Public Class MERGE
                 If codetree.Nodes.Count >= 1 Then
                     codetree.Nodes(0).Expand()
                 End If
+                resets_level1()
                 error_window.list_load_error.EndUpdate()
                 loaded = True
                 file_saveas.Enabled = True
@@ -285,6 +286,7 @@ Public Class MERGE
             ok = True
         End If
         If ok = True Then
+            resets_level1()
             UTF16BE.Enabled = False
             saveas_codefreak.Enabled = False
             PSX = False
@@ -317,6 +319,7 @@ Public Class MERGE
             ok = True
         End If
         If ok = True Then
+            resets_level1()
             file_saveas.Enabled = True
             UTF16BE.Enabled = False
             saveas_codefreak.Enabled = False
@@ -375,6 +378,7 @@ Public Class MERGE
             If codetree.Nodes.Count >= 1 Then
                 codetree.Nodes(0).Expand()
             End If
+            resets_level1()
             codetree.EndUpdate()
             reset_codepage()
             error_window.list_load_error.EndUpdate()
@@ -1052,6 +1056,8 @@ Public Class MERGE
         BIG5.Checked = False
         UTF16BE.Checked = False
         UTF16BE.Enabled = False
+        EUCJIS20004.Checked = False
+        SHIFTJIS2004.Checked = False
 
         If enc1 = 932 Then
             SJIS.Checked = True
@@ -1064,6 +1070,10 @@ Public Class MERGE
             EUCJP.Checked = True
         ElseIf enc1 = 950 Then
             BIG5.Checked = True
+        ElseIf enc1 = 519322004 Then
+            EUCJIS20004.Checked = True
+        ElseIf enc1 = 9322004 Then
+            SHIFTJIS2004.Checked = True
         End If
 
         Return 0
@@ -1104,6 +1114,21 @@ Public Class MERGE
 
     End Sub
 
+    Private Sub SHIFTJIS2004_Click(sender As System.Object, e As System.EventArgs) Handles SHIFTJIS2004.Click
+
+        My.Settings.MSCODEPAGE = 9322004
+        enc1 = 9322004
+        reset_codepage()
+
+    End Sub
+
+    Private Sub EUCJIS20004_Click(sender As System.Object, e As System.EventArgs) Handles EUCJIS20004.Click
+
+        My.Settings.MSCODEPAGE = 519322004
+        enc1 = 519322004
+        reset_codepage()
+
+    End Sub
 
     Private Sub UTF16BECP1201ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles UTF16BE.Click
         'エンコードを指定する場合
@@ -1356,10 +1381,10 @@ Public Class MERGE
     End Sub
 
     Public Function ConvCH(ByVal moto As String) As String
-        Dim st As String() = {"ー", "∋", "⊆", "⊇", "⊂", "⊃", "￢", "⇒", "⇔", "∃", "∂", "∇", "≪", "≫", "∬", "Å", "♯", "♭", "♪", "†", "‡", "¶", "⑪", "⑫", "⑬", "⑭", "⑮", "⑯", "⑰", "⑱", "⑲", "⑳", "㍉", "㌔", "㌢", "㍍", "㌘", "㌧", "㌃", "㌶", "㍑", "㍗", "㌍", "㌦", "㌣", "㌫", "㍊", "㌻", "㍻", "〝", "〟", "㏍", "㊤", "㊥", "㊦", "㊧", "㊨", "㍾", "㍽", "㍼"}
-        Dim sr As String() = {"ー", " ", " ", " ", " ", " ", " ", "→", "←→", "ヨ", "", "", "<<", ">>", "ダブルインテグラル", "オングストローム", "シャープ", "フラット", "8分音符", "ダガー", "ダブルダガー", "パラグラフ", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "ミリ", "キロ", "センチ", "メートル", "グラム", "トン", "ア-ル", "ヘクタール", "リットル", "ワｯト", "カロリー", "ドル", "セント", "パ-セント", "ミリバール", "ページ", "平成", " ", " ", "KK", "上", "中", "下", "左", "右", "明治", "大正", "昭和"}
+        Dim st As String() = {"∋", "⊆", "⊇", "⊂", "⊃", "￢", "⇒", "⇔", "∃", "∂", "∇", "≪", "≫", "∬", "Å", "♯", "♭", "♪", "†", "‡", "¶", "⑪", "⑫", "⑬", "⑭", "⑮", "⑯", "⑰", "⑱", "⑲", "⑳", "㍉", "㌔", "㌢", "㍍", "㌘", "㌧", "㌃", "㌶", "㍑", "㍗", "㌍", "㌦", "㌣", "㌫", "㍊", "㌻", "㍻", "〝", "〟", "㏍", "㊤", "㊥", "㊦", "㊧", "㊨", "㍾", "㍽", "㍼"}
+        Dim sr As String() = {" ", " ", " ", " ", " ", " ", "→", "←→", "ヨ", "", "", "<<", ">>", "ダブルインテグラル", "オングストローム", "シャープ", "フラット", "8分音符", "ダガー", "ダブルダガー", "パラグラフ", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "ミリ", "キロ", "センチ", "メートル", "グラム", "トン", "ア-ル", "ヘクタール", "リットル", "ワｯト", "カロリー", "ドル", "セント", "パ-セント", "ミリバール", "ページ", "平成", " ", " ", "KK", "上", "中", "下", "左", "右", "明治", "大正", "昭和"}
         Dim i As Integer = 0
-        For i = 0 To 59
+        For i = 0 To 58
             If moto.Contains(st(i)) Then
                 moto = moto.Replace(st(i), sr(i))
             End If
@@ -2300,6 +2325,7 @@ Public Class MERGE
                 UTF16BE.Enabled = True
                 saveas_codefreak.Enabled = True
             End If
+            resets_level1()
             codetree.EndUpdate()
             reset_codepage()
             error_window.list_load_error.EndUpdate()

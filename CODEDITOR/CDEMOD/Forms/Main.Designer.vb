@@ -53,6 +53,8 @@ Partial Class MERGE
         Me.GBK = New System.Windows.Forms.ToolStripMenuItem()
         Me.BIG5 = New System.Windows.Forms.ToolStripMenuItem()
         Me.EUCJP = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SHIFTJIS2004 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EUCJIS20004 = New System.Windows.Forms.ToolStripMenuItem()
         Me.UTF16BE = New System.Windows.Forms.ToolStripMenuItem()
         Me.codetreeview = New System.Windows.Forms.ToolStripMenuItem()
         Me.paserToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -208,7 +210,7 @@ Partial Class MERGE
         Me.treeopen.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menu_file, Me.menu_sort, Me.codepage_select, Me.codetreeview, Me.browsecodesite, Me.EXE起動ToolStripMenuItem, Me.menu_options, Me.ヘルプHToolStripMenuItem})
         Me.treeopen.Location = New System.Drawing.Point(0, 0)
         Me.treeopen.Name = "treeopen"
-        Me.treeopen.Size = New System.Drawing.Size(714, 26)
+        Me.treeopen.Size = New System.Drawing.Size(775, 26)
         Me.treeopen.TabIndex = 0
         Me.treeopen.Text = "MenuStrip1"
         '
@@ -271,6 +273,8 @@ Partial Class MERGE
         Me.saveas_cwcheat.Name = "saveas_cwcheat"
         Me.saveas_cwcheat.Size = New System.Drawing.Size(200, 38)
         Me.saveas_cwcheat.Text = "CWC/PSPAR/TEMP"
+        Me.saveas_cwcheat.ToolTipText = "PSPUMDゲーム用のコードファイルを保存します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "CWC形式;CWCHEAT,CHEATMASTER,SCEPCHEATMASTER,CMFUSION,FREE" & _
+    "CHEAT,TEMPAR,JPCHEAT" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "PSPAR/TEMP形式;TEMPARのみ対応" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "対応文字コード;各チートデバイスに依存" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'saveas_psx
         '
@@ -278,6 +282,7 @@ Partial Class MERGE
         Me.saveas_psx.Name = "saveas_psx"
         Me.saveas_psx.Size = New System.Drawing.Size(200, 38)
         Me.saveas_psx.Text = "PSX"
+        Me.saveas_psx.ToolTipText = "PS1エミュレータ用のコードファイルを保存します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "cwcpos形式;PS時代のプロアクションリプレイ用コード" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "対応文字コード;各チートデバイスに依存"
         '
         'saveas_codefreak
         '
@@ -285,6 +290,8 @@ Partial Class MERGE
         Me.saveas_codefreak.Name = "saveas_codefreak"
         Me.saveas_codefreak.Size = New System.Drawing.Size(200, 38)
         Me.saveas_codefreak.Text = "CODEFREAK"
+        Me.saveas_codefreak.ToolTipText = "サイバーガジェットのコードフリーク専用のバイナリ形式で保存します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "公式エディタと違いcwcheat形式生コードのみ" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "対応文字コード;UTF16ビッグエンディア" & _
+    "ンのみ"
         '
         'saveas_actionreplay
         '
@@ -293,6 +300,8 @@ Partial Class MERGE
         Me.saveas_actionreplay.Name = "saveas_actionreplay"
         Me.saveas_actionreplay.Size = New System.Drawing.Size(200, 38)
         Me.saveas_actionreplay.Text = "ACTONREPLAY"
+        Me.saveas_actionreplay.ToolTipText = "DATEL プロアクションリプレイ専用のバイナリ形式で保存します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "TEMPARでも使えます" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "対応文字コード;Shift_JISのJISX201部分,日本語は半" & _
+    "角カナのみ使用可能"
         '
         'file_exit
         '
@@ -383,7 +392,7 @@ Partial Class MERGE
         '
         'codepage_select
         '
-        Me.codepage_select.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SJIS, Me.GBK, Me.BIG5, Me.EUCJP, Me.UTF16BE})
+        Me.codepage_select.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SJIS, Me.GBK, Me.BIG5, Me.EUCJP, Me.SHIFTJIS2004, Me.EUCJIS20004, Me.UTF16BE})
         Me.codepage_select.Name = "codepage_select"
         Me.codepage_select.Size = New System.Drawing.Size(99, 22)
         Me.codepage_select.Text = "エンコード(&D)"
@@ -394,29 +403,46 @@ Partial Class MERGE
         '
         Me.SJIS.Name = "SJIS"
         Me.SJIS.Size = New System.Drawing.Size(182, 22)
-        Me.SJIS.Text = "SJIS(CP932)"
-        Me.SJIS.ToolTipText = "日本語シフトJISのDBを編集します"
+        Me.SJIS.Text = "Shift_JIS(CP932)"
+        Me.SJIS.ToolTipText = "日本語シフトJISのDBを編集します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "M$コードページ932" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "http://msdn.microsoft.com/en-us/goglobal/cc30515" & _
+    "2"
         '
         'GBK
         '
         Me.GBK.Name = "GBK"
         Me.GBK.Size = New System.Drawing.Size(182, 22)
         Me.GBK.Text = "GBK(CP936)"
-        Me.GBK.ToolTipText = "簡体中国語GBKのDBを編集します"
+        Me.GBK.ToolTipText = "簡体中国語GBKのDBを編集します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "M$コードページ936" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "http://msdn.microsoft.com/en-us/goglobal/cc305153" & _
+    "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'BIG5
         '
         Me.BIG5.Name = "BIG5"
         Me.BIG5.Size = New System.Drawing.Size(182, 22)
         Me.BIG5.Text = "BIG5(CP950)"
-        Me.BIG5.ToolTipText = "繁体字中国語BIG5のDBを編集します"
+        Me.BIG5.ToolTipText = "繁体字中国語BIG5のDBを編集します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "M$コードページ950" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "http://msdn.microsoft.com/en-us/goglobal/cc3051" & _
+    "55" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'EUCJP
         '
         Me.EUCJP.Name = "EUCJP"
         Me.EUCJP.Size = New System.Drawing.Size(182, 22)
         Me.EUCJP.Text = "EUC-JP(CP51932)"
-        Me.EUCJP.ToolTipText = "日本語EUC-JPのDBを編集します"
+        Me.EUCJP.ToolTipText = "日本語EUC-JPのDBを編集します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "文字コード対応表" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "http://charset.uic.jp/show/cp51932/" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        '
+        'SHIFTJIS2004
+        '
+        Me.SHIFTJIS2004.Name = "SHIFTJIS2004"
+        Me.SHIFTJIS2004.Size = New System.Drawing.Size(182, 22)
+        Me.SHIFTJIS2004.Text = "Shift_JIS-2004"
+        Me.SHIFTJIS2004.ToolTipText = "JISX0213規格SJISのDBを編集します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "文字コード対応表" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "http://charset.uic.jp/show/shiftjis2004/"
+        '
+        'EUCJIS20004
+        '
+        Me.EUCJIS20004.Name = "EUCJIS20004"
+        Me.EUCJIS20004.Size = New System.Drawing.Size(182, 22)
+        Me.EUCJIS20004.Text = "EUC_JIS-2004"
+        Me.EUCJIS20004.ToolTipText = "JISX0213規格EUC-JPのDBを編集します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "文字コード対応表" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "http://charset.uic.jp/show/eucjis2004/"
         '
         'UTF16BE
         '
@@ -424,7 +450,8 @@ Partial Class MERGE
         Me.UTF16BE.Name = "UTF16BE"
         Me.UTF16BE.Size = New System.Drawing.Size(182, 22)
         Me.UTF16BE.Text = "UTF16BE(CP1201)"
-        Me.UTF16BE.ToolTipText = "マルチバイトUTF16ビッグエンディアン" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "コードフリーク専用DBのみ対象"
+        Me.UTF16BE.ToolTipText = "ワイド文字UTF16ビッグエンディアン" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "コードフリーク専用DBのみ対象" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "http://ja.wikipedia.org/wiki/Unicode%E4%B8%" & _
+    "80%E8%A6%A7_0000-0FFF"
         '
         'codetreeview
         '
@@ -476,8 +503,8 @@ Partial Class MERGE
         Me.str_gbk.Name = "str_gbk"
         Me.str_gbk.Size = New System.Drawing.Size(208, 22)
         Me.str_gbk.Text = "中国語文字化け対策"
-        Me.str_gbk.ToolTipText = "FREECHEAT/CMFUSIONで半角カナ以外の表示できない文字を代替文字かスペースで置換します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "対象；" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "・ー∋⊆⊇⊂⊃￢⇒⇔∀∃∂∇≪≫∬Å♯♭♪†‡¶" & _
-    "⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳㍉㌔㌢㍍㌘㌧㌃㌶㍑㍗㌍㌦㌣㌫㍊㌻㍻〝〟㏍㊤㊥㊦㊧㊨㍾㍽㍼"
+        Me.str_gbk.ToolTipText = "FREECHEAT/CMFUSIONで半角カナ以外の表示できない文字を代替文字かスペースで置換します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "対象；" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "・∋⊆⊇⊂⊃￢⇒⇔∀∃∂∇≪≫∬Å♯♭♪†‡¶⑪" & _
+    "⑫⑬⑭⑮⑯⑰⑱⑲⑳㍉㌔㌢㍍㌘㌧㌃㌶㍑㍗㌍㌦㌣㌫㍊㌻㍻〝〟㏍㊤㊥㊦㊧㊨㍾㍽㍼"
         '
         'GBKOP
         '
@@ -892,64 +919,64 @@ Partial Class MERGE
         '
         Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cntparser, Me.dgedit, Me.ToolStripSeparator4, Me.cntclose, Me.cntexpand, Me.ToolStripSeparator5, Me.hankaku, Me.CNchar, Me.ToolStripSeparator6, Me.cntexe, Me.ToolStripSeparator11, Me.NodeConvert, Me.useFTP})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(207, 262)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(185, 226)
         '
         'cntparser
         '
         Me.cntparser.Name = "cntparser"
-        Me.cntparser.Size = New System.Drawing.Size(206, 26)
+        Me.cntparser.Size = New System.Drawing.Size(184, 22)
         Me.cntparser.Text = "コードパーサー"
         '
         'dgedit
         '
         Me.dgedit.Name = "dgedit"
-        Me.dgedit.Size = New System.Drawing.Size(206, 26)
+        Me.dgedit.Size = New System.Drawing.Size(184, 22)
         Me.dgedit.Text = "DGエディター"
         '
         'ToolStripSeparator4
         '
         Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(203, 6)
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(181, 6)
         '
         'cntclose
         '
         Me.cntclose.Name = "cntclose"
-        Me.cntclose.Size = New System.Drawing.Size(206, 26)
+        Me.cntclose.Size = New System.Drawing.Size(184, 22)
         Me.cntclose.Text = "全て折りたたむ"
         '
         'cntexpand
         '
         Me.cntexpand.Name = "cntexpand"
-        Me.cntexpand.Size = New System.Drawing.Size(206, 26)
+        Me.cntexpand.Size = New System.Drawing.Size(184, 22)
         Me.cntexpand.Text = "全て展開する"
         '
         'ToolStripSeparator5
         '
         Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
-        Me.ToolStripSeparator5.Size = New System.Drawing.Size(203, 6)
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(181, 6)
         '
         'hankaku
         '
         Me.hankaku.Name = "hankaku"
-        Me.hankaku.Size = New System.Drawing.Size(206, 26)
+        Me.hankaku.Size = New System.Drawing.Size(184, 22)
         Me.hankaku.Text = "半角カナ→全角"
         '
         'CNchar
         '
         Me.CNchar.Name = "CNchar"
-        Me.CNchar.Size = New System.Drawing.Size(206, 26)
+        Me.CNchar.Size = New System.Drawing.Size(184, 22)
         Me.CNchar.Text = "中国語文字化け対策"
         '
         'ToolStripSeparator6
         '
         Me.ToolStripSeparator6.Name = "ToolStripSeparator6"
-        Me.ToolStripSeparator6.Size = New System.Drawing.Size(203, 6)
+        Me.ToolStripSeparator6.Size = New System.Drawing.Size(181, 6)
         '
         'cntexe
         '
         Me.cntexe.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cntkakasi, Me.cntdbcopy})
         Me.cntexe.Name = "cntexe"
-        Me.cntexe.Size = New System.Drawing.Size(206, 26)
+        Me.cntexe.Size = New System.Drawing.Size(184, 22)
         Me.cntexe.Text = "EXE起動"
         '
         'cntkakasi
@@ -967,13 +994,13 @@ Partial Class MERGE
         'ToolStripSeparator11
         '
         Me.ToolStripSeparator11.Name = "ToolStripSeparator11"
-        Me.ToolStripSeparator11.Size = New System.Drawing.Size(203, 6)
+        Me.ToolStripSeparator11.Size = New System.Drawing.Size(181, 6)
         '
         'NodeConvert
         '
         Me.NodeConvert.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.clipboad, Me.CMFexport, Me.SCMexport, Me.FCTXT, Me.TABexport})
         Me.NodeConvert.Name = "NodeConvert"
-        Me.NodeConvert.Size = New System.Drawing.Size(206, 26)
+        Me.NodeConvert.Size = New System.Drawing.Size(184, 22)
         Me.NodeConvert.Text = "変換"
         '
         'clipboad
@@ -1010,7 +1037,7 @@ Partial Class MERGE
         '
         Me.useFTP.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ftpdb, Me.ftpcmf, Me.ftpscm, Me.ftptab})
         Me.useFTP.Name = "useFTP"
-        Me.useFTP.Size = New System.Drawing.Size(206, 26)
+        Me.useFTP.Size = New System.Drawing.Size(184, 22)
         Me.useFTP.Text = "FTP送信"
         '
         'ftpdb
@@ -1071,7 +1098,7 @@ Partial Class MERGE
         Me.GT_tb.Location = New System.Drawing.Point(321, 95)
         Me.GT_tb.MaxLength = 72
         Me.GT_tb.Name = "GT_tb"
-        Me.GT_tb.Size = New System.Drawing.Size(390, 19)
+        Me.GT_tb.Size = New System.Drawing.Size(451, 19)
         Me.GT_tb.TabIndex = 2
         '
         'gtitle_lbl
@@ -1110,7 +1137,7 @@ Partial Class MERGE
         Me.CT_tb.Location = New System.Drawing.Point(321, 169)
         Me.CT_tb.MaxLength = 72
         Me.CT_tb.Name = "CT_tb"
-        Me.CT_tb.Size = New System.Drawing.Size(390, 19)
+        Me.CT_tb.Size = New System.Drawing.Size(451, 19)
         Me.CT_tb.TabIndex = 4
         '
         'codetitle_lbl
@@ -1138,7 +1165,7 @@ Partial Class MERGE
         Me.cl_tb.Multiline = True
         Me.cl_tb.Name = "cl_tb"
         Me.cl_tb.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.cl_tb.Size = New System.Drawing.Size(193, 233)
+        Me.cl_tb.Size = New System.Drawing.Size(193, 228)
         Me.cl_tb.TabIndex = 8
         '
         'cl_lbl
@@ -1187,7 +1214,7 @@ Partial Class MERGE
         Me.cmt_tb.Multiline = True
         Me.cmt_tb.Name = "cmt_tb"
         Me.cmt_tb.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.cmt_tb.Size = New System.Drawing.Size(397, 101)
+        Me.cmt_tb.Size = New System.Drawing.Size(458, 101)
         Me.cmt_tb.TabIndex = 5
         '
         'cm_lbl
@@ -1205,7 +1232,7 @@ Partial Class MERGE
         Me.tool_menu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.add_game, Me.rem_game, Me.ToolStripSeparator2, Me.Add_cd, Me.rem_cd, Me.ToolStripSeparator1, Me.save_gc, Me.save_cc, Me.move_up, Me.move_down, Me.merge_codes})
         Me.tool_menu.Location = New System.Drawing.Point(0, 26)
         Me.tool_menu.Name = "tool_menu"
-        Me.tool_menu.Size = New System.Drawing.Size(714, 54)
+        Me.tool_menu.Size = New System.Drawing.Size(775, 54)
         Me.tool_menu.TabIndex = 14
         Me.tool_menu.Text = "ToolStrip1"
         '
@@ -1350,7 +1377,7 @@ Partial Class MERGE
         Me.button_list.Items.AddRange(New Object() {"セレクト", "スタート", "↑", "→", "↓", "←", "Lトリガー", "Rトリガー", "△", "○", "Ｘ", "□", "HOME", "HOLD", "ミュート", "スクリーン", "音量+", "音量-", "WLAN UP", "REMOTE HOLD"})
         Me.button_list.Location = New System.Drawing.Point(519, 207)
         Me.button_list.Name = "button_list"
-        Me.button_list.Size = New System.Drawing.Size(195, 200)
+        Me.button_list.Size = New System.Drawing.Size(256, 200)
         Me.button_list.TabIndex = 9
         '
         'inverse_chk
@@ -1559,7 +1586,7 @@ Partial Class MERGE
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
-        Me.ClientSize = New System.Drawing.Size(714, 561)
+        Me.ClientSize = New System.Drawing.Size(775, 561)
         Me.Controls.Add(Me.PSF)
         Me.Controls.Add(Me.curr_line)
         Me.Controls.Add(Me.dmtext)
@@ -1784,5 +1811,7 @@ Partial Class MERGE
     Friend WithEvents EUCJP As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents BIG5 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents GBKOP As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents SHIFTJIS2004 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents EUCJIS20004 As System.Windows.Forms.ToolStripMenuItem
 
 End Class
