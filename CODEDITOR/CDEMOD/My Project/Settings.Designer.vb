@@ -570,6 +570,30 @@ Namespace My
                 Me("GBKOP") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property saveencode() As Boolean
+            Get
+                Return CType(Me("saveencode"),Boolean)
+            End Get
+            Set
+                Me("saveencode") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property savetype() As Boolean
+            Get
+                Return CType(Me("savetype"),Boolean)
+            End Get
+            Set
+                Me("savetype") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

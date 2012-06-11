@@ -4,31 +4,66 @@ Imports System.Text
 
 Public Class save_db
 
+
+    Dim strenc As String() = {"[Shift_JIS,Windows-31J]", "[GBK]", "[Big5-HKSCS]", "[EUC-JP]", "[Shift_JIS-2004]", "[EUC-JIS-2004]", "[UTF16LE]", "[UTF16BE]", "[UTF32LE]", "[UTF32BE]", "[UTF-8]"}
+
+
+    Public Function selstr(ByVal enc1 As Integer) As String
+        Dim s As String = ""
+        If My.Settings.savetype = False Then
+            Select Case enc1
+                Case 932
+                    s = strenc(0)
+                Case 936
+                    s = strenc(1)
+                Case 951
+                    s = strenc(2)
+                Case 51932
+                    s = strenc(3)
+                Case 2132004
+                    s = strenc(4)
+                Case 512132004
+                    s = strenc(5)
+                Case 1201
+                    s = strenc(7)
+            End Select
+        Else
+            s = "[CP" & enc1.ToString & "]"
+        End If
+
+        Return s & vbCrLf
+
+    End Function
+
     Public Sub save_cwcheat(ByVal filename As String, ByVal enc1 As Integer)
 
         Dim m As MERGE = MERGE
         Dim i As Integer = 0 ' Error count
         Dim buffer As String()
 
-        If enc1 = 9322004 Or enc1 = 519322004 Then
+        If enc1 = 512132004 Or enc1 = 2132004 Then
             Dim unitable As String() = {"table\custom_utf32", "table\custom_utf32_2"}
             Dim sel As Integer = 0
-            If enc1 = 519322004 Then
+            If enc1 = 512132004 Then
                 sel = 1
             End If
             If File.Exists(unitable(sel)) = True Then
                 Dim ctbl As New customtable
-                Dim str As String = "[CP" & enc1.ToString & "]" & vbCrLf
-                Dim cwcar As String = "_L "
+                Dim str As String = ""
+
                 Dim tw As New FileStream(filename, FileMode.Create, FileAccess.Write)
+                Dim cwcar As String = "_L "
                 Dim bs As Byte()
                 Dim errors As Boolean = False
                 Dim tfs As New FileStream(unitable(sel), FileMode.Open, FileAccess.Read)
                 Dim tbl(CInt(tfs.Length - 1)) As Byte
                 tfs.Read(tbl, 0, tbl.Length)
                 tfs.Close()
-                bs = ctbl.unicode2custom(str, tbl, sel)
-                tw.Write(bs, 0, bs.Length)
+                If My.Settings.saveencode = True Then
+                    str = selstr(enc1)
+                    bs = ctbl.unicode2custom(str, tbl, sel)
+                    tw.Write(bs, 0, bs.Length)
+                End If
 
                 Try
 
@@ -110,7 +145,7 @@ Public Class save_db
 
                                         End If
 
-                                        End If
+                                    End If
 
                                 Next
 
@@ -140,8 +175,10 @@ Public Class save_db
             Dim b1 As String = Nothing
 
             reset_errors() ' Clear prior save errors if any
-
-            tw.Write("[CP" & enc1.ToString & "]" & vbCrLf)
+            
+            If My.Settings.saveencode = True Then
+                tw.Write(selstr(enc1))
+            End If
 
             Try
 
@@ -247,15 +284,16 @@ Public Class save_db
         Dim i As Integer = 0 ' Error count
         Dim buffer As String()
 
-        If enc1 = 9322004 Or enc1 = 519322004 Then
+        If enc1 = 2132004 Or enc1 = 512132004 Then
             Dim unitable As String() = {"table\custom_utf32", "table\custom_utf32_2"}
             Dim sel As Integer = 0
-            If enc1 = 519322004 Then
+            If enc1 = 512132004 Then
                 sel = 1
             End If
+
             If File.Exists(unitable(sel)) = True Then
                 Dim ctbl As New customtable
-                Dim str As String = "[CP" & enc1.ToString & "]" & vbCrLf
+                Dim str As String = ""
                 Dim cwcar As String = "_L "
                 Dim tw As New FileStream(filename, FileMode.Create, FileAccess.Write)
                 Dim bs As Byte()
@@ -264,8 +302,11 @@ Public Class save_db
                 Dim tbl(CInt(tfs.Length - 1)) As Byte
                 tfs.Read(tbl, 0, tbl.Length)
                 tfs.Close()
-                bs = ctbl.unicode2custom(str, tbl, sel)
-                tw.Write(bs, 0, bs.Length)
+                If My.Settings.saveencode = True Then
+                    str = selstr(enc1)
+                    bs = ctbl.unicode2custom(str, tbl, sel)
+                    tw.Write(bs, 0, bs.Length)
+                End If
 
                 Dim ew As error_window = error_window
                 Dim code As String = Nothing
@@ -378,7 +419,7 @@ Public Class save_db
 
                 Next
 
-
+                tw.Close()
 
             Else
                 MessageBox.Show(unitable(sel) & "がありません,GOOGLECODEからダウンロードして下さい")
@@ -390,8 +431,11 @@ Public Class save_db
             Dim ew As error_window = error_window
             Dim errors As Boolean = False
             Dim code As String = Nothing
+            
 
-            tw.Write("[CP" & enc1.ToString & "]" & vbCrLf)
+            If My.Settings.saveencode = True Then
+                tw.Write(selstr(enc1))
+            End If
 
             reset_errors() ' Clear prior save errors if any
 

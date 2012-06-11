@@ -7,13 +7,13 @@ Public Class load_db
     Public Sub read_PSP(ByVal filename As String, ByVal enc1 As Integer)
         Try
             Dim filenamebk As String = filename
-            If enc1 = 9322004 Or enc1 = 519322004 Then
+            If enc1 = 2132004 Or enc1 = 512132004 Or enc1 = 951 Then
                 Dim ctbl As New customtable
-                Dim tw As New StreamWriter("table\tmp", False, _
+                Dim tw As New StreamWriter(Application.StartupPath & "\table\tmp", False, _
                                            System.Text.Encoding.GetEncoding(65001))
                 tw.Write(ctbl.custom_pasrse(filename, enc1))
                 tw.Close()
-                filename = "table\tmp"
+                filename = Application.StartupPath & "\table\tmp"
                 enc1 = 65001
             End If
 
@@ -21,9 +21,9 @@ Public Class load_db
             Dim ew As error_window = error_window
             Dim memory As New MemoryManagement
             Dim file As New FileStream(filename, FileMode.Open, FileAccess.Read)
-            Dim sr As New StreamReader(file, _
-                                       System.Text.Encoding.GetEncoding(enc1))
-            If filename = "table\tmp" Then
+            Dim sr As New StreamReader(file, System.Text.Encoding.GetEncoding(enc1))
+
+            If filename = Application.StartupPath & "\table\tmp" Then
                 filename = filenamebk
             End If
 
@@ -241,7 +241,6 @@ Public Class load_db
                                     End If
 
                                     If ew.Visible = False Then
-
                                         ew.Show()
                                         ew.tab_error.SelectedIndex = 0 ' Give focus to the "Load Error" tab
                                         m.Focus()
@@ -336,7 +335,7 @@ Public Class load_db
                                     cmt.AppendLine(buffer(0))
                                     'b4 &= buffer(0) & vbCrLf
 
-                                ElseIf counts(0) = 1 AndAlso buffer(0).Contains("[CP") AndAlso buffer(0).Contains("]") Then
+                                ElseIf counts(0) = 1 AndAlso buffer(0).Contains("[") AndAlso buffer(0).Contains("]") Then
 
                                 Else ' If what we found isn't a comment, ignore it
 
@@ -410,6 +409,13 @@ Public Class load_db
 
             End If
 
+            Dim enctable As Integer() = {1200, 12000, 12001, 65001}
+            For i = 0 To 3
+                If My.Settings.MSCODEPAGE = enctable(i) Then
+                    My.Settings.MSCODEPAGE = 1201
+                End If
+            Next
+
             m.progbar.Visible = False
             sr.Close()
             file.Close()
@@ -423,13 +429,13 @@ Public Class load_db
     Public Sub read_PSX(ByVal filename As String, ByVal enc1 As Integer)
         Try
             Dim filenamebk As String = filename
-            If enc1 = 9322004 Or enc1 = 519322004 Then
+            If enc1 = 2132004 Or enc1 = 512132004 Or enc1 = 951 Then
                 Dim ctbl As New customtable
-                Dim tw As New StreamWriter("table\tmp", False, _
+                Dim tw As New StreamWriter(Application.StartupPath & "\table\tmp", False, _
                                            System.Text.Encoding.GetEncoding(65001))
                 tw.Write(ctbl.custom_pasrse(filename, enc1))
                 tw.Close()
-                filename = "table\tmp"
+                filename = Application.StartupPath & "\table\tmp"
                 enc1 = 65001
             End If
 
@@ -440,7 +446,7 @@ Public Class load_db
             Dim sr As New StreamReader(file, _
                                        System.Text.Encoding.GetEncoding(enc1))
 
-            If filename = "table\tmp" Then
+            If filename = Application.StartupPath & "\table\tmp" Then
                 filename = filenamebk
             End If
 
@@ -677,7 +683,7 @@ Public Class load_db
                                         cmt.AppendLine(buffer(0).Trim)
                                         'b4 &= buffer(0).Trim & vbCrLf
 
-                                    ElseIf counts(0) = 1 AndAlso buffer(0).Contains("[CP") AndAlso buffer(0).Contains("]") Then
+                                    ElseIf counts(0) = 1 AndAlso buffer(0).Contains("[") AndAlso buffer(0).Contains("]") Then
 
                                     Else ' what we found isn't a comment, ignore it
 
@@ -754,6 +760,14 @@ Public Class load_db
                 m.Focus()
                 reset_toolbar()
             End If
+
+            Dim enctable As Integer() = {1200, 12000, 12001, 65001}
+
+            For i = 0 To 3
+                If My.Settings.MSCODEPAGE = enctable(i) Then
+                    My.Settings.MSCODEPAGE = 1201
+                End If
+            Next
 
             m.progbar.Visible = False
             sr.Close()
@@ -1174,69 +1188,115 @@ Public Class load_db
 
     Public Function check_enc(ByVal filename As String) As Integer
 
-        Dim file As New FileStream(filename, FileMode.Open, FileAccess.Read)
-        Dim codepage As Integer = 932
-        Dim cp(16) As Byte
-        Dim bs(1) As Byte
-        Dim str As String
-        '5B 43 50 39 33 36 5D
-        If file.ReadByte = &H5B Then
-            file.Seek(0, SeekOrigin.Begin)
-            file.Read(cp, 0, 15)
-            str = Encoding.GetEncoding(0).GetString(cp)
-            Dim r As New Regex("\[CP\d+]", RegexOptions.ECMAScript)
-            Dim m As Match = r.Match(str)
-            If m.Success Then
-                file.Close()
-                str = m.Value
-                If str = "[CP932]" Then
-                    Return 932
-                ElseIf str = "[CP936]" Then
-                    Return 936
-                ElseIf str = "[CP950]" Then
-                    Return 950
-                ElseIf str = "[CP1201]" Then
-                    Return 1201
-                ElseIf str = "[CP51932]" Then
-                    Return 51932
-                ElseIf str = "[CP519322004]" Then
-                    Return 519322004
-                ElseIf str = "[CP9322004]" Then
-                    Return 9322004
+        Dim enctable As Integer() = {0, 932, 936, 951, 51932, 2132004, 512132004, 1201, 1200, 12000, 12001, 65001}
+
+        If My.Settings.saveencode = True Then
+            Dim file As New FileStream(filename, FileMode.Open, FileAccess.Read)
+            Dim cp(30) As Byte
+            Dim str As String
+            If file.Length > 30 Then
+                file.Read(cp, 0, 30)
+            End If
+            file.Close()
+            '5B 43 50 39 33 36 5D
+            If cp(0) = &H5B Then
+                str = Encoding.GetEncoding(0).GetString(cp)
+                Dim r As New Regex("^\[.+\]", RegexOptions.ECMAScript)
+                Dim m As Match = r.Match(str)
+                If m.Success Then
+                    str = m.Value
+                    If str.Contains("Shift_JIS") Or str.Contains("Windows-31J") Or str = "[CP932]" Then
+                        Return 932
+                    ElseIf str = "[GBK]" Or str = "[CP936]" Then
+                        Return 936
+                    ElseIf str = "[Big5-HKSCS]" Or str = "[CP951]" Then
+                        Return 951
+                        'ElseIf str = "[UTF16BE]" Or str = "[CP1201]" Then
+                        '    Return 1201
+                        'ElseIf str = "[UTF16LE]" Or str = "[CP1200]" Then
+                        '    Return 1200
+                        'ElseIf str = "[UTF-8]" Or str = "[CP65001]" Then
+                        '    Return 65001
+                    ElseIf str = "[EUC-JP]" Or str = "[CP51932]" Then
+                        Return 51932
+                    ElseIf str = "[Shift_JIS-2004]" Or str = "[CP2132004]" Then
+                        Return 2132004
+                    ElseIf str = "[EUC-JIS-2004]" Or str = "[CP512132004]" Then
+                        Return 512132004
+                    End If
+                End If
+            Else
+                If cp(0) = &H0 AndAlso cp(1) = &H0 AndAlso cp(2) = &HFE AndAlso cp(3) = &HFF Then
+                    My.Settings.MSCODEPAGE = 12001
+                ElseIf cp(0) = &HFF AndAlso cp(1) = &HFE AndAlso cp(2) = &H0 AndAlso cp(3) = &H0 Then
+                    My.Settings.MSCODEPAGE = 12000
+                ElseIf cp(0) = &HEF AndAlso cp(1) = &HBB AndAlso cp(2) = &HBF Then
+                    My.Settings.MSCODEPAGE = 65001
+                ElseIf cp(0) = &HFE AndAlso cp(1) = &HFF Then
+                    My.Settings.MSCODEPAGE = 1201
+                ElseIf cp(0) = &HFF AndAlso cp(1) = &HFE Then
+                    My.Settings.MSCODEPAGE = 1200
                 End If
             End If
         End If
 
-        file.Close()
+        For i = 0 To 11
+            If My.Settings.MSCODEPAGE = enctable(i) Then
+                Return My.Settings.MSCODEPAGE
+            End If
+        Next
 
-        Return My.Settings.MSCODEPAGE
+        MessageBox.Show("対応してないエンコードのようです,デフォルトコードページ0にします")
+        My.Settings.MSCODEPAGE = 0
+
+        Return 0
 
     End Function
 
     Public Function check_db(ByVal filename As String, ByVal enc1 As Integer) As Boolean
 
         Dim file As New FileStream(filename, FileMode.Open, FileAccess.Read)
-        Dim sr As New StreamReader(file, _
-                                   System.Text.Encoding.GetEncoding(enc1))
+        Dim sr As New StreamReader(file, System.Text.Encoding.GetEncoding(enc1))
         Dim buffer As String = Nothing
         Dim cwc As New Regex("^_L [0-9A-Fa-f]{8} [0-9A-Fa-f]{4}", RegexOptions.ECMAScript)
+        Dim gn As New Regex("^_S .", RegexOptions.ECMAScript)
+        Dim gid As New Regex("^_G .", RegexOptions.ECMAScript)
+        Dim cn As New Regex("^_C\d .", RegexOptions.ECMAScript)
         Dim cwcm As Match
+        Dim gnm As Match
+        Dim gidm As Match
+        Dim cnm As Match
         Dim cwcpop As Boolean = False
         Dim ct As Integer = 0
+        Dim mode As Integer = 0
 
         Do Until ct = 100 Or sr.EndOfStream = True
 
             buffer = sr.ReadLine
             ct += 1
             Try
-                '_L 12345678 1234
-                If buffer.Length >= 16 Then
-                        cwcm = cwc.Match(buffer)
-                        If cwcm.Success Then
-                            cwcpop = True
-                            Exit Do
+                If mode = 0 Then
+                    gnm = gn.Match(buffer)
+                    If gnm.Success Then
+                        mode = 1
                     End If
+                ElseIf mode = 1 Then
+                    gidm = gid.Match(buffer)
+                    If gidm.Success Then
+                        mode = 2
                     End If
+                ElseIf mode = 2 Then
+                    cnm = cn.Match(buffer)
+                    If cnm.Success Then
+                        mode = 3
+                    End If
+                ElseIf mode = 3 Then
+                    cwcm = cwc.Match(buffer)
+                    If cwcm.Success Then
+                        cwcpop = True
+                        Exit Do
+                    End If
+                End If
 
             Catch ex As Exception
                 MessageBox.Show(ex.Message)
@@ -1247,6 +1307,7 @@ Public Class load_db
         sr.Close()
 
         Return cwcpop
+
     End Function
 
     Public Function no_db(ByVal filename As String, ByVal enc1 As Integer) As Boolean
@@ -1259,8 +1320,15 @@ Public Class load_db
         Dim buffer As String = Nothing
         Dim nodb As Boolean = True
         Dim cwc As New Regex("^_(L|M|N) 0x[0-9A-Fa-f]{8} 0x[0-9A-Fa-f]{8}", RegexOptions.ECMAScript)
+        Dim gn As New Regex("^_S .", RegexOptions.ECMAScript)
+        Dim gid As New Regex("^_G .", RegexOptions.ECMAScript)
+        Dim cn As New Regex("^_C\d .", RegexOptions.ECMAScript)
         Dim cwcm As Match
+        Dim gnm As Match
+        Dim gidm As Match
+        Dim cnm As Match
         Dim ct As Integer = 0
+        Dim mode As Integer = 0
 
         Do Until ct = 100 Or sr.EndOfStream = True
 
@@ -1268,8 +1336,22 @@ Public Class load_db
             buffer = buffer.PadRight(2)
             ct += 1
             Try
-                '_L 0x12345678 0x12345678
-                If buffer.Length >= 24 Then
+                If mode = 0 Then
+                    gnm = gn.Match(buffer)
+                    If gnm.Success Then
+                        mode = 1
+                    End If
+                ElseIf mode = 1 Then
+                    gidm = gid.Match(buffer)
+                    If gidm.Success Then
+                        mode = 2
+                    End If
+                ElseIf mode = 2 Then
+                    cnm = cn.Match(buffer)
+                    If cnm.Success Then
+                        mode = 3
+                    End If
+                ElseIf mode = 3 Then
                     cwcm = cwc.Match(buffer)
                     If cwcm.Success Then
                         nodb = False
@@ -1282,8 +1364,11 @@ Public Class load_db
                 MessageBox.Show(ex.Message)
             End Try
         Loop
+
         If nodb = True Then
-            MessageBox.Show("コードフォーマットに該当しませんでした")
+            MessageBox.Show("どのコードフォーマットに該当しませんでした。" & vbCrLf & _
+                            "CWC形式ならば_S,_G,_C0または_C1,_Lの順番どおりになっている確認して下さい。" & vbCrLf & _
+                            "PROACTIONREPLAYやCODEFREAK専用のバイナリ形式は自動で判断されます。", "コード形式不明")
         End If
 
         file.Close()

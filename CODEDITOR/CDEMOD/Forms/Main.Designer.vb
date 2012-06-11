@@ -121,6 +121,9 @@ Partial Class MERGE
         Me.ToolStripSeparator12 = New System.Windows.Forms.ToolStripSeparator()
         Me.GOOGLESVN = New System.Windows.Forms.ToolStripMenuItem()
         Me.LANDMIRROR = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DBENCODE = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ENCTRING = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CPENC = New System.Windows.Forms.ToolStripMenuItem()
         Me.ヘルプHToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.オンラインヘルプToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.バージョン情報ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -402,7 +405,7 @@ Partial Class MERGE
         'SJIS
         '
         Me.SJIS.Name = "SJIS"
-        Me.SJIS.Size = New System.Drawing.Size(182, 22)
+        Me.SJIS.Size = New System.Drawing.Size(188, 22)
         Me.SJIS.Text = "Shift_JIS(CP932)"
         Me.SJIS.ToolTipText = "日本語シフトJISのDBを編集します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "M$コードページ932" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "http://msdn.microsoft.com/en-us/goglobal/cc30515" & _
     "2"
@@ -410,45 +413,46 @@ Partial Class MERGE
         'GBK
         '
         Me.GBK.Name = "GBK"
-        Me.GBK.Size = New System.Drawing.Size(182, 22)
+        Me.GBK.Size = New System.Drawing.Size(188, 22)
         Me.GBK.Text = "GBK(CP936)"
         Me.GBK.ToolTipText = "簡体中国語GBKのDBを編集します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "M$コードページ936" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "http://msdn.microsoft.com/en-us/goglobal/cc305153" & _
     "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'BIG5
         '
+        Me.BIG5.Enabled = False
         Me.BIG5.Name = "BIG5"
-        Me.BIG5.Size = New System.Drawing.Size(182, 22)
-        Me.BIG5.Text = "BIG5(CP950)"
-        Me.BIG5.ToolTipText = "繁体字中国語BIG5のDBを編集します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "M$コードページ950" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "http://msdn.microsoft.com/en-us/goglobal/cc3051" & _
-    "55" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        Me.BIG5.Size = New System.Drawing.Size(188, 22)
+        Me.BIG5.Text = "Big5HKSCS(CP951)"
+        Me.BIG5.ToolTipText = "繁体字中国語+香港補字 Big5HKSCSのDBを編集します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "M$コードページ951" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "http://msdn.microsoft.com/en-us/gogl" & _
+    "obal/cc305155" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'EUCJP
         '
         Me.EUCJP.Name = "EUCJP"
-        Me.EUCJP.Size = New System.Drawing.Size(182, 22)
+        Me.EUCJP.Size = New System.Drawing.Size(188, 22)
         Me.EUCJP.Text = "EUC-JP(CP51932)"
         Me.EUCJP.ToolTipText = "日本語EUC-JPのDBを編集します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "文字コード対応表" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "http://charset.uic.jp/show/cp51932/" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'SHIFTJIS2004
         '
         Me.SHIFTJIS2004.Name = "SHIFTJIS2004"
-        Me.SHIFTJIS2004.Size = New System.Drawing.Size(182, 22)
+        Me.SHIFTJIS2004.Size = New System.Drawing.Size(188, 22)
         Me.SHIFTJIS2004.Text = "Shift_JIS-2004"
         Me.SHIFTJIS2004.ToolTipText = "JISX0213規格SJISのDBを編集します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "文字コード対応表" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "http://charset.uic.jp/show/shiftjis2004/"
         '
         'EUCJIS20004
         '
         Me.EUCJIS20004.Name = "EUCJIS20004"
-        Me.EUCJIS20004.Size = New System.Drawing.Size(182, 22)
-        Me.EUCJIS20004.Text = "EUC_JIS-2004"
+        Me.EUCJIS20004.Size = New System.Drawing.Size(188, 22)
+        Me.EUCJIS20004.Text = "EUC-JIS-2004"
         Me.EUCJIS20004.ToolTipText = "JISX0213規格EUC-JPのDBを編集します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "文字コード対応表" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "http://charset.uic.jp/show/eucjis2004/"
         '
         'UTF16BE
         '
         Me.UTF16BE.Enabled = False
         Me.UTF16BE.Name = "UTF16BE"
-        Me.UTF16BE.Size = New System.Drawing.Size(182, 22)
+        Me.UTF16BE.Size = New System.Drawing.Size(188, 22)
         Me.UTF16BE.Text = "UTF16BE(CP1201)"
         Me.UTF16BE.ToolTipText = "ワイド文字UTF16ビッグエンディアン" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "コードフリーク専用DBのみ対象" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "http://ja.wikipedia.org/wiki/Unicode%E4%B8%" & _
     "80%E8%A6%A7_0000-0FFF"
@@ -671,7 +675,7 @@ Partial Class MERGE
         '
         'menu_options
         '
-        Me.menu_options.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.options_ontop, Me.options_error, Me.ブラウザ変更ToolStripMenuItem, Me.menu_font, Me.ToolStripMenuItem1, Me.grided_use, Me.fixedform, Me.FTPDsetting, Me.PBPHBHASH, Me.update_save_filepass, Me.autoupdater})
+        Me.menu_options.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.options_ontop, Me.options_error, Me.ブラウザ変更ToolStripMenuItem, Me.menu_font, Me.ToolStripMenuItem1, Me.grided_use, Me.fixedform, Me.FTPDsetting, Me.PBPHBHASH, Me.update_save_filepass, Me.autoupdater, Me.DBENCODE})
         Me.menu_options.Name = "menu_options"
         Me.menu_options.Size = New System.Drawing.Size(99, 22)
         Me.menu_options.Text = "オプション(&O)"
@@ -681,14 +685,14 @@ Partial Class MERGE
         '
         Me.options_ontop.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.alwaystop
         Me.options_ontop.Name = "options_ontop"
-        Me.options_ontop.Size = New System.Drawing.Size(225, 22)
+        Me.options_ontop.Size = New System.Drawing.Size(297, 22)
         Me.options_ontop.Text = "常に前面表示"
         '
         'options_error
         '
         Me.options_error.Image = CType(resources.GetObject("options_error.Image"), System.Drawing.Image)
         Me.options_error.Name = "options_error"
-        Me.options_error.Size = New System.Drawing.Size(225, 22)
+        Me.options_error.Size = New System.Drawing.Size(297, 22)
         Me.options_error.Text = "エラー画面を表示"
         Me.options_error.ToolTipText = "エラー画面の表示の設定"
         '
@@ -697,7 +701,7 @@ Partial Class MERGE
         Me.ブラウザ変更ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.codesite_browser, Me.nichannel_browser})
         Me.ブラウザ変更ToolStripMenuItem.Image = CType(resources.GetObject("ブラウザ変更ToolStripMenuItem.Image"), System.Drawing.Image)
         Me.ブラウザ変更ToolStripMenuItem.Name = "ブラウザ変更ToolStripMenuItem"
-        Me.ブラウザ変更ToolStripMenuItem.Size = New System.Drawing.Size(225, 22)
+        Me.ブラウザ変更ToolStripMenuItem.Size = New System.Drawing.Size(297, 22)
         Me.ブラウザ変更ToolStripMenuItem.Text = "ブラウザ変更"
         '
         'codesite_browser
@@ -719,7 +723,7 @@ Partial Class MERGE
         Me.menu_font.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.font_treeview, Me.font_gtitle, Me.font_gid, Me.font_codename, Me.font_codetxt, Me.font_cmt})
         Me.menu_font.Image = CType(resources.GetObject("menu_font.Image"), System.Drawing.Image)
         Me.menu_font.Name = "menu_font"
-        Me.menu_font.Size = New System.Drawing.Size(225, 22)
+        Me.menu_font.Size = New System.Drawing.Size(297, 22)
         Me.menu_font.Text = "フォント"
         Me.menu_font.ToolTipText = "メニューのフォントを指定します"
         '
@@ -763,7 +767,7 @@ Partial Class MERGE
         '
         Me.ToolStripMenuItem1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.URL8custom, Me.URL9custom, Me.URL10custom, Me.ToolStripSeparator8, Me.APP8custom, Me.APP9custom, Me.APP10custom})
         Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(225, 22)
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(297, 22)
         Me.ToolStripMenuItem1.Text = "URL/APPカスタム枠"
         '
         'URL8custom
@@ -810,7 +814,7 @@ Partial Class MERGE
         'grided_use
         '
         Me.grided_use.Name = "grided_use"
-        Me.grided_use.Size = New System.Drawing.Size(225, 22)
+        Me.grided_use.Size = New System.Drawing.Size(297, 22)
         Me.grided_use.Text = "グリッド編集有効"
         Me.grided_use.ToolTipText = "データグリッドでコードの値を編集可能にします" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "DEC；32bit10進数" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "OR；32bit論理和" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "AND；32bit論理積" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "XOR；32bit排他的論理和" & _
     "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "BINARY32；単精度浮動小数点数" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "BINARY32(16bit)；単精度浮動小数点数の16bit右シフト" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "BINARY16；半精度浮動小数点"
@@ -818,28 +822,28 @@ Partial Class MERGE
         'fixedform
         '
         Me.fixedform.Name = "fixedform"
-        Me.fixedform.Size = New System.Drawing.Size(225, 22)
+        Me.fixedform.Size = New System.Drawing.Size(297, 22)
         Me.fixedform.Text = "フォームサイズ自動"
         Me.fixedform.ToolTipText = "解像度にあわせてUIさいずが変化しますかわりにリサイズできなくなります" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "自動でないときはメインフォームのサイズは終了すると保存されます"
         '
         'FTPDsetting
         '
         Me.FTPDsetting.Name = "FTPDsetting"
-        Me.FTPDsetting.Size = New System.Drawing.Size(225, 22)
+        Me.FTPDsetting.Size = New System.Drawing.Size(297, 22)
         Me.FTPDsetting.Text = "FTP設定"
         Me.FTPDsetting.ToolTipText = "ツリービューのコンテキストでFTP転送するIPアドレスの設定をします" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "PSP側でPSPFTPDやPSPWIFILETRANSERの起動が必要"
         '
         'PBPHBHASH
         '
         Me.PBPHBHASH.Name = "PBPHBHASH"
-        Me.PBPHBHASH.Size = New System.Drawing.Size(225, 22)
+        Me.PBPHBHASH.Size = New System.Drawing.Size(297, 22)
         Me.PBPHBHASH.Text = "常にHBハッシュを計算する"
         Me.PBPHBHASH.ToolTipText = "PSF取得でゲームIDを常にCWCHEATのHBハッシュにします"
         '
         'update_save_filepass
         '
         Me.update_save_filepass.Name = "update_save_filepass"
-        Me.update_save_filepass.Size = New System.Drawing.Size(225, 22)
+        Me.update_save_filepass.Size = New System.Drawing.Size(297, 22)
         Me.update_save_filepass.Text = "起動時DB読み込み設定"
         Me.update_save_filepass.ToolTipText = "チェック有りの場合、起動時に最後に保存したデータベースを読み込むようになります。" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "チェックなしの場合、起動時に最後に読み込んだデータベースを読み込みます。"
         '
@@ -847,7 +851,7 @@ Partial Class MERGE
         '
         Me.autoupdater.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.samename, Me.releasedate, Me.ToolStripSeparator12, Me.GOOGLESVN, Me.LANDMIRROR})
         Me.autoupdater.Name = "autoupdater"
-        Me.autoupdater.Size = New System.Drawing.Size(225, 22)
+        Me.autoupdater.Size = New System.Drawing.Size(297, 22)
         Me.autoupdater.Text = "起動時最新版チェック"
         Me.autoupdater.ToolTipText = "起動時にCDEの最新版があるかどうかをチェックします。"
         '
@@ -879,6 +883,30 @@ Partial Class MERGE
         Me.LANDMIRROR.Name = "LANDMIRROR"
         Me.LANDMIRROR.Size = New System.Drawing.Size(194, 22)
         Me.LANDMIRROR.Text = "LAND使用"
+        '
+        'DBENCODE
+        '
+        Me.DBENCODE.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ENCTRING, Me.CPENC})
+        Me.DBENCODE.Name = "DBENCODE"
+        Me.DBENCODE.Size = New System.Drawing.Size(297, 22)
+        Me.DBENCODE.Text = "DB保存時にエンコード判定文字をつける"
+        Me.DBENCODE.ToolTipText = "テキストタイプのDBの文字コード判定が正確になります" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ない場合は指定したエンコードでDBが読まれます"
+        '
+        'ENCTRING
+        '
+        Me.ENCTRING.Name = "ENCTRING"
+        Me.ENCTRING.Size = New System.Drawing.Size(194, 22)
+        Me.ENCTRING.Text = "[文字コード名]で保存"
+        Me.ENCTRING.ToolTipText = "Shift_JIS=Windows-31J、日本語SJIS" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "GBK=簡体中国語" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Big5-HKSCS=繁体中国語+香港補助" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "EUC-JP=日本語EUC-JP" & _
+    "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Shift_JIS-2004=日本語JISX213規格のEUC-JP" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "EUC_JIS-2004=日本語JISX213規格のSJIS" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        '
+        'CPENC
+        '
+        Me.CPENC.Name = "CPENC"
+        Me.CPENC.Size = New System.Drawing.Size(194, 22)
+        Me.CPENC.Text = "[CP(番号)]で保存]"
+        Me.CPENC.ToolTipText = "M$コードページ番号で保存します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Shift_JIS-2004とEUC-JIS-2004はM$にないので仮の番号が吐き出されます" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "//FAKECODEPAGE" & _
+    "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Shift_JIS-2004=CP2132004" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "EUC-JIS-2004=CP512132004"
         '
         'ヘルプHToolStripMenuItem
         '
@@ -1813,5 +1841,8 @@ Partial Class MERGE
     Friend WithEvents GBKOP As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents SHIFTJIS2004 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents EUCJIS20004 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents DBENCODE As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ENCTRING As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents CPENC As System.Windows.Forms.ToolStripMenuItem
 
 End Class
