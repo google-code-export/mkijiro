@@ -41,6 +41,17 @@ Public Class MERGE
         End If
 
 
+        If My.Settings.saveencode = True Then
+            DBENCODE.Checked = True
+        End If
+
+        If My.Settings.savetype = True Then
+            CPENC.Checked = True
+        Else
+            ENCTRING.Checked = True
+        End If
+
+
         If My.Settings.codepathwhensave = True Then
             update_save_filepass.Checked = True
         Else
@@ -1070,9 +1081,9 @@ Public Class MERGE
             EUCJP.Checked = True
         ElseIf enc1 = 950 Then
             BIG5.Checked = True
-        ElseIf enc1 = 519322004 Then
+        ElseIf enc1 = 512132004 Then
             EUCJIS20004.Checked = True
-        ElseIf enc1 = 9322004 Then
+        ElseIf enc1 = 2132004 Then
             SHIFTJIS2004.Checked = True
         End If
 
@@ -1108,24 +1119,24 @@ Public Class MERGE
     Private Sub BIG5CPToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles BIG5.Click
 
         'エンコードを指定する場合
-        My.Settings.MSCODEPAGE = 950
-        enc1 = 950
+        My.Settings.MSCODEPAGE = 951
+        enc1 = 951
         reset_codepage()
 
     End Sub
 
     Private Sub SHIFTJIS2004_Click(sender As System.Object, e As System.EventArgs) Handles SHIFTJIS2004.Click
 
-        My.Settings.MSCODEPAGE = 9322004
-        enc1 = 9322004
+        My.Settings.MSCODEPAGE = 2132004
+        enc1 = 2132004
         reset_codepage()
 
     End Sub
 
     Private Sub EUCJIS20004_Click(sender As System.Object, e As System.EventArgs) Handles EUCJIS20004.Click
 
-        My.Settings.MSCODEPAGE = 519322004
-        enc1 = 519322004
+        My.Settings.MSCODEPAGE = 512132004
+        enc1 = 512132004
         reset_codepage()
 
     End Sub
@@ -3022,6 +3033,29 @@ Public Class MERGE
             temp += 1
         End If
         curr_line.Text = temp.ToString & "行目"
+    End Sub
+
+    Private Sub DBENCODE_Click(sender As System.Object, e As System.EventArgs) Handles DBENCODE.Click
+        If My.Settings.saveencode = False Then
+            DBENCODE.Checked = True
+            My.Settings.saveencode = True
+        Else
+            DBENCODE.Checked = False
+            My.Settings.saveencode = False
+        End If
+
+    End Sub
+
+    Private Sub ENCTRING_Click(sender As System.Object, e As System.EventArgs) Handles ENCTRING.Click, CPENC.Click
+        If My.Settings.savetype = False Then
+            ENCTRING.Checked = False
+            CPENC.Checked = True
+            My.Settings.savetype = True
+        Else
+            ENCTRING.Checked = True
+            CPENC.Checked = False
+            My.Settings.savetype = False
+        End If
     End Sub
 
 End Class
