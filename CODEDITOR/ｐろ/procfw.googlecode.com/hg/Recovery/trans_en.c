@@ -120,6 +120,7 @@ const char * g_messages_en[] = {
 	"Debug Type I",
 	"Debug Type II",
 	"Unlock Memory in PSP Games (breaks Homescreen)",
+	"Use mac.txt in /seplugins",
 };
 
 u8 message_test_en[NELEMS(g_messages_en) == MSG_END ? 0 : -1];

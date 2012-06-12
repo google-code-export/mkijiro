@@ -119,7 +119,8 @@ const char * g_messages_en[] = {
 "¡≠≥∫ﬁ∏",
 "√ﬁ ﬁØ∏ﬁ¿≤ÃﬂI",
 "√ﬁ ﬁØ∏ﬁ¿≤ÃﬂII",
-"PSPπﬁ∞—ÇÃ“”ÿ∂≤Œ≥ (Œ∞—Ω∏ÿ∞›∂ﬁ ﬁ∏ﬁÿœΩ)"
+"∂∏¡Æ≥“”ÿ…∑Æ≥æ≤ªŒﬂ∞ƒ",
+"seplugins∆±Ÿmac.txt¶¬∂≥",
 };
 
 u8 message_test_en[NELEMS(g_messages_en) == MSG_END ? 0 : -1];
