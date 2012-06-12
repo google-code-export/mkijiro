@@ -808,7 +808,7 @@ static int display_retail_high_memory(struct MenuEntry* entry, char *buf, int si
 }
 
 static int display_mac_spoofer(struct MenuEntry* entry, char *buf, int size){
-	sprintf(buf, "%-48s %-11s", g_messages[MAC_SPOOFER], get_bool_name(g_config.macspoofer));
+	sprintf(buf, "%s\t%s", g_messages[MAC_SPOOFER], get_bool_name(g_config.macspoofer));
 	return 0;
  }
 
@@ -883,8 +883,8 @@ static struct ValueOption g_retail_high_memory = {
 };
 
 static struct ValueOption g_mac_spoofer = {
- 		&g_config.macspoofer, 
- 		0, 2,
+ 	&g_config.macspoofer, 
+ 	0, 2,
 };
 
 static struct MenuEntry g_advanced_menu_entries[] = {
