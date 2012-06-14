@@ -7,6 +7,7 @@ Public Class save_db
 
     Dim strenc As String() = {"[Shift_JIS,Windows-31J]", "[GBK]", "[Big5-HKSCS]", "[EUC-JP]", "[Shift_JIS-2004]", "[EUC-JIS-2004]", "[UTF16LE]", "[UTF16BE]", "[UTF32LE]", "[UTF32BE]", "[UTF-8]"}
 
+    Dim unitable As String() = {"table\custom_utf32", "table\custom_utf32_2", "table\custom_utf32_3"}
 
     Public Function selstr(ByVal enc1 As Integer) As String
         Dim s As String = ""
@@ -41,178 +42,55 @@ Public Class save_db
         Dim i As Integer = 0 ' Error count
         Dim buffer As String()
 
-        If enc1 = 512132004 Or enc1 = 2132004 Then
-            Dim unitable As String() = {"table\custom_utf32", "table\custom_utf32_2"}
+        If enc1 = 512132004 Or enc1 = 2132004 Or enc1 = 951 Then
             Dim sel As Integer = 0
             If enc1 = 512132004 Then
                 sel = 1
+            ElseIf enc1 = 951 Then
+                sel = 2
             End If
-            If File.Exists(unitable(sel)) = True Then
-                Dim ctbl As New customtable
-                Dim str As String = ""
+        If File.Exists(unitable(sel)) = True Then
+            Dim ctbl As New customtable
+            Dim str As String = ""
 
-                Dim tw As New FileStream(filename, FileMode.Create, FileAccess.Write)
-                Dim cwcar As String = "_L "
-                Dim bs As Byte()
-                Dim errors As Boolean = False
-                Dim tfs As New FileStream(unitable(sel), FileMode.Open, FileAccess.Read)
-                Dim tbl(CInt(tfs.Length - 1)) As Byte
-                tfs.Read(tbl, 0, tbl.Length)
-                tfs.Close()
-                If My.Settings.saveencode = True Then
-                    str = selstr(enc1)
-                    bs = ctbl.unicode2custom(str, tbl, sel)
-                    tw.Write(bs, 0, bs.Length)
-                End If
-
-                Try
-
-                    For Each n As TreeNode In m.codetree.Nodes(0).Nodes
-
-                        str = "_S " & n.Tag.ToString.Trim & vbCrLf
-                        bs = ctbl.unicode2custom(str, tbl, sel)
-                        tw.Write(bs, 0, bs.Length)
-                        str = "_G " & n.Text.Trim & vbCrLf
-                        bs = ctbl.unicode2custom(str, tbl, sel)
-                        tw.Write(bs, 0, bs.Length)
-
-                        For Each n1 As TreeNode In n.Nodes
-
-                            If n1.Tag Is Nothing Then
-
-                                If n1.Tag.ToString.Substring(0, 1) = "0" Then
-                                    str = "_C0 " & n1.Text.Trim & vbCrLf
-                                    bs = ctbl.unicode2custom(str, tbl, sel)
-                                    tw.Write(bs, 0, bs.Length)
-                                Else
-                                    str = "_C0 " & n1.Text.Trim & vbCrLf
-                                    bs = ctbl.unicode2custom(str, tbl, sel)
-                                    tw.Write(bs, 0, bs.Length)
-                                End If
-                            Else
-
-                                buffer = n1.Tag.ToString.Split(CChar(vbCrLf))
-
-                                For Each s As String In buffer
-                                    If s.Length = 1 Then
-                                        If s = "0" Or s = "2" Or s = "4" Then
-                                            If s = "0" Then
-                                                cwcar = "_L "
-                                            ElseIf s = "2" Then
-                                                cwcar = "_M "
-                                            ElseIf s = "4" Then
-                                                cwcar = "_N "
-                                            End If
-                                            str = "_C0 " & n1.Text.Trim & vbCrLf
-                                            bs = ctbl.unicode2custom(str, tbl, sel)
-                                            tw.Write(bs, 0, bs.Length)
-                                        ElseIf s = "1" Or s = "3" Or s = "5" Then
-                                            If s = "1" Then
-                                                cwcar = "_L "
-                                            ElseIf s = "3" Then
-                                                cwcar = "_M "
-                                            ElseIf s = "5" Then
-                                                cwcar = "_N "
-                                            End If
-                                            str = "_C1 " & n1.Text.Trim & vbCrLf
-                                            bs = ctbl.unicode2custom(str, tbl, sel)
-                                            tw.Write(bs, 0, bs.Length)
-                                        End If
-                                    ElseIf s.Length > 1 Then
-
-                                        If s.Contains("#") Then
-
-                                            str = s.Trim & vbCrLf
-                                            bs = ctbl.unicode2custom(str, tbl, sel)
-                                            If bs.Length > 2 Then
-                                                tw.Write(bs, 0, bs.Length)
-                                            End If
-
-                                        Else
-                                            '0x00000000 0x00000000
-                                            If s.Contains("0x") Then
-
-                                                str = cwcar & s.Trim & vbCrLf
-                                                bs = ctbl.unicode2custom(str, tbl, sel)
-                                                tw.Write(bs, 0, bs.Length)
-
-                                            Else
-                                                ' Error, code length was incorrect
-                                                i += 1
-                                                write_errors(i, n.Text.Trim, n1.Text.Trim, "不正なコード形式です: " & s.Trim)
-                                                errors = True
-                                            End If
-
-                                        End If
-
-                                    End If
-
-                                Next
-
-                            End If
-
-                        Next
-
-                    Next
-
-                Catch ex As Exception
-                    MessageBox.Show(ex.Message)
-                End Try
-
-                tw.Close()
-            Else
-                MessageBox.Show(unitable(sel) & "がありません,GOOGLECODEからダウンロードして下さい")
-            End If
-
-        Else
-
-
-            Dim tw As New StreamWriter(filename, False, _
-                                       System.Text.Encoding.GetEncoding(enc1))
-            Dim ew As error_window = error_window
-            Dim errors As Boolean = False
+            Dim tw As New FileStream(filename, FileMode.Create, FileAccess.Write)
             Dim cwcar As String = "_L "
-            Dim b1 As String = Nothing
-
-            reset_errors() ' Clear prior save errors if any
-            
+            Dim bs As Byte()
+            Dim errors As Boolean = False
+            Dim tfs As New FileStream(unitable(sel), FileMode.Open, FileAccess.Read)
+            Dim tbl(CInt(tfs.Length - 1)) As Byte
+            tfs.Read(tbl, 0, tbl.Length)
+            tfs.Close()
             If My.Settings.saveencode = True Then
-                tw.Write(selstr(enc1))
+                str = selstr(enc1)
+                bs = ctbl.unicode2custom(str, tbl, sel)
+                tw.Write(bs, 0, bs.Length)
             End If
 
             Try
 
                 For Each n As TreeNode In m.codetree.Nodes(0).Nodes
 
-                    tw.Write("_S " & n.Tag.ToString.Trim & vbCrLf)
-                    tw.Write("_G " & n.Text.Trim & vbCrLf)
+                    str = "_S " & n.Tag.ToString.Trim & vbCrLf
+                    bs = ctbl.unicode2custom(str, tbl, sel)
+                    tw.Write(bs, 0, bs.Length)
+                    str = "_G " & n.Text.Trim & vbCrLf
+                    bs = ctbl.unicode2custom(str, tbl, sel)
+                    tw.Write(bs, 0, bs.Length)
 
                     For Each n1 As TreeNode In n.Nodes
 
                         If n1.Tag Is Nothing Then
 
                             If n1.Tag.ToString.Substring(0, 1) = "0" Then
-                                tw.Write("_C0 " & n1.Text.Trim & vbCrLf)
+                                str = "_C0 " & n1.Text.Trim & vbCrLf
+                                bs = ctbl.unicode2custom(str, tbl, sel)
+                                tw.Write(bs, 0, bs.Length)
                             Else
-                                tw.Write("_C1 " & n1.Text.Trim & vbCrLf)
+                                str = "_C0 " & n1.Text.Trim & vbCrLf
+                                bs = ctbl.unicode2custom(str, tbl, sel)
+                                tw.Write(bs, 0, bs.Length)
                             End If
-                            ' If the code title had no actual codes, don't save it
-                            'i += 1
-                            'write_errors(i, n.Text.Trim, n1.Text.Trim, "Error:  Code title contained no codes, not saved.")
-                            'errors = True
-
-                            'ElseIf n1.Tag.ToString.Trim >= "0" Or n1.Tag.ToString.Trim <= "5" Then
-
-                            '    If n1.Tag.ToString.Substring(0, 1) = "0" Then
-                            '        tw.Write("_C0 " & n1.Text.Trim & vbCrLf)
-                            '    Else
-                            '        tw.Write("_C1 " & n1.Text.Trim & vbCrLf)
-                            '    End If
-                            '    ' If the code title had no actual codes, don't save it
-                            '    'i += 1
-                            '    'write_errors(i, n.Text.Trim, n1.Text.Trim, "Error:  Code title contained no codes, not saved.")
-                            '    'errors = True
-
                         Else
 
                             buffer = n1.Tag.ToString.Split(CChar(vbCrLf))
@@ -227,7 +105,9 @@ Public Class save_db
                                         ElseIf s = "4" Then
                                             cwcar = "_N "
                                         End If
-                                        tw.Write("_C0 " & n1.Text.Trim & vbCrLf)
+                                        str = "_C0 " & n1.Text.Trim & vbCrLf
+                                        bs = ctbl.unicode2custom(str, tbl, sel)
+                                        tw.Write(bs, 0, bs.Length)
                                     ElseIf s = "1" Or s = "3" Or s = "5" Then
                                         If s = "1" Then
                                             cwcar = "_L "
@@ -236,19 +116,27 @@ Public Class save_db
                                         ElseIf s = "5" Then
                                             cwcar = "_N "
                                         End If
-                                        tw.Write("_C1 " & n1.Text.Trim & vbCrLf)
+                                        str = "_C1 " & n1.Text.Trim & vbCrLf
+                                        bs = ctbl.unicode2custom(str, tbl, sel)
+                                        tw.Write(bs, 0, bs.Length)
                                     End If
                                 ElseIf s.Length > 1 Then
 
                                     If s.Contains("#") Then
 
-                                        tw.Write(s.Trim & vbCrLf)
+                                        str = s.Trim & vbCrLf
+                                        bs = ctbl.unicode2custom(str, tbl, sel)
+                                        If bs.Length > 2 Then
+                                            tw.Write(bs, 0, bs.Length)
+                                        End If
 
                                     Else
                                         '0x00000000 0x00000000
                                         If s.Contains("0x") Then
 
-                                            tw.Write(cwcar & s.Trim & vbCrLf)
+                                            str = cwcar & s.Trim & vbCrLf
+                                            bs = ctbl.unicode2custom(str, tbl, sel)
+                                            tw.Write(bs, 0, bs.Length)
 
                                         Else
                                             ' Error, code length was incorrect
@@ -274,6 +162,120 @@ Public Class save_db
             End Try
 
             tw.Close()
+        Else
+            MessageBox.Show(unitable(sel) & "がありません,GOOGLECODEからダウンロードして下さい")
+        End If
+
+        Else
+
+
+        Dim tw As New StreamWriter(filename, False, _
+                                   System.Text.Encoding.GetEncoding(enc1))
+        Dim ew As error_window = error_window
+        Dim errors As Boolean = False
+        Dim cwcar As String = "_L "
+        Dim b1 As String = Nothing
+
+        reset_errors() ' Clear prior save errors if any
+
+        If My.Settings.saveencode = True Then
+            tw.Write(selstr(enc1))
+        End If
+
+        Try
+
+            For Each n As TreeNode In m.codetree.Nodes(0).Nodes
+
+                tw.Write("_S " & n.Tag.ToString.Trim & vbCrLf)
+                tw.Write("_G " & n.Text.Trim & vbCrLf)
+
+                For Each n1 As TreeNode In n.Nodes
+
+                    If n1.Tag Is Nothing Then
+
+                        If n1.Tag.ToString.Substring(0, 1) = "0" Then
+                            tw.Write("_C0 " & n1.Text.Trim & vbCrLf)
+                        Else
+                            tw.Write("_C1 " & n1.Text.Trim & vbCrLf)
+                        End If
+                        ' If the code title had no actual codes, don't save it
+                        'i += 1
+                        'write_errors(i, n.Text.Trim, n1.Text.Trim, "Error:  Code title contained no codes, not saved.")
+                        'errors = True
+
+                        'ElseIf n1.Tag.ToString.Trim >= "0" Or n1.Tag.ToString.Trim <= "5" Then
+
+                        '    If n1.Tag.ToString.Substring(0, 1) = "0" Then
+                        '        tw.Write("_C0 " & n1.Text.Trim & vbCrLf)
+                        '    Else
+                        '        tw.Write("_C1 " & n1.Text.Trim & vbCrLf)
+                        '    End If
+                        '    ' If the code title had no actual codes, don't save it
+                        '    'i += 1
+                        '    'write_errors(i, n.Text.Trim, n1.Text.Trim, "Error:  Code title contained no codes, not saved.")
+                        '    'errors = True
+
+                    Else
+
+                        buffer = n1.Tag.ToString.Split(CChar(vbCrLf))
+
+                        For Each s As String In buffer
+                            If s.Length = 1 Then
+                                If s = "0" Or s = "2" Or s = "4" Then
+                                    If s = "0" Then
+                                        cwcar = "_L "
+                                    ElseIf s = "2" Then
+                                        cwcar = "_M "
+                                    ElseIf s = "4" Then
+                                        cwcar = "_N "
+                                    End If
+                                    tw.Write("_C0 " & n1.Text.Trim & vbCrLf)
+                                ElseIf s = "1" Or s = "3" Or s = "5" Then
+                                    If s = "1" Then
+                                        cwcar = "_L "
+                                    ElseIf s = "3" Then
+                                        cwcar = "_M "
+                                    ElseIf s = "5" Then
+                                        cwcar = "_N "
+                                    End If
+                                    tw.Write("_C1 " & n1.Text.Trim & vbCrLf)
+                                End If
+                            ElseIf s.Length > 1 Then
+
+                                If s.Contains("#") Then
+
+                                    tw.Write(s.Trim & vbCrLf)
+
+                                Else
+                                    '0x00000000 0x00000000
+                                    If s.Contains("0x") Then
+
+                                        tw.Write(cwcar & s.Trim & vbCrLf)
+
+                                    Else
+                                        ' Error, code length was incorrect
+                                        i += 1
+                                        write_errors(i, n.Text.Trim, n1.Text.Trim, "不正なコード形式です: " & s.Trim)
+                                        errors = True
+                                    End If
+
+                                End If
+
+                            End If
+
+                        Next
+
+                    End If
+
+                Next
+
+            Next
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+        End Try
+
+        tw.Close()
         End If
 
     End Sub
@@ -284,11 +286,13 @@ Public Class save_db
         Dim i As Integer = 0 ' Error count
         Dim buffer As String()
 
-        If enc1 = 2132004 Or enc1 = 512132004 Then
-            Dim unitable As String() = {"table\custom_utf32", "table\custom_utf32_2"}
+
+        If enc1 = 512132004 Or enc1 = 2132004 Or enc1 = 951 Then
             Dim sel As Integer = 0
             If enc1 = 512132004 Then
                 sel = 1
+            ElseIf enc1 = 951 Then
+                sel = 2
             End If
 
             If File.Exists(unitable(sel)) = True Then

@@ -1,4 +1,9 @@
-M$にないJIS213てーぶるでTXT書きだす鶴です。
+M$にないJIS213てーぶるでTXT書きだす鶴です。カスタムテーブル+カスタム全角判定でいろいろでるかも
+
+2012/06/15
+CDEテスト用にextraを追加
+テスト用ファイルはBIG5HKSCS(CP951)
+キャレット位置のうにこーどを表示するようにした
 
 2012/06/10
 合成出力出来る場合はするようにした
@@ -17,3 +22,4 @@ by (ﾟ∀ﾟ)
 http://x0213.org/codetable/
 http://charset.uic.jp/show/shiftjis2004/
 http://www.gnu.org/software/libiconv/
+http://www.microsoft.com/hk/hkscs/code/HKSCS_91.htm

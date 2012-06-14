@@ -420,12 +420,11 @@ Partial Class MERGE
         '
         'BIG5
         '
-        Me.BIG5.Enabled = False
         Me.BIG5.Name = "BIG5"
         Me.BIG5.Size = New System.Drawing.Size(188, 22)
         Me.BIG5.Text = "Big5HKSCS(CP951)"
-        Me.BIG5.ToolTipText = "繁体字中国語+香港補字 Big5HKSCSのDBを編集します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "M$コードページ951" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "http://msdn.microsoft.com/en-us/gogl" & _
-    "obal/cc305155" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        Me.BIG5.ToolTipText = "繁体字中国語+香港補字 Big5HKSCSのDBを編集します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "M$コードページ951" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "http://www.microsoft.com/hk/hkscs/co" & _
+    "de/HKSCS.htm" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'EUCJP
         '

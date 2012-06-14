@@ -1079,7 +1079,7 @@ Public Class MERGE
             GBK.Checked = True
         ElseIf enc1 = 51932 Then
             EUCJP.Checked = True
-        ElseIf enc1 = 950 Then
+        ElseIf enc1 = 951 Then
             BIG5.Checked = True
         ElseIf enc1 = 512132004 Then
             EUCJIS20004.Checked = True

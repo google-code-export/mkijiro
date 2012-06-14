@@ -29,6 +29,8 @@ Partial Class Form1
         Me.RadioButton1 = New System.Windows.Forms.RadioButton()
         Me.RadioButton2 = New System.Windows.Forms.RadioButton()
         Me.Button1 = New System.Windows.Forms.Button()
+        Me.RadioButton3 = New System.Windows.Forms.RadioButton()
+        Me.unihex = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'READ
@@ -100,11 +102,33 @@ Partial Class Form1
         Me.Button1.Text = "FONT"
         Me.Button1.UseVisualStyleBackColor = True
         '
+        'RadioButton3
+        '
+        Me.RadioButton3.AutoSize = True
+        Me.RadioButton3.Location = New System.Drawing.Point(235, 8)
+        Me.RadioButton3.Name = "RadioButton3"
+        Me.RadioButton3.Size = New System.Drawing.Size(60, 16)
+        Me.RadioButton3.TabIndex = 9
+        Me.RadioButton3.TabStop = True
+        Me.RadioButton3.Text = "EXTRA"
+        Me.RadioButton3.UseVisualStyleBackColor = True
+        '
+        'unihex
+        '
+        Me.unihex.AutoSize = True
+        Me.unihex.Location = New System.Drawing.Point(333, 36)
+        Me.unihex.Name = "unihex"
+        Me.unihex.Size = New System.Drawing.Size(9, 12)
+        Me.unihex.TabIndex = 10
+        Me.unihex.Text = " "
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(421, 434)
+        Me.Controls.Add(Me.unihex)
+        Me.Controls.Add(Me.RadioButton3)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.RadioButton2)
         Me.Controls.Add(Me.RadioButton1)
@@ -127,5 +151,7 @@ Partial Class Form1
     Friend WithEvents RadioButton1 As System.Windows.Forms.RadioButton
     Friend WithEvents RadioButton2 As System.Windows.Forms.RadioButton
     Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents RadioButton3 As System.Windows.Forms.RadioButton
+    Friend WithEvents unihex As System.Windows.Forms.Label
 
 End Class
