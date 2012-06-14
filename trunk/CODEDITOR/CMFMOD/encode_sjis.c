@@ -356,7 +356,7 @@ int SJIS_UTF8SJIS(unsigned char *msg, int len)
 	return k;
 }
 
-//ワイド関数　utf8をutf16beに戻す,libconvのコピペ
+//ワイド関数utf8をutf16に戻す,libconvのコピペ
 static int utf8_mbtowc(ucs4_t *pwc, const unsigned char *s, int n)
 {
 	unsigned char c = s[0];
@@ -428,7 +428,7 @@ static int utf8_mbtowc(ucs4_t *pwc, const unsigned char *s, int n)
 		return RET_ILSEQ;
 }
 
-/* unicode -> cjk */ //UTF16巨大テーブルからEUC文字コードを取得
+/* unicode -> cjk */ //UTF16巨大テーブルからJIS文字コードを取得
 static int encode_uni2cjk(const unsigned char *uni,unsigned char *cjk, p_encodepack pack){
 	int transcount = 0;
 

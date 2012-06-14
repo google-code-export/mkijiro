@@ -39,6 +39,7 @@ Partial Class Form1
         Me.TOFUSTR = New System.Windows.Forms.ComboBox()
         Me.EX = New System.Windows.Forms.CheckBox()
         Me.sp = New System.Windows.Forms.CheckBox()
+        Me.Button3 = New System.Windows.Forms.Button()
         Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -187,12 +188,23 @@ Partial Class Form1
         Me.sp.Text = "NOM$"
         Me.sp.UseVisualStyleBackColor = True
         '
+        'Button3
+        '
+        Me.Button3.Location = New System.Drawing.Point(264, 184)
+        Me.Button3.Name = "Button3"
+        Me.Button3.Size = New System.Drawing.Size(19, 23)
+        Me.Button3.TabIndex = 16
+        Me.Button3.Text = "Button3"
+        Me.Button3.UseVisualStyleBackColor = True
+        Me.Button3.Visible = False
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(292, 219)
         Me.Controls.Add(Me.sp)
+        Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.TOFUSTR)
         Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.EX)
@@ -226,5 +238,6 @@ Partial Class Form1
     Friend WithEvents TOFUSTR As System.Windows.Forms.ComboBox
     Friend WithEvents EX As System.Windows.Forms.CheckBox
     Friend WithEvents sp As System.Windows.Forms.CheckBox
+    Friend WithEvents Button3 As System.Windows.Forms.Button
 
 End Class

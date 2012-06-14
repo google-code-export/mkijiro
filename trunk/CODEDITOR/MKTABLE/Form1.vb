@@ -12,6 +12,119 @@ Public Class Form1
         e.Handled = True
     End Sub
 
+    ' UTF32からUTF-8に変形
+    Private Sub Button3_Click(sender As System.Object, e As System.EventArgs) Handles Button3.Click
+        Dim bb As Byte() = Encoding.GetEncoding(12000).GetBytes(BASESTR.Text)
+        Dim wc As Integer = 0
+        Dim i As Integer = 0
+        Dim n As Integer = 0
+        While i < bb.Length
+            wc = BitConverter.ToInt32(bb, i)
+            n += utf32toutf8(bb, wc, n)
+            i += 4
+        End While
+
+        Array.Resize(bb, n)
+
+        CVTSTR.Text = Encoding.GetEncoding(65001).GetString(bb)
+
+    End Sub
+
+    ',libconvのVB用
+    Private Function utf32toutf8(r As Byte(), wc As Integer, n As Integer) As Integer
+        '        Static int
+        'utf8_wctomb (conv_t conv, unsigned char *r, ucs4_t wc, int n) /* n == 0 is acceptable */
+        '{
+        '  int count;
+        '  if (wc < 0x80)
+        '    count = 1;
+        '  else if (wc < 0x800)
+        '    count = 2;
+        '  else if (wc < 0x10000)
+        '    count = 3;
+        '  else if (wc < 0x200000)
+        '    count = 4;
+        '  else if (wc < 0x4000000)
+        '    count = 5;
+        '  else if (wc <= 0x7fffffff)
+        '    count = 6;
+        '        Else
+        '    return RET_ILUNI;
+        '            If (n < count)
+        '    return RET_TOOSMALL;
+        '  switch (count) { /* note: code falls through cases! */
+        '    case 6: r[5] = 0x80 | (wc & 0x3f); wc = wc >> 6; wc |= 0x4000000;
+        '    case 5: r[4] = 0x80 | (wc & 0x3f); wc = wc >> 6; wc |= 0x200000;
+        '    case 4: r[3] = 0x80 | (wc & 0x3f); wc = wc >> 6; wc |= 0x10000;
+        '    case 3: r[2] = 0x80 | (wc & 0x3f); wc = wc >> 6; wc |= 0x800;
+        '    case 2: r[1] = 0x80 | (wc & 0x3f); wc = wc >> 6; wc |= 0xc0;
+        '    case 1: r[0] = wc;
+        '  }
+        '  return count;
+        '}
+        Dim count As Integer = 0
+        Dim countbk As Integer = 0
+        If wc < &H80 Then
+            count = 1
+        ElseIf wc < &H800 Then
+            count = 2
+        ElseIf wc < &H10000 Then
+            count = 3
+        ElseIf wc < &H200000 Then
+            count = 4
+            'ElseIf wc < &H4000000 Then
+            '    count = 5
+            'ElseIf wc <= &H7FFFFFFF Then
+            '    count = 6
+        Else
+            'Return -1
+            Return 0
+        End If
+
+        'If n < count Then
+        '    Return -2
+        'End If
+        countbk = count
+
+        'If count = 6 Then
+        '    r(n + 5) = CByte(&H80 Or (wc And &H3F))
+        '    wc = wc >> 6
+        '    wc = wc Or &H4000000
+        '    count -= 1
+        'End If
+        'If count = 5 Then
+        '    r(n + 4) = CByte(&H80 Or (wc And &H3F))
+        '    wc = wc >> 6
+        '    wc = wc Or &H200000
+        '    count -= 1
+        'End If
+        If count = 4 Then
+            r(n + 3) = CByte(&H80 Or (wc And &H3F))
+            wc = wc >> 6
+            wc = wc Or &H10000
+            count -= 1
+        End If
+        If count = 3 Then
+            r(n + 2) = CByte(&H80 Or (wc And &H3F))
+            wc = wc >> 6
+            wc = wc Or &H800
+            count -= 1
+        End If
+        If count = 2 Then
+            r(n + 1) = CByte(&H80 Or (wc And &H3F))
+            wc = wc >> 6
+            wc = wc Or &HC0
+            count -= 1
+        End If
+        If count = 1 Then
+            r(n) = CByte(wc)
+        End If
+
+
+        Return countbk
+
+    End Function
+
 
     Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles Button1.Click
         Try
@@ -51,6 +164,9 @@ Public Class Form1
                             Dim sth3 As UInt64 = 0
                             Dim swap(3) As Byte
                             Dim ssss As String()
+                            Dim wc As Integer = 0
+                            Dim i As Integer = 0
+                            Dim n As Integer = 0
                             Dim z As Integer = 0
                             Dim uni As New Regex("(^0x[0-9A-fa-f]+|^&#x[0-9a-fA-F]+|&#[0-9]+|^u\+?[0-9A-fa-f]+|^U\+?[0-9A-fa-f]+)")
                             Dim unim As Match
@@ -104,59 +220,73 @@ Public Class Form1
                                     End If
 
                                     bbb = BitConverter.GetBytes(sth)
-                                    st = System.Text.Encoding.GetEncoding(12000).GetString(bbb)
+                                    If sp.Checked = False Then
+                                        st = System.Text.Encoding.GetEncoding(12000).GetString(bbb)
+                                        bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(st)
+                                    Else
+                                        'Dim bb As Byte() = Encoding.GetEncoding(12000).GetBytes(BASESTR.Text)
+                                        i = 0
+                                        n = 0
+                                        While i < bbb.Length
+                                            wc = BitConverter.ToInt32(bbb, i)
+                                            n += utf32toutf8(bbb, wc, n)
+                                            i += 4
+                                        End While
+                                        Array.Resize(bbb, n)
 
-                                    bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(st)
+                                        'CVTSTR.Text = Encoding.GetEncoding(65001).GetString(bb)
+                                    End If
+
                                 ElseIf sp.Checked = False Then
                                     bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(ssss(0))
                                 End If
 
-                                unim = uni.Match(ssss(1))
-                                If unim.Success Then
-                                    st = unim.Value
-                                    If st.Contains("x") Then
-                                        st = st.Replace("&#", "0")
-                                        sth3 = Convert.ToUInt64(st, 16)
-                                    ElseIf st.Contains("u") Then
-                                        st = st.Remove(0, 1)
-                                        st = st.Replace("+", "")
-                                        sth3 = Convert.ToUInt64(st, 16)
-                                    Else
-                                        st = st.Remove(0, 2)
-                                        sth3 = Convert.ToUInt64(st)
+                                    unim = uni.Match(ssss(1))
+                                    If unim.Success Then
+                                        st = unim.Value
+                                        If st.Contains("x") Then
+                                            st = st.Replace("&#", "0")
+                                            sth3 = Convert.ToUInt64(st, 16)
+                                        ElseIf st.Contains("u") Then
+                                            st = st.Remove(0, 1)
+                                            st = st.Replace("+", "")
+                                            sth3 = Convert.ToUInt64(st, 16)
+                                        Else
+                                            st = st.Remove(0, 2)
+                                            sth3 = Convert.ToUInt64(st)
+                                        End If
+
+                                        bb = BitConverter.GetBytes(sth3)
+                                        Array.Resize(bb, 4)
+                                        z = bb.Length - 1
+                                        For i = 0 To z
+                                            swap(i) = bb(z - i)
+                                        Next
+
+                                        If sth3 > &HFFFFFF Then
+                                            bb(0) = swap(0)
+                                            bb(1) = swap(1)
+                                            bb(2) = swap(2)
+                                            bb(3) = swap(3)
+                                        ElseIf sth3 > &HFFFF Then
+                                            bb(0) = swap(1)
+                                            bb(1) = swap(2)
+                                            bb(2) = swap(3)
+                                        ElseIf sth3 > &HFF Then
+                                            bb(0) = swap(2)
+                                            bb(1) = swap(3)
+                                        Else
+                                            bb(0) = swap(3)
+                                            bb(1) = 0
+                                        End If
+                                    ElseIf sp.Checked = False Then
+                                        bb = System.Text.Encoding.GetEncoding(enc).GetBytes(ssss(1))
                                     End If
 
-                                    bb = BitConverter.GetBytes(sth3)
-                                    Array.Resize(bb, 4)
-                                    z = bb.Length - 1
-                                    For i = 0 To z
-                                        swap(i) = bb(z - i)
-                                    Next
-
-                                    If sth3 > &HFFFFFF Then
-                                        bb(0) = swap(0)
-                                        bb(1) = swap(1)
-                                        bb(2) = swap(2)
-                                        bb(3) = swap(3)
-                                    ElseIf sth3 > &HFFFF Then
-                                        bb(0) = swap(1)
-                                        bb(1) = swap(2)
-                                        bb(2) = swap(3)
-                                    ElseIf sth3 > &HFF Then
-                                        bb(0) = swap(2)
-                                        bb(1) = swap(3)
-                                    Else
-                                        bb(0) = swap(3)
-                                        bb(1) = 0
+                                    If bb.Length >= 4 AndAlso sth < &H2FFFF Then
+                                        Array.Copy(bb, 0, bss, sth * 4, 4)
+                                        Array.Copy(bb, 0, bs, sth * 2, 2)
                                     End If
-                                ElseIf sp.Checked = False Then
-                                    bb = System.Text.Encoding.GetEncoding(enc).GetBytes(ssss(1))
-                                End If
-
-                                If bb.Length >= 4 AndAlso sth < &H2FFFF Then
-                                    Array.Copy(bb, 0, bss, sth * 4, 4)
-                                    Array.Copy(bb, 0, bs, sth * 2, 2)
-                                End If
 
                             End While
                             ssr.Close()
@@ -182,6 +312,9 @@ Public Class Form1
                     Dim c1 As Integer = 0
                     Dim c2 As Integer = 0
                     Dim c3 As Integer = 0
+                    Dim wc As Integer = 0
+                    Dim i As Integer = 0
+                    Dim n As Integer = 0
                     Dim bbb As Byte() = Nothing
                     Dim bbbb As Byte() = Nothing
                     Dim dest As Integer = 0
@@ -317,8 +450,24 @@ Public Class Form1
                                 End If
 
                                 bbb = BitConverter.GetBytes(sth)
-                                st = System.Text.Encoding.GetEncoding(12000).GetString(bbb)
-                                bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(st)
+
+
+                                If sp.Checked = False Then
+                                    st = System.Text.Encoding.GetEncoding(12000).GetString(bbb)
+                                    bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(st)
+                                Else
+                                    'Dim bb As Byte() = Encoding.GetEncoding(12000).GetBytes(BASESTR.Text)
+                                    i = 0
+                                    n = 0
+                                    While i < bbb.Length
+                                        wc = BitConverter.ToInt32(bbb, i)
+                                        n += utf32toutf8(bbb, wc, n)
+                                        i += 4
+                                    End While
+                                    Array.Resize(bbb, n)
+
+                                    'CVTSTR.Text = Encoding.GetEncoding(65001).GetString(bb)
+                                End If
                             ElseIf sp.Checked = False Then
                                 bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(ssss(0))
                             Else
@@ -632,6 +781,9 @@ Public Class Form1
                         Dim sth3 As UInt64 = 0
                         Dim swap(3) As Byte
                         Dim ssss As String()
+                        Dim wc As Integer = 0
+                        Dim k As Integer = 0
+                        Dim n As Integer = 0
                         Dim z As Integer = 0
                         Dim len As Integer
                         Dim len2 As Integer
@@ -686,9 +838,22 @@ Public Class Form1
                                     End If
                                 End If
                                 bbb = BitConverter.GetBytes(sth)
-                                st = System.Text.Encoding.GetEncoding(12000).GetString(bbb)
 
-                                bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(st)
+                                If sp.Checked = False Then
+                                    st = System.Text.Encoding.GetEncoding(12000).GetString(bbb)
+                                    bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(st)
+                                Else
+                                    k = 0
+                                    n = 0
+                                    While k < bbb.Length
+                                        wc = BitConverter.ToInt32(bbb, k)
+                                        n += utf32toutf8(bbb, wc, n)
+                                        k += 4
+                                    End While
+                                    Array.Resize(bbb, n)
+
+                                End If
+
                             ElseIf sp.Checked = False Then
                                 bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(ssss(0))
                             End If
@@ -1251,4 +1416,5 @@ Public Class Form1
         End If
 
     End Sub
+
 End Class

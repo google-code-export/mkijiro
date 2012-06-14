@@ -30,6 +30,7 @@
         {
             this.button1 = new System.Windows.Forms.Button();
             this.CMFUSION = new System.Windows.Forms.GroupBox();
+            this.CMGBK = new System.Windows.Forms.RadioButton();
             this.FC = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.FILER = new System.Windows.Forms.RadioButton();
@@ -47,7 +48,6 @@
             this.SEIKI = new System.Windows.Forms.CheckBox();
             this.JIS2SJIS = new System.Windows.Forms.ComboBox();
             this.button2 = new System.Windows.Forms.Button();
-            this.CMGBK = new System.Windows.Forms.RadioButton();
             this.CMFUSION.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -75,17 +75,28 @@
             this.CMFUSION.Size = new System.Drawing.Size(184, 119);
             this.CMFUSION.TabIndex = 5;
             this.CMFUSION.TabStop = false;
-            this.CMFUSION.Text = "圧縮ふぉんと";
+            this.CMFUSION.Text = "圧縮ふぉんと作成";
+            // 
+            // CMGBK
+            // 
+            this.CMGBK.AutoSize = true;
+            this.CMGBK.Location = new System.Drawing.Point(22, 79);
+            this.CMGBK.Name = "CMGBK";
+            this.CMGBK.Size = new System.Drawing.Size(124, 16);
+            this.CMGBK.TabIndex = 9;
+            this.CMGBK.TabStop = true;
+            this.CMGBK.Text = "CMF修正GBK12x12";
+            this.CMGBK.UseVisualStyleBackColor = true;
             // 
             // FC
             // 
             this.FC.AutoSize = true;
             this.FC.Location = new System.Drawing.Point(22, 57);
             this.FC.Name = "FC";
-            this.FC.Size = new System.Drawing.Size(146, 16);
+            this.FC.Size = new System.Drawing.Size(122, 16);
             this.FC.TabIndex = 8;
             this.FC.TabStop = true;
-            this.FC.Text = "FC/CMFSJIS12x12作成";
+            this.FC.Text = "FC/CMFSJIS12x12";
             this.FC.UseVisualStyleBackColor = true;
             // 
             // radioButton1
@@ -105,10 +116,10 @@
             this.FILER.AutoSize = true;
             this.FILER.Location = new System.Drawing.Point(22, 101);
             this.FILER.Name = "FILER";
-            this.FILER.Size = new System.Drawing.Size(134, 16);
+            this.FILER.Size = new System.Drawing.Size(138, 16);
             this.FILER.TabIndex = 6;
             this.FILER.TabStop = true;
-            this.FILER.Text = "6x12作成(FILER互換)";
+            this.FILER.Text = "FILER互換半全角6x12";
             this.FILER.UseVisualStyleBackColor = true;
             this.FILER.CheckedChanged += new System.EventHandler(this.FILER_CheckedChanged);
             // 
@@ -117,10 +128,10 @@
             this.CMF.AutoSize = true;
             this.CMF.Location = new System.Drawing.Point(22, 36);
             this.CMF.Name = "CMF";
-            this.CMF.Size = new System.Drawing.Size(128, 16);
+            this.CMF.Size = new System.Drawing.Size(104, 16);
             this.CMF.TabIndex = 5;
             this.CMF.TabStop = true;
-            this.CMF.Text = "CMF_EUC12x12作成";
+            this.CMF.Text = "CMF_EUC12x12";
             this.CMF.UseVisualStyleBackColor = true;
             this.CMF.CheckedChanged += new System.EventHandler(this.CMF_CheckedChanged_1);
             // 
@@ -260,9 +271,10 @@
             "S1S2-0x2020,(S1奇数判定+S2シフト),S1シフト(JIS208 規定)",
             "S1S2-0x2121,(S1奇数判定+S2シフト),S1シフト",
             "外部TXT変換テーブル使用",
-            "M$テーブル(ESC$B,ISO-2022-JP経由)",
-            "M$テーブル(+0x8080,EUC-JP経由)",
-            "SHIFT_JIS_2004(JIS213 2004規定)"});
+            "M$テーブル(ESC$B,ISO-2022-JP->CP932経由)",
+            "M$テーブル(+0x8080,EUC-JP->CP932経由)",
+            "SHIFT_JIS-2004(JIS213 2004規定)",
+            "94x94バイナリ形式リマップ表((c1-0x21)*94+c2-21)"});
             this.JIS2SJIS.Location = new System.Drawing.Point(5, 15);
             this.JIS2SJIS.Name = "JIS2SJIS";
             this.JIS2SJIS.Size = new System.Drawing.Size(196, 20);
@@ -279,17 +291,6 @@
             this.button2.Text = "復元";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Visible = false;
-            // 
-            // CMGBK
-            // 
-            this.CMGBK.AutoSize = true;
-            this.CMGBK.Location = new System.Drawing.Point(22, 79);
-            this.CMGBK.Name = "CMGBK";
-            this.CMGBK.Size = new System.Drawing.Size(148, 16);
-            this.CMGBK.TabIndex = 9;
-            this.CMGBK.TabStop = true;
-            this.CMGBK.Text = "CMF修正GBK12x12作成";
-            this.CMGBK.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 

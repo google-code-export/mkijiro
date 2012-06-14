@@ -10,14 +10,16 @@ Public Class Form1
 
     End Sub
 
-    Dim parsetest As String() = {"sjis2004test.txt", "eucjis2004.txt"}
-    Dim vstable As String() = {"table\sjisvsutf8", "table\eucvsutf8"}
-    Dim unitable As String() = {"table\custom_utf32", "table\custom_utf32_2"}
+    Dim parsetest As String() = {"sjis2004test.txt", "eucjis2004.txt", "extra.txt"}
+    Dim vstable As String() = {"table\sjisvsutf8", "table\eucvsutf8", "table\extra"}
+    Dim unitable As String() = {"table\custom_utf32", "table\custom_utf32_2", "table\custom_utf32_3"}
 
     Private Sub Button3_Click(sender As System.Object, e As System.EventArgs) Handles READ.Click
         Dim sel As Integer = 0
         If RadioButton2.Checked = True Then
             sel = 1
+        ElseIf RadioButton3.Checked = True Then
+            sel = 2
         End If
         If File.Exists(parsetest(sel)) Then
             Dim fs As New FileStream(parsetest(sel), FileMode.Open, FileAccess.Read)
@@ -141,7 +143,7 @@ Public Class Form1
                     End While
 
                     'EUC
-                Else
+                ElseIf RadioButton2.Checked = True Then
                     While i < bs.Length
                         c1 = bs(i)
                         If c1 < 128 Then
@@ -236,10 +238,10 @@ Public Class Form1
                                                 End If
                                             End If
 
-                                            ElseIf ct < &HF8 Then
-                                                k += 4
-                                            End If
+                                        ElseIf ct < &HF8 Then
+                                            k += 4
                                         End If
+                                    End If
                                 End If
                             Else
                                 Array.Copy(tofu, 0, bss, k, 3)
@@ -259,7 +261,69 @@ Public Class Form1
                         End If
 
                     End While
+
+                    'extra 'GBK/BIG5
+                ElseIf RadioButton3.Checked = True Then
+                    While i < bs.Length
+                        c1 = bs(i)
+                        If c1 < 128 Then
+                            '制御コード排除
+                            If (c1 < 32 AndAlso c1 <> &H9 AndAlso c1 <> &HD AndAlso c1 <> &HA) Or c1 = &H7F Then
+                                c1 = 32
+                            End If
+                            bss(k) = c1
+                            '改行CRLF化
+                            If c1 = &HA Then
+                                If k >= 0 Then
+                                    c2 = bss(k - 1)
+                                Else
+                                    c2 = 0
+                                End If
+                                If c2 <> &HD Then
+                                    bss(k) = &HD
+                                    bss(k + 1) = c1
+                                    k += 1
+                                End If
+                            End If
+                            k += 1
+                            i += 1
+                            'BIG5/GBK
+                        ElseIf (((c1 + &H7F) And &HFF) < &H7E) Then
+                            c2 = bs(i + 1)
+                            If c2 >= &H40 AndAlso c2 <= &HFE Then
+                                pos = (c1 - &H81) * 192 + c2 - &H40
+                                If pos * 4 < tbl.Length Then
+                                    Array.Copy(tbl, pos * 4, bss, k, 4)
+                                    ct = bss(k)
+                                    If ct = 0 Then
+                                        Array.Copy(tofu, 0, bss, k, 3)
+                                        k += 3
+                                    Else
+                                        If ct < &H80 Then
+                                            k += 1
+                                        ElseIf ct < &HC2 Then
+                                        ElseIf ct < &HE0 Then
+                                            k += 2
+                                        ElseIf ct < &HF0 Then
+                                            k += 3
+                                        ElseIf ct < &HF8 Then
+                                            k += 4
+                                        End If
+                                    End If
+                                End If
+                            Else
+                                Array.Copy(tofu, 0, bss, k, 3)
+                                k += 3
+                            End If
+                            i += 2
+                        Else
+                            i += 1
+                        End If
+
+                    End While
                 End If
+
+                Array.Resize(bss, k)
 
                 TextBox1.Text = Encoding.GetEncoding(65001).GetString(bss)
             Else
@@ -298,6 +362,8 @@ Public Class Form1
         Dim sel As Integer = 0
         If RadioButton2.Checked = True Then
             sel = 1
+        ElseIf RadioButton3.Checked = True Then
+            sel = 2
         End If
         If File.Exists(unitable(sel)) = True Then
             Dim fs As New FileStream("out.txt", FileMode.Create, FileAccess.Write)
@@ -362,6 +428,8 @@ Public Class Form1
                         c3 = bss(k + 2)
                         If i + 4 <= bs.Length Then
                             hex2 = BitConverter.ToUInt16(bs, i + 2)
+                        Else
+                            hex2 = 0
                         End If
 
                         If hex2 = &H309A AndAlso gouseimaru(pos) >= 0 Then
@@ -428,7 +496,7 @@ Public Class Form1
                 End While
 
                 'EUC
-            Else
+            ElseIf RadioButton2.Checked = True Then
                 While i < bs.Length
                     hex = BitConverter.ToUInt16(bs, i)
                     If hex >= &HD800 AndAlso hex <= &HDBFF Then
@@ -451,6 +519,8 @@ Public Class Form1
 
                         If i + 4 <= bs.Length Then
                             hex2 = BitConverter.ToUInt16(bs, i + 2)
+                        Else
+                            hex2 = 0
                         End If
 
                         If hex2 = &H309A AndAlso gouseimaru(pos) >= 0 Then
@@ -517,6 +587,41 @@ Public Class Form1
                     End If
                     i += 2
                 End While
+            ElseIf RadioButton3.Checked = True Then
+                While i < bs.Length
+                    hex = BitConverter.ToUInt16(bs, i)
+                    If hex >= &HD800 AndAlso hex <= &HDBFF Then
+                        i += 2
+                        hex2 = BitConverter.ToUInt16(bs, i)
+                        If hex2 >= &HDC00 AndAlso hex2 <= &HDFFF Then
+                            pos = (hex And &H3FF) * 1024 + (hex2 And &H3FF)
+                            pos += &H10000
+                        Else
+                            pos = tbl.Length
+                        End If
+                    Else
+                        pos = Convert.ToInt32(hex)
+                    End If
+                    If pos * 4 < tbl.Length Then
+                        Array.Copy(tbl, pos * 4, bss, k, 4)
+                        c1 = bss(k)
+                        c2 = bss(k + 1)
+                        c3 = bss(k + 2)
+
+                        If pos < 128 Then
+                            If pos < 32 AndAlso pos <> &HA AndAlso pos <> &HD AndAlso pos <> &H9 Then
+                                pos = 32
+                            End If
+                            bss(k) = pos
+                            k += 1
+                        ElseIf c1 = 0 AndAlso c2 = 0 Then
+                            'skip
+                        ElseIf ((c1 + &H7F) And &HFF) < &H7E AndAlso c2 >= &H40 Then
+                            k += 2
+                        End If
+                    End If
+            i += 2
+                End While
             End If
 
 
@@ -565,5 +670,16 @@ Public Class Form1
             My.Settings.font = fd.Font
             TextBox1.ForeColor = fd.Color
         End If
+    End Sub
+
+    Private Sub TextBox1_TextChanged(sender As System.Object, e As System.EventArgs) Handles TextBox1.KeyPress, TextBox1.KeyUp, TextBox1.KeyDown, TextBox1.TextChanged, TextBox1.Click
+        Dim iCaret As Integer = Me.TextBox1.SelectionStart
+        If iCaret < TextBox1.Text.Length Then
+            Dim s As String = TextBox1.Text.Substring(iCaret, 1)
+            unihex.Text = "U+" & BitConverter.ToInt32(Encoding.GetEncoding(12000).GetBytes(s), 0).ToString("X")
+        Else
+            unihex.Text = "[EOF]"
+        End If
+
     End Sub
 End Class

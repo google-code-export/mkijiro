@@ -4,7 +4,7 @@ Imports System.IO
 Public Class checkupdate
 
 
-    Dim extable As String() = {"table\sjisvsutf8", "table\eucvsutf8", "table\custom_utf32", "table\custom_utf32_2"}
+    Dim extable As String() = {"table\sjisvsutf8", "table\eucvsutf8", "table\big5vsutf8", "table\custom_utf32", "table\custom_utf32_2", "table\custom_utf32_3"}
 
     Public Sub CDEupater(ByVal mode As String)
 
@@ -23,7 +23,7 @@ Public Class checkupdate
                 Directory.CreateDirectory("table")
             End If
 
-            For i = 0 To 3
+            For i = 0 To 5
                 If File.Exists(extable(i)) = False Then
                     getweb(extable(i), tblbase & extable(i), 1)
                 End If

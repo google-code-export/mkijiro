@@ -9,8 +9,7 @@ Public Class load_db
             Dim filenamebk As String = filename
             If enc1 = 2132004 Or enc1 = 512132004 Or enc1 = 951 Then
                 Dim ctbl As New customtable
-                Dim tw As New StreamWriter(Application.StartupPath & "\table\tmp", False, _
-                                           System.Text.Encoding.GetEncoding(65001))
+                Dim tw As New StreamWriter(Application.StartupPath & "\table\tmp", False, System.Text.Encoding.GetEncoding(65001))
                 tw.Write(ctbl.custom_pasrse(filename, enc1))
                 tw.Close()
                 filename = Application.StartupPath & "\table\tmp"
@@ -1313,7 +1312,7 @@ Public Class load_db
     Public Function no_db(ByVal filename As String, ByVal enc1 As Integer) As Boolean
 
         Dim file As New FileStream(filename, FileMode.Open, FileAccess.Read)
-        If enc1 > 655535 Or enc1 = 1201 Then
+        If enc1 > 655535 Or enc1 = 1201 Or enc1 = 951 Then
             enc1 = 0
         End If
         Dim sr As New StreamReader(file, System.Text.Encoding.GetEncoding(enc1))
@@ -1366,8 +1365,13 @@ Public Class load_db
         Loop
 
         If nodb = True Then
-            MessageBox.Show("どのコードフォーマットに該当しませんでした。" & vbCrLf & _
-                            "CWC形式ならば_S,_G,_C0または_C1,_Lの順番どおりになっている確認して下さい。" & vbCrLf & _
+            MessageBox.Show("どのコードフォーマットに該当しませんでした。CWC形式ならば" & vbCrLf & _
+                            "_S ゲーム名" & vbCrLf & _
+                            "_G GAMEID" & vbCrLf & _
+                            "_C0 コード名(_C1だとコードON)" & vbCrLf & _
+                            "_L 0x12345678 0x12345678 (POPS時,_L 12345678 1234)" & vbCrLf & _
+                            "#コメント行" & vbCrLf & _
+                            "_の順番どおりになっているか確認して下さい。" & vbCrLf & _
                             "PROACTIONREPLAYやCODEFREAK専用のバイナリ形式は自動で判断されます。", "コード形式不明")
         End If
 

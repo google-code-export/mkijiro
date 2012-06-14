@@ -149,7 +149,7 @@ int UTF8SJIS_GBK(unsigned char *msg,int len){
 				}
 				else{
 	  			memcpy(&stm[k],&fbuffer[0],2);
-				k = k+2;
+				k +=2;
 				}
 				}
 				}
@@ -462,7 +462,7 @@ static int utf8_mbtowc(ucs4_t *pwc, const unsigned char *s, int n)
 		return RET_ILSEQ;
 }
 
-/* unicode -> cjk */ //UTF16巨大テーブルからEUC文字コードを取得
+/* unicode -> cjk */ //UTF16巨大テーブルからGBK文字コードを取得
 static int encode_uni2cjk(const unsigned char *uni,unsigned char *cjk, p_encodepack pack){
 	int transcount = 0;
 

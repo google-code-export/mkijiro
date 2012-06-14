@@ -352,7 +352,7 @@ int EUC_UTF8SJIS(unsigned char *msg, int len)
 	return k;
 }
 
-//ワイド関数　utf8をutf16beに戻す,libconvのコピペ
+//ワイド関数utf8をutf16に戻す,libconvのコピペ
 static int utf8_mbtowc(ucs4_t *pwc, const unsigned char *s, int n)
 {
 	unsigned char c = s[0];
