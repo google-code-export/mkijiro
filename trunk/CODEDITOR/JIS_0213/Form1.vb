@@ -7,26 +7,44 @@ Public Class Form1
     Private Sub INI(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
 
         TextBox1.Font = My.Settings.font
+        If My.Settings.out = True Then
+            outTX.Checked = True
+        End If
 
     End Sub
 
-    Dim parsetest As String() = {"sjis2004test.txt", "eucjis2004.txt", "extra.txt"}
+    Dim parsetest As String() = {"sjis2004test.txt", "eucjis2004.txt", "extra.txt", "out.txt"}
     Dim vstable As String() = {"table\sjisvsutf8", "table\eucvsutf8", "table\extra"}
     Dim unitable As String() = {"table\custom_utf32", "table\custom_utf32_2", "table\custom_utf32_3"}
 
-    Private Sub Button3_Click(sender As System.Object, e As System.EventArgs) Handles READ.Click
-        Dim sel As Integer = 0
-        If RadioButton2.Checked = True Then
+
+    Private Function sel_num(ByVal sel As Integer, ByVal mode As Integer) As Integer
+        sel = 0
+        If EUC.Checked = True Then
             sel = 1
-        ElseIf RadioButton3.Checked = True Then
+        ElseIf EX.Checked = True Then
             sel = 2
         End If
+        If mode = 0 AndAlso outTX.Checked = True Then
+            sel = 3
+        End If
+
+        Return sel
+    End Function
+
+    Private Sub Button3_Click(sender As System.Object, e As System.EventArgs) Handles READ.Click
+        Dim sel As Integer = 0
+        sel = sel_num(sel, 0)
+
         If File.Exists(parsetest(sel)) Then
             Dim fs As New FileStream(parsetest(sel), FileMode.Open, FileAccess.Read)
             Dim bs(CInt(fs.Length - 1)) As Byte
             Dim bss(CInt(fs.Length - 1) * 2) As Byte
             fs.Read(bs, 0, bs.Length)
             fs.Close()
+            If outTX.Checked = True Then
+                sel = sel_num(sel, 1)
+            End If
             If File.Exists(vstable(sel)) Then
                 Dim tfs As New FileStream(vstable(sel), FileMode.Open, FileAccess.Read)
                 Dim tbl(CInt(tfs.Length - 1)) As Byte
@@ -45,7 +63,7 @@ Public Class Form1
                 Dim i As Integer = 0
                 Dim k As Integer = 0
                 Dim pos As Integer = 0
-                If RadioButton1.Checked = True Then
+                If SJIS.Checked = True Then
                     'SJIS
                     While i < bs.Length
 
@@ -58,7 +76,7 @@ Public Class Form1
                             bss(k) = c1
                             '改行CRLF化
                             If c1 = &HA Then
-                                If k >= 0 Then
+                                If k > 0 Then
                                     c2 = bss(k - 1)
                                 Else
                                     c2 = 0
@@ -143,7 +161,7 @@ Public Class Form1
                     End While
 
                     'EUC
-                ElseIf RadioButton2.Checked = True Then
+                ElseIf EUC.Checked = True Then
                     While i < bs.Length
                         c1 = bs(i)
                         If c1 < 128 Then
@@ -154,7 +172,7 @@ Public Class Form1
                             bss(k) = c1
                             '改行CRLF化
                             If c1 = &HA Then
-                                If k >= 0 Then
+                                If k > 0 Then
                                     c2 = bss(k - 1)
                                 Else
                                     c2 = 0
@@ -263,7 +281,7 @@ Public Class Form1
                     End While
 
                     'extra 'GBK/BIG5
-                ElseIf RadioButton3.Checked = True Then
+                ElseIf EX.Checked = True Then
                     While i < bs.Length
                         c1 = bs(i)
                         If c1 < 128 Then
@@ -274,7 +292,7 @@ Public Class Form1
                             bss(k) = c1
                             '改行CRLF化
                             If c1 = &HA Then
-                                If k >= 0 Then
+                                If k > 0 Then
                                     c2 = bss(k - 1)
                                 Else
                                     c2 = 0
@@ -335,7 +353,6 @@ Public Class Form1
 
     End Sub
 
-
     Function gouseimaru(ByVal pos As Integer) As Integer
         Dim maru As Integer() = {&H304B, &H304D, &H304F, &H3051, &H3053, &H30AB, &H30AD, &H30AF, &H30B1, &H30B3, &H30BB, &H30C4, &H30C8, &H31F7}
         For i = 0 To maru.Length - 1
@@ -360,11 +377,7 @@ Public Class Form1
     Private Sub Button4_Click(sender As System.Object, e As System.EventArgs) Handles SAVE.Click
 
         Dim sel As Integer = 0
-        If RadioButton2.Checked = True Then
-            sel = 1
-        ElseIf RadioButton3.Checked = True Then
-            sel = 2
-        End If
+        sel = sel_num(sel, 1)
         If File.Exists(unitable(sel)) = True Then
             Dim fs As New FileStream("out.txt", FileMode.Create, FileAccess.Write)
             Dim bs As Byte() = Encoding.GetEncoding(1200).GetBytes(TextBox1.Text)
@@ -375,7 +388,10 @@ Public Class Form1
             tfs.Read(tbl, 0, tbl.Length)
             tfs.Close()
 
-            Dim tofu As Byte() = {&HE2, &H96, &HA1}
+            Dim tofusjis As Byte() = {&H81, &HA0}
+            Dim tofueuc As Byte() = {&HA2, &HA1}
+            Dim tofugb As Byte() = {&HA1, &HF5} 'GBK 0xa1f5 ,BIG5 0xa1bc
+            Dim tofuhk As Byte() = {&HA1, &HBC} '
             Dim maru As Byte() = {&HE3, &H82, &H9A}
             Dim ac As Byte() = {&HCC, &H80}
             Dim gousei As Byte() = {&HCB, &HA9, &HCB, &HA5}
@@ -405,8 +421,8 @@ Public Class Form1
             Dim hex As UInt16 = 0
             Dim hex2 As UInt16 = 0
             Dim pos As Int32 = 0
-            'SJIS
-            If RadioButton1.Checked = True Then
+            'SJIS2004
+            If SJIS.Checked = True Then
                 While i < bs.Length
                     hex = BitConverter.ToUInt16(bs, i)
                     If hex >= &HD800 AndAlso hex <= &HDBFF Then
@@ -483,11 +499,15 @@ Public Class Form1
                                 End If
                                 bss(k) = pos
                                 k += 1
-                            ElseIf c1 = 0 AndAlso c2 = 2 Then
-                                'skip
+                            ElseIf c1 = 0 AndAlso c2 = 0 Then
+                                Array.Copy(tofusjis, 0, bss, k, 2)
+                                k += 2
                             ElseIf c2 = 0 AndAlso c1 >= &HA1 AndAlso c1 <= &HDF Then
                                 k += 1
                             ElseIf (((c1 Xor &H20) + &H5F) And &HFF) < &H3C AndAlso c2 >= &H40 Then
+                                k += 2
+                            Else
+                                Array.Copy(tofusjis, 0, bss, k, 2)
                                 k += 2
                             End If
                         End If
@@ -495,8 +515,8 @@ Public Class Form1
                     i += 2
                 End While
 
-                'EUC
-            ElseIf RadioButton2.Checked = True Then
+                'EUC2004
+            ElseIf EUC.Checked = True Then
                 While i < bs.Length
                     hex = BitConverter.ToUInt16(bs, i)
                     If hex >= &HD800 AndAlso hex <= &HDBFF Then
@@ -575,19 +595,24 @@ Public Class Form1
                                 bss(k) = pos
                                 k += 1
                             ElseIf c1 = 0 AndAlso c2 = 0 Then
-                                'skip
+                                Array.Copy(tofueuc, 0, bss, k, 2)
+                                k += 2
                             ElseIf c1 = &H8E Then
                                 k += 2
                             ElseIf c1 = &H8F Then
                                 k += 3
                             ElseIf ((c1 + &H5F) And &HFF) < &H5E AndAlso c2 >= &HA1 Then
                                 k += 2
+                            Else
+                                Array.Copy(tofueuc, 0, bss, k, 2)
+                                k += 2
                             End If
                         End If
                     End If
                     i += 2
                 End While
-            ElseIf RadioButton3.Checked = True Then
+                'BIG5/GBK
+            ElseIf EX.Checked = True Then
                 While i < bs.Length
                     hex = BitConverter.ToUInt16(bs, i)
                     If hex >= &HD800 AndAlso hex <= &HDBFF Then
@@ -615,12 +640,17 @@ Public Class Form1
                             bss(k) = pos
                             k += 1
                         ElseIf c1 = 0 AndAlso c2 = 0 Then
+                            Array.Copy(tofuhk, 0, bss, k, 2)
+                            k += 2
                             'skip
                         ElseIf ((c1 + &H7F) And &HFF) < &H7E AndAlso c2 >= &H40 Then
                             k += 2
+                        Else
+                            Array.Copy(tofuhk, 0, bss, k, 2)
+                            k += 2
                         End If
                     End If
-            i += 2
+                    i += 2
                 End While
             End If
 
@@ -639,7 +669,7 @@ Public Class Form1
         TextBox1.Text = ""
     End Sub
 
-    Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles Button1.Click
+    Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles FONTs.Click
         Dim fd As New FontDialog()
 
         '初期のフォントを設定
@@ -674,12 +704,170 @@ Public Class Form1
 
     Private Sub TextBox1_TextChanged(sender As System.Object, e As System.EventArgs) Handles TextBox1.KeyPress, TextBox1.KeyUp, TextBox1.KeyDown, TextBox1.TextChanged, TextBox1.Click
         Dim iCaret As Integer = Me.TextBox1.SelectionStart
-        If iCaret < TextBox1.Text.Length Then
-            Dim s As String = TextBox1.Text.Substring(iCaret, 1)
-            unihex.Text = "U+" & BitConverter.ToInt32(Encoding.GetEncoding(12000).GetBytes(s), 0).ToString("X")
+        Dim s As String = ""
+        If iCaret < TextBox1.Text.Length - 1 Then
+            Dim bb As Byte() = Encoding.GetEncoding(1200).GetBytes(TextBox1.Text.Substring(iCaret, 2))
+            Dim sarrogate As UInteger = BitConverter.ToUInt32(bb, 0) And &HFFFF
+            Dim sarrogate2 As UInteger = BitConverter.ToUInt32(bb, 0) >> 16
+            If sarrogate < &HD800 Or sarrogate > &HDFFF Then
+                Array.Clear(bb, 2, 2)
+                unihex.Text = "UTF-32:U+" & sarrogate.ToString("X")
+                unihex.Text &= " UTF-16:U+" & sarrogate.ToString("X")
+                unihex.Text &= " UTF-8:" & getutf8(bb)
+            ElseIf sarrogate2 >= &HDC00 AndAlso sarrogate2 < &HE000 Then
+                Dim utf32 As UInt32 = &H10000 + ((sarrogate And &H3FF) << 10) Or (sarrogate2 And &H3FF)
+                unihex.Text = "UTF-32:U+" & utf32.ToString("X")
+                unihex.Text &= " UTF-16:U+" & sarrogate.ToString("X")
+                unihex.Text &= "+" & sarrogate2.ToString("X")
+                bb = BitConverter.GetBytes(utf32)
+                unihex.Text &= " UTF-8:" & getutf8(bb)
+            Else
+                unihex.Text = "U+" & sarrogate.ToString("X")
+                unihex.Text &= "+" & sarrogate2.ToString("X")
+                unihex.Text &= "は不正なサロゲートペアです"
+            End If
+        ElseIf iCaret = TextBox1.Text.Length - 1 Then
+            Dim bb As Byte() = Encoding.GetEncoding(1200).GetBytes(TextBox1.Text.Substring(iCaret, 1))
+            Dim sarrogate As UInteger = BitConverter.ToUInt16(bb, 0)
+            Array.Resize(bb, 4)
+            unihex.Text = "UTF-32:U+" & sarrogate.ToString("X")
+            unihex.Text &= " UTF-16:U+" & sarrogate.ToString("X")
+            unihex.Text &= " UTF-8:" & getutf8(bb)
         Else
             unihex.Text = "[EOF]"
         End If
 
+    End Sub
+
+
+    ' UTF32からUTF-8に変形
+    Private Function getutf8(ByVal bb As Byte()) As String
+        Dim wc As Integer = 0
+        Dim i As Integer = 0
+        Dim n As Integer = 0
+        Dim s As String = ""
+        While i < bb.Length
+            wc = BitConverter.ToInt32(bb, i)
+            n += utf32toutf8(bb, wc, n)
+            i += 4
+        End While
+        Array.Resize(bb, n)
+        For i = 0 To n - 1
+            s &= bb(i).ToString("X")
+        Next
+        Return s
+
+    End Function
+
+    ',libconvのVB用
+    Private Function utf32toutf8(r As Byte(), wc As Integer, n As Integer) As Integer
+        '        Static int
+        'utf8_wctomb (conv_t conv, unsigned char *r, ucs4_t wc, int n) /* n == 0 is acceptable */
+        '{
+        '  int count;
+        '  if (wc < 0x80)
+        '    count = 1;
+        '  else if (wc < 0x800)
+        '    count = 2;
+        '  else if (wc < 0x10000)
+        '    count = 3;
+        '  else if (wc < 0x200000)
+        '    count = 4;
+        '  else if (wc < 0x4000000)
+        '    count = 5;
+        '  else if (wc <= 0x7fffffff)
+        '    count = 6;
+        '        Else
+        '    return RET_ILUNI;
+        '            If (n < count)
+        '    return RET_TOOSMALL;
+        '  switch (count) { /* note: code falls through cases! */
+        '    case 6: r[5] = 0x80 | (wc & 0x3f); wc = wc >> 6; wc |= 0x4000000;
+        '    case 5: r[4] = 0x80 | (wc & 0x3f); wc = wc >> 6; wc |= 0x200000;
+        '    case 4: r[3] = 0x80 | (wc & 0x3f); wc = wc >> 6; wc |= 0x10000;
+        '    case 3: r[2] = 0x80 | (wc & 0x3f); wc = wc >> 6; wc |= 0x800;
+        '    case 2: r[1] = 0x80 | (wc & 0x3f); wc = wc >> 6; wc |= 0xc0;
+        '    case 1: r[0] = wc;
+        '  }
+        '  return count;
+        '}
+        Dim count As Integer = 0
+        Dim countbk As Integer = 0
+        If wc < &H80 Then
+            count = 1
+        ElseIf wc < &H800 Then
+            count = 2
+        ElseIf wc < &H10000 Then
+            count = 3
+        ElseIf wc < &H200000 Then
+            count = 4
+            'ElseIf wc < &H4000000 Then
+            '    count = 5
+            'ElseIf wc <= &H7FFFFFFF Then
+            '    count = 6
+        Else
+            'Return -1
+            Return 0
+        End If
+
+        'If n < count Then
+        '    Return -2
+        'End If
+        countbk = count
+
+        'If count = 6 Then
+        '    r(n + 5) = CByte(&H80 Or (wc And &H3F))
+        '    wc = wc >> 6
+        '    wc = wc Or &H4000000
+        '    count -= 1
+        'End If
+        'If count = 5 Then
+        '    r(n + 4) = CByte(&H80 Or (wc And &H3F))
+        '    wc = wc >> 6
+        '    wc = wc Or &H200000
+        '    count -= 1
+        'End If
+        If count = 4 Then
+            r(n + 3) = CByte(&H80 Or (wc And &H3F))
+            wc = wc >> 6
+            wc = wc Or &H10000
+            count -= 1
+        End If
+        If count = 3 Then
+            r(n + 2) = CByte(&H80 Or (wc And &H3F))
+            wc = wc >> 6
+            wc = wc Or &H800
+            count -= 1
+        End If
+        If count = 2 Then
+            r(n + 1) = CByte(&H80 Or (wc And &H3F))
+            wc = wc >> 6
+            wc = wc Or &HC0
+            count -= 1
+        End If
+        If count = 1 Then
+            r(n) = CByte(wc)
+        End If
+
+
+        Return countbk
+
+    End Function
+
+
+    Private Sub EUC_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles EUC.CheckedChanged
+        My.Settings.sel = 512132004
+    End Sub
+
+    Private Sub EX_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles EX.CheckedChanged
+        My.Settings.sel = 951
+    End Sub
+
+    Private Sub SJIS_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles SJIS.CheckedChanged
+        My.Settings.sel = 2132004
+    End Sub
+
+    Private Sub outTX_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles outTX.CheckedChanged
+        My.Settings.out = outTX.Checked
     End Sub
 End Class

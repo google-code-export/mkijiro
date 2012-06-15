@@ -65,6 +65,30 @@ Namespace My
                 Me("font") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("2132004")>  _
+        Public Property sel() As Integer
+            Get
+                Return CType(Me("sel"),Integer)
+            End Get
+            Set
+                Me("sel") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property out() As Boolean
+            Get
+                Return CType(Me("out"),Boolean)
+            End Get
+            Set
+                Me("out") = value
+            End Set
+        End Property
     End Class
 End Namespace
 
