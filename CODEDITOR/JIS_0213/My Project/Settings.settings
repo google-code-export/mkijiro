@@ -5,5 +5,11 @@
     <Setting Name="font" Type="System.Drawing.Font" Scope="User">
       <Value Profile="(Default)">MS UI Gothic, 9pt</Value>
     </Setting>
+    <Setting Name="sel" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">2132004</Value>
+    </Setting>
+    <Setting Name="out" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
