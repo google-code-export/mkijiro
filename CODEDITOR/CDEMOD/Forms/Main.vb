@@ -36,6 +36,13 @@ Public Class MERGE
 
         End If
 
+        If My.Settings.checkcpstr = True Then
+            cpstring.Checked = True
+        End If
+        If My.Settings.autocp = True Then
+            zenkakuwitherror.Checked = True
+        End If
+
         If My.Settings.GBKOP = True Then
             GBKOP.Checked = True
         End If
@@ -141,7 +148,7 @@ Public Class MERGE
         End If
 
         For Each cmd As String In My.Application.CommandLineArgs
-                My.Settings.lastcodepath = cmd
+            My.Settings.lastcodepath = cmd
         Next
 
         If System.IO.File.Exists(My.Settings.lastcodepath) = True Then
@@ -1069,6 +1076,8 @@ Public Class MERGE
         UTF16BE.Enabled = False
         EUCJIS20004.Checked = False
         SHIFTJIS2004.Checked = False
+        CCP.Checked = False
+        UHC.Checked = False
 
         If enc1 = 932 Then
             SJIS.Checked = True
@@ -1081,11 +1090,17 @@ Public Class MERGE
             EUCJP.Checked = True
         ElseIf enc1 = 951 Then
             BIG5.Checked = True
+        ElseIf enc1 = 949 Then
+            UHC.Checked = True
         ElseIf enc1 = 512132004 Then
             EUCJIS20004.Checked = True
         ElseIf enc1 = 2132004 Then
             SHIFTJIS2004.Checked = True
+        ElseIf enc1 = My.Settings.usercp Then
+            CCP.Checked = True
         End If
+
+        CCP.ToolTipText = "コンボボックスから対応M$コードページを指定します" & vbCrLf & "指定コード:" & My.Settings.cpstr
 
         Return 0
 
@@ -1145,6 +1160,28 @@ Public Class MERGE
         'エンコードを指定する場合
         enc1 = 1201
         reset_codepage()
+    End Sub
+
+
+    Private Sub CCP_Click(sender As System.Object, e As System.EventArgs) Handles CCP.Click
+
+        Dim f As New codepage
+        f.ShowDialog()
+        f.Dispose()
+
+        If My.Settings.MSCODEPAGE = My.Settings.usercp Then
+            enc1 = My.Settings.usercp
+            reset_codepage()
+        End If
+
+    End Sub
+
+    Private Sub EUCKR_Click(sender As System.Object, e As System.EventArgs) Handles UHC.Click
+
+        My.Settings.MSCODEPAGE = 949
+        enc1 = 949
+        reset_codepage()
+
     End Sub
 
 #End Region
@@ -3058,4 +3095,24 @@ Public Class MERGE
         End If
     End Sub
 
+    Private Sub cpstring_Click(sender As System.Object, e As System.EventArgs) Handles cpstring.Click
+        If My.Settings.checkcpstr = False Then
+            cpstring.Checked = True
+            My.Settings.checkcpstr = True
+        Else
+            cpstring.Checked = False
+            My.Settings.checkcpstr = False
+        End If
+    End Sub
+
+    Private Sub zenkakuwitherror_Click(sender As System.Object, e As System.EventArgs) Handles zenkakuwitherror.Click
+
+        If My.Settings.autocp = False Then
+            zenkakuwitherror.Checked = True
+            My.Settings.autocp = True
+        Else
+            zenkakuwitherror.Checked = False
+            My.Settings.autocp = False
+        End If
+    End Sub
 End Class

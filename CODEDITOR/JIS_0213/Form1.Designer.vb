@@ -32,7 +32,8 @@ Partial Class Form1
         Me.EX = New System.Windows.Forms.RadioButton()
         Me.unihex = New System.Windows.Forms.Label()
         Me.outTX = New System.Windows.Forms.CheckBox()
-        Me.SuspendLayout
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.SuspendLayout()
         '
         'READ
         '
@@ -41,14 +42,14 @@ Partial Class Form1
         Me.READ.Size = New System.Drawing.Size(87, 23)
         Me.READ.TabIndex = 2
         Me.READ.Text = "読み込みテスト"
-        Me.READ.UseVisualStyleBackColor = true
+        Me.READ.UseVisualStyleBackColor = True
         '
         'TextBox1
         '
-        Me.TextBox1.Font = New System.Drawing.Font("メイリオ", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128,Byte))
+        Me.TextBox1.Font = New System.Drawing.Font("メイリオ", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.TextBox1.Location = New System.Drawing.Point(27, 60)
         Me.TextBox1.MaxLength = 0
-        Me.TextBox1.Multiline = true
+        Me.TextBox1.Multiline = True
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.TextBox1.Size = New System.Drawing.Size(373, 362)
@@ -61,7 +62,7 @@ Partial Class Form1
         Me.SAVE.Size = New System.Drawing.Size(75, 23)
         Me.SAVE.TabIndex = 4
         Me.SAVE.Text = "保存"
-        Me.SAVE.UseVisualStyleBackColor = true
+        Me.SAVE.UseVisualStyleBackColor = True
         '
         'CLEAR
         '
@@ -70,29 +71,29 @@ Partial Class Form1
         Me.CLEAR.Size = New System.Drawing.Size(75, 23)
         Me.CLEAR.TabIndex = 5
         Me.CLEAR.Text = "初期化"
-        Me.CLEAR.UseVisualStyleBackColor = true
+        Me.CLEAR.UseVisualStyleBackColor = True
         '
         'SJIS
         '
-        Me.SJIS.AutoSize = true
-        Me.SJIS.Checked = true
+        Me.SJIS.AutoSize = True
+        Me.SJIS.Checked = True
         Me.SJIS.Location = New System.Drawing.Point(27, 9)
         Me.SJIS.Name = "SJIS"
         Me.SJIS.Size = New System.Drawing.Size(100, 16)
         Me.SJIS.TabIndex = 6
-        Me.SJIS.TabStop = true
+        Me.SJIS.TabStop = True
         Me.SJIS.Text = "SHIFTJIS_2004"
-        Me.SJIS.UseVisualStyleBackColor = true
+        Me.SJIS.UseVisualStyleBackColor = True
         '
         'EUC
         '
-        Me.EUC.AutoSize = true
+        Me.EUC.AutoSize = True
         Me.EUC.Location = New System.Drawing.Point(133, 9)
         Me.EUC.Name = "EUC"
         Me.EUC.Size = New System.Drawing.Size(95, 16)
         Me.EUC.TabIndex = 7
         Me.EUC.Text = "EUC_JIS_2004"
-        Me.EUC.UseVisualStyleBackColor = true
+        Me.EUC.UseVisualStyleBackColor = True
         '
         'FONTs
         '
@@ -101,22 +102,22 @@ Partial Class Form1
         Me.FONTs.Size = New System.Drawing.Size(75, 23)
         Me.FONTs.TabIndex = 8
         Me.FONTs.Text = "FONT"
-        Me.FONTs.UseVisualStyleBackColor = true
+        Me.FONTs.UseVisualStyleBackColor = True
         '
         'EX
         '
-        Me.EX.AutoSize = true
+        Me.EX.AutoSize = True
         Me.EX.Location = New System.Drawing.Point(235, 8)
         Me.EX.Name = "EX"
         Me.EX.Size = New System.Drawing.Size(60, 16)
         Me.EX.TabIndex = 9
-        Me.EX.TabStop = true
+        Me.EX.TabStop = True
         Me.EX.Text = "EXTRA"
-        Me.EX.UseVisualStyleBackColor = true
+        Me.EX.UseVisualStyleBackColor = True
         '
         'unihex
         '
-        Me.unihex.AutoSize = true
+        Me.unihex.AutoSize = True
         Me.unihex.Location = New System.Drawing.Point(25, 425)
         Me.unihex.Name = "unihex"
         Me.unihex.Size = New System.Drawing.Size(141, 12)
@@ -133,11 +134,21 @@ Partial Class Form1
         Me.outTX.Text = "out.txtを読む"
         Me.outTX.UseVisualStyleBackColor = True
         '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(357, 425)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(9, 12)
+        Me.Label1.TabIndex = 12
+        Me.Label1.Text = " "
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(421, 442)
+        Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.outTX)
         Me.Controls.Add(Me.unihex)
         Me.Controls.Add(Me.EX)
@@ -166,5 +177,6 @@ End Sub
     Friend WithEvents EX As System.Windows.Forms.RadioButton
     Friend WithEvents unihex As System.Windows.Forms.Label
     Friend WithEvents outTX As System.Windows.Forms.CheckBox
+    Friend WithEvents Label1 As System.Windows.Forms.Label
 
 End Class
