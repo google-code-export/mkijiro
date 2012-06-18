@@ -10,7 +10,12 @@ Public Class load_db
             If enc1 = 2132004 Or enc1 = 512132004 Or enc1 = 951 Then
                 Dim ctbl As New customtable
                 Dim tw As New StreamWriter(Application.StartupPath & "\table\tmp", False, System.Text.Encoding.GetEncoding(65001))
-                tw.Write(ctbl.custom_pasrse(filename, enc1))
+
+                Dim fs As New FileStream(filename, FileMode.Open, FileAccess.Read)
+                Dim bs(CInt(fs.Length - 1)) As Byte
+                fs.Read(bs, 0, bs.Length)
+                fs.Close()
+                tw.Write(ctbl.custom_pasrse(bs, enc1))
                 tw.Close()
                 filename = Application.StartupPath & "\table\tmp"
                 enc1 = 65001
@@ -408,13 +413,6 @@ Public Class load_db
 
             End If
 
-            Dim enctable As Integer() = {1200, 12000, 12001, 65001}
-            For i = 0 To 3
-                If My.Settings.MSCODEPAGE = enctable(i) Then
-                    My.Settings.MSCODEPAGE = 1201
-                End If
-            Next
-
             m.progbar.Visible = False
             sr.Close()
             file.Close()
@@ -430,9 +428,13 @@ Public Class load_db
             Dim filenamebk As String = filename
             If enc1 = 2132004 Or enc1 = 512132004 Or enc1 = 951 Then
                 Dim ctbl As New customtable
-                Dim tw As New StreamWriter(Application.StartupPath & "\table\tmp", False, _
-                                           System.Text.Encoding.GetEncoding(65001))
-                tw.Write(ctbl.custom_pasrse(filename, enc1))
+                Dim tw As New StreamWriter(Application.StartupPath & "\table\tmp", False, System.Text.Encoding.GetEncoding(65001))
+
+                Dim fs As New FileStream(filename, FileMode.Open, FileAccess.Read)
+                Dim bs(CInt(fs.Length - 1)) As Byte
+                fs.Read(bs, 0, bs.Length)
+                fs.Close()
+                tw.Write(ctbl.custom_pasrse(bs, enc1))
                 tw.Close()
                 filename = Application.StartupPath & "\table\tmp"
                 enc1 = 65001
@@ -442,8 +444,7 @@ Public Class load_db
             Dim ew As error_window = error_window
             Dim memory As New MemoryManagement
             Dim file As New FileStream(filename, FileMode.Open, FileAccess.Read)
-            Dim sr As New StreamReader(file, _
-                                       System.Text.Encoding.GetEncoding(enc1))
+            Dim sr As New StreamReader(file, System.Text.Encoding.GetEncoding(enc1))
 
             If filename = Application.StartupPath & "\table\tmp" Then
                 filename = filenamebk
@@ -760,13 +761,6 @@ Public Class load_db
                 reset_toolbar()
             End If
 
-            Dim enctable As Integer() = {1200, 12000, 12001, 65001}
-
-            For i = 0 To 3
-                If My.Settings.MSCODEPAGE = enctable(i) Then
-                    My.Settings.MSCODEPAGE = 1201
-                End If
-            Next
 
             m.progbar.Visible = False
             sr.Close()
@@ -1185,65 +1179,77 @@ Public Class load_db
 
     End Function
 
+    Dim enctable As Integer() = {0, 37, 437, 500, 708, 709, 710, 720, 737, 775, 850, 852, 855, 857, 858, 860, 861, 862, 863, 864, 865, 866, 869, 870, 874, 875, 932, 936, 949, 950, 1026, 1047, 1140, 1141, 1142, 1143, 1144, 1145, 1146, 1147, 1148, 1149, 1200, 1201, 1250, 1251, 1252, 1253, 1254, 1255, 1256, 1257, 1258, 1361, 10000, 10001, 10002, 10003, 10004, 10005, 10006, 10007, 10008, 10010, 10017, 10021, 10029, 10079, 10081, 10082, 12000, 12001, 20000, 20001, 20002, 20003, 20004, 20005, 20105, 20106, 20107, 20108, 20127, 20261, 20269, 20273, 20277, 20278, 20280, 20284, 20285, 20290, 20297, 20420, 20423, 20424, 20833, 20838, 20866, 20871, 20880, 20905, 20924, 20932, 20936, 20949, 21025, 21027, 21866, 28591, 28592, 28593, 28594, 28595, 28596, 28597, 28598, 28599, 28603, 28605, 29001, 38598, 50220, 50221, 50222, 50225, 50227, 50229, 50930, 50931, 50933, 50935, 50936, 50937, 50939, 51932, 51936, 51949, 51950, 52936, 54936, 57002, 57003, 57004, 57005, 57006, 57007, 57008, 57009, 57010, 57011, 65000, 65001, 951, 2132004, 512132004}
+
     Public Function check_enc(ByVal filename As String) As Integer
 
-        Dim enctable As Integer() = {0, 932, 936, 951, 51932, 2132004, 512132004, 1201, 1200, 12000, 12001, 65001}
+        Dim file As New FileStream(filename, FileMode.Open, FileAccess.Read)
+        Dim cp(20) As Byte
+        Dim str As String
+        If file.Length < 21 Then
+            file.Read(cp, 0, 20)
+        ElseIf file.Length > 1000 Then
+            Array.Resize(cp, 1000)
+            file.Read(cp, 0, 1000)
+        ElseIf file.Length > 300 Then
+            Array.Resize(cp, 300)
+            file.Read(cp, 0, 300)
+        End If
+        file.Close()
 
-        If My.Settings.saveencode = True Then
-            Dim file As New FileStream(filename, FileMode.Open, FileAccess.Read)
-            Dim cp(30) As Byte
-            Dim str As String
-            If file.Length > 30 Then
-                file.Read(cp, 0, 30)
-            End If
-            file.Close()
+        If My.Settings.checkcpstr = True Or My.Settings.autocp = True Then
             '5B 43 50 39 33 36 5D
-            If cp(0) = &H5B Then
+            If My.Settings.checkcpstr = True AndAlso cp(0) = &H5B Then
                 str = Encoding.GetEncoding(0).GetString(cp)
                 Dim r As New Regex("^\[.+\]", RegexOptions.ECMAScript)
                 Dim m As Match = r.Match(str)
                 If m.Success Then
                     str = m.Value
-                    If str.Contains("Shift_JIS") Or str.Contains("Windows-31J") Or str = "[CP932]" Then
+                    If (str.Contains("2004") = False AndAlso (str.Contains("Shift_JIS") Or str.Contains("Windows-31J"))) Or str = "[CP932]" Then
                         Return 932
                     ElseIf str = "[GBK]" Or str = "[CP936]" Then
                         Return 936
                     ElseIf str = "[Big5-HKSCS]" Or str = "[CP951]" Then
                         Return 951
-                        'ElseIf str = "[UTF16BE]" Or str = "[CP1201]" Then
-                        '    Return 1201
-                        'ElseIf str = "[UTF16LE]" Or str = "[CP1200]" Then
-                        '    Return 1200
-                        'ElseIf str = "[UTF-8]" Or str = "[CP65001]" Then
-                        '    Return 65001
+                    ElseIf str = "[UHC]" Or str = "[CP949]" Then
+                        Return 949
                     ElseIf str = "[EUC-JP]" Or str = "[CP51932]" Then
                         Return 51932
                     ElseIf str = "[Shift_JIS-2004]" Or str = "[CP2132004]" Then
                         Return 2132004
                     ElseIf str = "[EUC-JIS-2004]" Or str = "[CP512132004]" Then
                         Return 512132004
+                    ElseIf str = "[USER_CUSTOM]" Or str.Contains("CP") Then
+                        Return My.Settings.usercp
                     End If
                 End If
-            Else
-                If cp(0) = &H0 AndAlso cp(1) = &H0 AndAlso cp(2) = &HFE AndAlso cp(3) = &HFF Then
-                    My.Settings.MSCODEPAGE = 12001
-                ElseIf cp(0) = &HFF AndAlso cp(1) = &HFE AndAlso cp(2) = &H0 AndAlso cp(3) = &H0 Then
-                    My.Settings.MSCODEPAGE = 12000
-                ElseIf cp(0) = &HEF AndAlso cp(1) = &HBB AndAlso cp(2) = &HBF Then
-                    My.Settings.MSCODEPAGE = 65001
-                ElseIf cp(0) = &HFE AndAlso cp(1) = &HFF Then
-                    My.Settings.MSCODEPAGE = 1201
-                ElseIf cp(0) = &HFF AndAlso cp(1) = &HFE Then
-                    My.Settings.MSCODEPAGE = 1200
-                End If
+            End If
+
+            If My.Settings.autocp = True Then
+                My.Settings.MSCODEPAGE = GetCode(cp)
             End If
         End If
 
-        For i = 0 To 11
+        If cp(0) = &H0 AndAlso cp(1) = &H0 AndAlso cp(2) = &HFE AndAlso cp(3) = &HFF Then
+            My.Settings.MSCODEPAGE = 12001
+        ElseIf cp(0) = &HFF AndAlso cp(1) = &HFE AndAlso cp(2) = &H0 AndAlso cp(3) = &H0 Then
+            My.Settings.MSCODEPAGE = 12000
+        ElseIf cp(0) = &HEF AndAlso cp(1) = &HBB AndAlso cp(2) = &HBF Then
+            My.Settings.MSCODEPAGE = 65001
+        ElseIf cp(0) = &HFE AndAlso cp(1) = &HFF Then
+            My.Settings.MSCODEPAGE = 1201
+        ElseIf cp(0) = &HFF AndAlso cp(1) = &HFE Then
+            My.Settings.MSCODEPAGE = 1200
+        End If
+
+        For i = 0 To enctable.Length - 1
             If My.Settings.MSCODEPAGE = enctable(i) Then
+                My.Settings.usercp = My.Settings.MSCODEPAGE
                 Return My.Settings.MSCODEPAGE
             End If
         Next
+
+        Dim k As Integer = My.Settings.MSCODEPAGE
 
         MessageBox.Show("対応してないエンコードのようです,デフォルトコードページ0にします")
         My.Settings.MSCODEPAGE = 0
@@ -1252,15 +1258,332 @@ Public Class load_db
 
     End Function
 
+    ''' <summary>
+    ''' 文字コードを判別する
+    ''' </summary>
+    ''' <remarks>
+    ''' Jcode.pmのgetcodeメソッドを移植したものです。
+    ''' Jcode.pm(http://openlab.ring.gr.jp/Jcode/index-j.html)
+    ''' Jcode.pmのCopyright: Copyright 1999-2005 Dan Kogai
+    ''' </remarks>
+    ''' <param name="bytes">文字コードを調べるデータ</param>
+    ''' <returns>適当と思われるEncodingオブジェクト。
+    ''' 判断できなかった時はnull。</returns>
+    Public Function GetCode(ByVal bytes As Byte()) As Integer
+        Const bEscape As Byte = &H1B
+        Const bAt As Byte = &H40
+        Const bDollar As Byte = &H24
+        Const bAnd As Byte = &H26
+        Const bOpen As Byte = &H28 ''('
+        Const bB As Byte = &H42
+        Const bD As Byte = &H44
+        Const bJ As Byte = &H4A
+        Const bI As Byte = &H49
+        Dim ctbl As New customtable
+
+        Dim len As Integer = bytes.Length
+        Dim b1 As Byte, b2 As Byte, b3 As Byte, b4 As Byte
+
+        'Encode::is_utf8 は無視
+
+        Dim isBinary As Boolean = False
+        Dim i As Integer
+        For i = 0 To len - 1
+            b1 = bytes(i)
+            If b1 <= &H6 OrElse b1 = &H7F OrElse b1 = &HFF Then
+                ''binary'
+                isBinary = True
+                If b1 = &H0 AndAlso i < len - 1 AndAlso bytes(i + 1) <= &H7F Then
+                    'smells like raw unicode
+                    Return 1200
+                End If
+            End If
+        Next
+        If isBinary Then
+            Return Nothing
+        End If
+
+        'not Japanese
+        Dim notJapanese As Boolean = True
+        For i = 0 To len - 1
+            b1 = bytes(i)
+            If b1 = bEscape OrElse &H80 <= b1 Then
+                notJapanese = False
+                Exit For
+            End If
+        Next
+        If notJapanese Then
+            Return 20127
+        End If
+
+        For i = 0 To len - 3
+            b1 = bytes(i)
+            b2 = bytes(i + 1)
+            b3 = bytes(i + 2)
+
+            If b1 = bEscape Then
+                If b2 = bDollar AndAlso b3 = bAt Then
+                    'JIS_0208 1978
+                    'JIS
+                    Return 50220
+                ElseIf b2 = bDollar AndAlso b3 = bB Then
+                    'JIS_0208 1983
+                    'JIS
+                    Return 50220
+                ElseIf b2 = bOpen AndAlso (b3 = bB OrElse b3 = bJ) Then
+                    'JIS_ASC
+                    'JIS
+                    Return 50220
+                ElseIf b2 = bOpen AndAlso b3 = bI Then
+                    'JIS_KANA
+                    'JIS
+                    Return 50220
+                End If
+                If i < len - 3 Then
+                    b4 = bytes(i + 3)
+                    If b2 = bDollar AndAlso b3 = bOpen AndAlso b4 = bD Then
+                        'JIS_0212
+                        'JIS
+                        Return 50220
+                    End If
+                    If i < len - 5 AndAlso _
+                        b2 = bAnd AndAlso b3 = bAt AndAlso b4 = bEscape AndAlso _
+                        bytes(i + 4) = bDollar AndAlso bytes(i + 5) = bB Then
+                        'JIS_0208 1990
+                        'JIS
+                        Return 50220
+                    End If
+                End If
+            End If
+        Next
+
+        'should be euc|sjis|utf8
+        'use of (?:) by Hiroki Ohzaki <ohzaki@iod.ricoh.co.jp>
+        Dim enc As Integer() = {0, 0, 0, 0, 0, 0}
+        Dim encode As String() = {"sjis", "euc", "utf8", "gbk", "big5", "uhc"}
+
+
+        For i = 0 To len - 2
+            b1 = bytes(i)
+            b2 = bytes(i + 1)
+            If ((&H81 <= b1 AndAlso b1 <= &H9F) OrElse _
+                (&HE0 <= b1 AndAlso b1 <= &HFC)) AndAlso _
+                ((&H40 <= b2 AndAlso b2 <= &H7E) OrElse _
+                 (&H80 <= b2 AndAlso b2 <= &HFC)) Then
+                'SJIS_C
+                enc(0) += 2
+                i += 1
+            End If
+        Next
+        For i = 0 To len - 2
+            b1 = bytes(i)
+            b2 = bytes(i + 1)
+            If ((&HA1 <= b1 AndAlso b1 <= &HFE) AndAlso _
+                (&HA1 <= b2 AndAlso b2 <= &HFE)) OrElse _
+                (b1 = &H8E AndAlso (&HA1 <= b2 AndAlso b2 <= &HDF)) Then
+                'EUC_C
+                'EUC_KANA
+                enc(1) += 2
+                i += 1
+            ElseIf i < len - 2 Then
+                b3 = bytes(i + 2)
+                If b1 = &H8F AndAlso (&HA1 <= b2 AndAlso b2 <= &HFE) AndAlso _
+                    (&HA1 <= b3 AndAlso b3 <= &HFE) Then
+                    'EUC_0212
+                    enc(1) += 3
+                    i += 2
+                End If
+            End If
+        Next
+        For i = 0 To len - 2
+            b1 = bytes(i)
+            b2 = bytes(i + 1)
+            If (&HC0 <= b1 AndAlso b1 <= &HDF) AndAlso _
+                (&H80 <= b2 AndAlso b2 <= &HBF) Then
+                'UTF8
+                enc(2) += 2
+                i += 1
+            ElseIf i < len - 2 Then
+                b3 = bytes(i + 2)
+                If (&HE0 <= b1 AndAlso b1 <= &HEF) AndAlso _
+                    (&H80 <= b2 AndAlso b2 <= &HBF) AndAlso _
+                    (&H80 <= b3 AndAlso b3 <= &HBF) Then
+                    'UTF8
+                    enc(2) += 3
+                    i += 2
+                End If
+            ElseIf i < len - 3 Then
+                b3 = bytes(i + 2)
+                b4 = bytes(i + 3)
+                If (&HF0 <= b1 AndAlso b1 <= &HF7) AndAlso _
+                    (&H80 <= b2 AndAlso b2 <= &HBF) AndAlso _
+                    (&H80 <= b3 AndAlso b3 <= &HBF) AndAlso _
+                    (&H80 <= b4 AndAlso b4 <= &HBF) Then
+                    'UTF8
+                    enc(2) += 4
+                    i += 3
+                End If
+            End If
+        Next
+        For i = 0 To len - 2
+            b1 = bytes(i)
+            b2 = bytes(i + 1)
+            If ((&H81 <= b1 AndAlso b1 <= &HFE) AndAlso _
+                ((&H40 <= b2 AndAlso b2 <= &H7E) OrElse _
+                 (&H80 <= b2 AndAlso b2 <= &HFE))) Then
+                'GBK
+                enc(3) += 2
+                i += 1
+            End If
+        Next
+        For i = 0 To len - 2
+            b1 = bytes(i)
+            b2 = bytes(i + 1)
+            If ((&H88 <= b1 AndAlso b1 <= &HFE) AndAlso _
+                ((&H40 <= b2 AndAlso b2 <= &H7E) OrElse _
+                 (&HA1 <= b2 AndAlso b2 <= &HFE))) Then
+                'big5HKSCS
+                enc(4) += 2
+                i += 1
+            End If
+        Next
+        For i = 0 To len - 2
+            b1 = bytes(i)
+            b2 = bytes(i + 1)
+            If ((&H81 <= b1 AndAlso b1 <= &HFE) AndAlso _
+                ((&H41 <= b2 AndAlso b2 <= &H5A) OrElse _
+                 (&H61 <= b2 AndAlso b2 <= &H7A) OrElse _
+                 (&H81 <= b2 AndAlso b2 <= &HFE))) Then
+                'EUCKR/UHC
+                enc(5) += 2
+                i += 1
+            End If
+        Next
+        'M. Takahashi's suggestion
+        'utf8 += utf8 / 2;
+
+        'Dim sjis As Integer = enc(0)
+        'Dim euc As Integer = enc(1)
+        'Dim gbk As Integer = enc(3)
+        'Dim big5 As Integer = enc(4)
+        'Dim uhc As Integer = enc(5)
+
+        Array.Sort(enc, encode)
+
+        If encode(5) = "utf8" Then
+            'UTF8
+            Return 65001
+        Else
+
+            Dim enc2 As Integer() = {0, 0, 0, 0, 0, 0}
+            Dim encode2 As String() = {"sjis", "gbk", "big5", "euc", "sj2004", "eu2004"}
+
+            Dim s As String = Encoding.GetEncoding(936).GetString(bytes)
+            For i = 0 To s.Length - 1
+                If s(i) = "?" Then
+                    enc2(1) += 1
+                ElseIf s(i) = "・" Then
+                    enc2(1) += 1
+                ElseIf s(i) = "□" Then
+                    enc2(3) += 1
+                End If
+            Next
+
+            s = Encoding.GetEncoding(51932).GetString(bytes)
+            For i = 0 To s.Length - 1
+                If s(i) = "?" Then
+                    enc2(3) += 1
+                ElseIf s(i) = "・" Then
+                    enc2(3) += 1
+                ElseIf s(i) = "□" Then
+                    enc2(3) += 1
+                End If
+            Next
+
+            s = ctbl.custom_pasrse(bytes, 951)
+            For i = 0 To s.Length - 1
+                If s(i) = "?" Then
+                    enc2(2) += 1
+                ElseIf s(i) = "・" Then
+                    enc2(2) += 1
+                ElseIf s(i) = "□" Then
+                    enc2(2) += 1
+                End If
+            Next
+            s = ctbl.custom_pasrse(bytes, 512132004)
+            For i = 0 To s.Length - 1
+                If s(i) = "?" Then
+                    enc2(5) += 1
+                ElseIf s(i) = "・" Then
+                    enc2(5) += 1
+                ElseIf s(i) = "□" Then
+                    enc2(5) += 1
+                End If
+            Next
+            s = ctbl.custom_pasrse(bytes, 2132004)
+            For i = 0 To s.Length - 1
+                If s(i) = "?" Then
+                    enc2(4) += 1
+                ElseIf s(i) = "・" Then
+                    enc2(4) += 1
+                ElseIf s(i) = "□" Then
+                    enc2(4) += 1
+                End If
+            Next
+            s = Encoding.GetEncoding(932).GetString(bytes)
+            For i = 0 To s.Length - 1
+                If s(i) = "?" Then
+                    enc2(0) += 1
+                ElseIf s(i) = "・" Then
+                    enc2(0) += 1
+                ElseIf s(i) = "□" Then
+                    enc2(0) += 1
+                End If
+            Next
+
+            Array.Sort(enc2, encode2)
+            'SJIS
+            If encode2(0) = "sjis" Then
+                Return 932
+            End If
+
+            If encode2(0) = "euc" Then
+                'EUC
+                Return 51932
+            End If
+
+            If encode2(0) = "gbk" Then
+                'GBK
+                Return 936
+            End If
+            
+            If encode2(0) = "big5" Then
+                'big5hk
+                Return 951
+            End If
+            If encode2(0) = "eu2004" Then
+                'EU24
+                Return 512132004
+            End If
+            If encode2(0) = "sj2004" Then
+                'sj24
+                Return 2132004
+            End If
+
+        End If
+
+        Return 0
+    End Function
+
     Public Function check_db(ByVal filename As String, ByVal enc1 As Integer) As Boolean
 
         Dim file As New FileStream(filename, FileMode.Open, FileAccess.Read)
         Dim sr As New StreamReader(file, System.Text.Encoding.GetEncoding(enc1))
         Dim buffer As String = Nothing
         Dim cwc As New Regex("^_L [0-9A-Fa-f]{8} [0-9A-Fa-f]{4}", RegexOptions.ECMAScript)
-        Dim gn As New Regex("^_S .", RegexOptions.ECMAScript)
-        Dim gid As New Regex("^_G .", RegexOptions.ECMAScript)
-        Dim cn As New Regex("^_C\d .", RegexOptions.ECMAScript)
+        Dim gn As New Regex("^_S .?", RegexOptions.ECMAScript)
+        Dim gid As New Regex("^_G .?", RegexOptions.ECMAScript)
+        Dim cn As New Regex("^_C\d .?", RegexOptions.ECMAScript)
         Dim cwcm As Match
         Dim gnm As Match
         Dim gidm As Match
@@ -1319,9 +1642,9 @@ Public Class load_db
         Dim buffer As String = Nothing
         Dim nodb As Boolean = True
         Dim cwc As New Regex("^_(L|M|N) 0x[0-9A-Fa-f]{8} 0x[0-9A-Fa-f]{8}", RegexOptions.ECMAScript)
-        Dim gn As New Regex("^_S .", RegexOptions.ECMAScript)
-        Dim gid As New Regex("^_G .", RegexOptions.ECMAScript)
-        Dim cn As New Regex("^_C\d .", RegexOptions.ECMAScript)
+        Dim gn As New Regex("^_S .?", RegexOptions.ECMAScript)
+        Dim gid As New Regex("^_G .?", RegexOptions.ECMAScript)
+        Dim cn As New Regex("^_C\d .?", RegexOptions.ECMAScript)
         Dim cwcm As Match
         Dim gnm As Match
         Dim gidm As Match

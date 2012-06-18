@@ -5,7 +5,7 @@ Imports System.Text
 Public Class save_db
 
 
-    Dim strenc As String() = {"[Shift_JIS,Windows-31J]", "[GBK]", "[Big5-HKSCS]", "[EUC-JP]", "[Shift_JIS-2004]", "[EUC-JIS-2004]", "[UTF16LE]", "[UTF16BE]", "[UTF32LE]", "[UTF32BE]", "[UTF-8]"}
+    Dim strenc As String() = {"[Shift_JIS,Windows-31J]", "[GBK]", "[Big5-HKSCS]", "[UHC]", "[EUC-JP]", "[Shift_JIS-2004]", "[EUC-JIS-2004]", "[UTF16LE]", "[UTF16BE]", "[UTF32LE]", "[UTF32BE]", "[UTF-8]", "[USER_CUSTOM]"}
 
     Dim unitable As String() = {"table\custom_utf32", "table\custom_utf32_2", "table\custom_utf32_3"}
 
@@ -19,14 +19,18 @@ Public Class save_db
                     s = strenc(1)
                 Case 951
                     s = strenc(2)
-                Case 51932
+                Case 949
                     s = strenc(3)
-                Case 2132004
+                Case 51932
                     s = strenc(4)
-                Case 512132004
+                Case 2132004
                     s = strenc(5)
+                Case 512132004
+                    s = strenc(6)
                 Case 1201
-                    s = strenc(7)
+                    s = strenc(8)
+                Case Else
+                    s = strenc(12)
             End Select
         Else
             s = "[CP" & enc1.ToString & "]"

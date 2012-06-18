@@ -594,6 +594,66 @@ Namespace My
                 Me("savetype") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property autocp() As Boolean
+            Get
+                Return CType(Me("autocp"),Boolean)
+            End Get
+            Set
+                Me("autocp") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property checkcpstr() As Boolean
+            Get
+                Return CType(Me("checkcpstr"),Boolean)
+            End Get
+            Set
+                Me("checkcpstr") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property usercp() As Integer
+            Get
+                Return CType(Me("usercp"),Integer)
+            End Get
+            Set
+                Me("usercp") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property usercpsel() As Integer
+            Get
+                Return CType(Me("usercpsel"),Integer)
+            End Get
+            Set
+                Me("usercpsel") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("OS default")>  _
+        Public Property cpstr() As String
+            Get
+                Return CType(Me("cpstr"),String)
+            End Get
+            Set
+                Me("cpstr") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

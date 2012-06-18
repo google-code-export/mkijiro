@@ -37,11 +37,16 @@ Public Class Form1
         sel = sel_num(sel, 0)
 
         If File.Exists(parsetest(sel)) Then
+
             Dim fs As New FileStream(parsetest(sel), FileMode.Open, FileAccess.Read)
             Dim bs(CInt(fs.Length - 1)) As Byte
             Dim bss(CInt(fs.Length - 1) * 2) As Byte
             fs.Read(bs, 0, bs.Length)
             fs.Close()
+
+            Dim codepage As Integer = GetCode(bs)
+            Label1.Text = codepage.ToString
+
             If outTX.Checked = True Then
                 sel = sel_num(sel, 1)
             End If
@@ -854,6 +859,245 @@ Public Class Form1
 
     End Function
 
+    ''' <summary>
+    ''' 文字コードを判別する
+    ''' </summary>
+    ''' <remarks>
+    ''' Jcode.pmのgetcodeメソッドを移植したものです。
+    ''' Jcode.pm(http://openlab.ring.gr.jp/Jcode/index-j.html)
+    ''' Jcode.pmのCopyright: Copyright 1999-2005 Dan Kogai
+    ''' </remarks>
+    ''' <param name="bytes">文字コードを調べるデータ</param>
+    ''' <returns>適当と思われるEncodingオブジェクト。
+    ''' 判断できなかった時はnull。</returns>
+    Public Shared Function GetCode(ByVal bytes As Byte()) As Integer
+        Const bEscape As Byte = &H1B
+        Const bAt As Byte = &H40
+        Const bDollar As Byte = &H24
+        Const bAnd As Byte = &H26
+        Const bOpen As Byte = &H28 ''('
+        Const bB As Byte = &H42
+        Const bD As Byte = &H44
+        Const bJ As Byte = &H4A
+        Const bI As Byte = &H49
+
+        Dim len As Integer = bytes.Length
+        Dim b1 As Byte, b2 As Byte, b3 As Byte, b4 As Byte
+
+        'Encode::is_utf8 は無視
+
+        Dim isBinary As Boolean = False
+        Dim i As Integer
+        For i = 0 To len - 1
+            b1 = bytes(i)
+            If b1 <= &H6 OrElse b1 = &H7F OrElse b1 = &HFF Then
+                ''binary'
+                isBinary = True
+                If b1 = &H0 AndAlso i < len - 1 AndAlso bytes(i + 1) <= &H7F Then
+                    'smells like raw unicode
+                    Return 1200
+                End If
+            End If
+        Next
+        If isBinary Then
+            Return Nothing
+        End If
+
+        'not Japanese
+        Dim notJapanese As Boolean = True
+        For i = 0 To len - 1
+            b1 = bytes(i)
+            If b1 = bEscape OrElse &H80 <= b1 Then
+                notJapanese = False
+                Exit For
+            End If
+        Next
+        If notJapanese Then
+            Return 20127
+        End If
+
+        For i = 0 To len - 3
+            b1 = bytes(i)
+            b2 = bytes(i + 1)
+            b3 = bytes(i + 2)
+
+            If b1 = bEscape Then
+                If b2 = bDollar AndAlso b3 = bAt Then
+                    'JIS_0208 1978
+                    'JIS
+                    Return 50220
+                ElseIf b2 = bDollar AndAlso b3 = bB Then
+                    'JIS_0208 1983
+                    'JIS
+                    Return 50220
+                ElseIf b2 = bOpen AndAlso (b3 = bB OrElse b3 = bJ) Then
+                    'JIS_ASC
+                    'JIS
+                    Return 50220
+                ElseIf b2 = bOpen AndAlso b3 = bI Then
+                    'JIS_KANA
+                    'JIS
+                    Return 50220
+                End If
+                If i < len - 3 Then
+                    b4 = bytes(i + 3)
+                    If b2 = bDollar AndAlso b3 = bOpen AndAlso b4 = bD Then
+                        'JIS_0212
+                        'JIS
+                        Return 50220
+                    End If
+                    If i < len - 5 AndAlso _
+                        b2 = bAnd AndAlso b3 = bAt AndAlso b4 = bEscape AndAlso _
+                        bytes(i + 4) = bDollar AndAlso bytes(i + 5) = bB Then
+                        'JIS_0208 1990
+                        'JIS
+                        Return 50220
+                    End If
+                End If
+            End If
+        Next
+
+        'should be euc|sjis|utf8
+        'use of (?:) by Hiroki Ohzaki <ohzaki@iod.ricoh.co.jp>
+        Dim enc As Integer() = {0, 0, 0, 0, 0}
+        Dim encode As String() = {"sjis", "euc", "utf8", "gbk", "big5"}
+
+        For i = 0 To len - 2
+            b1 = bytes(i)
+            b2 = bytes(i + 1)
+            If ((&H81 <= b1 AndAlso b1 <= &H9F) OrElse _
+                (&HE0 <= b1 AndAlso b1 <= &HFC)) AndAlso _
+                ((&H40 <= b2 AndAlso b2 <= &H7E) OrElse _
+                 (&H80 <= b2 AndAlso b2 <= &HFC)) Then
+                'SJIS_C
+                enc(0) += 2
+                i += 1
+            End If
+        Next
+        For i = 0 To len - 2
+            b1 = bytes(i)
+            b2 = bytes(i + 1)
+            If ((&HA1 <= b1 AndAlso b1 <= &HFE) AndAlso _
+                (&HA1 <= b2 AndAlso b2 <= &HFE)) OrElse _
+                (b1 = &H8E AndAlso (&HA1 <= b2 AndAlso b2 <= &HDF)) Then
+                'EUC_C
+                'EUC_KANA
+                enc(1) += 2
+                i += 1
+            ElseIf i < len - 2 Then
+                b3 = bytes(i + 2)
+                If b1 = &H8F AndAlso (&HA1 <= b2 AndAlso b2 <= &HFE) AndAlso _
+                    (&HA1 <= b3 AndAlso b3 <= &HFE) Then
+                    'EUC_0212
+                    enc(1) += 3
+                    i += 2
+                End If
+            End If
+        Next
+        For i = 0 To len - 2
+            b1 = bytes(i)
+            b2 = bytes(i + 1)
+            If (&HC0 <= b1 AndAlso b1 <= &HDF) AndAlso _
+                (&H80 <= b2 AndAlso b2 <= &HBF) Then
+                'UTF8
+                enc(2) += 2
+                i += 1
+            ElseIf i < len - 2 Then
+                b3 = bytes(i + 2)
+                If (&HE0 <= b1 AndAlso b1 <= &HEF) AndAlso _
+                    (&H80 <= b2 AndAlso b2 <= &HBF) AndAlso _
+                    (&H80 <= b3 AndAlso b3 <= &HBF) Then
+                    'UTF8
+                    enc(2) += 3
+                    i += 2
+                End If
+            ElseIf i < len - 3 Then
+                b3 = bytes(i + 2)
+                b4 = bytes(i + 3)
+                If (&HF0 <= b1 AndAlso b1 <= &HF7) AndAlso _
+                    (&H80 <= b2 AndAlso b2 <= &HBF) AndAlso _
+                    (&H80 <= b3 AndAlso b3 <= &HBF) AndAlso _
+                    (&H80 <= b4 AndAlso b4 <= &HBF) Then
+                    'UTF8
+                    enc(2) += 4
+                    i += 3
+                End If
+            End If
+        Next
+        For i = 0 To len - 2
+            b1 = bytes(i)
+            b2 = bytes(i + 1)
+            If ((&H81 <= b1 AndAlso b1 <= &HFE) AndAlso _
+                ((&H40 <= b2 AndAlso b2 <= &H7E) OrElse _
+                 (&H80 <= b2 AndAlso b2 <= &HFE))) Then
+                'GBK
+                enc(3) += 2
+                i += 1
+            End If
+        Next
+        For i = 0 To len - 2
+            b1 = bytes(i)
+            b2 = bytes(i + 1)
+            If ((&H88 <= b1 AndAlso b1 <= &HFE) AndAlso _
+                ((&H40 <= b2 AndAlso b2 <= &H7E) OrElse _
+                 (&HA1 <= b2 AndAlso b2 <= &HFE))) Then
+                'HK
+                enc(4) += 2
+                i += 1
+            End If
+        Next
+        'M. Takahashi's suggestion
+        'utf8 += utf8 / 2;
+
+        Array.Sort(enc, encode)
+
+        If encode(4) = "euc" Then
+            'EUC
+            Return 512132004
+        ElseIf encode(4) = "sjis" Or encode(4) = "gbk" Or encode(4) = "big5" Then
+
+            Dim enc2 As Integer() = {0, 0, 0}
+            Dim encode2 As String() = {"sjis", "gbk", "big5"}
+
+            Dim s As String = Encoding.GetEncoding(936).GetString(bytes)
+            For i = 0 To s.Length - 1
+                If s(i) = "?" Then
+                    enc2(1) += 1
+                End If
+            Next
+            s = Encoding.GetEncoding(950).GetString(bytes)
+            For i = 0 To s.Length - 1
+                If s(i) = "?" Then
+                    enc2(2) += 1
+                End If
+            Next
+            s = Encoding.GetEncoding(932).GetString(bytes)
+            For i = 0 To s.Length - 1
+                If s(i) = "?" Then
+                    enc2(0) += 1
+                End If
+            Next
+
+            Array.Sort(enc2, encode2)
+            If encode2(0) = "gbk" Then
+                'GBK
+                Return 936
+            End If
+
+            'SJIS
+            If encode2(0) = "sjis" Then
+                Return 2132004
+            End If
+
+            Return 950
+
+            ElseIf encode(4) = "utf8" Then
+                'UTF8
+                Return 65001
+            End If
+
+            Return 0
+    End Function
 
     Private Sub EUC_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles EUC.CheckedChanged
         My.Settings.sel = 512132004
