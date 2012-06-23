@@ -7,286 +7,469 @@ Public Class Form1
     Private Sub INI(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
 
         TextBox1.Font = My.Settings.font
-        If My.Settings.out = True Then
-            outTX.Checked = True
-        End If
+        restcodepage()
 
     End Sub
 
-    Dim parsetest As String() = {"sjis2004test.txt", "eucjis2004.txt", "extra.txt", "out.txt"}
-    Dim vstable As String() = {"table\sjisvsutf8", "table\eucvsutf8", "table\extra"}
-    Dim unitable As String() = {"table\custom_utf32", "table\custom_utf32_2", "table\custom_utf32_3"}
-
+    Dim parsetest As String() = {"table\sjis2004test.txt", "table\eucjis2004.txt", "table\big5hkscs.txt", "table\iso2022jp2004.txt"}
+    Dim vstable As String() = {"table\sjisvsutf8", "table\eucvsutf8", "table\big5vsutf8", "table\eucvsutf8"}
+    Dim unitable As String() = {"table\custom_utf32", "table\custom_utf32_2", "table\custom_utf32_3", "table\custom_utf32_2"}
 
     Private Function sel_num(ByVal sel As Integer, ByVal mode As Integer) As Integer
         sel = 0
         If EUC.Checked = True Then
             sel = 1
-        ElseIf EX.Checked = True Then
-            sel = 2
-        End If
-        If mode = 0 AndAlso outTX.Checked = True Then
+        ElseIf JIS.Checked = True Then
             sel = 3
+        ElseIf BIG5HK.Checked = True Then
+            sel = 2
         End If
 
         Return sel
     End Function
 
-    Private Sub Button3_Click(sender As System.Object, e As System.EventArgs) Handles READ.Click
-        Dim sel As Integer = 0
-        sel = sel_num(sel, 0)
 
-        If File.Exists(parsetest(sel)) Then
+    Private Sub 開くToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles 開くToolStripMenuItem.Click
+        Dim ofd As New OpenFileDialog()
 
-            Dim fs As New FileStream(parsetest(sel), FileMode.Open, FileAccess.Read)
-            Dim bs(CInt(fs.Length - 1)) As Byte
-            Dim bss(CInt(fs.Length - 1) * 2) As Byte
-            fs.Read(bs, 0, bs.Length)
-            fs.Close()
+        ofd.InitialDirectory = Application.StartupPath
+        ofd.Filter = _
+            "TXTファイル(*.txt)|*.txt|すべてのファイル(*.*)|*.*"
+        'タイトルを設定する
+        ofd.Title = "開くファイルを選択してください"
+        ofd.RestoreDirectory = True
+        ofd.CheckFileExists = True
+        ofd.CheckPathExists = True
+        If ofd.ShowDialog() = DialogResult.OK Then
+            If My.Settings.mscodepage = 2132004 Or My.Settings.mscodepage = 512132004 Or My.Settings.mscodepage = 202132004 Or My.Settings.mscodepage = 951 Then
 
-            Dim codepage As Integer = GetCode(bs)
-            Label1.Text = codepage.ToString
+                Dim fs As New FileStream(ofd.FileName, FileMode.Open, FileAccess.Read)
+                Dim bs(CInt(fs.Length - 1)) As Byte
+                fs.Read(bs, 0, bs.Length)
+                fs.Close()
 
-            If outTX.Checked = True Then
-                sel = sel_num(sel, 1)
+                Dim sel As Integer = 0
+                sel = sel_num(sel, 0)
+
+                TextBox1.Text = Encoding.GetEncoding(65001).GetString(customtable_parse(bs, sel))
+
+            Else
+                Dim fs As New FileStream(ofd.FileName, FileMode.Open, FileAccess.Read)
+                Dim bs(CInt(fs.Length - 1)) As Byte
+                fs.Read(bs, 0, bs.Length)
+                fs.Close()
+                TextBox1.Text = Encoding.GetEncoding(My.Settings.mscodepage).GetString(bs)
+
             End If
-            If File.Exists(vstable(sel)) Then
-                Dim tfs As New FileStream(vstable(sel), FileMode.Open, FileAccess.Read)
-                Dim tbl(CInt(tfs.Length - 1)) As Byte
-                tfs.Read(tbl, 0, tbl.Length)
-                tfs.Close()
-                Dim tofu As Byte() = {&HE2, &H96, &HA1}
-                Dim maru As Byte() = {&HE3, &H82, &H9A}
-                Dim ac As Byte() = {&HCC, &H80}
-                Dim ac2 As Byte() = {&HCC, &H81}
-                Dim gousei As Byte() = {&HCB, &HA9, &HCB, &HA5}
-                Dim jis201 As Byte() = {0, 0, 0}
-                Dim c1 As Integer = 0
-                Dim c2 As Integer = 0
-                Dim c3 As Integer = 0
-                Dim ct As Integer = 0
-                Dim i As Integer = 0
-                Dim k As Integer = 0
-                Dim pos As Integer = 0
-                If SJIS.Checked = True Then
-                    'SJIS
-                    While i < bs.Length
+        End If
+    End Sub
 
-                        c1 = bs(i)
-                        If c1 < 128 Then
-                            '制御コード排除
-                            If (c1 < 32 AndAlso c1 <> &H9 AndAlso c1 <> &HD AndAlso c1 <> &HA) Or c1 = &H7F Then
-                                c1 = 32
+
+    Private Sub SAVEAS_Click(sender As System.Object, e As System.EventArgs) Handles SAVEAS.Click
+        Dim sfd As New SaveFileDialog()
+
+        sfd.FileName = "新しいファイル.txt"
+        sfd.Filter = "TXTファイル(*.txt)|*.txt|すべてのファイル(*.*)|*.*"
+        sfd.Title = "保存先のファイルを選択してください"
+        sfd.OverwritePrompt = True
+        sfd.CheckPathExists = True
+
+        'ダイアログを表示する
+        If sfd.ShowDialog() = DialogResult.OK Then
+            savefile(sfd.FileName)
+        End If
+    End Sub
+
+
+    Private Function customtable_parse(ByVal bs As Byte(), ByVal sel As Integer) As Byte()
+
+        If File.Exists(vstable(sel)) Then
+            Dim bss(CInt(bs.Length - 1) * 2) As Byte
+            Dim tfs As New FileStream(vstable(sel), FileMode.Open, FileAccess.Read)
+            Dim tbl(CInt(tfs.Length - 1)) As Byte
+            tfs.Read(tbl, 0, tbl.Length)
+            tfs.Close()
+            Dim tofu As Byte() = {&HE2, &H96, &HA1}
+            Dim maru As Byte() = {&HE3, &H82, &H9A}
+            Dim ac As Byte() = {&HCC, &H80}
+            Dim ac2 As Byte() = {&HCC, &H81}
+            Dim gousei As Byte() = {&HCB, &HA9, &HCB, &HA5}
+            Dim jis201 As Byte() = {0, 0, 0}
+            Dim c1 As Integer = 0
+            Dim c2 As Integer = 0
+            Dim c3 As Integer = 0
+            Dim c4 As Integer = 0
+            Dim ct As Integer = 0
+            Dim i As Integer = 0
+            Dim k As Integer = 0
+            Dim pos As Integer = 0
+            Dim len As Integer = bs.Length
+            If SJIS.Checked = True Then
+                'SJIS
+                While i < bs.Length
+
+                    c1 = bs(i)
+                    If c1 < 128 Then
+                        '制御コード排除
+                        If (c1 < 32 AndAlso c1 <> &H9 AndAlso c1 <> &HD AndAlso c1 <> &HA) Or c1 = &H7F Then
+                            c1 = 32
+                        End If
+                        bss(k) = c1
+                        '改行CRLF化
+                        If c1 = &HA Then
+                            If k > 0 Then
+                                c2 = bss(k - 1)
+                            Else
+                                c2 = 0
                             End If
-                            bss(k) = c1
-                            '改行CRLF化
-                            If c1 = &HA Then
-                                If k > 0 Then
-                                    c2 = bss(k - 1)
+                            If c2 <> &HD Then
+                                bss(k) = &HD
+                                bss(k + 1) = c1
+                                k += 1
+                            End If
+                        End If
+                        k += 1
+                        i += 1
+                    ElseIf ((c1 + &H5F) And &HFF) < &H3F Then
+                        c1 = c1 + &HFF60 - &HA0
+                        'uuuu zzzz yyyy xxxx
+                        'E1..EF 1110uuuu
+                        '80..BF 10zzzzyy
+                        '80..BF 10yyxxxx
+                        jis201(0) = CByte((c1 >> 12) Or &HE0)
+                        jis201(1) = CByte(((c1 >> 6) And &H3F) Or &H80)
+                        jis201(2) = CByte((c1 And &H3F) Or &H80)
+                        Array.Copy(jis201, 0, bss, k, 3)
+                        k += 3
+                        i += 1
+                    ElseIf ((((c1 Xor &H20) + &H5F) And &HFF) < &H3C) AndAlso i < len - 1 Then
+                        c2 = bs(i + 1)
+                        If c2 >= &H40 AndAlso c2 <= &HFC AndAlso c2 <> &H7F Then
+                            pos = ((c1 Xor &H20) - &HA1) * 192 + c2 - &H40
+                            If pos * 4 < tbl.Length Then
+                                Array.Copy(tbl, pos * 4, bss, k, 4)
+                                ct = bss(k)
+                                If ct = 0 Then
+                                    Array.Copy(tofu, 0, bss, k, 3)
+                                    k += 3
                                 Else
-                                    c2 = 0
-                                End If
-                                If c2 <> &HD Then
-                                    bss(k) = &HD
-                                    bss(k + 1) = c1
-                                    k += 1
+                                    If ct < &H80 Then
+                                        k += 1
+                                    ElseIf ct < &HC2 Then
+                                    ElseIf ct < &HE0 Then
+                                        k += 2
+                                        If c1 = &H86 AndAlso (c2 And 1) = 1 AndAlso c2 >= &H67 AndAlso c2 <= &H6D Then
+                                            Array.Copy(ac, 0, bss, k, 2)
+                                            k += 2
+                                        ElseIf c1 = &H86 AndAlso (c2 And 1) = 0 AndAlso c2 >= &H68 AndAlso c2 <= &H6E Then
+                                            Array.Copy(ac2, 0, bss, k, 2)
+                                            k += 2
+                                        ElseIf c1 = &H86 AndAlso (c2 = &H85 Or c2 = &H86) Then
+                                            Array.Copy(gousei, (c2 And 1) * 2, bss, k, 2)
+                                            k += 2
+                                        ElseIf c1 = &H86 AndAlso c2 = &H63 Then
+                                            Array.Copy(ac, 0, bss, k, 2)
+                                            k += 2
+                                        End If
+                                    ElseIf ct < &HF0 Then
+                                        k += 3
+                                        If c1 = &H82 AndAlso c2 >= &HF5 AndAlso c2 <= &HF9 Then
+                                            Array.Copy(maru, 0, bss, k, 3)
+                                            k += 3
+                                        ElseIf c1 = &H83 AndAlso c2 >= &H97 AndAlso c2 <= &H9E Then
+                                            Array.Copy(maru, 0, bss, k, 3)
+                                            k += 3
+                                        ElseIf c1 = &H83 AndAlso c2 = &HF6 Then
+                                            Array.Copy(maru, 0, bss, k, 3)
+                                            k += 3
+                                        End If
+
+
+                                    ElseIf ct < &HF8 Then
+                                        k += 4
+                                    End If
                                 End If
                             End If
-                            k += 1
-                            i += 1
-                        ElseIf ((c1 + &H5F) And &HFF) < &H3F Then
-                            c1 = c1 + &HFF60 - &HA0
+                        Else
+                            Array.Copy(tofu, 0, bss, k, 3)
+                            k += 3
+                        End If
+                        i += 2
+                    Else
+                        i += 1
+                    End If
+
+                End While
+
+                'JIS
+            ElseIf JIS.Checked = True Then
+
+                '1B 28 42: ASCII (厳密にはISO/IEC 646 国際基準版)
+                '1B 24 28 51: JIS X 0213第1面
+                '1B 24 28 50: JIS X 0213第2面
+
+                '1B 24 42 (JIS X 0208-1983のエスケープシーケンス): 
+                '1B 24 28 4F (JIS X 0213:2000第1面のエスケープシーケンス): 
+
+                Dim mode As Integer = -1
+
+                While i < bs.Length
+                    c1 = bs(i)
+                    If c1 = &H1B AndAlso (i < len - 2) Then
+                        c2 = bs(i + 1)
+                        c3 = bs(i + 2)
+                        If c2 = &H28 AndAlso c3 = &H42 Then
+                            mode = 0
+                            i += 3
+                        ElseIf c2 = &H24 AndAlso c3 = &H28 AndAlso (i < len - 3) Then
+                            c4 = bs(i + 3)
+                            If c4 = &H51 Then
+                                mode = 1
+                            ElseIf c4 = &H50 Then
+                                mode = 2
+                            Else
+                                mode = -1
+                            End If
+                            i += 4
+                        Else
+                            mode = -1
+                        End If
+                    ElseIf mode = 0 AndAlso c1 < 128 Then
+                        '制御コード排除
+                        If (c1 < 32 AndAlso c1 <> &H9 AndAlso c1 <> &HD AndAlso c1 <> &HA) Or c1 = &H7F Then
+                            c1 = 32
+                        End If
+                        bss(k) = c1
+                        '改行CRLF化
+                        If c1 = &HA Then
+                            If k > 0 Then
+                                c2 = bss(k - 1)
+                            Else
+                                c2 = 0
+                            End If
+                            If c2 <> &HD Then
+                                bss(k) = &HD
+                                bss(k + 1) = c1
+                                k += 1
+                            End If
+                        End If
+                        i += 1
+                        k += 1
+                    ElseIf mode = 1 AndAlso (((c1 + &HDF) And &HFF) < &H5E) Then
+                        c2 = bs(i + 1)
+                        If c2 >= &H21 AndAlso c2 <= &H7E Then
+                            pos = (c1 - &H21) * 94 + c2 - &H21
+                            If pos * 4 < tbl.Length Then
+                                Array.Copy(tbl, pos * 4, bss, k, 4)
+                                ct = bss(k)
+                                If ct = 0 Then
+                                    Array.Copy(tofu, 0, bss, k, 3)
+                                    k += 3
+                                Else
+                                    If ct < &H80 Then
+                                        k += 1
+                                    ElseIf ct < &HC2 Then
+
+                                    ElseIf ct < &HE0 Then
+                                        k += 2
+                                            If c1 = &H2B AndAlso (c2 And 1) = 0 AndAlso c2 >= &H48 AndAlso c2 <= &H4F Then
+                                                Array.Copy(ac, 0, bss, k, 2)
+                                                k += 2
+                                            ElseIf c1 = &H2B AndAlso (c2 And 1) = 1 AndAlso c2 >= &H48 AndAlso c2 <= &H4F Then
+                                                Array.Copy(ac2, 0, bss, k, 2)
+                                                k += 2
+                                            ElseIf c1 = &H2B AndAlso (c2 = &H65 Or c2 = &H66) Then
+                                                Array.Copy(gousei, (c2 And 1) * 2, bss, k, 2)
+                                                k += 2
+                                            ElseIf c1 = &H2B AndAlso c2 = &H44 Then
+                                                Array.Copy(ac, 0, bss, k, 2)
+                                                k += 2
+                                            End If
+
+                                    ElseIf ct < &HF0 Then
+                                        k += 3
+                                            If c1 = &H24 AndAlso c2 >= &H77 AndAlso c2 <= &H7B Then
+                                                Array.Copy(maru, 0, bss, k, 3)
+                                                k += 3
+                                            ElseIf c1 = &H25 AndAlso c2 >= &H77 AndAlso c2 <= &H7E Then
+                                                Array.Copy(maru, 0, bss, k, 3)
+                                                k += 3
+                                            ElseIf c1 = &H26 AndAlso c2 = &H78 Then
+                                                Array.Copy(maru, 0, bss, k, 3)
+                                                k += 3
+                                            End If
+
+                                    ElseIf ct < &HF8 Then
+                                        k += 4
+                                    End If
+                                End If
+                            End If
+                        Else
+                            Array.Copy(tofu, 0, bss, k, 3)
+                            k += 3
+                        End If
+                        i += 2
+
+                    ElseIf mode = 2 AndAlso (((c1 + &HDF) And &HFF) < &H5E) Then
+                        c2 = bs(i + 1)
+                        If c2 >= &H21 AndAlso c2 <= &H7E Then
+                            pos = (c1 - &H21) * 94 + c2 - &H21 + (94 * 94)
+                            If pos * 4 < tbl.Length Then
+                                Array.Copy(tbl, pos * 4, bss, k, 4)
+                                ct = bss(k)
+                                If ct = 0 Then
+                                    Array.Copy(tofu, 0, bss, k, 3)
+                                    k += 3
+                                Else
+                                    If ct < &H80 Then
+                                        k += 1
+                                    ElseIf ct < &HC2 Then
+
+                                    ElseIf ct < &HE0 Then
+                                        k += 2
+                                    ElseIf ct < &HF0 Then
+                                        k += 3
+                                    ElseIf ct < &HF8 Then
+                                        k += 4
+                                    End If
+                                End If
+                            End If
+                        Else
+                            Array.Copy(tofu, 0, bss, k, 3)
+                            k += 3
+                        End If
+                        i += 2
+
+                    Else
+                        i += 1
+                    End If
+
+                End While
+
+
+
+                'EUC
+            ElseIf EUC.Checked = True Then
+                While i < bs.Length
+                    c1 = bs(i)
+                    If c1 < 128 Then
+                        '制御コード排除
+                        If (c1 < 32 AndAlso c1 <> &H9 AndAlso c1 <> &HD AndAlso c1 <> &HA) Or c1 = &H7F Then
+                            c1 = 32
+                        End If
+                        bss(k) = c1
+                        '改行CRLF化
+                        If c1 = &HA Then
+                            If k > 0 Then
+                                c2 = bss(k - 1)
+                            Else
+                                c2 = 0
+                            End If
+                            If c2 <> &HD Then
+                                bss(k) = &HD
+                                bss(k + 1) = c1
+                                k += 1
+                            End If
+                        End If
+                        k += 1
+                        i += 1
+                    ElseIf c1 = &H8E AndAlso i < len - 1 Then
+                        c2 = bs(i + 1)
+                        If ((c2 + &H5F) And &HFF) < &H3F Then
+                            c2 = c2 + &HFF60 - &HA0
                             'uuuu zzzz yyyy xxxx
                             'E1..EF 1110uuuu
                             '80..BF 10zzzzyy
                             '80..BF 10yyxxxx
-                            jis201(0) = CByte((c1 >> 12) Or &HE0)
-                            jis201(1) = CByte(((c1 >> 6) And &H3F) Or &H80)
-                            jis201(2) = CByte((c1 And &H3F) Or &H80)
+                            jis201(0) = CByte((c2 >> 12) Or &HE0)
+                            jis201(1) = CByte(((c2 >> 6) And &H3F) Or &H80)
+                            jis201(2) = CByte((c2 And &H3F) Or &H80)
                             Array.Copy(jis201, 0, bss, k, 3)
                             k += 3
-                            i += 1
-                        ElseIf ((((c1 Xor &H20) + &H5F) And &HFF) < &H3C) Then
-                            c2 = bs(i + 1)
-                            If c2 >= &H40 AndAlso c2 <= &HFC AndAlso c2 <> &H7F Then
-                                pos = ((c1 Xor &H20) - &HA1) * 192 + c2 - &H40
-                                If pos * 4 < tbl.Length Then
-                                    Array.Copy(tbl, pos * 4, bss, k, 4)
-                                    ct = bss(k)
-                                    If ct = 0 Then
-                                        Array.Copy(tofu, 0, bss, k, 3)
-                                        k += 3
-                                    Else
-                                        If ct < &H80 Then
-                                            k += 1
-                                        ElseIf ct < &HC2 Then
-                                        ElseIf ct < &HE0 Then
-                                            k += 2
-                                            If c1 = &H86 AndAlso (c2 And 1) = 1 AndAlso c2 >= &H67 AndAlso c2 <= &H6D Then
+                        End If
+                        i += 2
+
+                    ElseIf ((((c1 + &H5F) And &HFF) < &H5E) AndAlso i < len - 1) Or (c1 = &H8F AndAlso i < len - 2) Then
+                        c2 = bs(i + 1)
+                        c3 = 0
+
+                        If c1 = &H8F Then
+                            c3 = 1
+                            c1 = c2
+                            c2 = bs(i + 2)
+                        End If
+
+                        If c2 >= &HA1 AndAlso c2 <= &HFE Then
+                            pos = (c3 * 94 * 94) + (c1 - &HA1) * 94 + c2 - &HA1
+                            If pos * 4 < tbl.Length Then
+                                Array.Copy(tbl, pos * 4, bss, k, 4)
+                                ct = bss(k)
+                                If ct = 0 Then
+                                    Array.Copy(tofu, 0, bss, k, 3)
+                                    k += 3
+                                Else
+                                    If ct < &H80 Then
+                                        k += 1
+                                    ElseIf ct < &HC2 Then
+                                    ElseIf ct < &HE0 Then
+                                        k += 2
+                                        If c3 = 0 Then
+                                            If c1 = &HAB AndAlso (c2 And 1) = 0 AndAlso c2 >= &HC8 AndAlso c2 <= &HCF Then
                                                 Array.Copy(ac, 0, bss, k, 2)
                                                 k += 2
-                                            ElseIf c1 = &H86 AndAlso (c2 And 1) = 0 AndAlso c2 >= &H68 AndAlso c2 <= &H6E Then
+                                            ElseIf c1 = &HAB AndAlso (c2 And 1) = 1 AndAlso c2 >= &HC8 AndAlso c2 <= &HCF Then
                                                 Array.Copy(ac2, 0, bss, k, 2)
                                                 k += 2
-                                            ElseIf c1 = &H86 AndAlso (c2 = &H85 Or c2 = &H86) Then
+                                            ElseIf c1 = &HAB AndAlso (c2 = &HE5 Or c2 = &HE6) Then
                                                 Array.Copy(gousei, (c2 And 1) * 2, bss, k, 2)
                                                 k += 2
-                                            ElseIf c1 = &H86 AndAlso c2 = &H63 Then
+                                            ElseIf c1 = &HAB AndAlso c2 = &HC4 Then
                                                 Array.Copy(ac, 0, bss, k, 2)
                                                 k += 2
                                             End If
-                                        ElseIf ct < &HF0 Then
-                                            k += 3
-                                            If c1 = &H82 AndAlso c2 >= &HF5 AndAlso c2 <= &HF9 Then
-                                                Array.Copy(maru, 0, bss, k, 3)
-                                                k += 3
-                                            ElseIf c1 = &H83 AndAlso c2 >= &H97 AndAlso c2 <= &H9E Then
-                                                Array.Copy(maru, 0, bss, k, 3)
-                                                k += 3
-                                            ElseIf c1 = &H83 AndAlso c2 = &HF6 Then
-                                                Array.Copy(maru, 0, bss, k, 3)
-                                                k += 3
-                                            End If
-
-
-                                        ElseIf ct < &HF8 Then
-                                            k += 4
                                         End If
-                                    End If
-                                End If
-                            Else
-                                Array.Copy(tofu, 0, bss, k, 3)
-                                k += 3
-                            End If
-                            i += 2
-                        Else
-                            i += 1
-                        End If
 
-                    End While
-
-                    'EUC
-                ElseIf EUC.Checked = True Then
-                    While i < bs.Length
-                        c1 = bs(i)
-                        If c1 < 128 Then
-                            '制御コード排除
-                            If (c1 < 32 AndAlso c1 <> &H9 AndAlso c1 <> &HD AndAlso c1 <> &HA) Or c1 = &H7F Then
-                                c1 = 32
-                            End If
-                            bss(k) = c1
-                            '改行CRLF化
-                            If c1 = &HA Then
-                                If k > 0 Then
-                                    c2 = bss(k - 1)
-                                Else
-                                    c2 = 0
-                                End If
-                                If c2 <> &HD Then
-                                    bss(k) = &HD
-                                    bss(k + 1) = c1
-                                    k += 1
-                                End If
-                            End If
-                            k += 1
-                            i += 1
-                        ElseIf c1 = &H8E Then
-                            c2 = bs(i + 1)
-                            If ((c2 + &H5F) And &HFF) < &H3F Then
-                                c2 = c2 + &HFF60 - &HA0
-                                'uuuu zzzz yyyy xxxx
-                                'E1..EF 1110uuuu
-                                '80..BF 10zzzzyy
-                                '80..BF 10yyxxxx
-                                jis201(0) = CByte((c2 >> 12) Or &HE0)
-                                jis201(1) = CByte(((c2 >> 6) And &H3F) Or &H80)
-                                jis201(2) = CByte((c2 And &H3F) Or &H80)
-                                Array.Copy(jis201, 0, bss, k, 3)
-                                k += 3
-                            End If
-                            i += 2
-
-                        ElseIf (((c1 + &H5F) And &HFF) < &H5E) Or c1 = &H8F Then
-                            c2 = bs(i + 1)
-                            c3 = 0
-
-                            If c1 = &H8F Then
-                                c3 = 1
-                                c1 = c2
-                                c2 = bs(i + 2)
-                            End If
-
-                            If c2 >= &HA1 AndAlso c2 <= &HFE Then
-                                pos = (c3 * 94 * 94) + (c1 - &HA1) * 94 + c2 - &HA1
-                                If pos * 4 < tbl.Length Then
-                                    Array.Copy(tbl, pos * 4, bss, k, 4)
-                                    ct = bss(k)
-                                    If ct = 0 Then
-                                        Array.Copy(tofu, 0, bss, k, 3)
+                                    ElseIf ct < &HF0 Then
                                         k += 3
-                                    Else
-                                        If ct < &H80 Then
-                                            k += 1
-                                        ElseIf ct < &HC2 Then
-                                        ElseIf ct < &HE0 Then
-                                            k += 2
-                                            If c3 = 0 Then
-                                                If c1 = &HAB AndAlso (c2 And 1) = 0 AndAlso c2 >= &HC8 AndAlso c2 <= &HCF Then
-                                                    Array.Copy(ac, 0, bss, k, 2)
-                                                    k += 2
-                                                ElseIf c1 = &HAB AndAlso (c2 And 1) = 1 AndAlso c2 >= &HC8 AndAlso c2 <= &HCF Then
-                                                    Array.Copy(ac2, 0, bss, k, 2)
-                                                    k += 2
-                                                ElseIf c1 = &HAB AndAlso (c2 = &HE5 Or c2 = &HE6) Then
-                                                    Array.Copy(gousei, (c2 And 1) * 2, bss, k, 2)
-                                                    k += 2
-                                                ElseIf c1 = &HAB AndAlso c2 = &HC4 Then
-                                                    Array.Copy(ac, 0, bss, k, 2)
-                                                    k += 2
-                                                End If
+                                        If c3 = 0 Then
+                                            If c1 = &HA4 AndAlso c2 >= &HF7 AndAlso c2 <= &HFB Then
+                                                Array.Copy(maru, 0, bss, k, 3)
+                                                k += 3
+                                            ElseIf c1 = &HA5 AndAlso c2 >= &HF7 AndAlso c2 <= &HFE Then
+                                                Array.Copy(maru, 0, bss, k, 3)
+                                                k += 3
+                                            ElseIf c1 = &HA6 AndAlso c2 = &HF8 Then
+                                                Array.Copy(maru, 0, bss, k, 3)
+                                                k += 3
                                             End If
-
-                                        ElseIf ct < &HF0 Then
-                                            k += 3
-                                            If c3 = 0 Then
-                                                If c1 = &HA4 AndAlso c2 >= &HF7 AndAlso c2 <= &HFB Then
-                                                    Array.Copy(maru, 0, bss, k, 3)
-                                                    k += 3
-                                                ElseIf c1 = &HA5 AndAlso c2 >= &HF7 AndAlso c2 <= &HFE Then
-                                                    Array.Copy(maru, 0, bss, k, 3)
-                                                    k += 3
-                                                ElseIf c1 = &HA6 AndAlso c2 = &HF8 Then
-                                                    Array.Copy(maru, 0, bss, k, 3)
-                                                    k += 3
-                                                End If
-                                            End If
-
-                                        ElseIf ct < &HF8 Then
-                                            k += 4
                                         End If
+
+                                    ElseIf ct < &HF8 Then
+                                        k += 4
                                     End If
                                 End If
-                            Else
-                                Array.Copy(tofu, 0, bss, k, 3)
-                                k += 3
                             End If
-
-
-                            If c3 = 1 Then
-                                i += 3
-                            Else
-                                i += 2
-
-                            End If
-
                         Else
-                            i += 1
+                            Array.Copy(tofu, 0, bss, k, 3)
+                            k += 3
                         End If
 
-                    End While
 
-                    'extra 'GBK/BIG5
-                ElseIf EX.Checked = True Then
+                        If c3 = 1 Then
+                            i += 3
+                        Else
+                            i += 2
+
+                        End If
+
+                    Else
+                        i += 1
+                    End If
+
+                End While
+
+                'extra 'GBK/BIG5
+                    ElseIf BIG5HK.Checked = True Then
                     While i < bs.Length
                         c1 = bs(i)
                         If c1 < 128 Then
@@ -311,7 +494,7 @@ Public Class Form1
                             k += 1
                             i += 1
                             'BIG5/GBK
-                        ElseIf (((c1 + &H7F) And &HFF) < &H7E) Then
+                        ElseIf (((c1 + &H7F) And &HFF) < &H7E) AndAlso i < len - 1 Then
                             c2 = bs(i + 1)
                             If c2 >= &H40 AndAlso c2 <= &HFE Then
                                 pos = (c1 - &H81) * 192 + c2 - &H40
@@ -344,14 +527,32 @@ Public Class Form1
                         End If
 
                     End While
-                End If
+                    End If
 
-                Array.Resize(bss, k)
+            Array.Resize(bss, k)
+            Return bss
 
-                TextBox1.Text = Encoding.GetEncoding(65001).GetString(bss)
-            Else
-                MessageBox.Show(vstable(sel) & "がありません")
-            End If
+        End If
+
+            Return bs
+
+    End Function
+
+    Private Sub Button3_Click(sender As System.Object, e As System.EventArgs) Handles READ.Click
+        Dim sel As Integer = 0
+        sel = sel_num(sel, 0)
+
+        If File.Exists(parsetest(sel)) Then
+
+            Dim fs As New FileStream(parsetest(sel), FileMode.Open, FileAccess.Read)
+            Dim bs(CInt(fs.Length - 1)) As Byte
+            fs.Read(bs, 0, bs.Length)
+            fs.Close()
+
+            Dim codepage As Integer = GetCode(bs)
+            Label1.Text = codepage.ToString
+
+            TextBox1.Text = Encoding.GetEncoding(65001).GetString(customtable_parse(bs, sel))
         Else
             MessageBox.Show(parsetest(sel) & "がありません")
         End If
@@ -378,126 +579,493 @@ Public Class Form1
         Return -1
     End Function
 
+    Private Sub ListBox1_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles TextBox1.DragEnter
+        'コントロール内にドラッグされたとき実行される
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            'ドラッグされたデータ形式を調べ、ファイルのときはコピーとする
+            e.Effect = DragDropEffects.Copy
+        Else
+            'ファイル以外は受け付けない
+            e.Effect = DragDropEffects.None
+        End If
+    End Sub
 
-    Private Sub Button4_Click(sender As System.Object, e As System.EventArgs) Handles SAVE.Click
+    Private Sub ListBox1_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles TextBox1.DragDrop
+        'コントロール内にドロップされたとき実行される
+        'ドロップされたすべてのファイル名を取得する
+        Dim fileName As String() = CType( _
+            e.Data.GetData(DataFormats.FileDrop, False), _
+            String())
+        Dim s As String = fileName(0)
 
-        Dim sel As Integer = 0
-        sel = sel_num(sel, 1)
-        If File.Exists(unitable(sel)) = True Then
-            Dim fs As New FileStream("out.txt", FileMode.Create, FileAccess.Write)
-            Dim bs As Byte() = Encoding.GetEncoding(1200).GetBytes(TextBox1.Text)
-            Dim bss(CInt(bs.Length - 1)) As Byte
+        If My.Settings.mscodepage = 2132004 Or My.Settings.mscodepage = 512132004 Or My.Settings.mscodepage = 202132004 Or My.Settings.mscodepage = 951 Then
 
-            Dim tfs As New FileStream(unitable(sel), FileMode.Open, FileAccess.Read)
-            Dim tbl(CInt(tfs.Length - 1)) As Byte
-            tfs.Read(tbl, 0, tbl.Length)
-            tfs.Close()
+            Dim fs As New FileStream(s, FileMode.Open, FileAccess.Read)
+            Dim bs(CInt(fs.Length - 1)) As Byte
+            fs.Read(bs, 0, bs.Length)
+            fs.Close()
 
-            Dim tofusjis As Byte() = {&H81, &HA0}
-            Dim tofueuc As Byte() = {&HA2, &HA1}
-            Dim tofugb As Byte() = {&HA1, &HF5} 'GBK 0xa1f5 ,BIG5 0xa1bc
-            Dim tofuhk As Byte() = {&HA1, &HBC} '
-            Dim maru As Byte() = {&HE3, &H82, &H9A}
-            Dim ac As Byte() = {&HCC, &H80}
-            Dim gousei As Byte() = {&HCB, &HA9, &HCB, &HA5}
+            Dim sel As Integer = 0
+            sel = sel_num(sel, 0)
 
-            Dim hmaru As Integer() = {&HF582, &H9783, &HF683}
-            Dim ha As Integer = &H6386
-            Dim hac As Integer = &H6786
-            Dim koe As Integer = &H8586
+            TextBox1.Text = Encoding.GetEncoding(65001).GetString(customtable_parse(bs, sel))
+
+        Else
+            Dim fs As New FileStream(s, FileMode.Open, FileAccess.Read)
+            Dim bs(CInt(fs.Length - 1)) As Byte
+            fs.Read(bs, 0, bs.Length)
+            fs.Close()
+            TextBox1.Text = Encoding.GetEncoding(My.Settings.mscodepage).GetString(bs)
+
+        End If
+    End Sub
+
+    Private Function savefile(ByVal fsname As String) As Integer
+
+        Dim fs As New FileStream(fsname, FileMode.Create, FileAccess.Write)
+        Dim bs As Byte()
 
 
-            Dim hmaru_euc As Integer() = {&HF7A4, &HF7A5, &HF8A6}
-            Dim ha_euc As Integer = &HC4AB
-            Dim hac_euc As Integer = &HC8AB
-            Dim koe_euc As Integer = &HE5AB
+        If My.Settings.mscodepage = 2132004 Or My.Settings.mscodepage = 512132004 Or My.Settings.mscodepage = 202132004 Or My.Settings.mscodepage = 951 Then
 
-            Dim code As Byte()
+            Dim sel As Integer = 0
+            sel = sel_num(sel, 1)
+            If File.Exists(unitable(sel)) = True Then
+                bs = Encoding.GetEncoding(1200).GetBytes(TextBox1.Text)
+                Dim bss(CInt(bs.Length - 1)) As Byte
+                Dim tfs As New FileStream(unitable(sel), FileMode.Open, FileAccess.Read)
+                Dim tbl(CInt(tfs.Length - 1)) As Byte
+                tfs.Read(tbl, 0, tbl.Length)
+                tfs.Close()
 
-            Dim jis201 As Byte() = {0, 0, 0}
-            Dim c1 As Integer = 0
-            Dim c2 As Integer = 0
-            Dim c3 As Integer = 0
-            Dim ct As Integer = 0
-            Dim i As Integer = 0
-            Dim k As Integer = 0
-            Dim l As Integer = 0
-            Dim m As Integer = 0
-            Dim hex As UInt16 = 0
-            Dim hex2 As UInt16 = 0
-            Dim pos As Int32 = 0
-            'SJIS2004
-            If SJIS.Checked = True Then
-                While i < bs.Length
-                    hex = BitConverter.ToUInt16(bs, i)
-                    If hex >= &HD800 AndAlso hex <= &HDBFF Then
-                        i += 2
-                        hex2 = BitConverter.ToUInt16(bs, i)
-                        If hex2 >= &HDC00 AndAlso hex2 <= &HDFFF Then
-                            pos = (hex And &H3FF) * 1024 + (hex2 And &H3FF)
-                            pos += &H10000
-                        Else
-                            pos = tbl.Length
-                        End If
-                    Else
-                        pos = Convert.ToInt32(hex)
-                    End If
-                    If pos * 4 < tbl.Length Then
-                        Array.Copy(tbl, pos * 4, bss, k, 4)
-                        c1 = bss(k)
-                        c2 = bss(k + 1)
-                        c3 = bss(k + 2)
-                        If i + 4 <= bs.Length Then
-                            hex2 = BitConverter.ToUInt16(bs, i + 2)
-                        Else
-                            hex2 = 0
-                        End If
+                Dim tofusjis As Byte() = {&H81, &HA0}
+                Dim tofueuc As Byte() = {&HA2, &HA2}
+                Dim tofujis As Byte() = {&H22, &H22}
+                Dim tofugb As Byte() = {&HA1, &HF5} 'GBK 0xa1f5 ,BIG5 0xa1bc
+                Dim tofuhk As Byte() = {&HA1, &HBC} '
+                Dim maru As Byte() = {&HE3, &H82, &H9A}
+                Dim ac As Byte() = {&HCC, &H80}
+                Dim gousei As Byte() = {&HCB, &HA9, &HCB, &HA5}
 
-                        If hex2 = &H309A AndAlso gouseimaru(pos) >= 0 Then
-                            m = gouseimaru(pos)
-                            l = 0
-                            If m > 12 Then
-                                l = 2
-                                m = 0
-                            ElseIf m > 4 Then
-                                l = 1
-                                m -= 5
+                Dim hmaru As Integer() = {&HF582, &H9783, &HF683}
+                Dim ha As Integer = &H6386
+                Dim hac As Integer = &H6786
+                Dim koe As Integer = &H8586
+
+
+                Dim hmaru_euc As Integer() = {&HF7A4, &HF7A5, &HF8A6}
+                Dim ha_euc As Integer = &HC4AB
+                Dim hac_euc As Integer = &HC8AB
+                Dim koe_euc As Integer = &HE5AB
+
+                Dim hmaru_jis As Integer() = {&H7724, &H7725, &H7826}
+                Dim ha_jis As Integer = &H442B
+                Dim hac_jis As Integer = &H482B
+                Dim koe_jis As Integer = &H652B
+
+                Dim code As Byte()
+
+                Dim jis201 As Byte() = {0, 0, 0}
+                Dim c1 As Integer = 0
+                Dim c2 As Integer = 0
+                Dim c3 As Integer = 0
+                Dim ct As Integer = 0
+                Dim i As Integer = 0
+                Dim k As Integer = 0
+                Dim l As Integer = 0
+                Dim m As Integer = 0
+                Dim hex As UInt16 = 0
+                Dim hex2 As UInt16 = 0
+                Dim pos As Int32 = 0
+                'SJIS2004
+                If SJIS.Checked = True Then
+                    While i < bs.Length
+                        hex = BitConverter.ToUInt16(bs, i)
+                        If hex >= &HD800 AndAlso hex <= &HDBFF Then
+                            i += 2
+                            hex2 = BitConverter.ToUInt16(bs, i)
+                            If hex2 >= &HDC00 AndAlso hex2 <= &HDFFF Then
+                                pos = (hex And &H3FF) * 1024 + (hex2 And &H3FF)
+                                pos += &H10000
+                            Else
+                                pos = tbl.Length
                             End If
-                            code = BitConverter.GetBytes(hmaru(l) + &H100 * m)
-                            Array.Copy(code, 0, bss, k, 4)
-                            k += 2
-                            i += 2
-
-                        ElseIf hex2 = &H300 AndAlso pos = &HE6 Then
-                            code = BitConverter.GetBytes(ha)
-                            Array.Copy(code, 0, bss, k, 4)
-                            k += 2
-                            i += 2
-
-                        ElseIf hex2 = &H300 AndAlso gouseiac(pos) >= 0 Then
-                            code = BitConverter.GetBytes(hac + (2 * gouseiac(pos) * &H100))
-                            Array.Copy(code, 0, bss, k, 4)
-                            k += 2
-                            i += 2
-
-                        ElseIf hex2 = &H301 AndAlso gouseiac(pos) >= 0 Then
-                            code = BitConverter.GetBytes(hac + ((2 * gouseiac(pos) + 1) * &H100))
-                            Array.Copy(code, 0, bss, k, 4)
-                            k += 2
-                            i += 2
-
-                        ElseIf hex2 = &H2E9 AndAlso pos = &H2E5 Then
-                            code = BitConverter.GetBytes(koe + &H100)
-                            Array.Copy(code, 0, bss, k, 4)
-                            k += 2
-                            i += 2
-
-                        ElseIf hex2 = &H2E5 AndAlso pos = &H2E9 Then
-                            code = BitConverter.GetBytes(koe)
-                            Array.Copy(code, 0, bss, k, 4)
-                            k += 2
-                            i += 2
                         Else
+                            pos = Convert.ToInt32(hex)
+                        End If
+                        If pos * 4 < tbl.Length Then
+                            Array.Copy(tbl, pos * 4, bss, k, 4)
+                            c1 = bss(k)
+                            c2 = bss(k + 1)
+                            c3 = bss(k + 2)
+                            If i + 4 <= bs.Length Then
+                                hex2 = BitConverter.ToUInt16(bs, i + 2)
+                            Else
+                                hex2 = 0
+                            End If
+
+                            If hex2 = &H309A AndAlso gouseimaru(pos) >= 0 Then
+                                m = gouseimaru(pos)
+                                l = 0
+                                If m > 12 Then
+                                    l = 2
+                                    m = 0
+                                ElseIf m > 4 Then
+                                    l = 1
+                                    m -= 5
+                                End If
+                                code = BitConverter.GetBytes(hmaru(l) + &H100 * m)
+                                Array.Copy(code, 0, bss, k, 4)
+                                k += 2
+                                i += 2
+
+                            ElseIf hex2 = &H300 AndAlso pos = &HE6 Then
+                                code = BitConverter.GetBytes(ha)
+                                Array.Copy(code, 0, bss, k, 4)
+                                k += 2
+                                i += 2
+
+                            ElseIf hex2 = &H300 AndAlso gouseiac(pos) >= 0 Then
+                                code = BitConverter.GetBytes(hac + (2 * gouseiac(pos) * &H100))
+                                Array.Copy(code, 0, bss, k, 4)
+                                k += 2
+                                i += 2
+
+                            ElseIf hex2 = &H301 AndAlso gouseiac(pos) >= 0 Then
+                                code = BitConverter.GetBytes(hac + ((2 * gouseiac(pos) + 1) * &H100))
+                                Array.Copy(code, 0, bss, k, 4)
+                                k += 2
+                                i += 2
+
+                            ElseIf hex2 = &H2E9 AndAlso pos = &H2E5 Then
+                                code = BitConverter.GetBytes(koe + &H100)
+                                Array.Copy(code, 0, bss, k, 4)
+                                k += 2
+                                i += 2
+
+                            ElseIf hex2 = &H2E5 AndAlso pos = &H2E9 Then
+                                code = BitConverter.GetBytes(koe)
+                                Array.Copy(code, 0, bss, k, 4)
+                                k += 2
+                                i += 2
+                            Else
+                                If pos < 128 Then
+                                    If pos < 32 AndAlso pos <> &HA AndAlso pos <> &HD AndAlso pos <> &H9 Then
+                                        pos = 32
+                                    End If
+                                    bss(k) = pos
+                                    k += 1
+                                ElseIf c1 = 0 AndAlso c2 = 0 Then
+                                    Array.Copy(tofusjis, 0, bss, k, 2)
+                                    k += 2
+                                ElseIf c2 = 0 AndAlso c1 >= &HA1 AndAlso c1 <= &HDF Then
+                                    k += 1
+                                ElseIf (((c1 Xor &H20) + &H5F) And &HFF) < &H3C AndAlso c2 >= &H40 Then
+                                    k += 2
+                                Else
+                                    Array.Copy(tofusjis, 0, bss, k, 2)
+                                    k += 2
+                                End If
+                            End If
+                        End If
+                        i += 2
+                    End While
+
+
+                    'JIS2004
+                ElseIf JIS.Checked = True Then
+                    '1B 28 42: ASCII (厳密にはISO/IEC 646 国際基準版)
+                    '1B 24 28 51: JIS X 0213第1面
+                    '1B 24 28 50: JIS X 0213第2面
+                    Dim ascii As Byte() = {&H1B, &H28, &H42}
+                    Dim jisp1 As Byte() = {&H1B, &H24, &H28, &H51}
+                    Dim jisp2 As Byte() = {&H1B, &H24, &H28, &H50}
+                    Dim mode As Integer = -1
+
+                    While i < bs.Length
+                        hex = BitConverter.ToUInt16(bs, i)
+                        If hex >= &HD800 AndAlso hex <= &HDBFF Then
+                            i += 2
+                            hex2 = BitConverter.ToUInt16(bs, i)
+                            If hex2 >= &HDC00 AndAlso hex2 <= &HDFFF Then
+                                pos = (hex And &H3FF) * 1024 + (hex2 And &H3FF)
+                                pos += &H10000
+                            Else
+                                pos = tbl.Length
+                            End If
+                        Else
+                            pos = Convert.ToInt32(hex)
+                        End If
+                        If pos * 4 < tbl.Length Then
+                            Array.Copy(tbl, pos * 4, bss, k, 4)
+                            c1 = bss(k)
+                            c2 = bss(k + 1)
+                            c3 = bss(k + 2)
+                            bss(k) = c1 And &H7F
+                            bss(k + 1) = c2 And &H7F
+                            bss(k + 2) = c3 And &H7F
+
+
+                            If i + 4 <= bs.Length Then
+                                hex2 = BitConverter.ToUInt16(bs, i + 2)
+                            Else
+                                hex2 = 0
+                            End If
+
+                            If hex2 = &H309A AndAlso gouseimaru(pos) >= 0 Then
+                                If mode <> 1 Then
+                                    mode = 1
+                                    Array.Copy(jisp1, 0, bss, k, 4)
+                                    k += 4
+                                End If
+                                m = gouseimaru(pos)
+                                l = 0
+                                If m > 12 Then
+                                    l = 2
+                                    m = 0
+                                ElseIf m > 4 Then
+                                    l = 1
+                                    m -= 5
+                                End If
+                                code = BitConverter.GetBytes(hmaru_jis(l) + &H100 * m)
+                                Array.Copy(code, 0, bss, k, 4)
+                                k += 2
+                                i += 2
+
+                            ElseIf hex2 = &H300 AndAlso pos = &HE6 Then
+                                If mode <> 1 Then
+                                    mode = 1
+                                    Array.Copy(jisp1, 0, bss, k, 4)
+                                    k += 4
+                                End If
+                                code = BitConverter.GetBytes(ha_jis)
+                                Array.Copy(code, 0, bss, k, 4)
+                                k += 2
+                                i += 2
+
+                            ElseIf hex2 = &H300 AndAlso gouseiac(pos) >= 0 Then
+                                If mode <> 1 Then
+                                    mode = 1
+                                    Array.Copy(jisp1, 0, bss, k, 4)
+                                    k += 4
+                                End If
+                                code = BitConverter.GetBytes(hac_jis + ((2 * gouseiac(pos)) * &H100))
+                                Array.Copy(code, 0, bss, k, 4)
+                                k += 2
+                                i += 2
+
+                            ElseIf hex2 = &H301 AndAlso gouseiac(pos) >= 0 Then
+                                If mode <> 1 Then
+                                    mode = 1
+                                    Array.Copy(jisp1, 0, bss, k, 4)
+                                    k += 4
+                                End If
+                                code = BitConverter.GetBytes(hac_jis + ((2 * gouseiac(pos) + 1) * &H100))
+                                Array.Copy(code, 0, bss, k, 4)
+                                k += 2
+                                i += 2
+
+                            ElseIf hex2 = &H2E9 AndAlso pos = &H2E5 Then
+                                If mode <> 1 Then
+                                    mode = 1
+                                    Array.Copy(jisp1, 0, bss, k, 4)
+                                    k += 4
+                                End If
+                                code = BitConverter.GetBytes(koe_jis + &H100)
+                                Array.Copy(code, 0, bss, k, 4)
+                                k += 2
+                                i += 2
+
+                            ElseIf hex2 = &H2E5 AndAlso pos = &H2E9 Then
+                                If mode <> 1 Then
+                                    mode = 1
+                                    Array.Copy(jisp1, 0, bss, k, 4)
+                                    k += 4
+                                End If
+                                code = BitConverter.GetBytes(koe_jis)
+                                Array.Copy(code, 0, bss, k, 4)
+                                k += 2
+                                i += 2
+                            Else
+                                If pos < 128 Then
+                                    If mode <> 0 Then
+                                        mode = 0
+                                        Array.Copy(ascii, 0, bss, k, 3)
+                                        k += 3
+                                    End If
+
+                                    If pos < 32 AndAlso pos <> &HA AndAlso pos <> &HD AndAlso pos <> &H9 Then
+                                        pos = 32
+                                    End If
+                                    bss(k) = pos
+                                    k += 1
+                                ElseIf c1 = 0 AndAlso c2 = 0 Then
+                                    If mode <> 1 Then
+                                        mode = 1
+                                        Array.Copy(jisp1, 0, bss, k, 4)
+                                        k += 4
+                                    End If
+                                    Array.Copy(tofujis, 0, bss, k, 2)
+                                    k += 2
+                                    '半角カナ廃止
+                                ElseIf c1 = &H8E Then
+
+
+                                ElseIf c1 = &H8F Then
+                                    If mode <> 2 Then
+                                        mode = 2
+                                        Array.Copy(jisp2, 0, bss, k, 4)
+                                        k += 4
+                                    End If
+                                    bss(k) = c2 And &H7F
+                                    bss(k + 1) = c3 And &H7F
+                                    k += 2
+
+                                ElseIf ((c1 + &H5F) And &HFF) < &H5E AndAlso c2 >= &HA1 Then
+                                    If mode <> 1 Then
+                                        mode = 1
+                                        Array.Copy(jisp1, 0, bss, k, 4)
+                                        k += 4
+                                    End If
+                                    bss(k) = c1 And &H7F
+                                    bss(k + 1) = c2 And &H7F
+                                    k += 2
+
+                                Else
+                                    If mode <> 1 Then
+                                        mode = 1
+                                        Array.Copy(jisp1, 0, bss, k, 4)
+                                        k += 4
+                                    End If
+                                    Array.Copy(tofujis, 0, bss, k, 2)
+                                    k += 2
+                                End If
+                            End If
+                        End If
+                        i += 2
+                    End While
+                    '終端アスキーモード
+                    Array.Copy(ascii, 0, bss, k, 3)
+                    k += 3
+
+                    'EUC2004
+                ElseIf EUC.Checked = True Then
+                    While i < bs.Length
+                        hex = BitConverter.ToUInt16(bs, i)
+                        If hex >= &HD800 AndAlso hex <= &HDBFF Then
+                            i += 2
+                            hex2 = BitConverter.ToUInt16(bs, i)
+                            If hex2 >= &HDC00 AndAlso hex2 <= &HDFFF Then
+                                pos = (hex And &H3FF) * 1024 + (hex2 And &H3FF)
+                                pos += &H10000
+                            Else
+                                pos = tbl.Length
+                            End If
+                        Else
+                            pos = Convert.ToInt32(hex)
+                        End If
+                        If pos * 4 < tbl.Length Then
+                            Array.Copy(tbl, pos * 4, bss, k, 4)
+                            c1 = bss(k)
+                            c2 = bss(k + 1)
+                            c3 = bss(k + 2)
+
+                            If i + 4 <= bs.Length Then
+                                hex2 = BitConverter.ToUInt16(bs, i + 2)
+                            Else
+                                hex2 = 0
+                            End If
+
+                            If hex2 = &H309A AndAlso gouseimaru(pos) >= 0 Then
+                                m = gouseimaru(pos)
+                                l = 0
+                                If m > 12 Then
+                                    l = 2
+                                    m = 0
+                                ElseIf m > 4 Then
+                                    l = 1
+                                    m -= 5
+                                End If
+                                code = BitConverter.GetBytes(hmaru_euc(l) + &H100 * m)
+                                Array.Copy(code, 0, bss, k, 4)
+                                k += 2
+                                i += 2
+
+                            ElseIf hex2 = &H300 AndAlso pos = &HE6 Then
+                                code = BitConverter.GetBytes(ha_euc)
+                                Array.Copy(code, 0, bss, k, 4)
+                                k += 2
+                                i += 2
+
+                            ElseIf hex2 = &H300 AndAlso gouseiac(pos) >= 0 Then
+                                code = BitConverter.GetBytes(hac_euc + ((2 * gouseiac(pos)) * &H100))
+                                Array.Copy(code, 0, bss, k, 4)
+                                k += 2
+                                i += 2
+
+                            ElseIf hex2 = &H301 AndAlso gouseiac(pos) >= 0 Then
+                                code = BitConverter.GetBytes(hac_euc + ((2 * gouseiac(pos) + 1) * &H100))
+                                Array.Copy(code, 0, bss, k, 4)
+                                k += 2
+                                i += 2
+
+                            ElseIf hex2 = &H2E9 AndAlso pos = &H2E5 Then
+                                code = BitConverter.GetBytes(koe_euc + &H100)
+                                Array.Copy(code, 0, bss, k, 4)
+                                k += 2
+                                i += 2
+
+                            ElseIf hex2 = &H2E5 AndAlso pos = &H2E9 Then
+                                code = BitConverter.GetBytes(koe_euc)
+                                Array.Copy(code, 0, bss, k, 4)
+                                k += 2
+                                i += 2
+                            Else
+                                If pos < 128 Then
+                                    If pos < 32 AndAlso pos <> &HA AndAlso pos <> &HD AndAlso pos <> &H9 Then
+                                        pos = 32
+                                    End If
+                                    bss(k) = pos
+                                    k += 1
+                                ElseIf c1 = 0 AndAlso c2 = 0 Then
+                                    Array.Copy(tofueuc, 0, bss, k, 2)
+                                    k += 2
+                                ElseIf c1 = &H8E Then
+                                    k += 2
+                                ElseIf c1 = &H8F Then
+                                    k += 3
+                                ElseIf ((c1 + &H5F) And &HFF) < &H5E AndAlso c2 >= &HA1 Then
+                                    k += 2
+                                Else
+                                    Array.Copy(tofueuc, 0, bss, k, 2)
+                                    k += 2
+                                End If
+                            End If
+                        End If
+                        i += 2
+                    End While
+                    'BIG5/GBK
+                ElseIf BIG5HK.Checked = True Then
+                    While i < bs.Length
+                        hex = BitConverter.ToUInt16(bs, i)
+                        If hex >= &HD800 AndAlso hex <= &HDBFF Then
+                            i += 2
+                            hex2 = BitConverter.ToUInt16(bs, i)
+                            If hex2 >= &HDC00 AndAlso hex2 <= &HDFFF Then
+                                pos = (hex And &H3FF) * 1024 + (hex2 And &H3FF)
+                                pos += &H10000
+                            Else
+                                pos = tbl.Length
+                            End If
+                        Else
+                            pos = Convert.ToInt32(hex)
+                        End If
+                        If pos * 4 < tbl.Length Then
+                            Array.Copy(tbl, pos * 4, bss, k, 4)
+                            c1 = bss(k)
+                            c2 = bss(k + 1)
+                            c3 = bss(k + 2)
+
                             If pos < 128 Then
                                 If pos < 32 AndAlso pos <> &HA AndAlso pos <> &HD AndAlso pos <> &H9 Then
                                     pos = 32
@@ -505,176 +1073,39 @@ Public Class Form1
                                 bss(k) = pos
                                 k += 1
                             ElseIf c1 = 0 AndAlso c2 = 0 Then
-                                Array.Copy(tofusjis, 0, bss, k, 2)
+                                Array.Copy(tofuhk, 0, bss, k, 2)
                                 k += 2
-                            ElseIf c2 = 0 AndAlso c1 >= &HA1 AndAlso c1 <= &HDF Then
-                                k += 1
-                            ElseIf (((c1 Xor &H20) + &H5F) And &HFF) < &H3C AndAlso c2 >= &H40 Then
-                                k += 2
-                            Else
-                                Array.Copy(tofusjis, 0, bss, k, 2)
-                                k += 2
-                            End If
-                        End If
-                    End If
-                    i += 2
-                End While
-
-                'EUC2004
-            ElseIf EUC.Checked = True Then
-                While i < bs.Length
-                    hex = BitConverter.ToUInt16(bs, i)
-                    If hex >= &HD800 AndAlso hex <= &HDBFF Then
-                        i += 2
-                        hex2 = BitConverter.ToUInt16(bs, i)
-                        If hex2 >= &HDC00 AndAlso hex2 <= &HDFFF Then
-                            pos = (hex And &H3FF) * 1024 + (hex2 And &H3FF)
-                            pos += &H10000
-                        Else
-                            pos = tbl.Length
-                        End If
-                    Else
-                        pos = Convert.ToInt32(hex)
-                    End If
-                    If pos * 4 < tbl.Length Then
-                        Array.Copy(tbl, pos * 4, bss, k, 4)
-                        c1 = bss(k)
-                        c2 = bss(k + 1)
-                        c3 = bss(k + 2)
-
-                        If i + 4 <= bs.Length Then
-                            hex2 = BitConverter.ToUInt16(bs, i + 2)
-                        Else
-                            hex2 = 0
-                        End If
-
-                        If hex2 = &H309A AndAlso gouseimaru(pos) >= 0 Then
-                            m = gouseimaru(pos)
-                            l = 0
-                            If m > 12 Then
-                                l = 2
-                                m = 0
-                            ElseIf m > 4 Then
-                                l = 1
-                                m -= 5
-                            End If
-                            code = BitConverter.GetBytes(hmaru_euc(l) + &H100 * m)
-                            Array.Copy(code, 0, bss, k, 4)
-                            k += 2
-                            i += 2
-
-                        ElseIf hex2 = &H300 AndAlso pos = &HE6 Then
-                            code = BitConverter.GetBytes(ha_euc)
-                            Array.Copy(code, 0, bss, k, 4)
-                            k += 2
-                            i += 2
-
-                        ElseIf hex2 = &H300 AndAlso gouseiac(pos) >= 0 Then
-                            code = BitConverter.GetBytes(hac_euc + ((2 * gouseiac(pos)) * &H100))
-                            Array.Copy(code, 0, bss, k, 4)
-                            k += 2
-                            i += 2
-
-                        ElseIf hex2 = &H301 AndAlso gouseiac(pos) >= 0 Then
-                            code = BitConverter.GetBytes(hac_euc + ((2 * gouseiac(pos) + 1) * &H100))
-                            Array.Copy(code, 0, bss, k, 4)
-                            k += 2
-                            i += 2
-
-                        ElseIf hex2 = &H2E9 AndAlso pos = &H2E5 Then
-                            code = BitConverter.GetBytes(koe_euc + &H100)
-                            Array.Copy(code, 0, bss, k, 4)
-                            k += 2
-                            i += 2
-
-                        ElseIf hex2 = &H2E5 AndAlso pos = &H2E9 Then
-                            code = BitConverter.GetBytes(koe_euc)
-                            Array.Copy(code, 0, bss, k, 4)
-                            k += 2
-                            i += 2
-                        Else
-                            If pos < 128 Then
-                                If pos < 32 AndAlso pos <> &HA AndAlso pos <> &HD AndAlso pos <> &H9 Then
-                                    pos = 32
-                                End If
-                                bss(k) = pos
-                                k += 1
-                            ElseIf c1 = 0 AndAlso c2 = 0 Then
-                                Array.Copy(tofueuc, 0, bss, k, 2)
-                                k += 2
-                            ElseIf c1 = &H8E Then
-                                k += 2
-                            ElseIf c1 = &H8F Then
-                                k += 3
-                            ElseIf ((c1 + &H5F) And &HFF) < &H5E AndAlso c2 >= &HA1 Then
+                                'skip
+                            ElseIf ((c1 + &H7F) And &HFF) < &H7E AndAlso c2 >= &H40 Then
                                 k += 2
                             Else
-                                Array.Copy(tofueuc, 0, bss, k, 2)
+                                Array.Copy(tofuhk, 0, bss, k, 2)
                                 k += 2
                             End If
                         End If
-                    End If
-                    i += 2
-                End While
-                'BIG5/GBK
-            ElseIf EX.Checked = True Then
-                While i < bs.Length
-                    hex = BitConverter.ToUInt16(bs, i)
-                    If hex >= &HD800 AndAlso hex <= &HDBFF Then
                         i += 2
-                        hex2 = BitConverter.ToUInt16(bs, i)
-                        If hex2 >= &HDC00 AndAlso hex2 <= &HDFFF Then
-                            pos = (hex And &H3FF) * 1024 + (hex2 And &H3FF)
-                            pos += &H10000
-                        Else
-                            pos = tbl.Length
-                        End If
-                    Else
-                        pos = Convert.ToInt32(hex)
-                    End If
-                    If pos * 4 < tbl.Length Then
-                        Array.Copy(tbl, pos * 4, bss, k, 4)
-                        c1 = bss(k)
-                        c2 = bss(k + 1)
-                        c3 = bss(k + 2)
+                    End While
+                End If
 
-                        If pos < 128 Then
-                            If pos < 32 AndAlso pos <> &HA AndAlso pos <> &HD AndAlso pos <> &H9 Then
-                                pos = 32
-                            End If
-                            bss(k) = pos
-                            k += 1
-                        ElseIf c1 = 0 AndAlso c2 = 0 Then
-                            Array.Copy(tofuhk, 0, bss, k, 2)
-                            k += 2
-                            'skip
-                        ElseIf ((c1 + &H7F) And &HFF) < &H7E AndAlso c2 >= &H40 Then
-                            k += 2
-                        Else
-                            Array.Copy(tofuhk, 0, bss, k, 2)
-                            k += 2
-                        End If
-                    End If
-                    i += 2
-                End While
+
+
+                fs.Write(bss, 0, k)
+                fs.Close()
+                Beep()
+            Else
+                MessageBox.Show(unitable(sel) & "がありません")
             End If
-
-
-
-            fs.Write(bss, 0, k)
+        Else
+            bs = Encoding.GetEncoding(My.Settings.usercp).GetBytes(TextBox1.Text)
+            fs.Write(bs, 0, bs.Length)
             fs.Close()
             Beep()
-        Else
-            MessageBox.Show(unitable(sel) & "がありません")
         End If
+        Return 0
 
-    End Sub
+    End Function
 
-    Private Sub Button5_Click(sender As System.Object, e As System.EventArgs) Handles CLEAR.Click
-        TextBox1.Text = ""
-    End Sub
-
-    Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles FONTs.Click
+    Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles フォントToolStripMenuItem.Click
         Dim fd As New FontDialog()
 
         '初期のフォントを設定
@@ -744,9 +1175,9 @@ Public Class Form1
 
     End Sub
 
-
     ' UTF32からUTF-8に変形
     Private Function getutf8(ByVal bb As Byte()) As String
+        'bb = Encoding.Convert(Encoding.GetEncoding(12000), Encoding.GetEncoding(65001), bb)
         Dim wc As Integer = 0
         Dim i As Integer = 0
         Dim n As Integer = 0
@@ -1091,27 +1522,99 @@ Public Class Form1
 
             Return 950
 
-            ElseIf encode(4) = "utf8" Then
-                'UTF8
-                Return 65001
-            End If
+        ElseIf encode(4) = "utf8" Then
+            'UTF8
+            Return 65001
+        End If
 
-            Return 0
+        Return 0
     End Function
 
-    Private Sub EUC_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles EUC.CheckedChanged
-        My.Settings.sel = 512132004
+    Private Sub EUC_CheckedChanged(sender As System.Object, e As System.EventArgs)
+        My.Settings.mscodepage = 512132004
     End Sub
 
-    Private Sub EX_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles EX.CheckedChanged
-        My.Settings.sel = 951
+    Private Sub EX_CheckedChanged(sender As System.Object, e As System.EventArgs)
+        My.Settings.mscodepage = 951
     End Sub
 
-    Private Sub SJIS_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles SJIS.CheckedChanged
-        My.Settings.sel = 2132004
+    Private Sub SJIS_CheckedChanged(sender As System.Object, e As System.EventArgs)
+        My.Settings.mscodepage = 2132004
     End Sub
 
-    Private Sub outTX_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles outTX.CheckedChanged
-        My.Settings.out = outTX.Checked
+
+    Private Sub SJIS_Click(sender As System.Object, e As System.EventArgs) Handles SJIS.Click
+        My.Settings.mscodepage = 2132004
+        restcodepage()
+    End Sub
+
+    Private Sub EUC_Click(sender As System.Object, e As System.EventArgs) Handles EUC.Click
+        My.Settings.mscodepage = 512132004
+        restcodepage()
+    End Sub
+
+
+    Private Sub JIS_Click(sender As System.Object, e As System.EventArgs) Handles JIS.Click
+
+        My.Settings.mscodepage = 202132004
+        restcodepage()
+
+    End Sub
+
+    Private Sub EX_Click(sender As System.Object, e As System.EventArgs) Handles BIG5HK.Click
+        My.Settings.mscodepage = 951
+        restcodepage()
+    End Sub
+
+    Private Sub コードページ指定ToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles SELCP.Click
+        Dim f As New form2
+        f.ShowDialog()
+        f.Dispose()
+
+        restcodepage()
+    End Sub
+
+    Private Function restcodepage() As Integer
+        SJIS.Checked = False
+        EUC.Checked = False
+        BIG5HK.Checked = False
+        JIS.Checked = False
+        SELCP.Checked = False
+
+        Select Case My.Settings.mscodepage
+            Case 2132004
+
+                SJIS.Checked = True
+            Case 512132004
+
+                EUC.Checked = True
+            Case 202132004
+
+                JIS.Checked = True
+
+            Case 951
+                BIG5HK.Checked = True
+
+            Case Else
+                SELCP.Checked = True
+        End Select
+        If My.Settings.mscodepage = My.Settings.usercp Then
+            SELCP.ToolTipText = My.Settings.cpstr
+        End If
+
+
+        Return 0
+
+    End Function
+
+    Private Sub 終了ToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles 終了ToolStripMenuItem.Click
+        Me.Close()
+    End Sub
+
+    Private Sub バージョンToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles バージョンToolStripMenuItem.Click
+        Dim f As New Form3
+        f.ShowDialog()
+        f.Dispose()
+
     End Sub
 End Class

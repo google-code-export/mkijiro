@@ -40,7 +40,11 @@ Partial Class Form1
         Me.EX = New System.Windows.Forms.CheckBox()
         Me.sp = New System.Windows.Forms.CheckBox()
         Me.Button3 = New System.Windows.Forms.Button()
+        Me.Button4 = New System.Windows.Forms.Button()
+        Me.Button5 = New System.Windows.Forms.Button()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.Panel1.SuspendLayout()
+        Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
         'Button1
@@ -190,21 +194,51 @@ Partial Class Form1
         '
         'Button3
         '
-        Me.Button3.Location = New System.Drawing.Point(264, 184)
+        Me.Button3.Location = New System.Drawing.Point(18, 71)
         Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(19, 23)
+        Me.Button3.Size = New System.Drawing.Size(71, 23)
         Me.Button3.TabIndex = 16
         Me.Button3.Text = "Button3"
         Me.Button3.UseVisualStyleBackColor = True
-        Me.Button3.Visible = False
+        '
+        'Button4
+        '
+        Me.Button4.Location = New System.Drawing.Point(18, 47)
+        Me.Button4.Name = "Button4"
+        Me.Button4.Size = New System.Drawing.Size(70, 23)
+        Me.Button4.TabIndex = 17
+        Me.Button4.Text = "Button4"
+        Me.Button4.UseVisualStyleBackColor = True
+        '
+        'Button5
+        '
+        Me.Button5.Location = New System.Drawing.Point(18, 18)
+        Me.Button5.Name = "Button5"
+        Me.Button5.Size = New System.Drawing.Size(75, 23)
+        Me.Button5.TabIndex = 18
+        Me.Button5.Text = "Button5"
+        Me.Button5.UseVisualStyleBackColor = True
+        '
+        'GroupBox1
+        '
+        Me.GroupBox1.Controls.Add(Me.Button5)
+        Me.GroupBox1.Controls.Add(Me.Button4)
+        Me.GroupBox1.Controls.Add(Me.Button3)
+        Me.GroupBox1.Location = New System.Drawing.Point(297, 99)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(200, 100)
+        Me.GroupBox1.TabIndex = 19
+        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.Text = "GroupBox1"
+        Me.GroupBox1.Visible = False
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(292, 219)
+        Me.ClientSize = New System.Drawing.Size(296, 219)
+        Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.sp)
-        Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.TOFUSTR)
         Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.EX)
@@ -218,6 +252,7 @@ Partial Class Form1
         Me.Text = "MKTABLE"
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
+        Me.GroupBox1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -239,5 +274,8 @@ Partial Class Form1
     Friend WithEvents EX As System.Windows.Forms.CheckBox
     Friend WithEvents sp As System.Windows.Forms.CheckBox
     Friend WithEvents Button3 As System.Windows.Forms.Button
+    Friend WithEvents Button4 As System.Windows.Forms.Button
+    Friend WithEvents Button5 As System.Windows.Forms.Button
+    Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
 
 End Class

@@ -117,25 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="MenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
-  <data name="SJIS.ToolTipText" xml:space="preserve">
-    <value>JISX0213規格のShift_JIS文字コードです,JISコード-0x2020したものを分けてそれぞれ区番号,点番号とすると
-//JIS1面　第1バイト
-区番号が1~62の時
-第1バイト= (区番号-1) ÷ 2 +0x81
-区番号が62~94の時
-第1バイト= (区番号-1) ÷ 2 +0xC1
-//JIS2面　第1バイト
-区番号が1, 3, 4, 5, 8, 12, 13, 14, 15 の時
-第1バイト= (区番号+ 0x1DF) ÷ 2 － (区番号 ÷ 8) × 3 
-区番号78～94の時、第1バイト= (区番号 + 0x19B) ÷ 2 
-//第2バイト
-・区番号が奇数の時
-点番号1~63の時,第2バイト=点番号+0x3F
-点番号63~94の時,第2バイト=点番号+0x40
-・区番号が偶数の時
-第2バイト=点番号+0x9E</value>
-  </data>
 </root>

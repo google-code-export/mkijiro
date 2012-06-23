@@ -15,6 +15,7 @@ Public Class Form1
     ' UTF32からUTF-8に変形
     Private Sub Button3_Click(sender As System.Object, e As System.EventArgs) Handles Button3.Click
         Dim bb As Byte() = Encoding.GetEncoding(12000).GetBytes(BASESTR.Text)
+        'Dim aa As Byte() = Encoding.Convert(Encoding.GetEncoding(12000), Encoding.GetEncoding(65001), bb)
         Dim wc As Integer = 0
         Dim i As Integer = 0
         Dim n As Integer = 0
@@ -27,6 +28,9 @@ Public Class Form1
         Array.Resize(bb, n)
 
         CVTSTR.Text = Encoding.GetEncoding(65001).GetString(bb)
+
+
+
 
     End Sub
 
@@ -146,8 +150,9 @@ Public Class Form1
                         For i = 0 To &HFFFF
                             bb(0) = CByte(i And &HFF)
                             bb(1) = CByte(i >> 8)
-                            s = System.Text.Encoding.GetEncoding(1200).GetString(bb)
-                            bbb = System.Text.Encoding.GetEncoding(enc).GetBytes(s)
+                            bbb = Encoding.Convert(Encoding.GetEncoding(1200), Encoding.GetEncoding(enc), bb)
+                            's = System.Text.Encoding.GetEncoding(1200).GetString(bb)
+                            'bbb = System.Text.Encoding.GetEncoding(enc).GetBytes(s)
                             Array.Resize(bbb, 4)
                             Array.Copy(bbb, 0, bs, i * 2, 2)
                             Array.Copy(bbb, 0, bss, i * 4, 4)
@@ -221,8 +226,9 @@ Public Class Form1
 
                                     bbb = BitConverter.GetBytes(sth)
                                     If sp.Checked = False Then
-                                        st = System.Text.Encoding.GetEncoding(12000).GetString(bbb)
-                                        bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(st)
+                                        bbb = Encoding.Convert(Encoding.GetEncoding(12000), Encoding.GetEncoding(65001), bbb)
+                                        'st = System.Text.Encoding.GetEncoding(12000).GetString(bbb)
+                                        'bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(st)
                                     Else
                                         'Dim bb As Byte() = Encoding.GetEncoding(12000).GetBytes(BASESTR.Text)
                                         i = 0
@@ -1417,4 +1423,28 @@ Public Class Form1
 
     End Sub
 
+    Private Sub Button4_Click(sender As System.Object, e As System.EventArgs) Handles Button4.Click
+
+        Dim b As Byte() = Encoding.GetEncoding(12000).GetBytes(BASESTR.Text)
+        Dim a As Byte() = Encoding.Convert(Encoding.GetEncoding(12000), Encoding.GetEncoding(65001), b)
+        Dim s As String = ""
+
+        For i = 0 To a.Length - 1
+            s &= a(i).ToString("X2")
+        Next
+        STRHEX.Text = s
+
+    End Sub
+
+    Private Sub Button5_Click(sender As System.Object, e As System.EventArgs) Handles Button5.Click
+
+        Dim b As Byte() = Encoding.GetEncoding(65001).GetBytes(BASESTR.Text)
+        Dim s As String = ""
+
+        For i = 0 To b.Length - 1
+            s &= b(i).ToString("X2")
+        Next
+        STRHEX.Text = s
+
+    End Sub
 End Class
