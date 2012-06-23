@@ -69,12 +69,12 @@ Namespace My
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("2132004")>  _
-        Public Property sel() As Integer
+        Public Property mscodepage() As Integer
             Get
-                Return CType(Me("sel"),Integer)
+                Return CType(Me("mscodepage"),Integer)
             End Get
             Set
-                Me("sel") = value
+                Me("mscodepage") = value
             End Set
         End Property
         
@@ -87,6 +87,54 @@ Namespace My
             End Get
             Set
                 Me("out") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property usercp() As Integer
+            Get
+                Return CType(Me("usercp"),Integer)
+            End Get
+            Set
+                Me("usercp") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property usercpsel() As Integer
+            Get
+                Return CType(Me("usercpsel"),Integer)
+            End Get
+            Set
+                Me("usercpsel") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0 OS defalut")>  _
+        Public Property cpstr() As String
+            Get
+                Return CType(Me("cpstr"),String)
+            End Get
+            Set
+                Me("cpstr") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0, 0")>  _
+        Public Property pos() As Global.System.Drawing.Point
+            Get
+                Return CType(Me("pos"),Global.System.Drawing.Point)
+            End Get
+            Set
+                Me("pos") = value
             End Set
         End Property
     End Class
