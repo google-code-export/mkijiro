@@ -8,11 +8,11 @@ Imports System.Runtime.InteropServices
 
 ' アセンブリ属性の値を確認します。
 
-<Assembly: AssemblyTitle("WindowsApplication1")> 
+<Assembly: AssemblyTitle("JISX0213NETA")> 
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("WindowsApplication1")> 
-<Assembly: AssemblyCopyright("Copyright ©  2012")> 
+<Assembly: AssemblyProduct("JISX0213NETA")> 
+<Assembly: AssemblyCopyright("(ﾟ∀ﾟ)")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>

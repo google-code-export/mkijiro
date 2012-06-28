@@ -36,6 +36,7 @@ Partial Class Form1
         Me.SJIS = New System.Windows.Forms.ToolStripMenuItem()
         Me.EUC = New System.Windows.Forms.ToolStripMenuItem()
         Me.JIS = New System.Windows.Forms.ToolStripMenuItem()
+        Me.JISX208ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BIG5HK = New System.Windows.Forms.ToolStripMenuItem()
         Me.SELCP = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
@@ -138,11 +139,23 @@ Partial Class Form1
         '
         'JIS
         '
+        Me.JIS.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.JISX208ToolStripMenuItem})
         Me.JIS.Name = "JIS"
         Me.JIS.Size = New System.Drawing.Size(180, 22)
         Me.JIS.Text = "ISO-2022-JP-2004"
         Me.JIS.ToolTipText = "JISX0213規格のJIS文字コードです、エスケープ＋特殊パターンでモードが切り替わります" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "1B 28 42: ASCII (厳密にはISO/IEC 646 " & _
     "国際基準版)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "1B 24 28 51: JIS X 0213第1面" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "1B 24 28 50: JIS X 0213第2面"
+        '
+        'JISX208ToolStripMenuItem
+        '
+        Me.JISX208ToolStripMenuItem.Checked = True
+        Me.JISX208ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.JISX208ToolStripMenuItem.Name = "JISX208ToolStripMenuItem"
+        Me.JISX208ToolStripMenuItem.Size = New System.Drawing.Size(183, 22)
+        Me.JISX208ToolStripMenuItem.Text = "JISX208互換モード"
+        Me.JISX208ToolStripMenuItem.ToolTipText = "JISX208のエスケープシーケンスを読みとるようにします" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "凜(JIS 0x7425,U+51DC),熙(JIS 0x7426,U+7199)はJIS90で出力" & _
+    "(M$だとJIS83で出力)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "JIS X 0208-1983(JIS83) 1b 24 42 ESC $ B" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "JIS X 0208-1990(JIS90) " & _
+    "1b 26 40 1b 24 42 ESC & @ ESC $ B"
         '
         'BIG5HK
         '
@@ -191,8 +204,8 @@ Partial Class Form1
         Me.Controls.Add(Me.unihex)
         Me.Controls.Add(Me.TextBox1)
         Me.Controls.Add(Me.MenuStrip1)
-        Me.DataBindings.Add(New System.Windows.Forms.Binding("Location", Global.JIS_213.My.MySettings.Default, "pos", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
-        Me.Location = Global.JIS_213.My.MySettings.Default.pos
+        Me.DataBindings.Add(New System.Windows.Forms.Binding("Location", Global.JISX0213NETA.My.MySettings.Default, "pos", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
+        Me.Location = Global.JISX0213NETA.My.MySettings.Default.pos
         Me.MainMenuStrip = Me.MenuStrip1
         Me.MaximumSize = New System.Drawing.Size(437, 480)
         Me.MinimumSize = New System.Drawing.Size(437, 480)
@@ -223,5 +236,6 @@ Partial Class Form1
     Friend WithEvents 終了ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents JIS As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents バージョンToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents JISX208ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class

@@ -137,6 +137,30 @@ Namespace My
                 Me("pos") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property jis208() As Boolean
+            Get
+                Return CType(Me("jis208"),Boolean)
+            End Get
+            Set
+                Me("jis208") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property lastfile() As String
+            Get
+                Return CType(Me("lastfile"),String)
+            End Get
+            Set
+                Me("lastfile") = value
+            End Set
+        End Property
     End Class
 End Namespace
 
@@ -148,9 +172,9 @@ Namespace My
     Friend Module MySettingsProperty
         
         <Global.System.ComponentModel.Design.HelpKeywordAttribute("My.Settings")>  _
-        Friend ReadOnly Property Settings() As Global.JIS_213.My.MySettings
+        Friend ReadOnly Property Settings() As Global.JISX0213NETA.My.MySettings
             Get
-                Return Global.JIS_213.My.MySettings.Default
+                Return Global.JISX0213NETA.My.MySettings.Default
             End Get
         End Property
     End Module

@@ -22,9 +22,11 @@ Partial Class form2
     'コード エディターを使って変更しないでください。
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.Button1 = New System.Windows.Forms.Button()
-        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
+        Me.SELECT_CP = New System.Windows.Forms.ComboBox()
         Me.Label1 = New System.Windows.Forms.Label()
+        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.SuspendLayout()
         '
         'Button1
@@ -38,10 +40,12 @@ Partial Class form2
         Me.Button1.Text = "OK"
         Me.Button1.UseVisualStyleBackColor = True
         '
-        'ComboBox1
+        'SELECT_CP
         '
-        Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {"0 OS default", "037 IBM037 IBM EBCDIC US-Canada", "437 IBM437 OEM United States", "500 IBM500 IBM EBCDIC International", "708 ASMO-708 Arabic (ASMO 708)", "709 Arabic (ASMO-449+, BCON V4)", "710 Arabic - Transparent Arabic", "720 DOS-720 Arabic (Transparent ASMO); Arabic (DOS)", "737 ibm737 OEM Greek (formerly 437G); Greek (DOS)", "775 ibm775 OEM Baltic; Baltic (DOS)", "850 ibm850 OEM Multilingual Latin 1; Western European (DOS)", "852 ibm852 OEM Latin 2; Central European (DOS)", "855 IBM855 OEM Cyrillic (primarily Russian)", "857 ibm857 OEM Turkish; Turkish (DOS)", "858 IBM00858 OEM Multilingual Latin 1 + Euro symbol", "860 IBM860 OEM Portuguese; Portuguese (DOS)", "861 ibm861 OEM Icelandic; Icelandic (DOS)", "862 DOS-862 OEM Hebrew; Hebrew (DOS)", "863 IBM863 OEM French Canadian; French Canadian (DOS)", "864 IBM864 OEM Arabic; Arabic (864)", "865 IBM865 OEM Nordic; Nordic (DOS)", "866 cp866 OEM Russian; Cyrillic (DOS)", "869 ibm869 OEM Modern Greek; Greek, Modern (DOS)", "870 IBM870 IBM EBCDIC Multilingual/ROECE (Latin 2); IBM EBCDIC Multilingual Latin" & _
+        Me.SELECT_CP.ContextMenuStrip = Me.ContextMenuStrip1
+        Me.SELECT_CP.FormattingEnabled = True
+        Me.SELECT_CP.ImeMode = System.Windows.Forms.ImeMode.Disable
+        Me.SELECT_CP.Items.AddRange(New Object() {"0 OS default", "037 IBM037 IBM EBCDIC US-Canada", "437 IBM437 OEM United States", "500 IBM500 IBM EBCDIC International", "708 ASMO-708 Arabic (ASMO 708)", "709 Arabic (ASMO-449+, BCON V4)", "710 Arabic - Transparent Arabic", "720 DOS-720 Arabic (Transparent ASMO); Arabic (DOS)", "737 ibm737 OEM Greek (formerly 437G); Greek (DOS)", "775 ibm775 OEM Baltic; Baltic (DOS)", "850 ibm850 OEM Multilingual Latin 1; Western European (DOS)", "852 ibm852 OEM Latin 2; Central European (DOS)", "855 IBM855 OEM Cyrillic (primarily Russian)", "857 ibm857 OEM Turkish; Turkish (DOS)", "858 IBM00858 OEM Multilingual Latin 1 + Euro symbol", "860 IBM860 OEM Portuguese; Portuguese (DOS)", "861 ibm861 OEM Icelandic; Icelandic (DOS)", "862 DOS-862 OEM Hebrew; Hebrew (DOS)", "863 IBM863 OEM French Canadian; French Canadian (DOS)", "864 IBM864 OEM Arabic; Arabic (864)", "865 IBM865 OEM Nordic; Nordic (DOS)", "866 cp866 OEM Russian; Cyrillic (DOS)", "869 ibm869 OEM Modern Greek; Greek, Modern (DOS)", "870 IBM870 IBM EBCDIC Multilingual/ROECE (Latin 2); IBM EBCDIC Multilingual Latin" & _
                 " 2", "874 windows-874 ANSI/OEM Thai (same as 28605, ISO 8859-15); Thai (Windows)", "875 cp875 IBM EBCDIC Greek Modern", "932 shift_jis ANSI/OEM Japanese; Japanese (Shift-JIS)", "936 gb2312 ANSI/OEM Simplified Chinese (PRC, Singapore); Chinese Simplified (GB23" & _
                 "12)", "949 ks_c_5601-1987 ANSI/OEM Korean (Unified Hangul Code)", "950 big5 ANSI/OEM Traditional Chinese (Taiwan; Hong Kong SAR, PRC); Chinese Tradi" & _
                 "tional (Big5)", "1026 IBM1026 IBM EBCDIC Turkish (Latin 5)", "1047 IBM01047 IBM EBCDIC Latin 1/Open System", "1140 IBM01140 IBM EBCDIC US-Canada (037 + Euro symbol); IBM EBCDIC (US-Canada-Eur" & _
@@ -63,10 +67,10 @@ Partial Class form2
                 "1 byte Kana)", "50222 iso-2022-jp ISO 2022 Japanese JIS X 0201-1989; Japanese (JIS-Allow 1 byte K" & _
                 "ana - SO/SI)", "50225 iso-2022-kr ISO 2022 Korean", "50227 x-cp50227 ISO 2022 Simplified Chinese; Chinese Simplified (ISO 2022)", "50229 ISO 2022 Traditional Chinese", "50930 EBCDIC Japanese (Katakana) Extended", "50931 EBCDIC US-Canada and Japanese", "50933 EBCDIC Korean Extended and Korean", "50935 EBCDIC Simplified Chinese Extended and Simplified Chinese", "50936 EBCDIC Simplified Chinese", "50937 EBCDIC US-Canada and Traditional Chinese", "50939 EBCDIC Japanese (Latin) Extended and Japanese", "51932 euc-jp EUC Japanese", "51936 EUC-CN EUC Simplified Chinese; Chinese Simplified (EUC)", "51949 euc-kr EUC Korean", "51950 EUC Traditional Chinese", "52936 hz-gb-2312 HZ-GB2312 Simplified Chinese; Chinese Simplified (HZ)", "54936 GB18030 Windows XP and later: GB18030 Simplified Chinese (4 byte); Chinese " & _
                 "Simplified (GB18030)", "57002 x-iscii-de ISCII Devanagari", "57003 x-iscii-be ISCII Bengali", "57004 x-iscii-ta ISCII Tamil", "57005 x-iscii-te ISCII Telugu", "57006 x-iscii-as ISCII Assamese", "57007 x-iscii-or ISCII Oriya", "57008 x-iscii-ka ISCII Kannada", "57009 x-iscii-ma ISCII Malayalam", "57010 x-iscii-gu ISCII Gujarati", "57011 x-iscii-pa ISCII Punjabi", "65000 utf-7 Unicode (UTF-7)", "65001 utf-8 Unicode (UTF-8)"})
-        Me.ComboBox1.Location = New System.Drawing.Point(30, 28)
-        Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(215, 20)
-        Me.ComboBox1.TabIndex = 1
+        Me.SELECT_CP.Location = New System.Drawing.Point(30, 28)
+        Me.SELECT_CP.Name = "SELECT_CP"
+        Me.SELECT_CP.Size = New System.Drawing.Size(215, 20)
+        Me.SELECT_CP.TabIndex = 1
         '
         'Label1
         '
@@ -77,13 +81,18 @@ Partial Class form2
         Me.Label1.TabIndex = 2
         Me.Label1.Text = "文字コード"
         '
+        'ContextMenuStrip1
+        '
+        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(61, 4)
+        '
         'form2
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(259, 88)
         Me.Controls.Add(Me.Label1)
-        Me.Controls.Add(Me.ComboBox1)
+        Me.Controls.Add(Me.SELECT_CP)
         Me.Controls.Add(Me.Button1)
         Me.Name = "form2"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
@@ -93,6 +102,7 @@ Partial Class form2
 
     End Sub
     Friend WithEvents Button1 As System.Windows.Forms.Button
-    Friend WithEvents ComboBox1 As System.Windows.Forms.ComboBox
+    Friend WithEvents SELECT_CP As System.Windows.Forms.ComboBox
     Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents ContextMenuStrip1 As System.Windows.Forms.ContextMenuStrip
 End Class

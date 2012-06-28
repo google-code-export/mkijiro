@@ -5,8 +5,8 @@ Imports System.Text.RegularExpressions
 
 Public Class Form1
 
-    Dim p As String() = {"sjis.txt", "euc-jp.txt", "gbk.txt", "table\euc-jp.dat", "table\shift-jis.dat", "table\gbk.dat", "unicode.txt", "txt_table\custom_utf32", "", "", "", "", ""}
-    Dim pp As String() = {"sjisvsgbk", "sjisvsutf8", "gbkvssjis", "gbkvsutf8", "eucvsgbk", "eucvsutf8"}
+    Dim p As String() = {"sjis.txt", "euc-jp.txt", "gbk.txt", "table\euc-jp.dat", "table\shift-jis.dat", "table\gbk.dat", "unicode.txt", "txt_table\custom_utf32", "", "", "", "", "", ""}
+    Dim pp As String() = {"sjisvsgbk", "sjisvsutf8", "gbkvssjis", "gbkvsutf8", "eucvsgbk", "eucvsutf8", "jisvsgbk", "jisvsutf8"}
 
     Private Sub TextBox1_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles ENCODE.KeyPress
         e.Handled = True
@@ -393,6 +393,29 @@ Public Class Form1
                         End If
                         llen = (&HFE - &HA1 + 1) * 94
                     End If
+                    'JIS VS
+                    If ENCODE.SelectedIndex = 11 Then
+                        If sp.Checked = False Then
+                            For i = &H2121 To &H7C7F
+                                bb(1) = CByte(i And &HFF)
+                                bb(0) = CByte(i >> 8)
+                                c1 = i >> 8
+                                c2 = i And &HFF
+                                If c2 >= &H21 AndAlso c1 >= &H21 AndAlso c2 <> &H7F Then
+                                    s = System.Text.Encoding.GetEncoding(51932).GetString(bb)
+                                    bbb = System.Text.Encoding.GetEncoding(502022).GetBytes(s)
+                                    bbbb = System.Text.Encoding.GetEncoding(65001).GetBytes(s)
+                                    Array.Copy(bbb, 3, bbb, 0, 2)
+                                    Array.Resize(bbb, 2)
+                                    Array.Resize(bbbb, 4)
+                                    dest = (c1 - &H21) * 94 + c2 - &H21
+                                    Array.Copy(bbb, 0, bs, dest * 2, 2)
+                                    Array.Copy(bbbb, 0, bss, dest * 4, 4)
+                                End If
+                            Next
+                        End If
+                        llen = (&H7E - &H21 + 1) * 94
+                    End If
 
                     If EX.Checked = True Then
                         Dim st As String = ""
@@ -572,6 +595,16 @@ Public Class Form1
 
                                 If c2 >= &HA1 AndAlso c1 >= &HA1 AndAlso c2 <> &HFF Then
                                     dest = (c3 * 94 * 94) + (c1 - &HA1) * 94 + c2 - &HA1
+                                    Array.Copy(bbb, 0, bss, dest * 4, 4)
+                                End If
+                            End If
+                            'JIS VS UTF8
+                            If ENCODE.SelectedIndex = 11 Then
+                                c1 = bb(0)
+                                c2 = bb(1)
+
+                                If c2 >= &H21 AndAlso c1 >= &H21 AndAlso c2 <> &H7F Then
+                                    dest = (c3 * 94 * 94) + (c1 - &H21) * 94 + c2 - &H21
                                     Array.Copy(bbb, 0, bss, dest * 4, 4)
                                 End If
                             End If

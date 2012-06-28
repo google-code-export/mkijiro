@@ -4,11 +4,51 @@ Imports System.IO
 
 Public Class Form1
 
+
     Private Sub INI(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
 
         TextBox1.Font = My.Settings.font
         restcodepage()
 
+        Dim cmds() As String
+        Dim fsname As String = ""
+        cmds = System.Environment.GetCommandLineArgs()
+        Dim cmd As String
+        Dim i As Integer = 0
+        For Each cmd In cmds
+            If i = 1 Then
+                fsname = cmd
+            End If
+            i += 1
+        Next
+
+        If Directory.Exists(My.Settings.lastfile) = False Then
+            My.Settings.lastfile = Application.StartupPath & "\"
+        End If
+
+        If File.Exists(fsname) Then
+
+            If My.Settings.mscodepage = 2132004 Or My.Settings.mscodepage = 512132004 Or My.Settings.mscodepage = 202132004 Or My.Settings.mscodepage = 951 Then
+
+                Dim fs As New FileStream(fsname, FileMode.Open, FileAccess.Read)
+                Dim bs(CInt(fs.Length - 1)) As Byte
+                fs.Read(bs, 0, bs.Length)
+                fs.Close()
+
+                Dim sel As Integer = 0
+                sel = sel_num(sel, 0)
+
+                TextBox1.Text = Encoding.GetEncoding(65001).GetString(customtable_parse(bs, sel))
+
+            Else
+                Dim fs As New FileStream(fsname, FileMode.Open, FileAccess.Read)
+                Dim bs(CInt(fs.Length - 1)) As Byte
+                fs.Read(bs, 0, bs.Length)
+                fs.Close()
+                TextBox1.Text = Encoding.GetEncoding(My.Settings.mscodepage).GetString(bs)
+
+            End If
+        End If
     End Sub
 
     Dim parsetest As String() = {"table\sjis2004test.txt", "table\eucjis2004.txt", "table\big5hkscs.txt", "table\iso2022jp2004.txt"}
@@ -28,19 +68,20 @@ Public Class Form1
         Return sel
     End Function
 
-
     Private Sub 開くToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles 開くToolStripMenuItem.Click
         Dim ofd As New OpenFileDialog()
 
-        ofd.InitialDirectory = Application.StartupPath
-        ofd.Filter = _
-            "TXTファイル(*.txt)|*.txt|すべてのファイル(*.*)|*.*"
+        ofd.InitialDirectory = My.Settings.lastfile
+        ofd.Filter = "TXTファイル(*.txt)|*.txt|すべてのファイル(*.*)|*.*"
         'タイトルを設定する
         ofd.Title = "開くファイルを選択してください"
         ofd.RestoreDirectory = True
         ofd.CheckFileExists = True
         ofd.CheckPathExists = True
         If ofd.ShowDialog() = DialogResult.OK Then
+
+            My.Settings.lastfile = Path.GetDirectoryName(ofd.FileName)
+
             If My.Settings.mscodepage = 2132004 Or My.Settings.mscodepage = 512132004 Or My.Settings.mscodepage = 202132004 Or My.Settings.mscodepage = 951 Then
 
                 Dim fs As New FileStream(ofd.FileName, FileMode.Open, FileAccess.Read)
@@ -64,10 +105,10 @@ Public Class Form1
         End If
     End Sub
 
-
     Private Sub SAVEAS_Click(sender As System.Object, e As System.EventArgs) Handles SAVEAS.Click
         Dim sfd As New SaveFileDialog()
 
+        sfd.InitialDirectory = My.Settings.lastfile
         sfd.FileName = "新しいファイル.txt"
         sfd.Filter = "TXTファイル(*.txt)|*.txt|すべてのファイル(*.*)|*.*"
         sfd.Title = "保存先のファイルを選択してください"
@@ -76,16 +117,16 @@ Public Class Form1
 
         'ダイアログを表示する
         If sfd.ShowDialog() = DialogResult.OK Then
+            My.Settings.lastfile = Path.GetDirectoryName(sfd.FileName)
             savefile(sfd.FileName)
         End If
     End Sub
 
-
     Private Function customtable_parse(ByVal bs As Byte(), ByVal sel As Integer) As Byte()
 
-        If File.Exists(vstable(sel)) Then
+        If File.Exists(Application.StartupPath & "\" & vstable(sel)) Then
             Dim bss(CInt(bs.Length - 1) * 2) As Byte
-            Dim tfs As New FileStream(vstable(sel), FileMode.Open, FileAccess.Read)
+            Dim tfs As New FileStream(Application.StartupPath & "\" & vstable(sel), FileMode.Open, FileAccess.Read)
             Dim tbl(CInt(tfs.Length - 1)) As Byte
             tfs.Read(tbl, 0, tbl.Length)
             tfs.Close()
@@ -203,15 +244,28 @@ Public Class Form1
 
                 'JIS
             ElseIf JIS.Checked = True Then
-
-                '1B 28 42: ASCII (厳密にはISO/IEC 646 国際基準版)
-                '1B 24 28 51: JIS X 0213第1面
-                '1B 24 28 50: JIS X 0213第2面
-
-                '1B 24 42 (JIS X 0208-1983のエスケープシーケンス): 
-                '1B 24 28 4F (JIS X 0213:2000第1面のエスケープシーケンス): 
-
+                
+                'JIS C 6226-1978 	1b 24 40 	ESC $ @
+                'JIS X 0208-1983 	1b 24 42 	ESC $ B
+                'JIS X 0208-1990 	1b 26 40 1b 24 42 	ESC & @ ESC $ B
+                'JIS X 0212-1990 	1b 24 28 44 	ESC $ ( D
+                'JIS X 0213:2000 1面 	1b 24 28 4f 	ESC $ ( O
+                'JIS X 0213:2004 1面 	1b 24 28 51 	ESC $ ( Q
+                'JIS X 0213:2000 2面 	1b 24 28 50 	ESC $ ( P
+                'JIS X 0201 ラテン文字 	1b 28 4a 	ESC ( J
+                'JIS X 0201 ラテン文字 	1b 28 48 	ESC ( H [*2]
+                'JIS X 0201 片仮名 	1b 28 49 	ESC ( I
+                'ISO/IEC 646 IRV 	1b 28 42 	ESC ( B
                 Dim mode As Integer = -1
+                Dim tbl208 As Byte() = Nothing
+                Dim jis208 As Boolean = My.Settings.jis208
+
+                If My.Settings.jis208 = True Then
+                    Dim tfss As New FileStream(Application.StartupPath & "\table\jisvsutf8", FileMode.Open, FileAccess.Read)
+                    Array.Resize(tbl208, CInt(tfss.Length))
+                    tfss.Read(tbl208, 0, tbl208.Length)
+                    tfss.Close()
+                End If
 
                 While i < bs.Length
                     c1 = bs(i)
@@ -221,19 +275,33 @@ Public Class Form1
                         If c2 = &H28 AndAlso c3 = &H42 Then
                             mode = 0
                             i += 3
-                        ElseIf c2 = &H24 AndAlso c3 = &H28 AndAlso (i < len - 3) Then
-                            c4 = bs(i + 3)
-                            If c4 = &H51 Then
-                                mode = 1
-                            ElseIf c4 = &H50 Then
-                                mode = 2
+                        ElseIf jis208 = True AndAlso c2 = &H24 AndAlso c3 = &H42 AndAlso (i < len - 2) Then
+                            mode = 4
+                            i += 3
+                        ElseIf jis208 = True AndAlso c2 = &H26 AndAlso c3 = &H40 AndAlso (i < len - 5) Then
+                            mode = -1
+                            i += 3
+                            c1 = bs(i)
+                            c2 = bs(i + 1)
+                            c3 = bs(i + 2)
+                            If c1 = &H1B AndAlso c2 = &H24 AndAlso c3 = &H42 AndAlso (i < len - 2) Then
+                                mode = 4
+                                i += 3
+                            End If
+
+                            ElseIf c2 = &H24 AndAlso c3 = &H28 AndAlso (i < len - 3) Then
+                                c4 = bs(i + 3)
+                                If c4 = &H51 Then
+                                    mode = 1
+                                ElseIf c4 = &H50 Then
+                                    mode = 2
+                                Else
+                                    mode = -1
+                                End If
+                                i += 4
                             Else
                                 mode = -1
                             End If
-                            i += 4
-                        Else
-                            mode = -1
-                        End If
                     ElseIf mode = 0 AndAlso c1 < 128 Then
                         '制御コード排除
                         If (c1 < 32 AndAlso c1 <> &H9 AndAlso c1 <> &HD AndAlso c1 <> &HA) Or c1 = &H7F Then
@@ -255,7 +323,7 @@ Public Class Form1
                         End If
                         i += 1
                         k += 1
-                    ElseIf mode = 1 AndAlso (((c1 + &HDF) And &HFF) < &H5E) Then
+                    ElseIf jis208 = True AndAlso mode = 4 AndAlso (((c1 + &HDF) And &HFF) < &H5E) AndAlso i < len - 1 Then
                         c2 = bs(i + 1)
                         If c2 >= &H21 AndAlso c2 <= &H7E Then
                             pos = (c1 - &H21) * 94 + c2 - &H21
@@ -272,32 +340,62 @@ Public Class Form1
 
                                     ElseIf ct < &HE0 Then
                                         k += 2
-                                            If c1 = &H2B AndAlso (c2 And 1) = 0 AndAlso c2 >= &H48 AndAlso c2 <= &H4F Then
-                                                Array.Copy(ac, 0, bss, k, 2)
-                                                k += 2
-                                            ElseIf c1 = &H2B AndAlso (c2 And 1) = 1 AndAlso c2 >= &H48 AndAlso c2 <= &H4F Then
-                                                Array.Copy(ac2, 0, bss, k, 2)
-                                                k += 2
-                                            ElseIf c1 = &H2B AndAlso (c2 = &H65 Or c2 = &H66) Then
-                                                Array.Copy(gousei, (c2 And 1) * 2, bss, k, 2)
-                                                k += 2
-                                            ElseIf c1 = &H2B AndAlso c2 = &H44 Then
-                                                Array.Copy(ac, 0, bss, k, 2)
-                                                k += 2
-                                            End If
+                                    ElseIf ct < &HF0 Then
+                                        k += 3
+                                    ElseIf ct < &HF8 Then
+                                        k += 4
+                                    End If
+                                End If
+                            End If
+                        Else
+                            Array.Copy(tofu, 0, bss, k, 3)
+                            k += 3
+                        End If
+                        i += 2
+                        'jis213 panel1
+                    ElseIf mode = 1 AndAlso (((c1 + &HDF) And &HFF) < &H5E) AndAlso i < len - 1 Then
+                        c2 = bs(i + 1)
+                        If c2 >= &H21 AndAlso c2 <= &H7E Then
+                            pos = (c1 - &H21) * 94 + c2 - &H21
+                            If pos * 4 < tbl.Length Then
+                                Array.Copy(tbl, pos * 4, bss, k, 4)
+                                ct = bss(k)
+                                If ct = 0 Then
+                                    Array.Copy(tofu, 0, bss, k, 3)
+                                    k += 3
+                                Else
+                                    If ct < &H80 Then
+                                        k += 1
+                                    ElseIf ct < &HC2 Then
+
+                                    ElseIf ct < &HE0 Then
+                                        k += 2
+                                        If c1 = &H2B AndAlso (c2 And 1) = 0 AndAlso c2 >= &H48 AndAlso c2 <= &H4F Then
+                                            Array.Copy(ac, 0, bss, k, 2)
+                                            k += 2
+                                        ElseIf c1 = &H2B AndAlso (c2 And 1) = 1 AndAlso c2 >= &H48 AndAlso c2 <= &H4F Then
+                                            Array.Copy(ac2, 0, bss, k, 2)
+                                            k += 2
+                                        ElseIf c1 = &H2B AndAlso (c2 = &H65 Or c2 = &H66) Then
+                                            Array.Copy(gousei, (c2 And 1) * 2, bss, k, 2)
+                                            k += 2
+                                        ElseIf c1 = &H2B AndAlso c2 = &H44 Then
+                                            Array.Copy(ac, 0, bss, k, 2)
+                                            k += 2
+                                        End If
 
                                     ElseIf ct < &HF0 Then
                                         k += 3
-                                            If c1 = &H24 AndAlso c2 >= &H77 AndAlso c2 <= &H7B Then
-                                                Array.Copy(maru, 0, bss, k, 3)
-                                                k += 3
-                                            ElseIf c1 = &H25 AndAlso c2 >= &H77 AndAlso c2 <= &H7E Then
-                                                Array.Copy(maru, 0, bss, k, 3)
-                                                k += 3
-                                            ElseIf c1 = &H26 AndAlso c2 = &H78 Then
-                                                Array.Copy(maru, 0, bss, k, 3)
-                                                k += 3
-                                            End If
+                                        If c1 = &H24 AndAlso c2 >= &H77 AndAlso c2 <= &H7B Then
+                                            Array.Copy(maru, 0, bss, k, 3)
+                                            k += 3
+                                        ElseIf c1 = &H25 AndAlso c2 >= &H77 AndAlso c2 <= &H7E Then
+                                            Array.Copy(maru, 0, bss, k, 3)
+                                            k += 3
+                                        ElseIf c1 = &H26 AndAlso c2 = &H78 Then
+                                            Array.Copy(maru, 0, bss, k, 3)
+                                            k += 3
+                                        End If
 
                                     ElseIf ct < &HF8 Then
                                         k += 4
@@ -309,7 +407,7 @@ Public Class Form1
                             k += 3
                         End If
                         i += 2
-
+                        'jisx panel2
                     ElseIf mode = 2 AndAlso (((c1 + &HDF) And &HFF) < &H5E) Then
                         c2 = bs(i + 1)
                         If c2 >= &H21 AndAlso c2 <= &H7E Then
@@ -469,65 +567,65 @@ Public Class Form1
                 End While
 
                 'extra 'GBK/BIG5
-                    ElseIf BIG5HK.Checked = True Then
-                    While i < bs.Length
-                        c1 = bs(i)
-                        If c1 < 128 Then
-                            '制御コード排除
-                            If (c1 < 32 AndAlso c1 <> &H9 AndAlso c1 <> &HD AndAlso c1 <> &HA) Or c1 = &H7F Then
-                                c1 = 32
+            ElseIf BIG5HK.Checked = True Then
+                While i < bs.Length
+                    c1 = bs(i)
+                    If c1 < 128 Then
+                        '制御コード排除
+                        If (c1 < 32 AndAlso c1 <> &H9 AndAlso c1 <> &HD AndAlso c1 <> &HA) Or c1 = &H7F Then
+                            c1 = 32
+                        End If
+                        bss(k) = c1
+                        '改行CRLF化
+                        If c1 = &HA Then
+                            If k > 0 Then
+                                c2 = bss(k - 1)
+                            Else
+                                c2 = 0
                             End If
-                            bss(k) = c1
-                            '改行CRLF化
-                            If c1 = &HA Then
-                                If k > 0 Then
-                                    c2 = bss(k - 1)
+                            If c2 <> &HD Then
+                                bss(k) = &HD
+                                bss(k + 1) = c1
+                                k += 1
+                            End If
+                        End If
+                        k += 1
+                        i += 1
+                        'BIG5/GBK
+                    ElseIf (((c1 + &H7F) And &HFF) < &H7E) AndAlso i < len - 1 Then
+                        c2 = bs(i + 1)
+                        If c2 >= &H40 AndAlso c2 <= &HFE Then
+                            pos = (c1 - &H81) * 192 + c2 - &H40
+                            If pos * 4 < tbl.Length Then
+                                Array.Copy(tbl, pos * 4, bss, k, 4)
+                                ct = bss(k)
+                                If ct = 0 Then
+                                    Array.Copy(tofu, 0, bss, k, 3)
+                                    k += 3
                                 Else
-                                    c2 = 0
-                                End If
-                                If c2 <> &HD Then
-                                    bss(k) = &HD
-                                    bss(k + 1) = c1
-                                    k += 1
-                                End If
-                            End If
-                            k += 1
-                            i += 1
-                            'BIG5/GBK
-                        ElseIf (((c1 + &H7F) And &HFF) < &H7E) AndAlso i < len - 1 Then
-                            c2 = bs(i + 1)
-                            If c2 >= &H40 AndAlso c2 <= &HFE Then
-                                pos = (c1 - &H81) * 192 + c2 - &H40
-                                If pos * 4 < tbl.Length Then
-                                    Array.Copy(tbl, pos * 4, bss, k, 4)
-                                    ct = bss(k)
-                                    If ct = 0 Then
-                                        Array.Copy(tofu, 0, bss, k, 3)
+                                    If ct < &H80 Then
+                                        k += 1
+                                    ElseIf ct < &HC2 Then
+                                    ElseIf ct < &HE0 Then
+                                        k += 2
+                                    ElseIf ct < &HF0 Then
                                         k += 3
-                                    Else
-                                        If ct < &H80 Then
-                                            k += 1
-                                        ElseIf ct < &HC2 Then
-                                        ElseIf ct < &HE0 Then
-                                            k += 2
-                                        ElseIf ct < &HF0 Then
-                                            k += 3
-                                        ElseIf ct < &HF8 Then
-                                            k += 4
-                                        End If
+                                    ElseIf ct < &HF8 Then
+                                        k += 4
                                     End If
                                 End If
-                            Else
-                                Array.Copy(tofu, 0, bss, k, 3)
-                                k += 3
                             End If
-                            i += 2
                         Else
-                            i += 1
+                            Array.Copy(tofu, 0, bss, k, 3)
+                            k += 3
                         End If
-
-                    End While
+                        i += 2
+                    Else
+                        i += 1
                     End If
+
+                End While
+            End If
 
             Array.Resize(bss, k)
             Return bss
@@ -542,7 +640,7 @@ Public Class Form1
         Dim sel As Integer = 0
         sel = sel_num(sel, 0)
 
-        If File.Exists(parsetest(sel)) Then
+        If File.Exists(Application.StartupPath & "\" & parsetest(sel)) Then
 
             Dim fs As New FileStream(parsetest(sel), FileMode.Open, FileAccess.Read)
             Dim bs(CInt(fs.Length - 1)) As Byte
@@ -630,10 +728,10 @@ Public Class Form1
 
             Dim sel As Integer = 0
             sel = sel_num(sel, 1)
-            If File.Exists(unitable(sel)) = True Then
+            If File.Exists(Application.StartupPath & "\" & unitable(sel)) = True Then
                 bs = Encoding.GetEncoding(1200).GetBytes(TextBox1.Text)
                 Dim bss(CInt(bs.Length - 1)) As Byte
-                Dim tfs As New FileStream(unitable(sel), FileMode.Open, FileAccess.Read)
+                Dim tfs As New FileStream(Application.StartupPath & "\" & unitable(sel), FileMode.Open, FileAccess.Read)
                 Dim tbl(CInt(tfs.Length - 1)) As Byte
                 tfs.Read(tbl, 0, tbl.Length)
                 tfs.Close()
@@ -774,13 +872,33 @@ Public Class Form1
 
                     'JIS2004
                 ElseIf JIS.Checked = True Then
-                    '1B 28 42: ASCII (厳密にはISO/IEC 646 国際基準版)
-                    '1B 24 28 51: JIS X 0213第1面
-                    '1B 24 28 50: JIS X 0213第2面
+                    'JIS C 6226-1978 	1b 24 40 	ESC $ @
+                    'JIS X 0208-1983 	1b 24 42 	ESC $ B
+                    'JIS X 0208-1990 	1b 26 40 1b 24 42 	ESC & @ ESC $ B
+                    'JIS X 0212-1990 	1b 24 28 44 	ESC $ ( D
+                    'JIS X 0213:2000 1面 	1b 24 28 4f 	ESC $ ( O
+                    'JIS X 0213:2004 1面 	1b 24 28 51 	ESC $ ( Q
+                    'JIS X 0213:2000 2面 	1b 24 28 50 	ESC $ ( P
+                    'JIS X 0201 ラテン文字 	1b 28 4a 	ESC ( J
+                    'JIS X 0201 ラテン文字 	1b 28 48 	ESC ( H [*2]
+                    'JIS X 0201 片仮名 	1b 28 49 	ESC ( I
+                    'ISO/IEC 646 IRV 	1b 28 42 	ESC ( B
                     Dim ascii As Byte() = {&H1B, &H28, &H42}
+                    Dim jis208 As Byte() = {&H1B, &H24, &H42}
+                    Dim jis208_90 As Byte() = {&H1B, &H26, &H40, &H1B, &H24, &H42}
+                    Dim jis2000 As Byte() = {&H1B, &H24, &H28, &H4F}
                     Dim jisp1 As Byte() = {&H1B, &H24, &H28, &H51}
                     Dim jisp2 As Byte() = {&H1B, &H24, &H28, &H50}
                     Dim mode As Integer = -1
+                    Dim tbl208 As Byte() = Nothing
+                    Array.Resize(bss, bss.Length * 2 + 100)
+
+                    If My.Settings.jis208 = True Then
+                        Dim tfss As New FileStream(Application.StartupPath & "\table\custom_utf32_4", FileMode.Open, FileAccess.Read)
+                        Array.Resize(tbl208, CInt(tfss.Length))
+                        tfss.Read(tbl208, 0, tbl208.Length)
+                        tfss.Close()
+                    End If
 
                     While i < bs.Length
                         hex = BitConverter.ToUInt16(bs, i)
@@ -804,7 +922,6 @@ Public Class Form1
                             bss(k) = c1 And &H7F
                             bss(k + 1) = c2 And &H7F
                             bss(k + 2) = c3 And &H7F
-
 
                             If i + 4 <= bs.Length Then
                                 hex2 = BitConverter.ToUInt16(bs, i + 2)
@@ -900,10 +1017,18 @@ Public Class Form1
                                     bss(k) = pos
                                     k += 1
                                 ElseIf c1 = 0 AndAlso c2 = 0 Then
-                                    If mode <> 1 Then
-                                        mode = 1
-                                        Array.Copy(jisp1, 0, bss, k, 4)
-                                        k += 4
+                                    If My.Settings.jis208 = True Then
+                                        If mode <> 4 Then
+                                            mode = 4
+                                            Array.Copy(jis208, 0, bss, k, 3)
+                                            k += 3
+                                        End If
+                                    Else
+                                        If mode <> 1 Then
+                                            mode = 1
+                                            Array.Copy(jisp1, 0, bss, k, 4)
+                                            k += 4
+                                        End If
                                     End If
                                     Array.Copy(tofujis, 0, bss, k, 2)
                                     k += 2
@@ -912,34 +1037,95 @@ Public Class Form1
 
 
                                 ElseIf c1 = &H8F Then
-                                    If mode <> 2 Then
-                                        mode = 2
-                                        Array.Copy(jisp2, 0, bss, k, 4)
-                                        k += 4
-                                    End If
-                                    bss(k) = c2 And &H7F
-                                    bss(k + 1) = c3 And &H7F
-                                    k += 2
+                                        If mode <> 2 Then
+                                            mode = 2
+                                            Array.Copy(jisp2, 0, bss, k, 4)
+                                            k += 4
+                                        End If
+                                        bss(k) = c2 And &H7F
+                                        bss(k + 1) = c3 And &H7F
+                                        k += 2
 
                                 ElseIf ((c1 + &H5F) And &HFF) < &H5E AndAlso c2 >= &HA1 Then
-                                    If mode <> 1 Then
-                                        mode = 1
-                                        Array.Copy(jisp1, 0, bss, k, 4)
-                                        k += 4
+                                    If My.Settings.jis208 = True Then
+                                        Array.Copy(tbl208, pos * 4, bss, k, 4)
+                                        c1 = bss(k)
+                                        c2 = bss(k + 1)
+                                        If c1 = 0 AndAlso c2 = 0 Then
+                                            Array.Copy(tbl, pos * 4, bss, k, 4)
+                                            c1 = bss(k)
+                                            c2 = bss(k + 1)
+                                            If mode <> 1 Then
+                                                mode = 1
+                                                Array.Copy(jisp1, 0, bss, k, 4)
+                                                k += 4
+                                            End If
+                                        ElseIf c1 = &H74 AndAlso (c2 = &H25 Or c2 = &H26) Then
+                                            If mode <> 5 Then
+                                                mode = 5
+                                                Array.Copy(jis208_90, 0, bss, k, 6)
+                                                k += 6
+                                            End If
+                                        Else
+                                            If mode <> 4 Then
+                                                mode = 4
+                                                Array.Copy(jis208, 0, bss, k, 3)
+                                                k += 3
+                                            End If
+                                        End If
+                                    Else
+                                        If mode <> 1 Then
+                                            mode = 1
+                                            Array.Copy(jisp1, 0, bss, k, 4)
+                                            k += 4
+                                        End If
                                     End If
-                                    bss(k) = c1 And &H7F
-                                    bss(k + 1) = c2 And &H7F
-                                    k += 2
+
+                                    If c1 = 0 AndAlso c2 = 0 Then
+                                        If My.Settings.jis208 = True Then
+                                            If mode <> 4 Then
+                                                mode = 4
+                                                Array.Copy(jis208, 0, bss, k, 3)
+                                                k += 3
+                                            Else
+                                                If mode <> 1 Then
+                                                    mode = 1
+                                                    Array.Copy(jisp1, 0, bss, k, 4)
+                                                    k += 4
+                                                End If
+                                            End If
+                                        Else
+                                            If mode <> 1 Then
+                                                mode = 1
+                                                Array.Copy(jisp1, 0, bss, k, 4)
+                                                k += 4
+                                            End If
+                                        End If
+                                        Array.Copy(tofujis, 0, bss, k, 2)
+                                        k += 2
+                                    Else
+                                        bss(k) = c1 And &H7F
+                                        bss(k + 1) = c2 And &H7F
+                                        k += 2
+                                    End If
 
                                 Else
-                                    If mode <> 1 Then
-                                        mode = 1
-                                        Array.Copy(jisp1, 0, bss, k, 4)
-                                        k += 4
+                                    If My.Settings.jis208 = True Then
+                                        If mode <> 4 Then
+                                            mode = 4
+                                            Array.Copy(jis208, 0, bss, k, 3)
+                                            k += 3
+                                        End If
+                                    Else
+                                        If mode <> 1 Then
+                                            mode = 1
+                                            Array.Copy(jisp1, 0, bss, k, 4)
+                                            k += 4
+                                        End If
                                     End If
                                     Array.Copy(tofujis, 0, bss, k, 2)
                                     k += 2
-                                End If
+                                    End If
                             End If
                         End If
                         i += 2
@@ -1616,5 +1802,10 @@ Public Class Form1
         f.ShowDialog()
         f.Dispose()
 
+    End Sub
+
+    Private Sub JISX208ToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles JISX208ToolStripMenuItem.Click
+        JISX208ToolStripMenuItem.Checked = Not JISX208ToolStripMenuItem.Checked
+        My.Settings.jis208 = JISX208ToolStripMenuItem.Checked
     End Sub
 End Class
