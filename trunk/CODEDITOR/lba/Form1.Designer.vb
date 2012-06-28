@@ -28,6 +28,8 @@ Partial Class Form1
         Me.ContextMenuStrip2 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.TREECOLLASEToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TREEEXPANDToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SECTORVIEWTREE = New System.Windows.Forms.ToolStripMenuItem()
+        Me.PATHTABLEToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.EXTRACTDATAToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.絶対パスで展開ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -35,7 +37,6 @@ Partial Class Form1
         Me.EXTRACTLBAToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ABSOLUTPATHToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OFFSETPATHToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.SECTORVIEWTREE = New System.Windows.Forms.ToolStripMenuItem()
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.Button1 = New System.Windows.Forms.Button()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
@@ -84,7 +85,6 @@ Partial Class Form1
         Me.vlistmax = New System.Windows.Forms.TextBox()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
-        Me.PATHTABLEToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ContextMenuStrip2.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -100,10 +100,10 @@ Partial Class Form1
         Me.TreeView1.ImageList = Me.ImageList1
         Me.TreeView1.ImeMode = System.Windows.Forms.ImeMode.NoControl
         Me.TreeView1.LineColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(240, Byte), Integer), CType(CType(240, Byte), Integer))
-        Me.TreeView1.Location = New System.Drawing.Point(36, 76)
+        Me.TreeView1.Location = New System.Drawing.Point(31, 65)
         Me.TreeView1.Name = "TreeView1"
         Me.TreeView1.SelectedImageIndex = 0
-        Me.TreeView1.Size = New System.Drawing.Size(293, 357)
+        Me.TreeView1.Size = New System.Drawing.Size(252, 307)
         Me.TreeView1.TabIndex = 0
         '
         'ContextMenuStrip2
@@ -124,6 +124,20 @@ Partial Class Form1
         Me.TREEEXPANDToolStripMenuItem.Size = New System.Drawing.Size(193, 26)
         Me.TREEEXPANDToolStripMenuItem.Text = "TREE EXPAND"
         '
+        'SECTORVIEWTREE
+        '
+        Me.SECTORVIEWTREE.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.PATHTABLEToolStripMenuItem})
+        Me.SECTORVIEWTREE.Name = "SECTORVIEWTREE"
+        Me.SECTORVIEWTREE.Size = New System.Drawing.Size(193, 26)
+        Me.SECTORVIEWTREE.Text = "SECTORVIEW"
+        '
+        'PATHTABLEToolStripMenuItem
+        '
+        Me.PATHTABLEToolStripMenuItem.Name = "PATHTABLEToolStripMenuItem"
+        Me.PATHTABLEToolStripMenuItem.Size = New System.Drawing.Size(144, 22)
+        Me.PATHTABLEToolStripMenuItem.Text = "PATHTABLE"
+        Me.PATHTABLEToolStripMenuItem.Visible = False
+        '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
@@ -139,13 +153,13 @@ Partial Class Form1
         '絶対パスで展開ToolStripMenuItem
         '
         Me.絶対パスで展開ToolStripMenuItem.Name = "絶対パスで展開ToolStripMenuItem"
-        Me.絶対パスで展開ToolStripMenuItem.Size = New System.Drawing.Size(178, 26)
+        Me.絶対パスで展開ToolStripMenuItem.Size = New System.Drawing.Size(160, 22)
         Me.絶対パスで展開ToolStripMenuItem.Text = "絶対パスで展開"
         '
         '相対パスで展開ToolStripMenuItem
         '
         Me.相対パスで展開ToolStripMenuItem.Name = "相対パスで展開ToolStripMenuItem"
-        Me.相対パスで展開ToolStripMenuItem.Size = New System.Drawing.Size(178, 26)
+        Me.相対パスで展開ToolStripMenuItem.Size = New System.Drawing.Size(160, 22)
         Me.相対パスで展開ToolStripMenuItem.Text = "相対パスで展開"
         '
         'EXTRACTLBAToolStripMenuItem
@@ -158,21 +172,14 @@ Partial Class Form1
         'ABSOLUTPATHToolStripMenuItem
         '
         Me.ABSOLUTPATHToolStripMenuItem.Name = "ABSOLUTPATHToolStripMenuItem"
-        Me.ABSOLUTPATHToolStripMenuItem.Size = New System.Drawing.Size(178, 26)
+        Me.ABSOLUTPATHToolStripMenuItem.Size = New System.Drawing.Size(160, 22)
         Me.ABSOLUTPATHToolStripMenuItem.Text = "絶対パスで出力"
         '
         'OFFSETPATHToolStripMenuItem
         '
         Me.OFFSETPATHToolStripMenuItem.Name = "OFFSETPATHToolStripMenuItem"
-        Me.OFFSETPATHToolStripMenuItem.Size = New System.Drawing.Size(178, 26)
+        Me.OFFSETPATHToolStripMenuItem.Size = New System.Drawing.Size(160, 22)
         Me.OFFSETPATHToolStripMenuItem.Text = "相対パスで出力"
-        '
-        'SECTORVIEWTREE
-        '
-        Me.SECTORVIEWTREE.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.PATHTABLEToolStripMenuItem})
-        Me.SECTORVIEWTREE.Name = "SECTORVIEWTREE"
-        Me.SECTORVIEWTREE.Size = New System.Drawing.Size(193, 26)
-        Me.SECTORVIEWTREE.Text = "SECTORVIEW"
         '
         'ImageList1
         '
@@ -186,34 +193,34 @@ Partial Class Form1
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(459, 439)
+        Me.Button1.Location = New System.Drawing.Point(393, 376)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(85, 23)
+        Me.Button1.Size = New System.Drawing.Size(73, 20)
         Me.Button1.TabIndex = 1
         Me.Button1.Text = "pathtable"
         Me.Button1.UseVisualStyleBackColor = True
         '
         'TextBox1
         '
-        Me.TextBox1.Location = New System.Drawing.Point(33, 439)
+        Me.TextBox1.Location = New System.Drawing.Point(28, 376)
         Me.TextBox1.Multiline = True
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TextBox1.Size = New System.Drawing.Size(399, 127)
+        Me.TextBox1.Size = New System.Drawing.Size(343, 109)
         Me.TextBox1.TabIndex = 2
         '
         'uid_seek
         '
-        Me.uid_seek.Location = New System.Drawing.Point(550, 468)
+        Me.uid_seek.Location = New System.Drawing.Point(471, 401)
         Me.uid_seek.Name = "uid_seek"
-        Me.uid_seek.Size = New System.Drawing.Size(100, 21)
+        Me.uid_seek.Size = New System.Drawing.Size(86, 19)
         Me.uid_seek.TabIndex = 3
         '
         'Button2
         '
-        Me.Button2.Location = New System.Drawing.Point(459, 468)
+        Me.Button2.Location = New System.Drawing.Point(393, 401)
         Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(85, 23)
+        Me.Button2.Size = New System.Drawing.Size(73, 20)
         Me.Button2.TabIndex = 4
         Me.Button2.Text = "UID"
         Me.Button2.UseVisualStyleBackColor = True
@@ -224,9 +231,9 @@ Partial Class Form1
         Me.ListView1.ContextMenuStrip = Me.ContextMenuStrip1
         Me.ListView1.FullRowSelect = True
         Me.ListView1.HideSelection = False
-        Me.ListView1.Location = New System.Drawing.Point(353, 76)
+        Me.ListView1.Location = New System.Drawing.Point(303, 65)
         Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(548, 356)
+        Me.ListView1.Size = New System.Drawing.Size(470, 306)
         Me.ListView1.SmallImageList = Me.ImageList1
         Me.ListView1.TabIndex = 5
         Me.ListView1.UseCompatibleStateImageBehavior = False
@@ -270,17 +277,17 @@ Partial Class Form1
         'dir
         '
         Me.dir.AutoSize = True
-        Me.dir.Location = New System.Drawing.Point(350, 44)
+        Me.dir.Location = New System.Drawing.Point(300, 38)
         Me.dir.Name = "dir"
-        Me.dir.Size = New System.Drawing.Size(22, 14)
+        Me.dir.Size = New System.Drawing.Size(18, 12)
         Me.dir.TabIndex = 6
         Me.dir.Text = "dir"
         '
         'ListView2
         '
-        Me.ListView2.Location = New System.Drawing.Point(378, 34)
+        Me.ListView2.Location = New System.Drawing.Point(324, 29)
         Me.ListView2.Name = "ListView2"
-        Me.ListView2.Size = New System.Drawing.Size(523, 36)
+        Me.ListView2.Size = New System.Drawing.Size(449, 31)
         Me.ListView2.TabIndex = 7
         Me.ListView2.UseCompatibleStateImageBehavior = False
         Me.ListView2.View = System.Windows.Forms.View.SmallIcon
@@ -291,52 +298,52 @@ Partial Class Form1
         Me.Panel1.Controls.Add(Me.title)
         Me.Panel1.Controls.Add(Me.id_h)
         Me.Panel1.Controls.Add(Me.title_h)
-        Me.Panel1.Location = New System.Drawing.Point(33, 32)
+        Me.Panel1.Location = New System.Drawing.Point(28, 27)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(296, 40)
+        Me.Panel1.Size = New System.Drawing.Size(254, 34)
         Me.Panel1.TabIndex = 10
         '
         'discid
         '
         Me.discid.AutoSize = True
-        Me.discid.Location = New System.Drawing.Point(72, 24)
+        Me.discid.Location = New System.Drawing.Point(62, 21)
         Me.discid.Name = "discid"
-        Me.discid.Size = New System.Drawing.Size(11, 14)
+        Me.discid.Size = New System.Drawing.Size(9, 12)
         Me.discid.TabIndex = 12
         Me.discid.Text = " "
         '
         'title
         '
         Me.title.AutoEllipsis = True
-        Me.title.Location = New System.Drawing.Point(69, 3)
+        Me.title.Location = New System.Drawing.Point(59, 3)
         Me.title.Name = "title"
-        Me.title.Size = New System.Drawing.Size(224, 14)
+        Me.title.Size = New System.Drawing.Size(192, 12)
         Me.title.TabIndex = 11
         '
         'id_h
         '
         Me.id_h.AutoSize = True
-        Me.id_h.Location = New System.Drawing.Point(15, 24)
+        Me.id_h.Location = New System.Drawing.Point(13, 21)
         Me.id_h.Name = "id_h"
-        Me.id_h.Size = New System.Drawing.Size(51, 14)
+        Me.id_h.Size = New System.Drawing.Size(44, 12)
         Me.id_h.TabIndex = 10
         Me.id_h.Text = "DISCID;"
         '
         'title_h
         '
         Me.title_h.AutoEllipsis = True
-        Me.title_h.Location = New System.Drawing.Point(15, 3)
+        Me.title_h.Location = New System.Drawing.Point(13, 3)
         Me.title_h.Name = "title_h"
-        Me.title_h.Size = New System.Drawing.Size(45, 14)
+        Me.title_h.Size = New System.Drawing.Size(39, 12)
         Me.title_h.TabIndex = 9
         Me.title_h.Text = "TITLE;"
         '
         'uid_parent
         '
         Me.uid_parent.AutoSize = True
-        Me.uid_parent.Location = New System.Drawing.Point(551, 439)
+        Me.uid_parent.Location = New System.Drawing.Point(472, 376)
         Me.uid_parent.Name = "uid_parent"
-        Me.uid_parent.Size = New System.Drawing.Size(112, 18)
+        Me.uid_parent.Size = New System.Drawing.Size(98, 16)
         Me.uid_parent.TabIndex = 11
         Me.uid_parent.Text = "[UID,PARENT]"
         Me.uid_parent.UseVisualStyleBackColor = True
@@ -344,9 +351,9 @@ Partial Class Form1
         'gridview
         '
         Me.gridview.AutoSize = True
-        Me.gridview.Location = New System.Drawing.Point(698, 439)
+        Me.gridview.Location = New System.Drawing.Point(598, 376)
         Me.gridview.Name = "gridview"
-        Me.gridview.Size = New System.Drawing.Size(57, 18)
+        Me.gridview.Size = New System.Drawing.Size(51, 16)
         Me.gridview.TabIndex = 12
         Me.gridview.Text = "GRID"
         Me.gridview.UseVisualStyleBackColor = True
@@ -354,9 +361,9 @@ Partial Class Form1
         'LinkLabel1
         '
         Me.LinkLabel1.AutoSize = True
-        Me.LinkLabel1.Location = New System.Drawing.Point(3, 13)
+        Me.LinkLabel1.Location = New System.Drawing.Point(3, 11)
         Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(57, 14)
+        Me.LinkLabel1.Size = New System.Drawing.Size(50, 12)
         Me.LinkLabel1.TabIndex = 13
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "UTCWIKI"
@@ -365,26 +372,26 @@ Partial Class Form1
         '
         Me.Panel2.Controls.Add(Me.Label1)
         Me.Panel2.Controls.Add(Me.LinkLabel1)
-        Me.Panel2.Location = New System.Drawing.Point(689, 463)
+        Me.Panel2.Location = New System.Drawing.Point(591, 397)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(87, 100)
+        Me.Panel2.Size = New System.Drawing.Size(75, 86)
         Me.Panel2.TabIndex = 14
         '
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(6, 37)
+        Me.Label1.Location = New System.Drawing.Point(5, 32)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(69, 42)
+        Me.Label1.Size = New System.Drawing.Size(59, 36)
         Me.Label1.TabIndex = 14
         Me.Label1.Text = "+9 JAPAN" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "+0 UK" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "-8 USA"
         '
         'localtime
         '
         Me.localtime.AutoSize = True
-        Me.localtime.Location = New System.Drawing.Point(785, 439)
+        Me.localtime.Location = New System.Drawing.Point(673, 376)
         Me.localtime.Name = "localtime"
-        Me.localtime.Size = New System.Drawing.Size(103, 18)
+        Me.localtime.Size = New System.Drawing.Size(90, 16)
         Me.localtime.TabIndex = 15
         Me.localtime.Text = "LOCAL TIME"
         Me.localtime.UseVisualStyleBackColor = True
@@ -392,36 +399,36 @@ Partial Class Form1
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(462, 515)
+        Me.Label2.Location = New System.Drawing.Point(396, 441)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(200, 14)
+        Me.Label2.Size = New System.Drawing.Size(173, 12)
         Me.Label2.TabIndex = 16
         Me.Label2.Text = "+SHIFT:START-END　SELCTION"
         '
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(462, 529)
+        Me.Label3.Location = New System.Drawing.Point(396, 453)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(164, 14)
+        Me.Label3.Size = New System.Drawing.Size(140, 12)
         Me.Label3.TabIndex = 17
         Me.Label3.Text = "+CTRL:MULTI SELECTION"
         '
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(462, 543)
+        Me.Label4.Location = New System.Drawing.Point(396, 465)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(160, 14)
+        Me.Label4.Size = New System.Drawing.Size(135, 12)
         Me.Label4.TabIndex = 18
         Me.Label4.Text = "CTRL+A:ALL SELECTION"
         '
         'VIRTUAL
         '
         Me.VIRTUAL.AutoSize = True
-        Me.VIRTUAL.Location = New System.Drawing.Point(785, 464)
+        Me.VIRTUAL.Location = New System.Drawing.Point(673, 398)
         Me.VIRTUAL.Name = "VIRTUAL"
-        Me.VIRTUAL.Size = New System.Drawing.Size(81, 18)
+        Me.VIRTUAL.Size = New System.Drawing.Size(72, 16)
         Me.VIRTUAL.TabIndex = 19
         Me.VIRTUAL.Text = "VIRTUAL"
         Me.VIRTUAL.UseVisualStyleBackColor = True
@@ -429,9 +436,9 @@ Partial Class Form1
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(782, 555)
+        Me.Label5.Location = New System.Drawing.Point(670, 476)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(46, 14)
+        Me.Label5.Size = New System.Drawing.Size(38, 12)
         Me.Label5.TabIndex = 20
         Me.Label5.Text = "Label5"
         '
@@ -441,7 +448,8 @@ Partial Class Form1
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ファイルToolStripMenuItem, Me.設定ToolStripMenuItem, Me.バージョンToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(914, 29)
+        Me.MenuStrip1.Padding = New System.Windows.Forms.Padding(5, 2, 0, 2)
+        Me.MenuStrip1.Size = New System.Drawing.Size(785, 26)
         Me.MenuStrip1.TabIndex = 21
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -449,43 +457,43 @@ Partial Class Form1
         '
         Me.ファイルToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.開くToolStripMenuItem})
         Me.ファイルToolStripMenuItem.Name = "ファイルToolStripMenuItem"
-        Me.ファイルToolStripMenuItem.Size = New System.Drawing.Size(78, 25)
+        Me.ファイルToolStripMenuItem.Size = New System.Drawing.Size(68, 22)
         Me.ファイルToolStripMenuItem.Text = "ファイル"
         '
         '開くToolStripMenuItem
         '
         Me.開くToolStripMenuItem.Name = "開くToolStripMenuItem"
-        Me.開くToolStripMenuItem.Size = New System.Drawing.Size(108, 26)
+        Me.開くToolStripMenuItem.Size = New System.Drawing.Size(100, 22)
         Me.開くToolStripMenuItem.Text = "開く"
         '
         '設定ToolStripMenuItem
         '
         Me.設定ToolStripMenuItem.Name = "設定ToolStripMenuItem"
-        Me.設定ToolStripMenuItem.Size = New System.Drawing.Size(50, 25)
+        Me.設定ToolStripMenuItem.Size = New System.Drawing.Size(44, 22)
         Me.設定ToolStripMenuItem.Text = "設定"
         '
         'バージョンToolStripMenuItem
         '
         Me.バージョンToolStripMenuItem.Name = "バージョンToolStripMenuItem"
-        Me.バージョンToolStripMenuItem.Size = New System.Drawing.Size(92, 25)
+        Me.バージョンToolStripMenuItem.Size = New System.Drawing.Size(80, 22)
         Me.バージョンToolStripMenuItem.Text = "バージョン"
         '
         'tree
         '
         Me.tree.AutoSize = True
-        Me.tree.Location = New System.Drawing.Point(783, 489)
+        Me.tree.Location = New System.Drawing.Point(671, 419)
         Me.tree.Name = "tree"
-        Me.tree.Size = New System.Drawing.Size(95, 18)
+        Me.tree.Size = New System.Drawing.Size(83, 16)
         Me.tree.TabIndex = 22
         Me.tree.Text = "TREEOPEN"
         Me.tree.UseVisualStyleBackColor = True
         '
         'fsbuf
         '
-        Me.fsbuf.Location = New System.Drawing.Point(65, 29)
+        Me.fsbuf.Location = New System.Drawing.Point(56, 25)
         Me.fsbuf.MaxLength = 2
         Me.fsbuf.Name = "fsbuf"
-        Me.fsbuf.Size = New System.Drawing.Size(17, 21)
+        Me.fsbuf.Size = New System.Drawing.Size(15, 19)
         Me.fsbuf.TabIndex = 23
         Me.fsbuf.Text = "0"
         Me.fsbuf.UseWaitCursor = True
@@ -494,36 +502,36 @@ Partial Class Form1
         'SAVEMODE
         '
         Me.SAVEMODE.AutoSize = True
-        Me.SAVEMODE.Location = New System.Drawing.Point(3, 9)
+        Me.SAVEMODE.Location = New System.Drawing.Point(3, 8)
         Me.SAVEMODE.Name = "SAVEMODE"
-        Me.SAVEMODE.Size = New System.Drawing.Size(16, 14)
+        Me.SAVEMODE.Size = New System.Drawing.Size(13, 12)
         Me.SAVEMODE.TabIndex = 24
         Me.SAVEMODE.Text = "A"
         Me.SAVEMODE.UseWaitCursor = True
         '
         'sdir
         '
-        Me.sdir.Location = New System.Drawing.Point(4, 29)
+        Me.sdir.Location = New System.Drawing.Point(3, 25)
         Me.sdir.Name = "sdir"
-        Me.sdir.Size = New System.Drawing.Size(49, 21)
+        Me.sdir.Size = New System.Drawing.Size(43, 19)
         Me.sdir.TabIndex = 25
         Me.sdir.Text = "SDIR"
         Me.sdir.UseWaitCursor = True
         '
         'nodemax
         '
-        Me.nodemax.Location = New System.Drawing.Point(4, 56)
+        Me.nodemax.Location = New System.Drawing.Point(3, 48)
         Me.nodemax.Name = "nodemax"
-        Me.nodemax.Size = New System.Drawing.Size(49, 21)
+        Me.nodemax.Size = New System.Drawing.Size(43, 19)
         Me.nodemax.TabIndex = 26
         Me.nodemax.Text = "50000"
         Me.nodemax.UseWaitCursor = True
         '
         'addlistmax
         '
-        Me.addlistmax.Location = New System.Drawing.Point(66, 56)
+        Me.addlistmax.Location = New System.Drawing.Point(57, 48)
         Me.addlistmax.Name = "addlistmax"
-        Me.addlistmax.Size = New System.Drawing.Size(45, 21)
+        Me.addlistmax.Size = New System.Drawing.Size(39, 19)
         Me.addlistmax.TabIndex = 27
         Me.addlistmax.Text = "3000"
         Me.addlistmax.UseWaitCursor = True
@@ -540,9 +548,9 @@ Partial Class Form1
         Me.Panel3.Controls.Add(Me.addlistmax)
         Me.Panel3.Controls.Add(Me.Label6)
         Me.Panel3.Controls.Add(Me.SAVEMODE)
-        Me.Panel3.Location = New System.Drawing.Point(919, 35)
+        Me.Panel3.Location = New System.Drawing.Point(788, 30)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(123, 135)
+        Me.Panel3.Size = New System.Drawing.Size(105, 116)
         Me.Panel3.TabIndex = 28
         Me.Panel3.UseWaitCursor = True
         Me.Panel3.Visible = False
@@ -550,9 +558,9 @@ Partial Class Form1
         'enc
         '
         Me.enc.AutoSize = True
-        Me.enc.Location = New System.Drawing.Point(65, 110)
+        Me.enc.Location = New System.Drawing.Point(56, 94)
         Me.enc.Name = "enc"
-        Me.enc.Size = New System.Drawing.Size(14, 14)
+        Me.enc.Size = New System.Drawing.Size(11, 12)
         Me.enc.TabIndex = 32
         Me.enc.Text = "0"
         Me.enc.UseWaitCursor = True
@@ -560,27 +568,27 @@ Partial Class Form1
         'bool_exe
         '
         Me.bool_exe.AutoSize = True
-        Me.bool_exe.Location = New System.Drawing.Point(6, 111)
+        Me.bool_exe.Location = New System.Drawing.Point(5, 95)
         Me.bool_exe.Name = "bool_exe"
-        Me.bool_exe.Size = New System.Drawing.Size(14, 14)
+        Me.bool_exe.Size = New System.Drawing.Size(11, 12)
         Me.bool_exe.TabIndex = 31
         Me.bool_exe.Text = "0"
         Me.bool_exe.UseWaitCursor = True
         '
         'exe
         '
-        Me.exe.Location = New System.Drawing.Point(66, 82)
+        Me.exe.Location = New System.Drawing.Point(57, 70)
         Me.exe.Name = "exe"
-        Me.exe.Size = New System.Drawing.Size(45, 21)
+        Me.exe.Size = New System.Drawing.Size(39, 19)
         Me.exe.TabIndex = 30
         Me.exe.Text = "EXE"
         Me.exe.UseWaitCursor = True
         '
         'vlistmax
         '
-        Me.vlistmax.Location = New System.Drawing.Point(4, 83)
+        Me.vlistmax.Location = New System.Drawing.Point(3, 71)
         Me.vlistmax.Name = "vlistmax"
-        Me.vlistmax.Size = New System.Drawing.Size(49, 21)
+        Me.vlistmax.Size = New System.Drawing.Size(43, 19)
         Me.vlistmax.TabIndex = 28
         Me.vlistmax.Text = "50000"
         Me.vlistmax.UseWaitCursor = True
@@ -588,9 +596,9 @@ Partial Class Form1
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(62, 9)
+        Me.Label6.Location = New System.Drawing.Point(53, 8)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(46, 14)
+        Me.Label6.Size = New System.Drawing.Size(38, 12)
         Me.Label6.TabIndex = 29
         Me.Label6.Text = "Label6"
         Me.Label6.UseWaitCursor = True
@@ -599,19 +607,12 @@ Partial Class Form1
         'Timer1
         '
         '
-        'PATHTABLEToolStripMenuItem
-        '
-        Me.PATHTABLEToolStripMenuItem.Name = "PATHTABLEToolStripMenuItem"
-        Me.PATHTABLEToolStripMenuItem.Size = New System.Drawing.Size(158, 26)
-        Me.PATHTABLEToolStripMenuItem.Text = "PATHTABLE"
-        Me.PATHTABLEToolStripMenuItem.Visible = False
-        '
         'Form1
         '
         Me.AllowDrop = True
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(914, 578)
+        Me.ClientSize = New System.Drawing.Size(785, 500)
         Me.Controls.Add(Me.tree)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Controls.Add(Me.VIRTUAL)
@@ -634,8 +635,8 @@ Partial Class Form1
         Me.Controls.Add(Me.ListView1)
         Me.Controls.Add(Me.uid_seek)
         Me.MainMenuStrip = Me.MenuStrip1
-        Me.MaximumSize = New System.Drawing.Size(1500, 621)
-        Me.MinimumSize = New System.Drawing.Size(932, 621)
+        Me.MaximumSize = New System.Drawing.Size(1288, 538)
+        Me.MinimumSize = New System.Drawing.Size(801, 538)
         Me.Name = "Form1"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "DROP_IMAGE"

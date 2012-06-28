@@ -1130,7 +1130,6 @@ Public Class MERGE
         reset_codepage()
     End Sub
 
-
     Private Sub BIG5CPToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles BIG5.Click
 
         'エンコードを指定する場合
@@ -1161,7 +1160,6 @@ Public Class MERGE
         enc1 = 1201
         reset_codepage()
     End Sub
-
 
     Private Sub CCP_Click(sender As System.Object, e As System.EventArgs) Handles CCP.Click
 
@@ -3013,7 +3011,6 @@ Public Class MERGE
             LANDMIRROR.Checked = True
             My.Settings.updatesever = True
         End If
-
 
     End Sub
 
