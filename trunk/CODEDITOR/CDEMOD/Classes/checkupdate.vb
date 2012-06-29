@@ -23,7 +23,7 @@ Public Class checkupdate
                 Directory.CreateDirectory("table")
             End If
 
-            For i = 0 To 5
+            For i = 0 To 7
                 If File.Exists(extable(i)) = False Then
                     getweb(extable(i), tblbase & extable(i), 1)
                 End If
