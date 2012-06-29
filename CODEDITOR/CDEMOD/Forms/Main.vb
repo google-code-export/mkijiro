@@ -1078,6 +1078,7 @@ Public Class MERGE
         SHIFTJIS2004.Checked = False
         CCP.Checked = False
         UHC.Checked = False
+        eucms.Checked = False
 
         If enc1 = 932 Then
             SJIS.Checked = True
@@ -1094,6 +1095,8 @@ Public Class MERGE
             UHC.Checked = True
         ElseIf enc1 = 512132004 Then
             EUCJIS20004.Checked = True
+        ElseIf enc1 = 21220932 Then
+            eucms.Checked = True
         ElseIf enc1 = 2132004 Then
             SHIFTJIS2004.Checked = True
         ElseIf enc1 = My.Settings.usercp Then
@@ -1182,6 +1185,12 @@ Public Class MERGE
 
     End Sub
 
+    Private Sub ToolStripMenuItem2_Click_1(sender As System.Object, e As System.EventArgs) Handles eucms.Click
+
+        My.Settings.MSCODEPAGE = 21220932
+        enc1 = 21220932
+        reset_codepage()
+    End Sub
 #End Region
 
 #Region "codetree"
@@ -3112,4 +3121,5 @@ Public Class MERGE
             My.Settings.autocp = False
         End If
     End Sub
+
 End Class

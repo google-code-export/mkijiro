@@ -4,7 +4,7 @@ Imports System.IO
 Public Class checkupdate
 
 
-    Dim extable As String() = {"table\sjisvsutf8", "table\eucvsutf8", "table\big5vsutf8", "table\custom_utf32", "table\custom_utf32_2", "table\custom_utf32_3"}
+    Dim extable As String() = {"table\sjisvsutf8", "table\eucvsutf8", "table\big5vsutf8", "table\eucmsvsutf8", "table\custom_utf32", "table\custom_utf32_2", "table\custom_utf32_3", "table\custom_utf32_4"}
 
     Public Sub CDEupater(ByVal mode As String)
 
