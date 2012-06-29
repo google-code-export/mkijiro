@@ -27,8 +27,8 @@ Public Class Form1
         End If
 
         If File.Exists(fsname) Then
-
-            If My.Settings.mscodepage = 2132004 Or My.Settings.mscodepage = 512132004 Or My.Settings.mscodepage = 202132004 Or My.Settings.mscodepage = 951 Then
+            
+            If customcpmatch(My.Settings.mscodepage) = True Then
 
                 Dim fs As New FileStream(fsname, FileMode.Open, FileAccess.Read)
                 Dim bs(CInt(fs.Length - 1)) As Byte
@@ -51,18 +51,20 @@ Public Class Form1
         End If
     End Sub
 
-    Dim parsetest As String() = {"table\sjis2004test.txt", "table\eucjis2004.txt", "table\big5hkscs.txt", "table\iso2022jp2004.txt"}
-    Dim vstable As String() = {"table\sjisvsutf8", "table\eucvsutf8", "table\big5vsutf8", "table\eucvsutf8"}
-    Dim unitable As String() = {"table\custom_utf32", "table\custom_utf32_2", "table\custom_utf32_3", "table\custom_utf32_2"}
+    Dim parsetest As String() = {"table\sjis2004test.txt", "table\eucjis2004.txt", "table\big5hkscs.txt", "table\iso2022jp2004.txt", "table\eucjpms.txt"}
+    Dim vstable As String() = {"table\sjisvsutf8", "table\eucvsutf8", "table\big5vsutf8", "table\eucvsutf8", "table\eucmsvsutf8"}
+    Dim unitable As String() = {"table\custom_utf32", "table\custom_utf32_2", "table\custom_utf32_3", "table\custom_utf32_2", "table\custom_utf32_4"}
 
     Private Function sel_num(ByVal sel As Integer, ByVal mode As Integer) As Integer
         sel = 0
         If EUC.Checked = True Then
             sel = 1
-        ElseIf JIS.Checked = True Then
-            sel = 3
         ElseIf BIG5HK.Checked = True Then
             sel = 2
+        ElseIf JIS.Checked = True Then
+            sel = 3
+        ElseIf eucms.Checked = True Then
+            sel = 4
         End If
 
         Return sel
@@ -81,8 +83,8 @@ Public Class Form1
         If ofd.ShowDialog() = DialogResult.OK Then
 
             My.Settings.lastfile = Path.GetDirectoryName(ofd.FileName)
-
-            If My.Settings.mscodepage = 2132004 Or My.Settings.mscodepage = 512132004 Or My.Settings.mscodepage = 202132004 Or My.Settings.mscodepage = 951 Then
+            
+            If customcpmatch(My.Settings.mscodepage) = True Then
 
                 Dim fs As New FileStream(ofd.FileName, FileMode.Open, FileAccess.Read)
                 Dim bs(CInt(fs.Length - 1)) As Byte
@@ -444,10 +446,8 @@ Public Class Form1
 
                 End While
 
-
-
                 'EUC
-            ElseIf EUC.Checked = True Then
+            ElseIf EUC.Checked = True Or eucms.Checked = True Then
                 While i < bs.Length
                     c1 = bs(i)
                     If c1 < 128 Then
@@ -511,7 +511,7 @@ Public Class Form1
                                     ElseIf ct < &HC2 Then
                                     ElseIf ct < &HE0 Then
                                         k += 2
-                                        If c3 = 0 Then
+                                        If c3 = 0 AndAlso EUC.Checked = True Then
                                             If c1 = &HAB AndAlso (c2 And 1) = 0 AndAlso c2 >= &HC8 AndAlso c2 <= &HCF Then
                                                 Array.Copy(ac, 0, bss, k, 2)
                                                 k += 2
@@ -529,7 +529,7 @@ Public Class Form1
 
                                     ElseIf ct < &HF0 Then
                                         k += 3
-                                        If c3 = 0 Then
+                                        If c3 = 0 AndAlso EUC.Checked = True Then
                                             If c1 = &HA4 AndAlso c2 >= &HF7 AndAlso c2 <= &HFB Then
                                                 Array.Copy(maru, 0, bss, k, 3)
                                                 k += 3
@@ -688,6 +688,20 @@ Public Class Form1
         End If
     End Sub
 
+    Dim customcodepage As Integer() = {2132004, 512132004, 202132004, 951, 21220932}
+
+    Private Function customcpmatch(ByVal enc As Integer) As Boolean
+
+        For i = 0 To customcodepage.Length - 1
+            If enc = customcodepage(i) Then
+                Return True
+            End If
+        Next
+
+        Return False
+
+    End Function
+
     Private Sub ListBox1_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles TextBox1.DragDrop
         'コントロール内にドロップされたとき実行される
         'ドロップされたすべてのファイル名を取得する
@@ -696,7 +710,7 @@ Public Class Form1
             String())
         Dim s As String = fileName(0)
 
-        If My.Settings.mscodepage = 2132004 Or My.Settings.mscodepage = 512132004 Or My.Settings.mscodepage = 202132004 Or My.Settings.mscodepage = 951 Then
+        If customcpmatch(My.Settings.mscodepage) = True Then
 
             Dim fs As New FileStream(s, FileMode.Open, FileAccess.Read)
             Dim bs(CInt(fs.Length - 1)) As Byte
@@ -724,13 +738,13 @@ Public Class Form1
         Dim bs As Byte()
 
 
-        If My.Settings.mscodepage = 2132004 Or My.Settings.mscodepage = 512132004 Or My.Settings.mscodepage = 202132004 Or My.Settings.mscodepage = 951 Then
+        If customcpmatch(My.Settings.mscodepage) = True Then
 
             Dim sel As Integer = 0
             sel = sel_num(sel, 1)
             If File.Exists(Application.StartupPath & "\" & unitable(sel)) = True Then
                 bs = Encoding.GetEncoding(1200).GetBytes(TextBox1.Text)
-                Dim bss(CInt(bs.Length - 1)) As Byte
+                Dim bss(CInt(bs.Length - 1) * 2) As Byte
                 Dim tfs As New FileStream(Application.StartupPath & "\" & unitable(sel), FileMode.Open, FileAccess.Read)
                 Dim tbl(CInt(tfs.Length - 1)) As Byte
                 tfs.Read(tbl, 0, tbl.Length)
@@ -894,7 +908,7 @@ Public Class Form1
                     Array.Resize(bss, bss.Length * 2 + 100)
 
                     If My.Settings.jis208 = True Then
-                        Dim tfss As New FileStream(Application.StartupPath & "\table\custom_utf32_4", FileMode.Open, FileAccess.Read)
+                        Dim tfss As New FileStream(Application.StartupPath & "\table\custom_utf32_5", FileMode.Open, FileAccess.Read)
                         Array.Resize(tbl208, CInt(tfss.Length))
                         tfss.Read(tbl208, 0, tbl208.Length)
                         tfss.Close()
@@ -1037,14 +1051,14 @@ Public Class Form1
 
 
                                 ElseIf c1 = &H8F Then
-                                        If mode <> 2 Then
-                                            mode = 2
-                                            Array.Copy(jisp2, 0, bss, k, 4)
-                                            k += 4
-                                        End If
-                                        bss(k) = c2 And &H7F
-                                        bss(k + 1) = c3 And &H7F
-                                        k += 2
+                                    If mode <> 2 Then
+                                        mode = 2
+                                        Array.Copy(jisp2, 0, bss, k, 4)
+                                        k += 4
+                                    End If
+                                    bss(k) = c2 And &H7F
+                                    bss(k + 1) = c3 And &H7F
+                                    k += 2
 
                                 ElseIf ((c1 + &H5F) And &HFF) < &H5E AndAlso c2 >= &HA1 Then
                                     If My.Settings.jis208 = True Then
@@ -1125,7 +1139,7 @@ Public Class Form1
                                     End If
                                     Array.Copy(tofujis, 0, bss, k, 2)
                                     k += 2
-                                    End If
+                                End If
                             End If
                         End If
                         i += 2
@@ -1134,8 +1148,8 @@ Public Class Form1
                     Array.Copy(ascii, 0, bss, k, 3)
                     k += 3
 
-                    'EUC2004
-                ElseIf EUC.Checked = True Then
+                    'EUC2004,eucjpms
+                ElseIf EUC.Checked = True Or eucms.Checked = True Then
                     While i < bs.Length
                         hex = BitConverter.ToUInt16(bs, i)
                         If hex >= &HD800 AndAlso hex <= &HDBFF Then
@@ -1156,7 +1170,7 @@ Public Class Form1
                             c2 = bss(k + 1)
                             c3 = bss(k + 2)
 
-                            If i + 4 <= bs.Length Then
+                            If EUC.Checked = True AndAlso i + 4 <= bs.Length Then
                                 hex2 = BitConverter.ToUInt16(bs, i + 2)
                             Else
                                 hex2 = 0
@@ -1228,7 +1242,7 @@ Public Class Form1
                                 End If
                             End If
                         End If
-                        i += 2
+                            i += 2
                     End While
                     'BIG5/GBK
                 ElseIf BIG5HK.Checked = True Then
@@ -1765,6 +1779,7 @@ Public Class Form1
         EUC.Checked = False
         BIG5HK.Checked = False
         JIS.Checked = False
+        eucms.Checked = False
         SELCP.Checked = False
 
         Select Case My.Settings.mscodepage
@@ -1774,6 +1789,9 @@ Public Class Form1
             Case 512132004
 
                 EUC.Checked = True
+            Case 21220932
+
+                eucms.Checked = True
             Case 202132004
 
                 JIS.Checked = True
@@ -1804,8 +1822,13 @@ Public Class Form1
 
     End Sub
 
-    Private Sub JISX208ToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles JISX208ToolStripMenuItem.Click
-        JISX208ToolStripMenuItem.Checked = Not JISX208ToolStripMenuItem.Checked
-        My.Settings.jis208 = JISX208ToolStripMenuItem.Checked
+    Private Sub JISX208ToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles JISX208.Click
+        JISX208.Checked = Not JISX208.Checked
+        My.Settings.jis208 = JISX208.Checked
+    End Sub
+
+    Private Sub eucms_Click(sender As System.Object, e As System.EventArgs) Handles eucms.Click
+        My.Settings.mscodepage = 21220932
+        restcodepage()
     End Sub
 End Class

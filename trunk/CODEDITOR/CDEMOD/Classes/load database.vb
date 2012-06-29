@@ -7,7 +7,7 @@ Public Class load_db
     Public Sub read_PSP(ByVal filename As String, ByVal enc1 As Integer)
         Try
             Dim filenamebk As String = filename
-            If enc1 = 2132004 Or enc1 = 512132004 Or enc1 = 951 Then
+            If enc1 = 2132004 Or enc1 = 512132004 Or enc1 = 951 Or enc1 = 21220932 Then
                 Dim ctbl As New customtable
                 Dim tw As New StreamWriter(Application.StartupPath & "\table\tmp", False, System.Text.Encoding.GetEncoding(65001))
 
@@ -426,7 +426,7 @@ Public Class load_db
     Public Sub read_PSX(ByVal filename As String, ByVal enc1 As Integer)
         Try
             Dim filenamebk As String = filename
-            If enc1 = 2132004 Or enc1 = 512132004 Or enc1 = 951 Then
+            If enc1 = 2132004 Or enc1 = 512132004 Or enc1 = 951 Or enc1 = 21220932 Then
                 Dim ctbl As New customtable
                 Dim tw As New StreamWriter(Application.StartupPath & "\table\tmp", False, System.Text.Encoding.GetEncoding(65001))
 
@@ -1179,7 +1179,7 @@ Public Class load_db
 
     End Function
 
-    Dim enctable As Integer() = {0, 37, 437, 500, 708, 709, 710, 720, 737, 775, 850, 852, 855, 857, 858, 860, 861, 862, 863, 864, 865, 866, 869, 870, 874, 875, 932, 936, 949, 950, 1026, 1047, 1140, 1141, 1142, 1143, 1144, 1145, 1146, 1147, 1148, 1149, 1200, 1201, 1250, 1251, 1252, 1253, 1254, 1255, 1256, 1257, 1258, 1361, 10000, 10001, 10002, 10003, 10004, 10005, 10006, 10007, 10008, 10010, 10017, 10021, 10029, 10079, 10081, 10082, 12000, 12001, 20000, 20001, 20002, 20003, 20004, 20005, 20105, 20106, 20107, 20108, 20127, 20261, 20269, 20273, 20277, 20278, 20280, 20284, 20285, 20290, 20297, 20420, 20423, 20424, 20833, 20838, 20866, 20871, 20880, 20905, 20924, 20932, 20936, 20949, 21025, 21027, 21866, 28591, 28592, 28593, 28594, 28595, 28596, 28597, 28598, 28599, 28603, 28605, 29001, 38598, 50220, 50221, 50222, 50225, 50227, 50229, 50930, 50931, 50933, 50935, 50936, 50937, 50939, 51932, 51936, 51949, 51950, 52936, 54936, 57002, 57003, 57004, 57005, 57006, 57007, 57008, 57009, 57010, 57011, 65000, 65001, 951, 2132004, 512132004}
+    Dim enctable As Integer() = {0, 37, 437, 500, 708, 709, 710, 720, 737, 775, 850, 852, 855, 857, 858, 860, 861, 862, 863, 864, 865, 866, 869, 870, 874, 875, 932, 936, 949, 950, 1026, 1047, 1140, 1141, 1142, 1143, 1144, 1145, 1146, 1147, 1148, 1149, 1200, 1201, 1250, 1251, 1252, 1253, 1254, 1255, 1256, 1257, 1258, 1361, 10000, 10001, 10002, 10003, 10004, 10005, 10006, 10007, 10008, 10010, 10017, 10021, 10029, 10079, 10081, 10082, 12000, 12001, 20000, 20001, 20002, 20003, 20004, 20005, 20105, 20106, 20107, 20108, 20127, 20261, 20269, 20273, 20277, 20278, 20280, 20284, 20285, 20290, 20297, 20420, 20423, 20424, 20833, 20838, 20866, 20871, 20880, 20905, 20924, 20932, 20936, 20949, 21025, 21027, 21866, 28591, 28592, 28593, 28594, 28595, 28596, 28597, 28598, 28599, 28603, 28605, 29001, 38598, 50220, 50221, 50222, 50225, 50227, 50229, 50930, 50931, 50933, 50935, 50936, 50937, 50939, 51932, 51936, 51949, 51950, 52936, 54936, 57002, 57003, 57004, 57005, 57006, 57007, 57008, 57009, 57010, 57011, 65000, 65001, 951, 2132004, 512132004, 21220932}
 
     Public Function check_enc(ByVal filename As String) As Integer
 
@@ -1219,6 +1219,8 @@ Public Class load_db
                         Return 2132004
                     ElseIf str = "[EUC-JIS-2004]" Or str = "[CP512132004]" Then
                         Return 512132004
+                    ElseIf str = "[eucJP-ms]" Or str = "[CP21220932]" Then
+                        Return 21220932
                     ElseIf str = "[USER_CUSTOM]" Or str.Contains("CP") Then
                         Return My.Settings.usercp
                     End If
@@ -1475,8 +1477,8 @@ Public Class load_db
             Return 65001
         Else
 
-            Dim enc2 As Integer() = {0, 0, 0, 0, 0, 0}
-            Dim encode2 As String() = {"sjis", "gbk", "big5", "euc", "sj2004", "eu2004"}
+            Dim enc2 As Integer() = {0, 0, 0, 0, 0, 0, 0}
+            Dim encode2 As String() = {"sjis", "gbk", "big5", "euc", "sj2004", "eu2004", "eums"}
 
             Dim s As String = Encoding.GetEncoding(936).GetString(bytes)
             For i = 0 To s.Length - 1
@@ -1511,6 +1513,16 @@ Public Class load_db
                 End If
             Next
             s = ctbl.custom_pasrse(bytes, 512132004)
+            For i = 0 To s.Length - 1
+                If s(i) = "?" Then
+                    enc2(5) += 1
+                ElseIf s(i) = "・" Then
+                    enc2(5) += 1
+                ElseIf s(i) = "□" Then
+                    enc2(5) += 1
+                End If
+            Next
+            s = ctbl.custom_pasrse(bytes, 21220932)
             For i = 0 To s.Length - 1
                 If s(i) = "?" Then
                     enc2(5) += 1
@@ -1564,6 +1576,10 @@ Public Class load_db
             If encode2(0) = "eu2004" Then
                 'EU24
                 Return 512132004
+            End If
+            If encode2(0) = "eums" Then
+                'EUms
+                Return 21220932
             End If
             If encode2(0) = "sj2004" Then
                 'sj24

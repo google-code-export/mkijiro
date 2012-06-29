@@ -138,4 +138,9 @@
 ・区番号が偶数の時
 第2バイト=点番号+0x9E</value>
   </data>
+  <data name="eucms.ToolTipText" xml:space="preserve">
+    <value>日本語EUC (eucJP-open) と Unicode (UCS) との間のコード変換規則に Microsoft Windows NT 3.51を使った文字コードです
+http://home.m05.itscom.net/numa/cde/ucs-conv/appendix.html
+http://www2d.biglobe.ne.jp/~msyk/charcode/cp932/eucJP-ms.html</value>
+  </data>
 </root>
