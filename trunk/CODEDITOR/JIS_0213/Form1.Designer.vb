@@ -37,13 +37,13 @@ Partial Class Form1
         Me.EUC = New System.Windows.Forms.ToolStripMenuItem()
         Me.JIS = New System.Windows.Forms.ToolStripMenuItem()
         Me.JISX208 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.eucms = New System.Windows.Forms.ToolStripMenuItem()
         Me.BIG5HK = New System.Windows.Forms.ToolStripMenuItem()
         Me.SELCP = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.READ = New System.Windows.Forms.ToolStripMenuItem()
         Me.フォントToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.バージョンToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.eucms = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -154,9 +154,15 @@ Partial Class Form1
         Me.JISX208.Name = "JISX208"
         Me.JISX208.Size = New System.Drawing.Size(183, 22)
         Me.JISX208.Text = "JISX208互換モード"
-        Me.JISX208.ToolTipText = "JISX208のエスケープシーケンスを読みとるようにします" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "凜(JIS 0x7425,U+51DC),熙(JIS 0x7426,U+7199)はJIS90で出力" & _
-    "(M$だとJIS83で出力)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "JIS X 0208-1983(JIS83) 1b 24 42 ESC $ B" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "JIS X 0208-1990(JIS90) " & _
-    "1b 26 40 1b 24 42 ESC & @ ESC $ B"
+        Me.JISX208.ToolTipText = "JISX208のエスケープシーケンスを読みとるようにします" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "JIS X 0208-1983(JIS83) 1b 24 42 ESC $ B" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "JIS X 020" & _
+    "8-1990(JIS90,208用更新シーケンスなので使用不可) 1b 26 40 1b 24 42 ESC & @ ESC $ B"
+        '
+        'eucms
+        '
+        Me.eucms.Name = "eucms"
+        Me.eucms.Size = New System.Drawing.Size(180, 22)
+        Me.eucms.Text = "eucJP-ms"
+        Me.eucms.ToolTipText = resources.GetString("eucms.ToolTipText")
         '
         'BIG5HK
         '
@@ -195,13 +201,6 @@ Partial Class Form1
         Me.バージョンToolStripMenuItem.Name = "バージョンToolStripMenuItem"
         Me.バージョンToolStripMenuItem.Size = New System.Drawing.Size(80, 22)
         Me.バージョンToolStripMenuItem.Text = "バージョン"
-        '
-        'eucms
-        '
-        Me.eucms.Name = "eucms"
-        Me.eucms.Size = New System.Drawing.Size(180, 22)
-        Me.eucms.Text = "eucJP-ms"
-        Me.eucms.ToolTipText = resources.GetString("eucms.ToolTipText")
         '
         'Form1
         '
