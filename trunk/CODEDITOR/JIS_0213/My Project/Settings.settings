@@ -29,5 +29,8 @@
     <Setting Name="lastfile" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="jisoutput" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">2004</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

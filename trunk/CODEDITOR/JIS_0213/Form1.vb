@@ -9,6 +9,7 @@ Public Class Form1
 
         TextBox1.Font = My.Settings.font
         restcodepage()
+        resetjis(My.Settings.jisoutput)
 
         Dim cmds() As String
         Dim fsname As String = ""
@@ -290,20 +291,22 @@ Public Class Form1
                                 mode = 4
                                 i += 3
                             End If
-
-                            ElseIf c2 = &H24 AndAlso c3 = &H28 AndAlso (i < len - 3) Then
-                                c4 = bs(i + 3)
-                                If c4 = &H51 Then
-                                    mode = 1
-                                ElseIf c4 = &H50 Then
-                                    mode = 2
-                                Else
-                                    mode = -1
-                                End If
-                                i += 4
+                            'jis2000,2004
+                        ElseIf c2 = &H24 AndAlso c3 = &H28 AndAlso (i < len - 3) Then
+                            c4 = bs(i + 3)
+                            If c4 = &H51 Then
+                                mode = 1
+                            ElseIf c4 = &H4F Then
+                                mode = 1
+                            ElseIf c4 = &H50 Then
+                                mode = 2
                             Else
                                 mode = -1
                             End If
+                            i += 4
+                        Else
+                            mode = -1
+                        End If
                     ElseIf mode = 0 AndAlso c1 < 128 Then
                         '制御コード排除
                         If (c1 < 32 AndAlso c1 <> &H9 AndAlso c1 <> &HD AndAlso c1 <> &HA) Or c1 = &H7F Then
@@ -900,7 +903,7 @@ Public Class Form1
                     Dim ascii As Byte() = {&H1B, &H28, &H42}
                     Dim jis208 As Byte() = {&H1B, &H24, &H42}
                     Dim jis208_90 As Byte() = {&H1B, &H26, &H40, &H1B, &H24, &H42}
-                    Dim jis2000 As Byte() = {&H1B, &H24, &H28, &H4F}
+                    Dim jisx2000 As Byte() = {&H1B, &H24, &H28, &H4F}
                     Dim jisp1 As Byte() = {&H1B, &H24, &H28, &H51}
                     Dim jisp2 As Byte() = {&H1B, &H24, &H28, &H50}
                     Dim mode As Integer = -1
@@ -1074,19 +1077,39 @@ Public Class Form1
                                                 Array.Copy(jisp1, 0, bss, k, 4)
                                                 k += 4
                                             End If
-                                            'ElseIf c1 = &H74 AndAlso (c2 = &H25 Or c2 = &H26) Then
-                                            '    If mode <> 5 Then
-                                            '        mode = 5
-                                            '        Array.Copy(jis208_90, 0, bss, k, 6)
-                                            '        k += 6
-                                            '    End If
-                                        Else
+                                        ElseIf JIS83.Checked = True AndAlso c1 = &H74 AndAlso (c2 = &H25 Or c2 = &H26) Then
                                             If mode <> 4 Then
                                                 mode = 4
                                                 Array.Copy(jis208, 0, bss, k, 3)
                                                 k += 3
                                             End If
+                                        ElseIf JIS90.Checked = True AndAlso c1 = &H74 AndAlso (c2 = &H25 Or c2 = &H26) Then
+                                            If mode <> 5 Then
+                                                mode = 5
+                                                Array.Copy(jis208_90, 0, bss, k, 6)
+                                                k += 6
+                                            End If
+
+                                        ElseIf JIS2000.Checked = True AndAlso c1 = &H74 AndAlso (c2 = &H25 Or c2 = &H26) Then
+                                            If mode <> 6 Then
+                                                mode = 6
+                                                Array.Copy(jisx2000, 0, bss, k, 4)
+                                                k += 4
+                                            End If
+                                        ElseIf JIS2004.Checked = True AndAlso c1 = &H74 AndAlso (c2 = &H25 Or c2 = &H26) Then
+                                            If mode <> 1 Then
+                                                mode = 1
+                                                Array.Copy(jisp1, 0, bss, k, 4)
+                                                k += 4
+                                            End If
+
+                                    Else
+                                        If mode <> 4 Then
+                                            mode = 4
+                                            Array.Copy(jis208, 0, bss, k, 3)
+                                            k += 3
                                         End If
+                                    End If
                                     Else
                                         If mode <> 1 Then
                                             mode = 1
@@ -1833,4 +1856,48 @@ Public Class Form1
         My.Settings.mscodepage = 21220932
         restcodepage()
     End Sub
+
+    Private Sub JIS83_Click(sender As System.Object, e As System.EventArgs) Handles JIS83.Click
+        My.Settings.jisoutput = 83
+        resetjis(My.Settings.jisoutput)
+
+    End Sub
+
+    Private Sub JIS90_Click(sender As System.Object, e As System.EventArgs) Handles JIS90.Click
+        My.Settings.jisoutput = 90
+        resetjis(My.Settings.jisoutput)
+
+    End Sub
+
+    Private Sub JIS2000_Click(sender As System.Object, e As System.EventArgs) Handles JIS2000.Click
+        My.Settings.jisoutput = 2000
+        resetjis(My.Settings.jisoutput)
+
+    End Sub
+
+    Private Sub JIS2004_Click(sender As System.Object, e As System.EventArgs) Handles JIS2004.Click
+        My.Settings.jisoutput = 2004
+        Resetjis(My.Settings.jisoutput)
+
+    End Sub
+
+    Private Function resetjis(ByVal mode As Integer) As Boolean
+        JIS83.Checked = False
+        JIS90.Checked = False
+        JIS2000.Checked = False
+        JIS2004.Checked = False
+
+        If mode = 83 Then
+            JIS83.Checked = True
+        ElseIf mode = 90 Then
+            JIS90.Checked = True
+        ElseIf mode = 2000 Then
+            JIS2000.Checked = True
+        ElseIf mode = 2004 Then
+            JIS2004.Checked = True
+        End If
+
+        Return True
+    End Function
+
 End Class
