@@ -888,7 +888,7 @@ Public Class Form1
                 ElseIf JIS.Checked = True Then
                     'JIS C 6226-1978 	1b 24 40 	ESC $ @
                     'JIS X 0208-1983 	1b 24 42 	ESC $ B
-                    'JIS X 0208-1990 	1b 26 40 1b 24 42 	ESC & @ ESC $ B
+                    'JIS X 0208-1990 	1b 26 40 1b 24 42 	ESC & @ ESC $ B ※使用不可,208更新シーケンス
                     'JIS X 0212-1990 	1b 24 28 44 	ESC $ ( D
                     'JIS X 0213:2000 1面 	1b 24 28 4f 	ESC $ ( O
                     'JIS X 0213:2004 1面 	1b 24 28 51 	ESC $ ( Q
@@ -1074,12 +1074,12 @@ Public Class Form1
                                                 Array.Copy(jisp1, 0, bss, k, 4)
                                                 k += 4
                                             End If
-                                        ElseIf c1 = &H74 AndAlso (c2 = &H25 Or c2 = &H26) Then
-                                            If mode <> 5 Then
-                                                mode = 5
-                                                Array.Copy(jis208_90, 0, bss, k, 6)
-                                                k += 6
-                                            End If
+                                            'ElseIf c1 = &H74 AndAlso (c2 = &H25 Or c2 = &H26) Then
+                                            '    If mode <> 5 Then
+                                            '        mode = 5
+                                            '        Array.Copy(jis208_90, 0, bss, k, 6)
+                                            '        k += 6
+                                            '    End If
                                         Else
                                             If mode <> 4 Then
                                                 mode = 4
@@ -1145,82 +1145,129 @@ Public Class Form1
                         i += 2
                     End While
                     '終端アスキーモード
-                    Array.Copy(ascii, 0, bss, k, 3)
-                    k += 3
+                    If mode <> 0 Then
+                        Array.Copy(ascii, 0, bss, k, 3)
+                        k += 3
+                    End If
 
                     'EUC2004,eucjpms
-                ElseIf EUC.Checked = True Or eucms.Checked = True Then
-                    While i < bs.Length
-                        hex = BitConverter.ToUInt16(bs, i)
-                        If hex >= &HD800 AndAlso hex <= &HDBFF Then
-                            i += 2
-                            hex2 = BitConverter.ToUInt16(bs, i)
-                            If hex2 >= &HDC00 AndAlso hex2 <= &HDFFF Then
-                                pos = (hex And &H3FF) * 1024 + (hex2 And &H3FF)
-                                pos += &H10000
-                            Else
-                                pos = tbl.Length
-                            End If
-                        Else
-                            pos = Convert.ToInt32(hex)
-                        End If
-                        If pos * 4 < tbl.Length Then
-                            Array.Copy(tbl, pos * 4, bss, k, 4)
-                            c1 = bss(k)
-                            c2 = bss(k + 1)
-                            c3 = bss(k + 2)
-
-                            If EUC.Checked = True AndAlso i + 4 <= bs.Length Then
-                                hex2 = BitConverter.ToUInt16(bs, i + 2)
-                            Else
-                                hex2 = 0
-                            End If
-
-                            If hex2 = &H309A AndAlso gouseimaru(pos) >= 0 Then
-                                m = gouseimaru(pos)
-                                l = 0
-                                If m > 12 Then
-                                    l = 2
-                                    m = 0
-                                ElseIf m > 4 Then
-                                    l = 1
-                                    m -= 5
+                    ElseIf EUC.Checked = True Or eucms.Checked = True Then
+                        While i < bs.Length
+                            hex = BitConverter.ToUInt16(bs, i)
+                            If hex >= &HD800 AndAlso hex <= &HDBFF Then
+                                i += 2
+                                hex2 = BitConverter.ToUInt16(bs, i)
+                                If hex2 >= &HDC00 AndAlso hex2 <= &HDFFF Then
+                                    pos = (hex And &H3FF) * 1024 + (hex2 And &H3FF)
+                                    pos += &H10000
+                                Else
+                                    pos = tbl.Length
                                 End If
-                                code = BitConverter.GetBytes(hmaru_euc(l) + &H100 * m)
-                                Array.Copy(code, 0, bss, k, 4)
-                                k += 2
-                                i += 2
-
-                            ElseIf hex2 = &H300 AndAlso pos = &HE6 Then
-                                code = BitConverter.GetBytes(ha_euc)
-                                Array.Copy(code, 0, bss, k, 4)
-                                k += 2
-                                i += 2
-
-                            ElseIf hex2 = &H300 AndAlso gouseiac(pos) >= 0 Then
-                                code = BitConverter.GetBytes(hac_euc + ((2 * gouseiac(pos)) * &H100))
-                                Array.Copy(code, 0, bss, k, 4)
-                                k += 2
-                                i += 2
-
-                            ElseIf hex2 = &H301 AndAlso gouseiac(pos) >= 0 Then
-                                code = BitConverter.GetBytes(hac_euc + ((2 * gouseiac(pos) + 1) * &H100))
-                                Array.Copy(code, 0, bss, k, 4)
-                                k += 2
-                                i += 2
-
-                            ElseIf hex2 = &H2E9 AndAlso pos = &H2E5 Then
-                                code = BitConverter.GetBytes(koe_euc + &H100)
-                                Array.Copy(code, 0, bss, k, 4)
-                                k += 2
-                                i += 2
-
-                            ElseIf hex2 = &H2E5 AndAlso pos = &H2E9 Then
-                                code = BitConverter.GetBytes(koe_euc)
-                                Array.Copy(code, 0, bss, k, 4)
-                                k += 2
-                                i += 2
                             Else
+                                pos = Convert.ToInt32(hex)
+                            End If
+                            If pos * 4 < tbl.Length Then
+                                Array.Copy(tbl, pos * 4, bss, k, 4)
+                                c1 = bss(k)
+                                c2 = bss(k + 1)
+                                c3 = bss(k + 2)
+
+                                If EUC.Checked = True AndAlso i + 4 <= bs.Length Then
+                                    hex2 = BitConverter.ToUInt16(bs, i + 2)
+                                Else
+                                    hex2 = 0
+                                End If
+
+                                If hex2 = &H309A AndAlso gouseimaru(pos) >= 0 Then
+                                    m = gouseimaru(pos)
+                                    l = 0
+                                    If m > 12 Then
+                                        l = 2
+                                        m = 0
+                                    ElseIf m > 4 Then
+                                        l = 1
+                                        m -= 5
+                                    End If
+                                    code = BitConverter.GetBytes(hmaru_euc(l) + &H100 * m)
+                                    Array.Copy(code, 0, bss, k, 4)
+                                    k += 2
+                                    i += 2
+
+                                ElseIf hex2 = &H300 AndAlso pos = &HE6 Then
+                                    code = BitConverter.GetBytes(ha_euc)
+                                    Array.Copy(code, 0, bss, k, 4)
+                                    k += 2
+                                    i += 2
+
+                                ElseIf hex2 = &H300 AndAlso gouseiac(pos) >= 0 Then
+                                    code = BitConverter.GetBytes(hac_euc + ((2 * gouseiac(pos)) * &H100))
+                                    Array.Copy(code, 0, bss, k, 4)
+                                    k += 2
+                                    i += 2
+
+                                ElseIf hex2 = &H301 AndAlso gouseiac(pos) >= 0 Then
+                                    code = BitConverter.GetBytes(hac_euc + ((2 * gouseiac(pos) + 1) * &H100))
+                                    Array.Copy(code, 0, bss, k, 4)
+                                    k += 2
+                                    i += 2
+
+                                ElseIf hex2 = &H2E9 AndAlso pos = &H2E5 Then
+                                    code = BitConverter.GetBytes(koe_euc + &H100)
+                                    Array.Copy(code, 0, bss, k, 4)
+                                    k += 2
+                                    i += 2
+
+                                ElseIf hex2 = &H2E5 AndAlso pos = &H2E9 Then
+                                    code = BitConverter.GetBytes(koe_euc)
+                                    Array.Copy(code, 0, bss, k, 4)
+                                    k += 2
+                                    i += 2
+                                Else
+                                    If pos < 128 Then
+                                        If pos < 32 AndAlso pos <> &HA AndAlso pos <> &HD AndAlso pos <> &H9 Then
+                                            pos = 32
+                                        End If
+                                        bss(k) = pos
+                                        k += 1
+                                    ElseIf c1 = 0 AndAlso c2 = 0 Then
+                                        Array.Copy(tofueuc, 0, bss, k, 2)
+                                        k += 2
+                                    ElseIf c1 = &H8E Then
+                                        k += 2
+                                    ElseIf c1 = &H8F Then
+                                        k += 3
+                                    ElseIf ((c1 + &H5F) And &HFF) < &H5E AndAlso c2 >= &HA1 Then
+                                        k += 2
+                                    Else
+                                        Array.Copy(tofueuc, 0, bss, k, 2)
+                                        k += 2
+                                    End If
+                                End If
+                            End If
+                            i += 2
+                        End While
+                        'BIG5/GBK
+                    ElseIf BIG5HK.Checked = True Then
+                        While i < bs.Length
+                            hex = BitConverter.ToUInt16(bs, i)
+                            If hex >= &HD800 AndAlso hex <= &HDBFF Then
+                                i += 2
+                                hex2 = BitConverter.ToUInt16(bs, i)
+                                If hex2 >= &HDC00 AndAlso hex2 <= &HDFFF Then
+                                    pos = (hex And &H3FF) * 1024 + (hex2 And &H3FF)
+                                    pos += &H10000
+                                Else
+                                    pos = tbl.Length
+                                End If
+                            Else
+                                pos = Convert.ToInt32(hex)
+                            End If
+                            If pos * 4 < tbl.Length Then
+                                Array.Copy(tbl, pos * 4, bss, k, 4)
+                                c1 = bss(k)
+                                c2 = bss(k + 1)
+                                c3 = bss(k + 2)
+
                                 If pos < 128 Then
                                     If pos < 32 AndAlso pos <> &HA AndAlso pos <> &HD AndAlso pos <> &H9 Then
                                         pos = 32
@@ -1228,79 +1275,34 @@ Public Class Form1
                                     bss(k) = pos
                                     k += 1
                                 ElseIf c1 = 0 AndAlso c2 = 0 Then
-                                    Array.Copy(tofueuc, 0, bss, k, 2)
+                                    Array.Copy(tofuhk, 0, bss, k, 2)
                                     k += 2
-                                ElseIf c1 = &H8E Then
-                                    k += 2
-                                ElseIf c1 = &H8F Then
-                                    k += 3
-                                ElseIf ((c1 + &H5F) And &HFF) < &H5E AndAlso c2 >= &HA1 Then
+                                    'skip
+                                ElseIf ((c1 + &H7F) And &HFF) < &H7E AndAlso c2 >= &H40 Then
                                     k += 2
                                 Else
-                                    Array.Copy(tofueuc, 0, bss, k, 2)
+                                    Array.Copy(tofuhk, 0, bss, k, 2)
                                     k += 2
                                 End If
                             End If
-                        End If
                             i += 2
-                    End While
-                    'BIG5/GBK
-                ElseIf BIG5HK.Checked = True Then
-                    While i < bs.Length
-                        hex = BitConverter.ToUInt16(bs, i)
-                        If hex >= &HD800 AndAlso hex <= &HDBFF Then
-                            i += 2
-                            hex2 = BitConverter.ToUInt16(bs, i)
-                            If hex2 >= &HDC00 AndAlso hex2 <= &HDFFF Then
-                                pos = (hex And &H3FF) * 1024 + (hex2 And &H3FF)
-                                pos += &H10000
-                            Else
-                                pos = tbl.Length
-                            End If
-                        Else
-                            pos = Convert.ToInt32(hex)
-                        End If
-                        If pos * 4 < tbl.Length Then
-                            Array.Copy(tbl, pos * 4, bss, k, 4)
-                            c1 = bss(k)
-                            c2 = bss(k + 1)
-                            c3 = bss(k + 2)
+                        End While
+                    End If
 
-                            If pos < 128 Then
-                                If pos < 32 AndAlso pos <> &HA AndAlso pos <> &HD AndAlso pos <> &H9 Then
-                                    pos = 32
-                                End If
-                                bss(k) = pos
-                                k += 1
-                            ElseIf c1 = 0 AndAlso c2 = 0 Then
-                                Array.Copy(tofuhk, 0, bss, k, 2)
-                                k += 2
-                                'skip
-                            ElseIf ((c1 + &H7F) And &HFF) < &H7E AndAlso c2 >= &H40 Then
-                                k += 2
-                            Else
-                                Array.Copy(tofuhk, 0, bss, k, 2)
-                                k += 2
-                            End If
-                        End If
-                        i += 2
-                    End While
+
+
+                    fs.Write(bss, 0, k)
+                    fs.Close()
+                    Beep()
+                Else
+                    MessageBox.Show(unitable(sel) & "がありません")
                 End If
-
-
-
-                fs.Write(bss, 0, k)
+            Else
+                bs = Encoding.GetEncoding(My.Settings.usercp).GetBytes(TextBox1.Text)
+                fs.Write(bs, 0, bs.Length)
                 fs.Close()
                 Beep()
-            Else
-                MessageBox.Show(unitable(sel) & "がありません")
             End If
-        Else
-            bs = Encoding.GetEncoding(My.Settings.usercp).GetBytes(TextBox1.Text)
-            fs.Write(bs, 0, bs.Length)
-            fs.Close()
-            Beep()
-        End If
         Return 0
 
     End Function
