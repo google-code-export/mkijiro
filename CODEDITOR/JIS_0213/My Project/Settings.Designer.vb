@@ -161,6 +161,18 @@ Namespace My
                 Me("lastfile") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("2004")>  _
+        Public Property jisoutput() As Integer
+            Get
+                Return CType(Me("jisoutput"),Integer)
+            End Get
+            Set
+                Me("jisoutput") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

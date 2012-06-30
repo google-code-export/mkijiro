@@ -44,6 +44,10 @@ Partial Class Form1
         Me.READ = New System.Windows.Forms.ToolStripMenuItem()
         Me.フォントToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.バージョンToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.JIS90 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.JIS83 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.JIS2000 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.JIS2004 = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -145,17 +149,19 @@ Partial Class Form1
         Me.JIS.Size = New System.Drawing.Size(180, 22)
         Me.JIS.Text = "ISO-2022-JP-2004"
         Me.JIS.ToolTipText = "JISX0213規格のJIS文字コードです、エスケープ＋特殊パターンでモードが切り替わります" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "1B 28 42: ASCII (厳密にはISO/IEC 646 " & _
-    "国際基準版)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "1B 24 28 51: JIS X 0213第1面" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "1B 24 28 50: JIS X 0213第2面"
+    "国際基準版)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "1B 24 28 51: JIS X 0213第1面" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "1B 24 28 50: JIS X 0213第2面" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "1b 24 28 4f :JIS" & _
+    " X 0213:2000 1面 " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'JISX208
         '
         Me.JISX208.Checked = True
         Me.JISX208.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.JISX208.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.JIS83, Me.JIS90, Me.JIS2000, Me.JIS2004})
         Me.JISX208.Name = "JISX208"
         Me.JISX208.Size = New System.Drawing.Size(183, 22)
         Me.JISX208.Text = "JISX208互換モード"
         Me.JISX208.ToolTipText = "JISX208のエスケープシーケンスを読みとるようにします" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "JIS X 0208-1983(JIS83) 1b 24 42 ESC $ B" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "JIS X 020" & _
-    "8-1990(JIS90,208用更新シーケンスなので使用不可) 1b 26 40 1b 24 42 ESC & @ ESC $ B"
+    "8-1990(JIS90) 1b 26 40 1b 24 42 ESC & @ ESC $ B" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'eucms
         '
@@ -202,6 +208,38 @@ Partial Class Form1
         Me.バージョンToolStripMenuItem.Size = New System.Drawing.Size(80, 22)
         Me.バージョンToolStripMenuItem.Text = "バージョン"
         '
+        'JIS90
+        '
+        Me.JIS90.Name = "JIS90"
+        Me.JIS90.Size = New System.Drawing.Size(152, 22)
+        Me.JIS90.Text = "JIS90"
+        Me.JIS90.ToolTipText = "jis90追加文字(凜熙)の出力方法をJISX208-1990にします(iso2022規格外)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "JIS X 0208-1990 1b 26 40 1b 24 4" & _
+    "2 ESC & @ ESC $ B " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        '
+        'JIS83
+        '
+        Me.JIS83.Name = "JIS83"
+        Me.JIS83.Size = New System.Drawing.Size(152, 22)
+        Me.JIS83.Text = "JIS83"
+        Me.JIS83.ToolTipText = "jis90追加文字(凜熙)の出力方法をJISX208-1983にします(jis83規格外)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "JIS X 0208-1983 1b 24 42 ESC $ B" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & _
+    "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        '
+        'JIS2000
+        '
+        Me.JIS2000.Name = "JIS2000"
+        Me.JIS2000.Size = New System.Drawing.Size(152, 22)
+        Me.JIS2000.Text = "JIS2000"
+        Me.JIS2000.ToolTipText = "jis90追加文字(凜熙)の出力方法をJISX213-2000にします" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "JIS X 0213:2000 1面 1b 24 28 4f " & Global.Microsoft.VisualBasic.ChrW(9) & "ESC $ ( O"
+        '
+        'JIS2004
+        '
+        Me.JIS2004.Checked = True
+        Me.JIS2004.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.JIS2004.Name = "JIS2004"
+        Me.JIS2004.Size = New System.Drawing.Size(152, 22)
+        Me.JIS2004.Text = "JIS2004"
+        Me.JIS2004.ToolTipText = "jis90追加文字(凜熙)の出力方法をJISX213-2004にします" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "JIS X 0213:2004 1面 1b 24 28 51 ESC $ ( Q"
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
@@ -245,5 +283,9 @@ Partial Class Form1
     Friend WithEvents バージョンToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents JISX208 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents eucms As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents JIS83 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents JIS90 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents JIS2000 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents JIS2004 As System.Windows.Forms.ToolStripMenuItem
 
 End Class
