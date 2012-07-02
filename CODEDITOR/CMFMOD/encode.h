@@ -11,6 +11,7 @@ extern void encode_free(p_encodepack);
 
 //extern int encode_ucs_conv(const unsigned char *ucs, unsigned char *cjk);
 extern int encode_utf8_conv(const unsigned char *ucs, unsigned char *cjk, p_encodepack pack);
+extern int encode_utf8_conv_noram(const unsigned char *ucs, unsigned char *cjk);
 
 #ifdef EXTEND_UINX_CODE
 extern int UTF8SJIS_EUC(unsigned char *msg, int len);

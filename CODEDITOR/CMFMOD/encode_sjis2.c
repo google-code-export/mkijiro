@@ -72,296 +72,15 @@ char FILE_ENCODE(){
 }
 
 
-//UTF8+SJISから直SJIS変換表
-int UTF8SJIS_SJIS(unsigned char *msg,int len){
-	char stm[80];
-	char fbuffer[2048];
-	char tofu[]="\x81\xA0";
-	u8 c1=0;
-	u8 c2=0;
-	int i=0;
-	int k=0;
-	int kk=0;
-	int slen=0;
-	int z=0;
-	int seek=0;
- 	int big=0;
-	int fd;
-	char filename_encode=FILE_ENCODE();
-
-		if(filename_encode==UTF8){
-
-   		  while(i < len){
-			c1= (u8)msg[i];
-			if((c1 & 0x80) ==0){
-			stm[k]=c1;
-			k++;
-			i++;
-			}
-			else if(c1 < 0xC2){
-			i+=2;
-			}
-			else if(c1 < 0xF8){
-				memcpy(&seek,&msg[i],4);
-				if(c1 < 0xE0){
-	   			seek &= 0xFFFF;
-				}
-				else if(c1 < 0xF0){
-	   			seek &= 0xFFFFFF;
-				}
- 				kk = 0;
-				fd = sceIoOpen("ms0:/cheatmaster/table/utf8", PSP_O_RDONLY, 0777);
-				if(fd>0){
-				 while(1){
-   				sceIoRead(fd,fbuffer,2048);
-	  				for( z = 0; z< 512;z++){
-					memcpy(&big,&fbuffer[z*4],4);
-		  				if(seek==big){
-			 			kk +=z;
-						memcpy(&slen,&fbuffer[z*4+4],1);
-			  			goto end1;
-						}
-						else if(big==0){
-						sceIoClose(fd);
-						memcpy(&stm[k],&tofu[0],2);
-						k = k+2;
-		  				goto fail2;
-						}
-					}
-					kk += 512;
-				 }
-				}
-				end1:
-				sceIoClose(fd);
-				fd = sceIoOpen("ms0:/cheatmaster/table/sjis", PSP_O_RDONLY, 0777);
-				if(fd>0){
-				sceIoLseek32(fd, kk<<1,PSP_SEEK_SET);
-				if (slen<16){
-		  		sceIoRead(fd,fbuffer,slen);
-	  			memcpy(&stm[k],&fbuffer[0],slen);
-				k +=slen;
-				}
-				else{
-		  		sceIoRead(fd,fbuffer,2);
-				if(fbuffer[1]==0){
-				stm[k]=fbuffer[0];
-				k++;
-				}
-				else{
-	  			memcpy(&stm[k],&fbuffer[0],2);
-				k = k+2;
-				}
-				}
-				}
-				sceIoClose(fd);
-
-				fail2:
-				if(c1 < 0xE0){
-				i+=2;
-				}
-				else if(c1 < 0xF0){
-				i+=3;
-				}
-				else{
-				i+=4;
-				}
-			}
-			else if(c1 < 0xFC){
-			i+=5;
-			}
-			else if(c1 < 0xFE){
-			i+=6;
-			}
-			else{
-			i++;
-			}
-		  }
-		}
-		//ファイル名表示 http://www.tohoho-web.com/wwwkanji.htm
-		else if(filename_encode==SJIS){
-		 while(i<len){
-		 	stm[i]=msg[i];
-		 	i++;k++;
-			 /*c1=(u8)msg[i];
-			c2=(u8)msg[i+1];
-			if( (u8)((c1^ 0x20)-0xA1) < (u8)0x3C ){
-			if (c1 >= 0xe0) { c1 = c1 - 0x40; }
-			if (c2 >= 0x80) { c2 = c2 - 1; }
-			if (c2 >= 0x9e) {
-				c1 = (c1 - 0x70) * 2;
-				c2 = c2 - 0x7d;
-			}
-			else {
-				c1 = ((c1 - 0x70) * 2) - 1;
-				c2 = c2 - 0x1f;
-			}
-			stm[k]=c1 | 0x80;
-			stm[k+1]=c2 | 0x80;
-			k+=2;i+=2;
-			}
-			else{
-				if((c1 & 0x80) ==0){
-				stm[k]=c1;
-				k++;i++;
-				}
-				else{//EUC半角
-				stm[k]=0x8E;
-				stm[k+1]=c1;
-				k+=2;i++;
-				}
-			}*/
-		  }
-		}
-	stm[k]=0;
-	memcpy(&msg[0],&stm[0],len);
-
-	return k;
-}
-
-//SJISから直UTF8＋SJIS変換表
-int SJIS_UTF8SJIS(unsigned char *msg, int len)
-{
-	char stm[80];
-	char fbuffer[2048];
-	u8 c1=0;
-	u8 c2=0;
-	int i=0;
-	int k=0;
-	int kk=0;
-	int z=0;
-	int seek=0;
- 	int big=0;
-	int fd;
-	char filename_encode=FILE_ENCODE();
-
-	if(filename_encode==UTF8){
-   	  while(i < len){
-		c1= (u8)msg[i];
-		c2= (u8)msg[i+1];
-		if((c1 & 0x80) ==0){
-		stm[k]=c1;
-		k++;i++;
-		}
-		else if(  ((((c1^0x20)+0x5F)&0xFF) < 0x3C) && (c2>=0x40) ){
-		memcpy(&seek,&msg[i],2);
- 		kk = 0;
-		fd = sceIoOpen("ms0:/cheatmaster/table/sjis", PSP_O_RDONLY, 0777);
-			if(fd>0){
-			 while(1){
-   				sceIoRead(fd,fbuffer,2048);
-				for( z = 0; z< 1024;z++){
-				memcpy(&big,&fbuffer[z*2],2);
-					if(seek==big){
-					kk +=z;
-					goto end;
-					}
-					else if(big==0){
-					sceIoClose(fd);
-					goto fail;
-					}
-				}
-				kk += 1024;
-			 }
-			}
-			end:
-			sceIoClose(fd);
-			fd = sceIoOpen("ms0:/cheatmaster/table/utf8", PSP_O_RDONLY, 0777);
-				if(fd>0){
-				sceIoLseek32(fd, kk<<2,PSP_SEEK_SET);
-   				sceIoRead(fd,fbuffer,4);
-				}
-			sceIoClose(fd);
-			c1=(u8)fbuffer[0];
-
-			if((c1 & 0x80) ==0){
-			memcpy(&stm[k],&fbuffer[0],1);
-			k++;
-			}
-			else if(c1 < 0xE0){
-			memcpy(&stm[k],&fbuffer[0],2);
-			k +=2;
-			}
-			else if(c1 < 0xF0){
-			memcpy(&stm[k],&fbuffer[0],3);
-			k +=3;
-			}
-			else if(c1 < 0xF8){
-			memcpy(&stm[k],&fbuffer[0],4);
-			k+=4;
-			}
-			//else if(c1 < 0xFC){
-			//k+=5;
-			//}
-			//else if(c1 < 0xFE){
-			//k+=6;
-			//}
-		fail:
-		i+=2;
-		}
-		else if(c1 < 0xE0){
-		stm[k]=c1;
-		k++;i++;
-		}
-		else{
-	   	i++;
-		}
-	  }
-	}
-	else if(filename_encode==SJIS){
-		while(i < len){
-		 	stm[i]=msg[i];
-		 	i++;k++;
-			/*c1= (u8)msg[i];
-			c2= (u8)msg[i+1];
-			if((c1 & 0x80) ==0){
-			stm[k]=c1;
-			k++;
-			i++;
-			}
-			else if(c1 == 0xE8 && c2>=0xA1){
-				stm[k]=c2;
-				k++;
-				i+=2;
-			}
-			else if( (((c1+0x5F)&0xFF) < 0x4C) && (c2>=0xA1) ){
-			//http://oku.edu.mie-u.ac.jp/~okumura/algo/
-			c1 &=0x7F;
-			c2 &=0x7F;
-			if ((c1 & 1) != 0)
-			{
-			c2 += 0x20;
-				if ((c2 & 0x80) == 0) {
-				c2--;
-				}
-			}
-			else {
-				c2 += 0x7E;
-			}
-			
-			c1 = (((c1 - 1) >> 1) + 0x91) ^ 0x20;
-
-				stm[k]=c1;
-				stm[k+1]=c2;
-				k+=2;
-				i+=2;
-			}
-			else{
-			i++;
-			}*/
-		}
-	}
-	stm[k]=0;
-	memcpy(&msg[0],&stm[0],len);
-
-	return k;
-}
-
 //ワイド関数utf8をutf32に戻す,libconvのコピペ
 static int utf8_mbtowc(ucs4_t *pwc, const unsigned char *s, int n)
 {
 	unsigned char c = s[0];
 
-	if (c < 0x80) {
+	if (c <0x20) {
+		return RET_TOOSMALL;
+	}
+	else if (c < 0x80) {
 		*pwc = c;
 		return 1;
 	} else if (c < 0xc2) {
@@ -428,6 +147,190 @@ static int utf8_mbtowc(ucs4_t *pwc, const unsigned char *s, int n)
 		return RET_ILSEQ;
 }
 
+//UTF8+SJISから直SJIS変換表
+int UTF8SJIS_SJIS(unsigned char *msg,int len){
+	int k=0;
+	char filename_encode=FILE_ENCODE();
+
+		if(filename_encode==UTF8){
+		k=encode_utf8_conv_noram((unsigned char *)&msg[0], NULL);
+		msg[k+1]=0;
+		k=strlen(msg);
+		}
+		else if(filename_encode==SJIS){
+		k=len;
+		}
+	
+
+	return k;
+}
+
+//メモリ使わない版
+int encode_uni2cjk_noram(const unsigned char *uni,unsigned char *cjk){
+	int transcount = 0;
+
+	if(uni[0]<0x81 && uni[1]==0){
+		cjk[0]=uni[0];
+		transcount = 1;
+	}
+	else{
+		int pos = (int)(*(unsigned short*)uni)*2;
+		//テーブルから2バイト差し替え用
+	int fd = sceIoOpen("ms0:/CheatMaster/sjis.dat", PSP_O_RDONLY, 0777);
+	
+	if(fd < 0){
+	sceIoClose(fd);
+		return 2;
+	}
+	
+	sceIoLseek32(fd, pos,PSP_SEEK_SET);
+	sceIoRead(fd, cjk, 2);
+	sceIoClose(fd);
+		if (cjk[1]==0){//半角カナ
+		transcount = 1;
+		}
+		else{
+		transcount = 2;
+		}
+		if(cjk[0]==0x3f && cjk[1]==0) //豆腐,u003f自体は"？"の文字
+		{
+			cjk[0]=0x81;
+			cjk[1]=0xA0;
+		}
+	}
+	return transcount;
+}
+
+extern int encode_utf8_conv_noram(const unsigned char *ucs, unsigned char *cjk)
+{
+	int i = 0, j = 0, l = strlen((const char *)ucs);
+	if(cjk == NULL) cjk = (unsigned char *)ucs;
+
+	while(i < l)
+	{
+		ucs4_t u = 0x1FFF;
+		int p = utf8_mbtowc(&u, ucs + i, l - i);
+		if(p < 0)
+			break;
+		if(u > 0xFFFF)
+			u = 0x1FFF;
+		j += encode_uni2cjk_noram((unsigned char*)&u,cjk + j);
+		i += p;
+	}
+	cjk[j] = 0;
+	return j;
+}
+
+
+//SJISから直UTF8＋SJIS変換表
+int SJIS_UTF8SJIS(unsigned char *msg, int len){
+	
+	char stm[80];
+	char fbuffer[4];
+	u8 c1=0;
+	u8 c2=0;
+	int i=0;
+	int k=0;
+	int pos=0;
+	int fd;
+	char filename_encode=FILE_ENCODE();
+
+	if(filename_encode==UTF8){
+   	  while(i < len){
+		c1= (u8)msg[i];
+		c2= (u8)msg[i+1];
+		if((c1 & 0x80) ==0){
+		stm[k]=c1;
+		k++;i++;
+		}
+		else if(((((c1^0x20)+0x5F)&0xFF) < 0x3C) && (c2>=0x40)){//SJIS判定
+			pos = ((c1^ 0x20) - 0xA1)*192 +c2-0x40;
+			fd = sceIoOpen("ms0:/cheatmaster/table/sjisvsutf8", PSP_O_RDONLY, 0777);
+			if(fd>0){
+				sceIoLseek32(fd, pos*4,PSP_SEEK_SET);
+				sceIoRead(fd,fbuffer,4);
+				}
+			sceIoClose(fd);
+			c1=fbuffer[0];
+
+			if((c1 & 0x80) ==0){//utf8 1byte
+			memcpy(&stm[k],&fbuffer[0],1);
+			k++;
+			}
+			else if(c1 < 0xE0){//utf8 2byte
+			memcpy(&stm[k],&fbuffer[0],2);
+			k +=2;
+			}
+			else if(c1 < 0xF0){//utf8 3byte
+			memcpy(&stm[k],&fbuffer[0],3);
+			k +=3;
+			}
+			else if(c1 < 0xF8){//utf8 4byte
+			memcpy(&stm[k],&fbuffer[0],4);
+			k+=4;
+			}
+		i+=2;
+		}
+		else if(c1 < 0xE0){//半角カナ
+		stm[k]=c1;
+		k++;
+		i++;
+		}
+		else{
+	   	i++;
+		}
+	  }
+	stm[k]=0;
+	memcpy(&msg[0],&stm[0],len);
+	}
+	else if(filename_encode==SJIS){
+		#ifdef JISX0213
+   	  while(i < len){
+		c1= (u8)msg[i];
+		c2= (u8)msg[i+1];
+		if((c1 & 0x80) ==0){
+		stm[k]=c1;
+		k++;i++;
+		}
+		else if(((((c1^0x20)+0x5F)&0xFF) < 0x3C) && (c2>=0x40)){//SJIS判定
+			pos = ((c1^ 0x20) - 0xA1)*192 +c2-0x40;
+			fd = sceIoOpen("ms0:/cheatmaster/table/sjis2004vssjis", PSP_O_RDONLY, 0777);
+			if(fd>0){
+				sceIoLseek32(fd, pos*2,PSP_SEEK_SET);
+				sceIoRead(fd,fbuffer,2);
+				}
+			sceIoClose(fd);
+			c1=fbuffer[0];
+			c2=fbuffer[1];
+
+			if((c1 & 0x80) ==0){//SJIS 1byte
+			memcpy(&stm[k],&fbuffer[0],1);
+			k++;
+			}
+			else if(((((c1^0x20)+0x5F)&0xFF) < 0x3C) && (c2>=0x40)){//SJIS 2byte
+			memcpy(&stm[k],&fbuffer[0],2);
+			k +=2;
+			}
+		i+=2;
+		}
+		else if(c1 < 0xE0){//半角カナ
+		stm[k]=c1;
+		k++;
+		i++;
+		}
+		else{
+	   	i++;
+		}
+	  }
+	stm[k]=0;
+	memcpy(&msg[0],&stm[0],len);
+		#endif
+	}
+
+	return k;
+}
+
+
 /* unicode -> cjk */ //UTF16巨大テーブルからJIS文字コードを取得
 static int encode_uni2cjk(const unsigned char *uni,unsigned char *cjk, p_encodepack pack){
 	int transcount = 0;
@@ -447,6 +350,7 @@ static int encode_uni2cjk(const unsigned char *uni,unsigned char *cjk, p_encodep
 		else{
 		transcount = 2;
 		}
+		
 		if(cjk[0]==0x3f && cjk[1]==0) //豆腐,u003f自体は"？"の文字
 		{
 			cjk[0]=0x81;
@@ -456,20 +360,6 @@ static int encode_uni2cjk(const unsigned char *uni,unsigned char *cjk, p_encodep
 	return transcount;
 }
 
-/* unicode string convert */
-/* extern int encode_ucs_conv(const unsigned char *ucs, unsigned char *cjk)
-{
-	int i = 0, j = 0;
-	if(cjk == NULL) cjk = (unsigned char *)ucs;
-
-	while(*(ucs + i) != 0 || *(ucs + i + 1) != 0)
-	{
-		j += encode_uni2cjk(ucs + i, cjk + j);
-		i += 2;
-	}
-	cjk[j] = 0;
-	return j;
-} */
 
 /* utf-8 string convert */
 extern int encode_utf8_conv(const unsigned char *ucs, unsigned char *cjk, p_encodepack pack)
@@ -497,7 +387,7 @@ extern int encode_init(p_encodepack pack)
 	int fd = sceIoOpen("ms0:/CheatMaster/sjis.dat", PSP_O_RDONLY, 0777);
 	if(fd < 0)
 		return 1;
-	pack->UNI_CJK = malloc(131072);//UTF16　0x0〜0xffffまでの変換表
+	pack->UNI_CJK = malloc(131072);//UTF16->SJIS 0x0〜0xffffまでの変換表
 	if(pack->UNI_CJK == NULL)
 	{
 		sceIoClose(fd);
