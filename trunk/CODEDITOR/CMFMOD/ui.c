@@ -632,7 +632,7 @@ int ui_input_string(int x, int y, char * s, int len)
 			else
 			{
 				ctrl_waitrelease();
-				font_fillrect(x, y + 10, 379, y + 107);
+				font_fillrect(x, y + 10, 379, y + 112);
 				sfree(idx_buf);
 				return -1;
 			}
