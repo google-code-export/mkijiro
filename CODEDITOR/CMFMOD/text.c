@@ -47,7 +47,8 @@ extern int text_open(const char * filename, int rowbytes, p_txtpack txtpack)
 		sceIoClose(fd);
 		return 1;
 	}
- 
+	
+ 	bzero(txtpack->txt->buf, l);
 	txtpack->txt->buf[l] = 0;
 	sceIoLseek32(fd, 0, PSP_SEEK_SET);
 	sceIoRead(fd, txtpack->txt->buf, l);

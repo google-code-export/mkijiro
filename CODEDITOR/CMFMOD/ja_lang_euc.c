@@ -9,7 +9,7 @@ char LANG_ADDRP1 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) 
 char LANG_ADDRP2 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "□あどれす △こーど追加 SELECT  履歴(最近10件)  ";
 char LANG_ADDALL [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "全結果をこーど追加";
 char LANG_ADD [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "1つこーど追加 ";
-char LANG_TABLETITLE [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "こーど追加    あどれす   ?       bit  実行";
+char LANG_TABLETITLE [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) =  "こーど追加 あどれす   値        bit  実行";
 char LANG_TABLEP3 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "○ 変更";
 char LANG_TABLEP4 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "× 変更";
 char LANG_NEWADDR [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "こーど追加";

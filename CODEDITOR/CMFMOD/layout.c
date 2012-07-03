@@ -291,7 +291,7 @@ static void layout_view(int flag)
 		}
 			
 		unsigned int tempadr = (addr + x + y * 16);
-		font_fillrect(102, 54, 238, 64);
+		font_fillrect(102, 54, 238, 66);
 		sprintf(s, "0x%08X:0x%08X", tempadr, tempadr - 0x08800000);
 		font_output(104, 56, s);
 		

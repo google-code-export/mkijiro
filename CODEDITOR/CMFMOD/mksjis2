@@ -13,7 +13,7 @@ endif
 
 
 
-TARGET = CMFMOD_SJIS
+TARGET = CMFMOD_SJIS2
 
 ifdef PSP_SLIM
 OBJS = conf_sjis.o main_sjis.o ctrl_sjis.o encode_sjis2.o font_sjis.o layout_sjis.o mem_sjis.o\
