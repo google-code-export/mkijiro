@@ -56,7 +56,7 @@ void debug_memui()
 	sprintf(buffer,"Free:%dK/%dK",
 	sceKernelPartitionMaxFreeMemSize(1)>>10,sceKernelPartitionMaxFreeMemSize(6)>>10);
 	//sceKernelGetModel()?sceKernelPartitionMaxFreeMemSize(8)>>10:0);
-	font_output(198, 232, buffer);
+	font_output(198, 230, buffer);
 }
 
 void ui_init()
@@ -104,7 +104,7 @@ void ui_init()
 			t_encodepack pack;
 	 		if(encode_init(&pack) == 0)
 			{
-				//UCS2(utf16BE)化後テーブル検索し、EUC変換
+				//UCS2(utf16BE)化後テーブル検索し、SJIS変換
 				encode_utf8_conv((unsigned char *)&ui_gv.ui_gname[12], NULL,&pack);
 				encode_free(&pack);
 			}
@@ -125,9 +125,9 @@ void ui_cls()
 	font_fillrect(96, 28, 383, 241);
 
 #ifdef GAME3XX
-	font_output(100, 30,"CM Fusion371 " VER_STR);
+	font_output(100, 30,"CMF371 " VER_STR);
 #else
-	font_output(100, 30,"CM Fusion " VER_STR);
+	font_output(100, 30,"CMF " VER_STR);
 #endif
 	if(usbinit){
 		font_output(379-4*6, 42,"USB");
@@ -137,9 +137,9 @@ void ui_cls()
 
  	char cpustr[40];
 	sprintf(cpustr, "CPU/BUS:%d/%d", scePowerGetCpuClockFrequencyInt(), scePowerGetBusClockFrequency());
-	font_output(100, 232, cpustr);
+	font_output(100, 230, cpustr);
 	sprintf(cpustr, "Bat:%d", scePowerGetBatteryLifePercent());
-	font_output(334, 232, cpustr);
+	font_output(334, 230, cpustr);
 	debug_memui();
 }
 
@@ -632,7 +632,7 @@ int ui_input_string(int x, int y, char * s, int len)
 			else
 			{
 				ctrl_waitrelease();
-				font_fillrect(x, y + 10, 379, y + 107);
+				font_fillrect(x, y + 10, 379, y + 112);
 				sfree(idx_buf);
 				return -1;
 			}

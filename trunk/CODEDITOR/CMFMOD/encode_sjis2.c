@@ -154,11 +154,12 @@ int UTF8SJIS_SJIS(unsigned char *msg,int len){
 
 		if(filename_encode==UTF8){
 		k=encode_utf8_conv_noram((unsigned char *)&msg[0], NULL);
+		msg[k]=0;
 		msg[k+1]=0;
 		k=strlen(msg);
 		}
 		else if(filename_encode==SJIS){
-		k=len;
+		k=strlen(msg);
 		}
 	
 
@@ -232,7 +233,7 @@ int SJIS_UTF8SJIS(unsigned char *msg, int len){
 	int i=0;
 	int k=0;
 	int pos=0;
-	int fd;
+	int fd=0;
 	char filename_encode=FILE_ENCODE();
 
 	if(filename_encode==UTF8){
@@ -241,17 +242,18 @@ int SJIS_UTF8SJIS(unsigned char *msg, int len){
 		c2= (u8)msg[i+1];
 		if((c1 & 0x80) ==0){
 		stm[k]=c1;
-		k++;i++;
+		k++;
+		i++;
 		}
-		else if(((((c1^0x20)+0x5F)&0xFF) < 0x3C) && (c2>=0x40)){//SJISÈ½Äê
-			pos = ((c1^ 0x20) - 0xA1)*192 +c2-0x40;
+		else if(((u8)((c1^0x20)- 0xA1) < (u8)0x3C) && (c2>=0x40)){//SJISÈ½Äê
+			pos = (((c1^ 0x20)- 0xA1)*192)+(c2 -0x40);
 			fd = sceIoOpen("ms0:/cheatmaster/table/sjisvsutf8", PSP_O_RDONLY, 0777);
-			if(fd>0){
-				sceIoLseek32(fd, pos*4,PSP_SEEK_SET);
-				sceIoRead(fd,fbuffer,4);
-				}
-			sceIoClose(fd);
+			if(fd>=0){
+			sceIoLseek32(fd, pos<<2,PSP_SEEK_SET);
+			sceIoRead(fd,fbuffer,4);
 			c1=fbuffer[0];
+			}
+			sceIoClose(fd);
 
 			if((c1 & 0x80) ==0){//utf8 1byte
 			memcpy(&stm[k],&fbuffer[0],1);
@@ -271,17 +273,20 @@ int SJIS_UTF8SJIS(unsigned char *msg, int len){
 			}
 		i+=2;
 		}
-		else if(c1 < 0xE0){//È¾³Ñ¥«¥Ê
-		stm[k]=c1;
-		k++;
-		i++;
+		else if(c1<0xE0){//È¾³Ñ¥«¥Ê
+			pos = c1 + 0xFF60 - 0xA0;
+			stm[k] = ((pos >> 12) | 0xE0);
+			stm[k+1] =  (((pos >> 6) & 0x3F) | 0x80);
+			stm[k+2] =  ((pos & 0x3F) | 0x80);
+		k +=3;
+        i +=1;
 		}
 		else{
 	   	i++;
 		}
 	  }
 	stm[k]=0;
-	memcpy(&msg[0],&stm[0],len);
+	memcpy(&msg[0],&stm[0],k);
 	}
 	else if(filename_encode==SJIS){
 		#ifdef JISX0213
@@ -323,7 +328,7 @@ int SJIS_UTF8SJIS(unsigned char *msg, int len){
 		}
 	  }
 	stm[k]=0;
-	memcpy(&msg[0],&stm[0],len);
+	memcpy(&msg[0],&stm[0],k);
 		#endif
 	}
 

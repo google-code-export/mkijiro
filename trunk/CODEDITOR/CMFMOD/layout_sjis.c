@@ -291,7 +291,7 @@ static void layout_view(int flag)
 		}
 			
 		unsigned int tempadr = (addr + x + y * 16);
-		font_fillrect(102, 54, 238, 64);
+		font_fillrect(102, 54, 238, 66);
 		sprintf(s, "0x%08X:0x%08X", tempadr, tempadr - 0x08800000);
 		font_output(104, 56, s);
 		
@@ -2596,12 +2596,14 @@ static void * layout_readdir(char *tempdir, char *ext, int *c, int *dc, int fatr
 
 	char stmm[45]="                                             ";
 	char stmn[8]="       \x0";
+	char stzz[8]="          ";
 	int stend=0;
 	int k=0;
 
 	for(i=0;i<tempc;i++){
 		strcpy(stmm, (char *)text_array[i]);
 		memcpy(&stmn[0],&stmm[strlen(stmm)-7],7);
+		memcpy(&stmm[strlen(stmm)-7],&stzz[0],7);
 
 		stend=UTF8SJIS_SJIS(stmm,36);
 		for(k=stend;k<36;k++){
@@ -2695,7 +2697,7 @@ READAGAIN:
 
 	idx = 0;
 	do {
-		font_fillrect(100, 30, 379, 239);
+		font_fillrect(100, 30, 379, 240);
 		font_output(120,34,LAYOUT_READ_HELP);
 		idx = ui_menu(110, 56, decode_text_array, c+dc, 14, idx, layout_read_cb);
 		if(idx < 0)
