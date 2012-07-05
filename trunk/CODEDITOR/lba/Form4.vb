@@ -118,6 +118,7 @@ Public Class Form4
 
                     Dim ct2 As Integer = 0
                     Dim templen As Integer = 0
+                    Dim jis208 As Byte() = {&H1B, &H24, &H42}
                     Array.Resize(bs, 2048 + 16)
 
                     While ct < 2048
@@ -178,13 +179,28 @@ Public Class Form4
                                 Array.Resize(str, 16)
                                 Array.Copy(bs, ct, str, 0, 16)
                             End If
-                        Else
+                        ElseIf enc = 50220 Then
                             Array.Copy(bs, ct, str, 0, 16)
+                            Else
+                                Array.Copy(bs, ct, str, 0, 16)
                         End If
-                        binst = displayhex(Encoding.GetEncoding(enc).GetString(str))
-                        sb.AppendLine(binst)
-                        lba_base += 16
-                        ct += 16
+
+
+                        If bsw.Checked = True Then
+                            str = byteswap(str)
+                        End If
+
+                        If enc = 50220 Then
+                            Array.Resize(jis208, 19)
+                            Array.Copy(str, 0, jis208, 3, 16)
+                            Array.Resize(str, 19)
+                            Array.Copy(jis208, 0, str, 0, 19)
+                        End If
+
+                            binst = displayhex(Encoding.GetEncoding(enc).GetString(str))
+                            sb.AppendLine(binst)
+                            lba_base += 16
+                            ct += 16
                     End While
                 End If
 
@@ -197,6 +213,22 @@ Public Class Form4
         End Try
 
     End Sub
+
+    Function byteswap(ByVal str As Byte()) As Byte()
+        Dim st2(str.Length) As Byte
+        Dim k As Integer = 0
+        For i = 0 To str.Length - 1
+            If (i And 1) = 0 Then
+                st2(2 * k + 1) = str(i)
+            Else
+                st2(2 * k) = str(i)
+                k += 1
+            End If
+        Next
+
+        Return st2
+
+    End Function
 
     Function cp932zenkaku(ByVal st As UInteger) As Boolean
         If (st >= &H8140 AndAlso st <= &H9FFC) _
@@ -327,5 +359,9 @@ Public Class Form4
         Dim m As New Form1
         m = CType(Me.Owner, Form1)
         m.enc.Text = ComboBox1.SelectedIndex.ToString
+    End Sub
+
+    Private Sub bsw_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles bsw.CheckedChanged
+        ffload(sender, e)
     End Sub
 End Class
