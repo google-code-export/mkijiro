@@ -8,9 +8,20 @@ Public Class Form1
     Dim p As String() = {"sjis.txt", "euc-jp.txt", "gbk.txt", "table\euc-jp.dat", "table\shift-jis.dat", "table\gbk.dat", "unicode.txt", "txt_table\custom_utf32", "", "", "", "", "", ""}
     Dim pp As String() = {"sjisvsgbk", "sjisvsutf8", "gbkvssjis", "gbkvsutf8", "eucvsgbk", "eucvsutf8", "jisvsgbk", "jisvsutf8"}
 
+
+    Private Sub INI(ByVal sender As Object, e As System.EventArgs) Handles MyBase.Load
+        sp.Checked = My.Settings.noms
+        jis.Checked = My.Settings.jis
+        EX.Checked = My.Settings.extra
+        selmode.SelectedIndex = My.Settings.seljis
+        ENCODE.SelectedIndex = My.Settings.selenc
+
+    End Sub
+
     Private Sub TextBox1_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles ENCODE.KeyPress
         e.Handled = True
     End Sub
+
 
     ' UTF32からUTF-8に変形
     Private Sub Button3_Click(sender As System.Object, e As System.EventArgs) Handles Button3.Click
@@ -129,8 +140,7 @@ Public Class Form1
 
     End Function
 
-
-    Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles Button1.Click
+    Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles MAKETABLE.Click
         Try
             Dim output As String = p(ENCODE.SelectedIndex)
             Dim mm As New Regex("CP\d+", RegexOptions.ECMAScript)
@@ -247,52 +257,52 @@ Public Class Form1
                                     bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(ssss(0))
                                 End If
 
-                                    unim = uni.Match(ssss(1))
-                                    If unim.Success Then
-                                        st = unim.Value
-                                        If st.Contains("x") Then
-                                            st = st.Replace("&#", "0")
-                                            sth3 = Convert.ToUInt64(st, 16)
-                                        ElseIf st.Contains("u") Then
-                                            st = st.Remove(0, 1)
-                                            st = st.Replace("+", "")
-                                            sth3 = Convert.ToUInt64(st, 16)
-                                        Else
-                                            st = st.Remove(0, 2)
-                                            sth3 = Convert.ToUInt64(st)
-                                        End If
-
-                                        bb = BitConverter.GetBytes(sth3)
-                                        Array.Resize(bb, 4)
-                                        z = bb.Length - 1
-                                        For i = 0 To z
-                                            swap(i) = bb(z - i)
-                                        Next
-
-                                        If sth3 > &HFFFFFF Then
-                                            bb(0) = swap(0)
-                                            bb(1) = swap(1)
-                                            bb(2) = swap(2)
-                                            bb(3) = swap(3)
-                                        ElseIf sth3 > &HFFFF Then
-                                            bb(0) = swap(1)
-                                            bb(1) = swap(2)
-                                            bb(2) = swap(3)
-                                        ElseIf sth3 > &HFF Then
-                                            bb(0) = swap(2)
-                                            bb(1) = swap(3)
-                                        Else
-                                            bb(0) = swap(3)
-                                            bb(1) = 0
-                                        End If
-                                    ElseIf sp.Checked = False Then
-                                        bb = System.Text.Encoding.GetEncoding(enc).GetBytes(ssss(1))
+                                unim = uni.Match(ssss(1))
+                                If unim.Success Then
+                                    st = unim.Value
+                                    If st.Contains("x") Then
+                                        st = st.Replace("&#", "0")
+                                        sth3 = Convert.ToUInt64(st, 16)
+                                    ElseIf st.Contains("u") Then
+                                        st = st.Remove(0, 1)
+                                        st = st.Replace("+", "")
+                                        sth3 = Convert.ToUInt64(st, 16)
+                                    Else
+                                        st = st.Remove(0, 2)
+                                        sth3 = Convert.ToUInt64(st)
                                     End If
 
-                                    If bb.Length >= 4 AndAlso sth < &H2FFFF Then
-                                        Array.Copy(bb, 0, bss, sth * 4, 4)
-                                        Array.Copy(bb, 0, bs, sth * 2, 2)
+                                    bb = BitConverter.GetBytes(sth3)
+                                    Array.Resize(bb, 4)
+                                    z = bb.Length - 1
+                                    For i = 0 To z
+                                        swap(i) = bb(z - i)
+                                    Next
+
+                                    If sth3 > &HFFFFFF Then
+                                        bb(0) = swap(0)
+                                        bb(1) = swap(1)
+                                        bb(2) = swap(2)
+                                        bb(3) = swap(3)
+                                    ElseIf sth3 > &HFFFF Then
+                                        bb(0) = swap(1)
+                                        bb(1) = swap(2)
+                                        bb(2) = swap(3)
+                                    ElseIf sth3 > &HFF Then
+                                        bb(0) = swap(2)
+                                        bb(1) = swap(3)
+                                    Else
+                                        bb(0) = swap(3)
+                                        bb(1) = 0
                                     End If
+                                ElseIf sp.Checked = False Then
+                                    bb = System.Text.Encoding.GetEncoding(enc).GetBytes(ssss(1))
+                                End If
+
+                                If bb.Length >= 4 AndAlso sth < &H2FFFF Then
+                                    Array.Copy(bb, 0, bss, sth * 4, 4)
+                                    Array.Copy(bb, 0, bs, sth * 2, 2)
+                                End If
 
                             End While
                             ssr.Close()
@@ -603,6 +613,50 @@ Public Class Form1
                                 c1 = bb(0)
                                 c2 = bb(1)
 
+                                If jis.Checked = True Then
+                                    If selmode.SelectedIndex = 0 Then
+                                        If (((c1 Xor &H20) + &H5F) And &HFF) < &H3C AndAlso ((c2 + &HC0) And &HFF) < 189 AndAlso c2 <> &H7F Then
+                                            If c1 >= &HF0 Then
+                                                over = True
+                                            End If
+                                            c1 = ((c1 Xor &H20) << 1) - &H121
+                                            If (c2 >= &H9F) Then
+                                                c1 += 1
+                                            End If
+
+                                            If ((c1 And 1) <> 0) Then
+                                                If ((c2 And &H80) = 0) Then
+                                                    c2 += 1
+                                                End If
+                                                c2 -= &H20
+                                            Else
+                                                c2 -= &H7E
+                                            End If
+                                        Else
+                                            c1 = 0
+                                            c2 = 0
+                                        End If
+
+                                        c3 = 0
+
+                                    Else
+                                        'euc
+                                        If c1 >= &H8F AndAlso c1 <= &H95 Then
+                                            over = True
+                                            c3 = c1 - &H8F + 1
+                                            c1 = bb(1) And &H7F
+                                            c2 = bb(2) And &H7F
+                                        Else
+                                            c3 = 0
+                                            c1 = bb(0) And &H7F
+                                            c2 = bb(0) And &H7F
+                                        End If
+
+                                    End If
+
+                                End If
+
+
                                 If c2 >= &H21 AndAlso c1 >= &H21 AndAlso c2 <> &H7F Then
                                     dest = (c3 * 94 * 94) + (c1 - &H21) * 94 + c2 - &H21
                                     Array.Copy(bbb, 0, bss, dest * 4, 4)
@@ -610,9 +664,13 @@ Public Class Form1
                             End If
                         End While
                         If over = True Then
-                            llen += c3 * llen
+                            If selmode.SelectedIndex = 0 Then
+                                llen += 1 * llen
+                            Else
+                                llen += c3 * llen
+                            End If
                         End If
-                        ssr.Close()
+                    ssr.Close()
                     End If
 
                     twotwo.Write(bs, 0, llen * 2)
@@ -996,7 +1054,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub Button2_Click(sender As System.Object, e As System.EventArgs) Handles Button2.Click
+    Private Sub Button2_Click(sender As System.Object, e As System.EventArgs) Handles TABLETEST.Click
         Try
             Dim mm As New Regex("CP\d+", RegexOptions.ECMAScript)
             Dim m As Match = mm.Match(ENCODE.Text)
@@ -1434,7 +1492,6 @@ Public Class Form1
     End Sub
 
 
-
     Private Sub ENCODE_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles ENCODE.SelectedIndexChanged
         If ENCODE.SelectedIndex = 8 Then
             INPUTSTRING.Text = "SJIS文字"
@@ -1454,20 +1511,18 @@ Public Class Form1
             EX.Enabled = True
         End If
 
-    End Sub
+        If ENCODE.SelectedIndex = 11 Then
+            jis.Enabled = True
+            selmode.Enabled = True
+        Else
+            jis.Enabled = False
+            selmode.Enabled = False
+        End If
 
-    Private Sub Button4_Click(sender As System.Object, e As System.EventArgs) Handles Button4.Click
-
-        Dim b As Byte() = Encoding.GetEncoding(12000).GetBytes(BASESTR.Text)
-        Dim a As Byte() = Encoding.Convert(Encoding.GetEncoding(12000), Encoding.GetEncoding(65001), b)
-        Dim s As String = ""
-
-        For i = 0 To a.Length - 1
-            s &= a(i).ToString("X2")
-        Next
-        STRHEX.Text = s
+        My.Settings.selenc = ENCODE.SelectedIndex
 
     End Sub
+
 
     Private Sub Button5_Click(sender As System.Object, e As System.EventArgs) Handles Button5.Click
 
@@ -1479,5 +1534,22 @@ Public Class Form1
         Next
         STRHEX.Text = s
 
+    End Sub
+
+    Private Sub CheckBox1_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles jis.CheckedChanged
+        My.Settings.jis = jis.Checked
+    End Sub
+
+    Private Sub EX_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles EX.CheckedChanged
+
+        My.Settings.extra = EX.Checked
+    End Sub
+
+    Private Sub sp_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles sp.CheckedChanged
+        My.Settings.noms = sp.Checked
+    End Sub
+
+    Private Sub selmode_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles selmode.SelectedIndexChanged
+        My.Settings.seljis = selmode.SelectedIndex
     End Sub
 End Class

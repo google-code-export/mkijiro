@@ -23,8 +23,8 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.Button2 = New System.Windows.Forms.Button()
+        Me.MAKETABLE = New System.Windows.Forms.Button()
+        Me.TABLETEST = New System.Windows.Forms.Button()
         Me.BASESTR = New System.Windows.Forms.TextBox()
         Me.INPUTSTRING = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
@@ -43,27 +43,30 @@ Partial Class Form1
         Me.Button4 = New System.Windows.Forms.Button()
         Me.Button5 = New System.Windows.Forms.Button()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
+        Me.selmode = New System.Windows.Forms.ComboBox()
+        Me.jis = New System.Windows.Forms.CheckBox()
         Me.Panel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
-        'Button1
+        'MAKETABLE
         '
-        Me.Button1.Location = New System.Drawing.Point(57, 45)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(124, 20)
-        Me.Button1.TabIndex = 0
-        Me.Button1.Text = "MAKE TABLE"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.MAKETABLE.Location = New System.Drawing.Point(14, 91)
+        Me.MAKETABLE.Name = "MAKETABLE"
+        Me.MAKETABLE.Size = New System.Drawing.Size(124, 20)
+        Me.MAKETABLE.TabIndex = 0
+        Me.MAKETABLE.Text = "MAKE TABLE"
+        Me.MAKETABLE.UseVisualStyleBackColor = True
         '
-        'Button2
+        'TABLETEST
         '
-        Me.Button2.Location = New System.Drawing.Point(57, 80)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(124, 20)
-        Me.Button2.TabIndex = 1
-        Me.Button2.Text = "TABLE TEST"
-        Me.Button2.UseVisualStyleBackColor = True
+        Me.TABLETEST.Location = New System.Drawing.Point(14, 117)
+        Me.TABLETEST.Name = "TABLETEST"
+        Me.TABLETEST.Size = New System.Drawing.Size(124, 20)
+        Me.TABLETEST.TabIndex = 1
+        Me.TABLETEST.Text = "TABLE TEST"
+        Me.TABLETEST.UseVisualStyleBackColor = True
         '
         'BASESTR
         '
@@ -123,7 +126,7 @@ Partial Class Form1
         Me.Panel1.Controls.Add(Me.Label3)
         Me.Panel1.Controls.Add(Me.Label1)
         Me.Panel1.Controls.Add(Me.CVTSTR)
-        Me.Panel1.Location = New System.Drawing.Point(27, 105)
+        Me.Panel1.Location = New System.Drawing.Point(12, 146)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(231, 104)
         Me.Panel1.TabIndex = 9
@@ -137,7 +140,6 @@ Partial Class Form1
         Me.ENCODE.Name = "ENCODE"
         Me.ENCODE.Size = New System.Drawing.Size(144, 20)
         Me.ENCODE.TabIndex = 10
-        Me.ENCODE.Text = "SHIFT-JIS(UTF8<->CP932)"
         '
         'ContextMenuStrip1
         '
@@ -156,7 +158,7 @@ Partial Class Form1
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(195, 83)
+        Me.Label5.Location = New System.Drawing.Point(144, 121)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(29, 12)
         Me.Label5.TabIndex = 12
@@ -166,7 +168,7 @@ Partial Class Form1
         '
         Me.TOFUSTR.FormattingEnabled = True
         Me.TOFUSTR.Items.AddRange(New Object() {"□", "■", "〓", "・"})
-        Me.TOFUSTR.Location = New System.Drawing.Point(231, 81)
+        Me.TOFUSTR.Location = New System.Drawing.Point(179, 118)
         Me.TOFUSTR.Name = "TOFUSTR"
         Me.TOFUSTR.Size = New System.Drawing.Size(34, 20)
         Me.TOFUSTR.TabIndex = 13
@@ -175,7 +177,7 @@ Partial Class Form1
         'EX
         '
         Me.EX.AutoSize = True
-        Me.EX.Location = New System.Drawing.Point(218, 9)
+        Me.EX.Location = New System.Drawing.Point(14, 36)
         Me.EX.Name = "EX"
         Me.EX.Size = New System.Drawing.Size(65, 16)
         Me.EX.TabIndex = 14
@@ -185,7 +187,7 @@ Partial Class Form1
         'sp
         '
         Me.sp.AutoSize = True
-        Me.sp.Location = New System.Drawing.Point(218, 28)
+        Me.sp.Location = New System.Drawing.Point(85, 36)
         Me.sp.Name = "sp"
         Me.sp.Size = New System.Drawing.Size(55, 16)
         Me.sp.TabIndex = 15
@@ -232,21 +234,51 @@ Partial Class Form1
         Me.GroupBox1.Text = "GroupBox1"
         Me.GroupBox1.Visible = False
         '
+        'ComboBox1
+        '
+        Me.ComboBox1.FormattingEnabled = True
+        Me.ComboBox1.Location = New System.Drawing.Point(315, 80)
+        Me.ComboBox1.Name = "ComboBox1"
+        Me.ComboBox1.Size = New System.Drawing.Size(121, 20)
+        Me.ComboBox1.TabIndex = 21
+        '
+        'selmode
+        '
+        Me.selmode.FormattingEnabled = True
+        Me.selmode.Items.AddRange(New Object() {"SJIS->FAKEJIS(ALLOW MORE THEN 0x7F,M$)", "EUC->JIS"})
+        Me.selmode.Location = New System.Drawing.Point(95, 56)
+        Me.selmode.Name = "selmode"
+        Me.selmode.Size = New System.Drawing.Size(127, 20)
+        Me.selmode.TabIndex = 22
+        '
+        'jis
+        '
+        Me.jis.AutoSize = True
+        Me.jis.Location = New System.Drawing.Point(14, 58)
+        Me.jis.Name = "jis"
+        Me.jis.Size = New System.Drawing.Size(77, 16)
+        Me.jis.TabIndex = 20
+        Me.jis.Text = "強制JIS化"
+        Me.jis.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(296, 219)
+        Me.ClientSize = New System.Drawing.Size(252, 257)
+        Me.Controls.Add(Me.ComboBox1)
         Me.Controls.Add(Me.GroupBox1)
+        Me.Controls.Add(Me.jis)
         Me.Controls.Add(Me.sp)
+        Me.Controls.Add(Me.EX)
         Me.Controls.Add(Me.TOFUSTR)
         Me.Controls.Add(Me.Label5)
-        Me.Controls.Add(Me.EX)
         Me.Controls.Add(Me.ENCODE)
+        Me.Controls.Add(Me.selmode)
         Me.Controls.Add(Me.Label4)
+        Me.Controls.Add(Me.TABLETEST)
+        Me.Controls.Add(Me.MAKETABLE)
         Me.Controls.Add(Me.Panel1)
-        Me.Controls.Add(Me.Button2)
-        Me.Controls.Add(Me.Button1)
         Me.Name = "Form1"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "MKTABLE"
@@ -257,8 +289,8 @@ Partial Class Form1
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents Button1 As System.Windows.Forms.Button
-    Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents MAKETABLE As System.Windows.Forms.Button
+    Friend WithEvents TABLETEST As System.Windows.Forms.Button
     Friend WithEvents BASESTR As System.Windows.Forms.TextBox
     Friend WithEvents INPUTSTRING As System.Windows.Forms.Label
     Friend WithEvents Label1 As System.Windows.Forms.Label
@@ -277,5 +309,8 @@ Partial Class Form1
     Friend WithEvents Button4 As System.Windows.Forms.Button
     Friend WithEvents Button5 As System.Windows.Forms.Button
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
+    Friend WithEvents ComboBox1 As System.Windows.Forms.ComboBox
+    Friend WithEvents selmode As System.Windows.Forms.ComboBox
+    Friend WithEvents jis As System.Windows.Forms.CheckBox
 
 End Class
