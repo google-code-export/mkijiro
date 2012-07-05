@@ -42,16 +42,16 @@ Partial Class ver
         Me.Panel1.Controls.Add(Me.builddate)
         Me.Panel1.Controls.Add(Me.Label2)
         Me.Panel1.Controls.Add(Me.Label1)
-        Me.Panel1.Location = New System.Drawing.Point(12, 3)
+        Me.Panel1.Location = New System.Drawing.Point(10, 3)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(222, 209)
+        Me.Panel1.Size = New System.Drawing.Size(190, 179)
         Me.Panel1.TabIndex = 0
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(70, 173)
+        Me.Button1.Location = New System.Drawing.Point(60, 148)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
+        Me.Button1.Size = New System.Drawing.Size(64, 20)
         Me.Button1.TabIndex = 10
         Me.Button1.Text = "UPDATE"
         Me.Button1.UseVisualStyleBackColor = True
@@ -59,9 +59,9 @@ Partial Class ver
         'LinkLabel1
         '
         Me.LinkLabel1.AutoSize = True
-        Me.LinkLabel1.Location = New System.Drawing.Point(67, 143)
+        Me.LinkLabel1.Location = New System.Drawing.Point(57, 123)
         Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(89, 14)
+        Me.LinkLabel1.Size = New System.Drawing.Size(73, 12)
         Me.LinkLabel1.TabIndex = 9
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "GOOGLESVN"
@@ -69,36 +69,36 @@ Partial Class ver
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(54, 110)
+        Me.Label4.Location = New System.Drawing.Point(46, 94)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(113, 14)
+        Me.Label4.Size = New System.Drawing.Size(95, 12)
         Me.Label4.TabIndex = 8
         Me.Label4.Text = "LICENCE: GPL v3"
         '
         'builddate
         '
         Me.builddate.AutoSize = True
-        Me.builddate.Location = New System.Drawing.Point(32, 82)
+        Me.builddate.Location = New System.Drawing.Point(27, 70)
         Me.builddate.Name = "builddate"
-        Me.builddate.Size = New System.Drawing.Size(167, 14)
+        Me.builddate.Size = New System.Drawing.Size(130, 12)
         Me.builddate.TabIndex = 7
-        Me.builddate.Text = "BUILD:2012/03/06-1 22:24"
+        Me.builddate.Text = "BUILD:2012/07/05 23:59"
         '
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(47, 52)
+        Me.Label2.Location = New System.Drawing.Point(40, 45)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(120, 14)
+        Me.Label2.Size = New System.Drawing.Size(107, 12)
         Me.Label2.TabIndex = 6
         Me.Label2.Text = "CREATED BY (ﾟ∀ﾟ)"
         '
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(23, 21)
+        Me.Label1.Location = New System.Drawing.Point(20, 18)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(171, 14)
+        Me.Label1.Size = New System.Drawing.Size(147, 12)
         Me.Label1.TabIndex = 5
         Me.Label1.Text = "ISO9660PATHTABLE_NETA"
         '
@@ -110,9 +110,9 @@ Partial Class ver
         '
         'ver
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(245, 224)
+        Me.ClientSize = New System.Drawing.Size(210, 192)
         Me.Controls.Add(Me.Panel1)
         Me.Name = "ver"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
