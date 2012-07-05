@@ -272,6 +272,151 @@ extern int zenkaku;
 char *toufuarray[]={"  ","\x81\xA0","\xA2\xA2"};
 char *convert_table[]={"\x0","ms0:/seplugins/table/sjis","ms0:/seplugins/table/euc-jp"};
 
+typedef unsigned int ucs4_t;
+typedef unsigned int dword;
+typedef unsigned char byte;
+typedef unsigned short word;
+#define RET_ILSEQ	  -1
+#define RET_TOOFEW(n)  (-2-(n))
+#define RET_ILUNI	  -1
+#define RET_TOOSMALL   -2
+
+
+//ワイド関数utf8をutf32に戻す,libconvのコピペ
+int utf8_mbtowc(ucs4_t *pwc,unsigned char *s, int n)
+{
+	unsigned char c = s[0];
+
+	if (c < 0x80) {
+		*pwc = c;
+		return 1;
+	} else if (c < 0xc2) {
+		return RET_ILSEQ;
+	} else if (c < 0xe0) {
+		if (n < 2)
+			return RET_TOOFEW(0);
+		if (!((s[1] ^ 0x80) < 0x40))
+			return RET_ILSEQ;
+		*pwc = ((ucs4_t) (c & 0x1f) << 6)
+			| (ucs4_t) (s[1] ^ 0x80);
+		return 2;
+	} else if (c < 0xf0) {
+		if (n < 3)
+			return RET_TOOFEW(0);
+		if (!((s[1] ^ 0x80) < 0x40 && (s[2] ^ 0x80) < 0x40
+			&& (c >= 0xe1 || s[1] >= 0xa0)))
+			return RET_ILSEQ;
+		*pwc = ((ucs4_t) (c & 0x0f) << 12)
+			| ((ucs4_t) (s[1] ^ 0x80) << 6)
+			| (ucs4_t) (s[2] ^ 0x80);
+		return 3;
+	} else if (c < 0xf8 && sizeof(ucs4_t)*8 >= 32) {
+		if (n < 4)
+			return RET_TOOFEW(0);
+		if (!((s[1] ^ 0x80) < 0x40 && (s[2] ^ 0x80) < 0x40
+			&& (s[3] ^ 0x80) < 0x40
+			&& (c >= 0xf1 || s[1] >= 0x90)))
+			return RET_ILSEQ;
+		*pwc = ((ucs4_t) (c & 0x07) << 18)
+			| ((ucs4_t) (s[1] ^ 0x80) << 12)
+			| ((ucs4_t) (s[2] ^ 0x80) << 6)
+			| (ucs4_t) (s[3] ^ 0x80);
+		return 4;
+	} else if (c < 0xfc && sizeof(ucs4_t)*8 >= 32) {
+		if (n < 5)
+			return RET_TOOFEW(0);
+		if (!((s[1] ^ 0x80) < 0x40 && (s[2] ^ 0x80) < 0x40
+			&& (s[3] ^ 0x80) < 0x40 && (s[4] ^ 0x80) < 0x40
+			&& (c >= 0xf9 || s[1] >= 0x88)))
+			return RET_ILSEQ;
+		*pwc = ((ucs4_t) (c & 0x03) << 24)
+			| ((ucs4_t) (s[1] ^ 0x80) << 18)
+			| ((ucs4_t) (s[2] ^ 0x80) << 12)
+			| ((ucs4_t) (s[3] ^ 0x80) << 6)
+			| (ucs4_t) (s[4] ^ 0x80);
+		return 5;
+	} else if (c < 0xfe && sizeof(ucs4_t)*8 >= 32) {
+		if (n < 6)
+			return RET_TOOFEW(0);
+		if (!((s[1] ^ 0x80) < 0x40 && (s[2] ^ 0x80) < 0x40
+			&& (s[3] ^ 0x80) < 0x40 && (s[4] ^ 0x80) < 0x40
+			&& (s[5] ^ 0x80) < 0x40
+			&& (c >= 0xfd || s[1] >= 0x84)))
+			return RET_ILSEQ;
+		*pwc = ((ucs4_t) (c & 0x01) << 30)
+			| ((ucs4_t) (s[1] ^ 0x80) << 24)
+			| ((ucs4_t) (s[2] ^ 0x80) << 18)
+			| ((ucs4_t) (s[3] ^ 0x80) << 12)
+			| ((ucs4_t) (s[4] ^ 0x80) << 6)
+			| (ucs4_t) (s[5] ^ 0x80);
+		return 6;
+	} else
+		return RET_ILSEQ;
+}
+
+ //encode_utf8_conv_noram((unsigned char *)&msg[0]);
+	
+
+//メモリ使わない版
+int encode_uni2cjk_noram(unsigned char *uni,unsigned char *cjk){
+	int transcount = 0;
+
+	if(uni[0]<0x81 && uni[1]==0){
+		cjk[0]=uni[0];
+		transcount = 1;
+	}
+	else{
+		int pos = (int)(*(unsigned short*)uni)*2;
+		//テーブルから2バイト差し替え用
+	int fd = sceIoOpen("ms0:/seplugings/sjis.dat", PSP_O_RDONLY, 0777);
+	
+	if(fd < 0){
+	sceIoClose(fd);
+		return 2;
+	}
+	
+	sceIoLseek32(fd, pos,PSP_SEEK_SET);
+	sceIoRead(fd, cjk, 2);
+	sceIoClose(fd);
+		if (cjk[1]==0){//半角カナ
+		transcount = 1;
+		}
+		else{
+		transcount = 2;
+		}
+		if(cjk[0]<=0x3f && cjk[1]==0) //豆腐,u003f自体は"？"の文字
+		{
+			cjk[0]=0x81;
+			cjk[1]=0xA0;
+		transcount = 2;
+		}
+	}
+	return transcount;
+}
+
+int encode_utf8_conv_noram(unsigned char *ucs)
+{
+	unsigned char *cjk;
+	int i = 0, j = 0, l = strlen((const char *)ucs);
+	if(cjk == NULL) cjk = (unsigned char *)ucs;
+
+	while(i < l)
+	{
+		ucs4_t u = 0x1FFF;
+		int p = utf8_mbtowc(&u, ucs + i, l - i);
+		if(p < 0)
+			break;
+		if(u > 0xFFFF)
+			u = 0x1FFF;
+		j += encode_uni2cjk_noram((unsigned char*)&u,cjk + j);
+		i += p;
+	}
+	cjk[j] = 0;
+	memcpy(&stm[0],&cjk[0],128);
+	return j;
+}
+
+
 int utf82sjis()
 {
 	char buffer[2048];
@@ -284,8 +429,8 @@ int utf82sjis()
 	int slen=0;
 	int fd;
 	unsigned char code=0;
-	const char *msg;
-	const char *p;
+	char *msg;
+	char *p;
 	p = get_recovery_fontname((size_t)(g_font_cur_sel));
 	msg = strrchr(p, '/');
 	p=convert_table[zenkaku];
@@ -407,7 +552,9 @@ static int display_recovery_font(struct MenuEntry* entry, char *buf, int size)
 		ok=0;
 	}
 	if(ok==1){
-	 utf82sjis();ok=2;
+	encode_utf8_conv_noram(fontname);
+	//utf82sjis();
+	ok=2;
 	}
 	if(ok==2){
 	fontname=stm;
