@@ -181,8 +181,9 @@ Public Class Form4
                             End If
                         ElseIf enc = 50220 Then
                             Array.Copy(bs, ct, str, 0, 16)
-                            Else
-                                Array.Copy(bs, ct, str, 0, 16)
+                        Else
+                            Array.Resize(str, 16)
+                            Array.Copy(bs, ct, str, 0, 16)
                         End If
 
 
