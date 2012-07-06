@@ -56,6 +56,7 @@ Partial Class MERGE
         Me.UHC = New System.Windows.Forms.ToolStripMenuItem()
         Me.SHIFTJIS2004 = New System.Windows.Forms.ToolStripMenuItem()
         Me.EUCJIS20004 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.eucms = New System.Windows.Forms.ToolStripMenuItem()
         Me.UTF16BE = New System.Windows.Forms.ToolStripMenuItem()
         Me.CCP = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator13 = New System.Windows.Forms.ToolStripSeparator()
@@ -208,7 +209,6 @@ Partial Class MERGE
         Me.dmtext = New System.Windows.Forms.TextBox()
         Me.curr_line = New System.Windows.Forms.Label()
         Me.コード形式 = New System.Windows.Forms.Label()
-        Me.eucms = New System.Windows.Forms.ToolStripMenuItem()
         Me.treeopen.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.tool_menu.SuspendLayout()
@@ -461,6 +461,14 @@ Partial Class MERGE
         Me.EUCJIS20004.Size = New System.Drawing.Size(193, 22)
         Me.EUCJIS20004.Text = "EUC-JIS-2004"
         Me.EUCJIS20004.ToolTipText = "JISX0213規格EUC-JPのDBを編集します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "文字コード対応表" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "http://charset.uic.jp/show/eucjis2004/"
+        '
+        'eucms
+        '
+        Me.eucms.Name = "eucms"
+        Me.eucms.Size = New System.Drawing.Size(193, 22)
+        Me.eucms.Text = "eucJP-ms"
+        Me.eucms.ToolTipText = "日本語EUC (eucJP-open) と Unicode (UCS) との間のコード変換規則に Microsoft Windows NT 3.51を使った文字コ" & _
+    "ードです" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "http://charset.uic.jp/show/eucjp-ms/"
         '
         'UTF16BE
         '
@@ -906,31 +914,31 @@ Partial Class MERGE
         'samename
         '
         Me.samename.Name = "samename"
-        Me.samename.Size = New System.Drawing.Size(194, 22)
+        Me.samename.Size = New System.Drawing.Size(226, 22)
         Me.samename.Text = "同じ名前(再起動必要)"
         '
         'releasedate
         '
         Me.releasedate.Name = "releasedate"
-        Me.releasedate.Size = New System.Drawing.Size(194, 22)
+        Me.releasedate.Size = New System.Drawing.Size(226, 22)
         Me.releasedate.Text = "リリース日付で保存"
         '
         'ToolStripSeparator12
         '
         Me.ToolStripSeparator12.Name = "ToolStripSeparator12"
-        Me.ToolStripSeparator12.Size = New System.Drawing.Size(191, 6)
+        Me.ToolStripSeparator12.Size = New System.Drawing.Size(223, 6)
         '
         'GOOGLESVN
         '
         Me.GOOGLESVN.Name = "GOOGLESVN"
-        Me.GOOGLESVN.Size = New System.Drawing.Size(194, 22)
-        Me.GOOGLESVN.Text = "GOOGLE使用"
+        Me.GOOGLESVN.Size = New System.Drawing.Size(226, 22)
+        Me.GOOGLESVN.Text = "GOOGLESVNからDL"
         '
         'LANDMIRROR
         '
         Me.LANDMIRROR.Name = "LANDMIRROR"
-        Me.LANDMIRROR.Size = New System.Drawing.Size(194, 22)
-        Me.LANDMIRROR.Text = "LAND使用"
+        Me.LANDMIRROR.Size = New System.Drawing.Size(226, 22)
+        Me.LANDMIRROR.Text = "IJIRO DAIWA HP　からDL"
         '
         'DBENCODE
         '
@@ -1657,14 +1665,6 @@ Partial Class MERGE
         Me.コード形式.Size = New System.Drawing.Size(56, 12)
         Me.コード形式.TabIndex = 21
         Me.コード形式.Text = "コード形式"
-        '
-        'eucms
-        '
-        Me.eucms.Name = "eucms"
-        Me.eucms.Size = New System.Drawing.Size(193, 22)
-        Me.eucms.Text = "eucJP-ms"
-        Me.eucms.ToolTipText = "日本語EUC (eucJP-open) と Unicode (UCS) との間のコード変換規則に Microsoft Windows NT 3.51を使った文字コ" & _
-    "ードです" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "http://charset.uic.jp/show/eucjp-ms/"
         '
         'MERGE
         '
