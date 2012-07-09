@@ -17,5 +17,56 @@
     <Setting Name="selenc" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
+    <Setting Name="tablest" Type="System.String" Scope="User">
+      <Value Profile="(Default)">&lt;table border=1&gt;</Value>
+    </Setting>
+    <Setting Name="tableen" Type="System.String" Scope="User">
+      <Value Profile="(Default)">&lt;/table&gt;</Value>
+    </Setting>
+    <Setting Name="tablerowst" Type="System.String" Scope="User">
+      <Value Profile="(Default)">&lt;tr&gt;</Value>
+    </Setting>
+    <Setting Name="tablerowen" Type="System.String" Scope="User">
+      <Value Profile="(Default)">&lt;/tr&gt;</Value>
+    </Setting>
+    <Setting Name="tableheaderst" Type="System.String" Scope="User">
+      <Value Profile="(Default)">&lt;th&gt;</Value>
+    </Setting>
+    <Setting Name="tableheaderen" Type="System.String" Scope="User">
+      <Value Profile="(Default)">&lt;/th&gt;</Value>
+    </Setting>
+    <Setting Name="tabledatast" Type="System.String" Scope="User">
+      <Value Profile="(Default)">&lt;td&gt;</Value>
+    </Setting>
+    <Setting Name="tabledataen" Type="System.String" Scope="User">
+      <Value Profile="(Default)">&lt;/td&gt;</Value>
+    </Setting>
+    <Setting Name="mstable" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="htmltblmode" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="tuni" Type="System.String" Scope="User">
+      <Value Profile="(Default)">&lt;tr style="background:#333;color:#fff;"&gt;
+&lt;th width="4%"&gt;CP&lt;/th&gt;
+&lt;th width="6%"&gt;0&lt;/th&gt;
+&lt;th width="6%"&gt;1&lt;/th&gt;
+&lt;th width="6%"&gt;2&lt;/th&gt;
+&lt;th width="6%"&gt;3&lt;/th&gt;
+&lt;th width="6%"&gt;4&lt;/th&gt;
+&lt;th width="6%"&gt;5&lt;/th&gt;
+&lt;th width="6%"&gt;6&lt;/th&gt;
+&lt;th width="6%"&gt;7&lt;/th&gt;
+&lt;th width="6%"&gt;8&lt;/th&gt;
+&lt;th width="6%"&gt;9&lt;/th&gt;
+&lt;th width="6%"&gt;A&lt;/th&gt;
+&lt;th width="6%"&gt;B&lt;/th&gt;
+&lt;th width="6%"&gt;C&lt;/th&gt;
+&lt;th width="6%"&gt;D&lt;/th&gt;
+&lt;th width="6%"&gt;E&lt;/th&gt;
+&lt;th width="6%"&gt;F&lt;/th&gt;
+&lt;/tr&gt;</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

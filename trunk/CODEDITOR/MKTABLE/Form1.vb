@@ -22,7 +22,6 @@ Public Class Form1
         e.Handled = True
     End Sub
 
-
     ' UTF32からUTF-8に変形
     Private Sub Button3_Click(sender As System.Object, e As System.EventArgs) Handles Button3.Click
         Dim bb As Byte() = Encoding.GetEncoding(12000).GetBytes(BASESTR.Text)
@@ -140,908 +139,1090 @@ Public Class Form1
 
     End Function
 
-    Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles MAKETABLE.Click
+    '巨大UTF16LEから各エンコードに変換
+    Private Function utf16vstable(ByVal output As String, ByVal enc As Integer) As Boolean
+        Dim ucs2 As New System.IO.FileStream(output, System.IO.FileMode.Create, System.IO.FileAccess.Write)
+        Dim ucs As New System.IO.FileStream(output.Replace("\", "\utf32_"), System.IO.FileMode.Create, System.IO.FileAccess.Write)
+        Dim bs(65536 * 2) As Byte
+        Dim bss(65536 * 4) As Byte
+        Dim bb(1) As Byte
+        Dim s As String = ""
+        Dim bbb As Byte() = Nothing
+        If sp.Checked = False Then
+            For i = 0 To &HFFFF
+                bb(0) = CByte(i And &HFF)
+                bb(1) = CByte(i >> 8)
+                bbb = Encoding.Convert(Encoding.GetEncoding(1200), Encoding.GetEncoding(enc), bb)
+                's = System.Text.Encoding.GetEncoding(1200).GetString(bb)
+                'bbb = System.Text.Encoding.GetEncoding(enc).GetBytes(s)
+                Array.Resize(bbb, 4)
+                Array.Copy(bbb, 0, bs, i * 2, 2)
+                Array.Copy(bbb, 0, bss, i * 4, 4)
+            Next
+        End If
+
+        If EX.Checked = True Then
+            Array.Resize(bs, &H2FFFF * 2)
+            Array.Resize(bss, &H2FFFF * 4)
+            If EX.Checked = True Then
+                Dim st As String = ""
+                Dim sth As Integer = 0
+                Dim sth2 As Integer = 0
+                Dim sth3 As UInt64 = 0
+                Dim swap(3) As Byte
+                Dim ssss As String()
+                Dim wc As Integer = 0
+                Dim i As Integer = 0
+                Dim n As Integer = 0
+                Dim z As Integer = 0
+                Dim uni As New Regex("(^0x[0-9A-fa-f]+|^&#x[0-9a-fA-F]+|&#[0-9]+|^u\+?[0-9A-fa-f]+|^U\+?[0-9A-fa-f]+)")
+                Dim unim As Match
+                Dim ssr As New System.IO.StreamReader("extra.txt", System.Text.Encoding.GetEncoding(65001))
+                While ssr.Peek() > -1
+                    s = ssr.ReadLine()
+                    ssss = s.Split(CChar(vbTab))
+                    unim = uni.Match(ssss(0))
+                    If unim.Success Then
+                        st = unim.Value
+                        If st.Contains("x") Then
+                            st = st.Replace("&#", "0")
+                            sth = Convert.ToInt32(st, 16)
+                        ElseIf st.Contains("u") Or st.Contains("U") Then
+                            st = st.Remove(0, 1)
+                            st = st.Replace("+", "")
+                            sth = Convert.ToInt32(st, 16)
+                        Else
+                            st = st.Remove(0, 2)
+                            sth = Convert.ToInt32(st)
+                        End If
+
+                        'サロゲートペア
+                        If sth >= &HD800 And sth <= &HDBFF Then
+                            unim = unim.NextMatch
+                            If unim.Success Then
+                                st = unim.Value
+                                If st.Contains("x") Then
+                                    st = st.Replace("&#", "0")
+                                    sth2 = Convert.ToInt32(st, 16)
+                                ElseIf st.Contains("u") Or st.Contains("U") Then
+                                    st = st.Remove(0, 1)
+                                    st = st.Replace("+", "")
+                                    sth2 = Convert.ToInt32(st, 16)
+                                Else
+                                    st = st.Remove(0, 2)
+                                    sth2 = Convert.ToInt32(st)
+                                End If
+                                If sth2 >= &HDC00 And sth2 <= &HDFFF Then
+                                    sth = sth And &H3FF
+                                    sth2 = sth2 And &H3FF
+                                    sth = (sth << 10) + sth2 + &H10000
+                                Else
+                                    MessageBox.Show(st & "はサロゲートペアではありません")
+                                    sth = &H3F
+                                End If
+                            Else
+                                MessageBox.Show(st & "はサロゲートペアではありません")
+                                sth = &H3F
+                            End If
+                        End If
+
+                        bbb = BitConverter.GetBytes(sth)
+                        If sp.Checked = False Then
+                            bbb = Encoding.Convert(Encoding.GetEncoding(12000), Encoding.GetEncoding(65001), bbb)
+                            'st = System.Text.Encoding.GetEncoding(12000).GetString(bbb)
+                            'bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(st)
+                        Else
+                            'Dim bb As Byte() = Encoding.GetEncoding(12000).GetBytes(BASESTR.Text)
+                            i = 0
+                            n = 0
+                            While i < bbb.Length
+                                wc = BitConverter.ToInt32(bbb, i)
+                                n += utf32toutf8(bbb, wc, n)
+                                i += 4
+                            End While
+                            Array.Resize(bbb, n)
+
+                            'CVTSTR.Text = Encoding.GetEncoding(65001).GetString(bb)
+                        End If
+
+                    ElseIf sp.Checked = False Then
+                        bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(ssss(0))
+                    End If
+
+                    unim = uni.Match(ssss(1))
+                    If unim.Success Then
+                        st = unim.Value
+                        If st.Contains("x") Then
+                            st = st.Replace("&#", "0")
+                            sth3 = Convert.ToUInt64(st, 16)
+                        ElseIf st.Contains("u") Then
+                            st = st.Remove(0, 1)
+                            st = st.Replace("+", "")
+                            sth3 = Convert.ToUInt64(st, 16)
+                        Else
+                            st = st.Remove(0, 2)
+                            sth3 = Convert.ToUInt64(st)
+                        End If
+
+                        bb = BitConverter.GetBytes(sth3)
+                        Array.Resize(bb, 4)
+                        z = bb.Length - 1
+                        For i = 0 To z
+                            swap(i) = bb(z - i)
+                        Next
+
+                        If sth3 > &HFFFFFF Then
+                            bb(0) = swap(0)
+                            bb(1) = swap(1)
+                            bb(2) = swap(2)
+                            bb(3) = swap(3)
+                        ElseIf sth3 > &HFFFF Then
+                            bb(0) = swap(1)
+                            bb(1) = swap(2)
+                            bb(2) = swap(3)
+                        ElseIf sth3 > &HFF Then
+                            bb(0) = swap(2)
+                            bb(1) = swap(3)
+                        Else
+                            bb(0) = swap(3)
+                            bb(1) = 0
+                        End If
+                    ElseIf sp.Checked = False Then
+                        bb = System.Text.Encoding.GetEncoding(enc).GetBytes(ssss(1))
+                    End If
+
+                    If bb.Length >= 4 AndAlso sth < &H2FFFF Then
+                        Array.Copy(bb, 0, bss, sth * 4, 4)
+                        Array.Copy(bb, 0, bs, sth * 2, 2)
+                    End If
+
+                End While
+                ssr.Close()
+            End If
+
+
+        End If
+
+        ucs.Write(bss, 0, bss.Length)
+        ucs2.Write(bs, 0, bs.Length)
+        ucs.Close()
+        ucs2.Close()
+        Beep()
+
+        Return True
+
+    End Function
+
+    'sjis/euc/gbk/jisからUTF8直変換
+    Private Function encvsutf8table(ByVal output As String, ByVal enc As Integer) As Boolean
+
+        Dim twotwo As New System.IO.FileStream("table\" & pp((ENCODE.SelectedIndex - 8) * 2), System.IO.FileMode.Create, System.IO.FileAccess.Write)
+        Dim twofour As New System.IO.FileStream("table\" & pp((ENCODE.SelectedIndex - 8) * 2 + 1), System.IO.FileMode.Create, System.IO.FileAccess.Write)
+        Dim bb(1) As Byte
+        Dim bs(65535 * 2) As Byte
+        Dim bss(65535 * 4) As Byte
+        Dim s As String = ""
+        Dim c1 As Integer = 0
+        Dim c2 As Integer = 0
+        Dim c3 As Integer = 0
+        Dim sjis As Integer = 0
+        Dim hantei As Integer = 0
+        Dim wc As Integer = 0
+        Dim i As Integer = 0
+        Dim n As Integer = 0
+        Dim bbb As Byte() = Nothing
+        Dim bbbb As Byte() = Nothing
+        Dim dest As Integer = 0
+        Dim llen As Integer = 0
+        Dim over As Boolean = False
+
+        ' SJIS VS
+        If ENCODE.SelectedIndex = 8 Then
+            If sp.Checked = False Then
+                For i = &H8140 To &HFCFF
+                    bb(1) = CByte(i And &HFF)
+                    bb(0) = CByte(i >> 8)
+                    c1 = i >> 8
+                    c2 = i And &HFF
+                    If c2 >= &H40 AndAlso (((c1 Xor &H20) + &H5F) And &HFF) < &H3C Then
+                        s = System.Text.Encoding.GetEncoding(932).GetString(bb)
+                        bbb = System.Text.Encoding.GetEncoding(936).GetBytes(s)
+                        bbbb = System.Text.Encoding.GetEncoding(65001).GetBytes(s)
+                        Array.Resize(bbb, 2)
+                        Array.Resize(bbbb, 4)
+                        dest = ((c1 Xor &H20) - &HA1) * 192 + c2 - &H40
+                        Array.Copy(bbb, 0, bs, dest * 2, 2)
+                        Array.Copy(bbbb, 0, bss, dest * 4, 4)
+                    End If
+                Next
+            End If
+            llen = ((&HFC Xor &H20) - &HA1 + 1) * 192
+        End If
+        'GBK VS
+        If ENCODE.SelectedIndex = 9 Then
+            If sp.Checked = False Then
+                For i = &H8140 To &HFEFF
+                    bb(1) = CByte(i And &HFF)
+                    bb(0) = CByte(i >> 8)
+                    c1 = i >> 8
+                    c2 = i And &HFF
+                    If c2 >= &H40 Then 'AndAlso ((c1 + &H7F) And &HFF) < &H7E Then
+                        s = System.Text.Encoding.GetEncoding(936).GetString(bb)
+                        bbb = System.Text.Encoding.GetEncoding(932).GetBytes(s)
+                        bbbb = System.Text.Encoding.GetEncoding(65001).GetBytes(s)
+                        Array.Resize(bbb, 2)
+                        Array.Resize(bbbb, 4)
+                        dest = (c1 - &H81) * 192 + c2 - &H40
+                        Array.Copy(bbb, 0, bs, dest * 2, 2)
+                        Array.Copy(bbbb, 0, bss, dest * 4, 4)
+                    End If
+                Next
+            End If
+            llen = (&HFE - &H81 + 1) * 192
+        End If
+        'EUC VS
+        If ENCODE.SelectedIndex = 10 Then
+            If sp.Checked = False Then
+                For i = &HA1A1 To &HFCFF
+                    bb(1) = CByte(i And &HFF)
+                    bb(0) = CByte(i >> 8)
+                    c1 = i >> 8
+                    c2 = i And &HFF
+                    If c2 >= &HA1 AndAlso c1 >= &HA1 AndAlso c2 <> &HFF Then
+                        s = System.Text.Encoding.GetEncoding(51932).GetString(bb)
+                        bbb = System.Text.Encoding.GetEncoding(936).GetBytes(s)
+                        bbbb = System.Text.Encoding.GetEncoding(65001).GetBytes(s)
+                        Array.Resize(bbb, 2)
+                        Array.Resize(bbbb, 4)
+                        dest = (c1 - &HA1) * 94 + c2 - &HA1
+                        Array.Copy(bbb, 0, bs, dest * 2, 2)
+                        Array.Copy(bbbb, 0, bss, dest * 4, 4)
+                    End If
+                Next
+            End If
+            llen = (&HFE - &HA1 + 1) * 94
+        End If
+        'JIS VS
+        If ENCODE.SelectedIndex = 11 Then
+            If sp.Checked = False Then
+                For i = &H2121 To &H7C7F
+                    bb(1) = CByte(i And &HFF)
+                    bb(0) = CByte(i >> 8)
+                    c1 = i >> 8
+                    c2 = i And &HFF
+                    If c2 >= &H21 AndAlso c1 >= &H21 AndAlso c2 <> &H7F Then
+                        s = System.Text.Encoding.GetEncoding(51932).GetString(bb)
+                        bbb = System.Text.Encoding.GetEncoding(502022).GetBytes(s)
+                        bbbb = System.Text.Encoding.GetEncoding(65001).GetBytes(s)
+                        Array.Copy(bbb, 3, bbb, 0, 2)
+                        Array.Resize(bbb, 2)
+                        Array.Resize(bbbb, 4)
+                        dest = (c1 - &H21) * 94 + c2 - &H21
+                        Array.Copy(bbb, 0, bs, dest * 2, 2)
+                        Array.Copy(bbbb, 0, bss, dest * 4, 4)
+                    End If
+                Next
+            End If
+            llen = (&H7E - &H21 + 1) * 94
+        End If
+
+        If EX.Checked = True Then
+            Dim st As String = ""
+            Dim sth As Integer = 0
+            Dim sth2 As Integer = 0
+            Dim sth3 As UInt64 = 0
+            Dim swap(3) As Byte
+            Dim ssss As String()
+            Dim z As Integer = 0
+            Dim len As Integer = 0
+            Dim uni As New Regex("(^0x[0-9A-fa-f]+|^&#x[0-9a-fA-F]+|&#[0-9]+|^u\+?[0-9A-fa-f]+|^U\+?[0-9A-fa-f]+)")
+            Dim unim As Match
+            Dim ssr As New System.IO.StreamReader("extra.txt", System.Text.Encoding.GetEncoding(65001))
+
+            While ssr.Peek() > -1
+                s = ssr.ReadLine()
+                ssss = s.Split(CChar(vbTab))
+                unim = uni.Match(ssss(0))
+                If unim.Success Then
+                    st = unim.Value
+                    If st.Contains("x") Then
+                        st = st.Replace("&#", "0")
+                        sth = Convert.ToInt32(st, 16)
+                    ElseIf st.Contains("u") Or st.Contains("U") Then
+                        st = st.Remove(0, 1)
+                        st = st.Replace("+", "")
+                        sth = Convert.ToInt32(st, 16)
+                    Else
+                        st = st.Remove(0, 2)
+                        sth = Convert.ToInt32(st)
+                    End If
+
+                    'サロゲートペア
+                    If sth >= &HD800 And sth <= &HDBFF Then
+                        unim = unim.NextMatch
+                        If unim.Success Then
+                            st = unim.Value
+                            If st.Contains("x") Then
+                                st = st.Replace("&#", "0")
+                                sth2 = Convert.ToInt32(st, 16)
+                            ElseIf st.Contains("u") Or st.Contains("U") Then
+                                st = st.Remove(0, 1)
+                                st = st.Replace("+", "")
+                                sth2 = Convert.ToInt32(st, 16)
+                            Else
+                                st = st.Remove(0, 2)
+                                sth2 = Convert.ToInt32(st)
+                            End If
+                            If sth2 >= &HDC00 And sth2 <= &HDFFF Then
+                                sth = sth And &H3FF
+                                sth2 = sth2 And &H3FF
+                                sth = (sth << 10) + sth2 + &H10000
+                            Else
+                                MessageBox.Show(st & "はサロゲートペアではありません")
+                                sth = &H3F
+                            End If
+                        Else
+                            MessageBox.Show(st & "はサロゲートペアではありません")
+                            sth = &H3F
+                        End If
+                    End If
+
+                    bbb = BitConverter.GetBytes(sth)
+
+
+                    If sp.Checked = False Then
+                        st = System.Text.Encoding.GetEncoding(12000).GetString(bbb)
+                        bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(st)
+                    Else
+                        i = 0
+                        n = 0
+                        While i < bbb.Length
+                            wc = BitConverter.ToInt32(bbb, i)
+                            n += utf32toutf8(bbb, wc, n)
+                            i += 4
+                        End While
+                        Array.Resize(bbb, n)
+
+                    End If
+                ElseIf sp.Checked = False Then
+                    bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(ssss(0))
+                Else
+                    Array.Resize(bbb, 4)
+                    bbb(0) = 0
+                    bbb(1) = 0
+                    bbb(2) = 0
+                    bbb(3) = 0
+                End If
+
+                unim = uni.Match(ssss(1))
+                If unim.Success Then
+                    st = unim.Value
+                    If st.Contains("x") Then
+                        st = st.Replace("&#", "0")
+                        sth3 = Convert.ToUInt64(st, 16)
+                    ElseIf st.Contains("u") Then
+                        st = st.Remove(0, 1)
+                        st = st.Replace("+", "")
+                        sth3 = Convert.ToUInt64(st, 16)
+                    Else
+                        st = st.Remove(0, 2)
+                        sth3 = Convert.ToUInt64(st)
+                    End If
+
+                    bb = BitConverter.GetBytes(sth3)
+                    Array.Resize(bb, 4)
+                    z = bb.Length - 1
+                    For i = 0 To z
+                        swap(i) = bb(z - i)
+                    Next
+
+                    If sth3 > &HFFFFFF Then
+                        bb(0) = swap(0)
+                        bb(1) = swap(1)
+                        bb(2) = swap(2)
+                        bb(3) = swap(3)
+                    ElseIf sth3 > &HFFFF Then
+                        Array.Resize(bb, 3)
+                        bb(0) = swap(1)
+                        bb(1) = swap(2)
+                        bb(2) = swap(3)
+                    ElseIf sth3 > &HFF Then
+                        Array.Resize(bb, 2)
+                        bb(0) = swap(2)
+                        bb(1) = swap(3)
+                    Else
+                        Array.Resize(bb, 2)
+                        bb(0) = swap(3)
+                        bb(1) = 0
+                    End If
+                ElseIf sp.Checked = False Then
+                    bb = System.Text.Encoding.GetEncoding(enc).GetBytes(ssss(1))
+                Else
+                    Array.Resize(bb, 3)
+                    bb(0) = 0
+                    bb(1) = 0
+                    bb(2) = 0
+                End If
+
+                Array.Resize(bb, 3)
+                Array.Resize(bbb, 4)
+
+                'SJIS VS UTF8
+                If ENCODE.SelectedIndex = 8 Then
+                    c1 = bb(0)
+                    c2 = bb(1)
+                    If c2 >= &H40 AndAlso c2 <> &H7F AndAlso c2 <= &HFC AndAlso (((c1 Xor &H20) + &H5F) And &HFF) < &H3C Then
+                        dest = ((c1 Xor &H20) - &HA1) * 192 + c2 - &H40
+                        Array.Copy(bbb, 0, bss, dest * 4, 4)
+                    End If
+                End If
+                'GBK VS UTF8
+                If ENCODE.SelectedIndex = 9 Then
+                    c1 = bb(0)
+                    c2 = bb(1)
+                    If c2 >= &H40 AndAlso c2 <> &H7F AndAlso c2 <> &HFF AndAlso ((c1 + &H7F) And &HFF) < &H7E Then
+
+                        dest = (c1 - &H81) * 192 + c2 - &H40
+                        Array.Copy(bbb, 0, bss, dest * 4, 4)
+                    End If
+                End If
+                'EUC VS UTF8
+                If ENCODE.SelectedIndex = 10 Then
+                    c1 = bb(0)
+                    c2 = bb(1)
+                    c3 = bb(2)
+                    If c1 >= &H8F AndAlso c1 <= &H95 Then
+                        over = True
+                        c3 = c1 - &H8F + 1
+                        c1 = bb(1)
+                        c2 = bb(2)
+                    Else
+                        c3 = 0
+                    End If
+
+                    If c2 >= &HA1 AndAlso c1 >= &HA1 AndAlso c2 <> &HFF Then
+                        dest = (c3 * 94 * 94) + (c1 - &HA1) * 94 + c2 - &HA1
+                        Array.Copy(bbb, 0, bss, dest * 4, 4)
+                    End If
+                End If
+                'JIS VS UTF8
+                If ENCODE.SelectedIndex = 11 Then
+                    c1 = bb(0)
+                    c2 = bb(1)
+
+                    If jis.Checked = True Then
+                        'sjis
+                        If selmode.SelectedIndex = 0 Then
+                            If (((c1 Xor &H20) + &H5F) And &HFF) < &H3C AndAlso ((c2 + &HC0) And &HFF) < 189 AndAlso c2 <> &H7F Then
+                                If c1 >= &HF0 Then
+                                    over = True
+                                End If
+                                c1 = ((c1 Xor &H20) << 1) - &H141 + &H20
+                                If (c2 >= &H9F) Then
+                                    c1 += 1
+                                End If
+
+                                If ((c1 And 1) <> 0) Then
+                                    If ((c2 And &H80) = 0) Then
+                                        c2 += 1
+                                    End If
+                                    c2 -= &H20
+                                Else
+                                    c2 -= &H7E
+                                End If
+                            Else
+                                c1 = 0
+                                c2 = 0
+                            End If
+
+                            c3 = 0
+
+                            'sjis2004
+                        ElseIf selmode.SelectedIndex = 2 Then
+                            If (((c1 Xor &H20) + &H5F) And &HFF) < &H3C AndAlso ((c2 + &HC0) And &HFF) < 189 AndAlso c2 <> &H7F Then
+                                sjis = (c1 << 8) + c2
+                                hantei = 0
+
+                                If c1 >= &HF0 Then
+                                    over = True
+                                End If
+
+                                'jispanel1
+                                If (sjis >= &H8140 AndAlso sjis <= &HEFFC) Then
+                                    c1 = ((c1 Xor &H20) << 1) - &H141 + &H20
+
+                                    If (c2 >= &H9F) Then
+                                        c1 += 1
+                                    End If
+
+                                    If ((c1 And 1) <> 0) Then
+                                        If ((c2 And &H80) = 0) Then
+                                            c2 += 1
+                                        End If
+                                        c2 -= &H20
+                                    Else
+                                        c2 -= &H7E
+                                    End If
+
+                                    c3 = 0
+
+                                    '第1バイトは (区番号 + 0x1DF) ÷ 2 － (区番号 ÷ 8) × 3
+                                    '第1バイトは (区番号 + 0x19B) ÷ 2 
+                                    '//int[] jjis = new int[] { 1, 8, 3, 4, 5, 12, 13, 14 ,15};
+                                    'jispanel2
+                                ElseIf (sjis >= &HF040 AndAlso sjis <= &HF49E) Then
+
+                                    c3 = 1
+                                    hantei = ((c1 And &HF)) << 1
+                                    If (c2 >= &H9F) Then
+                                        hantei += 1
+                                    End If
+
+                                    c1 = ((hantei) And &HF) + 1
+
+                                    If (c1 = 2) Then
+                                        c1 = 8
+                                    ElseIf (c1 >= 6) Then
+                                        c1 += 6
+                                    End If
+
+
+                                    If ((c1 And 1) <> 0) Then
+
+                                        If ((c2 And &H80) = 0) Then
+
+                                            c2 += 1
+
+                                        End If
+
+
+                                        c2 -= &H20
+
+                                    Else
+
+                                        c2 -= &H7E
+
+                                    End If
+
+                                    c1 += &H20
+
+                                    'jispanel2
+                                ElseIf (sjis >= &HF49F) Then
+                                    c3 = 1
+
+                                    c1 = (2 * c1) - &H19B + &H20
+
+                                    If (c2 >= &H9F) Then
+                                        c1 += 1
+                                    End If
+
+
+                                    If ((c1 And 1) <> 0) Then
+
+                                        If ((c2 And &H80) = 0) Then
+
+                                            c2 += 1
+
+                                        End If
+
+
+                                        c2 -= &H20
+
+                                    Else
+
+                                        c2 -= &H7E
+
+                                    End If
+
+                                Else
+
+                                    c1 = 0
+                                    c2 = 0
+                                    c3 = 0
+
+                                End If
+
+
+                            Else
+
+                                c1 = 0
+                                c2 = 0
+                                c3 = 0
+
+                            End If
+
+                            'euc
+                        ElseIf selmode.SelectedIndex = 1 Then
+
+                            If c1 >= &H8F AndAlso c1 <= &H95 Then
+                                over = True
+                                c3 = c1 - &H8F + 1
+                                c1 = bb(1) And &H7F
+                                c2 = bb(2) And &H7F
+
+                            ElseIf c1 >= &HA1 AndAlso c2 >= &HA1 Then
+
+                                c3 = 0
+                                c1 = bb(0) And &H7F
+                                c2 = bb(1) And &H7F
+                            Else
+                                c3 = 0
+                                c1 = 0
+                                c2 = 0
+                            End If
+
+
+                        End If
+
+                    End If
+
+                    If c2 >= &H21 AndAlso c1 >= &H21 AndAlso c2 <> &H7F Then
+
+                        dest = (c3 * 94 * 94) + (c1 - &H21) * 94 + c2 - &H21
+                        Array.Copy(bbb, 0, bss, dest * 4, 4)
+
+                    End If
+
+                End If
+
+            End While
+
+            If over = True Then
+                If selmode.SelectedIndex = 0 Then
+                    llen += 1 * llen
+                ElseIf selmode.SelectedIndex = 2 Then
+                    llen += 1 * llen
+                Else
+                    llen += c3 * llen
+                End If
+            End If
+            ssr.Close()
+        End If
+
+        twotwo.Write(bs, 0, llen * 2)
+        twofour.Write(bss, 0, llen * 4)
+        twotwo.Close()
+        twofour.Close()
+        Beep()
+
+        Return True
+    End Function
+
+    'unicodeコンソーシアムのテーブル SJIS JIS UNICODE の順番
+    Private Function unicodetable(ByVal output As String, ByVal enc As Integer) As Boolean
+
+        Dim ofd As New OpenFileDialog()
+        ofd.Filter = _
+            "TXTファイル(*.txt)|*.txt"
+        ofd.Title = "開くファイルを選択してください"
+        If ofd.ShowDialog() = DialogResult.OK Then
+            output = ofd.FileName
+            Dim sr As New System.IO.StreamReader(output, System.Text.Encoding.GetEncoding(65001))
+            Dim fsjis As New System.IO.FileStream("txt_table\sjis", System.IO.FileMode.Create, System.IO.FileAccess.Write)
+            Dim fjis As New System.IO.FileStream("txt_table\jis", System.IO.FileMode.Create, System.IO.FileAccess.Write)
+            Dim feuc As New System.IO.FileStream("txt_table\euc-jp", System.IO.FileMode.Create, System.IO.FileAccess.Write)
+            Dim fube As New System.IO.FileStream("txt_table\utf16be", System.IO.FileMode.Create, System.IO.FileAccess.Write)
+            Dim fule As New System.IO.FileStream("txt_table\utf16le", System.IO.FileMode.Create, System.IO.FileAccess.Write)
+            Dim futf8 As New System.IO.FileStream("txt_table\utf8", System.IO.FileMode.Create, System.IO.FileAccess.Write)
+            Dim usj As New System.IO.FileStream("txt_table\utf16_sjis", System.IO.FileMode.Create, System.IO.FileAccess.Write)
+            Dim ue As New System.IO.FileStream("txt_table\utf16_euc", System.IO.FileMode.Create, System.IO.FileAccess.Write)
+            Dim uj As New System.IO.FileStream("txt_table\utf16_jis", System.IO.FileMode.Create, System.IO.FileAccess.Write)
+            Dim s As String = ""
+            Dim r As New Regex("0x[0-9A-F]{4}\t0x[0-9A-F]{4}\t0x[0-9A-F]{4}", RegexOptions.ECMAScript)
+            Dim hexm As Match
+            Dim sjis(1) As Byte
+            Dim jis(1) As Byte
+            Dim euc(1) As Byte
+            Dim bs1(65535 * 2) As Byte
+            Dim bs2(65535 * 2) As Byte
+            Dim bs3(65535 * 2) As Byte
+            Dim bs4(65535 * 2) As Byte
+            Dim utf16be(1) As Byte
+            Dim utf16le(1) As Byte
+            Dim null(4) As Byte
+            Dim utf8 As Byte()
+            Dim srg As Boolean = False
+            Dim x As UInt16 = 0
+            Dim y As UInt16 = 0
+            Dim z As UInt16 = 0
+            While sr.Peek() > -1
+                s = sr.ReadLine()
+                hexm = r.Match(s)
+                If hexm.Success AndAlso s.Contains("//") = False Then
+                    s = hexm.Value
+                    x = Convert.ToUInt16(s.Substring(0, 6), 16)
+                    y = Convert.ToUInt16(s.Substring(7, 6), 16)
+                    z = Convert.ToUInt16(s.Substring(14, 6), 16)
+                    sjis(1) = CByte(x And &HFF)
+                    sjis(0) = CByte(x >> 8)
+                    jis(1) = CByte(y And &HFF)
+                    jis(0) = CByte(y >> 8)
+                    If jis(0) = 0 Then
+                        sjis(0) = CByte(x And &HFF)
+                        sjis(1) = CByte(x >> 8)
+                        jis(0) = CByte(y And &HFF)
+                        jis(1) = CByte(y >> 8)
+                        If ((jis(0) + &H5F) And &HFF) < &H40 Then
+                            euc(0) = &H8E
+                            euc(1) = jis(0)
+                        Else
+                            euc(0) = jis(0)
+                            euc(1) = jis(1)
+                        End If
+                    Else
+                        euc(1) = CByte((y Or &H80) And &HFF)
+                        euc(0) = CByte((y >> 8) Or &H80)
+                    End If
+                    utf16be(1) = CByte(z And &HFF)
+                    utf16be(0) = CByte(z >> 8)
+                    utf16le(1) = utf16be(0)
+                    utf16le(0) = utf16be(1)
+                    s = Encoding.GetEncoding(1201).GetString(utf16be)
+                    utf8 = Encoding.GetEncoding(65001).GetBytes(s)
+                    Array.Resize(utf8, 4)
+                    fsjis.Write(sjis, 0, 2)
+                    fjis.Write(jis, 0, 2)
+                    feuc.Write(euc, 0, 2)
+                    fube.Write(utf16be, 0, 2)
+                    fule.Write(utf16le, 0, 2)
+                    futf8.Write(utf8, 0, 4)
+                    If (z < 65536) Then
+                        Array.Copy(jis, 0, bs1, z * 2, 2)
+                        Array.Copy(sjis, 0, bs2, z * 2, 2)
+                        Array.Copy(euc, 0, bs3, z * 2, 2)
+                    ElseIf (z < 65536 * 2) Then
+                        'sjis2004
+                        Array.Copy(sjis, 0, bs4, (z - &H10000) * 2, 2)
+                        srg = True
+                    End If
+                End If
+            End While
+
+            uj.Write(bs1, 0, 65535 * 2)
+            usj.Write(bs2, 0, 65535 * 2)
+            If srg = True Then
+                usj.Write(bs4, 0, 65535 * 2)
+            End If
+            ue.Write(bs3, 0, 65535 * 2)
+
+            fsjis.Write(null, 0, 2)
+            fjis.Write(null, 0, 2)
+            feuc.Write(null, 0, 2)
+            fube.Write(null, 0, 2)
+            fule.Write(null, 0, 2)
+            futf8.Write(null, 0, 4)
+            sr.Close()
+            fsjis.Close()
+            fjis.Close()
+            fule.Close()
+            fube.Close()
+            futf8.Close()
+            feuc.Close()
+            uj.Close()
+            usj.Close()
+            ue.Close()
+            Beep()
+        End If
+        Return True
+    End Function
+
+    '特大utf32からjisx0213に変換　
+    Private Function uni_jisx0213table(ByVal output As String, ByVal enc As Integer) As Boolean
+
+        Dim ofd As New OpenFileDialog()
+        ofd.Filter = _
+            "TXTファイル(*.txt)|*.txt"
+        ofd.Title = "開くファイルを選択してください"
+        If ofd.ShowDialog() = DialogResult.OK Then
+            output = ofd.FileName
+            Dim sr As New System.IO.StreamReader(output, System.Text.Encoding.GetEncoding(65001))
+            Dim fjis As New System.IO.FileStream("txt_table\custom_utf32", System.IO.FileMode.Create, System.IO.FileAccess.Write)
+            Dim s As String = ""
+            Dim r As New Regex("0x[0-9A-F]{2,6}\tU\+[0-9A-F]{4,6}\t", RegexOptions.ECMAScript)
+            Dim hexm As Match
+            Dim btbl(4 * (&H2FFFF)) As Byte
+            Dim ss As String()
+            Dim bbb As Byte()
+            Dim sw(3) As Byte
+            Dim x As UInt32 = 0
+            Dim y As UInt32 = 0
+            Dim z As Integer = 0
+            While sr.Peek() > -1
+                s = sr.ReadLine()
+                hexm = r.Match(s)
+                If hexm.Success AndAlso s.Contains("//") = False Then
+                    s = hexm.Value.Replace("U+", "")
+                    ss = s.Split(CChar(vbTab))
+                    x = Convert.ToUInt32(ss(0), 16)
+                    y = Convert.ToUInt32(ss(1), 16)
+                    If x > &HFFFFFF Then
+                    ElseIf x > &HFFFF Then
+                        x = x << 8
+                    ElseIf x > &HFF Then
+                        x = x << 16
+                    Else
+                        x = x << 24
+                    End If
+                    bbb = BitConverter.GetBytes(x)
+                    Array.Resize(sw, bbb.Length)
+                    z = bbb.Length - 1
+                    For i = 0 To z
+                        sw(i) = bbb(z - i)
+                    Next
+                    If y > &H30000 Then
+                    Else
+                        Array.Copy(sw, 0, btbl, y * 4, bbb.Length)
+                    End If
+                End If
+            End While
+            fjis.Write(btbl, 0, btbl.Length)
+            sr.Close()
+            fjis.Close()
+            Beep()
+        End If
+
+        Return True
+    End Function
+
+    'SJIS,EUC,GBK <>　UTF8の変換　ブルーフォース方式
+    Private Function utf8vsenc(ByVal output As String, ByVal enc As Integer) As Boolean
+
+        Dim sr As New System.IO.FileStream(output, System.IO.FileMode.Open, System.IO.FileAccess.Read)
+        Dim fs As New System.IO.FileStream("table\" & Path.GetFileNameWithoutExtension(output), System.IO.FileMode.Create, System.IO.FileAccess.Write)
+        Dim fss As New System.IO.FileStream("table\utf8", System.IO.FileMode.Create, System.IO.FileAccess.Write)
+        Dim bs(CInt(sr.Length) - 1) As Byte
+        sr.Read(bs, 0, bs.Length)
+        Dim ss As String = System.Text.Encoding.GetEncoding(enc).GetString(bs)
+        Dim sss As String() = ss.Split(CChar(vbLf))
+        Dim i As Integer = 0
+        Dim bb As Byte() = Nothing
+        Dim bbb As Byte() = Nothing
+        If sp.Checked = False Then
+            For Each s As String In sss
+                s = s.Replace(vbCr, "")
+                bb = System.Text.Encoding.GetEncoding(enc).GetBytes(s)
+                bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(s)
+                Array.Resize(bb, 2)
+                Array.Resize(bbb, 4)
+                fs.Write(bb, 0, 2)
+                fss.Write(bbb, 0, 4)
+            Next
+        End If
+
+        If EX.Checked = True Then
+            Dim s As String = ""
+            Dim st As String = ""
+            Dim sth As Integer = 0
+            Dim sth2 As Integer = 0
+            Dim sth3 As UInt64 = 0
+            Dim swap(3) As Byte
+            Dim ssss As String()
+            Dim wc As Integer = 0
+            Dim k As Integer = 0
+            Dim n As Integer = 0
+            Dim z As Integer = 0
+            Dim len As Integer
+            Dim len2 As Integer
+            Dim uni As New Regex("(^0x[0-9A-fa-f]+|^&#x[0-9a-fA-F]+|&#[0-9]+|^u\+?[0-9A-fa-f]+|^U\+?[0-9A-fa-f]+)")
+            Dim unim As Match
+            Dim ssr As New System.IO.StreamReader("extra.txt", System.Text.Encoding.GetEncoding(65001))
+            While ssr.Peek() > -1
+                s = ssr.ReadLine()
+                ssss = s.Split(CChar(vbTab))
+                unim = uni.Match(ssss(0))
+                If unim.Success Then
+                    st = unim.Value
+                    If st.Contains("x") Then
+                        st = st.Replace("&#", "0")
+                        sth = Convert.ToInt32(st, 16)
+                    ElseIf st.Contains("u") Or st.Contains("U") Then
+                        st = st.Remove(0, 1)
+                        st = st.Replace("+", "")
+                        sth = Convert.ToInt32(st, 16)
+                    Else
+                        st = st.Remove(0, 2)
+                        sth = Convert.ToInt32(st)
+                    End If
+
+                    'サロゲートペア
+                    If sth >= &HD800 And sth <= &HDBFF Then
+                        unim = unim.NextMatch
+                        If unim.Success Then
+                            st = unim.Value
+                            If st.Contains("x") Then
+                                st = st.Replace("&#", "0")
+                                sth2 = Convert.ToInt32(st, 16)
+                            ElseIf st.Contains("u") Or st.Contains("U") Then
+                                st = st.Remove(0, 1)
+                                st = st.Replace("+", "")
+                                sth2 = Convert.ToInt32(st, 16)
+                            Else
+                                st = st.Remove(0, 2)
+                                sth2 = Convert.ToInt32(st)
+                            End If
+                            If sth2 >= &HDC00 And sth2 <= &HDFFF Then
+                                sth = sth And &H3FF
+                                sth2 = sth2 And &H3FF
+                                sth = (sth << 10) + sth2 + &H10000
+                            Else
+                                MessageBox.Show(st & "はサロゲートペアではありません")
+                                sth = &H3F
+                            End If
+                        Else
+                            MessageBox.Show(st & "はサロゲートペアではありません")
+                            sth = &H3F
+                        End If
+                    End If
+                    bbb = BitConverter.GetBytes(sth)
+
+                    If sp.Checked = False Then
+                        st = System.Text.Encoding.GetEncoding(12000).GetString(bbb)
+                        bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(st)
+                    Else
+                        k = 0
+                        n = 0
+                        While k < bbb.Length
+                            wc = BitConverter.ToInt32(bbb, k)
+                            n += utf32toutf8(bbb, wc, n)
+                            k += 4
+                        End While
+                        Array.Resize(bbb, n)
+
+                    End If
+
+                ElseIf sp.Checked = False Then
+                    bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(ssss(0))
+                End If
+
+                unim = uni.Match(ssss(1))
+                If unim.Success Then
+                    st = unim.Value
+                    If st.Contains("x") Then
+                        st = st.Replace("&#", "0")
+                        sth3 = Convert.ToUInt64(st, 16)
+                    ElseIf st.Contains("u") Then
+                        st = st.Remove(0, 1)
+                        st = st.Replace("+", "")
+                        sth3 = Convert.ToUInt64(st, 16)
+                    Else
+                        st = st.Remove(0, 2)
+                        sth3 = Convert.ToUInt64(st)
+                    End If
+
+                    bb = BitConverter.GetBytes(sth3)
+                    Array.Resize(bb, 4)
+                    z = bb.Length - 1
+                    For i = 0 To z
+                        swap(i) = bb(z - i)
+                    Next
+
+                    If sth3 > &HFFFFFF Then
+                        bb(0) = swap(0)
+                        bb(1) = swap(1)
+                        bb(2) = swap(2)
+                        bb(3) = swap(3)
+                    ElseIf sth3 > &HFFFF Then
+                        Array.Resize(bb, 3)
+                        bb(0) = swap(1)
+                        bb(1) = swap(2)
+                        bb(2) = swap(3)
+                    ElseIf sth3 > &HFF Then
+                        Array.Resize(bb, 2)
+                        bb(0) = swap(2)
+                        bb(1) = swap(3)
+                    Else
+                        Array.Resize(bb, 2)
+                        bb(0) = swap(3)
+                        bb(1) = 0
+                    End If
+                ElseIf sp.Checked = False Then
+                    bb = System.Text.Encoding.GetEncoding(enc).GetBytes(ssss(1))
+                End If
+
+                len = bb.Length
+                If len <= 2 Then
+                    Array.Resize(bb, 2)
+                    Array.Resize(bbb, 4)
+                    If BitConverter.ToUInt16(bb, 0) <> 0 AndAlso BitConverter.ToUInt32(bbb, 0) <> 0 Then
+                        fs.Write(bb, 0, 2)
+                        fss.Write(bbb, 0, 4)
+                    End If
+                Else
+                    len2 = len
+                    If (len And 1) = 1 Then
+                        len += 1
+                    End If
+                    Array.Resize(bb, len)
+                    fs.Write(bb, 0, len)
+                    Array.Resize(bbb, 4)
+                    fss.Write(bbb, 0, 4)
+                    Array.Clear(bbb, 0, 4)
+                    bbb(0) = CByte(len2)
+                    len = len >> 1
+                    For i = 0 To len - 2
+                        fss.Write(bbb, 0, 4)
+                    Next
+                End If
+            End While
+            If len <= 2 Then
+                Array.Resize(bbb, 4)
+                Array.Clear(bbb, 0, 4)
+                fs.Write(bbb, 0, 2)
+                bbb(0) = CByte(len)
+                fss.Write(bbb, 0, 4)
+            End If
+            ssr.Close()
+        End If
+
+        Array.Clear(bbb, 0, 4)
+        fs.Write(bbb, 0, 2)
+        fss.Write(bbb, 0, 4)
+        sr.Close()
+        fs.Close()
+        fss.Close()
+        Beep()
+
+
+        Return True
+    End Function
+
+    'TSVテキストUNICODE変換表をHTMLで可視化
+    Private Function tsvtable_html(ByVal output As String, ByVal enc As Integer) As Boolean
+
+        Return True
+    End Function
+
+    'テーブル作成
+    Private Sub MKTBL(sender As System.Object, e As System.EventArgs) Handles MAKETABLE.Click
         Try
             Dim output As String = p(ENCODE.SelectedIndex)
             Dim mm As New Regex("CP\d+", RegexOptions.ECMAScript)
             Dim m As Match = mm.Match(ENCODE.Text)
             If m.Success Then
                 Dim enc As Integer = CInt(m.Value.Remove(0, 2))
-
                 If (ENCODE.SelectedIndex >= 3 AndAlso ENCODE.SelectedIndex <= 5) Then
-                    Dim ucs2 As New System.IO.FileStream(output, System.IO.FileMode.Create, System.IO.FileAccess.Write)
-                    Dim ucs As New System.IO.FileStream(output.Replace("\", "\utf32_"), System.IO.FileMode.Create, System.IO.FileAccess.Write)
-                    Dim bs(65536 * 2) As Byte
-                    Dim bss(65536 * 4) As Byte
-                    Dim bb(1) As Byte
-                    Dim s As String = ""
-                    Dim bbb As Byte() = Nothing
-                    If sp.Checked = False Then
-                        For i = 0 To &HFFFF
-                            bb(0) = CByte(i And &HFF)
-                            bb(1) = CByte(i >> 8)
-                            bbb = Encoding.Convert(Encoding.GetEncoding(1200), Encoding.GetEncoding(enc), bb)
-                            's = System.Text.Encoding.GetEncoding(1200).GetString(bb)
-                            'bbb = System.Text.Encoding.GetEncoding(enc).GetBytes(s)
-                            Array.Resize(bbb, 4)
-                            Array.Copy(bbb, 0, bs, i * 2, 2)
-                            Array.Copy(bbb, 0, bss, i * 4, 4)
-                        Next
-                    End If
+                    utf16vstable(output, enc)
 
-                    If EX.Checked = True Then
-                        Array.Resize(bs, &H2FFFF * 2)
-                        Array.Resize(bss, &H2FFFF * 4)
-                        If EX.Checked = True Then
-                            Dim st As String = ""
-                            Dim sth As Integer = 0
-                            Dim sth2 As Integer = 0
-                            Dim sth3 As UInt64 = 0
-                            Dim swap(3) As Byte
-                            Dim ssss As String()
-                            Dim wc As Integer = 0
-                            Dim i As Integer = 0
-                            Dim n As Integer = 0
-                            Dim z As Integer = 0
-                            Dim uni As New Regex("(^0x[0-9A-fa-f]+|^&#x[0-9a-fA-F]+|&#[0-9]+|^u\+?[0-9A-fa-f]+|^U\+?[0-9A-fa-f]+)")
-                            Dim unim As Match
-                            Dim ssr As New System.IO.StreamReader("extra.txt", System.Text.Encoding.GetEncoding(65001))
-                            While ssr.Peek() > -1
-                                s = ssr.ReadLine()
-                                ssss = s.Split(CChar(vbTab))
-                                unim = uni.Match(ssss(0))
-                                If unim.Success Then
-                                    st = unim.Value
-                                    If st.Contains("x") Then
-                                        st = st.Replace("&#", "0")
-                                        sth = Convert.ToInt32(st, 16)
-                                    ElseIf st.Contains("u") Or st.Contains("U") Then
-                                        st = st.Remove(0, 1)
-                                        st = st.Replace("+", "")
-                                        sth = Convert.ToInt32(st, 16)
-                                    Else
-                                        st = st.Remove(0, 2)
-                                        sth = Convert.ToInt32(st)
-                                    End If
-
-                                    'サロゲートペア
-                                    If sth >= &HD800 And sth <= &HDBFF Then
-                                        unim = unim.NextMatch
-                                        If unim.Success Then
-                                            st = unim.Value
-                                            If st.Contains("x") Then
-                                                st = st.Replace("&#", "0")
-                                                sth2 = Convert.ToInt32(st, 16)
-                                            ElseIf st.Contains("u") Or st.Contains("U") Then
-                                                st = st.Remove(0, 1)
-                                                st = st.Replace("+", "")
-                                                sth2 = Convert.ToInt32(st, 16)
-                                            Else
-                                                st = st.Remove(0, 2)
-                                                sth2 = Convert.ToInt32(st)
-                                            End If
-                                            If sth2 >= &HDC00 And sth2 <= &HDFFF Then
-                                                sth = sth And &H3FF
-                                                sth2 = sth2 And &H3FF
-                                                sth = (sth << 10) + sth2 + &H10000
-                                            Else
-                                                MessageBox.Show(st & "はサロゲートペアではありません")
-                                                sth = &H3F
-                                            End If
-                                        Else
-                                            MessageBox.Show(st & "はサロゲートペアではありません")
-                                            sth = &H3F
-                                        End If
-                                    End If
-
-                                    bbb = BitConverter.GetBytes(sth)
-                                    If sp.Checked = False Then
-                                        bbb = Encoding.Convert(Encoding.GetEncoding(12000), Encoding.GetEncoding(65001), bbb)
-                                        'st = System.Text.Encoding.GetEncoding(12000).GetString(bbb)
-                                        'bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(st)
-                                    Else
-                                        'Dim bb As Byte() = Encoding.GetEncoding(12000).GetBytes(BASESTR.Text)
-                                        i = 0
-                                        n = 0
-                                        While i < bbb.Length
-                                            wc = BitConverter.ToInt32(bbb, i)
-                                            n += utf32toutf8(bbb, wc, n)
-                                            i += 4
-                                        End While
-                                        Array.Resize(bbb, n)
-
-                                        'CVTSTR.Text = Encoding.GetEncoding(65001).GetString(bb)
-                                    End If
-
-                                ElseIf sp.Checked = False Then
-                                    bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(ssss(0))
-                                End If
-
-                                unim = uni.Match(ssss(1))
-                                If unim.Success Then
-                                    st = unim.Value
-                                    If st.Contains("x") Then
-                                        st = st.Replace("&#", "0")
-                                        sth3 = Convert.ToUInt64(st, 16)
-                                    ElseIf st.Contains("u") Then
-                                        st = st.Remove(0, 1)
-                                        st = st.Replace("+", "")
-                                        sth3 = Convert.ToUInt64(st, 16)
-                                    Else
-                                        st = st.Remove(0, 2)
-                                        sth3 = Convert.ToUInt64(st)
-                                    End If
-
-                                    bb = BitConverter.GetBytes(sth3)
-                                    Array.Resize(bb, 4)
-                                    z = bb.Length - 1
-                                    For i = 0 To z
-                                        swap(i) = bb(z - i)
-                                    Next
-
-                                    If sth3 > &HFFFFFF Then
-                                        bb(0) = swap(0)
-                                        bb(1) = swap(1)
-                                        bb(2) = swap(2)
-                                        bb(3) = swap(3)
-                                    ElseIf sth3 > &HFFFF Then
-                                        bb(0) = swap(1)
-                                        bb(1) = swap(2)
-                                        bb(2) = swap(3)
-                                    ElseIf sth3 > &HFF Then
-                                        bb(0) = swap(2)
-                                        bb(1) = swap(3)
-                                    Else
-                                        bb(0) = swap(3)
-                                        bb(1) = 0
-                                    End If
-                                ElseIf sp.Checked = False Then
-                                    bb = System.Text.Encoding.GetEncoding(enc).GetBytes(ssss(1))
-                                End If
-
-                                If bb.Length >= 4 AndAlso sth < &H2FFFF Then
-                                    Array.Copy(bb, 0, bss, sth * 4, 4)
-                                    Array.Copy(bb, 0, bs, sth * 2, 2)
-                                End If
-
-                            End While
-                            ssr.Close()
-                        End If
-
-
-                    End If
-
-                    ucs.Write(bss, 0, bss.Length)
-                    ucs2.Write(bs, 0, bs.Length)
-                    ucs.Close()
-                    ucs2.Close()
-                    Beep()
+                    'HTML
+                ElseIf ENCODE.SelectedIndex = 12 Then
+                    tsvtable_html(output, enc)
 
                     'SJIS,GBK,EUC VS テーブル,フォントロード使い回し
                 ElseIf ENCODE.SelectedIndex >= 8 Then
-                    Dim twotwo As New System.IO.FileStream("table\" & pp((ENCODE.SelectedIndex - 8) * 2), System.IO.FileMode.Create, System.IO.FileAccess.Write)
-                    Dim twofour As New System.IO.FileStream("table\" & pp((ENCODE.SelectedIndex - 8) * 2 + 1), System.IO.FileMode.Create, System.IO.FileAccess.Write)
-                    Dim bb(1) As Byte
-                    Dim bs(65535 * 2) As Byte
-                    Dim bss(65535 * 4) As Byte
-                    Dim s As String = ""
-                    Dim c1 As Integer = 0
-                    Dim c2 As Integer = 0
-                    Dim c3 As Integer = 0
-                    Dim wc As Integer = 0
-                    Dim i As Integer = 0
-                    Dim n As Integer = 0
-                    Dim bbb As Byte() = Nothing
-                    Dim bbbb As Byte() = Nothing
-                    Dim dest As Integer = 0
-                    Dim llen As Integer = 0
-                    Dim over As Boolean = False
-
-                    ' SJIS VS
-                    If ENCODE.SelectedIndex = 8 Then
-                        If sp.Checked = False Then
-                            For i = &H8140 To &HFCFF
-                                bb(1) = CByte(i And &HFF)
-                                bb(0) = CByte(i >> 8)
-                                c1 = i >> 8
-                                c2 = i And &HFF
-                                If c2 >= &H40 AndAlso (((c1 Xor &H20) + &H5F) And &HFF) < &H3C Then
-                                    s = System.Text.Encoding.GetEncoding(932).GetString(bb)
-                                    bbb = System.Text.Encoding.GetEncoding(936).GetBytes(s)
-                                    bbbb = System.Text.Encoding.GetEncoding(65001).GetBytes(s)
-                                    Array.Resize(bbb, 2)
-                                    Array.Resize(bbbb, 4)
-                                    dest = ((c1 Xor &H20) - &HA1) * 192 + c2 - &H40
-                                    Array.Copy(bbb, 0, bs, dest * 2, 2)
-                                    Array.Copy(bbbb, 0, bss, dest * 4, 4)
-                                End If
-                            Next
-                        End If
-                        llen = ((&HFC Xor &H20) - &HA1 + 1) * 192
-                    End If
-                    'GBK VS
-                    If ENCODE.SelectedIndex = 9 Then
-                        If sp.Checked = False Then
-                            For i = &H8140 To &HFEFF
-                                bb(1) = CByte(i And &HFF)
-                                bb(0) = CByte(i >> 8)
-                                c1 = i >> 8
-                                c2 = i And &HFF
-                                If c2 >= &H40 Then 'AndAlso ((c1 + &H7F) And &HFF) < &H7E Then
-                                    s = System.Text.Encoding.GetEncoding(936).GetString(bb)
-                                    bbb = System.Text.Encoding.GetEncoding(932).GetBytes(s)
-                                    bbbb = System.Text.Encoding.GetEncoding(65001).GetBytes(s)
-                                    Array.Resize(bbb, 2)
-                                    Array.Resize(bbbb, 4)
-                                    dest = (c1 - &H81) * 192 + c2 - &H40
-                                    Array.Copy(bbb, 0, bs, dest * 2, 2)
-                                    Array.Copy(bbbb, 0, bss, dest * 4, 4)
-                                End If
-                            Next
-                        End If
-                        llen = (&HFE - &H81 + 1) * 192
-                    End If
-                    'EUC VS
-                    If ENCODE.SelectedIndex = 10 Then
-                        If sp.Checked = False Then
-                            For i = &HA1A1 To &HFCFF
-                                bb(1) = CByte(i And &HFF)
-                                bb(0) = CByte(i >> 8)
-                                c1 = i >> 8
-                                c2 = i And &HFF
-                                If c2 >= &HA1 AndAlso c1 >= &HA1 AndAlso c2 <> &HFF Then
-                                    s = System.Text.Encoding.GetEncoding(51932).GetString(bb)
-                                    bbb = System.Text.Encoding.GetEncoding(936).GetBytes(s)
-                                    bbbb = System.Text.Encoding.GetEncoding(65001).GetBytes(s)
-                                    Array.Resize(bbb, 2)
-                                    Array.Resize(bbbb, 4)
-                                    dest = (c1 - &HA1) * 94 + c2 - &HA1
-                                    Array.Copy(bbb, 0, bs, dest * 2, 2)
-                                    Array.Copy(bbbb, 0, bss, dest * 4, 4)
-                                End If
-                            Next
-                        End If
-                        llen = (&HFE - &HA1 + 1) * 94
-                    End If
-                    'JIS VS
-                    If ENCODE.SelectedIndex = 11 Then
-                        If sp.Checked = False Then
-                            For i = &H2121 To &H7C7F
-                                bb(1) = CByte(i And &HFF)
-                                bb(0) = CByte(i >> 8)
-                                c1 = i >> 8
-                                c2 = i And &HFF
-                                If c2 >= &H21 AndAlso c1 >= &H21 AndAlso c2 <> &H7F Then
-                                    s = System.Text.Encoding.GetEncoding(51932).GetString(bb)
-                                    bbb = System.Text.Encoding.GetEncoding(502022).GetBytes(s)
-                                    bbbb = System.Text.Encoding.GetEncoding(65001).GetBytes(s)
-                                    Array.Copy(bbb, 3, bbb, 0, 2)
-                                    Array.Resize(bbb, 2)
-                                    Array.Resize(bbbb, 4)
-                                    dest = (c1 - &H21) * 94 + c2 - &H21
-                                    Array.Copy(bbb, 0, bs, dest * 2, 2)
-                                    Array.Copy(bbbb, 0, bss, dest * 4, 4)
-                                End If
-                            Next
-                        End If
-                        llen = (&H7E - &H21 + 1) * 94
-                    End If
-
-                    If EX.Checked = True Then
-                        Dim st As String = ""
-                        Dim sth As Integer = 0
-                        Dim sth2 As Integer = 0
-                        Dim sth3 As UInt64 = 0
-                        Dim swap(3) As Byte
-                        Dim ssss As String()
-                        Dim z As Integer = 0
-                        Dim len As Integer = 0
-                        Dim uni As New Regex("(^0x[0-9A-fa-f]+|^&#x[0-9a-fA-F]+|&#[0-9]+|^u\+?[0-9A-fa-f]+|^U\+?[0-9A-fa-f]+)")
-                        Dim unim As Match
-                        Dim ssr As New System.IO.StreamReader("extra.txt", System.Text.Encoding.GetEncoding(65001))
-
-                        While ssr.Peek() > -1
-                            s = ssr.ReadLine()
-                            ssss = s.Split(CChar(vbTab))
-                            unim = uni.Match(ssss(0))
-                            If unim.Success Then
-                                st = unim.Value
-                                If st.Contains("x") Then
-                                    st = st.Replace("&#", "0")
-                                    sth = Convert.ToInt32(st, 16)
-                                ElseIf st.Contains("u") Or st.Contains("U") Then
-                                    st = st.Remove(0, 1)
-                                    st = st.Replace("+", "")
-                                    sth = Convert.ToInt32(st, 16)
-                                Else
-                                    st = st.Remove(0, 2)
-                                    sth = Convert.ToInt32(st)
-                                End If
-
-                                'サロゲートペア
-                                If sth >= &HD800 And sth <= &HDBFF Then
-                                    unim = unim.NextMatch
-                                    If unim.Success Then
-                                        st = unim.Value
-                                        If st.Contains("x") Then
-                                            st = st.Replace("&#", "0")
-                                            sth2 = Convert.ToInt32(st, 16)
-                                        ElseIf st.Contains("u") Or st.Contains("U") Then
-                                            st = st.Remove(0, 1)
-                                            st = st.Replace("+", "")
-                                            sth2 = Convert.ToInt32(st, 16)
-                                        Else
-                                            st = st.Remove(0, 2)
-                                            sth2 = Convert.ToInt32(st)
-                                        End If
-                                        If sth2 >= &HDC00 And sth2 <= &HDFFF Then
-                                            sth = sth And &H3FF
-                                            sth2 = sth2 And &H3FF
-                                            sth = (sth << 10) + sth2 + &H10000
-                                        Else
-                                            MessageBox.Show(st & "はサロゲートペアではありません")
-                                            sth = &H3F
-                                        End If
-                                    Else
-                                        MessageBox.Show(st & "はサロゲートペアではありません")
-                                        sth = &H3F
-                                    End If
-                                End If
-
-                                bbb = BitConverter.GetBytes(sth)
-
-
-                                If sp.Checked = False Then
-                                    st = System.Text.Encoding.GetEncoding(12000).GetString(bbb)
-                                    bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(st)
-                                Else
-                                    'Dim bb As Byte() = Encoding.GetEncoding(12000).GetBytes(BASESTR.Text)
-                                    i = 0
-                                    n = 0
-                                    While i < bbb.Length
-                                        wc = BitConverter.ToInt32(bbb, i)
-                                        n += utf32toutf8(bbb, wc, n)
-                                        i += 4
-                                    End While
-                                    Array.Resize(bbb, n)
-
-                                    'CVTSTR.Text = Encoding.GetEncoding(65001).GetString(bb)
-                                End If
-                            ElseIf sp.Checked = False Then
-                                bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(ssss(0))
-                            Else
-                                Array.Resize(bbb, 4)
-                                bbb(0) = 0
-                                bbb(1) = 0
-                                bbb(2) = 0
-                                bbb(3) = 0
-                            End If
-
-                            unim = uni.Match(ssss(1))
-                            If unim.Success Then
-                                st = unim.Value
-                                If st.Contains("x") Then
-                                    st = st.Replace("&#", "0")
-                                    sth3 = Convert.ToUInt64(st, 16)
-                                ElseIf st.Contains("u") Then
-                                    st = st.Remove(0, 1)
-                                    st = st.Replace("+", "")
-                                    sth3 = Convert.ToUInt64(st, 16)
-                                Else
-                                    st = st.Remove(0, 2)
-                                    sth3 = Convert.ToUInt64(st)
-                                End If
-
-                                bb = BitConverter.GetBytes(sth3)
-                                Array.Resize(bb, 4)
-                                z = bb.Length - 1
-                                For i = 0 To z
-                                    swap(i) = bb(z - i)
-                                Next
-
-                                If sth3 > &HFFFFFF Then
-                                    bb(0) = swap(0)
-                                    bb(1) = swap(1)
-                                    bb(2) = swap(2)
-                                    bb(3) = swap(3)
-                                ElseIf sth3 > &HFFFF Then
-                                    Array.Resize(bb, 3)
-                                    bb(0) = swap(1)
-                                    bb(1) = swap(2)
-                                    bb(2) = swap(3)
-                                ElseIf sth3 > &HFF Then
-                                    Array.Resize(bb, 2)
-                                    bb(0) = swap(2)
-                                    bb(1) = swap(3)
-                                Else
-                                    Array.Resize(bb, 2)
-                                    bb(0) = swap(3)
-                                    bb(1) = 0
-                                End If
-                            ElseIf sp.Checked = False Then
-                                bb = System.Text.Encoding.GetEncoding(enc).GetBytes(ssss(1))
-                            Else
-                                Array.Resize(bb, 3)
-                                bb(0) = 0
-                                bb(1) = 0
-                                bb(2) = 0
-                            End If
-
-                            Array.Resize(bb, 3)
-                            Array.Resize(bbb, 4)
-
-                            'SJIS VS UTF8
-                            If ENCODE.SelectedIndex = 8 Then
-                                c1 = bb(0)
-                                c2 = bb(1)
-                                If c2 >= &H40 AndAlso c2 <> &H7F AndAlso c2 <= &HFC AndAlso (((c1 Xor &H20) + &H5F) And &HFF) < &H3C Then
-                                    dest = ((c1 Xor &H20) - &HA1) * 192 + c2 - &H40
-                                    Array.Copy(bbb, 0, bss, dest * 4, 4)
-                                End If
-                            End If
-                            'GBK VS UTF8
-                            If ENCODE.SelectedIndex = 9 Then
-                                c1 = bb(0)
-                                c2 = bb(1)
-                                If c2 >= &H40 AndAlso c2 <> &H7F AndAlso c2 <> &HFF AndAlso ((c1 + &H7F) And &HFF) < &H7E Then
-
-                                    dest = (c1 - &H81) * 192 + c2 - &H40
-                                    Array.Copy(bbb, 0, bss, dest * 4, 4)
-                                End If
-                            End If
-                            'EUC VS UTF8
-                            If ENCODE.SelectedIndex = 10 Then
-                                c1 = bb(0)
-                                c2 = bb(1)
-                                c3 = bb(2)
-                                If c1 >= &H8F AndAlso c1 <= &H95 Then
-                                    over = True
-                                    c3 = c1 - &H8F + 1
-                                    c1 = bb(1)
-                                    c2 = bb(2)
-                                Else
-                                    c3 = 0
-                                End If
-
-                                If c2 >= &HA1 AndAlso c1 >= &HA1 AndAlso c2 <> &HFF Then
-                                    dest = (c3 * 94 * 94) + (c1 - &HA1) * 94 + c2 - &HA1
-                                    Array.Copy(bbb, 0, bss, dest * 4, 4)
-                                End If
-                            End If
-                            'JIS VS UTF8
-                            If ENCODE.SelectedIndex = 11 Then
-                                c1 = bb(0)
-                                c2 = bb(1)
-
-                                If jis.Checked = True Then
-                                    If selmode.SelectedIndex = 0 Then
-                                        If (((c1 Xor &H20) + &H5F) And &HFF) < &H3C AndAlso ((c2 + &HC0) And &HFF) < 189 AndAlso c2 <> &H7F Then
-                                            If c1 >= &HF0 Then
-                                                over = True
-                                            End If
-                                            c1 = ((c1 Xor &H20) << 1) - &H121
-                                            If (c2 >= &H9F) Then
-                                                c1 += 1
-                                            End If
-
-                                            If ((c1 And 1) <> 0) Then
-                                                If ((c2 And &H80) = 0) Then
-                                                    c2 += 1
-                                                End If
-                                                c2 -= &H20
-                                            Else
-                                                c2 -= &H7E
-                                            End If
-                                        Else
-                                            c1 = 0
-                                            c2 = 0
-                                        End If
-
-                                        c3 = 0
-
-                                    Else
-                                        'euc
-                                        If c1 >= &H8F AndAlso c1 <= &H95 Then
-                                            over = True
-                                            c3 = c1 - &H8F + 1
-                                            c1 = bb(1) And &H7F
-                                            c2 = bb(2) And &H7F
-                                        Else
-                                            c3 = 0
-                                            c1 = bb(0) And &H7F
-                                            c2 = bb(0) And &H7F
-                                        End If
-
-                                    End If
-
-                                End If
-
-
-                                If c2 >= &H21 AndAlso c1 >= &H21 AndAlso c2 <> &H7F Then
-                                    dest = (c3 * 94 * 94) + (c1 - &H21) * 94 + c2 - &H21
-                                    Array.Copy(bbb, 0, bss, dest * 4, 4)
-                                End If
-                            End If
-                        End While
-                        If over = True Then
-                            If selmode.SelectedIndex = 0 Then
-                                llen += 1 * llen
-                            Else
-                                llen += c3 * llen
-                            End If
-                        End If
-                    ssr.Close()
-                    End If
-
-                    twotwo.Write(bs, 0, llen * 2)
-                    twofour.Write(bss, 0, llen * 4)
-                    twotwo.Close()
-                    twofour.Close()
-                    Beep()
+                    encvsutf8table(output, enc)
 
                     'てきすとからいっぱい
                 ElseIf ENCODE.SelectedIndex = 6 Then
-                    Dim ofd As New OpenFileDialog()
-                    ofd.Filter = _
-                        "TXTファイル(*.txt)|*.txt"
-                    ofd.Title = "開くファイルを選択してください"
-                    If ofd.ShowDialog() = DialogResult.OK Then
-                        output = ofd.FileName
-                        Dim sr As New System.IO.StreamReader(output, System.Text.Encoding.GetEncoding(65001))
-                        Dim fsjis As New System.IO.FileStream("txt_table\sjis", System.IO.FileMode.Create, System.IO.FileAccess.Write)
-                        Dim fjis As New System.IO.FileStream("txt_table\jis", System.IO.FileMode.Create, System.IO.FileAccess.Write)
-                        Dim feuc As New System.IO.FileStream("txt_table\euc-jp", System.IO.FileMode.Create, System.IO.FileAccess.Write)
-                        Dim fube As New System.IO.FileStream("txt_table\utf16be", System.IO.FileMode.Create, System.IO.FileAccess.Write)
-                        Dim fule As New System.IO.FileStream("txt_table\utf16le", System.IO.FileMode.Create, System.IO.FileAccess.Write)
-                        Dim futf8 As New System.IO.FileStream("txt_table\utf8", System.IO.FileMode.Create, System.IO.FileAccess.Write)
-                        Dim usj As New System.IO.FileStream("txt_table\utf16_sjis", System.IO.FileMode.Create, System.IO.FileAccess.Write)
-                        Dim ue As New System.IO.FileStream("txt_table\utf16_euc", System.IO.FileMode.Create, System.IO.FileAccess.Write)
-                        Dim uj As New System.IO.FileStream("txt_table\utf16_jis", System.IO.FileMode.Create, System.IO.FileAccess.Write)
-                        Dim s As String = ""
-                        Dim r As New Regex("0x[0-9A-F]{4}\t0x[0-9A-F]{4}\t0x[0-9A-F]{4}", RegexOptions.ECMAScript)
-                        Dim hexm As Match
-                        Dim sjis(1) As Byte
-                        Dim jis(1) As Byte
-                        Dim euc(1) As Byte
-                        Dim bs1(65535 * 2) As Byte
-                        Dim bs2(65535 * 2) As Byte
-                        Dim bs3(65535 * 2) As Byte
-                        Dim bs4(65535 * 2) As Byte
-                        Dim utf16be(1) As Byte
-                        Dim utf16le(1) As Byte
-                        Dim null(4) As Byte
-                        Dim utf8 As Byte()
-                        Dim srg As Boolean = False
-                        Dim x As UInt16 = 0
-                        Dim y As UInt16 = 0
-                        Dim z As UInt16 = 0
-                        While sr.Peek() > -1
-                            s = sr.ReadLine()
-                            hexm = r.Match(s)
-                            If hexm.Success AndAlso s.Contains("//") = False Then
-                                s = hexm.Value
-                                x = Convert.ToUInt16(s.Substring(0, 6), 16)
-                                y = Convert.ToUInt16(s.Substring(7, 6), 16)
-                                z = Convert.ToUInt16(s.Substring(14, 6), 16)
-                                sjis(1) = CByte(x And &HFF)
-                                sjis(0) = CByte(x >> 8)
-                                jis(1) = CByte(y And &HFF)
-                                jis(0) = CByte(y >> 8)
-                                If jis(0) = 0 Then
-                                    sjis(0) = CByte(x And &HFF)
-                                    sjis(1) = CByte(x >> 8)
-                                    jis(0) = CByte(y And &HFF)
-                                    jis(1) = CByte(y >> 8)
-                                    If ((jis(0) + &H5F) And &HFF) < &H40 Then
-                                        euc(0) = &H8E
-                                        euc(1) = jis(0)
-                                    Else
-                                        euc(0) = jis(0)
-                                        euc(1) = jis(1)
-                                    End If
-                                Else
-                                    euc(1) = CByte((y Or &H80) And &HFF)
-                                    euc(0) = CByte((y >> 8) Or &H80)
-                                End If
-                                utf16be(1) = CByte(z And &HFF)
-                                utf16be(0) = CByte(z >> 8)
-                                utf16le(1) = utf16be(0)
-                                utf16le(0) = utf16be(1)
-                                s = Encoding.GetEncoding(1201).GetString(utf16be)
-                                utf8 = Encoding.GetEncoding(65001).GetBytes(s)
-                                Array.Resize(utf8, 4)
-                                fsjis.Write(sjis, 0, 2)
-                                fjis.Write(jis, 0, 2)
-                                feuc.Write(euc, 0, 2)
-                                fube.Write(utf16be, 0, 2)
-                                fule.Write(utf16le, 0, 2)
-                                futf8.Write(utf8, 0, 4)
-                                If (z < 65536) Then
-                                    Array.Copy(jis, 0, bs1, z * 2, 2)
-                                    Array.Copy(sjis, 0, bs2, z * 2, 2)
-                                    Array.Copy(euc, 0, bs3, z * 2, 2)
-                                ElseIf (z < 65536 * 2) Then
-                                    'sjis2004
-                                    Array.Copy(sjis, 0, bs4, (z - &H10000) * 2, 2)
-                                    srg = True
-                                End If
-                            End If
-                        End While
+                    unicodetable(output, enc)
 
-                        uj.Write(bs1, 0, 65535 * 2)
-                        usj.Write(bs2, 0, 65535 * 2)
-                        If srg = True Then
-                            usj.Write(bs4, 0, 65535 * 2)
-                        End If
-                        ue.Write(bs3, 0, 65535 * 2)
-
-                        fsjis.Write(null, 0, 2)
-                        fjis.Write(null, 0, 2)
-                        feuc.Write(null, 0, 2)
-                        fube.Write(null, 0, 2)
-                        fule.Write(null, 0, 2)
-                        futf8.Write(null, 0, 4)
-                        sr.Close()
-                        fsjis.Close()
-                        fjis.Close()
-                        fule.Close()
-                        fube.Close()
-                        futf8.Close()
-                        feuc.Close()
-                        uj.Close()
-                        usj.Close()
-                        ue.Close()
-                        Beep()
-                    End If
-
-                    'utf32
+                    'jisx0213
                 ElseIf ENCODE.SelectedIndex = 7 Then
-                    Dim ofd As New OpenFileDialog()
-                    ofd.Filter = _
-                        "TXTファイル(*.txt)|*.txt"
-                    ofd.Title = "開くファイルを選択してください"
-                    If ofd.ShowDialog() = DialogResult.OK Then
-                        output = ofd.FileName
-                        Dim sr As New System.IO.StreamReader(output, System.Text.Encoding.GetEncoding(65001))
-                        Dim fjis As New System.IO.FileStream("txt_table\custom_utf32", System.IO.FileMode.Create, System.IO.FileAccess.Write)
-                        Dim s As String = ""
-                        Dim r As New Regex("0x[0-9A-F]{2,6}\tU\+[0-9A-F]{4,6}\t", RegexOptions.ECMAScript)
-                        Dim hexm As Match
-                        Dim btbl(4 * (&H2FFFF)) As Byte
-                        Dim ss As String()
-                        Dim bbb As Byte()
-                        Dim sw(3) As Byte
-                        Dim x As UInt32 = 0
-                        Dim y As UInt32 = 0
-                        Dim z As Integer = 0
-                        While sr.Peek() > -1
-                            s = sr.ReadLine()
-                            hexm = r.Match(s)
-                            If hexm.Success AndAlso s.Contains("//") = False Then
-                                s = hexm.Value.Replace("U+", "")
-                                ss = s.Split(CChar(vbTab))
-                                x = Convert.ToUInt32(ss(0), 16)
-                                y = Convert.ToUInt32(ss(1), 16)
-                                If x > &HFFFFFF Then
-                                ElseIf x > &HFFFF Then
-                                    x = x << 8
-                                ElseIf x > &HFF Then
-                                    x = x << 16
-                                Else
-                                    x = x << 24
-                                End If
-                                bbb = BitConverter.GetBytes(x)
-                                Array.Resize(sw, bbb.Length)
-                                z = bbb.Length - 1
-                                For i = 0 To z
-                                    sw(i) = bbb(z - i)
-                                Next
-                                If y > &H30000 Then
-                                Else
-                                    Array.Copy(sw, 0, btbl, y * 4, bbb.Length)
-                                End If
-                            End If
-                        End While
-                        fjis.Write(btbl, 0, btbl.Length)
-                        sr.Close()
-                        fjis.Close()
-                        Beep()
-                    End If
+                    uni_jisx0213table(output, enc)
+
+
                 ElseIf File.Exists(output) Then
-                    Dim sr As New System.IO.FileStream(output, System.IO.FileMode.Open, System.IO.FileAccess.Read)
-                    Dim fs As New System.IO.FileStream("table\" & Path.GetFileNameWithoutExtension(output), System.IO.FileMode.Create, System.IO.FileAccess.Write)
-                    Dim fss As New System.IO.FileStream("table\utf8", System.IO.FileMode.Create, System.IO.FileAccess.Write)
-                    Dim bs(CInt(sr.Length) - 1) As Byte
-                    sr.Read(bs, 0, bs.Length)
-                    Dim ss As String = System.Text.Encoding.GetEncoding(enc).GetString(bs)
-                    Dim sss As String() = ss.Split(CChar(vbLf))
-                    Dim i As Integer = 0
-                    Dim bb As Byte() = Nothing
-                    Dim bbb As Byte() = Nothing
-                    If sp.Checked = False Then
-                        For Each s As String In sss
-                            s = s.Replace(vbCr, "")
-                            bb = System.Text.Encoding.GetEncoding(enc).GetBytes(s)
-                            bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(s)
-                            Array.Resize(bb, 2)
-                            Array.Resize(bbb, 4)
-                            fs.Write(bb, 0, 2)
-                            fss.Write(bbb, 0, 4)
-                        Next
-                    End If
+                    utf8vsenc(output, enc)
 
-                    If EX.Checked = True Then
-                        Dim s As String = ""
-                        Dim st As String = ""
-                        Dim sth As Integer = 0
-                        Dim sth2 As Integer = 0
-                        Dim sth3 As UInt64 = 0
-                        Dim swap(3) As Byte
-                        Dim ssss As String()
-                        Dim wc As Integer = 0
-                        Dim k As Integer = 0
-                        Dim n As Integer = 0
-                        Dim z As Integer = 0
-                        Dim len As Integer
-                        Dim len2 As Integer
-                        Dim uni As New Regex("(^0x[0-9A-fa-f]+|^&#x[0-9a-fA-F]+|&#[0-9]+|^u\+?[0-9A-fa-f]+|^U\+?[0-9A-fa-f]+)")
-                        Dim unim As Match
-                        Dim ssr As New System.IO.StreamReader("extra.txt", System.Text.Encoding.GetEncoding(65001))
-                        While ssr.Peek() > -1
-                            s = ssr.ReadLine()
-                            ssss = s.Split(CChar(vbTab))
-                            unim = uni.Match(ssss(0))
-                            If unim.Success Then
-                                st = unim.Value
-                                If st.Contains("x") Then
-                                    st = st.Replace("&#", "0")
-                                    sth = Convert.ToInt32(st, 16)
-                                ElseIf st.Contains("u") Or st.Contains("U") Then
-                                    st = st.Remove(0, 1)
-                                    st = st.Replace("+", "")
-                                    sth = Convert.ToInt32(st, 16)
-                                Else
-                                    st = st.Remove(0, 2)
-                                    sth = Convert.ToInt32(st)
-                                End If
-
-                                'サロゲートペア
-                                If sth >= &HD800 And sth <= &HDBFF Then
-                                    unim = unim.NextMatch
-                                    If unim.Success Then
-                                        st = unim.Value
-                                        If st.Contains("x") Then
-                                            st = st.Replace("&#", "0")
-                                            sth2 = Convert.ToInt32(st, 16)
-                                        ElseIf st.Contains("u") Or st.Contains("U") Then
-                                            st = st.Remove(0, 1)
-                                            st = st.Replace("+", "")
-                                            sth2 = Convert.ToInt32(st, 16)
-                                        Else
-                                            st = st.Remove(0, 2)
-                                            sth2 = Convert.ToInt32(st)
-                                        End If
-                                        If sth2 >= &HDC00 And sth2 <= &HDFFF Then
-                                            sth = sth And &H3FF
-                                            sth2 = sth2 And &H3FF
-                                            sth = (sth << 10) + sth2 + &H10000
-                                        Else
-                                            MessageBox.Show(st & "はサロゲートペアではありません")
-                                            sth = &H3F
-                                        End If
-                                    Else
-                                        MessageBox.Show(st & "はサロゲートペアではありません")
-                                        sth = &H3F
-                                    End If
-                                End If
-                                bbb = BitConverter.GetBytes(sth)
-
-                                If sp.Checked = False Then
-                                    st = System.Text.Encoding.GetEncoding(12000).GetString(bbb)
-                                    bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(st)
-                                Else
-                                    k = 0
-                                    n = 0
-                                    While k < bbb.Length
-                                        wc = BitConverter.ToInt32(bbb, k)
-                                        n += utf32toutf8(bbb, wc, n)
-                                        k += 4
-                                    End While
-                                    Array.Resize(bbb, n)
-
-                                End If
-
-                            ElseIf sp.Checked = False Then
-                                bbb = System.Text.Encoding.GetEncoding(65001).GetBytes(ssss(0))
-                            End If
-
-                            unim = uni.Match(ssss(1))
-                            If unim.Success Then
-                                st = unim.Value
-                                If st.Contains("x") Then
-                                    st = st.Replace("&#", "0")
-                                    sth3 = Convert.ToUInt64(st, 16)
-                                ElseIf st.Contains("u") Then
-                                    st = st.Remove(0, 1)
-                                    st = st.Replace("+", "")
-                                    sth3 = Convert.ToUInt64(st, 16)
-                                Else
-                                    st = st.Remove(0, 2)
-                                    sth3 = Convert.ToUInt64(st)
-                                End If
-
-                                bb = BitConverter.GetBytes(sth3)
-                                Array.Resize(bb, 4)
-                                z = bb.Length - 1
-                                For i = 0 To z
-                                    swap(i) = bb(z - i)
-                                Next
-
-                                If sth3 > &HFFFFFF Then
-                                    bb(0) = swap(0)
-                                    bb(1) = swap(1)
-                                    bb(2) = swap(2)
-                                    bb(3) = swap(3)
-                                ElseIf sth3 > &HFFFF Then
-                                    Array.Resize(bb, 3)
-                                    bb(0) = swap(1)
-                                    bb(1) = swap(2)
-                                    bb(2) = swap(3)
-                                ElseIf sth3 > &HFF Then
-                                    Array.Resize(bb, 2)
-                                    bb(0) = swap(2)
-                                    bb(1) = swap(3)
-                                Else
-                                    Array.Resize(bb, 2)
-                                    bb(0) = swap(3)
-                                    bb(1) = 0
-                                End If
-                            ElseIf sp.Checked = False Then
-                                bb = System.Text.Encoding.GetEncoding(enc).GetBytes(ssss(1))
-                            End If
-
-                            len = bb.Length
-                            If len <= 2 Then
-                                Array.Resize(bb, 2)
-                                Array.Resize(bbb, 4)
-                                If BitConverter.ToUInt16(bb, 0) <> 0 AndAlso BitConverter.ToUInt32(bbb, 0) <> 0 Then
-                                    fs.Write(bb, 0, 2)
-                                    fss.Write(bbb, 0, 4)
-                                End If
-                            Else
-                                len2 = len
-                                If (len And 1) = 1 Then
-                                    len += 1
-                                End If
-                                Array.Resize(bb, len)
-                                fs.Write(bb, 0, len)
-                                Array.Resize(bbb, 4)
-                                fss.Write(bbb, 0, 4)
-                                Array.Clear(bbb, 0, 4)
-                                bbb(0) = CByte(len2)
-                                len = len >> 1
-                                For i = 0 To len - 2
-                                    fss.Write(bbb, 0, 4)
-                                Next
-                            End If
-                        End While
-                        If len <= 2 Then
-                            Array.Resize(bbb, 4)
-                            Array.Clear(bbb, 0, 4)
-                            fs.Write(bbb, 0, 2)
-                            bbb(0) = CByte(len)
-                            fss.Write(bbb, 0, 4)
-                        End If
-                        ssr.Close()
-                    End If
-
-                    Array.Clear(bbb, 0, 4)
-                    fs.Write(bbb, 0, 2)
-                    fss.Write(bbb, 0, 4)
-                    sr.Close()
-                    fs.Close()
-                    fss.Close()
-                    Beep()
                 Else
                     MessageBox.Show(output & ",変換対象テキストがありません")
                 End If
@@ -1054,7 +1235,8 @@ Public Class Form1
 
     End Sub
 
-    Private Sub Button2_Click(sender As System.Object, e As System.EventArgs) Handles TABLETEST.Click
+    '各テーブルのテスト
+    Private Sub TESTER(sender As System.Object, e As System.EventArgs) Handles TABLETEST.Click
         Try
             Dim mm As New Regex("CP\d+", RegexOptions.ECMAScript)
             Dim m As Match = mm.Match(ENCODE.Text)
@@ -1491,7 +1673,6 @@ Public Class Form1
 
     End Sub
 
-
     Private Sub ENCODE_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles ENCODE.SelectedIndexChanged
         If ENCODE.SelectedIndex = 8 Then
             INPUTSTRING.Text = "SJIS文字"
@@ -1519,10 +1700,15 @@ Public Class Form1
             selmode.Enabled = False
         End If
 
+        If ENCODE.SelectedIndex = 12 Then
+            Button1.Visible = True
+        Else
+            Button1.Visible = False
+        End If
+
         My.Settings.selenc = ENCODE.SelectedIndex
 
     End Sub
-
 
     Private Sub Button5_Click(sender As System.Object, e As System.EventArgs) Handles Button5.Click
 
@@ -1551,5 +1737,11 @@ Public Class Form1
 
     Private Sub selmode_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles selmode.SelectedIndexChanged
         My.Settings.seljis = selmode.SelectedIndex
+    End Sub
+
+    Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles Button1.Click
+        Dim f As New Form2
+        f.ShowDialog()
+        f.Dispose()
     End Sub
 End Class

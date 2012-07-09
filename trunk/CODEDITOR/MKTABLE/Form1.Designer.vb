@@ -46,6 +46,7 @@ Partial Class Form1
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.selmode = New System.Windows.Forms.ComboBox()
         Me.jis = New System.Windows.Forms.CheckBox()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.Panel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
@@ -135,10 +136,10 @@ Partial Class Form1
         '
         Me.ENCODE.ContextMenuStrip = Me.ContextMenuStrip1
         Me.ENCODE.FormattingEnabled = True
-        Me.ENCODE.Items.AddRange(New Object() {"SHIFT-JIS(UTF8<->CP932)", "EUC-JP(UTF8<->CP51932)", "GBK(UTF8<->CP936)", "UTF16/32→EUC-JP(UTF8→UTF16/32→CP51932)", "UTF16/32→SJIS(UTF8→UTF16/32→CP932)", "UTF16/32→GBK(UTF8→UTF16/32→CP936)", "Unicode Consortiumテキストテーブル(CP1201→JIS/EUC/SJIS)", "JIS213_2004テキストテーブル(CP12001→JIS/SJS/EUC)", "(c1^0x20-0xA1)*192+c2-0x40(SJIS→CP936/CP65001)", "(c1-0x81)*192+c2-0x40(GBK→CP932/CP65001)", "c3*94*94+(c1-0xA1)*94+c2-0xa1(EUC→CP936/CP65001)", "c3*94*94+(c1-0x21)*94+c2-0x21(JIS→CP936/CP65001)"})
+        Me.ENCODE.Items.AddRange(New Object() {"SHIFT-JIS(UTF8<->CP932)", "EUC-JP(UTF8<->CP51932)", "GBK(UTF8<->CP936)", "UTF16/32→EUC-JP(UTF8→UTF16/32→CP51932)", "UTF16/32→SJIS(UTF8→UTF16/32→CP932)", "UTF16/32→GBK(UTF8→UTF16/32→CP936)", "Unicode Consortiumテキストテーブル(CP1201→JIS/EUC/SJIS)", "JIS213_2004テキストテーブル(CP12001→JIS/SJS/EUC)", "(c1^0x20-0xA1)*192+c2-0x40(SJIS→CP936/CP65001)", "(c1-0x81)*192+c2-0x40(GBK→CP932/CP65001)", "c3*94*94+(c1-0xA1)*94+c2-0xa1(EUC→CP936/CP65001)", "c3*94*94+(c1-0x21)*94+c2-0x21(JIS→CP936/CP65001)", "文字コードTSVのHTML化(LOCALENC→UNICODE)"})
         Me.ENCODE.Location = New System.Drawing.Point(68, 10)
         Me.ENCODE.Name = "ENCODE"
-        Me.ENCODE.Size = New System.Drawing.Size(144, 20)
+        Me.ENCODE.Size = New System.Drawing.Size(172, 20)
         Me.ENCODE.TabIndex = 10
         '
         'ContextMenuStrip1
@@ -245,10 +246,10 @@ Partial Class Form1
         'selmode
         '
         Me.selmode.FormattingEnabled = True
-        Me.selmode.Items.AddRange(New Object() {"SJIS->FAKEJIS(ALLOW MORE THEN 0x7F,M$)", "EUC->JIS"})
+        Me.selmode.Items.AddRange(New Object() {"SJIS->FAKEJIS(ALLOW MORE THEN 0x7F,M$)", "EUC->JIS", "SJIS2004->JIS"})
         Me.selmode.Location = New System.Drawing.Point(95, 56)
         Me.selmode.Name = "selmode"
-        Me.selmode.Size = New System.Drawing.Size(127, 20)
+        Me.selmode.Size = New System.Drawing.Size(145, 20)
         Me.selmode.TabIndex = 22
         '
         'jis
@@ -261,11 +262,22 @@ Partial Class Form1
         Me.jis.Text = "強制JIS化"
         Me.jis.UseVisualStyleBackColor = True
         '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(146, 91)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(86, 21)
+        Me.Button1.TabIndex = 23
+        Me.Button1.Text = "HTML出力"
+        Me.Button1.UseVisualStyleBackColor = True
+        Me.Button1.Visible = False
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(252, 257)
+        Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.ComboBox1)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.jis)
@@ -312,5 +324,6 @@ Partial Class Form1
     Friend WithEvents ComboBox1 As System.Windows.Forms.ComboBox
     Friend WithEvents selmode As System.Windows.Forms.ComboBox
     Friend WithEvents jis As System.Windows.Forms.CheckBox
+    Friend WithEvents Button1 As System.Windows.Forms.Button
 
 End Class

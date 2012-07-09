@@ -113,6 +113,143 @@ Namespace My
                 Me("selenc") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("<table border=1>")>  _
+        Public Property tablest() As String
+            Get
+                Return CType(Me("tablest"),String)
+            End Get
+            Set
+                Me("tablest") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("</table>")>  _
+        Public Property tableen() As String
+            Get
+                Return CType(Me("tableen"),String)
+            End Get
+            Set
+                Me("tableen") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("<tr>")>  _
+        Public Property tablerowst() As String
+            Get
+                Return CType(Me("tablerowst"),String)
+            End Get
+            Set
+                Me("tablerowst") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("</tr>")>  _
+        Public Property tablerowen() As String
+            Get
+                Return CType(Me("tablerowen"),String)
+            End Get
+            Set
+                Me("tablerowen") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("<th>")>  _
+        Public Property tableheaderst() As String
+            Get
+                Return CType(Me("tableheaderst"),String)
+            End Get
+            Set
+                Me("tableheaderst") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("</th>")>  _
+        Public Property tableheaderen() As String
+            Get
+                Return CType(Me("tableheaderen"),String)
+            End Get
+            Set
+                Me("tableheaderen") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("<td>")>  _
+        Public Property tabledatast() As String
+            Get
+                Return CType(Me("tabledatast"),String)
+            End Get
+            Set
+                Me("tabledatast") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("</td>")>  _
+        Public Property tabledataen() As String
+            Get
+                Return CType(Me("tabledataen"),String)
+            End Get
+            Set
+                Me("tabledataen") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property mstable() As Boolean
+            Get
+                Return CType(Me("mstable"),Boolean)
+            End Get
+            Set
+                Me("mstable") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property htmltblmode() As Integer
+            Get
+                Return CType(Me("htmltblmode"),Integer)
+            End Get
+            Set
+                Me("htmltblmode") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("<tr style=""background:#333;color:#fff;"">"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"<th width=""4%"">CP</th>"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"<th width=""6%"">"& _ 
+            "0</th>"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"<th width=""6%"">1</th>"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"<th width=""6%"">2</th>"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"<th width=""6%"">3</th>"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"<th"& _ 
+            " width=""6%"">4</th>"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"<th width=""6%"">5</th>"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"<th width=""6%"">6</th>"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"<th width=""6%"""& _ 
+            ">7</th>"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"<th width=""6%"">8</th>"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"<th width=""6%"">9</th>"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"<th width=""6%"">A</th>"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"<t"& _ 
+            "h width=""6%"">B</th>"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"<th width=""6%"">C</th>"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"<th width=""6%"">D</th>"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"<th width=""6%"& _ 
+            """>E</th>"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"<th width=""6%"">F</th>"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"</tr>")>  _
+        Public Property tuni() As String
+            Get
+                Return CType(Me("tuni"),String)
+            End Get
+            Set
+                Me("tuni") = value
+            End Set
+        End Property
     End Class
 End Namespace
 
