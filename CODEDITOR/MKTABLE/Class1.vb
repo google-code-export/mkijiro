@@ -475,13 +475,36 @@ Public Class Class1
         Dim c1 As Integer = 0
         Dim c2 As Integer = 0
         Dim c3 As Integer = 0
-        Dim jis As Byte() = {&H1B, &H24, &H42}
-
         Dim unicodeview As Boolean = unic
         Dim tk As String = My.Settings.thexval
 
+        'Dim ascii As Byte() = {&H1B, &H28, &H40}
+        Dim jis201roma As Byte() = {&H1B, &H28, &H4A}
+        Dim jis201kana As Byte() = {&H1B, &H28, &H49}
+        Dim jis73 As Byte() = {&H1B, &H24, &H40}
+
+        Dim jis83 As Byte() = {&H1B, &H24, &H42}
+
+        'Dim unicpstas(255) As String
+        'Dim unias(255) As String
+
+        Dim unicpstjisroma(255) As String
+        Dim unijisroma(255) As String
+
+        Dim unicpstjiskana(255) As String
+        Dim unijiskana(255) As String
+
+        Dim unicpstjis73(10496) As String
+        Dim unijis73(10496) As String
+
+        Dim tmp As Integer = 0
+        Dim z As Integer = 0
+
 
         Dim sb As New StringBuilder
+        Dim sb1 As New StringBuilder
+        Dim sb2 As New StringBuilder
+        Dim sb3 As New StringBuilder
 
         If mode = 0 Then
             tk.Replace("JIS", "SJIS")
@@ -499,11 +522,17 @@ Public Class Class1
             bb = BitConverter.GetBytes(ii)
             If ii < 256 Then
                 bb(0) = CByte(ii And &HFF)
+
                 uni(ii) = Encoding.GetEncoding(enc).GetString(bb)
 
                 bb = Encoding.GetEncoding(12000).GetBytes(uni(ii))
                 unicp(ii) = BitConverter.ToUInt16(bb, 0)
-                If ii <> &H3F AndAlso unicp(ii) = &H3F Then
+
+
+                If ii < &H20 Then
+                    uni(ii) = ""
+                    unicpst(ii) = "<br>U+" & ii.ToString("X")
+                ElseIf ii <> &H3F AndAlso unicp(ii) = &H3F Then
                     uni(ii) = ""
                     unicpst(ii) = ""
                 ElseIf uni(ii) <> "" Then
@@ -520,7 +549,29 @@ Public Class Class1
                 If mode = 2 Then
                     Array.Resize(bb, 5)
                     Array.Copy(bb, 0, bb, 3, 2)
-                    Array.Copy(jis, 0, bb, 0, 3)
+
+                    If ii >= &H2120 AndAlso ii <= &H2821 Then
+                        Array.Copy(jis73, 0, bb, 0, 3)
+                        unijis73(ii) = Encoding.GetEncoding(enc).GetString(bb)
+                        bb = Encoding.GetEncoding(12000).GetBytes(unijis73(ii))
+                        tmp = BitConverter.ToUInt16(bb, 0)
+                        If ii <> &H3F AndAlso tmp = &H3F Then
+                            unijis73(ii) = ""
+                            unicpstjis73(ii) = ""
+                        ElseIf uni(ii) <> "" Then
+                            unicpstjis73(ii) = "<br>U+" & tmp.ToString("X")
+                            If tmp = &H30FB Then
+                                unijis73(ii) = ""
+                                unicpstjis73(ii) = ""
+                            End If
+                        End If
+                    End If
+
+                    Array.Resize(bb, 5)
+                    bb(3) = CByte(ii >> 8)
+                    bb(4) = CByte(ii And &HFF)
+                    Array.Copy(jis83, 0, bb, 0, 3)
+
                 End If
 
                 uni(ii) = Encoding.GetEncoding(enc).GetString(bb)
@@ -532,7 +583,7 @@ Public Class Class1
                     unicp(ii) = &H3F
                 End If
 
-                If ii <> &H3F AndAlso unicp(ii) = &H3F Then
+                If (ii <> &H3F AndAlso unicp(ii) = &H3F) Then
                     uni(ii) = ""
                     unicpst(ii) = ""
                 ElseIf uni(ii) <> "" Then
@@ -544,7 +595,7 @@ Public Class Class1
                     End If
 
                 End If
-                End If
+            End If
         Next
 
         sb.AppendLine(th)
@@ -677,7 +728,7 @@ Public Class Class1
                 c1 = ii >> 8
                 c2 = ii And &HFF
 
-                If (ii < 256 Or (c1 >= &H21 AndAlso c1 <= &H92 AndAlso c2 >= &H20 AndAlso c2 <= &H7F)) Then
+                If (ii < 256) Then
 
                     If ((ii And 15) = 0) Then
                         sb.AppendLine(tst)
@@ -690,6 +741,63 @@ Public Class Class1
                             sb.Append(unicpst(ii))
                         End If
                         sb.AppendLine(td2)
+
+
+                    Else
+                        sb.Append(td1)
+                        sb.Append(uni(ii))
+                        If unicodeview = True Then
+                            sb.Append(unicpst(ii))
+                        End If
+                        sb.AppendLine(td2)
+
+                        If ((ii And 15) = 15) Then
+                            sb.AppendLine(tend)
+                        End If
+
+
+                        If ii = 255 Then
+                            sb.AppendLine(tst)
+                            sb3.AppendLine(th1)
+                            sb3.AppendLine("//ESC $ @<br>") ' C 6226-1978	ESC 2/4 4/0	ESC $ @<br>")
+                            sb3.AppendLine(th2)
+                            sb3.AppendLine(tend)
+                            z = sb.Length
+                            sb.AppendLine(tst)
+                            sb.AppendLine(th1)
+                            sb.AppendLine("//ESC $ B<br>") ' X 0208-1983	ESC 2/4 4/2	ESC $ B<br>")
+                            sb.AppendLine(th2)
+                            sb.AppendLine(tend)
+                        End If
+                    End If
+
+                ElseIf ((c1 >= &H21 AndAlso c1 <= &H97 AndAlso c2 >= &H20 AndAlso c2 <= &H7F)) Then
+
+                    If ((ii And 15) = 0) Then
+                        sb.AppendLine(tst)
+                        sb.Append(th1)
+                        sb.Append(ii.ToString("X"))
+                        sb.AppendLine(th2)
+                        sb.Append(td1)
+                        sb.Append(uni(ii))
+                        If unicodeview = True Then
+                            sb.Append(unicpst(ii))
+                        End If
+                        sb.AppendLine(td2)
+
+                        If ii >= &H2120 AndAlso ii <= &H287F Then
+                            sb3.AppendLine(tst)
+                            sb3.Append(th1)
+                            sb3.Append(ii.ToString("X"))
+                            sb3.AppendLine(th2)
+                            sb3.Append(td1)
+                            sb3.Append(unijis73(ii))
+                            If unicodeview = True Then
+                                sb3.Append(unicpstjis73(ii))
+                            End If
+                            sb3.AppendLine(td2)
+                        End If
+
                     Else
 
                         If ii = &H2126 Then
@@ -706,6 +814,25 @@ Public Class Class1
                         If ((ii And 15) = 15) Then
                             sb.AppendLine(tend)
                         End If
+
+                        If ii >= &H2120 AndAlso ii <= &H287F Then
+                            sb3.Append(td1)
+                            sb3.Append(unijis73(ii))
+                            If unicodeview = True Then
+                                sb3.Append(unicpstjis73(ii))
+                            End If
+                            sb3.AppendLine(td2)
+
+                            If ((ii And 15) = 15) Then
+                                sb3.AppendLine(tend)
+                            End If
+
+                            If ii = &H287F Then
+                                sb.Insert(z, sb3.ToString)
+                            End If
+
+                        End If
+
                     End If
                 End If
             Next
