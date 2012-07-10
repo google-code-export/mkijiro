@@ -16,6 +16,7 @@ Public Class Form2
         TextBox6.Text = My.Settings.tableheaderen
         TextBox7.Text = My.Settings.tabledatast
         TextBox8.Text = My.Settings.tabledataen
+        TextBox9.Text = My.Settings.thexval
         ComboBox1.SelectedIndex = My.Settings.htmltblmode
         CheckBox1.Checked = My.Settings.mstable
 
@@ -32,6 +33,7 @@ Public Class Form2
         My.Settings.tableheaderen = TextBox6.Text
         My.Settings.tabledatast = TextBox7.Text
         My.Settings.tabledataen = TextBox8.Text
+        My.Settings.thexval = TextBox9.Text
 
         My.Settings.htmltblmode = ComboBox1.SelectedIndex
         My.Settings.mstable = CheckBox1.Checked
@@ -41,10 +43,11 @@ Public Class Form2
 
     Private Sub Button2_Click(sender As System.Object, e As System.EventArgs) Handles Button2.Click
         Dim cc As New Class1
-        cc.converthtml(ComboBox1.SelectedIndex)
+        cc.converthtml(ComboBox1.SelectedIndex, CheckBox1.Checked)
 
     End Sub
 
+    Private Sub CheckBox1_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles CheckBox1.CheckedChanged
 
-
+    End Sub
 End Class

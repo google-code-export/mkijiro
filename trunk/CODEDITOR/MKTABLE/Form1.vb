@@ -1188,7 +1188,8 @@ Public Class Form1
 
     'TSVテキストUNICODE変換表をHTMLで可視化
     Private Function tsvtable_html(ByVal output As String, ByVal enc As Integer) As Boolean
-
+        Dim cc As New Class1
+        cc.txt_converthtml(My.Settings.htmltblmode, My.Settings.mstable)
         Return True
     End Function
 

@@ -136,7 +136,7 @@ Partial Class Form1
         '
         Me.ENCODE.ContextMenuStrip = Me.ContextMenuStrip1
         Me.ENCODE.FormattingEnabled = True
-        Me.ENCODE.Items.AddRange(New Object() {"SHIFT-JIS(UTF8<->CP932)", "EUC-JP(UTF8<->CP51932)", "GBK(UTF8<->CP936)", "UTF16/32→EUC-JP(UTF8→UTF16/32→CP51932)", "UTF16/32→SJIS(UTF8→UTF16/32→CP932)", "UTF16/32→GBK(UTF8→UTF16/32→CP936)", "Unicode Consortiumテキストテーブル(CP1201→JIS/EUC/SJIS)", "JIS213_2004テキストテーブル(CP12001→JIS/SJS/EUC)", "(c1^0x20-0xA1)*192+c2-0x40(SJIS→CP936/CP65001)", "(c1-0x81)*192+c2-0x40(GBK→CP932/CP65001)", "c3*94*94+(c1-0xA1)*94+c2-0xa1(EUC→CP936/CP65001)", "c3*94*94+(c1-0x21)*94+c2-0x21(JIS→CP936/CP65001)", "文字コードTSVのHTML化(LOCALENC→UNICODE)"})
+        Me.ENCODE.Items.AddRange(New Object() {"SHIFT-JIS(UTF8<->CP932)", "EUC-JP(UTF8<->CP51932)", "GBK(UTF8<->CP936)", "UTF16/32→EUC-JP(UTF8→UTF16/32→CP51932)", "UTF16/32→SJIS(UTF8→UTF16/32→CP932)", "UTF16/32→GBK(UTF8→UTF16/32→CP936)", "Unicode Consortiumテキストテーブル(CP1201→JIS/EUC/SJIS)", "JIS213_2004テキストテーブル(CP12001→JIS/SJS/EUC)", "(c1^0x20-0xA1)*192+c2-0x40(SJIS→CP936/CP65001)", "(c1-0x81)*192+c2-0x40(GBK→CP932/CP65001)", "c3*94*94+(c1-0xA1)*94+c2-0xa1(EUC→CP936/CP65001)", "c3*94*94+(c1-0x21)*94+c2-0x21(JIS→CP936/CP65001)", "文字コードTSVのHTML化(LOCALENC→CP120001)"})
         Me.ENCODE.Location = New System.Drawing.Point(68, 10)
         Me.ENCODE.Name = "ENCODE"
         Me.ENCODE.Size = New System.Drawing.Size(172, 20)
@@ -266,9 +266,9 @@ Partial Class Form1
         '
         Me.Button1.Location = New System.Drawing.Point(146, 91)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(86, 21)
+        Me.Button1.Size = New System.Drawing.Size(94, 21)
         Me.Button1.TabIndex = 23
-        Me.Button1.Text = "HTML出力"
+        Me.Button1.Text = "HTML出力設定"
         Me.Button1.UseVisualStyleBackColor = True
         Me.Button1.Visible = False
         '
@@ -291,6 +291,8 @@ Partial Class Form1
         Me.Controls.Add(Me.TABLETEST)
         Me.Controls.Add(Me.MAKETABLE)
         Me.Controls.Add(Me.Panel1)
+        Me.MaximumSize = New System.Drawing.Size(268, 295)
+        Me.MinimumSize = New System.Drawing.Size(268, 295)
         Me.Name = "Form1"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "MKTABLE"

@@ -47,7 +47,7 @@
     <Setting Name="htmltblmode" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="tuni" Type="System.String" Scope="User">
+    <Setting Name="thexval" Type="System.String" Scope="User">
       <Value Profile="(Default)">&lt;tr style="background:#333;color:#fff;"&gt;
 &lt;th width="4%"&gt;CP&lt;/th&gt;
 &lt;th width="6%"&gt;0&lt;/th&gt;

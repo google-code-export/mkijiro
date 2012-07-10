@@ -40,6 +40,7 @@ Partial Class Form2
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
+        Me.TextBox9 = New System.Windows.Forms.TextBox()
         Me.SuspendLayout()
         '
         'TextBox1
@@ -80,11 +81,11 @@ Partial Class Form2
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(282, 120)
+        Me.Label1.Location = New System.Drawing.Point(291, 9)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(38, 12)
+        Me.Label1.Size = New System.Drawing.Size(79, 12)
         Me.Label1.TabIndex = 5
-        Me.Label1.Text = "Label1"
+        Me.Label1.Text = "16進数テーブル"
         '
         'Label2
         '
@@ -189,11 +190,21 @@ Partial Class Form2
         Me.Button2.Text = "さんぷる"
         Me.Button2.UseVisualStyleBackColor = True
         '
+        'TextBox9
+        '
+        Me.TextBox9.Location = New System.Drawing.Point(293, 24)
+        Me.TextBox9.Multiline = True
+        Me.TextBox9.Name = "TextBox9"
+        Me.TextBox9.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.TextBox9.Size = New System.Drawing.Size(209, 200)
+        Me.TextBox9.TabIndex = 18
+        '
         'Form2
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(284, 236)
+        Me.ClientSize = New System.Drawing.Size(516, 236)
+        Me.Controls.Add(Me.TextBox9)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.CheckBox1)
@@ -212,6 +223,8 @@ Partial Class Form2
         Me.Controls.Add(Me.TextBox3)
         Me.Controls.Add(Me.TextBox2)
         Me.Controls.Add(Me.TextBox1)
+        Me.MaximumSize = New System.Drawing.Size(532, 274)
+        Me.MinimumSize = New System.Drawing.Size(532, 274)
         Me.Name = "Form2"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "HTML出力設定"
@@ -237,4 +250,5 @@ Partial Class Form2
     Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
     Friend WithEvents Button1 As System.Windows.Forms.Button
     Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents TextBox9 As System.Windows.Forms.TextBox
 End Class
