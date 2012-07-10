@@ -242,12 +242,12 @@ Namespace My
             ">7</th>"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"<th width=""6%"">8</th>"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"<th width=""6%"">9</th>"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"<th width=""6%"">A</th>"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"<t"& _ 
             "h width=""6%"">B</th>"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"<th width=""6%"">C</th>"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"<th width=""6%"">D</th>"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"<th width=""6%"& _ 
             """>E</th>"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"<th width=""6%"">F</th>"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"</tr>")>  _
-        Public Property tuni() As String
+        Public Property thexval() As String
             Get
-                Return CType(Me("tuni"),String)
+                Return CType(Me("thexval"),String)
             End Get
             Set
-                Me("tuni") = value
+                Me("thexval") = value
             End Set
         End Property
     End Class
