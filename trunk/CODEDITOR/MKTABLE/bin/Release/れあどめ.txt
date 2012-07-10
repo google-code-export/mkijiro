@@ -4,7 +4,9 @@ EXTRA　:(0x[0-9A-fa-f]+|&#x[0-9a-fA-F]+|&#[0-9]+|u\+?[0-9A-fa-f]+|U\+?[0-9A-fa-f
 UNICODE;0x[0-9A-F]{4}\t0x[0-9A-F]{4}\t0x[0-9A-F]{4} //sjis,jis,utf16の順
 JISX0213 ;0x[0-9A-F]{2,6}\tU\+[0-9A-F]{4,6}\t"　//(コードポイント)、UTF32の順
 
-2012/07/11
+2012/07/11-1
+HTMLのTHTDタグを色付きに変更
+jisでエラーが出てたので修正
 SJIS/EUC/GBKのTEXTテーブルをHTMLに変換するモードを追加(使えるTXTはJISX0231と同じ)
 HTMLテーブルに1BYTEハイパーリンクをつけるようにした
 

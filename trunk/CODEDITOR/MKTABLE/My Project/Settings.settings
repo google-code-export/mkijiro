@@ -30,13 +30,13 @@
       <Value Profile="(Default)">&lt;/tr&gt;</Value>
     </Setting>
     <Setting Name="tableheaderst" Type="System.String" Scope="User">
-      <Value Profile="(Default)">&lt;th&gt;</Value>
+      <Value Profile="(Default)">&lt;th bgcolor="#FFCC33"&gt;</Value>
     </Setting>
     <Setting Name="tableheaderen" Type="System.String" Scope="User">
       <Value Profile="(Default)">&lt;/th&gt;</Value>
     </Setting>
     <Setting Name="tabledatast" Type="System.String" Scope="User">
-      <Value Profile="(Default)">&lt;td&gt;</Value>
+      <Value Profile="(Default)">&lt;td bgcolor="#C0C0F0"&gt;</Value>
     </Setting>
     <Setting Name="tabledataen" Type="System.String" Scope="User">
       <Value Profile="(Default)">&lt;/td&gt;</Value>

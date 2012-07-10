@@ -173,6 +173,7 @@ Public Class Class1
 
                 End While
 
+                ssr.Close()
                 sb.AppendLine(th)
                 sb.AppendLine(tk)
 
@@ -397,7 +398,7 @@ Public Class Class1
                                 sb.Append(ii.ToString("X"))
                                 sb.AppendLine(th2)
                                 sb.Append(td1)
-                                If ii >= &HA1 AndAlso ii <= &HFE Then
+                                If ii >= &H81 AndAlso ii <= &HFE Then
                                     sb.Append("<a href=""#")
                                     sb.Append((ii).ToString("X"))
                                     sb.Append(""">")
@@ -416,7 +417,7 @@ Public Class Class1
                                     unicpst(ii) = "<br>U+30FB"
                                 End If
                                 sb.Append(td1)
-                                If ii >= &HA1 AndAlso ii <= &HFE Then
+                                If ii >= &H81 AndAlso ii <= &HFE Then
                                     sb.Append("<a href=""#")
                                     sb.Append((ii).ToString("X"))
                                     sb.Append(""">")
@@ -525,7 +526,11 @@ Public Class Class1
                 uni(ii) = Encoding.GetEncoding(enc).GetString(bb)
 
                 bb = Encoding.GetEncoding(12000).GetBytes(uni(ii))
-                unicp(ii) = BitConverter.ToUInt16(bb, 0)
+                If bb.Length = 4 Then
+                    unicp(ii) = BitConverter.ToUInt16(bb, 0)
+                Else
+                    unicp(ii) = &H3F
+                End If
 
                 If ii <> &H3F AndAlso unicp(ii) = &H3F Then
                     uni(ii) = ""
@@ -539,7 +544,7 @@ Public Class Class1
                     End If
 
                 End If
-            End If
+                End If
         Next
 
         sb.AppendLine(th)
@@ -723,7 +728,7 @@ Public Class Class1
                         sb.Append(ii.ToString("X"))
                         sb.AppendLine(th2)
                         sb.Append(td1)
-                        If ii >= &HA1 AndAlso ii <= &HFE Then
+                        If ii >= &H81 AndAlso ii <= &HFE Then
                             sb.Append("<a href=""#")
                             sb.Append((ii).ToString("X"))
                             sb.Append(""">")
@@ -742,7 +747,7 @@ Public Class Class1
                             unicpst(ii) = "<br>U+30FB"
                         End If
                         sb.Append(td1)
-                        If ii >= &HA1 AndAlso ii <= &HFE Then
+                        If ii >= &H81 AndAlso ii <= &HFE Then
                             sb.Append("<a href=""#")
                             sb.Append((ii).ToString("X"))
                             sb.Append(""">")

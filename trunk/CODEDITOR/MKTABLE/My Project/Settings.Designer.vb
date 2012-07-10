@@ -164,7 +164,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("<th>")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("<th bgcolor=""#FFCC33"">")>  _
         Public Property tableheaderst() As String
             Get
                 Return CType(Me("tableheaderst"),String)
@@ -188,7 +188,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("<td>")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("<td bgcolor=""#C0C0F0"">")>  _
         Public Property tabledatast() As String
             Get
                 Return CType(Me("tabledatast"),String)
