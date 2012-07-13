@@ -1250,10 +1250,10 @@ Public Class Class1
                             End If
                         End If
                     Next
-                    kst += &H4000000
-                    kmax += &H4000000
+                    kst += &H3000000
+                    kmax += &H3000000
 
-                    If kmax > &HFE39FE39 Then
+                    If kmax > &HFE39FE3F Then
                         kmax = &HFE39FE3F
                     End If
                 End While
@@ -1265,7 +1265,13 @@ Public Class Class1
 
             Dim sw As New System.IO.StreamWriter(Application.StartupPath & "\test.html", False, System.Text.Encoding.GetEncoding(65001))
             sw.Write(sb.ToString)
-            sw.Close()
+        sw.Close()
+
+        If enc = 54936 Then
+            If MessageBox.Show("GB18030はUNICODEBMPを含んでいるため表示に時間がかかります(目安クロームで１～2分）。このまま表示しますか？", "GB18030ベンチマーク警告", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) = Windows.Forms.DialogResult.Cancel Then
+                Return True
+            End If
+        End If
 
             Process.Start(Application.StartupPath & "\test.html")
 
