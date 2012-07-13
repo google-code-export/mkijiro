@@ -1183,7 +1183,7 @@ Public Class Class1
                 Dim c4 As Integer = 0
                 Dim cp As Integer = 0
                 Dim kst As Integer = &H81308130
-                Dim kmax As Integer = &H8430813F
+                Dim kmax As Integer = &H8339FE30
 
                 While (kst < &HFE39FE39)
 
@@ -1252,6 +1252,10 @@ Public Class Class1
                     Next
                     kst += &H4000000
                     kmax += &H4000000
+
+                    If kmax > &HFE39FE39 Then
+                        kmax = &HFE39FE3F
+                    End If
                 End While
             End If
 
