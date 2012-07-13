@@ -43,11 +43,6 @@ Public Class Form2
     End Sub
 
     Private Sub Button2_Click(sender As System.Object, e As System.EventArgs) Handles Button2.Click
-        If cpg = 54936 Then
-            If MessageBox.Show("GB18030はUNICODEBMPを含んでいるため表示に時間がかかります(目安クロームで１～2分）。このまま表示しますか？", "GB18030ベンチマーク警告", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) = Windows.Forms.DialogResult.Cancel Then
-                Exit Sub
-            End If
-        End If
 
         Dim cc As New Class1
         cc.converthtml(ComboBox1.SelectedIndex, CheckBox1.Checked, cpg)
