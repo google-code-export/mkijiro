@@ -1488,28 +1488,22 @@ Public Class Form1
         '    wc = wc Or &H200000
         '    count -= 1
         'End If
-        If count = 4 Then
-            r(n + 3) = CByte(&H80 Or (wc And &H3F))
-            wc = wc >> 6
-            wc = wc Or &H10000
+        While count > 0
+            Select Case count
+                Case 4
+                    r(n + 3) = CByte(&H80 Or (wc And &H3F))
+                    wc = (wc >> 6) Or &H10000
+                Case 3
+                    r(n + 2) = CByte(&H80 Or (wc And &H3F))
+                    wc = (wc >> 6) Or &H800
+                Case 2
+                    r(n + 1) = CByte(&H80 Or (wc And &H3F))
+                    wc = (wc >> 6) Or &HC0
+                Case 1
+                    r(n) = CByte(wc)
+            End Select
             count -= 1
-        End If
-        If count = 3 Then
-            r(n + 2) = CByte(&H80 Or (wc And &H3F))
-            wc = wc >> 6
-            wc = wc Or &H800
-            count -= 1
-        End If
-        If count = 2 Then
-            r(n + 1) = CByte(&H80 Or (wc And &H3F))
-            wc = wc >> 6
-            wc = wc Or &HC0
-            count -= 1
-        End If
-        If count = 1 Then
-            r(n) = CByte(wc)
-        End If
-
+        End While
 
         Return countbk
 

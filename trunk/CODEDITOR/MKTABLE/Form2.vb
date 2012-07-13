@@ -5,6 +5,7 @@ Imports System.Text.RegularExpressions
 
 Public Class Form2
 
+    Dim cpg As Integer = 932
 
     Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
 
@@ -42,12 +43,42 @@ Public Class Form2
     End Sub
 
     Private Sub Button2_Click(sender As System.Object, e As System.EventArgs) Handles Button2.Click
+        If cpg = 54936 Then
+            If MessageBox.Show("GB18030はUNICODEBMPを含んでいるため表示に時間がかかります(目安クロームで１～2分）。このまま表示しますか？", "GB18030ベンチマーク警告", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) = Windows.Forms.DialogResult.Cancel Then
+                Exit Sub
+            End If
+        End If
+
         Dim cc As New Class1
-        cc.converthtml(ComboBox1.SelectedIndex, CheckBox1.Checked)
+        cc.converthtml(ComboBox1.SelectedIndex, CheckBox1.Checked, cpg)
 
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles CheckBox1.CheckedChanged
+       
 
+    End Sub
+
+    Private Sub ComboBox1_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles ComboBox1.SelectedIndexChanged
+        Select Case ComboBox1.SelectedIndex
+            Case 0
+                SELECT_CP.SelectedIndex = 1
+            Case 1
+                SELECT_CP.SelectedIndex = 6
+            Case 2
+                SELECT_CP.SelectedIndex = 11
+            Case 3
+                SELECT_CP.SelectedIndex = 15
+        End Select
+    End Sub
+
+    Private Sub ComboBox2_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles SELECT_CP.SelectedIndexChanged
+        Dim cp As New Regex("^\d+", RegexOptions.ECMAScript)
+        Dim cpm As Match = cp.Match(SELECT_CP.Text)
+        If cpm.Success Then
+            cpg = CInt(cpm.Value)
+        Else
+            cpg = 0
+        End If
     End Sub
 End Class
