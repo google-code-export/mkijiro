@@ -4,6 +4,17 @@ EXTRA　:(0x[0-9A-fa-f]+|&#x[0-9a-fA-F]+|&#[0-9]+|u\+?[0-9A-fa-f]+|U\+?[0-9A-fa-f
 UNICODE;0x[0-9A-F]{4}\t0x[0-9A-F]{4}\t0x[0-9A-F]{4} //sjis,jis,utf16の順
 JISX0213 ;0x[0-9A-F]{2,6}\tU\+[0-9A-F]{4,6}\t"　//(コードポイント)、UTF32の順
 
+
+2012/07/13
+FAKEEUC->JISを追加(cp20932すたいるっぽいやつ (0x8FA1A1,EUC=0xA121,M$CP932)
+さんぷるでいくつかコードページ指定を追加,GB18030はべんちまーく警告がでるようにした
+
+2012/07/12
+JISのHTML化モードで\d\-[0-9a-fA-F]の正規表現パースを追加,4-とき2面判定
+##	0-XX	ISO/IEC 646 IRV (designated by '1b 28 42')
+## 	3-XXXX	JIS X 0213:2004 plane 1 (designated by '1b 24 28 51')
+## 	4-XXXX	JIS X 0213:2000 plane 2 (designated by '1b 24 28 50')
+
 2012/07/11-1
 HTMLのTHTDタグを色付きに変更
 jisでエラーが出てたので修正

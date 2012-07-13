@@ -41,6 +41,8 @@ Partial Class Form2
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.TextBox9 = New System.Windows.Forms.TextBox()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.SELECT_CP = New System.Windows.Forms.ComboBox()
         Me.SuspendLayout()
         '
         'TextBox1
@@ -165,7 +167,7 @@ Partial Class Form2
         'CheckBox1
         '
         Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(162, 181)
+        Me.CheckBox1.Location = New System.Drawing.Point(189, 207)
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(91, 16)
         Me.CheckBox1.TabIndex = 15
@@ -174,7 +176,7 @@ Partial Class Form2
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(71, 203)
+        Me.Button1.Location = New System.Drawing.Point(27, 203)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 16
@@ -183,7 +185,7 @@ Partial Class Form2
         '
         'Button2
         '
-        Me.Button2.Location = New System.Drawing.Point(164, 203)
+        Me.Button2.Location = New System.Drawing.Point(108, 203)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 17
@@ -199,11 +201,39 @@ Partial Class Form2
         Me.TextBox9.Size = New System.Drawing.Size(209, 200)
         Me.TextBox9.TabIndex = 18
         '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Location = New System.Drawing.Point(164, 164)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(86, 12)
+        Me.Label7.TabIndex = 20
+        Me.Label7.Text = "コードページ指定"
+        '
+        'SELECT_CP
+        '
+        Me.SELECT_CP.FormattingEnabled = True
+        Me.SELECT_CP.Items.AddRange(New Object() {"--SJIS(0x81~0x9F,0xE0~0xFC)--", "932 shift_jis ANSI/OEM Japanese; Japanese (Shift-JIS)", "10001 x-mac-japanese Japanese (Mac)", "10003 x-mac-korean Korean (Mac)", "10008 x-mac-chinesesimp MAC Simplified Chinese (GB 2312); Chinese Simplified (Mac" & _
+                ")", "--EUC(0xA1~0xFE)--", "51932 euc-jp EUC Japanese", "20932 EUC-JP Japanese (JIS 0208-1990 and 0121-1990)", "20936 x-cp20936 Simplified Chinese (GB2312); Chinese Simplified (GB2312-80)", "51949 euc-kr EUC Korean", "--JIS(0x21~0x7E,M$拡張0x93まで)--", "50220 iso-2022-jp ISO 2022 Japanese with no halfwidth Katakana; Japanese (JIS)", "50221 csISO2022JP ISO 2022 Japanese with halfwidth Katakana; Japanese (JIS-Allow " & _
+                "1 byte Kana)", "50222 iso-2022-jp ISO 2022 Japanese JIS X 0201-1989; Japanese (JIS-Allow 1 byte K" & _
+                "ana - SO/SI)", "ーGBK/BIG5(0x81~0xFE)---", "936 gb2312 ANSI/OEM Simplified Chinese (PRC, Singapore); Chinese Simplified (GB23" & _
+                "12)", "51936 EUC-CN EUC Simplified Chinese; Chinese Simplified (EUC)949 ks_c_5601-1987 A" & _
+                "NSI/OEM Korean (Unified Hangul Code)", "54936 GB18030 Windows XP and later: GB18030 Simplified Chinese (4 byte); Chinese " & _
+                "Simplified (GB18030)", "10002 x-mac-chinesetrad MAC Traditional Chinese (Big5); Chinese Traditional (Mac)" & _
+                "", "950 big5 ANSI/OEM Traditional Chinese (Taiwan; Hong Kong SAR, PRC); Chinese Tradi" & _
+                "tional (Big5)", "949 UHA(Unified Hangul Code)"})
+        Me.SELECT_CP.Location = New System.Drawing.Point(166, 177)
+        Me.SELECT_CP.Name = "SELECT_CP"
+        Me.SELECT_CP.Size = New System.Drawing.Size(106, 20)
+        Me.SELECT_CP.TabIndex = 21
+        '
         'Form2
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(516, 236)
+        Me.Controls.Add(Me.SELECT_CP)
+        Me.Controls.Add(Me.Label7)
         Me.Controls.Add(Me.TextBox9)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Button1)
@@ -251,4 +281,6 @@ Partial Class Form2
     Friend WithEvents Button1 As System.Windows.Forms.Button
     Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents TextBox9 As System.Windows.Forms.TextBox
+    Friend WithEvents Label7 As System.Windows.Forms.Label
+    Friend WithEvents SELECT_CP As System.Windows.Forms.ComboBox
 End Class

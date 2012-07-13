@@ -98,42 +98,31 @@ Public Class Form1
         'If n < count Then
         '    Return -2
         'End If
+
         countbk = count
 
-        'If count = 6 Then
-        '    r(n + 5) = CByte(&H80 Or (wc And &H3F))
-        '    wc = wc >> 6
-        '    wc = wc Or &H4000000
-        '    count -= 1
-        'End If
-        'If count = 5 Then
-        '    r(n + 4) = CByte(&H80 Or (wc And &H3F))
-        '    wc = wc >> 6
-        '    wc = wc Or &H200000
-        '    count -= 1
-        'End If
-        If count = 4 Then
-            r(n + 3) = CByte(&H80 Or (wc And &H3F))
-            wc = wc >> 6
-            wc = wc Or &H10000
+        While count > 0
+            Select Case count
+                'Case 6
+                '    r(n + 5) = CByte(&H80 Or (wc And &H3F))
+                '    wc = (wc >> 6) Or &H4000000
+                'Case 5
+                '    r(n + 4) = CByte(&H80 Or (wc And &H3F))
+                '    wc = (wc >> 6) Or &H200000
+                Case 4
+                    r(n + 3) = CByte(&H80 Or (wc And &H3F))
+                    wc = (wc >> 6) Or &H10000
+                Case 3
+                    r(n + 2) = CByte(&H80 Or (wc And &H3F))
+                    wc = (wc >> 6) Or &H800
+                Case 2
+                    r(n + 1) = CByte(&H80 Or (wc And &H3F))
+                    wc = (wc >> 6) Or &HC0
+                Case 1
+                    r(n) = CByte(wc)
+            End Select
             count -= 1
-        End If
-        If count = 3 Then
-            r(n + 2) = CByte(&H80 Or (wc And &H3F))
-            wc = wc >> 6
-            wc = wc Or &H800
-            count -= 1
-        End If
-        If count = 2 Then
-            r(n + 1) = CByte(&H80 Or (wc And &H3F))
-            wc = wc >> 6
-            wc = wc Or &HC0
-            count -= 1
-        End If
-        If count = 1 Then
-            r(n) = CByte(wc)
-        End If
-
+        End While
 
         Return countbk
 
@@ -1693,7 +1682,7 @@ Public Class Form1
             EX.Enabled = True
         End If
 
-        If ENCODE.SelectedIndex = 11 Then
+        If ENCODE.SelectedIndex >= 11 Then
             jis.Enabled = True
             selmode.Enabled = True
         Else

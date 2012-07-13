@@ -152,9 +152,9 @@ Partial Class Form1
         Me.Label4.AutoSize = True
         Me.Label4.Location = New System.Drawing.Point(12, 13)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(50, 12)
+        Me.Label4.Size = New System.Drawing.Size(57, 12)
         Me.Label4.TabIndex = 11
-        Me.Label4.Text = "エンコード"
+        Me.Label4.Text = "作成モード"
         '
         'Label5
         '
@@ -246,7 +246,7 @@ Partial Class Form1
         'selmode
         '
         Me.selmode.FormattingEnabled = True
-        Me.selmode.Items.AddRange(New Object() {"SJIS->FAKEJIS(ALLOW MORE THEN 0x7F,M$)", "EUC->JIS", "SJIS2004->JIS"})
+        Me.selmode.Items.AddRange(New Object() {"SJIS->FAKEJIS(ALLOW MORE THEN 0x7F,M$JIS)", "SJIS2004->JIS", "EUC->JIS", "FAKEEUC->JIS(0xA121～0xFEFE,FORCE 2byte EUC )"})
         Me.selmode.Location = New System.Drawing.Point(95, 56)
         Me.selmode.Name = "selmode"
         Me.selmode.Size = New System.Drawing.Size(145, 20)
