@@ -53,6 +53,7 @@ Public Class Form1
             Dim c2 As Integer = 0
             Dim pos As Integer = 0
             Dim pos2 As Integer = 0
+
             For i = &H8140 To &HFEFE
                 c1 = i >> 8
                 c2 = i And &HFF
@@ -84,9 +85,7 @@ Public Class Form1
                         End If
                     End If
                 End If
-
             Next
-
 
             Dim fss As New FileStream("font_gbk.dat", FileMode.Create, FileAccess.Write)
             fss.Write(bss, 0, 437504)
