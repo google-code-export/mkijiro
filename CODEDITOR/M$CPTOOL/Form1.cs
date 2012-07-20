@@ -129,7 +129,7 @@ namespace WindowsFormsApplication1
                     s = "";
                 }
 
-                if (i < 256 && skip == 0x30fb)
+                if (i < 256 && (skip == 0x30fb || (skip == 0x3f && i!=0x3f)))
                 {
                     zenkaku[zct] = (byte)i;
                     zct++;
@@ -144,7 +144,7 @@ namespace WindowsFormsApplication1
                 if ((i != 0x3f) && ((skip == 0x3f) ))
                 {
                 }
-                if ((i!=skipok) && ((skip == 0x30fb)))
+                else if ((i!=skipok) && ((skip == 0x30fb)))
                 {
                 }
                 else

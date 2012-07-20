@@ -1,116 +1,116 @@
-nop        
-li         $at, 0
-li         $at, 0
-move       $t0, $t1
-move       $t0, $t1
-b          0x08801018
-b          0x0880101C
-bal        0x08801020
-bnez       $t0, 0x08801024
-bnezl      $t0, 0x08801028
-beqz       $t0, 0x0880102C
-beqzl      $t0, 0x08801030
-neg        $t0, $t1
-negu       $t0, $t1
-not        $t0, $t1
-jalr       $t0
-add        $t0, $t1, $t3
-addi       $t0, $t1, 0
-addiu      $t0, $t1, 4660
-add        $t0, $t1, $t3
-and        $t0, $t1, $t3
-andi       $t0, $t1, 0x0
-beq        $t0, $t1, 0x0880105
-beql       $t0, $t3, 0x0880106
-bgez       $t0, 0x08801064
-bgezal     $t0, $0
-bgezl      $t3, 0x0880106C
-bgtz       $t3, 0x08801070
-bgtzl      $t3, 0x08801074
-bitrev     $t0, $t1
-blez       $t3, 0x0880107C
-blezl      $t3, 0x08801080
-bltz       $t3, 0x08801084
-bltzl      $t3, 0x08801088
-bltzal     $t3, 0x0880108C
-bltzall    $t3, 0x08801090
-bne        $t0, $t3, 0x0880109
-bnel       $t0, $t3, 0x0880109
-break      0x7
-cache      0x1F, 0($t0)
-cfc0       $t0, $0
-clo        $t0, $t1
-clz        $t0, $t1
-ctc0       $t3, $0
-max        $t0, $t1, $t3
-min        $t0, $t1, $t3
-dbreak     
-div        $t0, $t1
-divu       $t0, $t1
-dret       
-eret       
-ext        $t0, $t1, 30, 1
-ins        $t0, $t1, 1, 15
-j          0x08801000
-jr         $t3
-jalr       $t0, $t1
-jal        0x08801000
-lb         $t3, 0($t4)
-lbu        $t3, 0($t4)
-lh         $t3, 0($t4)
-lhu        $t3, 0($t4)
-ll         $t1, 0($t4)
-lui        $t3, 0x0
-lw         $t3, 0($t4)
-lwl        $t3, 0($t4)
-lwr        $t3, 0($t4)
-madd       $a2, $at
-maddu      $a2, $at
-mfc0       $t3, Count
-mfdr       $t3, DRCNTL
-mfhi       $t0
-mfic       $t3, $0
-mflo       $t0
-movn       $t0, $t1, $t3
-movz       $t0, $t1, $t3
-msub       $a2, $at
-msubu      $a2, $at
-mtc0       $t3, $0
-mtdr       $t3, DRCNTL
-mtic       $t3, $0
-halt       
-mthi       $t0
-mtlo       $t0
-mult       $t0, $t1
-multu      $t0, $t1
-nor        $t0, $t1, $t3
-or         $t0, $t1, $t3
-ori        $t0, $t1, 0x1234
-rotr       $t0, $t1, 0
-rotv       $t0, $t1, $t3
-seb        $t0, $t1
-seh        $t0, $t1
-sb         $t1, 0($t0)
-sc         $t1, 0($t0)
-sh         $t1, 0($t0)
-sllv       $t0, $t1, $t3
-sll        $t0, $t1, 1
-slt        $t0, $t1, $t3
-slti       $t0, $t1, 0
-sltiu      $t0, $t1, 0
-sltu       $t0, $t1, $t3
-sra        $t0, $t1, 1
-srav       $t0, $t1, $t2
-srlv       $t0, $t1, $t3
-srl        $t0, $t1, 30
-sw         $t3, 0($t4)
-swl        $t3, 0($t4)
-swr        $t3, 0($t4)
-sub        $t0, $t1, $t3
-subu       $t0, $t1, $t3
-sync       
-syscall    0xFFFFE
-xor        $t0, $t1, $t3
-xori       $t0, $t1, 0x0
-wsbh       $t0, $t1
-wsbw       $t0, $t1
+nop 
+li	$at, 0
+li	$at, 0
+move	$t0, $t1
+move	$t0, $t1
+b	0x08801018
+b	0x0880101C
+bal	0x08801020
+bnez	$t0, 0x08801024
+bnezl	$t0, 0x08801028
+beqz	$t0, 0x0880102C
+beqzl	$t0, 0x08801030
+neg	$t0, $t1
+negu	$t0, $t1
+not	$t0, $t1
+jalr	$t0
+add	$t0, $t1, $t3
+addi	$t0, $t1, 0
+addiu	$t0, $t1, 4660
+add	$t0, $t1, $t3
+and	$t0, $t1, $t3
+andi	$t0, $t1, 0x0
+beq	$t0, $t1, 0x0880105
+beql	$t0, $t3, 0x0880106
+bgez	$t0, 0x08801064
+bgezal	$t0, $0
+bgezl	$t3, 0x0880106C
+bgtz	$t3, 0x08801070
+bgtzl	$t3, 0x08801074
+bitrev	$t0, $t1
+blez	$t3, 0x0880107C
+blezl	$t3, 0x08801080
+bltz	$t3, 0x08801084
+bltzl	$t3, 0x08801088
+bltzal	$t3, 0x0880108C
+bltzall	$t3, 0x08801090
+bne	$t0, $t3, 0x0880109
+bnel	$t0, $t3, 0x0880109
+break	0x7
+cache	0x1F, 0($t0)
+cfc0	$t0, $0
+clo	$t0, $t1
+clz	$t0, $t1
+ctc0	$t3, $0
+max	$t0, $t1, $t3
+min	$t0, $t1, $t3
+dbreak	
+div	$t0, $t1
+divu	$t0, $t1
+dret	
+eret	
+ext	$t0, $t1, 30, 1
+ins	$t0, $t1, 1, 15
+j	0x08801000
+jr	$t3
+jalr	$t0, $t1
+jal	0x08801000
+lb	$t3, 0($t4)
+lbu	$t3, 0($t4)
+lh	$t3, 0($t4)
+lhu	$t3, 0($t4)
+ll	$t1, 0($t4)
+lui	$t3, 0x0
+lw	$t3, 0($t4)
+lwl	$t3, 0($t4)
+lwr	$t3, 0($t4)
+madd	$a2, $at
+maddu	$a2, $at
+mfc0	$t3, Count
+mfdr	$t3, DRCNTL
+mfhi	$t0
+mfic	$t3, $0
+mflo	$t0
+movn	$t0, $t1, $t3
+movz	$t0, $t1, $t3
+msub	$a2, $at
+msubu	$a2, $at
+mtc0	$t3, $0
+mtdr	$t3, DRCNTL
+mtic	$t3, $0
+halt	
+mthi	$t0
+mtlo	$t0
+mult	$t0, $t1
+multu	$t0, $t1
+nor	$t0, $t1, $t3
+or	$t0, $t1, $t3
+ori	$t0, $t1, 0x1234
+rotr	$t0, $t1, 0
+rotv	$t0, $t1, $t3
+seb	$t0, $t1
+seh	$t0, $t1
+sb	$t1, 0($t0)
+sc	$t1, 0($t0)
+sh	$t1, 0($t0)
+sllv	$t0, $t1, $t3
+sll	$t0, $t1, 1
+slt	$t0, $t1, $t3
+slti	$t0, $t1, 0
+sltiu	$t0, $t1, 0
+sltu	$t0, $t1, $t3
+sra	$t0, $t1, 1
+srav	$t0, $t1, $t2
+srlv	$t0, $t1, $t3
+srl	$t0, $t1, 30
+sw	$t3, 0($t4)
+swl	$t3, 0($t4)
+swr	$t3, 0($t4)
+sub	$t0, $t1, $t3
+subu	$t0, $t1, $t3
+sync	
+syscall	0xFFFFE
+xor	$t0, $t1, $t3
+xori	$t0, $t1, 0x0
+wsbh	$t0, $t1
+wsbw	$t0, $t1
