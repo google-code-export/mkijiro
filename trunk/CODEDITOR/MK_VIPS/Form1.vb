@@ -5,32 +5,89 @@ Imports System.Text.RegularExpressions
 
 Public Class Form1
 
+    Friend cpg As Integer = 932
+    Friend sel As Integer = 0
+
     Private Sub ff(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
-        If File.Exists("conf") = True Then
-            Dim sr As New System.IO.StreamReader("conf", System.Text.Encoding.GetEncoding(0))
-            Dim s As String
-            While sr.Peek() > -1
-                s = sr.ReadLine()
-                If s.Contains("ADDR") Then
-                    ADDR.Text = s.Remove(0, 4)
-                ElseIf s.Contains("MODE") Then
-                    MODE.Text = s.Remove(0, 4)
-                End If
-            End While
-            sr.Close()
-        End If
+        Try
+
+            If File.Exists("conf") = True Then
+                Dim sr As New System.IO.StreamReader("conf", System.Text.Encoding.GetEncoding(932))
+                Dim s As String
+                While sr.Peek() > -1
+                    s = sr.ReadLine()
+                    If s.Contains("ADDR") Then
+                        ADDR.Text = s.Remove(0, 4)
+                    ElseIf s.Contains("MODE") Then
+                        MODE.Text = s.Remove(0, 4)
+                    ElseIf s.Contains("ENC") Then
+                        cpg = CInt(s.Remove(0, 3))
+                    ElseIf s.Contains("SEL") Then
+                        sel = CInt(s.Remove(0, 3))
+                    ElseIf s.Contains("FONT") Then
+                        Dim ss As String() = s.Split(CChar(","))
+                        ASM.Font = New Font(iniparse(ss(0)), CSng(iniparse(ss(1))), FontStyle.Regular)
+                        CODE.Font = ASM.Font
+                    End If
+                End While
+                sr.Close()
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+        End Try
+
     End Sub
 
-    Private Sub Form1_FormClosing(sender As System.Object, e As System.Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
+    Private Function iniparse(ByVal s As String) As String
+        s = s.Remove(0, s.LastIndexOf("=") + 1)
+        Return s
+    End Function
 
-        Dim sr As New System.IO.StreamWriter("conf", False, System.Text.Encoding.GetEncoding(0))
+    Private Function iniparse2(ByVal s As String) As Single
+        s = s.Remove(0, s.LastIndexOf("=") + 1)
+        Return CSng(s)
+    End Function
+
+    Private Sub fc(sender As System.Object, e As System.Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
+
+        Dim sr As New System.IO.StreamWriter("conf", False, System.Text.Encoding.GetEncoding(932))
         Dim s As String
         s = "ADDR" & ADDR.Text
         sr.WriteLine(s)
         s = "MODE" & MODE.Text
         sr.WriteLine(s)
+        s = "ENC" & cpg.ToString
+        sr.WriteLine(s)
+        s = "SEL" & sel.ToString
+        sr.WriteLine(s)
+        s = "FONT" & ASM.Font.ToString
+        sr.WriteLine(s)
         sr.Close()
+
     End Sub
+
+
+    Private Sub ffe(sender As System.Object, e As System.Windows.Forms.DragEventArgs) Handles ASM.DragEnter
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            e.Effect = DragDropEffects.Copy
+        Else
+            e.Effect = DragDropEffects.None
+        End If
+
+    End Sub
+
+
+    Private Sub ffd(sender As System.Object, e As System.Windows.Forms.DragEventArgs) Handles ASM.DragDrop
+        Dim fn As String() = CType( _
+               e.Data.GetData(DataFormats.FileDrop, False), _
+               String())
+        If File.Exists(fn(0)) Then
+            Dim sr As New StreamReader(fn(0), Encoding.GetEncoding(cpg))
+            ASM.Text = sr.ReadToEnd()
+            sr.Close()
+        End If
+    End Sub
+
 
     Function str2bin(ByVal temp As String) As Byte()
         temp = temp.Replace("0x", "")
@@ -593,11 +650,11 @@ Public Class Form1
 
             Dim z As Integer = 0
 
-            While z < Decoder.Length
-                mips = Convert.ToUInt32(Decoder(z + 1), 16)
-                mask = Convert.ToUInt32(Decoder(z + 2), 16)
+            While z < decoder.Length
+                mips = Convert.ToUInt32(decoder(z + 1), 16)
+                mask = Convert.ToUInt32(decoder(z + 2), 16)
                 If (hex And mask) = mips Then
-                    asm = Decoder(z) & " " & Decoder(z + 3)
+                    asm = decoder(z) & " " & decoder(z + 3)
                     asm = decode_arg(asm, hex, l)
                     Exit While
                 End If
@@ -1833,7 +1890,6 @@ Public Class Form1
         End Try
     End Function
 
-
     Function float_sel(ByVal str As String, ByVal hex As Integer, ByVal k As Integer) As Integer
         Dim freg As New Regex("\$(f|fpr)\d{1,2}")
         Dim fregm As Match = freg.Match(str)
@@ -1885,7 +1941,9 @@ Public Class Form1
         Dim valdecm As Match = valdec.Match(str)
         Dim k As Integer = 0
         Dim j As Integer = 0
-        If valhexm.Success Then
+        If valdecm.Success Then
+            hex = hex Or ((Convert.ToInt32(valdecm.Value.Remove(0, 1)) - 1) And &HFFFF)
+        ElseIf valhexm.Success Then
             k = Convert.ToInt32(valhexm.Value.Replace("$", "").Remove(0, 1), 16)
             If k < &H1800000 Then
                 k += &H8800000
@@ -1894,8 +1952,6 @@ Public Class Form1
                 hex2 += &H8800000
             End If
             hex = hex Or ((k - hex2 - 4) >> 2 And &HFFFF)
-        ElseIf valdecm.Success Then
-            hex = hex Or ((Convert.ToInt32(valdecm.Value.Remove(0, 1)) - 1) And &HFFFF)
         Else
             Dim cma As Integer = str.LastIndexOf(",")
             str = str.Substring(cma + 1, str.Length - cma - 1).Trim
@@ -1959,6 +2015,8 @@ Public Class Form1
         Dim valdecm As Match = valdec.Match(str)
         Dim valfloat As New Regex("(\x20|,)-?\d+\.?\d*f$")
         Dim valfloatm As Match = valfloat.Match(str)
+        Dim valhfloat As New Regex("(\x20|,)-?\d+\.?\d*hf$")
+        Dim valhfloatm As Match = valhfloat.Match(str)
         If valhexm.Success Then
             Dim s As String = valhexm.Value
             Dim minus As Integer = 0
@@ -1970,11 +2028,11 @@ Public Class Form1
                 minus = Convert.ToInt32(s.Replace("$", "").Remove(0, 1), 16)
             End If
             hex = hex Or (minus And &HFFFF)
-        End If
-        If valdecm.Success Then
+        ElseIf valdecm.Success Then
             hex = hex Or (Convert.ToInt32(valdecm.Value.Remove(0, 1)) And &HFFFF)
-        End If
-        If valfloatm.Success Then
+
+        ElseIf valfloatm.Success Then
+
             Dim f As Single = Convert.ToSingle(valfloatm.Value.Remove(0, 1).Replace("f", ""))
             Dim bit() As Byte = BitConverter.GetBytes(f)
             Dim sb As New System.Text.StringBuilder()
@@ -1984,6 +2042,20 @@ Public Class Form1
                 i -= 1
             End While
             hex = hex Or (Convert.ToInt32(sb.ToString.Substring(0, 4), 16))
+        ElseIf valhfloatm.Success Then
+
+            Dim f As Single = Convert.ToSingle(valhfloatm.Value.Remove(0, 1).Replace("hf", ""))
+            Dim bit() As Byte = BitConverter.GetBytes(f)
+            Dim sb As New System.Text.StringBuilder()
+            Dim i As Integer = 3
+            While i >= 0
+                sb.Append(Convert.ToString(bit(i), 16).PadLeft(2, "0"c))
+                i -= 1
+            End While
+
+            Dim s As String = converthalffloat(sb.ToString)
+
+            hex = hex Or (Convert.ToInt32(s.Substring(0, 4), 16))
         End If
         Return hex
     End Function
@@ -2096,7 +2168,7 @@ Public Class Form1
     Dim label_addr(255) As Integer
 
     Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles Button1.Click
-        Dim ss As String() = (TextBox1.Text & vbCrLf).Split(CChar(vbLf))
+        Dim ss As String() = (ASM.Text & vbCrLf).Split(CChar(vbLf))
         Dim sb As New StringBuilder
         Dim st As Integer = Convert.ToInt32(ADDR.Text, 16)
         Dim i As Integer = Convert.ToInt32(ADDR.Text, 16)
@@ -2243,7 +2315,7 @@ Public Class Form1
             sb.Insert(0, "_L 0xF00000" & Convert.ToString((i >> 4), 16).ToUpper.PadLeft(2, "0"c) & " 0x00000000" & vbCrLf)
         End If
 
-        TextBox2.Text = sb.ToString
+        CODE.Text = sb.ToString
     End Sub
 
     Private Sub only_hexdicimal(sender As System.Object, e As System.Windows.Forms.KeyPressEventArgs) Handles ADDR.KeyPress
@@ -2261,10 +2333,60 @@ Public Class Form1
         e.Handled = True
     End Sub
 
-    Private Sub TextBox1_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles TextBox1.KeyDown, TextBox2.KeyDown
+    Private Sub TextBox1_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles ASM.KeyDown, CODE.KeyDown
         If e.KeyCode = Keys.A AndAlso e.Control Then
             DirectCast(sender, TextBox).SelectAll()
         End If
     End Sub
 
+    Private Sub バージョンToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles バージョン.Click
+        Dim v As New version
+        v.ShowDialog()
+        v.Close()
+    End Sub
+
+    Private Sub ToolStripMenuItem2_Click(sender As System.Object, e As System.EventArgs) Handles enc.Click
+        Dim f As New codepage
+        f.ShowDialog(Me)
+        f.Dispose()
+    End Sub
+
+    Private Sub ToolStripMenuItem1_Click(sender As System.Object, e As System.EventArgs) Handles save.Click, save2.Click
+        Dim f As New SaveFileDialog
+        f.InitialDirectory = Application.StartupPath
+        f.Filter = "テキストファイル（*.txt)|*.txt"
+        f.Title = "ファイルの保存"
+        If f.ShowDialog = Windows.Forms.DialogResult.OK Then
+            Dim sr As New StreamWriter(f.FileName, False, Encoding.GetEncoding(cpg))
+            sr.Write(CODE.Text)
+            sr.Close()
+        End If
+    End Sub
+
+    Private Sub 終了ToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles 終了.Click
+        Me.Close()
+    End Sub
+
+    Private Sub open_Click(sender As System.Object, e As System.EventArgs) Handles open.Click
+        Dim f As New OpenFileDialog
+        f.InitialDirectory = Application.StartupPath
+        f.Filter = "テキストファイル（*.txt)|*.txt"
+        f.Title = "開くテキストを選んでください"
+        If f.ShowDialog = Windows.Forms.DialogResult.OK Then
+            Dim sr As New StreamReader(f.FileName, Encoding.GetEncoding(cpg))
+            ASM.Text = sr.ReadToEnd()
+            sr.Close()
+        End If
+    End Sub
+
+    Private Sub フォント_Click(sender As System.Object, e As System.EventArgs) Handles フォント.Click
+        Dim fd As New FontDialog()
+        fd.Font = ASM.Font
+        fd.ShowColor = False
+        If fd.ShowDialog() <> DialogResult.Cancel Then
+            ASM.Font = fd.Font
+            CODE.Font = fd.Font
+        End If
+
+    End Sub
 End Class
