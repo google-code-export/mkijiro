@@ -79,6 +79,7 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class1.vb" />
     <Compile Include="Form1.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -92,7 +93,7 @@
     <Compile Include="codepage.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form2.Designer.vb">
+    <Compile Include="ver.Designer.vb">
       <DependentUpon>ver.vb</DependentUpon>
     </Compile>
     <Compile Include="ver.vb">
@@ -121,14 +122,14 @@
     <EmbeddedResource Include="codepage.resx">
       <DependentUpon>codepage.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ver.resx">
+      <DependentUpon>ver.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ver.resx">
-      <DependentUpon>ver.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
