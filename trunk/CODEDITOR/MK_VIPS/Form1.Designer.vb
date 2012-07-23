@@ -24,7 +24,7 @@ Partial Class Form1
     Private Sub InitializeComponent()
         Me.ASM = New System.Windows.Forms.TextBox()
         Me.MODE = New System.Windows.Forms.ComboBox()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.cvt_asm2code = New System.Windows.Forms.Button()
         Me.CODE = New System.Windows.Forms.TextBox()
         Me.ADDR = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
@@ -34,16 +34,20 @@ Partial Class Form1
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.save2 = New System.Windows.Forms.Button()
-        Me.Button2 = New System.Windows.Forms.Button()
+        Me.cnt_code2asm = New System.Windows.Forms.Button()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.FairuToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.open = New System.Windows.Forms.ToolStripMenuItem()
         Me.save = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ASM保存ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.コード保存ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.終了 = New System.Windows.Forms.ToolStripMenuItem()
         Me.enc = New System.Windows.Forms.ToolStripMenuItem()
-        Me.バージョン = New System.Windows.Forms.ToolStripMenuItem()
         Me.フォント = New System.Windows.Forms.ToolStripMenuItem()
+        Me.バージョン = New System.Windows.Forms.ToolStripMenuItem()
+        Me.savea = New System.Windows.Forms.Button()
+        Me.ASMSB = New System.Windows.Forms.Button()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
@@ -71,14 +75,14 @@ Partial Class Form1
         Me.MODE.TabIndex = 1
         Me.MODE.Text = "NITEPR"
         '
-        'Button1
+        'cvt_asm2code
         '
-        Me.Button1.Location = New System.Drawing.Point(138, 27)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(76, 41)
-        Me.Button1.TabIndex = 2
-        Me.Button1.Text = "ASM->コード変換"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.cvt_asm2code.Location = New System.Drawing.Point(140, 16)
+        Me.cvt_asm2code.Name = "cvt_asm2code"
+        Me.cvt_asm2code.Size = New System.Drawing.Size(76, 41)
+        Me.cvt_asm2code.TabIndex = 2
+        Me.cvt_asm2code.Text = "ASM->コード変換"
+        Me.cvt_asm2code.UseVisualStyleBackColor = True
         '
         'CODE
         '
@@ -119,9 +123,10 @@ Partial Class Form1
         '
         'Panel1
         '
+        Me.Panel1.Controls.Add(Me.ASMSB)
         Me.Panel1.Controls.Add(Me.ADDR)
         Me.Panel1.Controls.Add(Me.Label1)
-        Me.Panel1.Controls.Add(Me.Button1)
+        Me.Panel1.Controls.Add(Me.cvt_asm2code)
         Me.Panel1.Controls.Add(Me.Label2)
         Me.Panel1.Controls.Add(Me.MODE)
         Me.Panel1.Location = New System.Drawing.Point(23, 376)
@@ -150,7 +155,7 @@ Partial Class Form1
         'Panel2
         '
         Me.Panel2.Controls.Add(Me.save2)
-        Me.Panel2.Controls.Add(Me.Button2)
+        Me.Panel2.Controls.Add(Me.cnt_code2asm)
         Me.Panel2.Location = New System.Drawing.Point(291, 389)
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(354, 91)
@@ -158,22 +163,22 @@ Partial Class Form1
         '
         'save2
         '
-        Me.save2.Location = New System.Drawing.Point(275, 9)
+        Me.save2.Location = New System.Drawing.Point(275, 3)
         Me.save2.Name = "save2"
-        Me.save2.Size = New System.Drawing.Size(76, 46)
+        Me.save2.Size = New System.Drawing.Size(76, 41)
         Me.save2.TabIndex = 1
-        Me.save2.Text = "テキスト保存"
+        Me.save2.Text = "コード保存"
         Me.save2.UseVisualStyleBackColor = True
         '
-        'Button2
+        'cnt_code2asm
         '
-        Me.Button2.Location = New System.Drawing.Point(3, 14)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(86, 41)
-        Me.Button2.TabIndex = 0
-        Me.Button2.Text = "コード->ASM変換"
-        Me.Button2.UseVisualStyleBackColor = True
-        Me.Button2.Visible = False
+        Me.cnt_code2asm.Location = New System.Drawing.Point(3, 3)
+        Me.cnt_code2asm.Name = "cnt_code2asm"
+        Me.cnt_code2asm.Size = New System.Drawing.Size(86, 41)
+        Me.cnt_code2asm.TabIndex = 0
+        Me.cnt_code2asm.Text = "コード->ASM変換"
+        Me.cnt_code2asm.UseVisualStyleBackColor = True
+        Me.cnt_code2asm.Visible = False
         '
         'MenuStrip1
         '
@@ -199,9 +204,22 @@ Partial Class Form1
         '
         'save
         '
+        Me.save.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ASM保存ToolStripMenuItem, Me.コード保存ToolStripMenuItem})
         Me.save.Name = "save"
         Me.save.Size = New System.Drawing.Size(100, 22)
         Me.save.Text = "保存"
+        '
+        'ASM保存ToolStripMenuItem
+        '
+        Me.ASM保存ToolStripMenuItem.Name = "ASM保存ToolStripMenuItem"
+        Me.ASM保存ToolStripMenuItem.Size = New System.Drawing.Size(136, 22)
+        Me.ASM保存ToolStripMenuItem.Text = "ASM保存"
+        '
+        'コード保存ToolStripMenuItem
+        '
+        Me.コード保存ToolStripMenuItem.Name = "コード保存ToolStripMenuItem"
+        Me.コード保存ToolStripMenuItem.Size = New System.Drawing.Size(136, 22)
+        Me.コード保存ToolStripMenuItem.Text = "コード保存"
         '
         'ToolStripSeparator1
         '
@@ -220,17 +238,35 @@ Partial Class Form1
         Me.enc.Size = New System.Drawing.Size(80, 22)
         Me.enc.Text = "文字コード"
         '
+        'フォント
+        '
+        Me.フォント.Name = "フォント"
+        Me.フォント.Size = New System.Drawing.Size(68, 22)
+        Me.フォント.Text = "フォント"
+        '
         'バージョン
         '
         Me.バージョン.Name = "バージョン"
         Me.バージョン.Size = New System.Drawing.Size(80, 22)
         Me.バージョン.Text = "バージョン"
         '
-        'フォント
+        'savea
         '
-        Me.フォント.Name = "フォント"
-        Me.フォント.Size = New System.Drawing.Size(68, 22)
-        Me.フォント.Text = "フォント"
+        Me.savea.Location = New System.Drawing.Point(140, 70)
+        Me.savea.Name = "savea"
+        Me.savea.Size = New System.Drawing.Size(75, 23)
+        Me.savea.TabIndex = 7
+        Me.savea.Text = "ASM保存"
+        Me.savea.UseVisualStyleBackColor = True
+        '
+        'ASMSB
+        '
+        Me.ASMSB.Location = New System.Drawing.Point(140, 66)
+        Me.ASMSB.Name = "ASMSB"
+        Me.ASMSB.Size = New System.Drawing.Size(75, 23)
+        Me.ASMSB.TabIndex = 7
+        Me.ASMSB.Text = "ASM保存"
+        Me.ASMSB.UseVisualStyleBackColor = True
         '
         'Form1
         '
@@ -260,7 +296,7 @@ Partial Class Form1
     End Sub
     Friend WithEvents ASM As System.Windows.Forms.TextBox
     Friend WithEvents MODE As System.Windows.Forms.ComboBox
-    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents cvt_asm2code As System.Windows.Forms.Button
     Friend WithEvents CODE As System.Windows.Forms.TextBox
     Friend WithEvents ADDR As System.Windows.Forms.TextBox
     Friend WithEvents Label1 As System.Windows.Forms.Label
@@ -272,7 +308,7 @@ Partial Class Form1
     Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
     Friend WithEvents FairuToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents バージョン As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents cnt_code2asm As System.Windows.Forms.Button
     Friend WithEvents open As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents 終了 As System.Windows.Forms.ToolStripMenuItem
@@ -280,5 +316,9 @@ Partial Class Form1
     Friend WithEvents enc As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents save2 As System.Windows.Forms.Button
     Friend WithEvents フォント As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ASM保存ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents コード保存ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents savea As System.Windows.Forms.Button
+    Friend WithEvents ASMSB As System.Windows.Forms.Button
 
 End Class

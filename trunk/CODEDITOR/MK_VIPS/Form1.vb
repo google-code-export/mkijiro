@@ -1485,19 +1485,16 @@ Public Class Form1
                     hex = &H10000000
                     hex = reg_boolean_para(ss(0), hex, 0)
                     hex = reg_boolean_para(ss(1), hex, 1)
-                    'hex = reg_boolean(str, hex, 0)
                     hex = offset_boolean2(str, hex, hex2)
                 ElseIf mips = "bne" Then
                     hex = &H14000000
                     hex = reg_boolean_para(ss(0), hex, 0)
                     hex = reg_boolean_para(ss(1), hex, 1)
-                    'hex = reg_boolean(str, hex, 0)
                     hex = offset_boolean2(str, hex, hex2)
                 ElseIf mips = "blez" Then
                     hex = &H18000000
                     hex = reg_boolean_para(ss(0), hex, 0)
                     hex = reg_boolean_para(ss(1), hex, 1)
-                    'hex = reg_boolean(str, hex, 0)
                     hex = offset_boolean2(str, hex, hex2)
                 ElseIf mips = "bgtz" Then
                     hex = &H1C000000
@@ -1719,13 +1716,11 @@ Public Class Form1
                     hex = &H50000000
                     hex = reg_boolean_para(ss(0), hex, 0)
                     hex = reg_boolean_para(ss(1), hex, 1)
-                    'hex = reg_boolean(str, hex, 0)
                     hex = offset_boolean2(str, hex, hex2)
                 ElseIf mips = "bnel" Then
                     hex = &H54000000
                     hex = reg_boolean_para(ss(0), hex, 0)
                     hex = reg_boolean_para(ss(1), hex, 1)
-                    'hex = reg_boolean(str, hex, 0)
                     hex = offset_boolean2(str, hex, hex2)
                 ElseIf mips = "blezl" Then
                     hex = &H58000000
@@ -1876,18 +1871,519 @@ Public Class Form1
                     hex = valdec_boolean_para(ss(0), hex, 1)
                     hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
                     hex = offset_boolean3(str, hex)
+
+                    'vfpu
+                ElseIf mips = "bvf" Then
+                    '"bvf", "0x49000000", "0xFFE30000", "%Zc,%O", _
+                    hex = &H49000000
+                    hex = Zc(ss(0), hex)
+                    hex = offset_boolean2(str, hex, hex2)
+                ElseIf mips = "bvfl" Then
+                    '"bvfl", "0x49020000", "0xFFE30000", "%Zc,%O", _
+                    hex = &H49020000
+                    hex = Zc(ss(0), hex)
+                    hex = offset_boolean2(str, hex, hex2)
+                ElseIf mips = "bvt" Then
+                    '"bvt", "0x49010000", "0xFFE30000", "%Zc,%O", _
+                    hex = &H49010000
+                    hex = Zc(ss(0), hex)
+                    hex = offset_boolean2(str, hex, hex2)
+                ElseIf mips = "bvtl" Then
+                    '"bvtl", "0x49030000", "0xFFE30000", "%Zc,%O", _
+                    hex = &H49030000
+                    hex = Zc(ss(0), hex)
+                    hex = offset_boolean2(str, hex, hex2)
+                ElseIf mips = "lv.q" Then
+                    '"lv.q", "0xD8000000", "0xFC000002", "%Xq,%Y", _
+                    hex = &HD8000000
+                    hex = Xq(ss(0), hex)
+                    hex = Y(str, hex)
+                    hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
+                ElseIf mips = "lv.s" Then
+                    '"lv.s", "0xC8000000", "0xFC000000", "%Xs,%Y", _
+                    hex = &HC8000000
+                    hex = Xs(ss(0), hex)
+                    hex = Y(str, hex)
+                    hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
+                ElseIf mips = "lvl.q" Then
+                    '"lvl.q", "0xD4000000", "0xFC000002", "%Xq,%Y", _
+                    hex = &HD4000000
+                    hex = Xq(ss(0), hex)
+                    hex = Y(str, hex)
+                    hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
+                ElseIf mips = "lvr.q" Then
+                    '"lvr.q", "0xD4000002", "0xFC000002", "%Xq,%Y", _
+                    hex = &HD4000002
+                    hex = Xq(ss(0), hex)
+                    hex = Y(str, hex)
+                    hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
+                ElseIf mips = "sv.q" Then
+                    '"sv.q", "0xF8000000", "0xFC000002", "%Xq,%Y", _
+                    hex = &HF8000000
+                    hex = Xq(ss(0), hex)
+                    hex = Y(str, hex)
+                    hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
+                ElseIf mips = "sv.s" Then
+                    '"sv.s", "0xE8000000", "0xFC000000", "%Xs,%Y", _
+                    hex = &HE8000000
+                    hex = Xs(ss(0), hex)
+                    hex = Y(str, hex)
+                    hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
+                ElseIf mips = "svl.q" Then
+                    '"svl.q", "0xF4000000", "0xFC000002", "%Xq,%Y", _
+                    hex = &HF4000000
+                    hex = Xq(ss(0), hex)
+                    hex = Y(str, hex)
+                    hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
+                ElseIf mips = "svr.q" Then
+                    '"svr.q", "0xF4000002", "0xFC000002", "%Xq,%Y", _
+                    hex = &HF4000002
+                    hex = Xq(ss(0), hex)
+                    hex = Y(str, hex)
+                    hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
+
+
+                    '"mfv", "0x48600000", "0xFFE0FF80", "%t,%zs", _
+                    '"mfvc", "0x48600000", "0xFFE0FF00", "%t,%2d", _
+                    '"mtv", "0x48E00000", "0xFFE0FF80", "%t,%zs", _
+                    '"mtvc", "0x48E00000", "0xFFE0FF00", "%t,%2d", _
+
+                ElseIf mips = "vabs.p" Then
+                    '"vabs.p", "0xD0010080", "0xFFFF8080", "%zp,%yp", _
+                    hex = &HD0010080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vabs.t" Then
+                    '"vabs.t", "0xD0018000", "0xFFFF8080", "%zt,%yt", _
+                    hex = &HD0018000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                ElseIf mips = "vabs.s" Then
+                    '"vabs.s", "0xD0010000", "0xFFFF8080", "%zs,%ys", _
+                    hex = &HD0010000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vabs.q" Then
+                    '"vabs.q", "0xD0018080", "0xFFFF8080", "%zq,%yq", _
+                    hex = &HD0018080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vadd.q" Then
+                    '"vadd.q", "0x60008080", "0xFF808080", "%zq,%yq,%xq", _
+                    hex = &H60008080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vadd.p" Then
+                    '"vadd.p", "0x60000080", "0xFF808080", "%zp,%yp,%xp", _
+                    hex = &H60000080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                    hex = xyzp(ss(2), hex, 2)
+                ElseIf mips = "vadd.s" Then
+                    '"vadd.s", "0x60000000", "0xFF808080", "%zs,%ys,%xs", _
+                    hex = &H60000000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                    hex = xyzs(ss(2), hex, 2)
+                ElseIf mips = "vadd.t" Then
+                    '"vadd.t", "0x60008000", "0xFF808080", "%zt,%yt,%xt", _
+                    hex = &H60008000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                    hex = xyzt(ss(2), hex, 2)
+
+                ElseIf mips = "vasin.p" Then
+                    '"vasin.p", "0xD0170080", "0xFFFF8080", "%zp,%yp", _
+                    hex = &HD0170080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vasin.q" Then
+                    '"vasin.q", "0xD0178080", "0xFFFF8080", "%zq,%yq", _
+                    hex = &HD0178080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vasin.s" Then
+                    '"vasin.s", "0xD0170000", "0xFFFF8080", "%zs,%ys", _
+                    hex = &HD0170000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vasin.t" Then
+                    '"vasin.t", "0xD0178000", "0xFFFF8080", "%zt,%yt", _
+                    hex = &HD0178000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+
+                ElseIf mips = "vavg.p" Then
+                    '"vavg.p", "0xD0470080", "0xFFFF8080", "%zp,%yp", _
+                    hex = &HD0470080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vavg.q" Then
+                    '"vavg.q", "0xD0478080", "0xFFFF8080", "%zq,%yq", _
+                    hex = &HD0478080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vavg.t" Then
+                    '"vavg.t", "0xD0478000", "0xFFFF8080", "%zt,%yt", _
+                    hex = &HD0478000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+
+                ElseIf mips = "vbfy1.p" Then
+                    '"vbfy1.p", "0xD0420080", "0xFFFF8080", "%zp,%yp", _
+                    hex = &HD0420080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vbfy1.q" Then
+                    '"vbfy1.q", "0xD0428080", "0xFFFF8080", "%zq,%yq", _
+                    hex = &HD0428080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vbfy2.q" Then
+                    '"vbfy2.q", "0xD0438080", "0xFFFF8080", "%zq,%yq", _
+                    hex = &HD0438080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+
+
+
+                ElseIf mips = "vcmp.p" Then
+                    '"vcmp.p", "0x6C000080", "0xFF8080F0", "%Zn,%yp,%xp", _
+                    hex = &H6C000080
+                    hex = Zn(ss(0), hex)
+                    If ss.Length >= 2 Then
+                        hex = xyzp(ss(1), hex, 1)
+                    End If
+                    If ss.Length >= 3 Then
+                        hex = xyzp(ss(2), hex, 2)
+                    End If
+                ElseIf mips = "vcmp.q" Then
+                    '"vcmp.q", "0x6C008080", "0xFF8080F0", "%Zn,%yq,%xq", _
+                    hex = &H6C008080
+                    hex = Zn(ss(0), hex)
+                    If ss.Length >= 2 Then
+                        hex = xyzq(ss(1), hex, 1)
+                    End If
+                    If ss.Length >= 3 Then
+                        hex = xyzq(ss(2), hex, 2)
+                    End If
+                ElseIf mips = "vcmp.s" Then
+                    '"vcmp.s", "0x6C000000", "0xFF8080F0", "%Zn,%ys,%xs", _
+                    hex = &H6C000000
+                    hex = Zn(ss(0), hex)
+                    If ss.Length >= 2 Then
+                        hex = xyzs(ss(1), hex, 1)
+                    End If
+                    If ss.Length >= 3 Then
+                        hex = xyzs(ss(2), hex, 2)
+                    End If
+                ElseIf mips = "vcmp.t" Then
+                    '"vcmp.t", "0x6C008000", "0xFF8080F0", "%Zn,%yt,%xt", _
+                    hex = &H6C008000
+                    hex = Zn(ss(0), hex)
+                    If ss.Length >= 2 Then
+                        hex = xyzt(ss(1), hex, 1)
+                    End If
+                    If ss.Length >= 3 Then
+                        hex = xyzt(ss(2), hex, 2)
+                    End If
+
+                ElseIf mips = "vcos.p" Then
+                    '"vcos.p", "0xD0130080", "0xFFFF8080", "%zp,%yp", _
+                    hex = &HD0130080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vcos.q" Then
+                    '"vcos.q", "0xD0138080", "0xFFFF8080", "%zq,%yq", _
+                    hex = &HD0138080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vvcos.s" Then
+                    '"vcos.s", "0xD0130000", "0xFFFF8080", "%zs,%ys", _
+                    hex = &HD0130000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vcos.t" Then
+                    '"vcos.t", "0xD0138000", "0xFFFF8080", "%zt,%yt", _
+                    hex = &HD0138000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+
+                ElseIf mips = "vcrs.t" Then
+                    '"vcrs.t", "0x66808000", "0xFF808080", "%zt,%yt,%xt", _
+                    hex = &H66808000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                    hex = xyzt(ss(2), hex, 2)
+                ElseIf mips = "vcrsp.t" Then
+                    '"vcrsp.t", "0xF2808000", "0xFF808080", "%zt,%yt,%xt", _
+                    hex = &HF2808000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                    hex = xyzt(ss(2), hex, 2)
+                ElseIf mips = "vdet.p" Then
+                    '"vdet.p", "0x67000080", "0xFF808080", "%zs,%yp,%xp", _
+                    hex = &H67000080
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                    hex = xyzp(ss(2), hex, 2)
+
+                ElseIf mips = "vdiv.p" Then
+                    '"vdiv.p", "0x63800080", "0xFF808080", "%zp,%yp,%xp", _
+                    hex = &H63800080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                    hex = xyzp(ss(2), hex, 2)
+                ElseIf mips = "vdiv.q" Then
+                    '"vdiv.q", "0x63808080", "0xFF808080", "%zq,%yq,%xq", _
+                    hex = &H63808080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vdiv.s" Then
+                    '"vdiv.s", "0x63800000", "0xFF808080", "%zs,%ys,%xs", _
+                    hex = &H63800000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                    hex = xyzs(ss(2), hex, 2)
+                ElseIf mips = "vdiv.t" Then
+                    '"vdiv.t", "0x63808000", "0xFF808080", "%zt,%yt,%xt", _
+                    hex = &H63808000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                    hex = xyzt(ss(2), hex, 2)
+
+                ElseIf mips = "vdot.p" Then
+                    '"vdot.p", "0x64800080", "0xFF808080", "%zs,%yp,%xp", _
+                    hex = &H64800080
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                    hex = xyzp(ss(2), hex, 2)
+                ElseIf mips = "vdot.q" Then
+                    '"vdot.q", "0x64808080", "0xFF808080", "%zs,%yq,%xq", _
+                    hex = &H64808080
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vdot.t" Then
+                    '"vdot.t", "0x64808000", "0xFF808080", "%zs,%yt,%xt", _
+                    hex = &H64808000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                    hex = xyzt(ss(2), hex, 2)
+
+                ElseIf mips = "vexp2.p" Then
+                    '"vexp2.p", "0xD0140080", "0xFFFF8080", "%zp,%yp", _
+                    hex = &HD0140080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vexp2.q" Then
+                    '"vexp2.q", "0xD0148080", "0xFFFF8080", "%zq,%yq", _
+                    hex = &HD0148080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vexp2.s" Then
+                    '"vexp2.s", "0xD0140000", "0xFFFF8080", "%zs,%ys", _
+                    hex = &HD0140000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vexp2.t" Then
+                    '"vexp2.t", "0xD0148000", "0xFFFF8080", "%zt,%yt", _
+                    hex = &HD0148000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+
+                ElseIf mips = "vf2h.p" Then
+                    '"vf2h.p", "0xD0320080", "0xFFFF8080", "%zs,%yp", _
+                    hex = &HD0320080
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vf2h.q" Then
+                    '"vf2h.q", "0xD0328080", "0xFFFF8080", "%zp,%yq", _
+                    hex = &HD0328080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+
+                ElseIf mips = "vfad.p" Then
+                    '"vfad.p", "0xD0460080", "0xFFFF8080", "%zp,%yp", _
+                    hex = &HD0460080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vfad.q" Then
+                    '"vfad.q", "0xD0468080", "0xFFFF8080", "%zq,%yq", _
+                    hex = &HD0468080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vfad.t" Then
+                    '"vfad.t", "0xD0468000", "0xFFFF8080", "%zt,%yt", _
+                    hex = &HD0468000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                ElseIf mips = "vfim.s" Then
+                    '"vfim.s", "0xDF800000", "0xFF800000", "%xs,%vh", _
+                    hex = &HDF800000
+                    hex = xyzs(ss(0), hex, 2)
+                    If str.Contains("hf") Then
+                        hex = valhex_boolean(str, hex)
+                    End If
+                ElseIf mips = "viim.s" Then
+                    '"viim.s", "0xDF000000", "0xFF800000", "%xs,%vi", _
+                    hex = &HDF000000
+                    hex = xyzs(ss(0), hex, 2)
+                    hex = valhex_boolean(str, hex)
+                ElseIf mips = "vflush" Then
+                    '"vflush", "0xFFFF040D", "0xFFFFFFFF", "", _
+                    hex = &HFFFF040D
+
                 End If
 
-                asm = "0x" & Convert.ToString(hex, 16).ToUpper.PadLeft(8, "0"c)
-            End If
+                    asm = "0x" & Convert.ToString(hex, 16).ToUpper.PadLeft(8, "0"c)
+                End If
 
-            'Dim vfreg As New Regex("(S|C|M)\d\d\d")
-
-            Return asm
+                Return asm
         Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return ""
         End Try
+    End Function
+
+    Function Zn(ByVal str As String, ByVal hex As Integer) As Integer
+        Dim reg As New Regex("(FL|EQ|LT|LE|TR|NE|GE|GT|EZ|EN|EI|ES|NZ|NN|NI|NS)", RegexOptions.IgnoreCase)
+        Dim regm As Match = reg.Match(str)
+        If regm.Success Then
+            hex = hex Or (vbranch_sel(regm.Value))
+        End If
+        Return hex
+    End Function
+
+    Function vbranch_sel(ByVal s As String) As Integer
+        Dim ss As String() = {
+            "fl", "eq", "lt", "le",
+          "tr", "ne", "ge", "gt",
+          "ez", "en", "ei", "es",
+          "nz", "nn", "ni", "ns"
+        }
+        Dim i As Integer = 0
+
+        For i = 0 To 15
+            If ss(i) = s Then
+                Exit For
+            End If
+        Next
+        If i = 16 Then
+            i = 0
+        End If
+
+        Return i
+    End Function
+
+    Function xyzs(ByVal str As String, ByVal hex As Integer, ByVal k As Integer) As Integer
+        Dim vf As New Regex("s[0-7]?[0-3]{1,2}")
+        Dim vfm As Match = vf.Match(str)
+        Dim tmp As Integer = 0
+        If vfm.Success Then
+            tmp = Convert.ToInt32(vfm.Value.Remove(0, 1), 16)
+            hex = hex Or (((tmp >> 8) << 2) + ((tmp >> 4) And 3) + ((tmp And 3) << 5) << (8 * k))
+        End If
+        Return hex
+    End Function
+
+    Function xyzp(ByVal str As String, ByVal hex As Integer, ByVal k As Integer) As Integer
+        Dim vf As New Regex("(c[0-7]?[0-3]?[02]|r[0-7]?[02]?[0-3])")
+        Dim vfm As Match = vf.Match(str)
+        Dim tmp As Integer = 0
+        If vfm.Success Then
+            tmp = Convert.ToInt32(vfm.Value.Remove(0, 1), 16)
+            If vfm.Value(0) = "c" Then
+                If (tmp And 2) = 2 Then
+                    hex = hex Or ((&H40 + ((tmp >> 8) << 2) + ((tmp >> 4) And 3)) << (8 * k))
+                Else
+                    hex = hex Or ((((tmp >> 8) << 2) + ((tmp >> 4) And 3)) << (8 * k))
+                End If
+            Else
+                If ((tmp >> 4) And 2) = 2 Then
+                    hex = hex Or ((&H60 + ((tmp >> 8) << 2) + (tmp And 3)) << (8 * k))
+                Else
+                    hex = hex Or ((&H20 + ((tmp >> 8) << 2) + (tmp And 3)) << (8 * k))
+                End If
+            End If
+        End If
+        Return hex
+    End Function
+
+    Function xyzt(ByVal str As String, ByVal hex As Integer, ByVal k As Integer) As Integer
+        Dim vf As New Regex("(c[0-7]?[0-3]?[01]|r[0-7]?[01]?[0-3])")
+        Dim vfm As Match = vf.Match(str)
+        Dim tmp As Integer = 0
+        If vfm.Success Then
+            tmp = Convert.ToInt32(vfm.Value.Remove(0, 1), 16)
+            If vfm.Value(0) = "c" Then
+                If (tmp And 1) = 1 Then
+                    hex = hex Or ((&H40 + ((tmp >> 8) << 2) + ((tmp >> 4) And 3)) << (8 * k))
+                Else
+                    hex = hex Or ((((tmp >> 8) << 2) + ((tmp >> 4) And 3)) << (8 * k))
+                End If
+            Else
+                If ((tmp >> 4) And 1) = 1 Then
+                    hex = hex Or ((&H60 + ((tmp >> 8) << 2) + (tmp And 3)) << (8 * k))
+                Else
+                    hex = hex Or ((&H20 + ((tmp >> 8) << 2) + (tmp And 3)) << (8 * k))
+                End If
+            End If
+        End If
+        Return hex
+    End Function
+
+    Function xyzq(ByVal str As String, ByVal hex As Integer, ByVal k As Integer) As Integer
+        Dim vf As New Regex("(c[0-7]?[0-3]?0|r[0-7]?0?[0-3])")
+        Dim vfm As Match = vf.Match(str)
+        Dim tmp As Integer = 0
+        If vfm.Success Then
+            tmp = Convert.ToInt32(vfm.Value.Remove(0, 1), 16)
+            If vfm.Value(0) = "c" Then
+                hex = hex Or ((((tmp >> 8) << 2) + ((tmp >> 4) And 3)) << (8 * k))
+            Else
+                hex = hex Or ((&H20 + ((tmp >> 8) << 2) + (tmp And 3)) << (8 * k))
+            End If
+        End If
+        Return hex
+    End Function
+
+    Function Xs(ByVal str As String, ByVal hex As Integer) As Integer
+        Dim vf As New Regex("s[0-7]?[0-3]{1,2}")
+        Dim vfm As Match = vf.Match(str)
+        Dim tmp As Integer = 0
+        If vfm.Success Then
+            tmp = Convert.ToInt32(vfm.Value.Remove(0, 1), 16)
+            hex = hex Or ((tmp >> 8) << 18) + (((tmp >> 4) And 3) << 16) + ((tmp And 3))
+        End If
+        Return hex
+    End Function
+
+    Function Xq(ByVal str As String, ByVal hex As Integer) As Integer
+        Dim vf As New Regex("(c[0-7]?[0-3]?0|r[0-7]?0?[0-3])")
+        Dim vfm As Match = vf.Match(str)
+        Dim tmp As Integer = 0
+        If vfm.Success Then
+            tmp = Convert.ToInt32(vfm.Value.Remove(0, 1), 16)
+            If vfm.Value(0) = "c" Then
+                hex = hex Or ((tmp >> 8) << 18) + (((tmp >> 4) And 3) << 16)
+            Else
+                hex += 1
+                hex = hex Or ((tmp >> 8) << 18) + ((tmp And 3) << 16)
+            End If
+        End If
+        Return hex
+    End Function
+
+    Function Zc(ByVal str As String, ByVal hex As Integer) As Integer
+        Dim dec As New Regex("\d")
+        Dim decm As Match = dec.Match(str)
+        If decm.Success Then
+            hex = hex Or ((CInt(decm.Value) And 7) << 18)
+        End If
+        Return hex
     End Function
 
     Function float_sel(ByVal str As String, ByVal hex As Integer, ByVal k As Integer) As Integer
@@ -1937,13 +2433,11 @@ Public Class Form1
     Function offset_boolean2(ByVal str As String, ByVal hex As Integer, ByVal hex2 As Integer) As Integer
         Dim valhex As New Regex("(\x20|,|\t)(\$|0x)[0-9A-Fa-f]{1,8}$")
         Dim valhexm As Match = valhex.Match(str)
-        Dim valdec As New Regex("(\x20|,|\t)(\+|-)?\d{1,4}$")
+        Dim valdec As New Regex("(\x20|,|\t)(\+|\-)?\d{1,4}$")
         Dim valdecm As Match = valdec.Match(str)
         Dim k As Integer = 0
         Dim j As Integer = 0
-        If valdecm.Success Then
-            hex = hex Or ((Convert.ToInt32(valdecm.Value.Remove(0, 1)) - 1) And &HFFFF)
-        ElseIf valhexm.Success Then
+        If valhexm.Success Then
             k = Convert.ToInt32(valhexm.Value.Replace("$", "").Remove(0, 1), 16)
             If k < &H1800000 Then
                 k += &H8800000
@@ -1952,6 +2446,8 @@ Public Class Form1
                 hex2 += &H8800000
             End If
             hex = hex Or ((k - hex2 - 4) >> 2 And &HFFFF)
+        ElseIf valdecm.Success Then
+            hex = hex Or ((Convert.ToInt32(valdecm.Value.Remove(0, 1)) - 1) And &HFFFF)
         Else
             Dim cma As Integer = str.LastIndexOf(",")
             str = str.Substring(cma + 1, str.Length - cma - 1).Trim
@@ -1992,6 +2488,30 @@ Public Class Form1
         End If
         If valdecm.Success Then
             hex = hex Or (Convert.ToInt32(valdecm.Value.Remove(0, 1).Replace("(", "")) And &HFFFF)
+        End If
+        Return hex
+    End Function
+
+    'vfpu offset
+    Function Y(ByVal str As String, ByVal hex As Integer) As Integer
+        Dim valhex As New Regex("(\x20|,|\t)-?(\$|0x)[0-9A-Fa-f]{1,4}\(")
+        Dim valhexm As Match = valhex.Match(str)
+        Dim valdec As New Regex("(\x20|,|\t)(\+|-)?\d{1,5}\(")
+        Dim valdecm As Match = valdec.Match(str)
+        Dim k As Integer = 0
+        If valhexm.Success Then
+            Dim s As String = valhexm.Value
+            If s.Contains("-") Then
+                k = &H10000
+                s = s.Replace("-", "")
+                k = k - Convert.ToInt32(s.Replace("$", "").Remove(0, 1).Replace("(", ""), 16)
+            Else
+                k = Convert.ToInt32(s.Replace("$", "").Remove(0, 1).Replace("(", ""), 16)
+            End If
+            hex = hex Or (k And &HFFFC)
+        End If
+        If valdecm.Success Then
+            hex = hex Or (Convert.ToInt32(valdecm.Value.Remove(0, 1).Replace("(", "")) And &HFFFC)
         End If
         Return hex
     End Function
@@ -2167,7 +2687,7 @@ Public Class Form1
     Dim label(255) As String
     Dim label_addr(255) As Integer
 
-    Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles Button1.Click
+    Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles cvt_asm2code.Click
         Dim ss As String() = (ASM.Text & vbCrLf).Split(CChar(vbLf))
         Dim sb As New StringBuilder
         Dim st As Integer = Convert.ToInt32(ADDR.Text, 16)
@@ -2351,14 +2871,26 @@ Public Class Form1
         f.Dispose()
     End Sub
 
-    Private Sub ToolStripMenuItem1_Click(sender As System.Object, e As System.EventArgs) Handles save.Click, save2.Click
+    Private Sub SAVECODE(sender As System.Object, e As System.EventArgs) Handles save2.Click, コード保存ToolStripMenuItem.Click
         Dim f As New SaveFileDialog
         f.InitialDirectory = Application.StartupPath
         f.Filter = "テキストファイル（*.txt)|*.txt"
-        f.Title = "ファイルの保存"
+        f.Title = "コードの保存"
         If f.ShowDialog = Windows.Forms.DialogResult.OK Then
             Dim sr As New StreamWriter(f.FileName, False, Encoding.GetEncoding(cpg))
             sr.Write(CODE.Text)
+            sr.Close()
+        End If
+    End Sub
+
+    Private Sub SAVEASM(sender As System.Object, e As System.EventArgs) Handles ASM保存ToolStripMenuItem.Click, ASMSB.Click
+        Dim f As New SaveFileDialog
+        f.InitialDirectory = Application.StartupPath
+        f.Filter = "テキストファイル（*.txt)|*.txt"
+        f.Title = "ASMテキストの保存"
+        If f.ShowDialog = Windows.Forms.DialogResult.OK Then
+            Dim sr As New StreamWriter(f.FileName, False, Encoding.GetEncoding(cpg))
+            sr.Write(ASM.Text)
             sr.Close()
         End If
     End Sub
@@ -2389,4 +2921,5 @@ Public Class Form1
         End If
 
     End Sub
+
 End Class
