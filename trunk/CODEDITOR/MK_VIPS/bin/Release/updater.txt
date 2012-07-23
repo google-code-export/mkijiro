@@ -1,0 +1,1 @@
+BOOT="http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/MK_VIPS/bin/Release/MK_VIPS.exe","MK_VIPS.exe"
