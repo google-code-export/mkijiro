@@ -36,14 +36,14 @@ Partial Class version
         Me.Panel1.Controls.Add(Me.Label3)
         Me.Panel1.Controls.Add(Me.Label1)
         Me.Panel1.Controls.Add(Me.Label2)
-        Me.Panel1.Location = New System.Drawing.Point(27, 12)
+        Me.Panel1.Location = New System.Drawing.Point(12, 12)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(162, 121)
+        Me.Panel1.Size = New System.Drawing.Size(190, 121)
         Me.Panel1.TabIndex = 3
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(42, 95)
+        Me.Button1.Location = New System.Drawing.Point(61, 95)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 3
@@ -55,14 +55,14 @@ Partial Class version
         Me.Label3.AutoSize = True
         Me.Label3.Location = New System.Drawing.Point(23, 44)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(124, 12)
+        Me.Label3.Size = New System.Drawing.Size(142, 12)
         Me.Label3.TabIndex = 2
-        Me.Label3.Text = "BUILD:2012/07/24 7:52"
+        Me.Label3.Text = "BUILD:2012/07/24-1 11:52"
         '
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(52, 20)
+        Me.Label1.Location = New System.Drawing.Point(71, 17)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(46, 12)
         Me.Label1.TabIndex = 0
@@ -71,7 +71,7 @@ Partial Class version
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(23, 70)
+        Me.Label2.Location = New System.Drawing.Point(40, 71)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(107, 12)
         Me.Label2.TabIndex = 1
