@@ -2251,7 +2251,7 @@ Public Class Form1
                     hex = &H66000080
                     hex = xyzs(ss(0), hex, 0)
                     hex = xyzp(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
+                    hex = xyzp(ss(2), hex, 2)
                 ElseIf mips = "vhdp.q" Then
                     '"vhdp.q","0x66008080","0xFF808080","%zs,%yq,%xq",
                     hex = &H66008080
@@ -2263,7 +2263,7 @@ Public Class Form1
                     hex = &H66008000
                     hex = xyzs(ss(0), hex, 0)
                     hex = xyzt(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
+                    hex = xyzt(ss(2), hex, 2)
                 ElseIf mips = "vi2c.q" Then
                     '"vi2c.q","0xD03D8080","0xFFFF8080","%zs,%yq",
                     hex = &HD03D8080
@@ -2332,7 +2332,7 @@ Public Class Form1
                     hex = &H6D800080
                     hex = xyzp(ss(0), hex, 0)
                     hex = xyzp(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
+                    hex = xyzp(ss(2), hex, 2)
                 ElseIf mips = "vmax.q" Then
                     '"vmax.q","0x6D808080","0xFF808080","%zq,%yq,%xq",
                     hex = &H6D808080
@@ -2344,19 +2344,19 @@ Public Class Form1
                     hex = &H6D800000
                     hex = xyzs(ss(0), hex, 0)
                     hex = xyzs(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
+                    hex = xyzs(ss(2), hex, 2)
                 ElseIf mips = "vmax.t" Then
                     '"vmax.t","0x6D808000","0xFF808080","%zt,%yt,%xt",
                     hex = &H6D808000
                     hex = xyzt(ss(0), hex, 0)
                     hex = xyzt(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
+                    hex = xyzt(ss(2), hex, 2)
                 ElseIf mips = "vmin.p" Then
                     '"vmin.p","0x6D000080","0xFF808080","%zp,%yp,%xp",
                     hex = &H6D000080
                     hex = xyzp(ss(0), hex, 0)
                     hex = xyzp(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
+                    hex = xyzp(ss(2), hex, 2)
                 ElseIf mips = "vmin.q" Then
                     '"vmin.q","0x6D008080","0xFF808080","%zq,%yq,%xq",
                     hex = &H6D008080
@@ -2368,13 +2368,13 @@ Public Class Form1
                     hex = &H6D000000
                     hex = xyzs(ss(0), hex, 0)
                     hex = xyzs(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
+                    hex = xyzs(ss(2), hex, 2)
                 ElseIf mips = "vmin.t" Then
                     '"vmin.t","0x6D008000","0xFF808080","%zt,%yt,%xt",
                     hex = &H6D008000
                     hex = xyzt(ss(0), hex, 0)
                     hex = xyzt(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
+                    hex = xyzt(ss(2), hex, 2)
                 ElseIf mips = "vmone.p" Then
                     '"vmone.p","0xF3870080","0xFFFFFF80","%zp",
                     hex = &HF3870080
@@ -2412,7 +2412,7 @@ Public Class Form1
                     hex = &H64000080
                     hex = xyzp(ss(0), hex, 0)
                     hex = xyzp(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
+                    hex = xyzp(ss(2), hex, 2)
                 ElseIf mips = "vmul.q" Then
                     '"vmul.q","0x64008080","0xFF808080","%zq,%yq,%xq",
                     hex = &H64008080
@@ -2424,13 +2424,13 @@ Public Class Form1
                     hex = &H64000000
                     hex = xyzs(ss(0), hex, 0)
                     hex = xyzs(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
+                    hex = xyzs(ss(2), hex, 2)
                 ElseIf mips = "vmul.t" Then
                     '"vmul.t","0x64008000","0xFF808080","%zt,%yt,%xt",
                     hex = &H64008000
                     hex = xyzt(ss(0), hex, 0)
                     hex = xyzt(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
+                    hex = xyzt(ss(2), hex, 2)
                 ElseIf mips = "vneg.p" Then
                     '"vneg.p","0xD0020080","0xFFFF8080","%zp,%yp",
                     hex = &HD0020080
@@ -2703,7 +2703,7 @@ Public Class Form1
                     hex = &H61000000
                     hex = xyzs(ss(0), hex, 0)
                     hex = xyzs(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
+                    hex = xyzs(ss(2), hex, 2)
                 ElseIf mips = "vsbz.s" Then
                     '"vsbz.s","0xD0360000","0xFFFF8080","%zs,%ys",
                     hex = &HD0360000
@@ -2714,25 +2714,25 @@ Public Class Form1
                     hex = &H65000080
                     hex = xyzp(ss(0), hex, 0)
                     hex = xyzp(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
+                    hex = xyzs(ss(2), hex, 2)
                 ElseIf mips = "vscl.q" Then
                     '"vscl.q","0x65008080","0xFF808080","%zq,%yq,%xs",
                     hex = &H65008080
                     hex = xyzq(ss(0), hex, 0)
                     hex = xyzq(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
+                    hex = xyzs(ss(2), hex, 2)
                 ElseIf mips = "vscl.t" Then
                     '"vscl.t","0x65008000","0xFF808080","%zt,%yt,%xs",
                     hex = &H65008000
                     hex = xyzt(ss(0), hex, 0)
                     hex = xyzt(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
+                    hex = xyzs(ss(2), hex, 2)
                 ElseIf mips = "vscmp.p" Then
                     '"vscmp.p","0x6E800080","0xFF808080","%zp,%yp,%xp",
                     hex = &H6E800080
                     hex = xyzp(ss(0), hex, 0)
                     hex = xyzp(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
+                    hex = xyzp(ss(2), hex, 2)
                 ElseIf mips = "vscmp.q" Then
                     '"vscmp.q","0x6E808080","0xFF808080","%zq,%yq,%xq",
                     hex = &H6E808080
@@ -2744,19 +2744,19 @@ Public Class Form1
                     hex = &H6E800000
                     hex = xyzs(ss(0), hex, 0)
                     hex = xyzs(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
+                    hex = xyzs(ss(2), hex, 2)
                 ElseIf mips = "vscmp.t" Then
                     '"vscmp.t","0x6E808000","0xFF808080","%zt,%yt,%xt",
                     hex = &H6E808000
                     hex = xyzt(ss(0), hex, 0)
                     hex = xyzt(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
+                    hex = xyzt(ss(2), hex, 2)
                 ElseIf mips = "vsge.p" Then
                     '"vsge.p","0x6F000080","0xFF808080","%zp,%yp,%xp",
                     hex = &H6F000080
                     hex = xyzp(ss(0), hex, 0)
                     hex = xyzp(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
+                    hex = xyzp(ss(2), hex, 2)
                 ElseIf mips = "vsge.q" Then
                     '"vsge.q","0x6F008080","0xFF808080","%zq,%yq,%xq",
                     hex = &H6F008080
@@ -2768,13 +2768,13 @@ Public Class Form1
                     hex = &H6F000000
                     hex = xyzs(ss(0), hex, 0)
                     hex = xyzs(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
+                    hex = xyzs(ss(2), hex, 2)
                 ElseIf mips = "vsge.t" Then
                     '"vsge.t","0x6F008000","0xFF808080","%zt,%yt,%xt",
                     hex = &H6F008000
                     hex = xyzt(ss(0), hex, 0)
                     hex = xyzt(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
+                    hex = xyzt(ss(2), hex, 2)
                 ElseIf mips = "vsgn.p" Then
                     '"vsgn.p","0xD04A0080","0xFFFF8080","%zp,%yp",
                     hex = &HD04A0080
@@ -2820,7 +2820,7 @@ Public Class Form1
                     hex = &H6F800080
                     hex = xyzp(ss(0), hex, 0)
                     hex = xyzp(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
+                    hex = xyzp(ss(2), hex, 2)
                 ElseIf mips = "vslt.q" Then
                     '"vslt.q","0x6F808080","0xFF808080","%zq,%yq,%xq",
                     hex = &H6F808080
@@ -2832,13 +2832,13 @@ Public Class Form1
                     hex = &H6F800000
                     hex = xyzs(ss(0), hex, 0)
                     hex = xyzs(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
+                    hex = xyzs(ss(2), hex, 2)
                 ElseIf mips = "vslt.t" Then
                     '"vslt.t","0x6F808000","0xFF808080","%zt,%yt,%xt",
                     hex = &H6F808000
                     hex = xyzt(ss(0), hex, 0)
                     hex = xyzt(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
+                    hex = xyzt(ss(2), hex, 2)
                 ElseIf mips = "vsocp.p" Then
                     '"vsocp.p","0xD0450080","0xFFFF8080","%zq,%yp",
                     hex = &HD0450080
@@ -2894,7 +2894,7 @@ Public Class Form1
                     hex = &H60800080
                     hex = xyzp(ss(0), hex, 0)
                     hex = xyzp(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
+                    hex = xyzp(ss(2), hex, 2)
                 ElseIf mips = "vsub.q" Then
                     '"vsub.q","0x60808080","0xFF808080","%zq,%yq,%xq",
                     hex = &H60808080
@@ -2906,13 +2906,13 @@ Public Class Form1
                     hex = &H60800000
                     hex = xyzs(ss(0), hex, 0)
                     hex = xyzs(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
+                    hex = xyzs(ss(2), hex, 2)
                 ElseIf mips = "vsub.t" Then
                     '"vsub.t","0x60808000","0xFF808080","%zt,%yt,%xt",
                     hex = &H60808000
                     hex = xyzt(ss(0), hex, 0)
                     hex = xyzt(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
+                    hex = xyzt(ss(2), hex, 2)
                 ElseIf mips = "vsync" Then
                     '"vsync","0xFFFF0320","0xFFFFFFFF","",
                     hex = &HFFFF0320
@@ -2957,6 +2957,7 @@ Public Class Form1
                     '"vzero.t","0xD0068000","0xFFFFFF80","%zt",
                     hex = &HD0068000
                     hex = xyzt(ss(0), hex, 0)
+
 
 
                 End If
