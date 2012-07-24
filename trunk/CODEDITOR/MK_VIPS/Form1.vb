@@ -2046,8 +2046,6 @@ Public Class Form1
                     hex = xyzq(ss(0), hex, 0)
                     hex = xyzq(ss(1), hex, 1)
 
-
-
                 ElseIf mips = "vcmp.p" Then
                     '"vcmp.p", "0x6C000080", "0xFF8080F0", "%Zn,%yp,%xp", _
                     hex = &H6C000080
@@ -2235,6 +2233,731 @@ Public Class Form1
                 ElseIf mips = "vflush" Then
                     '"vflush", "0xFFFF040D", "0xFFFFFFFF", "", _
                     hex = &HFFFF040D
+
+
+                    ''プログラムで変換
+                ElseIf mips = "vh2f.p" Then
+                    '"vh2f.p","0xD0330080","0xFFFF8080","%zq,%yp",
+                    hex = &HD0330080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vh2f.s" Then
+                    '"vh2f.s","0xD0330000","0xFFFF8080","%zp,%ys",
+                    hex = &HD0330000
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vhdp.p" Then
+                    '"vhdp.p","0x66000080","0xFF808080","%zs,%yp,%xp",
+                    hex = &H66000080
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vhdp.q" Then
+                    '"vhdp.q","0x66008080","0xFF808080","%zs,%yq,%xq",
+                    hex = &H66008080
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vhdp.t" Then
+                    '"vhdp.t","0x66008000","0xFF808080","%zs,%yt,%xt",
+                    hex = &H66008000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vi2c.q" Then
+                    '"vi2c.q","0xD03D8080","0xFFFF8080","%zs,%yq",
+                    hex = &HD03D8080
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vi2s.p" Then
+                    '"vi2s.p","0xD03F0080","0xFFFF8080","%zs,%yp",
+                    hex = &HD03F0080
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vi2s.q" Then
+                    '"vi2s.q","0xD03F8080","0xFFFF8080","%zp,%yq",
+                    hex = &HD03F8080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vi2uc.q" Then
+                    '"vi2uc.q","0xD03C8080","0xFFFF8080","%zs,%yq",
+                    hex = &HD03C8080
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vi2us.p" Then
+                    '"vi2us.p","0xD03E0080","0xFFFF8080","%zs,%yq",
+                    hex = &HD03E0080
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vi2us.q" Then
+                    '"vi2us.q","0xD03E8080","0xFFFF8080","%zp,%yq",
+                    hex = &HD03E8080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vidt.p" Then
+                    '"vidt.p","0xD0030080","0xFFFFFF80","%zp",
+                    hex = &HD0030080
+                    hex = xyzp(ss(0), hex, 0)
+                ElseIf mips = "vidt.q" Then
+                    '"vidt.q","0xD0038080","0xFFFFFF80","%zq",
+                    hex = &HD0038080
+                    hex = xyzq(ss(0), hex, 0)
+                ElseIf mips = "vlgb.s" Then
+                    '"vlgb.s","0xD0370000","0xFFFF8080","%zs,%ys",
+                    hex = &HD0370000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vlog2.p" Then
+                    '"vlog2.p","0xD0150080","0xFFFF8080","%zp,%yp",
+                    hex = &HD0150080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vlog2.q" Then
+                    '"vlog2.q","0xD0158080","0xFFFF8080","%zq,%yq",
+                    hex = &HD0158080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vlog2.s" Then
+                    '"vlog2.s","0xD0150000","0xFFFF8080","%zs,%ys",
+                    hex = &HD0150000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vlog2.t" Then
+                    '"vlog2.t","0xD0158000","0xFFFF8080","%zt,%yt",
+                    hex = &HD0158000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                ElseIf mips = "vmax.p" Then
+                    '"vmax.p","0x6D800080","0xFF808080","%zp,%yp,%xp",
+                    hex = &H6D800080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vmax.q" Then
+                    '"vmax.q","0x6D808080","0xFF808080","%zq,%yq,%xq",
+                    hex = &H6D808080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vmax.s" Then
+                    '"vmax.s","0x6D800000","0xFF808080","%zs,%ys,%xs",
+                    hex = &H6D800000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vmax.t" Then
+                    '"vmax.t","0x6D808000","0xFF808080","%zt,%yt,%xt",
+                    hex = &H6D808000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vmin.p" Then
+                    '"vmin.p","0x6D000080","0xFF808080","%zp,%yp,%xp",
+                    hex = &H6D000080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vmin.q" Then
+                    '"vmin.q","0x6D008080","0xFF808080","%zq,%yq,%xq",
+                    hex = &H6D008080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vmin.s" Then
+                    '"vmin.s","0x6D000000","0xFF808080","%zs,%ys,%xs",
+                    hex = &H6D000000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vmin.t" Then
+                    '"vmin.t","0x6D008000","0xFF808080","%zt,%yt,%xt",
+                    hex = &H6D008000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vmone.p" Then
+                    '"vmone.p","0xF3870080","0xFFFFFF80","%zp",
+                    hex = &HF3870080
+                    hex = xyzp(ss(0), hex, 0)
+                ElseIf mips = "vmone.q" Then
+                    '"vmone.q","0xF3878080","0xFFFFFF80","%zq",
+                    hex = &HF3878080
+                    hex = xyzq(ss(0), hex, 0)
+                ElseIf mips = "vmone.t" Then
+                    '"vmone.t","0xF3878000","0xFFFFFF80","%zt",
+                    hex = &HF3878000
+                    hex = xyzt(ss(0), hex, 0)
+                ElseIf mips = "vmov.p" Then
+                    '"vmov.p","0xD0000080","0xFFFF8080","%zp,%yp",
+                    hex = &HD0000080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vmov.q" Then
+                    '"vmov.q","0xD0008080","0xFFFF8080","%zq,%yq",
+                    hex = &HD0008080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vmov.s" Then
+                    '"vmov.s","0xD0000000","0xFFFF8080","%zs,%ys",
+                    hex = &HD0000000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vmov.t" Then
+                    '"vmov.t","0xD0008000","0xFFFF8080","%zt,%yt",
+                    hex = &HD0008000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                ElseIf mips = "vmul.p" Then
+                    '"vmul.p","0x64000080","0xFF808080","%zp,%yp,%xp",
+                    hex = &H64000080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vmul.q" Then
+                    '"vmul.q","0x64008080","0xFF808080","%zq,%yq,%xq",
+                    hex = &H64008080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vmul.s" Then
+                    '"vmul.s","0x64000000","0xFF808080","%zs,%ys,%xs",
+                    hex = &H64000000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vmul.t" Then
+                    '"vmul.t","0x64008000","0xFF808080","%zt,%yt,%xt",
+                    hex = &H64008000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vneg.p" Then
+                    '"vneg.p","0xD0020080","0xFFFF8080","%zp,%yp",
+                    hex = &HD0020080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vneg.q" Then
+                    '"vneg.q","0xD0028080","0xFFFF8080","%zq,%yq",
+                    hex = &HD0028080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vneg.s" Then
+                    '"vneg.s","0xD0020000","0xFFFF8080","%zs,%ys",
+                    hex = &HD0020000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vneg.t" Then
+                    '"vneg.t","0xD0028000","0xFFFF8080","%zt,%yt",
+                    hex = &HD0028000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                ElseIf mips = "vnop" Then
+                    '"vnop","0xFFFF0000","0xFFFFFFFF","",
+                    hex = &HFFFF0000
+                ElseIf mips = "vnrcp.p" Then
+                    '"vnrcp.p","0xD0180080","0xFFFF8080","%zp,%yp",
+                    hex = &HD0180080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vnrcp.q" Then
+                    '"vnrcp.q","0xD0188080","0xFFFF8080","%zq,%yq",
+                    hex = &HD0188080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vnrcp.s" Then
+                    '"vnrcp.s","0xD0180000","0xFFFF8080","%zs,%ys",
+                    hex = &HD0180000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vnrcp.t" Then
+                    '"vnrcp.t","0xD0188000","0xFFFF8080","%zt,%yt",
+                    hex = &HD0188000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                ElseIf mips = "vnsin.p" Then
+                    '"vnsin.p","0xD01A0080","0xFFFF8080","%zp,%yp",
+                    hex = &HD01A0080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vnsin.q" Then
+                    '"vnsin.q","0xD01A8080","0xFFFF8080","%zq,%yq",
+                    hex = &HD01A8080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vnsin.s" Then
+                    '"vnsin.s","0xD01A0000","0xFFFF8080","%zs,%ys",
+                    hex = &HD01A0000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vnsin.t" Then
+                    '"vnsin.t","0xD01A8000","0xFFFF8080","%zt,%yt",
+                    hex = &HD01A8000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                ElseIf mips = "vocp.p" Then
+                    '"vocp.p","0xD0440080","0xFFFF8080","%zp,%yp",
+                    hex = &HD0440080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vocp.q" Then
+                    '"vocp.q","0xD0448080","0xFFFF8080","%zq,%yq",
+                    hex = &HD0448080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vocp.s" Then
+                    '"vocp.s","0xD0440000","0xFFFF8080","%zs,%ys",
+                    hex = &HD0440000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vocp.t" Then
+                    '"vocp.t","0xD0448000","0xFFFF8080","%zt,%yt",
+                    hex = &HD0448000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                ElseIf mips = "vone.p" Then
+                    '"vone.p","0xD0070080","0xFFFFFF80","%zp",
+                    hex = &HD0070080
+                    hex = xyzp(ss(0), hex, 0)
+                ElseIf mips = "vone.q" Then
+                    '"vone.q","0xD0078080","0xFFFFFF80","%zq",
+                    hex = &HD0078080
+                    hex = xyzq(ss(0), hex, 0)
+                ElseIf mips = "vone.s" Then
+                    '"vone.s","0xD0070000","0xFFFFFF80","%zs",
+                    hex = &HD0070000
+                    hex = xyzs(ss(0), hex, 0)
+                ElseIf mips = "vone.t" Then
+                    '"vone.t","0xD0078000","0xFFFFFF80","%zt",
+                    hex = &HD0078000
+                    hex = xyzt(ss(0), hex, 0)
+                ElseIf mips = "vqmul.q" Then
+                    '"vqmul.q","0xF2808080","0xFF808080","%zq,%yq,%xq",
+                    hex = &HF2808080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vrcp.p" Then
+                    '"vrcp.p","0xD0100080","0xFFFF8080","%zp,%yp",
+                    hex = &HD0100080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vrcp.q" Then
+                    '"vrcp.q","0xD0108080","0xFFFF8080","%zq,%yq",
+                    hex = &HD0108080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vrcp.s" Then
+                    '"vrcp.s","0xD0100000","0xFFFF8080","%zs,%ys",
+                    hex = &HD0100000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vrcp.t" Then
+                    '"vrcp.t","0xD0108000","0xFFFF8080","%zt,%yt",
+                    hex = &HD0108000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                ElseIf mips = "vrexp2.p" Then
+                    '"vrexp2.p","0xD01C0080","0xFFFF8080","%zp,%yp",
+                    hex = &HD01C0080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vrexp2.q" Then
+                    '"vrexp2.q","0xD01C8080","0xFFFF8080","%zq,%yq",
+                    hex = &HD01C8080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vrexp2.s" Then
+                    '"vrexp2.s","0xD01C0000","0xFFFF8080","%zs,%ys",
+                    hex = &HD01C0000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vrexp2.t" Then
+                    '"vrexp2.t","0xD01C8000","0xFFFF8080","%zt,%yt",
+                    hex = &HD01C8000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                ElseIf mips = "vrndf1.p" Then
+                    '"vrndf1.p","0xD0220080","0xFFFFFF80","%zp",
+                    hex = &HD0220080
+                    hex = xyzp(ss(0), hex, 0)
+                ElseIf mips = "vrndf1.q" Then
+                    '"vrndf1.q","0xD0228080","0xFFFFFF80","%zq",
+                    hex = &HD0228080
+                    hex = xyzq(ss(0), hex, 0)
+                ElseIf mips = "vrndf1.s" Then
+                    '"vrndf1.s","0xD0220000","0xFFFFFF80","%zs",
+                    hex = &HD0220000
+                    hex = xyzs(ss(0), hex, 0)
+                ElseIf mips = "vrndf1.t" Then
+                    '"vrndf1.t","0xD0228000","0xFFFFFF80","%zt",
+                    hex = &HD0228000
+                    hex = xyzt(ss(0), hex, 0)
+                ElseIf mips = "vrndf2.p" Then
+                    '"vrndf2.p","0xD0230080","0xFFFFFF80","%zp",
+                    hex = &HD0230080
+                    hex = xyzp(ss(0), hex, 0)
+                ElseIf mips = "vrndf2.q" Then
+                    '"vrndf2.q","0xD0238080","0xFFFFFF80","%zq",
+                    hex = &HD0238080
+                    hex = xyzq(ss(0), hex, 0)
+                ElseIf mips = "vrndf2.s" Then
+                    '"vrndf2.s","0xD0230000","0xFFFFFF80","%zs",
+                    hex = &HD0230000
+                    hex = xyzs(ss(0), hex, 0)
+                ElseIf mips = "vrndf2.t" Then
+                    '"vrndf2.t","0xD0238000","0xFFFFFF80","%zt",
+                    hex = &HD0238000
+                    hex = xyzt(ss(0), hex, 0)
+                ElseIf mips = "vrndi.p" Then
+                    '"vrndi.p","0xD0210080","0xFFFFFF80","%zp",
+                    hex = &HD0210080
+                    hex = xyzp(ss(0), hex, 0)
+                ElseIf mips = "vrndi.q" Then
+                    '"vrndi.q","0xD0218080","0xFFFFFF80","%zq",
+                    hex = &HD0218080
+                    hex = xyzq(ss(0), hex, 0)
+                ElseIf mips = "vrndi.s" Then
+                    '"vrndi.s","0xD0210000","0xFFFFFF80","%zs",
+                    hex = &HD0210000
+                    hex = xyzs(ss(0), hex, 0)
+                ElseIf mips = "vrndi.t" Then
+                    '"vrndi.t","0xD0218000","0xFFFFFF80","%zt",
+                    hex = &HD0218000
+                    hex = xyzt(ss(0), hex, 0)
+                ElseIf mips = "vrnds.s" Then
+                    '"vrnds.s","0xD0200000","0xFFFF80FF","%ys",
+                    hex = &HD0200000
+                    hex = xyzs(ss(0), hex, 1)
+                ElseIf mips = "vrsq.p" Then
+                    '"vrsq.p","0xD0110080","0xFFFF8080","%zp,%yp",
+                    hex = &HD0110080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vrsq.q" Then
+                    '"vrsq.q","0xD0118080","0xFFFF8080","%zq,%yq",
+                    hex = &HD0118080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vrsq.s" Then
+                    '"vrsq.s","0xD0110000","0xFFFF8080","%zs,%ys",
+                    hex = &HD0110000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vrsq.t" Then
+                    '"vrsq.t","0xD0118000","0xFFFF8080","%zt,%yt",
+                    hex = &HD0118000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                ElseIf mips = "vs2i.p" Then
+                    '"vs2i.p","0xD03B0080","0xFFFF8080","%zq,%yp",
+                    hex = &HD03B0080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vs2i.s" Then
+                    '"vs2i.s","0xD03B0000","0xFFFF8080","%zp,%ys",
+                    hex = &HD03B0000
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vsat0.p" Then
+                    '"vsat0.p","0xD0040080","0xFFFF8080","%zp,%yp",
+                    hex = &HD0040080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vsat0.q" Then
+                    '"vsat0.q","0xD0048080","0xFFFF8080","%zq,%yq",
+                    hex = &HD0048080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vsat0.s" Then
+                    '"vsat0.s","0xD0040000","0xFFFF8080","%zs,%ys",
+                    hex = &HD0040000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vsat0.t" Then
+                    '"vsat0.t","0xD0048000","0xFFFF8080","%zt,%yt",
+                    hex = &HD0048000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                ElseIf mips = "vsat1.p" Then
+                    '"vsat1.p","0xD0050080","0xFFFF8080","%zp,%yp",
+                    hex = &HD0050080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vsat1.q" Then
+                    '"vsat1.q","0xD0058080","0xFFFF8080","%zq,%yq",
+                    hex = &HD0058080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vsat1.s" Then
+                    '"vsat1.s","0xD0050000","0xFFFF8080","%zs,%ys",
+                    hex = &HD0050000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vsat1.t" Then
+                    '"vsat1.t","0xD0058000","0xFFFF8080","%zt,%yt",
+                    hex = &HD0058000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                ElseIf mips = "vsbn.s" Then
+                    '"vsbn.s","0x61000000","0xFF808080","%zs,%ys,%xs",
+                    hex = &H61000000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vsbz.s" Then
+                    '"vsbz.s","0xD0360000","0xFFFF8080","%zs,%ys",
+                    hex = &HD0360000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vscl.p" Then
+                    '"vscl.p","0x65000080","0xFF808080","%zp,%yp,%xs",
+                    hex = &H65000080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vscl.q" Then
+                    '"vscl.q","0x65008080","0xFF808080","%zq,%yq,%xs",
+                    hex = &H65008080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vscl.t" Then
+                    '"vscl.t","0x65008000","0xFF808080","%zt,%yt,%xs",
+                    hex = &H65008000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vscmp.p" Then
+                    '"vscmp.p","0x6E800080","0xFF808080","%zp,%yp,%xp",
+                    hex = &H6E800080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vscmp.q" Then
+                    '"vscmp.q","0x6E808080","0xFF808080","%zq,%yq,%xq",
+                    hex = &H6E808080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vscmp.s" Then
+                    '"vscmp.s","0x6E800000","0xFF808080","%zs,%ys,%xs",
+                    hex = &H6E800000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vscmp.t" Then
+                    '"vscmp.t","0x6E808000","0xFF808080","%zt,%yt,%xt",
+                    hex = &H6E808000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vsge.p" Then
+                    '"vsge.p","0x6F000080","0xFF808080","%zp,%yp,%xp",
+                    hex = &H6F000080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vsge.q" Then
+                    '"vsge.q","0x6F008080","0xFF808080","%zq,%yq,%xq",
+                    hex = &H6F008080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vsge.s" Then
+                    '"vsge.s","0x6F000000","0xFF808080","%zs,%ys,%xs",
+                    hex = &H6F000000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vsge.t" Then
+                    '"vsge.t","0x6F008000","0xFF808080","%zt,%yt,%xt",
+                    hex = &H6F008000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vsgn.p" Then
+                    '"vsgn.p","0xD04A0080","0xFFFF8080","%zp,%yp",
+                    hex = &HD04A0080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vsgn.q" Then
+                    '"vsgn.q","0xD04A8080","0xFFFF8080","%zq,%yq",
+                    hex = &HD04A8080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vsgn.s" Then
+                    '"vsgn.s","0xD04A0000","0xFFFF8080","%zs,%ys",
+                    hex = &HD04A0000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vsgn.t" Then
+                    '"vsgn.t","0xD04A8000","0xFFFF8080","%zt,%yt",
+                    hex = &HD04A8000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                ElseIf mips = "vsin.p" Then
+                    '"vsin.p","0xD0120080","0xFFFF8080","%zp,%yp",
+                    hex = &HD0120080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vsin.q" Then
+                    '"vsin.q","0xD0128080","0xFFFF8080","%zq,%yq",
+                    hex = &HD0128080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vsin.s" Then
+                    '"vsin.s","0xD0120000","0xFFFF8080","%zs,%ys",
+                    hex = &HD0120000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vsin.t" Then
+                    '"vsin.t","0xD0128000","0xFFFF8080","%zt,%yt",
+                    hex = &HD0128000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                ElseIf mips = "vslt.p" Then
+                    '"vslt.p","0x6F800080","0xFF808080","%zp,%yp,%xp",
+                    hex = &H6F800080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vslt.q" Then
+                    '"vslt.q","0x6F808080","0xFF808080","%zq,%yq,%xq",
+                    hex = &H6F808080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vslt.s" Then
+                    '"vslt.s","0x6F800000","0xFF808080","%zs,%ys,%xs",
+                    hex = &H6F800000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vslt.t" Then
+                    '"vslt.t","0x6F808000","0xFF808080","%zt,%yt,%xt",
+                    hex = &H6F808000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vsocp.p" Then
+                    '"vsocp.p","0xD0450080","0xFFFF8080","%zq,%yp",
+                    hex = &HD0450080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vsocp.s" Then
+                    '"vsocp.s","0xD0450000","0xFFFF8080","%zp,%ys",
+                    hex = &HD0450000
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vsqrt.p" Then
+                    '"vsqrt.p","0xD0160080","0xFFFF8080","%zp,%yp",
+                    hex = &HD0160080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vsqrt.q" Then
+                    '"vsqrt.q","0xD0168080","0xFFFF8080","%zq,%yq",
+                    hex = &HD0168080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vsqrt.s" Then
+                    '"vsqrt.s","0xD0160000","0xFFFF8080","%zs,%ys",
+                    hex = &HD0160000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vsqrt.t" Then
+                    '"vsqrt.t","0xD0168000","0xFFFF8080","%zt,%yt",
+                    hex = &HD0168000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                ElseIf mips = "vsrt1.q" Then
+                    '"vsrt1.q","0xD0408080","0xFFFF8080","%zq,%yq",
+                    hex = &HD0408080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vsrt2.q" Then
+                    '"vsrt2.q","0xD0418080","0xFFFF8080","%zq,%yq",
+                    hex = &HD0418080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vsrt3.q" Then
+                    '"vsrt3.q","0xD0488080","0xFFFF8080","%zq,%yq",
+                    hex = &HD0488080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vsrt4.q" Then
+                    '"vsrt4.q","0xD0498080","0xFFFF8080","%zq,%yq",
+                    hex = &HD0498080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vsub.p" Then
+                    '"vsub.p","0x60800080","0xFF808080","%zp,%yp,%xp",
+                    hex = &H60800080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vsub.q" Then
+                    '"vsub.q","0x60808080","0xFF808080","%zq,%yq,%xq",
+                    hex = &H60808080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vsub.s" Then
+                    '"vsub.s","0x60800000","0xFF808080","%zs,%ys,%xs",
+                    hex = &H60800000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vsub.t" Then
+                    '"vsub.t","0x60808000","0xFF808080","%zt,%yt,%xt",
+                    hex = &H60808000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                    hex = xyzq(ss(2), hex, 2)
+                ElseIf mips = "vsync" Then
+                    '"vsync","0xFFFF0320","0xFFFFFFFF","",
+                    hex = &HFFFF0320
+                ElseIf mips = "vt4444.q" Then
+                    '"vt4444.q","0xD0598080","0xFFFF8080","%zq,%yq",
+                    hex = &HD0598080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vt5551.q" Then
+                    '"vt5551.q","0xD05A8080","0xFFFF8080","%zq,%yq",
+                    hex = &HD05A8080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vt5650.q" Then
+                    '"vt5650.q","0xD05B8080","0xFFFF8080","%zq,%yq",
+                    hex = &HD05B8080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vus2i.p" Then
+                    '"vus2i.p","0xD03A0080","0xFFFF8080","%zq,%yp",
+                    hex = &HD03A0080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vus2i.s" Then
+                    '"vus2i.s","0xD03A0000","0xFFFF8080","%zp,%ys",
+                    hex = &HD03A0000
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vzero.p" Then
+                    '"vzero.p","0xD0060080","0xFFFFFF80","%zp",
+                    hex = &HD0060080
+                    hex = xyzp(ss(0), hex, 0)
+                ElseIf mips = "vzero.q" Then
+                    '"vzero.q","0xD0068080","0xFFFFFF80","%zq",
+                    hex = &HD0068080
+                    hex = xyzq(ss(0), hex, 0)
+                ElseIf mips = "vzero.s" Then
+                    '"vzero.s","0xD0060000","0xFFFFFF80","%zs",
+                    hex = &HD0060000
+                    hex = xyzs(ss(0), hex, 0)
+                ElseIf mips = "vzero.t" Then
+                    '"vzero.t","0xD0068000","0xFFFFFF80","%zt",
+                    hex = &HD0068000
+                    hex = xyzt(ss(0), hex, 0)
+
 
                 End If
 
