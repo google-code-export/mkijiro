@@ -892,7 +892,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 
     Dim dgcp As DataGridViewRow()
 
-    Private Sub コピーToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles copy.Click
+    Private Sub コピーToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles copy.Click, CPADV.Click
         Try
             Dim d As Integer = DataGridView1.CurrentCell.RowIndex
             Dim row As DataGridViewRow
@@ -911,6 +911,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                             jj = r.Index
                         End If
                         row = DataGridView1.Rows(r.Index)
+
                         'st.Append("<DGLINE")
                         'st.Append((r.Index + 1).ToString.PadLeft(3, "0"c))
                         'st.Append("='")
@@ -931,10 +932,22 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                         'End If
                         'st.Append("'>")
                         'st.Append(vbCrLf)
+
                         st.Append(edmode)
                         st.Append(row.Cells(0).Value.ToString)
                         st.Append(" ")
-                        st.AppendLine(row.Cells(1).Value.ToString)
+                        st.Append(row.Cells(1).Value.ToString)
+                        If sender Is CPADV Then
+                            st.Append(" #")
+                            If Not row.Cells(3).Value Is Nothing Then
+                                st.Append(row.Cells(3).Value.ToString)
+                            End If
+                            st.Append(",")
+                            If Not row.Cells(4).Value Is Nothing Then
+                                st.Append(row.Cells(4).Value.ToString)
+                            End If
+                        End If
+                        st.AppendLine()
                         cursor(i) = st.ToString
                         dgcp(i) = CloneWithValues(row)
                         index(i) = r.Index
