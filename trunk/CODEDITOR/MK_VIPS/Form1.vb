@@ -4264,13 +4264,6 @@ Public Class Form1
                     sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
                     i += 4
                 End If
-                If MODE.Text = "JPCSP" Then
-                    sb.Append("0x")
-                    sb.Append(Convert.ToString(i Or &H20000000, 16).ToUpper.PadLeft(8, "0"c))
-                    sb.Append(" ")
-                    sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                    i += 4
-                End If
                 If MODE.Text = "PSPAR" Then
                     sb.Append("_M ")
                     sb.Append("0x")
@@ -4428,4 +4421,12 @@ Public Class Form1
 
     End Sub
 
+    Private Sub Button1_Click_1(sender As System.Object, e As System.EventArgs) Handles Button1.Click
+        Dim rm As New Regex("^_[A-Z]*? ", RegexOptions.ECMAScript)
+        Dim rmm As Match = rm.Match(CODE.Text)
+        While rmm.Success
+            CODE.Text = CODE.Text.Replace(rmm.Value, "")
+            rmm = rmm.NextMatch
+        End While
+    End Sub
 End Class

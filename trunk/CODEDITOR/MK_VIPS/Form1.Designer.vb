@@ -30,6 +30,7 @@ Partial Class Form1
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.ASMSB = New System.Windows.Forms.Button()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
@@ -47,7 +48,7 @@ Partial Class Form1
         Me.フォント = New System.Windows.Forms.ToolStripMenuItem()
         Me.バージョン = New System.Windows.Forms.ToolStripMenuItem()
         Me.savea = New System.Windows.Forms.Button()
-        Me.ASMSB = New System.Windows.Forms.Button()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
@@ -68,7 +69,7 @@ Partial Class Form1
         'MODE
         '
         Me.MODE.FormattingEnabled = True
-        Me.MODE.Items.AddRange(New Object() {"NITEPR", "CWCHEAT", "JPCSP", "PSPAR", "PMETAN", "PSPAR(0xE)", "TEMPAR(0xC2)", "CMFUSION(0xF0)"})
+        Me.MODE.Items.AddRange(New Object() {"NITEPR", "CWCHEAT", "PSPAR", "PMETAN", "PSPAR(0xE)", "TEMPAR(0xC2)", "CMFUSION(0xF0)"})
         Me.MODE.Location = New System.Drawing.Point(15, 70)
         Me.MODE.Name = "MODE"
         Me.MODE.Size = New System.Drawing.Size(101, 20)
@@ -77,7 +78,7 @@ Partial Class Form1
         '
         'cvt_asm2code
         '
-        Me.cvt_asm2code.Location = New System.Drawing.Point(140, 16)
+        Me.cvt_asm2code.Location = New System.Drawing.Point(154, 13)
         Me.cvt_asm2code.Name = "cvt_asm2code"
         Me.cvt_asm2code.Size = New System.Drawing.Size(76, 41)
         Me.cvt_asm2code.TabIndex = 2
@@ -131,8 +132,17 @@ Partial Class Form1
         Me.Panel1.Controls.Add(Me.MODE)
         Me.Panel1.Location = New System.Drawing.Point(23, 376)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(228, 104)
+        Me.Panel1.Size = New System.Drawing.Size(251, 102)
         Me.Panel1.TabIndex = 7
+        '
+        'ASMSB
+        '
+        Me.ASMSB.Location = New System.Drawing.Point(154, 68)
+        Me.ASMSB.Name = "ASMSB"
+        Me.ASMSB.Size = New System.Drawing.Size(75, 23)
+        Me.ASMSB.TabIndex = 7
+        Me.ASMSB.Text = "ASM保存"
+        Me.ASMSB.UseVisualStyleBackColor = True
         '
         'Label3
         '
@@ -154,16 +164,17 @@ Partial Class Form1
         '
         'Panel2
         '
+        Me.Panel2.Controls.Add(Me.Button1)
         Me.Panel2.Controls.Add(Me.save2)
         Me.Panel2.Controls.Add(Me.cnt_code2asm)
-        Me.Panel2.Location = New System.Drawing.Point(291, 389)
+        Me.Panel2.Location = New System.Drawing.Point(291, 378)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(354, 91)
+        Me.Panel2.Size = New System.Drawing.Size(354, 100)
         Me.Panel2.TabIndex = 10
         '
         'save2
         '
-        Me.save2.Location = New System.Drawing.Point(275, 3)
+        Me.save2.Location = New System.Drawing.Point(265, 11)
         Me.save2.Name = "save2"
         Me.save2.Size = New System.Drawing.Size(76, 41)
         Me.save2.TabIndex = 1
@@ -172,7 +183,7 @@ Partial Class Form1
         '
         'cnt_code2asm
         '
-        Me.cnt_code2asm.Location = New System.Drawing.Point(3, 3)
+        Me.cnt_code2asm.Location = New System.Drawing.Point(3, 11)
         Me.cnt_code2asm.Name = "cnt_code2asm"
         Me.cnt_code2asm.Size = New System.Drawing.Size(86, 41)
         Me.cnt_code2asm.TabIndex = 0
@@ -259,20 +270,20 @@ Partial Class Form1
         Me.savea.Text = "ASM保存"
         Me.savea.UseVisualStyleBackColor = True
         '
-        'ASMSB
+        'Button1
         '
-        Me.ASMSB.Location = New System.Drawing.Point(140, 66)
-        Me.ASMSB.Name = "ASMSB"
-        Me.ASMSB.Size = New System.Drawing.Size(75, 23)
-        Me.ASMSB.TabIndex = 7
-        Me.ASMSB.Text = "ASM保存"
-        Me.ASMSB.UseVisualStyleBackColor = True
+        Me.Button1.Location = New System.Drawing.Point(172, 11)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(73, 41)
+        Me.Button1.TabIndex = 2
+        Me.Button1.Text = "_LMN除去"
+        Me.Button1.UseVisualStyleBackColor = True
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(675, 490)
+        Me.ClientSize = New System.Drawing.Size(675, 488)
         Me.Controls.Add(Me.Panel2)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.Label3)
@@ -320,5 +331,6 @@ Partial Class Form1
     Friend WithEvents コード保存ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents savea As System.Windows.Forms.Button
     Friend WithEvents ASMSB As System.Windows.Forms.Button
+    Friend WithEvents Button1 As System.Windows.Forms.Button
 
 End Class
