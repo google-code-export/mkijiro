@@ -35,52 +35,57 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.listView3 = new System.Windows.Forms.ListView();
-            this.listView1 = new System.Windows.Forms.ListView();
-            this.listView2 = new System.Windows.Forms.ListView();
-            this.listView4 = new System.Windows.Forms.ListView();
-            this.listView5 = new System.Windows.Forms.ListView();
-            this.listView6 = new System.Windows.Forms.ListView();
-            this.listView7 = new System.Windows.Forms.ListView();
-            this.listView8 = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.listView1 = new System.Windows.Forms.ListView();
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.listView2 = new System.Windows.Forms.ListView();
             this.columnHeader11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader12 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader13 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader14 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader15 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.listView4 = new System.Windows.Forms.ListView();
             this.columnHeader16 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader17 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader18 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader19 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader20 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader21 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader22 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader23 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader24 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader25 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader26 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader27 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader28 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader29 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader30 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.listView5 = new System.Windows.Forms.ListView();
             this.columnHeader31 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader32 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader33 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader34 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader35 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.listView6 = new System.Windows.Forms.ListView();
             this.columnHeader36 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader37 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader38 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader39 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader40 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.listView7 = new System.Windows.Forms.ListView();
+            this.columnHeader21 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader22 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader23 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader24 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader25 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.listView8 = new System.Windows.Forms.ListView();
+            this.columnHeader26 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader27 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader28 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader29 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader30 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.vToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.vIWETYEPEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.h24 = new System.Windows.Forms.ToolStripMenuItem();
+            this.v24 = new System.Windows.Forms.ToolStripMenuItem();
+            this.h33 = new System.Windows.Forms.ToolStripMenuItem();
+            this.v33 = new System.Windows.Forms.ToolStripMenuItem();
             columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -88,6 +93,22 @@
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // columnHeader7
+            // 
+            columnHeader7.Text = "+00";
+            // 
+            // columnHeader8
+            // 
+            columnHeader8.Text = "+10";
+            // 
+            // columnHeader9
+            // 
+            columnHeader9.Text = "+20";
+            // 
+            // columnHeader10
+            // 
+            columnHeader10.Text = "+30";
             // 
             // button1
             // 
@@ -131,6 +152,28 @@
             this.listView3.View = System.Windows.Forms.View.Details;
             this.listView3.SelectedIndexChanged += new System.EventHandler(this.listView3_SelectedIndexChanged);
             // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "S200";
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "+00";
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "+10";
+            this.columnHeader3.Width = 57;
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "+20";
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Text = "+30";
+            this.columnHeader5.Width = 64;
+            // 
             // listView1
             // 
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -154,6 +197,11 @@
             this.listView1.View = System.Windows.Forms.View.Details;
             this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
             // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Text = "S000";
+            this.columnHeader6.Width = 59;
+            // 
             // listView2
             // 
             this.listView2.Activation = System.Windows.Forms.ItemActivation.OneClick;
@@ -175,6 +223,26 @@
             this.listView2.UseCompatibleStateImageBehavior = false;
             this.listView2.View = System.Windows.Forms.View.Details;
             this.listView2.SelectedIndexChanged += new System.EventHandler(this.listView2_SelectedIndexChanged);
+            // 
+            // columnHeader11
+            // 
+            this.columnHeader11.Text = "S100";
+            // 
+            // columnHeader12
+            // 
+            this.columnHeader12.Text = "+00";
+            // 
+            // columnHeader13
+            // 
+            this.columnHeader13.Text = "+10";
+            // 
+            // columnHeader14
+            // 
+            this.columnHeader14.Text = "+20";
+            // 
+            // columnHeader15
+            // 
+            this.columnHeader15.Text = "+30";
             // 
             // listView4
             // 
@@ -198,6 +266,26 @@
             this.listView4.View = System.Windows.Forms.View.Details;
             this.listView4.SelectedIndexChanged += new System.EventHandler(this.listView4_SelectedIndexChanged);
             // 
+            // columnHeader16
+            // 
+            this.columnHeader16.Text = "S300";
+            // 
+            // columnHeader17
+            // 
+            this.columnHeader17.Text = "+00";
+            // 
+            // columnHeader18
+            // 
+            this.columnHeader18.Text = "+10";
+            // 
+            // columnHeader19
+            // 
+            this.columnHeader19.Text = "+20";
+            // 
+            // columnHeader20
+            // 
+            this.columnHeader20.Text = "+30";
+            // 
             // listView5
             // 
             this.listView5.Activation = System.Windows.Forms.ItemActivation.OneClick;
@@ -219,6 +307,26 @@
             this.listView5.UseCompatibleStateImageBehavior = false;
             this.listView5.View = System.Windows.Forms.View.Details;
             this.listView5.SelectedIndexChanged += new System.EventHandler(this.listView5_SelectedIndexChanged);
+            // 
+            // columnHeader31
+            // 
+            this.columnHeader31.Text = "S400";
+            // 
+            // columnHeader32
+            // 
+            this.columnHeader32.Text = "+00";
+            // 
+            // columnHeader33
+            // 
+            this.columnHeader33.Text = "+20";
+            // 
+            // columnHeader34
+            // 
+            this.columnHeader34.Text = "+20";
+            // 
+            // columnHeader35
+            // 
+            this.columnHeader35.Text = "+30";
             // 
             // listView6
             // 
@@ -242,6 +350,26 @@
             this.listView6.View = System.Windows.Forms.View.Details;
             this.listView6.SelectedIndexChanged += new System.EventHandler(this.listView6_SelectedIndexChanged);
             // 
+            // columnHeader36
+            // 
+            this.columnHeader36.Text = "S500";
+            // 
+            // columnHeader37
+            // 
+            this.columnHeader37.Text = "+00";
+            // 
+            // columnHeader38
+            // 
+            this.columnHeader38.Text = "+10";
+            // 
+            // columnHeader39
+            // 
+            this.columnHeader39.Text = "+20";
+            // 
+            // columnHeader40
+            // 
+            this.columnHeader40.Text = "+30";
+            // 
             // listView7
             // 
             this.listView7.Activation = System.Windows.Forms.ItemActivation.OneClick;
@@ -263,6 +391,26 @@
             this.listView7.UseCompatibleStateImageBehavior = false;
             this.listView7.View = System.Windows.Forms.View.Details;
             this.listView7.SelectedIndexChanged += new System.EventHandler(this.listView7_SelectedIndexChanged);
+            // 
+            // columnHeader21
+            // 
+            this.columnHeader21.Text = "S600";
+            // 
+            // columnHeader22
+            // 
+            this.columnHeader22.Text = "+00";
+            // 
+            // columnHeader23
+            // 
+            this.columnHeader23.Text = "+10";
+            // 
+            // columnHeader24
+            // 
+            this.columnHeader24.Text = "+20";
+            // 
+            // columnHeader25
+            // 
+            this.columnHeader25.Text = "+30";
             // 
             // listView8
             // 
@@ -286,109 +434,6 @@
             this.listView8.View = System.Windows.Forms.View.Details;
             this.listView8.SelectedIndexChanged += new System.EventHandler(this.listView8_SelectedIndexChanged);
             // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = "S200";
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "+00";
-            // 
-            // columnHeader3
-            // 
-            this.columnHeader3.Text = "+10";
-            this.columnHeader3.Width = 57;
-            // 
-            // columnHeader4
-            // 
-            this.columnHeader4.Text = "+20";
-            // 
-            // columnHeader5
-            // 
-            this.columnHeader5.Text = "+30";
-            this.columnHeader5.Width = 64;
-            // 
-            // columnHeader6
-            // 
-            this.columnHeader6.Text = "S000";
-            this.columnHeader6.Width = 59;
-            // 
-            // columnHeader7
-            // 
-            columnHeader7.Text = "+00";
-            // 
-            // columnHeader8
-            // 
-            columnHeader8.Text = "+10";
-            // 
-            // columnHeader9
-            // 
-            columnHeader9.Text = "+20";
-            // 
-            // columnHeader10
-            // 
-            columnHeader10.Text = "+30";
-            // 
-            // columnHeader11
-            // 
-            this.columnHeader11.Text = "S100";
-            // 
-            // columnHeader12
-            // 
-            this.columnHeader12.Text = "+00";
-            // 
-            // columnHeader13
-            // 
-            this.columnHeader13.Text = "+10";
-            // 
-            // columnHeader14
-            // 
-            this.columnHeader14.Text = "+20";
-            // 
-            // columnHeader15
-            // 
-            this.columnHeader15.Text = "+30";
-            // 
-            // columnHeader16
-            // 
-            this.columnHeader16.Text = "S300";
-            // 
-            // columnHeader17
-            // 
-            this.columnHeader17.Text = "+00";
-            // 
-            // columnHeader18
-            // 
-            this.columnHeader18.Text = "+10";
-            // 
-            // columnHeader19
-            // 
-            this.columnHeader19.Text = "+20";
-            // 
-            // columnHeader20
-            // 
-            this.columnHeader20.Text = "+30";
-            // 
-            // columnHeader21
-            // 
-            this.columnHeader21.Text = "S600";
-            // 
-            // columnHeader22
-            // 
-            this.columnHeader22.Text = "+00";
-            // 
-            // columnHeader23
-            // 
-            this.columnHeader23.Text = "+10";
-            // 
-            // columnHeader24
-            // 
-            this.columnHeader24.Text = "+20";
-            // 
-            // columnHeader25
-            // 
-            this.columnHeader25.Text = "+30";
-            // 
             // columnHeader26
             // 
             this.columnHeader26.Text = "S700";
@@ -409,53 +454,14 @@
             // 
             this.columnHeader30.Text = "+30";
             // 
-            // columnHeader31
-            // 
-            this.columnHeader31.Text = "S400";
-            // 
-            // columnHeader32
-            // 
-            this.columnHeader32.Text = "+00";
-            // 
-            // columnHeader33
-            // 
-            this.columnHeader33.Text = "+20";
-            // 
-            // columnHeader34
-            // 
-            this.columnHeader34.Text = "+20";
-            // 
-            // columnHeader35
-            // 
-            this.columnHeader35.Text = "+30";
-            // 
-            // columnHeader36
-            // 
-            this.columnHeader36.Text = "S500";
-            // 
-            // columnHeader37
-            // 
-            this.columnHeader37.Text = "+00";
-            // 
-            // columnHeader38
-            // 
-            this.columnHeader38.Text = "+10";
-            // 
-            // columnHeader39
-            // 
-            this.columnHeader39.Text = "+20";
-            // 
-            // columnHeader40
-            // 
-            this.columnHeader40.Text = "+30";
-            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.vToolStripMenuItem});
+            this.vToolStripMenuItem,
+            this.vIWETYEPEToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(670, 26);
+            this.menuStrip1.Size = new System.Drawing.Size(667, 26);
             this.menuStrip1.TabIndex = 12;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -477,14 +483,57 @@
             this.panel1.Controls.Add(this.listView3);
             this.panel1.Location = new System.Drawing.Point(24, 69);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(634, 419);
+            this.panel1.Size = new System.Drawing.Size(945, 419);
             this.panel1.TabIndex = 14;
+            // 
+            // vIWETYEPEToolStripMenuItem
+            // 
+            this.vIWETYEPEToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.v24,
+            this.h24,
+            this.v33,
+            this.h33});
+            this.vIWETYEPEToolStripMenuItem.Name = "vIWETYEPEToolStripMenuItem";
+            this.vIWETYEPEToolStripMenuItem.Size = new System.Drawing.Size(89, 22);
+            this.vIWETYEPEToolStripMenuItem.Text = "VIWETYEPE";
+            // 
+            // h24
+            // 
+            this.h24.Name = "h24";
+            this.h24.Size = new System.Drawing.Size(152, 22);
+            this.h24.Text = "2x4(横)";
+            this.h24.ToolTipText = "０１\r\n２３\r\n４５\r\n６７";
+            this.h24.Click += new System.EventHandler(this.h24_Click);
+            // 
+            // v24
+            // 
+            this.v24.Name = "v24";
+            this.v24.Size = new System.Drawing.Size(152, 22);
+            this.v24.Text = "2x4(縦)";
+            this.v24.ToolTipText = "０４\r\n１５\r\n２６\r\n３７\r\n";
+            this.v24.Click += new System.EventHandler(this.v24_Click);
+            // 
+            // h33
+            // 
+            this.h33.Name = "h33";
+            this.h33.Size = new System.Drawing.Size(152, 22);
+            this.h33.Text = "3x3(横)";
+            this.h33.ToolTipText = "０１２\r\n３４５\r\n６７";
+            this.h33.Click += new System.EventHandler(this.h33_Click);
+            // 
+            // v33
+            // 
+            this.v33.Name = "v33";
+            this.v33.Size = new System.Drawing.Size(152, 22);
+            this.v33.Text = "3x3(縦)";
+            this.v33.ToolTipText = "０３６\r\n１４７\r\n２５\r\n";
+            this.v33.Click += new System.EventHandler(this.v33_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(670, 496);
+            this.ClientSize = new System.Drawing.Size(667, 496);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
@@ -552,6 +601,11 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.ColumnHeader columnHeader6;
+        private System.Windows.Forms.ToolStripMenuItem vIWETYEPEToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem h24;
+        private System.Windows.Forms.ToolStripMenuItem v24;
+        private System.Windows.Forms.ToolStripMenuItem h33;
+        private System.Windows.Forms.ToolStripMenuItem v33;
     }
 }
 
