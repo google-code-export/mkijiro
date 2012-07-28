@@ -199,5 +199,64 @@ namespace WindowsFormsApplication1
         {
 
         }
+
+        private void rmaptbl(ListView ls, int x, int y)
+        {
+            listView1.SetBounds(9 + x * 308, 3 + y * 103, 0, 0, BoundsSpecified.Location);
+        }
+
+        private void v24_Click(object sender, EventArgs e)
+        {
+            this.Size = new Size(676, 534);
+            listView1.SetBounds(9 + 0* 308, 3 + 0 * 103, 0, 0, BoundsSpecified.Location);
+            listView2.SetBounds(9 + 0* 308, 3 + 1 * 103, 0, 0, BoundsSpecified.Location);
+            listView3.SetBounds(9 + 0 * 308, 3 + 2 * 103, 0, 0, BoundsSpecified.Location);
+            listView4.SetBounds(9 + 0 * 308, 3 + 3 * 103, 0, 0, BoundsSpecified.Location);
+            listView5.SetBounds(9 + 1 * 308, 3 + 0 * 103, 0, 0, BoundsSpecified.Location);
+            listView6.SetBounds(9 + 1 * 308, 3 + 1 * 103, 0, 0, BoundsSpecified.Location);
+            listView7.SetBounds(9 + 1 * 308, 3 + 2 * 103, 0, 0, BoundsSpecified.Location);
+            listView8.SetBounds(9 + 1 * 308, 3 + 3 * 103, 0, 0, BoundsSpecified.Location);
+        }
+
+        private void h24_Click(object sender, EventArgs e)
+        {
+            this.Size = new Size(676, 534);
+            listView1.SetBounds(9 + 0 * 308, 3 + 0 * 103, 0, 0, BoundsSpecified.Location);
+            listView2.SetBounds(9 + 1 * 308, 3 + 0 * 103, 0, 0, BoundsSpecified.Location);
+            listView3.SetBounds(9 + 0 * 308, 3 + 1 * 103, 0, 0, BoundsSpecified.Location);
+            listView4.SetBounds(9 + 1 * 308, 3 + 1 * 103, 0, 0, BoundsSpecified.Location);
+            listView5.SetBounds(9 + 0 * 308, 3 + 2 * 103, 0, 0, BoundsSpecified.Location);
+            listView6.SetBounds(9 + 1 * 308, 3 + 2 * 103, 0, 0, BoundsSpecified.Location);
+            listView7.SetBounds(9 + 0 * 308, 3 + 3 * 103, 0, 0, BoundsSpecified.Location);
+            listView8.SetBounds(9 + 1 * 308, 3 + 3 * 103, 0, 0, BoundsSpecified.Location);
+        }
+
+        private void v33_Click(object sender, EventArgs e)
+        {
+            this.Size = new Size(1000, 430);
+            listView1.SetBounds(9 + 0 * 308, 3 + 0 * 103, 0, 0, BoundsSpecified.Location);
+            listView2.SetBounds(9 + 0 * 308, 3 + 1 * 103, 0, 0, BoundsSpecified.Location);
+            listView3.SetBounds(9 + 0 * 308, 3 + 2 * 103, 0, 0, BoundsSpecified.Location);
+            listView4.SetBounds(9 + 1 * 308, 3 + 0 * 103, 0, 0, BoundsSpecified.Location);
+            listView5.SetBounds(9 + 1 * 308, 3 + 1 * 103, 0, 0, BoundsSpecified.Location);
+            listView6.SetBounds(9 + 1 * 308, 3 + 2 * 103, 0, 0, BoundsSpecified.Location);
+            listView7.SetBounds(9 + 2 * 308, 3 + 0 * 103, 0, 0, BoundsSpecified.Location);
+            listView8.SetBounds(9 + 2 * 308, 3 + 1 * 103, 0, 0, BoundsSpecified.Location);
+
+        }
+
+        private void h33_Click(object sender, EventArgs e)
+        {
+            this.Size = new Size(1000, 430);
+            listView1.SetBounds(9 + 0 * 308, 3 + 0 * 103, 0, 0, BoundsSpecified.Location);
+            listView2.SetBounds(9 + 1 * 308, 3 + 0 * 103, 0, 0, BoundsSpecified.Location);
+            listView3.SetBounds(9 + 2 * 308, 3 + 0 * 103, 0, 0, BoundsSpecified.Location);
+            listView4.SetBounds(9 + 0 * 308, 3 + 1 * 103, 0, 0, BoundsSpecified.Location);
+            listView5.SetBounds(9 + 1 * 308, 3 + 1 * 103, 0, 0, BoundsSpecified.Location);
+            listView6.SetBounds(9 + 2 * 308, 3 + 1 * 103, 0, 0, BoundsSpecified.Location);
+            listView7.SetBounds(9 + 0 * 308, 3 + 2 * 103, 0, 0, BoundsSpecified.Location);
+            listView8.SetBounds(9 + 1 * 308, 3 + 2 * 103, 0, 0, BoundsSpecified.Location);
+
+        }
     }
 }
