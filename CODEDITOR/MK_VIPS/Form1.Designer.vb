@@ -34,6 +34,7 @@ Partial Class Form1
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.save2 = New System.Windows.Forms.Button()
         Me.cnt_code2asm = New System.Windows.Forms.Button()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
@@ -48,7 +49,6 @@ Partial Class Form1
         Me.フォント = New System.Windows.Forms.ToolStripMenuItem()
         Me.バージョン = New System.Windows.Forms.ToolStripMenuItem()
         Me.savea = New System.Windows.Forms.Button()
-        Me.Button1 = New System.Windows.Forms.Button()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
@@ -172,6 +172,15 @@ Partial Class Form1
         Me.Panel2.Size = New System.Drawing.Size(354, 100)
         Me.Panel2.TabIndex = 10
         '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(172, 11)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(73, 41)
+        Me.Button1.TabIndex = 2
+        Me.Button1.Text = "_LMN除去"
+        Me.Button1.UseVisualStyleBackColor = True
+        '
         'save2
         '
         Me.save2.Location = New System.Drawing.Point(265, 11)
@@ -189,7 +198,6 @@ Partial Class Form1
         Me.cnt_code2asm.TabIndex = 0
         Me.cnt_code2asm.Text = "コード->ASM変換"
         Me.cnt_code2asm.UseVisualStyleBackColor = True
-        Me.cnt_code2asm.Visible = False
         '
         'MenuStrip1
         '
@@ -269,15 +277,6 @@ Partial Class Form1
         Me.savea.TabIndex = 7
         Me.savea.Text = "ASM保存"
         Me.savea.UseVisualStyleBackColor = True
-        '
-        'Button1
-        '
-        Me.Button1.Location = New System.Drawing.Point(172, 11)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(73, 41)
-        Me.Button1.TabIndex = 2
-        Me.Button1.Text = "_LMN除去"
-        Me.Button1.UseVisualStyleBackColor = True
         '
         'Form1
         '
