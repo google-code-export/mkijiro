@@ -640,9 +640,8 @@ Public Class Form1
 
     'decoder PRXTOOLの移植
 #Region "decoder"
-    Function decoders(ByVal str As String, ByVal l As Integer) As String
+    Function decoders(ByVal hex As UInteger, ByVal l As Integer) As String
         Try
-            Dim hex As UInteger = Convert.ToUInt32(str, 16)
             Dim mask As UInteger = 0
             Dim mips As UInteger = 0
             Dim asm As String = ""
@@ -664,7 +663,7 @@ Public Class Form1
             Return asm
         Catch ex As Exception
             MessageBox.Show(ex.Message)
-            Return str
+            Return "decode error"
         End Try
     End Function
 
@@ -829,12 +828,24 @@ Public Class Form1
                                 If (bytes(1) And &H7F) < &H7C Then
                                     Dim bytes2 As Byte() = str2bin(converthalffloat2(bytes))
                                     If BitConverter.ToSingle(bytes2, 0) > 0.00009 Then
-                                        sss = BitConverter.ToSingle(bytes2, 0).ToString
+                                        sss = BitConverter.ToSingle(bytes2, 0).ToString & "hf"
                                     Else
-                                        sss = "0"
+                                        sss = "0hf"
                                     End If
+                                ElseIf (bytes(1) And &H7F) < &H7F Then
+                                    If (bytes(1) And &H80) = 0 Then
+                                        sss = "+"
+                                    Else
+                                        sss = "-"
+                                    End If
+                                    sss &= "Inf"
                                 Else
-                                    sss = "NaN"
+                                    If (bytes(1) And &H80) = 0 Then
+                                        sss = "+"
+                                    Else
+                                        sss = "-"
+                                    End If
+                                    sss &= "NaN"
                                 End If
                                 str = str.Replace("%v" & ss(i + 1), sss)
                                 'output = print_vfpu_halffloat(opcode, output); i++; 
@@ -978,7 +989,6 @@ Public Class Form1
 
     End Function
 
-
     Function print_vfpu_rotator(ByVal l As UInteger) As String
 
         Dim elements(4) As String
@@ -1071,7 +1081,6 @@ Public Class Form1
 
         Return ss
     End Function
-
 
 
     Function print_vfpu_reg(ByVal reg As Integer, ByVal offset As Integer, ByVal one As String, ByVal two As String) As String
@@ -3908,13 +3917,17 @@ Public Class Form1
                     Exit For
                 End If
             Next
-            k = label_addr(j)
-            If k < &H1800000 Then
-                k += &H8800000
+            If (j < 255) Then
+                k = label_addr(j)
+                If k < &H1800000 Then
+                    k += &H8800000
+                End If
+                hex = hex Or ((k >> 2) And &H3FFFFFF)
+            Else
+                MessageBox.Show(str & "に該当するラベルがみつかりませんでした", "")
             End If
-            hex = hex Or ((k >> 2) And &H3FFFFFF)
-        End If
-        Return hex
+            End If
+            Return hex
     End Function
 
     'type branch offset
@@ -3944,6 +3957,7 @@ Public Class Form1
                     Exit For
                 End If
             Next
+            If (j < 255) Then
             k = label_addr(j)
             If k < &H1800000 Then
                 k += &H8800000
@@ -3951,7 +3965,10 @@ Public Class Form1
             If hex2 < &H1800000 Then
                 hex2 += &H8800000
             End If
-            hex = hex Or ((k - hex2 - 4) >> 2 And &HFFFF)
+                hex = hex Or ((k - hex2 - 4) >> 2 And &HFFFF)
+            Else
+                MessageBox.Show(str & "に該当するラベルがみつかりませんでした", "")
+            End If
         End If
         Return hex
     End Function
@@ -4194,11 +4211,29 @@ Public Class Form1
     Dim label_addr(255) As Integer
 
     Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles cvt_asm2code.Click
-        Dim ss As String() = (ASM.Text & vbCrLf).Split(CChar(vbLf))
-        Dim sb As New StringBuilder
+        Dim sa As New StringBuilder
         Dim st As Integer = Convert.ToInt32(ADDR.Text, 16)
-        Dim i As Integer = Convert.ToInt32(ADDR.Text, 16)
-        If MODE.SelectedIndex < 2 Then
+        If MODE.SelectedIndex = 4 Then
+            Dim ss As String() = Regex.Split((ASM.Text & vbCrLf), "setpc")
+            cvtget(st, (ASM.Text & vbCrLf), 1)
+            sa.Append(cvtget(st, ss(0), 2))
+            For i = 1 To ss.Length - 1
+                Dim sts As String = ss(i).Substring(0, ss(i).IndexOf(vbLf)).Trim
+                st = offset_boolean(" " & sts, 0) << 2
+                sa.Append(cvtget(st, "//" & ss(i), 4))
+            Next
+        Else
+            sa.Append(cvtget(st, (ASM.Text & vbCrLf), 0))
+        End If
+
+        CODE.Text = sa.ToString
+    End Sub
+
+    Private Function cvtget(ByVal st As Integer, ByVal asms As String, ByVal selm As Integer) As String
+        Dim ss As String() = (asms).Split(CChar(vbLf))
+        Dim sb As New StringBuilder
+        Dim i As Integer = st
+        If mode.SelectedIndex < 2 Then
             If st >= &H8800000 Then
                 i -= &H8800000
             End If
@@ -4216,126 +4251,155 @@ Public Class Form1
 
         Dim ct As Integer = 0
         Dim ii As Integer = i
+        Dim setpc As Integer
         Dim odd As Boolean = False
-        Array.Clear(label, 0, 256)
-        Array.Clear(label_addr, 0, 256)
+        If selm < 2 Then
+            Array.Clear(label, 0, 256)
+            Array.Clear(label_addr, 0, 256)
 
-        For Each s As String In ss
-            If s.Trim = "" Then
-            ElseIf s.Length > 0 AndAlso (s(0) = "_" Or s(0) = "/" Or s(0) = "#" Or s(0) = ";") Then
-            ElseIf s.Length > 2 AndAlso (s.Substring(0, 3) = "FNC") Then
-            ElseIf s.Length > 2 AndAlso s.Substring(s.Length - 2, 1) = ":" Then
-                label(ct) = s.Remove(s.Length - 2, 2).ToLower.Trim
-                label_addr(ct) = ii
-                ct += 1
-            ElseIf s.Length > 2 AndAlso s.Contains(":") Then
-                label(ct) = s.Substring(0, s.IndexOf(":")).ToLower.Trim
-                label_addr(ct) = ii
-                ct += 1
-                ii += 4
-            ElseIf s.Length > 4 AndAlso s.Substring(0, 5) = "label" Then
-                label(ct) = s.Remove(0, 5).ToLower.Trim
-                label_addr(ct) = ii
-                ct += 1
-            Else
-                ii += 4
-            End If
-        Next
+            For Each s As String In ss
+                If s.Trim = "" Then
+                ElseIf s.Length > 0 AndAlso (s(0) = "_" Or s(0) = "/" Or s(0) = "#" Or s(0) = ";") Then
+                ElseIf s.Length > 2 AndAlso (s.Substring(0, 3) = "FNC") Then
+                ElseIf s.Length > 2 AndAlso s.Substring(s.Length - 2, 1) = ":" Then
+                    label(ct) = s.Remove(s.Length - 2, 2).ToLower.Trim
+                    label_addr(ct) = ii
+                    ct += 1
+                ElseIf s.Length > 2 AndAlso s.Contains(":") Then
+                    label(ct) = s.Substring(0, s.IndexOf(":")).ToLower.Trim
+                    label_addr(ct) = ii
+                    ct += 1
+                    ii += 4
+                ElseIf s.Length > 4 AndAlso s.Substring(0, 5) = "label" Then
+                    label(ct) = s.Remove(0, 5).ToLower.Trim
+                    label_addr(ct) = ii
+                    ct += 1
+                ElseIf s.Length > 5 AndAlso s.Substring(0, 5) = "setpc" Then
+                    setpc = offset_boolean(s.Trim, 0) << 2
+                    If setpc <> 0 Then
+                        If MODE.SelectedIndex < 2 Then
+                            If setpc >= &H8800000 Then
+                                setpc -= &H8800000
+                            End If
+                        ElseIf MODE.SelectedIndex > 4 Then
+                            MessageBox.Show("TEMP/CMFサブルーチンは開始アドレスがカーネルメモリ固定のためSETPCは使えません。")
+                            Return ""
+                        End If
+                        ii = setpc
+                    End If
+                Else
+                    ii += 4
+                End If
 
-        For Each s As String In ss
-            If s.Trim = "" Then
-            ElseIf s.Length > 0 AndAlso (s(0) = "_" Or s(0) = "/" Or s(0) = "#" Or s(0) = ";") Then
-            ElseIf s.Length > 2 AndAlso (s.Substring(0, 3) = "FNC") Then
-            ElseIf s.Length > 2 AndAlso s.Substring(s.Length - 2, 1) = ":" Then
-            ElseIf s.Length > 4 AndAlso s.Substring(0, 5) = "label" Then
-            Else
-                If MODE.Text = "NITEPR" Then
-                    sb.Append("0x")
-                    sb.Append(Convert.ToString(i, 16).ToUpper.PadLeft(8, "0"c))
-                    sb.Append(" ")
-                    sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                    i += 4
-                End If
-                If MODE.Text = "CWCHEAT" Then
-                    sb.Append("_L ")
-                    sb.Append("0x")
-                    sb.Append(Convert.ToString(i Or &H20000000, 16).ToUpper.PadLeft(8, "0"c))
-                    sb.Append(" ")
-                    sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                    i += 4
-                End If
-                If MODE.Text = "PSPAR" Then
-                    sb.Append("_M ")
-                    sb.Append("0x")
-                    sb.Append(Convert.ToString(i And &HFFFFFFF, 16).ToUpper.PadLeft(8, "0"c))
-                    sb.Append(" ")
-                    sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                    i += 4
-                End If
-                If MODE.Text = "PMETAN" Then
-                    sb.Append("_NWR ")
-                    sb.Append("0x80000000 0x")
-                    sb.Append(Convert.ToString(i And &HFFFFFFF, 16).ToUpper.PadLeft(8, "0"c))
-                    sb.Append(" ")
-                    sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                    i += 4
-                End If
-                If MODE.Text = "PSPAR(0xE)" Then
-                    If odd = False Then
-                        sb.Append("_M ")
-                        sb.Append(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                        sb.Append(" ")
-                        odd = True
-                    Else
-                        sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                        odd = False
+            Next
+        End If
+
+        If (selm And 1) = 0 Then
+
+            For Each s As String In ss
+                If s.Trim = "" Then
+                ElseIf s.Length > 0 AndAlso (s(0) = "_" Or s(0) = "/" Or s(0) = "#" Or s(0) = ";") Then
+                ElseIf s.Length > 2 AndAlso (s.Substring(0, 3) = "FNC") Then
+                ElseIf s.Length > 2 AndAlso s.Substring(s.Length - 2, 1) = ":" Then
+                ElseIf s.Length > 4 AndAlso s.Substring(0, 5) = "label" Then
+                ElseIf s.Length > 5 AndAlso s.Substring(0, 5) = "setpc" Then
+                    setpc = offset_boolean(s.Trim, 0) << 2
+                    If setpc <> 0 Then
+                        If MODE.SelectedIndex < 2 Then
+                            If setpc >= &H8800000 Then
+                                setpc -= &H8800000
+                            End If
+                        End If
+                        i = setpc
                     End If
-                    i += 4
-                End If
-                If MODE.Text = "TEMPAR(0xC2)" Then
-                    If odd = False Then
-                        sb.Append("_N ")
-                        sb.Append(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                Else
+                    If MODE.Text = "NITEPR" Then
+                        sb.Append("0x")
+                        sb.Append(Convert.ToString(i, 16).ToUpper.PadLeft(8, "0"c))
                         sb.Append(" ")
-                        odd = True
-                    Else
                         sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                        odd = False
+                        i += 4
                     End If
-                    i += 4
-                End If
-                If MODE.Text = "CMFUSION(0xF0)" Then
-                    If odd = False Then
+                    If MODE.Text = "CWCHEAT" Then
                         sb.Append("_L ")
-                        sb.Append(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                        sb.Append("0x")
+                        sb.Append(Convert.ToString(i Or &H20000000, 16).ToUpper.PadLeft(8, "0"c))
                         sb.Append(" ")
-                        odd = True
-                    Else
                         sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                        odd = False
+                        i += 4
                     End If
-                    i += 4
+                    If MODE.Text = "PSPAR" Then
+                        sb.Append("_M ")
+                        sb.Append("0x")
+                        sb.Append(Convert.ToString(i And &HFFFFFFF, 16).ToUpper.PadLeft(8, "0"c))
+                        sb.Append(" ")
+                        sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                        i += 4
+                    End If
+                    If MODE.Text = "PMETAN" Then
+                        sb.Append("_NWR ")
+                        sb.Append("0x80000000 0x")
+                        sb.Append(Convert.ToString(i And &HFFFFFFF, 16).ToUpper.PadLeft(8, "0"c))
+                        sb.Append(" ")
+                        sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                        i += 4
+                    End If
+                    If MODE.Text = "PSPAR(0xE)" Then
+                        If odd = False Then
+                            sb.Append("_M ")
+                            sb.Append(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                            sb.Append(" ")
+                            odd = True
+                        Else
+                            sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                            odd = False
+                        End If
+                        i += 4
+                    End If
+                    If MODE.Text = "TEMPAR(0xC2)" Then
+                        If odd = False Then
+                            sb.Append("_N ")
+                            sb.Append(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                            sb.Append(" ")
+                            odd = True
+                        Else
+                            sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                            odd = False
+                        End If
+                        i += 4
+                    End If
+                    If MODE.Text = "CMFUSION(0xF0)" Then
+                        If odd = False Then
+                            sb.Append("_L ")
+                            sb.Append(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                            sb.Append(" ")
+                            odd = True
+                        Else
+                            sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                            odd = False
+                        End If
+                        i += 4
+                    End If
                 End If
-            End If
-        Next
-        If odd = True Then
-            sb.Append("0x00000000")
-        End If
-        i = i - st
-        If MODE.Text = "PSPAR(0xE)" Then
-            sb.Insert(0, "_M 0xE" & (st And &HFFFFFFF).ToString("X").ToUpper.PadLeft(7, "0"c) & " 0x000000" & Convert.ToString((i), 16).ToUpper.PadLeft(2, "0"c) & vbCrLf)
-        ElseIf MODE.Text = "TEMPAR(0xC2)" Then
-            sb.Insert(0, "_N 0xC2000000 0x000000" & Convert.ToString((i), 16).ToUpper.PadLeft(2, "0"c) & vbCrLf)
-        ElseIf MODE.Text = "CMFUSION(0xF0)" Then
-            i = i * 2
+            Next
             If odd = True Then
-                i += 8
+                sb.AppendLine("0x00000000")
             End If
-            sb.Insert(0, "_L 0xF00000" & Convert.ToString((i >> 4), 16).ToUpper.PadLeft(2, "0"c) & " 0x00000000" & vbCrLf)
+            i = i - st
+            If MODE.Text = "PSPAR(0xE)" Then
+                sb.Insert(0, "_M 0xE" & (st And &HFFFFFFF).ToString("X").ToUpper.PadLeft(7, "0"c) & " 0x000000" & Convert.ToString((i), 16).ToUpper.PadLeft(2, "0"c) & vbCrLf)
+            ElseIf MODE.Text = "TEMPAR(0xC2)" Then
+                sb.Insert(0, "_N 0xC2000000 0x000000" & Convert.ToString((i), 16).ToUpper.PadLeft(2, "0"c) & vbCrLf)
+            ElseIf MODE.Text = "CMFUSION(0xF0)" Then
+                i = i * 2
+                If odd = True Then
+                    i += 8
+                End If
+                sb.Insert(0, "_L 0xF00000" & Convert.ToString((i >> 4), 16).ToUpper.PadLeft(2, "0"c) & " 0x00000000" & vbCrLf)
+            End If
         End If
-
-        CODE.Text = sb.ToString
-    End Sub
+        Return sb.ToString
+    End Function
 
     Private Sub only_hexdicimal(sender As System.Object, e As System.Windows.Forms.KeyPressEventArgs) Handles ADDR.KeyPress
         Dim hex As New Regex("[^0-9A-Fa-fx\x08]")
@@ -4428,5 +4492,54 @@ Public Class Form1
             CODE.Text = CODE.Text.Replace(rmm.Value, "")
             rmm = rmm.NextMatch
         End While
+    End Sub
+
+    Private Sub cnt_code2asm_Click(sender As System.Object, e As System.EventArgs) Handles cnt_code2asm.Click
+        Dim s As String = ""
+            Dim ss As String() = CODE.Text.Split(CChar(vbLf))
+            Dim address(ss.Length) As Integer
+            Dim values(ss.Length) As UInteger
+            Dim h As New Regex("0x[0-9A-Fa-f]{8}")
+            Dim hm As Match
+            Dim k As Integer = 0
+            For i = 0 To ss.Length - 1
+                hm = h.Match(ss(i))
+                If hm.Success Then
+                    address(k) = Convert.ToInt32(hm.Value, 16)
+                    hm = hm.NextMatch
+                    If hm.Success Then
+                        values(k) = Convert.ToUInt32(hm.Value, 16)
+                        k += 1
+                    End If
+                End If
+            Next
+            Array.Resize(address, k)
+            Array.Resize(values, k)
+            Array.Sort(address, values)
+            Array.Resize(address, k + 2)
+            address(k + 1) = address(k) + 4
+            Dim sb As New StringBuilder
+            Dim diff As Integer = address(1) - address(0)
+            Dim tmpadr As Integer = 0
+            For i = 0 To k - 1
+                If diff = 4 Then
+                    sb.AppendLine(decoders(values(i), address(i)))
+                Else
+                    sb.AppendLine()
+                    sb.Append("setpc 0x")
+                    tmpadr = address(i) And &H9FFFFFF
+                    If tmpadr <= &H1800000 Then
+                        tmpadr += &H8800000
+                    End If
+                    sb.AppendLine(tmpadr.ToString("X"))
+                    sb.AppendLine(decoders(values(i), address(i)))
+                End If
+                diff = address(i + 1) - address(i)
+            Next
+
+            ASM.Text = sb.ToString
+
+
+
     End Sub
 End Class
