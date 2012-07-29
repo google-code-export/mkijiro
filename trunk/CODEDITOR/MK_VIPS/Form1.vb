@@ -4198,7 +4198,7 @@ Public Class Form1
         Dim sb As New StringBuilder
         Dim st As Integer = Convert.ToInt32(ADDR.Text, 16)
         Dim i As Integer = Convert.ToInt32(ADDR.Text, 16)
-        If MODE.SelectedIndex < 3 Then
+        If MODE.SelectedIndex < 2 Then
             If st >= &H8800000 Then
                 i -= &H8800000
             End If
