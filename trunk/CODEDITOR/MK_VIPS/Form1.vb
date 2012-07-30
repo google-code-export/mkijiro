@@ -67,7 +67,7 @@ Public Class Form1
     End Sub
 
 
-    Private Sub ffe(sender As System.Object, e As System.Windows.Forms.DragEventArgs) Handles ASM.DragEnter
+    Private Sub ffe(sender As System.Object, e As System.Windows.Forms.DragEventArgs) Handles ASM.DragEnter, CODE.DragEnter
         If e.Data.GetDataPresent(DataFormats.FileDrop) Then
             e.Effect = DragDropEffects.Copy
         Else
@@ -85,6 +85,22 @@ Public Class Form1
             Dim sr As New StreamReader(fn(0), Encoding.GetEncoding(cpg))
             ASM.Text = sr.ReadToEnd()
             sr.Close()
+        End If
+    End Sub
+
+
+    Private Sub ffc(sender As System.Object, e As System.Windows.Forms.DragEventArgs) Handles CODE.DragDrop
+        Dim fn As String() = CType( _
+               e.Data.GetData(DataFormats.FileDrop, False), _
+               String())
+        If File.Exists(fn(0)) Then
+            If (Path.GetExtension(fn(0)) = ".bin") Then
+
+            Else
+                Dim sr As New StreamReader(fn(0), Encoding.GetEncoding(cpg))
+                CODE.Text = sr.ReadToEnd()
+                sr.Close()
+            End If
         End If
     End Sub
 
@@ -653,7 +669,7 @@ Public Class Form1
                 mips = Convert.ToUInt32(decoder(z + 1), 16)
                 mask = Convert.ToUInt32(decoder(z + 2), 16)
                 If (hex And mask) = mips Then
-                    asm = decoder(z) & " " & decoder(z + 3)
+                    asm = decoder(z) & vbTab & decoder(z + 3)
                     asm = decode_arg(asm, hex, l)
                     Exit While
                 End If
@@ -861,10 +877,10 @@ Public Class Form1
                         ': // [hlide] added %2? (? is d, s)
                         Select Case ss(i + 1)
                             Case "d"
-                                str = str.Replace("%2" & ss(i + 1), print_cop2(CInt((hex >> 8) And &HFF)))
+                                str = str.Replace("%2" & ss(i + 1), print_cop2(CInt(hex And &HFF)))
                                 ' : output = print_cop2(VED(opcode), output); i++; break;
                             Case "s"
-                                str = str.Replace("%2" & ss(i + 1), print_cop2(CInt(hex And &HFF)))
+                                str = str.Replace("%2" & ss(i + 1), print_cop2(CInt((hex >> 8) And &HFF)))
                                 ': output = print_cop2(VES(opcode), output); i++; break;
                         End Select
 
@@ -4526,7 +4542,7 @@ Public Class Form1
                     sb.AppendLine(decoders(values(i), address(i)))
                 Else
                     sb.AppendLine()
-                    sb.Append("setpc 0x")
+                sb.Append("setpc" & vbTab & "0x")
                     tmpadr = address(i) And &H9FFFFFF
                     If tmpadr <= &H1800000 Then
                         tmpadr += &H8800000

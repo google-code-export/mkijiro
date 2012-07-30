@@ -60,6 +60,7 @@ Partial Class Form1
         Me.ASM.Font = New System.Drawing.Font("Verdana", 9.163636!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ASM.ImeMode = System.Windows.Forms.ImeMode.NoControl
         Me.ASM.Location = New System.Drawing.Point(21, 54)
+        Me.ASM.MaxLength = 0
         Me.ASM.Multiline = True
         Me.ASM.Name = "ASM"
         Me.ASM.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
@@ -87,8 +88,10 @@ Partial Class Form1
         '
         'CODE
         '
+        Me.CODE.AllowDrop = True
         Me.CODE.Font = New System.Drawing.Font("Verdana", 9.163636!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CODE.Location = New System.Drawing.Point(291, 54)
+        Me.CODE.MaxLength = 0
         Me.CODE.Multiline = True
         Me.CODE.Name = "CODE"
         Me.CODE.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
