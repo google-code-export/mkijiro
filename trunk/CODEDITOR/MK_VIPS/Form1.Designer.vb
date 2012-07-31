@@ -49,6 +49,7 @@ Partial Class Form1
         Me.フォント = New System.Windows.Forms.ToolStripMenuItem()
         Me.バージョン = New System.Windows.Forms.ToolStripMenuItem()
         Me.savea = New System.Windows.Forms.Button()
+        Me.設定ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
@@ -204,7 +205,7 @@ Partial Class Form1
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FairuToolStripMenuItem, Me.enc, Me.フォント, Me.バージョン})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FairuToolStripMenuItem, Me.enc, Me.フォント, Me.設定ToolStripMenuItem, Me.バージョン})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Size = New System.Drawing.Size(675, 26)
@@ -221,14 +222,14 @@ Partial Class Form1
         'open
         '
         Me.open.Name = "open"
-        Me.open.Size = New System.Drawing.Size(100, 22)
+        Me.open.Size = New System.Drawing.Size(152, 22)
         Me.open.Text = "開く"
         '
         'save
         '
         Me.save.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ASM保存ToolStripMenuItem, Me.コード保存ToolStripMenuItem})
         Me.save.Name = "save"
-        Me.save.Size = New System.Drawing.Size(100, 22)
+        Me.save.Size = New System.Drawing.Size(152, 22)
         Me.save.Text = "保存"
         '
         'ASM保存ToolStripMenuItem
@@ -246,12 +247,12 @@ Partial Class Form1
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(97, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(149, 6)
         '
         '終了
         '
         Me.終了.Name = "終了"
-        Me.終了.Size = New System.Drawing.Size(100, 22)
+        Me.終了.Size = New System.Drawing.Size(152, 22)
         Me.終了.Text = "終了"
         '
         'enc
@@ -280,6 +281,12 @@ Partial Class Form1
         Me.savea.TabIndex = 7
         Me.savea.Text = "ASM保存"
         Me.savea.UseVisualStyleBackColor = True
+        '
+        '設定ToolStripMenuItem
+        '
+        Me.設定ToolStripMenuItem.Name = "設定ToolStripMenuItem"
+        Me.設定ToolStripMenuItem.Size = New System.Drawing.Size(44, 22)
+        Me.設定ToolStripMenuItem.Text = "設定"
         '
         'Form1
         '
@@ -334,5 +341,6 @@ Partial Class Form1
     Friend WithEvents savea As System.Windows.Forms.Button
     Friend WithEvents ASMSB As System.Windows.Forms.Button
     Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents 設定ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class
