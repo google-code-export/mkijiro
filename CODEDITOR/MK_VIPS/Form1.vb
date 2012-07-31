@@ -7,6 +7,8 @@ Public Class Form1
 
     Friend cpg As Integer = 932
     Friend sel As Integer = 0
+    Public tmp As Integer = &H8200000
+    Public cmf As Integer = &H8300000
 
     Private Sub ff(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
         Try
@@ -24,6 +26,10 @@ Public Class Form1
                         cpg = CInt(s.Remove(0, 3))
                     ElseIf s.Contains("SEL") Then
                         sel = CInt(s.Remove(0, 3))
+                    ElseIf s.Contains("TMSB") Then
+                        tmp = CInt(s.Remove(0, 4))
+                    ElseIf s.Contains("CMSB") Then
+                        cmf = CInt(s.Remove(0, 4))
                     ElseIf s.Contains("FONT") Then
                         Dim ss As String() = s.Split(CChar(","))
                         ASM.Font = New Font(iniparse(ss(0)), CSng(iniparse(ss(1))), FontStyle.Regular)
@@ -59,6 +65,10 @@ Public Class Form1
         s = "ENC" & cpg.ToString
         sr.WriteLine(s)
         s = "SEL" & sel.ToString
+        sr.WriteLine(s)
+        s = "TMSB" & tmp.ToString
+        sr.WriteLine(s)
+        s = "CMSB" & cmf.ToString
         sr.WriteLine(s)
         s = "FONT" & ASM.Font.ToString
         sr.WriteLine(s)
@@ -900,7 +910,6 @@ Public Class Form1
         Next
         Return str
     End Function
-
 
     Function print_cop2(ByVal reg As Integer) As String
         Dim vfpu_extra_regs As String() = {"VFPU_PFXS",
@@ -4501,7 +4510,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub Button1_Click_1(sender As System.Object, e As System.EventArgs) Handles Button1.Click
+    Private Sub Removeheader(sender As System.Object, e As System.EventArgs) Handles Button1.Click
         Dim rm As New Regex("^_[A-Z]*? ", RegexOptions.ECMAScript)
         Dim rmm As Match = rm.Match(CODE.Text)
         While rmm.Success
@@ -4512,50 +4521,125 @@ Public Class Form1
 
     Private Sub cnt_code2asm_Click(sender As System.Object, e As System.EventArgs) Handles cnt_code2asm.Click
         Dim s As String = ""
-            Dim ss As String() = CODE.Text.Split(CChar(vbLf))
-            Dim address(ss.Length) As Integer
-            Dim values(ss.Length) As UInteger
-            Dim h As New Regex("0x[0-9A-Fa-f]{8}")
-            Dim hm As Match
-            Dim k As Integer = 0
-            For i = 0 To ss.Length - 1
-                hm = h.Match(ss(i))
-                If hm.Success Then
-                    address(k) = Convert.ToInt32(hm.Value, 16)
-                    hm = hm.NextMatch
-                    If hm.Success Then
-                        values(k) = Convert.ToUInt32(hm.Value, 16)
-                        k += 1
+        Dim ss As String() = CODE.Text.Split(CChar(vbLf))
+        Dim address(ss.Length * 2) As Integer
+        Dim values(ss.Length * 2) As UInteger
+        Dim h As New Regex("0x([2C0][01]|0[89])[0-9A-Fa-f]{6} 0x[0-9A-Fa-f]{8}")
+        Dim hm As Match
+        Dim cd As New Regex("0x[0-9A-Fa-f]{8} 0x[0-9A-Fa-f]{8}")
+        Dim cdm As Match
+        Dim pmetan As New Regex("0x8[0-9A-Fa-f]{7} 0x0[0189][0-9A-Fa-f]{6} 0x[0-9A-Fa-f]{8}")
+        Dim pmem As Match
+        Dim sbr As New Regex("0x(E[89]|F0|C2)[0-9A-Fa-f]{6} 0x000000[0-9A-Fa-f]{2}")
+        Dim sbm As Match
+        Dim subrutin As Integer = 0
+        Dim k As Integer = 0
+        Dim l As Integer = 0
+        Dim j As Integer = 0
+        Dim tmpadr As Integer = 0
+        Dim st As Integer = Convert.ToInt32(ADDR.Text, 16)
+        If st <= &H1800000 Then
+            st = st + &H8800000
+        End If
+
+        For i = 0 To ss.Length - 1
+            hm = h.Match(ss(i))
+            pmem = pmetan.Match(ss(i))
+            sbm = sbr.Match(ss(i))
+            cdm = cd.Match(ss(i))
+            If pmem.Success Then
+                address(k) = Convert.ToInt32(pmem.Value.Substring(13, 8), 16)
+                values(k) = Convert.ToUInt32(pmem.Value.Substring(24, 8), 16)
+                k += 1
+            ElseIf sbm.Success Then
+                l = Convert.ToInt32(sbm.Value.Substring(19, 2), 16)
+                j = k
+                If sbm.Value.Contains("0xE") Then
+                    tmpadr = (Convert.ToInt32(sbm.Value.Substring(2, 8), 16) And &H9FFFFFF)
+                    subrutin = (l >> 3)
+                    If (l And 7) <> 0 Then
+                        subrutin += 1
                     End If
+                ElseIf sbm.Value.Contains("0xC2") Then
+                    tmpadr = tmp
+                    subrutin = (l >> 3)
+                    If (l And 7) <> 0 Then
+                        subrutin += 1
+                    End If
+                ElseIf sbm.Value.Contains("0xF0") Then
+                    tmpadr = cmf
+                    l = 0
+                    subrutin = Convert.ToInt32(sbm.Value.Substring(8, 2), 16)
+                Else
+                    subrutin = 0
                 End If
-            Next
+            ElseIf subrutin > 0 AndAlso cdm.Success Then
+                address(k) = (tmpadr + (k - j) * 4)
+                values(k) = Convert.ToUInt32(cdm.Value.Substring(2, 8), 16)
+                If (subrutin > 1) Then
+                    address(k + 1) = (tmpadr + (k + 1 - j) * 4)
+                    values(k + 1) = Convert.ToUInt32(cdm.Value.Substring(13, 8), 16)
+                    k += 2
+                ElseIf (subrutin = 1 AndAlso ((l And 7) > 4 Or (l And 7) = 0)) Then
+                    address(k + 1) = (tmpadr + (k + 1 - j) * 4)
+                    values(k + 1) = Convert.ToUInt32(cdm.Value.Substring(13, 8), 16)
+                    k += 2
+                Else
+                    k += 1
+                End If
+                subrutin -= 1
+            ElseIf hm.Success Then
+                address(k) = Convert.ToInt32(hm.Value.Substring(2, 8), 16)
+                values(k) = Convert.ToUInt32(hm.Value.Substring(13, 8), 16)
+                k += 1
+            End If
+        Next
             Array.Resize(address, k)
             Array.Resize(values, k)
             Array.Sort(address, values)
             Array.Resize(address, k + 2)
-            address(k + 1) = address(k) + 4
+        address(k + 1) = (address(k) + 4)
             Dim sb As New StringBuilder
-            Dim diff As Integer = address(1) - address(0)
-            Dim tmpadr As Integer = 0
-            For i = 0 To k - 1
-                If diff = 4 Then
-                    sb.AppendLine(decoders(values(i), address(i)))
-                Else
-                    sb.AppendLine()
+        Dim diff As Integer = CInt(address(1) - address(0))
+        tmpadr = (address(0) And &H9FFFFFF)
+        If tmpadr <= &H1800000 Then
+            tmpadr = (tmpadr + &H8800000)
+        End If
+
+        If diff <> 0 AndAlso st <> tmpadr Then
+            sb.Append("setpc" & vbTab & "0x")
+            tmpadr = (address(0) And &H9FFFFFF)
+            If tmpadr <= &H1800000 Then
+                tmpadr = (tmpadr + &H8800000)
+            End If
+            sb.AppendLine(tmpadr.ToString("X"))
+        End If
+
+        For i = 0 To k - 1
+            If diff = 4 Then
+                sb.AppendLine(decoders(values(i), CInt(address(i))))
+            Else
+                sb.AppendLine()
                 sb.Append("setpc" & vbTab & "0x")
-                    tmpadr = address(i) And &H9FFFFFF
-                    If tmpadr <= &H1800000 Then
-                        tmpadr += &H8800000
-                    End If
-                    sb.AppendLine(tmpadr.ToString("X"))
-                    sb.AppendLine(decoders(values(i), address(i)))
+                tmpadr = (address(i) And &H9FFFFFF)
+                If tmpadr <= &H1800000 Then
+                    tmpadr = (tmpadr + &H8800000)
                 End If
-                diff = address(i + 1) - address(i)
-            Next
+                sb.AppendLine(tmpadr.ToString("X"))
+                sb.AppendLine(decoders(values(i), (address(i))))
+            End If
+            diff = (address(i + 1) - address(i))
+        Next
 
-            ASM.Text = sb.ToString
+        ASM.Text = sb.ToString
 
 
 
+    End Sub
+
+    Private Sub 設定ToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles 設定ToolStripMenuItem.Click
+        Dim f As New Form2
+        f.ShowDialog(Me)
+        f.Dispose()
     End Sub
 End Class
