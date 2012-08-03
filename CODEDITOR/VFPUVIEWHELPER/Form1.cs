@@ -258,5 +258,13 @@ namespace WindowsFormsApplication1
             listView8.SetBounds(9 + 1 * 308, 3 + 2 * 103, 0, 0, BoundsSpecified.Location);
 
         }
+
+        private void vERToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            VFPUHELP.Form2 f = new VFPUHELP.Form2();
+            f.ShowDialog(this);
+            f.Dispose();
+
+        }
     }
 }
