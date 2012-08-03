@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C# Express 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CF2TXT", "CF2TXT.csproj", "{367284F1-6581-4CCC-BAD6-8F09EADF563A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{367284F1-6581-4CCC-BAD6-8F09EADF563A}.Debug|x86.ActiveCfg = Debug|x86
+		{367284F1-6581-4CCC-BAD6-8F09EADF563A}.Debug|x86.Build.0 = Debug|x86
+		{367284F1-6581-4CCC-BAD6-8F09EADF563A}.Release|x86.ActiveCfg = Release|x86
+		{367284F1-6581-4CCC-BAD6-8F09EADF563A}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

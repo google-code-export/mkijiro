@@ -80,12 +80,14 @@
             this.columnHeader30 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.vToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.vIWETYEPEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.h24 = new System.Windows.Forms.ToolStripMenuItem();
             this.v24 = new System.Windows.Forms.ToolStripMenuItem();
-            this.h33 = new System.Windows.Forms.ToolStripMenuItem();
+            this.h24 = new System.Windows.Forms.ToolStripMenuItem();
             this.v33 = new System.Windows.Forms.ToolStripMenuItem();
+            this.h33 = new System.Windows.Forms.ToolStripMenuItem();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.vERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -458,7 +460,8 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.vToolStripMenuItem,
-            this.vIWETYEPEToolStripMenuItem});
+            this.vIWETYEPEToolStripMenuItem,
+            this.vERToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(667, 26);
@@ -470,6 +473,49 @@
             this.vToolStripMenuItem.Name = "vToolStripMenuItem";
             this.vToolStripMenuItem.Size = new System.Drawing.Size(24, 22);
             this.vToolStripMenuItem.Text = " ";
+            // 
+            // vIWETYEPEToolStripMenuItem
+            // 
+            this.vIWETYEPEToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.v24,
+            this.h24,
+            this.v33,
+            this.h33});
+            this.vIWETYEPEToolStripMenuItem.Name = "vIWETYEPEToolStripMenuItem";
+            this.vIWETYEPEToolStripMenuItem.Size = new System.Drawing.Size(89, 22);
+            this.vIWETYEPEToolStripMenuItem.Text = "VIEWTYEPE";
+            // 
+            // v24
+            // 
+            this.v24.Name = "v24";
+            this.v24.Size = new System.Drawing.Size(152, 22);
+            this.v24.Text = "2x4(縦)";
+            this.v24.ToolTipText = "０４\r\n１５\r\n２６\r\n３７\r\n";
+            this.v24.Click += new System.EventHandler(this.v24_Click);
+            // 
+            // h24
+            // 
+            this.h24.Name = "h24";
+            this.h24.Size = new System.Drawing.Size(152, 22);
+            this.h24.Text = "2x4(横)";
+            this.h24.ToolTipText = "０１\r\n２３\r\n４５\r\n６７";
+            this.h24.Click += new System.EventHandler(this.h24_Click);
+            // 
+            // v33
+            // 
+            this.v33.Name = "v33";
+            this.v33.Size = new System.Drawing.Size(152, 22);
+            this.v33.Text = "3x3(縦)";
+            this.v33.ToolTipText = "０３６\r\n１４７\r\n２５\r\n";
+            this.v33.Click += new System.EventHandler(this.v33_Click);
+            // 
+            // h33
+            // 
+            this.h33.Name = "h33";
+            this.h33.Size = new System.Drawing.Size(152, 22);
+            this.h33.Text = "3x3(横)";
+            this.h33.ToolTipText = "０１２\r\n３４５\r\n６７";
+            this.h33.Click += new System.EventHandler(this.h33_Click);
             // 
             // panel1
             // 
@@ -486,48 +532,20 @@
             this.panel1.Size = new System.Drawing.Size(945, 419);
             this.panel1.TabIndex = 14;
             // 
-            // vIWETYEPEToolStripMenuItem
+            // vERToolStripMenuItem
             // 
-            this.vIWETYEPEToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.v24,
-            this.h24,
-            this.v33,
-            this.h33});
-            this.vIWETYEPEToolStripMenuItem.Name = "vIWETYEPEToolStripMenuItem";
-            this.vIWETYEPEToolStripMenuItem.Size = new System.Drawing.Size(89, 22);
-            this.vIWETYEPEToolStripMenuItem.Text = "VIWETYEPE";
+            this.vERToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aAToolStripMenuItem});
+            this.vERToolStripMenuItem.Name = "vERToolStripMenuItem";
+            this.vERToolStripMenuItem.Size = new System.Drawing.Size(43, 22);
+            this.vERToolStripMenuItem.Text = "VER";
+            this.vERToolStripMenuItem.Click += new System.EventHandler(this.vERToolStripMenuItem_Click);
             // 
-            // h24
+            // aAToolStripMenuItem
             // 
-            this.h24.Name = "h24";
-            this.h24.Size = new System.Drawing.Size(152, 22);
-            this.h24.Text = "2x4(横)";
-            this.h24.ToolTipText = "０１\r\n２３\r\n４５\r\n６７";
-            this.h24.Click += new System.EventHandler(this.h24_Click);
-            // 
-            // v24
-            // 
-            this.v24.Name = "v24";
-            this.v24.Size = new System.Drawing.Size(152, 22);
-            this.v24.Text = "2x4(縦)";
-            this.v24.ToolTipText = "０４\r\n１５\r\n２６\r\n３７\r\n";
-            this.v24.Click += new System.EventHandler(this.v24_Click);
-            // 
-            // h33
-            // 
-            this.h33.Name = "h33";
-            this.h33.Size = new System.Drawing.Size(152, 22);
-            this.h33.Text = "3x3(横)";
-            this.h33.ToolTipText = "０１２\r\n３４５\r\n６７";
-            this.h33.Click += new System.EventHandler(this.h33_Click);
-            // 
-            // v33
-            // 
-            this.v33.Name = "v33";
-            this.v33.Size = new System.Drawing.Size(152, 22);
-            this.v33.Text = "3x3(縦)";
-            this.v33.ToolTipText = "０３６\r\n１４７\r\n２５\r\n";
-            this.v33.Click += new System.EventHandler(this.v33_Click);
+            this.aAToolStripMenuItem.Name = "aAToolStripMenuItem";
+            this.aAToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aAToolStripMenuItem.Text = "AA";
             // 
             // Form1
             // 
@@ -541,7 +559,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "VPU_REGISTER_HELPER";
+            this.Text = "VFPU_REGISTER_HELPER";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.panel1.ResumeLayout(false);
@@ -606,6 +624,8 @@
         private System.Windows.Forms.ToolStripMenuItem v24;
         private System.Windows.Forms.ToolStripMenuItem h33;
         private System.Windows.Forms.ToolStripMenuItem v33;
+        private System.Windows.Forms.ToolStripMenuItem vERToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aAToolStripMenuItem;
     }
 }
 
