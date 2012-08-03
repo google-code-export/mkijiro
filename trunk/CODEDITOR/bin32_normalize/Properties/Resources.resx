@@ -136,9 +136,15 @@
     <value>fraction:</value>
   </data>
   <data name="s4" xml:space="preserve">
-    <value>無限大を超えてるため非数になります。</value>
+    <value>指数が上限かつ仮数が０の場合、無限大となります.</value>
   </data>
   <data name="s4_e" xml:space="preserve">
-    <value>not a number</value>
+    <value>if exponet is filled  and fraction is  0, infinty number</value>
+  </data>
+  <data name="s5" xml:space="preserve">
+    <value>指数が上限かつ仮数が0出ない場合、無限大を超えてるため非数になります。</value>
+  </data>
+  <data name="s5_e" xml:space="preserve">
+    <value>if exponet is filled  and fraction is not 0, not a number</value>
   </data>
 </root>
