@@ -218,14 +218,26 @@ namespace WindowsFormsApplication1
             {
                 foreach (TreeNode n in treeView1.Nodes)
                 {
-                    sb.AppendLine("---------------------");
-                    sb.AppendLine(rpstringout(n.Text));
+                    sb.Append("\"");
+                    sb.Append(rpstringout(n.Text));
+                    sb.AppendLine("\"");
+                    sb.Append("''");
                     sb.AppendLine(n.Tag.ToString());
-                    sb.AppendLine();
                     foreach (TreeNode m in n.Nodes)
                     {
                         sb.AppendLine(rpstringout(m.Text));
-                        sb.AppendLine(rpstringout(m.Tag.ToString()));
+                        mr = r.Match(rpstringout(m.Tag.ToString()));
+                        while (mr.Success == true)
+                        {
+                            sb.Append("$");
+                            sb.AppendLine(mr.Value);
+                            mr = mr.NextMatch();
+                        }
+                        pos = m.Tag.ToString().IndexOf("''");
+                        if (pos > 0)
+                        {
+                            sb.AppendLine(rpstringout((m.Tag.ToString().Remove(0, pos))));
+                        }
                     }
                 }
             }
@@ -237,7 +249,6 @@ namespace WindowsFormsApplication1
                     sb.AppendLine(rpstringout(n.Tag.ToString()));
                     sb.Append("_G ");
                     sb.AppendLine(n.Text);
-                    sb.AppendLine();
                     foreach (TreeNode m in n.Nodes)
                     {
                         if(m.Text !="(M)"){
@@ -254,7 +265,6 @@ namespace WindowsFormsApplication1
                         if(pos>0){
                         sb.AppendLine( rpstringout((m.Tag.ToString().Remove(0, pos).Replace("''", "#"))));
                             }
-                        sb.AppendLine();
                         }
                     }
                 }
