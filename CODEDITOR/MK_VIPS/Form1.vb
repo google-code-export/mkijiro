@@ -4258,6 +4258,9 @@ Public Class Form1
         Dim ss As String() = (asms).Split(CChar(vbLf))
         Dim sb As New StringBuilder
         Dim i As Integer = st
+        Dim modesel As Integer = MODE.SelectedIndex
+        Dim cmfaddrval(1) As Int64
+        Dim cmfst As String = ""
         If mode.SelectedIndex < 2 Then
             If st >= &H8800000 Then
                 i -= &H8800000
@@ -4276,7 +4279,7 @@ Public Class Form1
 
         Dim ct As Integer = 0
         Dim ii As Integer = i
-        Dim setpc As Integer
+        Dim setpc As Integer = 0
         Dim odd As Boolean = False
         If selm < 2 Then
             Array.Clear(label, 0, 256)
@@ -4306,7 +4309,7 @@ Public Class Form1
                             If setpc >= &H8800000 Then
                                 setpc -= &H8800000
                             End If
-                        ElseIf MODE.SelectedIndex > 4 Then
+                        ElseIf (MODE.SelectedIndex = 5 AndAlso setpc <> tmp) Or (MODE.SelectedIndex > 5 AndAlso setpc <> cmf) Then
                             MessageBox.Show("TEMP/CMFサブルーチンは開始アドレスがカーネルメモリ固定のためSETPCは使えません。")
                             Return ""
                         End If
@@ -4338,89 +4341,129 @@ Public Class Form1
                         i = setpc
                     End If
                 Else
-                    If MODE.Text = "NITEPR" Then
-                        sb.Append("0x")
-                        sb.Append(Convert.ToString(i, 16).ToUpper.PadLeft(8, "0"c))
-                        sb.Append(" ")
-                        sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                        i += 4
-                    End If
-                    If MODE.Text = "CWCHEAT" Then
-                        sb.Append("_L ")
-                        sb.Append("0x")
-                        sb.Append(Convert.ToString(i Or &H20000000, 16).ToUpper.PadLeft(8, "0"c))
-                        sb.Append(" ")
-                        sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                        i += 4
-                    End If
-                    If MODE.Text = "PSPAR" Then
-                        sb.Append("_M ")
-                        sb.Append("0x")
-                        sb.Append(Convert.ToString(i And &HFFFFFFF, 16).ToUpper.PadLeft(8, "0"c))
-                        sb.Append(" ")
-                        sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                        i += 4
-                    End If
-                    If MODE.Text = "PMETAN" Then
-                        sb.Append("_NWR ")
-                        sb.Append("0x80000000 0x")
-                        sb.Append(Convert.ToString(i And &HFFFFFFF, 16).ToUpper.PadLeft(8, "0"c))
-                        sb.Append(" ")
-                        sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                        i += 4
-                    End If
-                    If MODE.Text = "PSPAR(0xE)" Then
-                        If odd = False Then
-                            sb.Append("_M ")
-                            sb.Append(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                    Select Case modesel
+                        Case 0
+                            'If MODE.Text = "NITEPR" Then
+                            sb.Append("0x")
+                            sb.Append(Convert.ToString(i, 16).ToUpper.PadLeft(8, "0"c))
                             sb.Append(" ")
-                            odd = True
-                        Else
                             sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                            odd = False
-                        End If
-                        i += 4
-                    End If
-                    If MODE.Text = "TEMPAR(0xC2)" Then
-                        If odd = False Then
-                            sb.Append("_N ")
-                            sb.Append(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                            sb.Append(" ")
-                            odd = True
-                        Else
-                            sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                            odd = False
-                        End If
-                        i += 4
-                    End If
-                    If MODE.Text = "CMFUSION(0xF0)" Then
-                        If odd = False Then
+                            i += 4
+                            '            End If
+                        Case 1
+                            'If MODE.Text = "CWCHEAT" Then
                             sb.Append("_L ")
-                            sb.Append(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                            sb.Append("0x")
+                            sb.Append(Convert.ToString(i Or &H20000000, 16).ToUpper.PadLeft(8, "0"c))
                             sb.Append(" ")
-                            odd = True
-                        Else
                             sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                            odd = False
-                        End If
-                        i += 4
-                    End If
+                            i += 4
+                            'End If
+                        Case 2
+                            'If MODE.Text = "PSPAR" Then
+                            sb.Append("_M ")
+                            sb.Append("0x")
+                            sb.Append(Convert.ToString(i And &HFFFFFFF, 16).ToUpper.PadLeft(8, "0"c))
+                            sb.Append(" ")
+                            sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                            i += 4
+                            'End If
+                        Case 3
+                            'If MODE.Text = "PMETAN" Then
+                            sb.Append("_NWR ")
+                            sb.Append("0x80000000 0x")
+                            sb.Append(Convert.ToString(i And &HFFFFFFF, 16).ToUpper.PadLeft(8, "0"c))
+                            sb.Append(" ")
+                            sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                            i += 4
+                            'End If
+                        Case 4
+                            'If MODE.Text = "PSPAR(0xE)" Then
+                            If odd = False Then
+                                sb.Append("_M ")
+                                sb.Append(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                                sb.Append(" ")
+                                odd = True
+                            Else
+                                sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                                odd = False
+                            End If
+                            i += 4
+                            'End If
+                        Case 5
+                            'If MODE.Text = "TEMPAR(0xC2)" Then
+                            If odd = False Then
+                                sb.Append("_N ")
+                                sb.Append(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                                sb.Append(" ")
+                                odd = True
+                            Else
+                                sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                                odd = False
+                            End If
+                            i += 4
+                            'End If
+                        Case Else
+                            'If MODE.Text = "CMFUSION(0xF0)" Then
+                            If odd = False Then
+                                sb.Append("_L ")
+                                cmfst = assembler(s.Trim.ToLower, Convert.ToString(i, 16))
+                                If modesel > 6 Then
+                                    cmfaddrval(0) = Convert.ToInt64(cmfst, 16)
+                                Else
+                                    sb.Append(cmfst)
+                                    sb.Append(" ")
+                                End If
+                                odd = True
+                            Else
+                                cmfst = assembler(s.Trim.ToLower, Convert.ToString(i, 16))
+                                If modesel > 6 Then
+                                    cmfaddrval(1) = Convert.ToInt64(cmfst, 16)
+                                    cmfaddrval = EncryptCB(cmfaddrval)
+                                    If (modesel = 8) Then
+                                        cmfaddrval = SwapFF(cmfaddrval)
+                                        cmfaddrval = EncryptCB(cmfaddrval)
+                                    End If
+                                    sb.Append("0x")
+                                    sb.Append(cmfaddrval(0).ToString("X8"))
+                                    sb.Append(" 0x")
+                                    sb.AppendLine(cmfaddrval(1).ToString("X8"))
+                                Else
+                                    sb.AppendLine(cmfst)
+                                End If
+                                odd = False
+                            End If
+                            i += 4
+                    End Select
                 End If
             Next
             If odd = True Then
-                sb.AppendLine("0x00000000")
+                If modesel > 6 Then
+                    cmfaddrval(1) = 0
+                    cmfaddrval = EncryptCB(cmfaddrval)
+                    If (modesel = 8) Then
+                        cmfaddrval = SwapFF(cmfaddrval)
+                        cmfaddrval = EncryptCB(cmfaddrval)
+                    End If
+                    sb.Append("0x")
+                    sb.Append(cmfaddrval(0).ToString("X8"))
+                    sb.Append(" 0x")
+                    sb.AppendLine(cmfaddrval(1).ToString("X8"))
+                Else
+                    sb.AppendLine("0x00000000")
+                End If
             End If
             i = i - st
             If MODE.Text = "PSPAR(0xE)" Then
-                sb.Insert(0, "_M 0xE" & (st And &HFFFFFFF).ToString("X").ToUpper.PadLeft(7, "0"c) & " 0x000000" & Convert.ToString((i), 16).ToUpper.PadLeft(2, "0"c) & vbCrLf)
+                sb.Insert(0, "_M 0xE" & (st And &HFFFFFFF).ToString("X").ToUpper.PadLeft(7, "0"c) & " 0x0000" & (i And &HFFFF).ToString("X4") & vbCrLf)
             ElseIf MODE.Text = "TEMPAR(0xC2)" Then
-                sb.Insert(0, "_N 0xC2000000 0x000000" & Convert.ToString((i), 16).ToUpper.PadLeft(2, "0"c) & vbCrLf)
-            ElseIf MODE.Text = "CMFUSION(0xF0)" Then
+                sb.Insert(0, "_N 0xC2000000 0x00000" & (i And &H3FF).ToString("X3") & vbCrLf)
+            ElseIf MODE.Text.Contains("CMFUSION") Then
                 i = i * 2
                 If odd = True Then
                     i += 8
                 End If
-                sb.Insert(0, "_L 0xF00000" & Convert.ToString((i >> 4), 16).ToUpper.PadLeft(2, "0"c) & " 0x00000000" & vbCrLf)
+                sb.Insert(0, "_L 0xF00000" & ((i And 255) >> 4).ToString("X2") & " 0x000000" & (MODE.SelectedIndex - 6).ToString("X2") & vbCrLf)
             End If
         End If
         Return sb.ToString
@@ -4536,7 +4579,9 @@ Public Class Form1
         Dim k As Integer = 0
         Dim l As Integer = 0
         Dim j As Integer = 0
+        Dim cmfenc As Integer = 0
         Dim tmpadr As Integer = 0
+        Dim cmfaddrval(1) As Integer
         Dim st As Integer = Convert.ToInt32(ADDR.Text, 16)
         If st <= &H1800000 Then
             st = st + &H8800000
@@ -4568,8 +4613,8 @@ Public Class Form1
                     End If
                 ElseIf sbm.Value.Contains("0xF0") Then
                     tmpadr = cmf
-                    l = 0
-                    subrutin = Convert.ToInt32(sbm.Value.Substring(8, 2), 16)
+                    cmfenc = l
+                    subrutin = Convert.ToInt32(sbm.Value.Substring(8, 2), 16) + 1
                 Else
                     subrutin = 0
                 End If
@@ -4579,12 +4624,33 @@ Public Class Form1
                 If (subrutin > 1) Then
                     address(k + 1) = (tmpadr + (k + 1 - j) * 4)
                     values(k + 1) = Convert.ToUInt32(cdm.Value.Substring(13, 8), 16)
+                    If (cmfenc > 0) Then
+                        values = DecryptCB(values, k)
+                        If (cmfenc = 2) Then
+                            values = SwapBack(values, k)
+                            values = DecryptCB(values, k)
+                        End If
+                    End If
                     k += 2
                 ElseIf (subrutin = 1 AndAlso ((l And 7) > 4 Or (l And 7) = 0)) Then
                     address(k + 1) = (tmpadr + (k + 1 - j) * 4)
                     values(k + 1) = Convert.ToUInt32(cdm.Value.Substring(13, 8), 16)
+                    If (cmfenc > 0) Then
+                        values = DecryptCB(values, k)
+                        If (cmfenc = 2) Then
+                            values = SwapBack(values, k)
+                            values = DecryptCB(values, k)
+                        End If
+                    End If
                     k += 2
                 Else
+                    If (cmfenc > 0) Then
+                        values = DecryptCB(values, k)
+                        If (cmfenc = 2) Then
+                            values = SwapBack(values, k)
+                            values = DecryptCB(values, k)
+                        End If
+                    End If
                     k += 1
                 End If
                 subrutin -= 1
@@ -4632,10 +4698,142 @@ Public Class Form1
         Next
 
         ASM.Text = sb.ToString
-
-
-
     End Sub
+
+    Dim CBSEED As Int64() = {
+      &H288596, &HA0B8D9B, &H1DD9A10A,
+      &H37DD28, &HA0133F8, &HB95AB9B0,
+      &H3BEEF1, &HAF733EC, &H5CF5D328,
+      &HBC822, &HA15C574, &H95FE7F10,
+      &HBC935D, &HA50AC20, &H8E2D6303,
+      &HA139F2, &HA920FB9, &H16BB6286,
+      &HE9BBF8, &HA599F0B, &HE389324C,
+      &HF57F7B, &HA4AA0E3, &H7AC6EA8,
+      &H90D704, &HA21C012, &HAA4811D8,
+      &H1814D4, &HA906254, &H76CE4E18,
+      &HC5848E, &HA31FD54, &HFE447516,
+      &H5B83E7, &HA091C0E, &HF9CD94D0,
+      &H108CF7, &HA372B38, &H4C24DEDB,
+      &H46CE5A, &HA6F266C, &H68275C4E,
+      &H3A5BF4, &HA61DD4A, &H72494382,
+      &H6FAFFC, &HA0DBF92, &HC8AA88E8}
+
+    Private Function EncryptCB(ByVal addrval As Int64()) As Int64()
+        Dim s As String = ""
+        Dim addr As Int64 = addrval(0)
+        Dim val As Int64 = addrval(1)
+        Dim cmd As Integer = CInt((addr And &HF0000000) >> 28)
+        Dim tmp4 As Int64 = (addr >> 8) And &HFFFF
+        Dim tmp3 As Int64 = (addr << 16) And &HFF0000
+        Dim tmp2 As Int64 = tmp4 Or tmp3
+        Dim tmp1 As Int64 = addr And &HFF000000
+        Dim mask As Int64 = 4294967295
+        tmp2 = tmp2 + CBSEED(3 * cmd)
+        If (tmp2 >= &H1000000) Then
+            tmp2 -= &H1000000
+        End If
+        addr = tmp1 Or tmp2
+        addr = addr Xor CBSEED(3 * cmd + 1)
+        If cmd > 2 Then
+            val = val + CBSEED(3 * cmd + 2)
+            val = val Xor addr
+        End If
+        addr = addr And mask
+        val = val And mask
+        addrval(0) = addr
+        addrval(1) = val
+
+        '	int cmd = (addr & 0xf0000000) >> 28;
+        '	if(cmd > 2)
+        '	{
+        '		val ^= addr;
+        '		val -= CBseeds[cmd].value;
+        '	}
+        '	addr ^= CBseeds[cmd].XOR;
+        '	int temp1 = (addr & 0xff000000);
+        '	int temp2 = (addr & 0xffffff) - CBseeds[cmd].addition;
+        '	if(temp2 < 0)
+        '		temp2 += 0x1000000;
+        '	int temp3 = (temp2 & 0xff0000) >> 16;
+        '	int temp4 = (temp2 & 0xffff) << 8;
+        '	addr = temp1 + temp3 + temp4;
+
+        Return addrval
+    End Function
+
+    Private Function DecryptCB(ByVal addrval As UInteger(), ByVal k As Integer) As UInteger()
+
+        '	int cmd = (addr & 0xf0000000) >> 28;
+        '	if(cmd > 2)
+        '	{
+        '		val ^= addr;
+        '		val -= CBseeds[cmd].value;
+        '	}
+        '	addr ^= CBseeds[cmd].XOR;
+        '	int temp1 = (addr & 0xff000000);
+        '	int temp2 = (addr & 0xffffff) - CBseeds[cmd].addition;
+        '	if(temp2 < 0)
+        '		temp2 += 0x1000000;
+        '	int temp3 = (temp2 & 0xff0000) >> 16;
+        '	int temp4 = (temp2 & 0xffff) << 8;
+        '	addr = temp1 + temp3 + temp4;
+        Dim addr As Int64 = addrval(k)
+        Dim val As Int64 = addrval(k + 1)
+        Dim cmd As Integer = CInt((addr And &HF0000000) >> 28)
+        Dim mask As Int64 = 4294967295
+
+        If (cmd > 2) Then
+            val = val Xor addr
+            val -= CBSEED(cmd * 3 + 2)
+        End If
+
+        addr = addr Xor CBSEED(3 * cmd + 1)
+        Dim temp1 As Int64 = CLng((addr And &HFF000000))
+        Dim temp2 As Int64 = CLng((addr And &HFFFFFF) - CBSEED(3 * cmd))
+        If (temp2 < 0) Then
+            temp2 += &H1000000
+        End If
+        Dim temp3 As Int64 = (temp2 And &HFF0000) >> 16
+        Dim temp4 As Int64 = (temp2 And &HFFFF) << 8
+        addr = temp1 Or temp3 Or temp4
+
+        addr = addr And mask
+        val = val And mask
+        addrval(k) = CUInt(addr)
+        addrval(k + 1) = CUInt(val)
+
+        Return addrval
+    End Function
+
+    Private Function SwapFF(ByVal addrval As Int64()) As Int64()
+        'u32 a=code->adr;
+        'u32 v=code->val;
+        'code->adr=(a&0xFF)|((v&0xFF0000)>>8)|((a&0xFF00)<<8)|(v&0xFF000000);
+        'code->val=((v&0xFF00)<<16)|((a&0xFF000000)>>8)|((v&0xFF)<<8)|((a&0xFF0000)>>16);
+        Dim a As Int64 = addrval(0)
+        Dim v As Int64 = addrval(1)
+        '0xAA33BB44 0xCC11DD22
+        '0x11223344 0xAABBCCDD
+        addrval(0) = CUInt((a And &HFF) Or ((v And &HFF0000) << 8) Or ((a And &HFF0000) >> 8) Or ((v And &HFF) << 16))
+        addrval(1) = CUInt(((a And &HFF000000)) Or ((v And &HFF000000) >> 16) Or ((a And &HFF00) << 8) Or ((v And &HFF00) >> 8))
+
+        Return addrval
+    End Function
+
+    Private Function SwapBack(ByVal addrval As UInteger(), ByVal k As Integer) As UInteger()
+        'u32 a=code->adr;
+        'u32 v=code->val;
+        'code->adr=(a&0xFF)|((v&0xFF0000)>>8)|((a&0xFF00)<<8)|(v&0xFF000000);
+        'code->val=((v&0xFF00)<<16)|((a&0xFF000000)>>8)|((v&0xFF)<<8)|((a&0xFF0000)>>16);
+        Dim a As Int64 = addrval(k)
+        Dim v As Int64 = addrval(k + 1)
+        '0x11223344 0xAABBCCDD
+        '0xAA33BB44 0xCC11DD22
+        addrval(k) = CUInt((a And &HFF) Or ((v And &HFF0000) >> 8) Or ((a And &HFF00) << 8) Or (v And &HFF000000))
+        addrval(k + 1) = CUInt(((v And &HFF00) << 16) Or ((a And &HFF000000) >> 8) Or ((v And &HFF) << 8) Or ((a And &HFF0000) >> 16))
+
+        Return addrval
+    End Function
 
     Private Sub 設定ToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles 設定ToolStripMenuItem.Click
         Dim f As New Form2

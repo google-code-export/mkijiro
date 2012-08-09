@@ -69,7 +69,7 @@ Partial Class version
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(130, 12)
         Me.Label3.TabIndex = 2
-        Me.Label3.Text = "BUILD:2012/07/31 12:11" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        Me.Label3.Text = "BUILD:2012/08/09 12:16" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'Label1
         '
