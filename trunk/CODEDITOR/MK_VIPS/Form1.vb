@@ -104,8 +104,9 @@ Public Class Form1
                e.Data.GetData(DataFormats.FileDrop, False), _
                String())
         If File.Exists(fn(0)) Then
-            If (Path.GetExtension(fn(0)) = ".bin") Then
-
+            Dim ext As String = Path.GetExtension(fn(0))
+            If ext = ".bin" Or ext = ".pat" Then
+                bin2txt(fn(0), ext)
             Else
                 Dim sr As New StreamReader(fn(0), Encoding.GetEncoding(cpg))
                 CODE.Text = sr.ReadToEnd()
@@ -685,6 +686,10 @@ Public Class Form1
                 End If
                 z += 4
             End While
+
+            If asm = "" Then
+                asm = ".word" & vbTab & "0x" & hex.ToString("X8")
+            End If
 
             Return asm
         Catch ex As Exception
@@ -3371,6 +3376,8 @@ Public Class Form1
                     hex = vp0123(ss(1), hex, 1)
                     hex = vp0123(ss(2), hex, 2)
                     hex = vp0123(ss(3).Replace("]", ""), hex, 3)
+                ElseIf mips = ".word" Then
+                    hex = valword(str.Trim)
                 End If
 
                 asm = "0x" & Convert.ToString(hex, 16).ToUpper.PadLeft(8, "0"c)
@@ -4004,6 +4011,8 @@ Public Class Form1
         Dim valhexm As Match = valhex.Match(str)
         Dim valdec As New Regex("(\x20|,|\t)(\+|-)?\d{1,5}\(")
         Dim valdecm As Match = valdec.Match(str)
+        Dim vallb As New Regex("(\x20|,|\t)s?(lower_).*?\(")
+        Dim vallbm As Match = vallb.Match(str)
         Dim k As Integer = 0
         If valhexm.Success Then
             Dim s As String = valhexm.Value
@@ -4015,9 +4024,35 @@ Public Class Form1
                 k = Convert.ToInt32(s.Replace("$", "").Remove(0, 1).Replace("(", ""), 16)
             End If
             hex = hex Or (k And &HFFFF)
-        End If
-        If valdecm.Success Then
+        ElseIf valdecm.Success Then
             hex = hex Or (Convert.ToInt32(valdecm.Value.Remove(0, 1).Replace("(", "")) And &HFFFF)
+        Else
+            Dim j As Integer = 0
+            Dim sl As Integer = 0
+            If vallbm.Success Then
+                sl = 2
+                str = vallbm.Value.Remove(0, 1).Replace("(", "")
+                str = str.Remove(0, str.IndexOf("_") + 1)
+                For j = 0 To 255
+                    If label(j) = str Then
+                        Exit For
+                    End If
+                Next
+                If (j < 255) Then
+                    k = label_addr(j)
+                    If k < &H1800000 Then
+                        k += &H8800000
+                    End If
+                    If (sl And 2) = 2 Then
+                        k = k And &HFFFF
+                    End If
+                    hex = hex Or k
+                Else
+                    MessageBox.Show(str & "に該当するラベルがみつかりませんでした", "")
+                End If
+            Else
+                MessageBox.Show(str & "でラベルを使用する場合はラベル名の前にslowerかlower_をつけて下さい", "")
+            End If
         End If
         Return hex
     End Function
@@ -4046,6 +4081,8 @@ Public Class Form1
         Dim valhexm As Match = valhex.Match(str)
         Dim valdec As New Regex("(\x20|,|\t)(\+|-)?\d{1,5}\(")
         Dim valdecm As Match = valdec.Match(str)
+        Dim vallb As New Regex("(\x20|,|\t)s?(lower_).*?\(")
+        Dim vallbm As Match = vallb.Match(str)
         Dim k As Integer = 0
         If valhexm.Success Then
             Dim s As String = valhexm.Value
@@ -4057,9 +4094,35 @@ Public Class Form1
                 k = Convert.ToInt32(s.Replace("$", "").Remove(0, 1).Replace("(", ""), 16)
             End If
             hex = hex Or (k And &HFFFC)
-        End If
-        If valdecm.Success Then
+        ElseIf valdecm.Success Then
             hex = hex Or (Convert.ToInt32(valdecm.Value.Remove(0, 1).Replace("(", "")) And &HFFFC)
+        Else
+            Dim j As Integer = 0
+            Dim sl As Integer = 0
+            If vallbm.Success Then
+                sl = 2
+                str = vallbm.Value.Remove(0, 1).Replace("(", "")
+                str = str.Remove(0, str.IndexOf("_") + 1)
+                For j = 0 To 255
+                    If label(j) = str Then
+                        Exit For
+                    End If
+                Next
+                If (j < 255) Then
+                    k = label_addr(j)
+                    If k < &H1800000 Then
+                        k += &H8800000
+                    End If
+                    If (sl And 2) = 2 Then
+                        k = k And &HFFFF
+                    End If
+                    hex = hex Or (k And &HFFFC)
+                Else
+                    MessageBox.Show(str & "に該当するラベルがみつかりませんでした", "")
+                End If
+            Else
+                MessageBox.Show(str & "でラベルを使用する場合はラベル名の前にslowerかlower_をつけて下さい", "")
+            End If
         End If
         Return hex
     End Function
@@ -4084,6 +4147,8 @@ Public Class Form1
         Dim valfloat As New Regex("(\x20|,)-?\d+\.?\d*f$")
         Dim valfloatm As Match = valfloat.Match(str)
         Dim valhfloat As New Regex("(\x20|,)-?\d+\.?\d*hf$")
+        Dim vallb As New Regex("(\x20|,)s?(upper_|lower_)")
+        Dim vallbm As Match = vallb.Match(str)
         Dim valhfloatm As Match = valhfloat.Match(str)
         If valhexm.Success Then
             Dim s As String = valhexm.Value
@@ -4124,8 +4189,118 @@ Public Class Form1
             Dim s As String = converthalffloat(sb.ToString)
 
             hex = hex Or (Convert.ToInt32(s.Substring(0, 4), 16))
+        Else
+            Dim k As Integer = 0
+            Dim j As Integer = 0
+            Dim sl As Integer = 0
+            Dim cma As Integer = 0
+            If vallbm.Success Then
+                If vallbm.Value.Contains("upper") Then
+                    sl = 1
+                Else
+                    sl = 2
+                End If
+                If vallbm.Value.Contains("s") Then
+                    sl += 4
+                End If
+                str = str.Replace(vallbm.Value.Remove(0, 1), "")
+                cma = vallbm.Index
+            End If
+            str = str.Remove(0, cma + 1).Trim
+            For j = 0 To 255
+                If label(j) = str Then
+                    Exit For
+                End If
+            Next
+            If (j < 255) Then
+                k = label_addr(j)
+                If k < &H1800000 Then
+                    k += &H8800000
+                End If
+                If (sl And 1) = 1 Then
+                    If (sl And 4) = 4 AndAlso (k And &HFFFF) >= &H8000 Then
+                        k = k >> 16
+                        k += 1
+                    Else
+                        k = k >> 16
+                    End If
+                ElseIf (sl And 2) = 2 Then
+                    k = k And &HFFFF
+                End If
+                hex = hex Or k
+            Else
+                MessageBox.Show(str & "に該当するラベルがみつかりませんでした", "")
+            End If
         End If
         Return hex
+    End Function
+
+    Function valword(ByVal str As String) As Integer
+        Dim valhex As New Regex("(\x20|,)-?(\$|0x)[0-9A-Fa-f]{1,8}$")
+        Dim valhexm As Match = valhex.Match(str)
+        Dim valdec As New Regex("(\x20|,)-?\d{1,10}$")
+        Dim valdecm As Match = valdec.Match(str)
+        Dim vallb As New Regex("(\x20|,)s?(upper_|lower_)")
+        Dim vallbm As Match = vallb.Match(str)
+        Dim minus As Int64 = 0
+        If valhexm.Success Then
+            Dim s As String = valhexm.Value
+            If s.Contains("-") Then
+                s = s.Replace("-", "")
+                minus = &H10000
+                minus -= Convert.ToInt64(s.Replace("$", "").Remove(0, 1), 16)
+            Else
+                minus = Convert.ToInt64(s.Replace("$", "").Remove(0, 1), 16)
+            End If
+        ElseIf valdecm.Success Then
+            minus = Convert.ToInt64(valdecm.Value.Remove(0, 1))
+        Else
+            Dim k As Integer = 0
+            Dim j As Integer = 0
+            Dim sl As Integer = 0
+            If vallbm.Success Then
+                If vallbm.Value.Contains("up") Then
+                    sl = 1
+                Else
+                    sl = 2
+                End If
+                If vallbm.Value.Contains("s") Then
+                    sl += 4
+                End If
+                str = str.Replace(vallbm.Value, "")
+            End If
+            Dim cma As Integer = str.Trim.LastIndexOf(" ")
+            If cma < 0 Then
+                cma = str.Trim.LastIndexOf(vbTab)
+            End If
+            str = str.Substring(cma + 1, str.Length - cma - 1).Trim
+            For j = 0 To 255
+                If label(j) = str Then
+                    Exit For
+                End If
+            Next
+            If (j < 255) Then
+                k = label_addr(j)
+                If k < &H1800000 Then
+                    k += &H8800000
+                End If
+                If (sl And 1) = 1 Then
+                    If (sl And 4) = 4 AndAlso (k And &HFFFF) >= &H8000 Then
+                        k = k >> 16
+                        k += 1
+                    Else
+                        k = k >> 16
+                    End If
+                ElseIf (sl And 2) = 2 Then
+                    k = k And &HFFFF
+                End If
+                minus = k
+            Else
+                MessageBox.Show(str & "に該当するラベルがみつかりませんでした", "")
+            End If
+        End If
+        minus = minus And 4294967295
+        Return CInt(minus)
     End Function
 
     Function reg_sel(ByVal s As String) As Integer
@@ -4230,17 +4405,37 @@ Public Class Form1
         End While
         Return hex
     End Function
+
+    Function getstring(ByVal str As String) As Byte()
+        Dim st As Regex = New Regex(""".*?""")
+        Dim stm As Match = st.Match(str)
+        Dim stt As String = ""
+        Dim valdec As New Regex("string\d{1,10}")
+        Dim valdecm As Match = valdec.Match(str)
+        Dim enc As Int32 = 0
+        If valdecm.Success Then
+            enc = Convert.ToInt32(valdecm.Value.Remove(0, 6))
+        End If
+        If stm.Success Then
+            stt = stm.Value.Substring(1, stm.Length - 2)
+        End If
+        Dim b As Byte() = Encoding.GetEncoding(enc).GetBytes(stt)
+
+        Return b
+    End Function
+
 #End Region
 
     Dim label(255) As String
     Dim label_addr(255) As Integer
+    Dim normalize As String
 
     Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles cvt_asm2code.Click
         Dim sa As New StringBuilder
         Dim st As Integer = Convert.ToInt32(ADDR.Text, 16)
         If MODE.SelectedIndex = 4 Then
-            Dim ss As String() = Regex.Split((ASM.Text & vbCrLf), "setpc")
             cvtget(st, (ASM.Text & vbCrLf), 1)
+            Dim ss As String() = Regex.Split(normalize, "setpc")
             sa.Append(cvtget(st, ss(0), 2))
             For i = 1 To ss.Length - 1
                 Dim sts As String = ss(i).Substring(0, ss(i).IndexOf(vbLf)).Trim
@@ -4257,11 +4452,13 @@ Public Class Form1
     Private Function cvtget(ByVal st As Integer, ByVal asms As String, ByVal selm As Integer) As String
         Dim ss As String() = (asms).Split(CChar(vbLf))
         Dim sb As New StringBuilder
+        'Dim sa As New StringBuilder
+        Dim sc As New StringBuilder
         Dim i As Integer = st
         Dim modesel As Integer = MODE.SelectedIndex
         Dim cmfaddrval(1) As Int64
         Dim cmfst As String = ""
-        If mode.SelectedIndex < 2 Then
+        If MODE.SelectedIndex < 2 Then
             If st >= &H8800000 Then
                 i -= &H8800000
             End If
@@ -4281,7 +4478,77 @@ Public Class Form1
         Dim ii As Integer = i
         Dim setpc As Integer = 0
         Dim odd As Boolean = False
+        Dim odd2 As Boolean = False
         If selm < 2 Then
+
+            Dim psdis As New Regex("(\t|\x20|　)*?(#|;).+$")
+            Dim llb As New Regex("^.*?:( |\t|　)+")
+            Dim shead As New Regex("^[a-z0-9\.]+(\x20|\t)+")
+            Dim sheadm As Match
+            Dim psdism As Match
+            Dim llbm As Match
+            For Each s As String In ss
+                psdism = psdis.Match(s.Trim)
+                If psdism.Success Then
+                    s = s.Substring(0, psdism.Index)
+                End If
+                llbm = llb.Match(s.Trim)
+                If llbm.Success Then
+                    sc.AppendLine(llbm.Value.Trim)
+                    s = s.Remove(0, llbm.Length)
+                End If
+                sheadm = shead.Match(s.Trim)
+                If sheadm.Success Then
+                    Select Case sheadm.Value.Trim.ToLower
+                        Case "la"
+                            Dim lst = s.Remove(0, s.LastIndexOf(",") + 1).ToLower
+                            Dim rg As String = s.Substring(0, s.IndexOf(",")).Remove(0, 2).Trim
+                            sc.Append("lui ")
+                            sc.Append(rg)
+                            sc.Append(",upper_")
+                            sc.AppendLine(lst)
+                            sc.Append("ori ")
+                            sc.Append(rg)
+                            sc.Append(",")
+                            sc.Append(rg)
+                            sc.Append(",lower_")
+                            sc.AppendLine(lst)
+                        Case "li"
+                            Dim k = valword(s.Trim)
+                            Dim rg As String = s.Substring(0, s.IndexOf(",")).Remove(0, 2).Trim
+                            If (k >> 16 <> 0) Then
+                                sc.Append("lui ")
+                                sc.Append(rg)
+                                sc.Append(",0x")
+                                sc.AppendLine((k >> 16).ToString("X4"))
+                            End If
+                            If ((k And &HFFFF) <> 0) Then
+                                sc.Append("ori ")
+                                sc.Append(rg)
+                                sc.Append(",")
+                                If (k >> 16 <> 0) Then
+                                    sc.Append(rg)
+                                Else
+                                    sc.Append("zr")
+                                End If
+                                sc.Append(",0x")
+                                sc.AppendLine((k And &HFFFF).ToString("X4"))
+                            End If
+                            If k = 0 Then
+                                sc.Append(s.Trim)
+                            End If
+                        Case "ulv.q"
+                        Case "usv.q"
+                        Case Else
+                            sc.AppendLine(s.Trim)
+                    End Select
+                Else
+                    sc.AppendLine(s.Trim)
+                End If
+            Next
+
+            ss = sc.ToString.Split(CChar(vbLf))
+            normalize = sc.ToString
             Array.Clear(label, 0, 256)
             Array.Clear(label_addr, 0, 256)
 
@@ -4302,6 +4569,12 @@ Public Class Form1
                     label(ct) = s.Remove(0, 5).ToLower.Trim
                     label_addr(ct) = ii
                     ct += 1
+                ElseIf s.Length > 7 AndAlso s.Substring(0, 7) = ".string" Then
+                    Dim b As Byte() = getstring(s.Trim)
+                    ii += b.Length + 1
+                    If (ii And 3) <> 0 Then
+                        ii = (ii And &H9FFFFFC) + 4
+                    End If
                 ElseIf s.Length > 5 AndAlso s.Substring(0, 5) = "setpc" Then
                     setpc = offset_boolean(s.Trim, 0) << 2
                     If setpc <> 0 Then
@@ -4340,101 +4613,183 @@ Public Class Form1
                         End If
                         i = setpc
                     End If
-                Else
-                    Select Case modesel
-                        Case 0
-                            'If MODE.Text = "NITEPR" Then
-                            sb.Append("0x")
-                            sb.Append(Convert.ToString(i, 16).ToUpper.PadLeft(8, "0"c))
-                            sb.Append(" ")
-                            sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                            i += 4
-                            '            End If
-                        Case 1
-                            'If MODE.Text = "CWCHEAT" Then
-                            sb.Append("_L ")
-                            sb.Append("0x")
-                            sb.Append(Convert.ToString(i Or &H20000000, 16).ToUpper.PadLeft(8, "0"c))
-                            sb.Append(" ")
-                            sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                            i += 4
-                            'End If
-                        Case 2
-                            'If MODE.Text = "PSPAR" Then
-                            sb.Append("_M ")
-                            sb.Append("0x")
-                            sb.Append(Convert.ToString(i And &HFFFFFFF, 16).ToUpper.PadLeft(8, "0"c))
-                            sb.Append(" ")
-                            sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                            i += 4
-                            'End If
-                        Case 3
-                            'If MODE.Text = "PMETAN" Then
-                            sb.Append("_NWR ")
-                            sb.Append("0x80000000 0x")
-                            sb.Append(Convert.ToString(i And &HFFFFFFF, 16).ToUpper.PadLeft(8, "0"c))
-                            sb.Append(" ")
-                            sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                            i += 4
-                            'End If
-                        Case 4
-                            'If MODE.Text = "PSPAR(0xE)" Then
-                            If odd = False Then
-                                sb.Append("_M ")
-                                sb.Append(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                                sb.Append(" ")
-                                odd = True
-                            Else
-                                sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                                odd = False
-                            End If
-                            i += 4
-                            'End If
-                        Case 5
-                            'If MODE.Text = "TEMPAR(0xC2)" Then
-                            If odd = False Then
-                                sb.Append("_N ")
-                                sb.Append(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                                sb.Append(" ")
-                                odd = True
-                            Else
-                                sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                                odd = False
-                            End If
-                            i += 4
-                            'End If
-                        Case Else
-                            'If MODE.Text = "CMFUSION(0xF0)" Then
-                            If odd = False Then
-                                sb.Append("_L ")
-                                cmfst = assembler(s.Trim.ToLower, Convert.ToString(i, 16))
-                                If modesel > 6 Then
-                                    cmfaddrval(0) = Convert.ToInt64(cmfst, 16)
-                                Else
-                                    sb.Append(cmfst)
-                                    sb.Append(" ")
-                                End If
-                                odd = True
-                            Else
-                                cmfst = assembler(s.Trim.ToLower, Convert.ToString(i, 16))
-                                If modesel > 6 Then
-                                    cmfaddrval(1) = Convert.ToInt64(cmfst, 16)
-                                    cmfaddrval = EncryptCB(cmfaddrval)
-                                    If (modesel = 8) Then
-                                        cmfaddrval = SwapFF(cmfaddrval)
-                                        cmfaddrval = EncryptCB(cmfaddrval)
-                                    End If
+                ElseIf s.Length > 7 AndAlso s.Substring(0, 7) = ".string" Then
+                    Dim b As Byte() = getstring(s.Trim)
+                    Dim j As Integer = b.Length + 1
+                    Dim k As Integer = 0
+                    If (j And 3) <> 0 Then
+                        j = (j And &HFFFC) + 4
+                    End If
+                    Array.Resize(b, j)
+                    odd2 = False
+                    While (k < j)
+                        If modesel < 4 Then
+                            Select Case modesel
+                                Case 0
                                     sb.Append("0x")
-                                    sb.Append(cmfaddrval(0).ToString("X8"))
-                                    sb.Append(" 0x")
-                                    sb.AppendLine(cmfaddrval(1).ToString("X8"))
+                                    sb.Append(Convert.ToString(i + k, 16).ToUpper.PadLeft(8, "0"c))
+                                Case 1
+                                    sb.Append("_L 0x")
+                                    sb.Append(Convert.ToString((i + k) Or &H20000000, 16).ToUpper.PadLeft(8, "0"c))
+                                Case 2
+                                    sb.Append("_M 0x")
+                                    sb.Append(Convert.ToString((i + k) And &HFFFFFFF, 16).ToUpper.PadLeft(8, "0"c))
+                                Case 3
+                                    sb.Append("_NWR 0x80000000 0x")
+                                    sb.Append(Convert.ToString((i + k) And &HFFFFFFF, 16).ToUpper.PadLeft(8, "0"c))
+                            End Select
+                            sb.Append(" 0x")
+                            sb.AppendLine(BitConverter.ToInt32(b, k).ToString("X8"))
+                        Else
+                            Select Case modesel
+                                Case 4
+                                    If odd = False Then
+                                        sb.Append("_M 0x")
+                                        sb.Append(BitConverter.ToInt32(b, k).ToString("X8"))
+                                        sb.Append(" 0x")
+                                        odd = True
+                                    Else
+                                        sb.AppendLine(BitConverter.ToInt32(b, k).ToString("X8"))
+                                        odd = False
+                                    End If
+                                Case 5
+                                    If odd = False Then
+                                        sb.Append("_N 0x")
+                                        sb.Append(BitConverter.ToInt32(b, k).ToString("X8"))
+                                        sb.Append(" 0x")
+                                        odd = True
+                                    Else
+                                        sb.AppendLine(BitConverter.ToInt32(b, k).ToString("X8"))
+                                        odd = False
+                                    End If
+                                Case 6
+                                    If odd = False Then
+                                        sb.Append("_L 0x")
+                                        cmfst = BitConverter.ToInt32(b, k).ToString("X8")
+                                        If modesel > 6 Then
+                                            cmfaddrval(0) = Convert.ToInt64(cmfst, 16)
+                                        Else
+                                            sb.Append(cmfst)
+                                            sb.Append(" 0x")
+                                        End If
+                                        odd = True
+                                    Else
+                                        cmfst = BitConverter.ToInt32(b, k).ToString("X8")
+                                        If modesel > 6 Then
+                                            cmfaddrval(1) = Convert.ToInt64(cmfst, 16)
+                                            cmfaddrval = EncryptCB(cmfaddrval)
+                                            If (modesel = 8) Then
+                                                cmfaddrval = SwapFF(cmfaddrval)
+                                                cmfaddrval = EncryptCB(cmfaddrval)
+                                            End If
+                                            sb.Append(cmfaddrval(0).ToString("X8"))
+                                            sb.Append(" 0x")
+                                            sb.AppendLine(cmfaddrval(1).ToString("X8"))
+                                        Else
+                                            sb.AppendLine(cmfst)
+                                        End If
+                                        odd = False
+                                    End If
+                            End Select
+                        End If
+                        k += 4
+                    End While
+                    i += j
+                Else
+                        Select Case modesel
+                            Case 0
+                                'If MODE.Text = "NITEPR" Then
+                                sb.Append("0x")
+                                sb.Append(Convert.ToString(i, 16).ToUpper.PadLeft(8, "0"c))
+                                sb.Append(" ")
+                                sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                                i += 4
+                                '            End If
+                            Case 1
+                                'If MODE.Text = "CWCHEAT" Then
+                                sb.Append("_L ")
+                                sb.Append("0x")
+                                sb.Append(Convert.ToString(i Or &H20000000, 16).ToUpper.PadLeft(8, "0"c))
+                                sb.Append(" ")
+                                sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                                i += 4
+                                'End If
+                            Case 2
+                                'If MODE.Text = "PSPAR" Then
+                                sb.Append("_M ")
+                                sb.Append("0x")
+                                sb.Append(Convert.ToString(i And &HFFFFFFF, 16).ToUpper.PadLeft(8, "0"c))
+                                sb.Append(" ")
+                                sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                                i += 4
+                                'End If
+                            Case 3
+                                'If MODE.Text = "PMETAN" Then
+                                sb.Append("_NWR ")
+                                sb.Append("0x80000000 0x")
+                                sb.Append(Convert.ToString(i And &HFFFFFFF, 16).ToUpper.PadLeft(8, "0"c))
+                                sb.Append(" ")
+                                sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                                i += 4
+                                'End If
+                            Case 4
+                                'If MODE.Text = "PSPAR(0xE)" Then
+                                If odd = False Then
+                                    sb.Append("_M ")
+                                    sb.Append(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                                    sb.Append(" ")
+                                    odd = True
                                 Else
-                                    sb.AppendLine(cmfst)
+                                    sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                                    odd = False
                                 End If
-                                odd = False
-                            End If
-                            i += 4
-                    End Select
+                                i += 4
+                                'End If
+                            Case 5
+                                'If MODE.Text = "TEMPAR(0xC2)" Then
+                                If odd = False Then
+                                    sb.Append("_N ")
+                                    sb.Append(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                                    sb.Append(" ")
+                                    odd = True
+                                Else
+                                    sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                                    odd = False
+                                End If
+                                i += 4
+                                'End If
+                            Case Else
+                                'If MODE.Text = "CMFUSION(0xF0)" Then
+                                If odd = False Then
+                                    sb.Append("_L ")
+                                    cmfst = assembler(s.Trim.ToLower, Convert.ToString(i, 16))
+                                    If modesel > 6 Then
+                                        cmfaddrval(0) = Convert.ToInt64(cmfst, 16)
+                                    Else
+                                        sb.Append(cmfst)
+                                        sb.Append(" ")
+                                    End If
+                                    odd = True
+                                Else
+                                    cmfst = assembler(s.Trim.ToLower, Convert.ToString(i, 16))
+                                    If modesel > 6 Then
+                                        cmfaddrval(1) = Convert.ToInt64(cmfst, 16)
+                                        cmfaddrval = EncryptCB(cmfaddrval)
+                                        If (modesel = 8) Then
+                                            cmfaddrval = SwapFF(cmfaddrval)
+                                            cmfaddrval = EncryptCB(cmfaddrval)
+                                        End If
+                                        sb.Append("0x")
+                                        sb.Append(cmfaddrval(0).ToString("X8"))
+                                        sb.Append(" 0x")
+                                        sb.AppendLine(cmfaddrval(1).ToString("X8"))
+                                    Else
+                                        sb.AppendLine(cmfst)
+                                    End If
+                                    odd = False
+                                End If
+                                i += 4
+                        End Select
                 End If
             Next
             If odd = True Then
@@ -4530,17 +4885,6 @@ Public Class Form1
         Me.Close()
     End Sub
 
-    Private Sub open_Click(sender As System.Object, e As System.EventArgs) Handles open.Click
-        Dim f As New OpenFileDialog
-        f.InitialDirectory = Application.StartupPath
-        f.Filter = "テキストファイル（*.txt)|*.txt"
-        f.Title = "開くテキストを選んでください"
-        If f.ShowDialog = Windows.Forms.DialogResult.OK Then
-            Dim sr As New StreamReader(f.FileName, Encoding.GetEncoding(cpg))
-            ASM.Text = sr.ReadToEnd()
-            sr.Close()
-        End If
-    End Sub
 
     Private Sub フォント_Click(sender As System.Object, e As System.EventArgs) Handles フォント.Click
         Dim fd As New FontDialog()
@@ -4573,7 +4917,7 @@ Public Class Form1
         Dim cdm As Match
         Dim pmetan As New Regex("0x8[0-9A-Fa-f]{7} 0x0[0189][0-9A-Fa-f]{6} 0x[0-9A-Fa-f]{8}")
         Dim pmem As Match
-        Dim sbr As New Regex("0x(E[89]|F0|C2)[0-9A-Fa-f]{6} 0x000000[0-9A-Fa-f]{2}")
+        Dim sbr As New Regex("0x(E[89]|F[0-9A-Fa-f]|C2)[0-9A-Fa-f]{6} 0x[0-9A-Fa-f]{8}")
         Dim sbm As Match
         Dim subrutin As Integer = 0
         Dim k As Integer = 0
@@ -4611,10 +4955,11 @@ Public Class Form1
                     If (l And 7) <> 0 Then
                         subrutin += 1
                     End If
-                ElseIf sbm.Value.Contains("0xF0") Then
+                ElseIf sbm.Value.Contains("0xF") Then
                     tmpadr = cmf
                     cmfenc = l
-                    subrutin = Convert.ToInt32(sbm.Value.Substring(8, 2), 16) + 1
+                    l = 0
+                    subrutin = Convert.ToInt32(sbm.Value.Substring(8, 2), 16)
                 Else
                     subrutin = 0
                 End If
@@ -4660,12 +5005,12 @@ Public Class Form1
                 k += 1
             End If
         Next
-            Array.Resize(address, k)
-            Array.Resize(values, k)
-            Array.Sort(address, values)
-            Array.Resize(address, k + 2)
+        Array.Resize(address, k)
+        Array.Resize(values, k)
+        Array.Sort(address, values)
+        Array.Resize(address, k + 2)
         address(k + 1) = (address(k) + 4)
-            Dim sb As New StringBuilder
+        Dim sb As New StringBuilder
         Dim diff As Integer = CInt(address(1) - address(0))
         tmpadr = (address(0) And &H9FFFFFF)
         If tmpadr <= &H1800000 Then
@@ -4840,4 +5185,71 @@ Public Class Form1
         f.ShowDialog(Me)
         f.Dispose()
     End Sub
+
+    Private Sub ASMopen_Click(sender As System.Object, e As System.EventArgs) Handles ASMopen.Click
+        Dim f As New OpenFileDialog
+        f.InitialDirectory = Application.StartupPath
+        f.Filter = "テキストファイル（*.txt)|*.txt"
+        f.Title = "開くテキストを選んでください"
+        If f.ShowDialog = Windows.Forms.DialogResult.OK Then
+            Dim sr As New StreamReader(f.FileName, Encoding.GetEncoding(cpg))
+            ASM.Text = sr.ReadToEnd()
+            sr.Close()
+        End If
+    End Sub
+
+    Private Sub CODEopen_Click(sender As System.Object, e As System.EventArgs) Handles CODEopen.Click
+        Dim f As New OpenFileDialog
+        f.InitialDirectory = Application.StartupPath
+        f.Filter = "テキストファイル（*.txt)|*.txt|バイナリファイル(*.bin)|*.bin|パッチファイル(*.pat)|*.pat"
+        f.Title = "開くテキスト/バイナリを選んでください"
+        If f.ShowDialog = Windows.Forms.DialogResult.OK Then
+            Dim ext As String = Path.GetExtension(f.FileName)
+            If ext = ".bin" Or ext = ".pat" Then
+                bin2txt(f.FileName, ext)
+            Else
+                Dim sr As New StreamReader(f.FileName, Encoding.GetEncoding(cpg))
+                CODE.Text = sr.ReadToEnd()
+                sr.Close()
+            End If
+        End If
+    End Sub
+
+    Private Function bin2txt(ByVal fn As String, ByVal ext As String) As Boolean
+        Dim bin As New FileStream(fn, FileMode.Open, FileAccess.Read)
+        Dim buffer(2048) As Byte
+        Dim sb As StringBuilder = New StringBuilder
+        Dim st As Integer = Convert.ToInt32(ADDR.Text, 16)
+        Dim readSize As Integer
+        Dim total As Integer
+        If ext = ".pat" Then
+            bin.Read(buffer, 0, 4)
+            st = BitConverter.ToInt32(buffer, 0)
+        End If
+
+        While True
+            readSize = bin.Read(buffer, 0, buffer.Length)
+            total += readSize
+            readSize = readSize >> 2
+            If readSize = 0 Then
+                Exit While
+            End If
+            For i = 0 To readSize - 1
+                sb.Append("0x")
+                sb.Append(st.ToString("X8"))
+                sb.Append(" 0x")
+                sb.Append(BitConverter.ToInt32(buffer, i << 2).ToString("X8"))
+                sb.AppendLine()
+                st += 4
+            Next
+            If total >= 1000 Then
+                MessageBox.Show("4960バイト以上はよみこめません")
+                Exit While
+            End If
+        End While
+        bin.Close()
+
+        CODE.Text = sb.ToString
+        Return True
+    End Function
 End Class
