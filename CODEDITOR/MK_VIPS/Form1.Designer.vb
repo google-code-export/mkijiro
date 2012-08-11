@@ -50,6 +50,8 @@ Partial Class Form1
         Me.設定ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.バージョン = New System.Windows.Forms.ToolStripMenuItem()
         Me.savea = New System.Windows.Forms.Button()
+        Me.ASMopen = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CODEopen = New System.Windows.Forms.ToolStripMenuItem()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
@@ -221,15 +223,16 @@ Partial Class Form1
         '
         'open
         '
+        Me.open.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ASMopen, Me.CODEopen})
         Me.open.Name = "open"
-        Me.open.Size = New System.Drawing.Size(100, 22)
+        Me.open.Size = New System.Drawing.Size(152, 22)
         Me.open.Text = "開く"
         '
         'save
         '
         Me.save.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ASM保存ToolStripMenuItem, Me.コード保存ToolStripMenuItem})
         Me.save.Name = "save"
-        Me.save.Size = New System.Drawing.Size(100, 22)
+        Me.save.Size = New System.Drawing.Size(152, 22)
         Me.save.Text = "保存"
         '
         'ASM保存ToolStripMenuItem
@@ -247,12 +250,12 @@ Partial Class Form1
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(97, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(149, 6)
         '
         '終了
         '
         Me.終了.Name = "終了"
-        Me.終了.Size = New System.Drawing.Size(100, 22)
+        Me.終了.Size = New System.Drawing.Size(152, 22)
         Me.終了.Text = "終了"
         '
         'enc
@@ -287,6 +290,18 @@ Partial Class Form1
         Me.savea.TabIndex = 7
         Me.savea.Text = "ASM保存"
         Me.savea.UseVisualStyleBackColor = True
+        '
+        'ASMopen
+        '
+        Me.ASMopen.Name = "ASMopen"
+        Me.ASMopen.Size = New System.Drawing.Size(152, 22)
+        Me.ASMopen.Text = "ASM"
+        '
+        'CODEopen
+        '
+        Me.CODEopen.Name = "CODEopen"
+        Me.CODEopen.Size = New System.Drawing.Size(152, 22)
+        Me.CODEopen.Text = "CODE"
         '
         'Form1
         '
@@ -342,5 +357,7 @@ Partial Class Form1
     Friend WithEvents ASMSB As System.Windows.Forms.Button
     Friend WithEvents Button1 As System.Windows.Forms.Button
     Friend WithEvents 設定ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ASMopen As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents CODEopen As System.Windows.Forms.ToolStripMenuItem
 
 End Class
