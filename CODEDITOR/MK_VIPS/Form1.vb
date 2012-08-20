@@ -4013,6 +4013,8 @@ Public Class Form1
         Dim valdecm As Match = valdec.Match(str)
         Dim vallb As New Regex("(\x20|,|\t)s?(lower_).*?\(")
         Dim vallbm As Match = vallb.Match(str)
+        Dim valadd As New Regex(",\[(\+|\-)\d{1,5}\]$")
+        Dim valaddm As Match = valadd.Match(str)
         Dim k As Integer = 0
         If valhexm.Success Then
             Dim s As String = valhexm.Value
@@ -4054,6 +4056,12 @@ Public Class Form1
                 MessageBox.Show(str & "でラベルを使用する場合はラベル名の前にslowerかlower_をつけて下さい", "")
             End If
         End If
+
+        If valaddm.Success Then
+            Dim s As String = valaddm.Value
+            hex = hex + (Convert.ToInt32(s.Remove(0, 2).Replace("]", "")))
+        End If
+
         Return hex
     End Function
 
@@ -4083,6 +4091,8 @@ Public Class Form1
         Dim valdecm As Match = valdec.Match(str)
         Dim vallb As New Regex("(\x20|,|\t)s?(lower_).*?\(")
         Dim vallbm As Match = vallb.Match(str)
+        Dim valadd As New Regex(",\[(\+|\-)\d{1,5}\]$")
+        Dim valaddm As Match = valadd.Match(str)
         Dim k As Integer = 0
         If valhexm.Success Then
             Dim s As String = valhexm.Value
@@ -4124,6 +4134,11 @@ Public Class Form1
                 MessageBox.Show(str & "でラベルを使用する場合はラベル名の前にslowerかlower_をつけて下さい", "")
             End If
         End If
+        If valaddm.Success Then
+            Dim s As String = valaddm.Value
+            hex = hex + (Convert.ToInt32(s.Remove(0, 2).Replace("]", "")))
+        End If
+
         Return hex
     End Function
 
@@ -4300,6 +4315,9 @@ Public Class Form1
             End If
         End If
         minus = minus And 4294967295
+        If minus >= &H80000000 Then
+            minus -= 4294967296
+        End If
         Return CInt(minus)
     End Function
 
@@ -4406,20 +4424,44 @@ Public Class Form1
         Return hex
     End Function
 
+
+    Dim mscp As Integer() = {0, 37, 437, 500, 708, 709, 710, 720, 737, 775, 850, 852, 855, 857, 858, 860, 861, 862, 863, 864, 865, 866, 869, 870, 874, 875, 932, 936, 949, 950, 1026, 1047, 1140, 1141, 1142, 1143, 1144, 1145, 1146, 1147, 1148, 1149, 1200, 1201, 1250, 1251, 1252, 1253, 1254, 1255, 1256, 1257, 1258, 1361, 10000, 10001, 10002, 10003, 10004, 10005, 10006, 10007, 10008, 10010, 10017, 10021, 10029, 10079, 10081, 10082, 12000, 12001, 20000, 20001, 20002, 20003, 20004, 20005, 20105, 20106, 20107, 20108, 20127, 20261, 20269, 20273, 20277, 20278, 20280, 20284, 20285, 20290, 20297, 20420, 20423, 20424, 20833, 20838, 20866, 20871, 20880, 20905, 20924, 20932, 20936, 20949, 21025, 21027, 21866, 28591, 28592, 28593, 28594, 28595, 28596, 28597, 28598, 28599, 28603, 28605, 29001, 38598, 50220, 50221, 50222, 50225, 50227, 50229, 50930, 50931, 50933, 50935, 50936, 50937, 50939, 51932, 51936, 51949, 51950, 52936, 54936, 57002, 57003, 57004, 57005, 57006, 57007, 57008, 57009, 57010, 57011, 65000, 65001}
+
+    Function checkcp(ByVal cp As Integer) As Boolean
+        Dim len As Integer = mscp.Length - 1
+        For i = 0 To len
+            If cp = mscp(i) Then
+                Return True
+            End If
+        Next
+        Return False
+
+    End Function
+
     Function getstring(ByVal str As String) As Byte()
-        Dim st As Regex = New Regex(""".*?""")
+        Dim st As Regex = New Regex(""".*?""$")
         Dim stm As Match = st.Match(str)
         Dim stt As String = ""
         Dim valdec As New Regex("string\d{1,10}")
         Dim valdecm As Match = valdec.Match(str)
         Dim enc As Int32 = 0
+        Dim b As Byte() = Nothing
+        Dim nulls(1) As Byte
         If valdecm.Success Then
             enc = Convert.ToInt32(valdecm.Value.Remove(0, 6))
         End If
         If stm.Success Then
             stt = stm.Value.Substring(1, stm.Length - 2)
+        Else
+            Return nulls
         End If
-        Dim b As Byte() = Encoding.GetEncoding(enc).GetBytes(stt)
+
+        If checkcp(enc) = True Then
+            b = Encoding.GetEncoding(enc).GetBytes(stt)
+        Else
+            MessageBox.Show("CP" & enc.ToString & "は対応してないコードページです。NULLで処理します", "エラー")
+            Return nulls
+        End If
 
         Return b
     End Function
@@ -4451,8 +4493,8 @@ Public Class Form1
 
     Private Function cvtget(ByVal st As Integer, ByVal asms As String, ByVal selm As Integer) As String
         Dim ss As String() = (asms).Split(CChar(vbLf))
+        Dim sa As New StringBuilder
         Dim sb As New StringBuilder
-        'Dim sa As New StringBuilder
         Dim sc As New StringBuilder
         Dim i As Integer = st
         Dim modesel As Integer = MODE.SelectedIndex
@@ -4479,14 +4521,21 @@ Public Class Form1
         Dim setpc As Integer = 0
         Dim odd As Boolean = False
         Dim odd2 As Boolean = False
+        Dim macros As Boolean = False
+        Dim macrost(255) As String
+        Dim macrobase(255) As String
+        Dim macroct As Integer = 0
         If selm < 2 Then
 
-            Dim psdis As New Regex("(\t|\x20|　)*?(#|;).+$")
+            Dim psdis As New Regex("(\t|\x20|　)*?(#|;|//).+$")
             Dim llb As New Regex("^.*?:( |\t|　)+")
-            Dim shead As New Regex("^[a-z0-9\.]+(\x20|\t)+")
+            Dim shead As New Regex("^[a-z0-9\._\-]+(\x20|\t)+")
             Dim sheadm As Match
             Dim psdism As Match
             Dim llbm As Match
+            Dim rg As String = ""
+            Dim lst As String = ""
+            Dim head As String = ""
             For Each s As String In ss
                 psdism = psdis.Match(s.Trim)
                 If psdism.Success Then
@@ -4498,11 +4547,25 @@ Public Class Form1
                     s = s.Remove(0, llbm.Length)
                 End If
                 sheadm = shead.Match(s.Trim)
-                If sheadm.Success Then
-                    Select Case sheadm.Value.Trim.ToLower
+                s = s.Trim
+                If macros = True AndAlso s.Length > 5 AndAlso s.Remove(0, 5) <> ".endm" Then
+                    sa.AppendLine(s)
+                ElseIf s.Length > 5 AndAlso s.Substring(0, 6) = ".macro" Then
+                    sa.Clear()
+                    macros = True
+                    s = s.Remove(0, 6).Trim
+                    s = s.Replace(vbTab, " ")
+                    macrost(macroct) = s
+                ElseIf s.Length > 4 AndAlso s.Substring(0, 5) = ".endm" Then
+                    macros = False
+                    macrobase(macroct) = sa.ToString
+                    macroct += 1
+                ElseIf sheadm.Success Then
+                    head = sheadm.Value.Trim.ToLower
+                    Select Case head
                         Case "la"
-                            Dim lst = s.Remove(0, s.LastIndexOf(",") + 1).ToLower
-                            Dim rg As String = s.Substring(0, s.IndexOf(",")).Remove(0, 2).Trim
+                            lst = s.Remove(0, s.LastIndexOf(",") + 1).ToLower
+                            rg = s.Substring(0, s.IndexOf(",")).Remove(0, 2).Trim
                             sc.Append("lui ")
                             sc.Append(rg)
                             sc.Append(",upper_")
@@ -4515,7 +4578,7 @@ Public Class Form1
                             sc.AppendLine(lst)
                         Case "li"
                             Dim k = valword(s.Trim)
-                            Dim rg As String = s.Substring(0, s.IndexOf(",")).Remove(0, 2).Trim
+                            rg = s.Substring(0, s.IndexOf(",")).Remove(0, 2).Trim
                             If (k >> 16 <> 0) Then
                                 sc.Append("lui ")
                                 sc.Append(rg)
@@ -4537,8 +4600,170 @@ Public Class Form1
                             If k = 0 Then
                                 sc.Append(s.Trim)
                             End If
+                        Case ".ascii"
+                            rg = s.Remove(0, 6).Trim
+                            sc.Append(".string20127 ")
+                            sc.AppendLine(rg)
+                        Case ".shift_jis"
+                            rg = s.Remove(0, 10).Trim
+                            sc.Append(".string932 ")
+                            sc.AppendLine(rg)
+                        Case ".euc-jp"
+                            rg = s.Remove(0, 7).Trim
+                            sc.Append(".string51932 ")
+                            sc.AppendLine(rg)
+                        Case ".utf-16be"
+                            rg = s.Remove(0, 8).Trim
+                            sc.Append(".string1201 ")
+                            sc.AppendLine(rg)
+                        Case ".utf-16le"
+                            rg = s.Remove(0, 8).Trim
+                            sc.Append(".string1200 ")
+                            sc.AppendLine(rg)
+                        Case ".utf-8"
+                            rg = s.Remove(0, 5).Trim
+                            sc.Append(".string65001 ")
+                            sc.AppendLine(rg)
+                        Case ".uhc"
+                            rg = s.Remove(0, 4).Trim
+                            sc.Append(".string949 ")
+                            sc.AppendLine(rg)
+                        Case ".euc-kr"
+                            rg = s.Remove(0, 7).Trim
+                            sc.Append(".string51949 ")
+                            sc.AppendLine(rg)
+                        Case ".big5"
+                            rg = s.Remove(0, 4).Trim
+                            sc.Append(".string950 ")
+                            sc.AppendLine(rg)
+                            'Case ".big5-hkscs"
+                            '    rg = s.Remove(0, 10).Trim
+                            '    sc.Append(".string951 ")
+                            '    sc.AppendLine(rg)
+                        Case ".gbk"
+                            rg = s.Remove(0, 4).Trim
+                            sc.Append(".string936 ")
+                            sc.AppendLine(rg)
+                        Case ".gb18030"
+                            rg = s.Remove(0, 8).Trim
+                            sc.Append(".string54936 ")
+                            sc.AppendLine(rg)
                         Case "ulv.q"
+                            rg = s.Remove(0, 5).Trim
+                            sc.Append("lvl.q ")
+                            sc.Append(rg)
+                            sc.AppendLine(",[+12]")
+                            sc.Append("lvr.q ")
+                            sc.AppendLine(rg)
                         Case "usv.q"
+                            rg = s.Remove(0, 5).Trim
+                            sc.Append("svl.q ")
+                            sc.Append(rg)
+                            sc.AppendLine(",[+12]")
+                            sc.Append("svr.q ")
+                            sc.AppendLine(rg)
+                        Case "ulw"
+                            rg = s.Remove(0, 3).Trim
+                            sc.Append("lwl ")
+                            sc.Append(rg)
+                            sc.AppendLine(",[+3]")
+                            sc.Append("lwr ")
+                            sc.AppendLine(rg)
+                        Case "usw"
+                            rg = s.Remove(0, 3).Trim
+                            sc.Append("swl ")
+                            sc.Append(rg)
+                            sc.AppendLine(",[+3]")
+                            sc.Append("swr ")
+                            sc.AppendLine(rg)
+                        Case "mul"
+                            Dim sk As String() = s.Split(CChar(","))
+                            If sk.Length > 2 Then
+                                lst = s.Remove(0, s.IndexOf(",") + 1).Trim
+                                rg = s.Remove(0, 4).Trim
+                                rg = rg.Substring(0, rg.IndexOf(",")).Trim
+                                sc.Append("mult ")
+                                sc.AppendLine(lst)
+                                sc.Append("mflo ")
+                                sc.AppendLine(rg)
+                            Else
+                                sc.AppendLine(s.Trim)
+                            End If
+                        Case "mulu"
+                            Dim sk As String() = s.Split(CChar(","))
+                            If sk.Length > 2 Then
+                                lst = s.Remove(0, s.IndexOf(",") + 1).Trim
+                                rg = s.Remove(0, 4).Trim
+                                rg = rg.Substring(0, rg.IndexOf(",")).Trim
+                                sc.Append("multu ")
+                                sc.AppendLine(lst)
+                                sc.Append("mflo ")
+                                sc.AppendLine(rg)
+                            Else
+                                sc.AppendLine(s.Trim)
+                            End If
+                        Case "bgt", "blt", "bgtu", "bltu", "bgti", "blti", "bgtiu", "bltiu" _
+                            , "bgtl", "bltl", "bgtul", "bltul", "bgtil", "bltil", "bgtiul", "bltiul" _
+                            , "bge", "ble", "bgeu", "bleu", "bgei", "blei", "bgeiu", "bleiu" _
+                            , "bgel", "blel", "bgeul", "bleul", "bgeil", "bleil", "bgeiul", "bleiul"
+                            rg = s.Remove(0, sheadm.Length).Trim
+
+                            Dim sk As String() = rg.Split(CChar(","))
+                            If sk.Length > 2 Then
+                                If head.Contains("iu") Then
+                                    sc.Append("sltiu at,")
+                                ElseIf head.Contains("i") Then
+                                    sc.Append("slti at,")
+                                ElseIf head.Contains("u") Then
+                                    sc.Append("sltu at,")
+                                Else
+                                    sc.Append("slt at,")
+                                End If
+                                If head.Contains("i") AndAlso (head.Contains("gt") Or head.Contains("le")) Then
+                                    sc.Append(sk(0))
+                                    sc.Append(",0x")
+                                    Dim tmp As Integer = valhex_boolean("," & sk(1), 0)
+                                    If head.Contains("gt") Then
+                                        tmp += 1
+                                    Else
+                                        tmp -= 1
+                                    End If
+                                    tmp = tmp And &HFFFF
+                                    sc.AppendLine(tmp.ToString("X"))
+                                ElseIf head.Contains("gt") Or head.Contains("le") Then
+                                    sc.Append(sk(1))
+                                    sc.Append(",")
+                                    sc.AppendLine(sk(0))
+                                Else
+                                    sc.Append(sk(0))
+                                    sc.Append(",")
+                                    sc.AppendLine(sk(1))
+                                End If
+                                If head.Contains("i") AndAlso (head.Contains("gt") Or head.Contains("le")) Then
+                                    If head.Contains("gt") Then
+                                        sc.Append("beq")
+                                    Else
+                                        sc.Append("bne")
+                                    End If
+                                ElseIf head.Contains("gt") Or head.Contains("lt") Then
+                                    sc.Append("bne")
+                                Else
+                                    sc.Append("beq")
+                                End If
+                                If head(head.Length - 1) = "l" Then
+                                    sc.Append("l")
+                                End If
+                                sc.Append(" at,zr,")
+                                sc.AppendLine(sk(2))
+                            Else
+                                sc.AppendLine(s.Trim)
+                            End If
+                            '                                                           if(R[rs]>R[rt])
+                            'bgt $rs,$rt,Label 	slt $at,$rt,$rs; bne $at,$zero,Label 　 if(R[rt]<R[rs]) PC=Label,(R[rt]>=R[rs])PC+4
+                            'blt $rs,$rt,Label 	slt $at,$rs,$rt; bne $at,$zero,Label 	if(R[rs]<R[rt]) PC=Label,(R[rs]>=R[rt])PC+4
+                            'bge $rs,$rt,Label 	slt $at,$rs,$rt; beq $at,$zero,Label 　	if(R[rs]>=R[rt]) PC=Label,(R[rs]<R[rt])PC+4
+                            'ble $rs,$rt,Label 	slt $at,$rt,$rs; beq $at,$zero,Label    if(R[rt]>=R[rs]) PC=Label,(R[rt]<R[rs])PC+4
+                            '                                                               rs<=rt
                         Case Else
                             sc.AppendLine(s.Trim)
                     End Select
@@ -4547,13 +4772,24 @@ Public Class Form1
                 End If
             Next
 
-            ss = sc.ToString.Split(CChar(vbLf))
+            Dim sss As String = sc.ToString
+            'For p = 0 To macroct - 1
+            '    sss = sss.Replace(macrost(p).Substring(0, macrost(p).IndexOf(" ")).Trim, "")
+            'Next
+
+            ss = sss.Split(CChar(vbLf))
             normalize = sc.ToString
             Array.Clear(label, 0, 256)
             Array.Clear(label_addr, 0, 256)
+            macros = False
 
             For Each s As String In ss
                 If s.Trim = "" Then
+                ElseIf macros = True Then
+                ElseIf s.Length > 6 AndAlso s.Substring(0, 6) = ".macro" Then
+                    macros = True
+                ElseIf s.Length > 5 AndAlso s.Substring(0, 5) = ".endm" Then
+                    macros = False
                 ElseIf s.Length > 0 AndAlso (s(0) = "_" Or s(0) = "/" Or s(0) = "#" Or s(0) = ";") Then
                 ElseIf s.Length > 2 AndAlso (s.Substring(0, 3) = "FNC") Then
                 ElseIf s.Length > 2 AndAlso s.Substring(s.Length - 2, 1) = ":" Then
@@ -4597,11 +4833,17 @@ Public Class Form1
 
         If (selm And 1) = 0 Then
 
+            macros = False
             For Each s As String In ss
                 If s.Trim = "" Then
+                ElseIf macros = True Then
                 ElseIf s.Length > 0 AndAlso (s(0) = "_" Or s(0) = "/" Or s(0) = "#" Or s(0) = ";") Then
                 ElseIf s.Length > 2 AndAlso (s.Substring(0, 3) = "FNC") Then
                 ElseIf s.Length > 2 AndAlso s.Substring(s.Length - 2, 1) = ":" Then
+                ElseIf s.Length > 6 AndAlso s.Substring(0, 6) = ".macro" Then
+                    macros = True
+                ElseIf s.Length > 5 AndAlso s.Substring(0, 5) = ".endm" Then
+                    macros = False
                 ElseIf s.Length > 4 AndAlso s.Substring(0, 5) = "label" Then
                 ElseIf s.Length > 5 AndAlso s.Substring(0, 5) = "setpc" Then
                     setpc = offset_boolean(s.Trim, 0) << 2
@@ -4696,100 +4938,100 @@ Public Class Form1
                     End While
                     i += j
                 Else
-                        Select Case modesel
-                            Case 0
-                                'If MODE.Text = "NITEPR" Then
-                                sb.Append("0x")
-                                sb.Append(Convert.ToString(i, 16).ToUpper.PadLeft(8, "0"c))
-                                sb.Append(" ")
-                                sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                                i += 4
-                                '            End If
-                            Case 1
-                                'If MODE.Text = "CWCHEAT" Then
-                                sb.Append("_L ")
-                                sb.Append("0x")
-                                sb.Append(Convert.ToString(i Or &H20000000, 16).ToUpper.PadLeft(8, "0"c))
-                                sb.Append(" ")
-                                sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                                i += 4
-                                'End If
-                            Case 2
-                                'If MODE.Text = "PSPAR" Then
+                    Select Case modesel
+                        Case 0
+                            'If MODE.Text = "NITEPR" Then
+                            sb.Append("0x")
+                            sb.Append(Convert.ToString(i, 16).ToUpper.PadLeft(8, "0"c))
+                            sb.Append(" ")
+                            sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                            i += 4
+                            '            End If
+                        Case 1
+                            'If MODE.Text = "CWCHEAT" Then
+                            sb.Append("_L ")
+                            sb.Append("0x")
+                            sb.Append(Convert.ToString(i Or &H20000000, 16).ToUpper.PadLeft(8, "0"c))
+                            sb.Append(" ")
+                            sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                            i += 4
+                            'End If
+                        Case 2
+                            'If MODE.Text = "PSPAR" Then
+                            sb.Append("_M ")
+                            sb.Append("0x")
+                            sb.Append(Convert.ToString(i And &HFFFFFFF, 16).ToUpper.PadLeft(8, "0"c))
+                            sb.Append(" ")
+                            sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                            i += 4
+                            'End If
+                        Case 3
+                            'If MODE.Text = "PMETAN" Then
+                            sb.Append("_NWR ")
+                            sb.Append("0x80000000 0x")
+                            sb.Append(Convert.ToString(i And &HFFFFFFF, 16).ToUpper.PadLeft(8, "0"c))
+                            sb.Append(" ")
+                            sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                            i += 4
+                            'End If
+                        Case 4
+                            'If MODE.Text = "PSPAR(0xE)" Then
+                            If odd = False Then
                                 sb.Append("_M ")
-                                sb.Append("0x")
-                                sb.Append(Convert.ToString(i And &HFFFFFFF, 16).ToUpper.PadLeft(8, "0"c))
+                                sb.Append(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
                                 sb.Append(" ")
+                                odd = True
+                            Else
                                 sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                                i += 4
-                                'End If
-                            Case 3
-                                'If MODE.Text = "PMETAN" Then
-                                sb.Append("_NWR ")
-                                sb.Append("0x80000000 0x")
-                                sb.Append(Convert.ToString(i And &HFFFFFFF, 16).ToUpper.PadLeft(8, "0"c))
+                                odd = False
+                            End If
+                            i += 4
+                            'End If
+                        Case 5
+                            'If MODE.Text = "TEMPAR(0xC2)" Then
+                            If odd = False Then
+                                sb.Append("_N ")
+                                sb.Append(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
                                 sb.Append(" ")
+                                odd = True
+                            Else
                                 sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                                i += 4
-                                'End If
-                            Case 4
-                                'If MODE.Text = "PSPAR(0xE)" Then
-                                If odd = False Then
-                                    sb.Append("_M ")
-                                    sb.Append(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
+                                odd = False
+                            End If
+                            i += 4
+                            'End If
+                        Case Else
+                            'If MODE.Text = "CMFUSION(0xF0)" Then
+                            If odd = False Then
+                                sb.Append("_L ")
+                                cmfst = assembler(s.Trim.ToLower, Convert.ToString(i, 16))
+                                If modesel > 6 Then
+                                    cmfaddrval(0) = Convert.ToInt64(cmfst, 16)
+                                Else
+                                    sb.Append(cmfst)
                                     sb.Append(" ")
-                                    odd = True
-                                Else
-                                    sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                                    odd = False
                                 End If
-                                i += 4
-                                'End If
-                            Case 5
-                                'If MODE.Text = "TEMPAR(0xC2)" Then
-                                If odd = False Then
-                                    sb.Append("_N ")
-                                    sb.Append(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                                    sb.Append(" ")
-                                    odd = True
-                                Else
-                                    sb.AppendLine(assembler(s.Trim.ToLower, Convert.ToString(i, 16)))
-                                    odd = False
-                                End If
-                                i += 4
-                                'End If
-                            Case Else
-                                'If MODE.Text = "CMFUSION(0xF0)" Then
-                                If odd = False Then
-                                    sb.Append("_L ")
-                                    cmfst = assembler(s.Trim.ToLower, Convert.ToString(i, 16))
-                                    If modesel > 6 Then
-                                        cmfaddrval(0) = Convert.ToInt64(cmfst, 16)
-                                    Else
-                                        sb.Append(cmfst)
-                                        sb.Append(" ")
-                                    End If
-                                    odd = True
-                                Else
-                                    cmfst = assembler(s.Trim.ToLower, Convert.ToString(i, 16))
-                                    If modesel > 6 Then
-                                        cmfaddrval(1) = Convert.ToInt64(cmfst, 16)
+                                odd = True
+                            Else
+                                cmfst = assembler(s.Trim.ToLower, Convert.ToString(i, 16))
+                                If modesel > 6 Then
+                                    cmfaddrval(1) = Convert.ToInt64(cmfst, 16)
+                                    cmfaddrval = EncryptCB(cmfaddrval)
+                                    If (modesel = 8) Then
+                                        cmfaddrval = SwapFF(cmfaddrval)
                                         cmfaddrval = EncryptCB(cmfaddrval)
-                                        If (modesel = 8) Then
-                                            cmfaddrval = SwapFF(cmfaddrval)
-                                            cmfaddrval = EncryptCB(cmfaddrval)
-                                        End If
-                                        sb.Append("0x")
-                                        sb.Append(cmfaddrval(0).ToString("X8"))
-                                        sb.Append(" 0x")
-                                        sb.AppendLine(cmfaddrval(1).ToString("X8"))
-                                    Else
-                                        sb.AppendLine(cmfst)
                                     End If
-                                    odd = False
+                                    sb.Append("0x")
+                                    sb.Append(cmfaddrval(0).ToString("X8"))
+                                    sb.Append(" 0x")
+                                    sb.AppendLine(cmfaddrval(1).ToString("X8"))
+                                Else
+                                    sb.AppendLine(cmfst)
                                 End If
-                                i += 4
-                        End Select
+                                odd = False
+                            End If
+                            i += 4
+                    End Select
                 End If
             Next
             If odd = True Then
