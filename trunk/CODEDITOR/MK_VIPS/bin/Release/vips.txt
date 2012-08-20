@@ -1,3 +1,30 @@
+2012/08/20
+.wordでオーバーフロー例外が出てたので修正
+コメントに"//"を追加
+擬似命令を追加
+//アライメント無視読込、保存(lw[lr],sw[lr],lv[lr].q,sv[lr].q)
+"ulv.q","usv.q"
+"ulw","usw"
+//ニセ3オペランド乗算 (multu? + mflo)
+"mul","mulu"
+//大小比較(slt,sltu,slti,sltiu + beq,bne,beql,bnel,RD=$at)
+ "bgt", "blt", "bgtu", "bltu", "bgti", "blti", "bgtiu", "bltiu" _
+,"bgtl", "bltl", "bgtul", "bltul", "bgtil", "bltil", "bgtiul", "bltiul" _
+,"bge", "ble", "bgeu", "bleu", "bgei", "blei", "bgeiu", "bleiu" _
+,"bgel", "blel", "bgeul", "bleul", "bgeil", "bleil", "bgeiul", "bleiul"
+.stringに代替命令を追加
+.ascii	.string20127 
+.shift_jis	.string932 
+.euc-jp	.string51932 
+.uhc	.string949 
+.euc-kr	.string51949 
+.big5	.string950 
+.gbk	.string936 
+.gb18030	.string54936 
+.utf-16be	.string1201 
+.utf-16le	.string1200 
+.utf-8	.string65001
+
 2012/08/11
 .wordの出力が変なとこがあったので修正
 lwなどに16bitマスクラベルを追加
