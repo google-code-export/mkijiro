@@ -67,9 +67,9 @@ Partial Class version
         Me.Label3.AutoSize = True
         Me.Label3.Location = New System.Drawing.Point(18, 50)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(130, 12)
+        Me.Label3.Size = New System.Drawing.Size(124, 12)
         Me.Label3.TabIndex = 2
-        Me.Label3.Text = "BUILD:2012/08/20 23:44"
+        Me.Label3.Text = "BUILD:2012/08/24 0:00"
         '
         'Label1
         '
