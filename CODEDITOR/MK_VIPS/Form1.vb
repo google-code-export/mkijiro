@@ -3378,6 +3378,8 @@ Public Class Form1
                     hex = vp0123(ss(3).Replace("]", ""), hex, 3)
                 ElseIf mips = ".word" Then
                     hex = valword(str.Trim)
+                ElseIf mips = ".float" Then
+                    hex = valfloat(str.Trim)
                 End If
 
                 asm = "0x" & Convert.ToString(hex, 16).ToUpper.PadLeft(8, "0"c)
@@ -4319,6 +4321,98 @@ Public Class Form1
             minus -= 4294967296
         End If
         Return CInt(minus)
+    End Function
+
+
+    Dim maths As String() = {"tan", "tanh", "sin", "sinh", "cos", "cosh", "sqrt", "ln", "log", "exp", "pow", "atan", "asin", "acos", "atan_deg", "asin_deg", "acos_deg"}
+
+    Function valfloat(ByVal str As String) As Integer
+        Dim valfl As New Regex("(\x20|,)[+-]?\d+\.?\d+$")
+        Dim valflm As Match = valfl.Match(str)
+        Dim valmugen As New Regex("(\x20|,)[+-]?(nan|inf)$")
+        Dim valmugenm As Match = valmugen.Match(str)
+        Dim valmath As New Regex("(tan|tanh|sin|sinh|cos|cosh|sqrt|ln|log-?\d+\.?\d*_|atan|asin|acos|exp|pow-?\d+\.?\d*_|atan_deg|asin_deg|acos_deg)-?\d+\.?\d*(rad)?$")
+        Dim valmathm As Match = valmath.Match(str)
+        Dim hex As Integer = 0
+        If valflm.Success Then
+            Dim k As Single = Convert.ToSingle(valflm.Value.Remove(0, 1))
+            Dim b As Byte() = BitConverter.GetBytes(k)
+            hex = BitConverter.ToInt32(b, 0)
+        ElseIf valmugenm.Success Then
+            If valmugenm.Value.Contains("nan") Then
+                hex = &H7FC00000
+            Else
+                hex = &H7F800000
+            End If
+            If valmugenm.Value.Contains("-") Then
+                hex = hex Or &H80000000
+            End If
+        ElseIf valmathm.Success Then
+            Dim vald As New Regex("-?\d+\.?\d*")
+            Dim valdm As Match = vald.Match(valmathm.Value)
+            Dim k As Double = Convert.ToDouble(valdm.Value)
+            Dim angle As Double = k
+            If valmathm.Value.Contains("rad") = False Then
+                angle = angle * Math.PI / 180
+            End If
+            Dim hh As String = valmathm.Value.Substring(0, valdm.Index).Trim
+            Dim i As Integer = 0
+            For i = 0 To maths.Length - 1
+                If hh = maths(i) Then
+                    Select Case i
+                        Case 0
+                            k = Math.Tan(angle)
+                        Case 1
+                            k = Math.Tanh(angle)
+                        Case 2
+                            k = Math.Sin(angle)
+                        Case 3
+                            k = Math.Sinh(angle)
+                        Case 4
+                            k = Math.Cos(angle)
+                        Case 5
+                            k = Math.Cosh(angle)
+                        Case 6
+                            k = Math.Sqrt(k)
+                        Case 7
+                            k = Math.Log(k)
+                        Case 8
+                            valdm = valdm.NextMatch
+                            angle = Convert.ToDouble(valdm.Value)
+                            k = Math.Log(angle, k)
+                        Case 9
+                            k = Math.Exp(k)
+                        Case 10
+                            valdm = valdm.NextMatch
+                            angle = Convert.ToDouble(valdm.Value)
+                            k = Math.Pow(k, angle)
+                        Case 11
+                            k = Math.Atan(k)
+                        Case 12
+                            k = Math.Asin(k)
+                        Case 13
+                            k = Math.Acos(k)
+                        Case 14
+                            k = Math.Atan(k)
+                        Case 15
+                            k = Math.Asin(k)
+                        Case 16
+                            k = Math.Acos(k)
+                    End Select
+                    Exit For
+                End If
+            Next
+
+            If i >= 14 AndAlso i <= 16 Then
+                k = k * 180 / Math.PI
+            End If
+
+            Dim f As Single = Convert.ToSingle(k)
+            Dim b As Byte() = BitConverter.GetBytes(f)
+            hex = BitConverter.ToInt32(b, 0)
+        End If
+        Return hex
+
     End Function
 
     Function reg_sel(ByVal s As String) As Integer

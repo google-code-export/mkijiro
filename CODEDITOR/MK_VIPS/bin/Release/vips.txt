@@ -1,3 +1,8 @@
+2012/08/24
+.floatを追加
+.floatにM$の数学関数を指定できるようにした
+"tan", "tanh", "sin", "sinh", "cos", "cosh", "sqrt", "ln", "log", "exp", "pow", "atan", "asin", "acos", "atan_deg", "asin_deg", "acos_deg"
+
 2012/08/20
 .wordでオーバーフロー例外が出てたので修正
 コメントに"//"を追加
