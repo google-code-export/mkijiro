@@ -4324,14 +4324,23 @@ Public Class Form1
     End Function
 
 
-    Dim maths As String() = {"tan", "tanh", "sin", "sinh", "cos", "cosh", "sqrt", "ln", "log", "exp", "pow", "atan", "asin", "acos", "atan_deg", "asin_deg", "acos_deg"}
+    Dim maths As String() = {"tan", "tanh", "sin", "sinh", "cos", "cosh", "sqrt", "ln", "log", "exp", "pow", "atan", "asin", "acos", "atan_deg", "asin_deg", "acos_deg", "atan2_deg_", "atan2_"}
+    Dim mathsconst As String() = {"π", "円周率", "黄金比", "自然対数の底"}
+    Dim mathrp As String() = {"pi", "pi", "goldenratio", "e"}
 
     Function valfloat(ByVal str As String) As Integer
+
+        Dim i As Integer = 0
+        For i = 0 To mathsconst.Length - 1
+            If str.Contains(mathsconst(i)) Then
+                str = str.Replace(mathsconst(i), mathrp(i))
+            End If
+        Next
         Dim valfl As New Regex("(\x20|,)[+-]?\d+\.?\d+$")
         Dim valflm As Match = valfl.Match(str)
-        Dim valmugen As New Regex("(\x20|,)[+-]?(nan|inf)$")
+        Dim valmugen As New Regex("(\x20|,)[+-]?(nan|inf|e|pi|goldenratio)$")
         Dim valmugenm As Match = valmugen.Match(str)
-        Dim valmath As New Regex("(tan|tanh|sin|sinh|cos|cosh|sqrt|ln|log-?\d+\.?\d*_|atan|asin|acos|exp|pow-?\d+\.?\d*_|atan_deg|asin_deg|acos_deg)-?\d+\.?\d*(rad)?$")
+        Dim valmath As New Regex("(tan|tanh|sin|sinh|cos|cosh|sqrt|ln|log|exp|pow|atan_deg|asin_deg|acos_deg|atan2_deg_|atan2_|atan|asin|acos)")
         Dim valmathm As Match = valmath.Match(str)
         Dim hex As Integer = 0
         If valflm.Success Then
@@ -4339,8 +4348,23 @@ Public Class Form1
             Dim b As Byte() = BitConverter.GetBytes(k)
             hex = BitConverter.ToInt32(b, 0)
         ElseIf valmugenm.Success Then
-            If valmugenm.Value.Contains("nan") Then
+            If valmugenm.Value.Contains("pi") Then
+                Dim f As Single = Convert.ToSingle(Math.PI)
+                Dim b As Byte() = BitConverter.GetBytes(f)
+                hex = BitConverter.ToInt32(b, 0)
+            ElseIf valmugenm.Value.Contains("goldenratio") Then
+                Dim f As Single = Convert.ToSingle((1 + Math.Sqrt(5)) / 2)
+                Dim b As Byte() = BitConverter.GetBytes(f)
+                hex = BitConverter.ToInt32(b, 0)
+            ElseIf valmugenm.Value.Contains("e") Then
+                Dim f As Single = Convert.ToSingle(Math.E)
+                Dim b As Byte() = BitConverter.GetBytes(f)
+                hex = BitConverter.ToInt32(b, 0)
+            ElseIf valmugenm.Value.Contains("nan") Then
                 hex = &H7FC00000
+                If valmugenm.Value.Contains("-") Then
+                    hex = hex Or &H80000000
+                End If
             Else
                 hex = &H7F800000
             End If
@@ -4348,15 +4372,33 @@ Public Class Form1
                 hex = hex Or &H80000000
             End If
         ElseIf valmathm.Success Then
+            Dim hh As String = valmathm.Value
+            str = str.Remove(0, valmathm.Index + valmathm.Length).Replace("deg", "dg")
+            Dim valmu As New Regex("[+-]?(e|pi|goldenratio)")
+            Dim valmum As Match = valmu.Match(str)
+            While valmum.Success
+                Dim y As Double = Convert.ToSingle(Math.PI)
+                If valmum.Value.Contains("pi") Then
+                    y = Convert.ToSingle(Math.PI)
+                ElseIf valmum.Value.Contains("goldenratio") Then
+                    y = Convert.ToSingle((1 + Math.Sqrt(5)) / 2)
+                ElseIf valmugenm.Value.Contains("e") Then
+                    y = Convert.ToSingle(Math.E)
+                End If
+                If valmum.Value.Contains("-") Then
+                    y = -y
+                End If
+                str = str.Replace(valmum.Value, y.ToString)
+                valmum = valmum.NextMatch
+            End While
             Dim vald As New Regex("-?\d+\.?\d*")
-            Dim valdm As Match = vald.Match(valmathm.Value)
+            Dim valdm As Match = vald.Match(str)
             Dim k As Double = Convert.ToDouble(valdm.Value)
             Dim angle As Double = k
-            If valmathm.Value.Contains("rad") = False Then
+            If str.Contains("度") = True Or str.Contains("dg") = True Or str.Contains("°") = True Then
                 angle = angle * Math.PI / 180
             End If
-            Dim hh As String = valmathm.Value.Substring(0, valdm.Index).Trim
-            Dim i As Integer = 0
+
             For i = 0 To maths.Length - 1
                 If hh = maths(i) Then
                     Select Case i
@@ -4398,12 +4440,20 @@ Public Class Form1
                             k = Math.Asin(k)
                         Case 16
                             k = Math.Acos(k)
+                        Case 17
+                            valdm = valdm.NextMatch
+                            angle = Convert.ToDouble(valdm.Value)
+                            k = Math.Atan2(k, angle)
+                        Case 18
+                            valdm = valdm.NextMatch
+                            angle = Convert.ToDouble(valdm.Value)
+                            k = Math.Atan2(k, angle)
                     End Select
                     Exit For
                 End If
             Next
 
-            If i >= 14 AndAlso i <= 16 Then
+            If i >= 14 AndAlso i <= 17 Then
                 k = k * 180 / Math.PI
             End If
 
@@ -4411,7 +4461,7 @@ Public Class Form1
             Dim b As Byte() = BitConverter.GetBytes(f)
             hex = BitConverter.ToInt32(b, 0)
         End If
-        Return hex
+            Return hex
 
     End Function
 
