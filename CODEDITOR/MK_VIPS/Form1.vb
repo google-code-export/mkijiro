@@ -4340,7 +4340,7 @@ Public Class Form1
         Dim valflm As Match = valfl.Match(str)
         Dim valmugen As New Regex("(\x20|,)[+-]?(nan|inf|e|pi|goldenratio)$")
         Dim valmugenm As Match = valmugen.Match(str)
-        Dim valmath As New Regex("(tan|tanh|sin|sinh|cos|cosh|sqrt|ln|log|exp|pow|atan_deg|asin_deg|acos_deg|atan2_deg_|atan2_|atan|asin|acos)")
+        Dim valmath As New Regex("(tanh|tan|sinh|sin|cosh|cos|sqrt|ln|log|exp|pow|atan_deg|asin_deg|acos_deg|atan2_deg_|atan2_|atan|asin|acos)")
         Dim valmathm As Match = valmath.Match(str)
         Dim hex As Integer = 0
         If valflm.Success Then
@@ -4377,7 +4377,7 @@ Public Class Form1
             Dim valmu As New Regex("[+-]?(e|pi|goldenratio)")
             Dim valmum As Match = valmu.Match(str)
             While valmum.Success
-                Dim y As Double = Convert.ToSingle(Math.PI)
+                Dim y As Double = 0
                 If valmum.Value.Contains("pi") Then
                     y = Convert.ToSingle(Math.PI)
                 ElseIf valmum.Value.Contains("goldenratio") Then
@@ -4394,7 +4394,7 @@ Public Class Form1
             Dim vald As New Regex("-?\d+\.?\d*")
             Dim valdm As Match = vald.Match(str)
             Dim k As Double = Convert.ToDouble(valdm.Value)
-            Dim angle As Double = k
+            Dim angle As Double = calcradian(str)
             If str.Contains("度") = True Or str.Contains("dg") = True Or str.Contains("°") = True Then
                 angle = angle * Math.PI / 180
             End If
@@ -4460,9 +4460,74 @@ Public Class Form1
             Dim f As Single = Convert.ToSingle(k)
             Dim b As Byte() = BitConverter.GetBytes(f)
             hex = BitConverter.ToInt32(b, 0)
+        Else
+            Dim h As Double = calcradian(str)
+            Dim f As Single = Convert.ToSingle(h)
+            Dim b As Byte() = BitConverter.GetBytes(f)
+            hex = BitConverter.ToInt32(b, 0)
         End If
-            Return hex
+        Return hex
 
+    End Function
+
+    Private Function calcradian(ByVal st As String) As Double
+        Dim ss(255) As String
+        Dim s As String = st.Replace(" ", "")
+        Dim sbk As String = ""
+        Dim i As Integer = 0
+        Dim sb As New StringBuilder
+        Dim f As Double = 0
+        While i < s.Length
+            If s(i) = "*" Or s(i) = "/" Then
+                f = floatcal(sb.ToString, f, sbk)
+                sbk = s(i)
+                sb.Clear()
+            Else
+                sb.Append(s(i))
+            End If
+            i += 1
+        End While
+        Return floatcal(sb.ToString, f, sbk)
+
+    End Function
+
+    Private Function floatcal(ByVal str As String, ByVal f As Double, ByVal sbk As String) As Double
+        Dim g As Double
+        Dim ff As New Regex("-?\d\.?\d*")
+        Dim ffm As Match = ff.Match(str)
+        Dim valmu As New Regex("[+-]?(e|pi|goldenratio)")
+        Dim valmum As Match = valmu.Match(str)
+
+        If ffm.Success Then
+            g = Convert.ToDouble(ffm.Value)
+            str = str.Replace(ffm.Value, "")
+        ElseIf valmum.Success Then
+            If valmum.Value.Contains("pi") Then
+                g = Convert.ToSingle(Math.PI)
+            ElseIf valmum.Value.Contains("goldenratio") Then
+                g = Convert.ToSingle((1 + Math.Sqrt(5)) / 2)
+            ElseIf valmum.Value.Contains("e") Then
+                g = Convert.ToSingle(Math.E)
+            End If
+            If valmum.Value.Contains("-") Then
+                g = -g
+            End If
+        End If
+
+        Dim cc As New Regex("[\*/]")
+        Dim ccm As Match = cc.Match(sbk)
+        If ccm.Success Then
+            Select Case ccm.Value
+                Case "*"
+                    f = f * g
+                Case "/"
+                    f = f / g
+            End Select
+        Else
+            f = g
+        End If
+
+        Return f
     End Function
 
     Function reg_sel(ByVal s As String) As Integer

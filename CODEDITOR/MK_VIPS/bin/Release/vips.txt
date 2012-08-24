@@ -1,4 +1,5 @@
-2012/08/24-1
+2012/08/24-2
+分数ラジアン,分数SCE関数用角度に対応
 sinの角度指定をラジアンに変更、度数使用時は°度degをつける
 .floatにatan2_,atan2_deg_を追加
 浮動小数点置換文字を追加
@@ -7,8 +8,6 @@ powとかの区切りを_でなく他でもいけるように変更(スペース数字.以外の文字)
 powx^y
 log2,4
 atan2_deg_-1,-1
-
-2012/08/24
 .floatを追加
 .floatにM$の数学関数を指定できるようにした
 "tan", "tanh", "sin", "sinh", "cos", "cosh", "sqrt", "ln", "log", "exp", "pow", "atan", "asin", "acos", "atan_deg", "asin_deg", "acos_deg"
