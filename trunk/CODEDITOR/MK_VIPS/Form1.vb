@@ -4373,7 +4373,7 @@ Public Class Form1
             End If
         ElseIf valmathm.Success Then
             Dim hh As String = valmathm.Value
-            str = str.Remove(0, valmathm.Index + valmathm.Length).Replace("deg", "dg")
+            str = str.Remove(0, valmathm.Index + valmathm.Length).Replace("deg", "dgr").Replace("grade", "grad")
             Dim valmu As New Regex("[+-]?(e|pi|goldenratio)")
             Dim valmum As Match = valmu.Match(str)
             While valmum.Success
@@ -4382,7 +4382,7 @@ Public Class Form1
                     y = Convert.ToSingle(Math.PI)
                 ElseIf valmum.Value.Contains("goldenratio") Then
                     y = Convert.ToSingle((1 + Math.Sqrt(5)) / 2)
-                ElseIf valmugenm.Value.Contains("e") Then
+                ElseIf valmum.Value.Contains("e") Then
                     y = Convert.ToSingle(Math.E)
                 End If
                 If valmum.Value.Contains("-") Then
@@ -4395,9 +4395,7 @@ Public Class Form1
             Dim valdm As Match = vald.Match(str)
             Dim k As Double = Convert.ToDouble(valdm.Value)
             Dim angle As Double = calcradian(str)
-            If str.Contains("度") = True Or str.Contains("dg") = True Or str.Contains("°") = True Then
-                angle = angle * Math.PI / 180
-            End If
+            angle = angle_cvt(str.Trim, angle)
 
             For i = 0 To maths.Length - 1
                 If hh = maths(i) Then
@@ -4468,6 +4466,59 @@ Public Class Form1
         End If
         Return hex
 
+    End Function
+
+    Private Function angle_cvt(ByVal s As String, ByVal angle As Double) As Double
+
+        Dim valmu As New Regex("(度|グラード|直角|dgr|grad|gon|°|rad|r|∟)")
+        Dim valmum As Match = valmu.Match(s)
+        Dim valhms As New Regex("\d+\.?\d*[dhms度°時分秒′″]")
+        Dim valhmsm As Match = valhms.Match(s)
+        Dim hms As Boolean = False
+        If valhmsm.Success Then
+            angle = 0
+            Dim vals As String = ""
+            Dim hh As String = ""
+            Dim len As Integer = 0
+            While valhmsm.Success
+                len = valhmsm.Value.Length - 1
+                vals = valhmsm.Value.Substring(0, len)
+                hh = valhmsm.Value.Remove(0, len)
+                Select Case hh
+                    Case "d", "°", "度"
+                        hms = False
+                        angle += Convert.ToDouble(vals)
+                    Case "h", "時"
+                        hms = True
+                        angle += 15 * Convert.ToDouble(vals)
+                    Case "m", "分", "′"
+                        If hms = True Then
+                            angle += Convert.ToDouble(vals) / 4
+                        Else
+                            angle += Convert.ToDouble(vals) / 60
+                        End If
+                    Case "s", "秒", "″"
+                        If hms = True Then
+                            angle += Convert.ToDouble(vals) / 240
+                        Else
+                            angle += Convert.ToDouble(vals) / 3600
+                        End If
+                End Select
+                valhmsm = valhmsm.NextMatch
+            End While
+            angle = angle * Math.PI / 180
+        ElseIf valmum.Success Then
+            Select Case valmum.Value
+                Case "grad", "gon", "グラード"
+                    angle = angle * 90 / 100
+                Case "r", "直角", "∟"
+                    angle = angle * 90
+            End Select
+            If valmum.Value <> "rad" Then
+                angle = angle * Math.PI / 180
+            End If
+        End If
+        Return angle
     End Function
 
     Private Function calcradian(ByVal st As String) As Double
