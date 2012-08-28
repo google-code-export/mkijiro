@@ -1,3 +1,11 @@
+2012/08/28
+"atan_deg", "asin_deg", "acos_deg","atan2_deg_"を
+atan[drg]?,asin[drg]?,acos[drg]?,atan2_[drg]? に変更
+戻り値は　drgなし=ラジアン,d=度数,ｒ=直角,g=グラード
+tanとかの90度例外を修正
+powの区切りを"^"か","，log atan2 の区切りを","に限定
+cbrt(3乗根),xrt(x乗根)を追加
+
 2012/08/27
 角度にHMS,DMS,グラード,∟(直角)単位を追加
 
