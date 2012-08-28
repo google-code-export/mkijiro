@@ -3379,7 +3379,7 @@ Public Class Form1
                 ElseIf mips = ".word" Then
                     hex = valword(str.Trim)
                 ElseIf mips = ".float" Then
-                    hex = valfloat(str.Trim)
+                    hex = cvt_float(valfloat(str.Trim))
                 End If
 
                 asm = "0x" & Convert.ToString(hex, 16).ToUpper.PadLeft(8, "0"c)
@@ -4324,11 +4324,15 @@ Public Class Form1
     End Function
 
 
-    Dim maths As String() = {"tan", "tanh", "sin", "sinh", "cos", "cosh", "sqrt", "ln", "log", "exp", "pow", "atan", "asin", "acos", "atan_deg", "asin_deg", "acos_deg", "atan2_deg_", "atan2_"}
+    Dim maths As String() = {"tan", "tanh", "sin", "sinh", "cos", "cosh", "sqrt", "ln", "log", "exp", "pow", _
+                             "atan", "asin", "acos", "atan2_", "atand", "asind", "acosd", "atan2_d", _
+                             "atanr", "asinr", "acosr", "atan2_r", "atang", "asing", "acosg", "atan2_g", _
+                             "cbrt", "xrt"
+                            }
     Dim mathsconst As String() = {"π", "円周率", "黄金比", "自然対数の底"}
     Dim mathrp As String() = {"pi", "pi", "goldenratio", "e"}
 
-    Function valfloat(ByVal str As String) As Integer
+    Function valfloat(ByVal str As String) As Double
 
         Dim i As Integer = 0
         For i = 0 To mathsconst.Length - 1
@@ -4336,40 +4340,29 @@ Public Class Form1
                 str = str.Replace(mathsconst(i), mathrp(i))
             End If
         Next
+        Dim k As Double = 0
         Dim valfl As New Regex("(\x20|,)[+-]?\d+\.?\d+$")
         Dim valflm As Match = valfl.Match(str)
         Dim valmugen As New Regex("(\x20|,)[+-]?(nan|inf|e|pi|goldenratio)$")
         Dim valmugenm As Match = valmugen.Match(str)
-        Dim valmath As New Regex("(tanh|tan|sinh|sin|cosh|cos|sqrt|ln|log|exp|pow|atan_deg|asin_deg|acos_deg|atan2_deg_|atan2_|atan|asin|acos)")
+        Dim valmath As New Regex("(tanh|tan|sinh|sin|cosh|cos|sqrt|cbrt|xrt|ln|log|exp|pow|atan2_[drg]?|atan[drg]?|asin[drg]?|acos[drg]?)")
         Dim valmathm As Match = valmath.Match(str)
-        Dim hex As Integer = 0
         If valflm.Success Then
-            Dim k As Single = Convert.ToSingle(valflm.Value.Remove(0, 1))
-            Dim b As Byte() = BitConverter.GetBytes(k)
-            hex = BitConverter.ToInt32(b, 0)
+            k = Convert.ToSingle(valflm.Value.Remove(0, 1))
         ElseIf valmugenm.Success Then
             If valmugenm.Value.Contains("pi") Then
-                Dim f As Single = Convert.ToSingle(Math.PI)
-                Dim b As Byte() = BitConverter.GetBytes(f)
-                hex = BitConverter.ToInt32(b, 0)
+                k = Convert.ToSingle(Math.PI)
             ElseIf valmugenm.Value.Contains("goldenratio") Then
-                Dim f As Single = Convert.ToSingle((1 + Math.Sqrt(5)) / 2)
-                Dim b As Byte() = BitConverter.GetBytes(f)
-                hex = BitConverter.ToInt32(b, 0)
+                k = Convert.ToDouble((1 + Math.Sqrt(5)) / 2)
             ElseIf valmugenm.Value.Contains("e") Then
-                Dim f As Single = Convert.ToSingle(Math.E)
-                Dim b As Byte() = BitConverter.GetBytes(f)
-                hex = BitConverter.ToInt32(b, 0)
+                k = Convert.ToDouble(Math.E)
             ElseIf valmugenm.Value.Contains("nan") Then
-                hex = &H7FC00000
-                If valmugenm.Value.Contains("-") Then
-                    hex = hex Or &H80000000
-                End If
+                k = 1.0E+308
             Else
-                hex = &H7F800000
+                k = 1.0E+307
             End If
             If valmugenm.Value.Contains("-") Then
-                hex = hex Or &H80000000
+                k = -k
             End If
         ElseIf valmathm.Success Then
             Dim hh As String = valmathm.Value
@@ -4393,7 +4386,8 @@ Public Class Form1
             End While
             Dim vald As New Regex("-?\d+\.?\d*")
             Dim valdm As Match = vald.Match(str)
-            Dim k As Double = Convert.ToDouble(valdm.Value)
+            k = Convert.ToDouble(valdm.Value)
+            Dim ss As String() = str.Split(CChar(","))
             Dim angle As Double = calcradian(str)
             angle = angle_cvt(str.Trim, angle)
 
@@ -4402,77 +4396,120 @@ Public Class Form1
                     Select Case i
                         Case 0
                             k = Math.Tan(angle)
+                            If angle = Math.PI / 2 Or angle = -Math.PI * 3 / 2 Then
+                                k = 1.0E+307
+                            ElseIf angle = -Math.PI / 2 Or angle = Math.PI * 3 / 2 Then
+                                k = -1.0E+307
+                            ElseIf angle = Math.PI Or angle = -Math.PI Then
+                                k = 0
+                            End If
                         Case 1
                             k = Math.Tanh(angle)
                         Case 2
                             k = Math.Sin(angle)
+                            If angle = Math.PI Or angle = -Math.PI Then
+                                k = 0
+                            End If
                         Case 3
                             k = Math.Sinh(angle)
                         Case 4
                             k = Math.Cos(angle)
+                            If angle = Math.PI / 2 Or angle = -Math.PI / 2 Or angle = -Math.PI * 3 / 2 Or angle = Math.PI * 3 / 2 Then
+                                k = 0
+                            End If
                         Case 5
                             k = Math.Cosh(angle)
                         Case 6
                             k = Math.Sqrt(k)
+                        Case 27
+                            k = Math.Pow(k, 1 / 3)
                         Case 7
                             k = Math.Log(k)
                         Case 8
-                            valdm = valdm.NextMatch
-                            angle = Convert.ToDouble(valdm.Value)
-                            k = Math.Log(angle, k)
+                            k = valfloat(ss(0))
+                            If ss.Length < 2 Then
+                                MessageBox.Show("引数が２つ必要です。(x,y)で指定してください")
+                                k = 0
+                            Else
+                                angle = valfloat(ss(1))
+                                k = Math.Log(angle, k)
+                            End If
                         Case 9
                             k = Math.Exp(k)
-                        Case 10
-                            valdm = valdm.NextMatch
-                            angle = Convert.ToDouble(valdm.Value)
-                            k = Math.Pow(k, angle)
-                        Case 11
+                        Case 10, 28
+                            If ss.Length < 2 Then
+                                ss = str.Split(CChar("^"))
+                            End If
+                            If ss.Length < 2 Then
+                                MessageBox.Show("引数が2つ必要です。(x,y)かx^yで指定してください")
+                                k = 0
+                            Else
+                                k = valfloat(ss(0))
+                                angle = valfloat(ss(1))
+                                If i = 28 Then
+                                    angle = 1 / angle
+                                End If
+                                k = Math.Pow(k, angle)
+                            End If
+                        Case 11, 15, 19, 23
                             k = Math.Atan(k)
-                        Case 12
+                        Case 12, 16, 20, 24
                             k = Math.Asin(k)
-                        Case 13
+                        Case 13, 17, 21, 25
                             k = Math.Acos(k)
-                        Case 14
-                            k = Math.Atan(k)
-                        Case 15
-                            k = Math.Asin(k)
-                        Case 16
-                            k = Math.Acos(k)
-                        Case 17
-                            valdm = valdm.NextMatch
-                            angle = Convert.ToDouble(valdm.Value)
-                            k = Math.Atan2(k, angle)
-                        Case 18
-                            valdm = valdm.NextMatch
-                            angle = Convert.ToDouble(valdm.Value)
-                            k = Math.Atan2(k, angle)
+                        Case 14, 18, 22, 26
+                            If ss.Length < 2 Then
+                                MessageBox.Show("引数が2つ必要です。(x,y)で指定してください")
+                                k = 0
+                            Else
+                                k = valfloat(ss(0))
+                                angle = valfloat(ss(1))
+                                k = Math.Atan2(k, angle)
+                            End If
                     End Select
                     Exit For
                 End If
             Next
-
-            If i >= 14 AndAlso i <= 17 Then
+            '度数
+            If i >= 15 AndAlso i <= 18 Then
                 k = k * 180 / Math.PI
+                '直角
+            ElseIf i >= 19 AndAlso i <= 22 Then
+                k = k * 2 / Math.PI
+                'グラード
+            ElseIf i >= 22 AndAlso i <= 26 Then
+                k = k * 200 / Math.PI
             End If
 
-            Dim f As Single = Convert.ToSingle(k)
-            Dim b As Byte() = BitConverter.GetBytes(f)
-            hex = BitConverter.ToInt32(b, 0)
-        Else
-            Dim h As Double = calcradian(str)
-            Dim f As Single = Convert.ToSingle(h)
-            Dim b As Byte() = BitConverter.GetBytes(f)
-            hex = BitConverter.ToInt32(b, 0)
-        End If
-        Return hex
+            Else
+                k = calcradian(str)
+            End If
 
+            Return k
+
+    End Function
+
+    Private Function cvt_float(ByVal k As Double) As Integer
+        If k = 1.0E+307 Then
+            Return &H7F000000
+        ElseIf k = 1.0E+308 Then
+            k = 1.0E+308
+            Return &H7F800000
+        ElseIf k = -1.0E+307 Then
+            Return &HFF800000
+        ElseIf k = -1.0E+308 Then
+            Return &HFF800000
+        End If
+        Dim f As Single = Convert.ToSingle(k)
+        Dim b As Byte() = BitConverter.GetBytes(f)
+        Return BitConverter.ToInt32(b, 0)
     End Function
 
     Private Function angle_cvt(ByVal s As String, ByVal angle As Double) As Double
 
         Dim valmu As New Regex("(度|グラード|直角|dgr|grad|gon|°|rad|r|∟)")
         Dim valmum As Match = valmu.Match(s)
-        Dim valhms As New Regex("\d+\.?\d*[dhms度°時分秒′″]")
+        Dim valhms As New Regex("-?\d+\.?\d*[dhms度°時分秒′″]")
         Dim valhmsm As Match = valhms.Match(s)
         Dim hms As Boolean = False
         If valhmsm.Success Then
@@ -4533,6 +4570,8 @@ Public Class Form1
                 f = floatcal(sb.ToString, f, sbk)
                 sbk = s(i)
                 sb.Clear()
+            ElseIf s(i) = "," Or s(i) = "^" Then
+                Exit While
             Else
                 sb.Append(s(i))
             End If
