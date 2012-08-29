@@ -3936,8 +3936,14 @@ Public Class Form1
         Dim j As Integer = 0
         If valhexm.Success Then
             k = Convert.ToInt32(valhexm.Value.Replace("$", "").Remove(0, 1), 16)
-            If k < &H1800000 Then
-                k += &H8800000
+            If MODE.SelectedIndex = 4 Then
+                If k >= &H9800000 Then
+                    k -= &H9800000
+                End If
+            Else
+                If k < &H1800000 Then
+                    k += &H8800000
+                End If
             End If
             hex = hex Or ((k >> 2) And &H3FFFFFF)
         Else
@@ -3953,14 +3959,21 @@ Public Class Form1
             Next
             If (j < 255) Then
                 k = label_addr(j)
-                If k < &H1800000 Then
-                    k += &H8800000
+
+                If MODE.SelectedIndex = 4 Then
+                    If k >= &H9800000 Then
+                        k -= &H9800000
+                    End If
+                Else
+                    If k < &H1800000 Then
+                        k += &H8800000
+                    End If
                 End If
                 hex = hex Or ((k >> 2) And &H3FFFFFF)
             Else
                 MessageBox.Show(str & "に該当するラベルがみつかりませんでした", "")
             End If
-            End If
+        End If
             Return hex
     End Function
 
@@ -3974,11 +3987,20 @@ Public Class Form1
         Dim j As Integer = 0
         If valhexm.Success Then
             k = Convert.ToInt32(valhexm.Value.Replace("$", "").Remove(0, 1), 16)
-            If k < &H1800000 Then
-                k += &H8800000
-            End If
-            If hex2 < &H1800000 Then
-                hex2 += &H8800000
+            If MODE.SelectedIndex = 4 Then
+                If k >= &H9800000 Then
+                    k -= &H9800000
+                End If
+                If hex2 >= &H9800000 Then
+                    hex2 -= &H9800000
+                End If
+            Else
+                If k < &H1800000 Then
+                    k += &H8800000
+                End If
+                If hex2 < &H1800000 Then
+                    hex2 += &H8800000
+                End If
             End If
             hex = hex Or ((k - hex2 - 4) >> 2 And &HFFFF)
         ElseIf valdecm.Success Then
@@ -3992,18 +4014,27 @@ Public Class Form1
                 End If
             Next
             If (j < 255) Then
-            k = label_addr(j)
-            If k < &H1800000 Then
-                k += &H8800000
-            End If
-            If hex2 < &H1800000 Then
-                hex2 += &H8800000
-            End If
+                k = label_addr(j)
+                If MODE.SelectedIndex = 4 Then
+                    If k >= &H9800000 Then
+                        k -= &H9800000
+                    End If
+                    If hex2 >= &H9800000 Then
+                        hex2 -= &H9800000
+                    End If
+                Else
+                    If k < &H1800000 Then
+                        k += &H8800000
+                    End If
+                    If hex2 < &H1800000 Then
+                        hex2 += &H8800000
+                    End If
+                End If
                 hex = hex Or ((k - hex2 - 4) >> 2 And &HFFFF)
             Else
                 MessageBox.Show(str & "に該当するラベルがみつかりませんでした", "")
             End If
-        End If
+            End If
         Return hex
     End Function
 
@@ -4044,8 +4075,14 @@ Public Class Form1
                 Next
                 If (j < 255) Then
                     k = label_addr(j)
-                    If k < &H1800000 Then
-                        k += &H8800000
+                    If MODE.SelectedIndex = 4 Then
+                        If k >= &H9800000 Then
+                            k -= &H9800000
+                        End If
+                    Else
+                        If k < &H1800000 Then
+                            k += &H8800000
+                        End If
                     End If
                     If (sl And 2) = 2 Then
                         k = k And &HFFFF
@@ -4054,9 +4091,9 @@ Public Class Form1
                 Else
                     MessageBox.Show(str & "に該当するラベルがみつかりませんでした", "")
                 End If
-            Else
-                MessageBox.Show(str & "でラベルを使用する場合はラベル名の前にslowerかlower_をつけて下さい", "")
-            End If
+                Else
+                    MessageBox.Show(str & "でラベルを使用する場合はラベル名の前にslowerかlower_をつけて下さい", "")
+                End If
         End If
 
         If valaddm.Success Then
@@ -4122,8 +4159,15 @@ Public Class Form1
                 Next
                 If (j < 255) Then
                     k = label_addr(j)
-                    If k < &H1800000 Then
-                        k += &H8800000
+
+                    If MODE.SelectedIndex = 4 Then
+                        If k >= &H9800000 Then
+                            k -= &H9800000
+                        End If
+                    Else
+                        If k < &H1800000 Then
+                            k += &H8800000
+                        End If
                     End If
                     If (sl And 2) = 2 Then
                         k = k And &HFFFF
@@ -4132,9 +4176,9 @@ Public Class Form1
                 Else
                     MessageBox.Show(str & "に該当するラベルがみつかりませんでした", "")
                 End If
-            Else
-                MessageBox.Show(str & "でラベルを使用する場合はラベル名の前にslowerかlower_をつけて下さい", "")
-            End If
+                Else
+                    MessageBox.Show(str & "でラベルを使用する場合はラベル名の前にslowerかlower_をつけて下さい", "")
+                End If
         End If
         If valaddm.Success Then
             Dim s As String = valaddm.Value
@@ -4231,8 +4275,14 @@ Public Class Form1
             Next
             If (j < 255) Then
                 k = label_addr(j)
-                If k < &H1800000 Then
-                    k += &H8800000
+                If MODE.SelectedIndex = 4 Then
+                    If k >= &H9800000 Then
+                        k -= &H9800000
+                    End If
+                Else
+                    If k < &H1800000 Then
+                        k += &H8800000
+                    End If
                 End If
                 If (sl And 1) = 1 Then
                     If (sl And 4) = 4 AndAlso (k And &HFFFF) >= &H8000 Then
@@ -4248,7 +4298,7 @@ Public Class Form1
             Else
                 MessageBox.Show(str & "に該当するラベルがみつかりませんでした", "")
             End If
-        End If
+            End If
         Return hex
     End Function
 
@@ -4298,8 +4348,16 @@ Public Class Form1
             Next
             If (j < 255) Then
                 k = label_addr(j)
-                If k < &H1800000 Then
-                    k += &H8800000
+
+
+                If MODE.SelectedIndex = 4 Then
+                    If k >= &H9800000 Then
+                        k -= &H9800000
+                    End If
+                Else
+                    If k < &H1800000 Then
+                        k += &H8800000
+                    End If
                 End If
                 If (sl And 1) = 1 Then
                     If (sl And 4) = 4 AndAlso (k And &HFFFF) >= &H8000 Then
@@ -4315,7 +4373,7 @@ Public Class Form1
             Else
                 MessageBox.Show(str & "に該当するラベルがみつかりませんでした", "")
             End If
-        End If
+            End If
         minus = minus And 4294967295
         If minus >= &H80000000 Then
             minus -= 4294967296
@@ -4778,7 +4836,7 @@ Public Class Form1
     Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles cvt_asm2code.Click
         Dim sa As New StringBuilder
         Dim st As Integer = Convert.ToInt32(ADDR.Text, 16)
-        If MODE.SelectedIndex = 4 Then
+        If MODE.SelectedIndex = 5 Then
             cvtget(st, (ASM.Text & vbCrLf), 1)
             Dim ss As String() = Regex.Split(normalize, "setpc")
             sa.Append(cvtget(st, ss(0), 2))
@@ -4809,6 +4867,13 @@ Public Class Form1
             End If
             If i >= &H8800000 Then
                 i -= &H8800000
+            End If
+        ElseIf modesel = 4 Then
+            If st >= &H9800000 Then
+                st -= &H9800000
+            End If
+            If i >= &H9800000 Then
+                i -= &H9800000
             End If
         Else
             If st < &H1800000 Then
@@ -5121,7 +5186,11 @@ Public Class Form1
                             If setpc >= &H8800000 Then
                                 setpc -= &H8800000
                             End If
-                        ElseIf (MODE.SelectedIndex = 5 AndAlso setpc <> tmp) Or (MODE.SelectedIndex > 5 AndAlso setpc <> cmf) Then
+                        ElseIf MODE.SelectedIndex = 4 Then
+                            If setpc >= &H9800000 Then
+                                setpc -= &H9800000
+                            End If
+                        ElseIf (MODE.SelectedIndex = 6 AndAlso setpc <> tmp) Or (MODE.SelectedIndex > 6 AndAlso setpc <> cmf) Then
                             MessageBox.Show("TEMP/CMFサブルーチンは開始アドレスがカーネルメモリ固定のためSETPCは使えません。")
                             Return ""
                         End If
@@ -5155,6 +5224,10 @@ Public Class Form1
                             If setpc >= &H8800000 Then
                                 setpc -= &H8800000
                             End If
+                        ElseIf MODE.SelectedIndex = 4 Then
+                            If setpc >= &H9800000 Then
+                                setpc -= &H9800000
+                            End If
                         End If
                         i = setpc
                     End If
@@ -5168,7 +5241,7 @@ Public Class Form1
                     Array.Resize(b, j)
                     odd2 = False
                     While (k < j)
-                        If modesel < 4 Then
+                        If modesel < 5 Then
                             Select Case modesel
                                 Case 0
                                     sb.Append("0x")
@@ -5182,12 +5255,24 @@ Public Class Form1
                                 Case 3
                                     sb.Append("_NWR 0x80000000 0x")
                                     sb.Append(Convert.ToString((i + k) And &HFFFFFFF, 16).ToUpper.PadLeft(8, "0"c))
+                                Case 4
+                                    sb.Append("_L ")
+                                    sb.Append(Convert.ToString(((i + k) And &HFFFFFFF) Or &H80000000, 16).ToUpper.PadLeft(8, "0"c))
                             End Select
-                            sb.Append(" 0x")
-                            sb.AppendLine(BitConverter.ToInt32(b, k).ToString("X8"))
+                            If modesel < 4 Then
+                                sb.Append(" 0x")
+                                sb.AppendLine(BitConverter.ToInt32(b, k).ToString("X8"))
+                            Else
+                                sb.Append(" ")
+                                sb.AppendLine((BitConverter.ToInt32(b, k) And &HFFFF).ToString("X4"))
+                                sb.Append("_L ")
+                                sb.Append(Convert.ToString(((i + k + 2) And &HFFFFFFF) Or &H80000000, 16).ToUpper.PadLeft(8, "0"c))
+                                sb.Append(" ")
+                                sb.AppendLine(((BitConverter.ToInt32(b, k) >> 16) And &HFFFF).ToString("X4"))
+                            End If
                         Else
                             Select Case modesel
-                                Case 4
+                                Case 5
                                     If odd = False Then
                                         sb.Append("_M 0x")
                                         sb.Append(BitConverter.ToInt32(b, k).ToString("X8"))
@@ -5197,7 +5282,7 @@ Public Class Form1
                                         sb.AppendLine(BitConverter.ToInt32(b, k).ToString("X8"))
                                         odd = False
                                     End If
-                                Case 5
+                                Case 6
                                     If odd = False Then
                                         sb.Append("_N 0x")
                                         sb.Append(BitConverter.ToInt32(b, k).ToString("X8"))
@@ -5207,7 +5292,7 @@ Public Class Form1
                                         sb.AppendLine(BitConverter.ToInt32(b, k).ToString("X8"))
                                         odd = False
                                     End If
-                                Case 6
+                                Case 7
                                     If odd = False Then
                                         sb.Append("_L 0x")
                                         cmfst = BitConverter.ToInt32(b, k).ToString("X8")
@@ -5220,10 +5305,10 @@ Public Class Form1
                                         odd = True
                                     Else
                                         cmfst = BitConverter.ToInt32(b, k).ToString("X8")
-                                        If modesel > 6 Then
+                                        If modesel > 7 Then
                                             cmfaddrval(1) = Convert.ToInt64(cmfst, 16)
                                             cmfaddrval = EncryptCB(cmfaddrval)
-                                            If (modesel = 8) Then
+                                            If (modesel = 9) Then
                                                 cmfaddrval = SwapFF(cmfaddrval)
                                                 cmfaddrval = EncryptCB(cmfaddrval)
                                             End If
@@ -5237,7 +5322,7 @@ Public Class Form1
                                     End If
                             End Select
                         End If
-                        k += 4
+                            k += 4
                     End While
                     i += j
                 Else
@@ -5278,6 +5363,19 @@ Public Class Form1
                             i += 4
                             'End If
                         Case 4
+                            'If MODE.Text = "CWCPOPS" Then
+                            setpc = Convert.ToInt32(assembler(s.Trim.ToLower, Convert.ToString(i, 16)), 16)
+                            sb.Append("_L ")
+                            sb.Append(Convert.ToString((i And &HFFFFFFF) Or &H80000000, 16).ToUpper.PadLeft(8, "0"c))
+                            sb.Append(" ")
+                            sb.AppendLine((setpc And &HFFFF).ToString("X4"))
+                            sb.Append("_L ")
+                            sb.Append(Convert.ToString(((i + 2) And &HFFFFFFF) Or &H80000000, 16).ToUpper.PadLeft(8, "0"c))
+                            sb.Append(" ")
+                            sb.AppendLine(((setpc >> 16) And &HFFFF).ToString("X4"))
+                            i += 4
+                            'End If
+                        Case 5
                             'If MODE.Text = "PSPAR(0xE)" Then
                             If odd = False Then
                                 sb.Append("_M ")
@@ -5290,7 +5388,7 @@ Public Class Form1
                             End If
                             i += 4
                             'End If
-                        Case 5
+                        Case 6
                             'If MODE.Text = "TEMPAR(0xC2)" Then
                             If odd = False Then
                                 sb.Append("_N ")
@@ -5338,10 +5436,10 @@ Public Class Form1
                 End If
             Next
             If odd = True Then
-                If modesel > 6 Then
+                If modesel > 7 Then
                     cmfaddrval(1) = 0
                     cmfaddrval = EncryptCB(cmfaddrval)
-                    If (modesel = 8) Then
+                    If (modesel = 9) Then
                         cmfaddrval = SwapFF(cmfaddrval)
                         cmfaddrval = EncryptCB(cmfaddrval)
                     End If
