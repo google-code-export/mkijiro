@@ -4327,7 +4327,7 @@ Public Class Form1
     Dim maths As String() = {"tan", "tanh", "sin", "sinh", "cos", "cosh", "sqrt", "ln", "log", "exp", "pow", _
                              "atan", "asin", "acos", "atan2_", "atand", "asind", "acosd", "atan2_d", _
                              "atanr", "asinr", "acosr", "atan2_r", "atang", "asing", "acosg", "atan2_g", _
-                             "cbrt", "xrt"
+                             "cbrt", "xrt", "yrt"
                             }
     Dim mathsconst As String() = {"π", "円周率", "黄金比", "自然対数の底"}
     Dim mathrp As String() = {"pi", "pi", "goldenratio", "e"}
@@ -4345,7 +4345,7 @@ Public Class Form1
         Dim valflm As Match = valfl.Match(str)
         Dim valmugen As New Regex("(\x20|,)[+-]?(nan|inf|e|pi|goldenratio)$")
         Dim valmugenm As Match = valmugen.Match(str)
-        Dim valmath As New Regex("(tanh|tan|sinh|sin|cosh|cos|sqrt|cbrt|xrt|ln|log|exp|pow|atan2_[drg]?|atan[drg]?|asin[drg]?|acos[drg]?)")
+        Dim valmath As New Regex("(tanh|tan|sinh|sin|cosh|cos|sqrt|cbrt|[xy]rt|ln|log|exp|pow|atan2_[drg]?|atan[drg]?|asin[drg]?|acos[drg]?)")
         Dim valmathm As Match = valmath.Match(str)
         If valflm.Success Then
             k = Convert.ToSingle(valflm.Value.Remove(0, 1))
@@ -4436,7 +4436,7 @@ Public Class Form1
                             End If
                         Case 9
                             k = Math.Exp(k)
-                        Case 10, 28
+                        Case 10, 28, 29
                             If ss.Length < 2 Then
                                 ss = str.Split(CChar("^"))
                             End If
@@ -4447,6 +4447,10 @@ Public Class Form1
                                 k = valfloat(ss(0))
                                 angle = valfloat(ss(1))
                                 If i = 28 Then
+                                    Dim sw As Double = 1 / k
+                                    k = angle
+                                    angle = sw
+                                ElseIf i = 29 Then
                                     angle = 1 / angle
                                 End If
                                 k = Math.Pow(k, angle)

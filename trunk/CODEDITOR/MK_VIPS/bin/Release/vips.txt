@@ -1,3 +1,10 @@
+2012/08/29
+yrt‚ğ’Ç‰ÁAxtr‚Íˆø”‚Ì‡”Ô‚ğ‹t‚É‚µ‚½
+.float sqrt(3)
+.float pow(3,1/2)
+.float xrt(2,3)
+.float yrt(3,2)
+
 2012/08/28
 "atan_deg", "asin_deg", "acos_deg","atan2_deg_"‚ğ
 atan[drg]?,asin[drg]?,acos[drg]?,atan2_[drg]? ‚É•ÏX
