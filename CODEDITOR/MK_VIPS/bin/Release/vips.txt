@@ -1,3 +1,31 @@
+2012/08/31
+FLOATにRPNモードを追加,ENTERキーは","
+X,Yの順番をスタック/見た目えらべるようにした
+"drop","swap",
+"deg2rad","deg2grad","deg2r",
+"rad2deg","rad2grad","rad2r",
+"grad2deg","grad2rad","grad2r",
+"r2deg","r2rad","r2grad",
+"+","-","*","/",
+"1/x",
+"pow", "x^y","^"
+"rpow", "y^x",
+"xrt","yrt",
+"logy","logx",
+"sqrt","cbrt",
+"log","ln",
+"atand","atan","atanr","atang",
+"atan2_d","atan2_","atan2_r","atan2_g",
+"acosd","acos","acosr","acosg",
+"asind","asin","asinr","asing",
+"tanhd","tahn","tanhr","tanhg",
+"coshd","cohs","coshr","coshg",
+"sinhd","sinh","sinhr","sinhg",
+"tand","tan","tanr","tang",
+"cosd","cos","cosr","cosg",
+"sind","sin","sinr","sing"
+
+
 2012/08/29-1
 ASMにCWCPOPモードを追加
 yrtを追加、xtrは引数の順番を逆にした
@@ -29,7 +57,8 @@ log2,4
 atan2_deg_-1,-1
 .floatを追加
 .floatにM$の数学関数を指定できるようにした
-"tan", "tanh", "sin", "sinh", "cos", "cosh", "sqrt", "ln", "log", "exp", "pow", "atan", "asin", "acos", "atan_deg", "asin_deg", "acos_deg"
+"tan", "tanh", "sin", "sinh", "cos", "cosh", "sqrt", "ln", "log", "exp", "pow", "atan", 
+"asin", "acos", "atan_deg", "asin_deg", "acos_deg"
 
 2012/08/20
 .wordでオーバーフロー例外が出てたので修正
