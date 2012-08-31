@@ -50,12 +50,12 @@ Partial Class Form1
         Me.enc = New System.Windows.Forms.ToolStripMenuItem()
         Me.フォント = New System.Windows.Forms.ToolStripMenuItem()
         Me.設定ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.バージョン = New System.Windows.Forms.ToolStripMenuItem()
-        Me.savea = New System.Windows.Forms.Button()
         Me.RPN = New System.Windows.Forms.ToolStripMenuItem()
-        Me.サブルーチン仮アドレスToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.STACKORDER = New System.Windows.Forms.ToolStripMenuItem()
         Me.LOOKSORDER = New System.Windows.Forms.ToolStripMenuItem()
+        Me.サブルーチン仮アドレスToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.バージョン = New System.Windows.Forms.ToolStripMenuItem()
+        Me.savea = New System.Windows.Forms.Button()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
@@ -293,33 +293,12 @@ Partial Class Form1
         Me.設定ToolStripMenuItem.Size = New System.Drawing.Size(44, 22)
         Me.設定ToolStripMenuItem.Text = "設定"
         '
-        'バージョン
-        '
-        Me.バージョン.Name = "バージョン"
-        Me.バージョン.Size = New System.Drawing.Size(80, 22)
-        Me.バージョン.Text = "バージョン"
-        '
-        'savea
-        '
-        Me.savea.Location = New System.Drawing.Point(140, 70)
-        Me.savea.Name = "savea"
-        Me.savea.Size = New System.Drawing.Size(75, 23)
-        Me.savea.TabIndex = 7
-        Me.savea.Text = "ASM保存"
-        Me.savea.UseVisualStyleBackColor = True
-        '
         'RPN
         '
         Me.RPN.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.STACKORDER, Me.LOOKSORDER})
         Me.RPN.Name = "RPN"
         Me.RPN.Size = New System.Drawing.Size(208, 22)
         Me.RPN.Text = "FLOATRPN計算"
-        '
-        'サブルーチン仮アドレスToolStripMenuItem
-        '
-        Me.サブルーチン仮アドレスToolStripMenuItem.Name = "サブルーチン仮アドレスToolStripMenuItem"
-        Me.サブルーチン仮アドレスToolStripMenuItem.Size = New System.Drawing.Size(208, 22)
-        Me.サブルーチン仮アドレスToolStripMenuItem.Text = "サブルーチン仮アドレス"
         '
         'STACKORDER
         '
@@ -334,6 +313,27 @@ Partial Class Form1
         Me.LOOKSORDER.Name = "LOOKSORDER"
         Me.LOOKSORDER.Size = New System.Drawing.Size(158, 22)
         Me.LOOKSORDER.Text = "X,Y 見た目順"
+        '
+        'サブルーチン仮アドレスToolStripMenuItem
+        '
+        Me.サブルーチン仮アドレスToolStripMenuItem.Name = "サブルーチン仮アドレスToolStripMenuItem"
+        Me.サブルーチン仮アドレスToolStripMenuItem.Size = New System.Drawing.Size(208, 22)
+        Me.サブルーチン仮アドレスToolStripMenuItem.Text = "サブルーチン仮アドレス"
+        '
+        'バージョン
+        '
+        Me.バージョン.Name = "バージョン"
+        Me.バージョン.Size = New System.Drawing.Size(80, 22)
+        Me.バージョン.Text = "バージョン"
+        '
+        'savea
+        '
+        Me.savea.Location = New System.Drawing.Point(140, 70)
+        Me.savea.Name = "savea"
+        Me.savea.Size = New System.Drawing.Size(75, 23)
+        Me.savea.TabIndex = 7
+        Me.savea.Text = "ASM保存"
+        Me.savea.UseVisualStyleBackColor = True
         '
         'Form1
         '

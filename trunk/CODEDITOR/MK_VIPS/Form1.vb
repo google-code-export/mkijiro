@@ -36,11 +36,15 @@ Public Class Form1
                         CODE.Font = ASM.Font
                     ElseIf s.Contains("RPN") Then
                         tmp = CInt(s.Remove(0, 3))
-                        If tmp = 1 Then
+                        If (tmp And 1) = 1 Then
                             RPN.Checked = True
                         End If
                         If (tmp And 2) = 2 Then
+                            STACKORDER.Checked = False
                             LOOKSORDER.Checked = True
+                        Else
+                            STACKORDER.Checked = True
+                            LOOKSORDER.Checked = False
                         End If
                     End If
                 End While
