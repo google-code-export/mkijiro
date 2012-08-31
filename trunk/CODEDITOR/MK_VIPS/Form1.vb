@@ -34,6 +34,14 @@ Public Class Form1
                         Dim ss As String() = s.Split(CChar(","))
                         ASM.Font = New Font(iniparse(ss(0)), CSng(iniparse(ss(1))), FontStyle.Regular)
                         CODE.Font = ASM.Font
+                    ElseIf s.Contains("RPN") Then
+                        tmp = CInt(s.Remove(0, 3))
+                        If tmp = 1 Then
+                            RPN.Checked = True
+                        End If
+                        If (tmp And 2) = 2 Then
+                            LOOKSORDER.Checked = True
+                        End If
                     End If
                 End While
                 sr.Close()
@@ -72,6 +80,14 @@ Public Class Form1
         sr.WriteLine(s)
         s = "FONT" & ASM.Font.ToString
         sr.WriteLine(s)
+        If RPN.Checked Then
+            Dim k As Integer = 1
+            If LOOKSORDER.Checked = True Then
+                k += 2
+            End If
+            s = "RPN" & k.ToString
+            sr.WriteLine(s)
+        End If
         sr.Close()
 
     End Sub
@@ -4390,6 +4406,229 @@ Public Class Form1
     Dim mathsconst As String() = {"π", "円周率", "黄金比", "自然対数の底"}
     Dim mathrp As String() = {"pi", "pi", "goldenratio", "e"}
 
+
+    Private Function cvt_dbl(ByVal s As String) As Double
+        Dim dem As Double = 0
+        Dim cnst As New Regex("-?(e|pi|goldenratio)")
+        Dim cnstm As Match = cnst.Match(s)
+        Dim frac As New Regex("-?\d+\.?\d*")
+        Dim fracm As Match = frac.Match(s)
+        If cnstm.Success Then
+            If cnstm.Value.Contains("e") Then
+                dem = (Math.E)
+            ElseIf cnstm.Value.Contains("pi") Then
+                dem = (Math.PI)
+            ElseIf cnstm.Value.Contains("goldendratio") Then
+                dem = ((1 + Math.Sqrt(5)) / 2)
+            End If
+            If cnstm.Value.Contains("-") Then
+                dem = -dem
+            End If
+        ElseIf fracm.Success Then
+            dem = Convert.ToDouble(fracm.Value)
+        End If
+
+        Return dem
+    End Function
+
+    Private Function swapper(ByVal dem As Double()) As Double()
+        Dim demt As Double
+        demt = dem(1)
+        dem(1) = dem(0)
+        dem(0) = demt
+        Return dem
+    End Function
+
+    Private Function swapper2(ByVal dem As Double()) As Double()
+        If LOOKSORDER.Checked Then
+            dem = swapper(dem)
+        End If
+        Return dem
+    End Function
+
+    Private Function rpndbl(ByVal str As String) As Double
+        Dim ss As String() = str.ToLower.Split(CChar(","))
+        Dim len As Integer = ss.Length - 1
+        Dim dem(len) As Double
+        For i = 0 To len
+            Select Case ss(i)
+                '4*(4*atan(1/5)-atan(1/239))
+                '4,4,5,1/x,atan,*,239,1/x,atan,-,*
+                Case "drop"
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "swap"
+                    dem = swapper(dem)
+                Case "deg2rad"
+                    dem(0) = dem(0) * Math.PI / 180
+                Case "deg2grad"
+                    dem(0) = dem(0) * 100 / 90
+                Case "deg2r"
+                    dem(0) = dem(0) / 90
+                Case "rad2deg"
+                    dem(0) = dem(0) * 180 / Math.PI
+                Case "rad2grad"
+                    dem(0) = dem(0) * 200 / Math.PI
+                Case "rad2r"
+                    dem(0) = dem(0) * 2 / Math.PI
+                Case "grad2deg"
+                    dem(0) = dem(0) * 90 / 100
+                Case "grad2rad"
+                    dem(0) = dem(0) * Math.PI / 200
+                Case "grad2r"
+                    dem(0) = dem(0) / 100
+                Case "r2deg"
+                    dem(0) = dem(0) * 90
+                Case "r2rad"
+                    dem(0) = dem(0) * Math.PI / 2
+                Case "r2grad"
+                    dem(0) = dem(0) * 100
+                Case "+"
+                    dem(1) = dem(0) + dem(1)
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "-"
+                    dem(1) = dem(1) - dem(0)
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "*"
+                    dem(1) = dem(1) * dem(0)
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "/"
+                    dem(1) = dem(1) / dem(0)
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "rpow", "y^x"
+                    dem = swapper2(dem)
+                    dem(1) = Math.Pow(dem(1), dem(0))
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "pow", "x^y", "^"
+                    dem = swapper2(dem)
+                    dem(1) = Math.Pow(dem(0), dem(1))
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "xrt"
+                    dem = swapper2(dem)
+                    dem(1) = Math.Pow(dem(1), 1 / dem(0))
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "yrt"
+                    dem = swapper2(dem)
+                    dem(1) = Math.Pow(dem(0), 1 / dem(1))
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "logy"
+                    dem = swapper2(dem)
+                    dem(1) = Math.Log(dem(0), dem(1))
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "logx"
+                    dem = swapper2(dem)
+                    dem(1) = Math.Log(dem(1), dem(0))
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "1/x"
+                    dem(0) = 1 / dem(0)
+                Case "sqrt"
+                    dem(0) = Math.Sqrt(dem(0))
+                Case "cbrt"
+                    dem(0) = Math.Pow(dem(0), 1 / 3)
+                Case "log"
+                    dem(0) = Math.Log(dem(0), 10)
+                Case "ln"
+                    dem(0) = Math.Log(dem(0), Math.E)
+                Case "atand"
+                    dem(0) = Math.Atan(dem(0)) * 180 / Math.PI
+                Case "atan"
+                    dem(0) = Math.Atan(dem(0))
+                Case "atanr"
+                    dem(0) = Math.Atan(dem(0)) * 2 / Math.PI
+                Case "atang"
+                    dem(0) = Math.Atan(dem(0)) * 200 / Math.PI
+                Case "atan2_d"
+                    dem = swapper2(dem)
+                    dem(1) = Math.Atan2(dem(1), dem(0)) * 180 / Math.PI
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "atan2_"
+                    dem = swapper2(dem)
+                    dem(1) = Math.Atan2(dem(1), dem(0))
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "atan2_r"
+                    dem = swapper2(dem)
+                    dem(1) = Math.Atan2(dem(1), dem(0)) * 2 / Math.PI
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "atan2_g"
+                    dem = swapper2(dem)
+                    dem(1) = Math.Atan2(dem(1), dem(0)) * 200 / Math.PI
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "acosd"
+                    dem(0) = Math.Acos(dem(0)) * 180 / Math.PI
+                Case "acos"
+                    dem(0) = Math.Acos(dem(0))
+                Case "acosr"
+                    dem(0) = Math.Acos(dem(0)) * 2 / Math.PI
+                Case "acosg"
+                    dem(0) = Math.Acos(dem(0))
+                Case "asind"
+                    dem(0) = Math.Asin(dem(0)) * 180 / Math.PI
+                Case "asin"
+                    dem(0) = Math.Asin(dem(0))
+                Case "asinr"
+                    dem(0) = Math.Asin(dem(0)) * 2 / Math.PI
+                Case "asing"
+                    dem(0) = Math.Asin(dem(0))
+                Case "tanhd"
+                    dem(0) = Math.Tanh(dem(0) * 200 / Math.PI)
+                Case "tahn"
+                    dem(0) = Math.Tanh(dem(0))
+                Case "tanhr"
+                    dem(0) = Math.Tanh(dem(0) * Math.PI / 2)
+                Case "tanhg"
+                    dem(0) = Math.Tanh(dem(0) * 90 / 100 * Math.PI / 180)
+                Case "coshd"
+                    dem(0) = Math.Cosh(dem(0) * Math.PI / 180)
+                Case "cohs"
+                    dem(0) = Math.Cosh(dem(0))
+                Case "coshr"
+                    dem(0) = Math.Cosh(dem(0) * Math.PI / 2)
+                Case "coshg"
+                    dem(0) = Math.Cosh(dem(0) * 90 / 100 * Math.PI / 180)
+                Case "sinhd"
+                    dem(0) = Math.Sinh(dem(0) * Math.PI / 180)
+                Case "sinh"
+                    dem(0) = Math.Sinh(dem(0))
+                Case "sinhr"
+                    dem(0) = Math.Sinh(dem(0) * Math.PI / 2)
+                Case "sinhg"
+                    dem(0) = Math.Sinh(dem(0) * Math.PI / 200)
+                Case "tand"
+                    dem(0) = Math.Tan(dem(0) * Math.PI / 180)
+                Case "tan"
+                    dem(0) = Math.Tan(dem(0))
+                Case "tanr"
+                    dem(0) = Math.Tan(dem(0) * Math.PI / 2)
+                Case "tang"
+                    dem(0) = Math.Tan(dem(0) * Math.PI / 200)
+                Case "cosd"
+                    dem(0) = Math.Cos(dem(0) * Math.PI / 180)
+                Case "cos"
+                    dem(0) = Math.Cos(dem(0))
+                Case "cosr"
+                    dem(0) = Math.Cos(dem(0) * Math.PI / 2)
+                Case "cosg"
+                    dem(0) = Math.Cos(dem(0) * 90 / 100 * Math.PI / 180)
+                Case "sind"
+                    dem(0) = Math.Sin(dem(0) * Math.PI / 180)
+                Case "sin"
+                    dem(0) = Math.Sin(dem(0))
+                Case "sinr"
+                    dem(0) = Math.Sin(dem(0) * Math.PI / 2)
+                Case "sing"
+                    dem(0) = Math.Sin(dem(0) * 90 / 100 * Math.PI / 180)
+                Case Else
+                    If (ss(i)).Trim <> "" Then
+                        Array.Copy(dem, 0, dem, 1, len)
+                        dem(0) = cvt_dbl(ss(i))
+                    End If
+            End Select
+        Next
+        dem(0) = Math.Round(dem(0), 14)
+
+        Return dem(0)
+
+    End Function
+
     Function valfloat(ByVal str As String) As Double
 
         Dim i As Integer = 0
@@ -4398,6 +4637,19 @@ Public Class Form1
                 str = str.Replace(mathsconst(i), mathrp(i))
             End If
         Next
+        Dim k As Double = 0
+        If RPN.Checked Then
+            k = rpndbl(str)
+        Else
+            k = calcdbl(str)
+        End If
+        Return k
+
+    End Function
+
+    Private Function calcdbl(ByVal str As String) As Double
+        Dim i As Integer = 0
+
         Dim k As Double = 0
         Dim valfl As New Regex("(\x20|,)[+-]?\d+\.?\d+$")
         Dim valflm As Match = valfl.Match(str)
@@ -4543,12 +4795,11 @@ Public Class Form1
                 k = k * 200 / Math.PI
             End If
 
-            Else
-                k = calcradian(str)
-            End If
+        Else
+            k = calcradian(str)
+        End If
 
-            Return k
-
+        Return k
     End Function
 
     Private Function cvt_float(ByVal k As Double) As Integer
@@ -5322,7 +5573,7 @@ Public Class Form1
                                     End If
                             End Select
                         End If
-                            k += 4
+                        k += 4
                     End While
                     i += j
                 Else
@@ -5824,9 +6075,6 @@ Public Class Form1
     End Function
 
     Private Sub 設定ToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles 設定ToolStripMenuItem.Click
-        Dim f As New Form2
-        f.ShowDialog(Me)
-        f.Dispose()
     End Sub
 
     Private Sub ASMopen_Click(sender As System.Object, e As System.EventArgs) Handles ASMopen.Click
@@ -5895,4 +6143,20 @@ Public Class Form1
         CODE.Text = sb.ToString
         Return True
     End Function
+
+    Private Sub RPN_Click(sender As System.Object, e As System.EventArgs) Handles RPN.Click
+        RPN.Checked = Not RPN.Checked
+    End Sub
+
+    Private Sub サブルーチン仮アドレスToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles サブルーチン仮アドレスToolStripMenuItem.Click
+        Dim f As New Form2
+        f.ShowDialog(Me)
+        f.Dispose()
+    End Sub
+
+    Private Sub STACKORDER_Click(sender As System.Object, e As System.EventArgs) Handles STACKORDER.Click, LOOKSORDER.Click
+        STACKORDER.Checked = Not STACKORDER.Checked
+        LOOKSORDER.Checked = Not STACKORDER.Checked
+    End Sub
+
 End Class

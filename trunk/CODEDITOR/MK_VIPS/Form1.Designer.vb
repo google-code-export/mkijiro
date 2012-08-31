@@ -52,6 +52,10 @@ Partial Class Form1
         Me.設定ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.バージョン = New System.Windows.Forms.ToolStripMenuItem()
         Me.savea = New System.Windows.Forms.Button()
+        Me.RPN = New System.Windows.Forms.ToolStripMenuItem()
+        Me.サブルーチン仮アドレスToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.STACKORDER = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LOOKSORDER = New System.Windows.Forms.ToolStripMenuItem()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
@@ -284,6 +288,7 @@ Partial Class Form1
         '
         '設定ToolStripMenuItem
         '
+        Me.設定ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RPN, Me.サブルーチン仮アドレスToolStripMenuItem})
         Me.設定ToolStripMenuItem.Name = "設定ToolStripMenuItem"
         Me.設定ToolStripMenuItem.Size = New System.Drawing.Size(44, 22)
         Me.設定ToolStripMenuItem.Text = "設定"
@@ -302,6 +307,33 @@ Partial Class Form1
         Me.savea.TabIndex = 7
         Me.savea.Text = "ASM保存"
         Me.savea.UseVisualStyleBackColor = True
+        '
+        'RPN
+        '
+        Me.RPN.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.STACKORDER, Me.LOOKSORDER})
+        Me.RPN.Name = "RPN"
+        Me.RPN.Size = New System.Drawing.Size(208, 22)
+        Me.RPN.Text = "FLOATRPN計算"
+        '
+        'サブルーチン仮アドレスToolStripMenuItem
+        '
+        Me.サブルーチン仮アドレスToolStripMenuItem.Name = "サブルーチン仮アドレスToolStripMenuItem"
+        Me.サブルーチン仮アドレスToolStripMenuItem.Size = New System.Drawing.Size(208, 22)
+        Me.サブルーチン仮アドレスToolStripMenuItem.Text = "サブルーチン仮アドレス"
+        '
+        'STACKORDER
+        '
+        Me.STACKORDER.Checked = True
+        Me.STACKORDER.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.STACKORDER.Name = "STACKORDER"
+        Me.STACKORDER.Size = New System.Drawing.Size(158, 22)
+        Me.STACKORDER.Text = "Y,X スタック順"
+        '
+        'LOOKSORDER
+        '
+        Me.LOOKSORDER.Name = "LOOKSORDER"
+        Me.LOOKSORDER.Size = New System.Drawing.Size(158, 22)
+        Me.LOOKSORDER.Text = "X,Y 見た目順"
         '
         'Form1
         '
@@ -359,5 +391,9 @@ Partial Class Form1
     Friend WithEvents 設定ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ASMopen As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents CODEopen As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents RPN As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents サブルーチン仮アドレスToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents STACKORDER As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents LOOKSORDER As System.Windows.Forms.ToolStripMenuItem
 
 End Class
