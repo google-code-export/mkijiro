@@ -140,19 +140,19 @@ Public Class Form1
                     dem(0) = Math.Atan(dem(0)) * 200 / Math.PI
                 Case "atan2_d"
                     dem = swapper2(dem)
-                    dem(1) = Math.Atan2(dem(0), dem(1)) * 180 / Math.PI
+                    dem(1) = Math.Atan2(dem(1), dem(0)) * 180 / Math.PI
                     Array.Copy(dem, 1, dem, 0, len)
                 Case "atan2_"
                     dem = swapper2(dem)
-                    dem(1) = Math.Atan2(dem(0), dem(1))
+                    dem(1) = Math.Atan2(dem(1), dem(0))
                     Array.Copy(dem, 1, dem, 0, len)
                 Case "atan2_r"
                     dem = swapper2(dem)
-                    dem(1) = Math.Atan2(dem(0), dem(1)) * 2 / Math.PI
+                    dem(1) = Math.Atan2(dem(1), dem(0)) * 2 / Math.PI
                     Array.Copy(dem, 1, dem, 0, len)
                 Case "atan2_g"
                     dem = swapper2(dem)
-                    dem(1) = Math.Atan2(dem(0), dem(1)) * 200 / Math.PI
+                    dem(1) = Math.Atan2(dem(1), dem(0)) * 200 / Math.PI
                     Array.Copy(dem, 1, dem, 0, len)
                 Case "acosd"
                     dem(0) = Math.Acos(dem(0)) * 180 / Math.PI
