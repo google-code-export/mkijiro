@@ -46,6 +46,9 @@ Public Class Form1
                             STACKORDER.Checked = True
                             LOOKSORDER.Checked = False
                         End If
+                        If (tmp And 4) = 4 Then
+                            CVTRPN.Checked = True
+                        End If
                     End If
                 End While
                 sr.Close()
@@ -88,6 +91,9 @@ Public Class Form1
             Dim k As Integer = 1
             If LOOKSORDER.Checked = True Then
                 k += 2
+            End If
+            If CVTRPN.Checked = True Then
+                k += 4
             End If
             s = "RPN" & k.ToString
             sr.WriteLine(s)
@@ -4410,7 +4416,6 @@ Public Class Form1
     Dim mathsconst As String() = {"π", "円周率", "黄金比", "自然対数の底"}
     Dim mathrp As String() = {"pi", "pi", "goldenratio", "e"}
 
-
     Private Function cvt_dbl(ByVal s As String) As Double
         Dim dem As Double = 0
         Dim cnst As New Regex("-?(e|pi|goldenratio)")
@@ -4455,7 +4460,7 @@ Public Class Form1
         Dim len As Integer = ss.Length - 1
         Dim dem(len) As Double
         For i = 0 To len
-            Select Case ss(i)
+            Select Case ss(i).Trim
                 '4*(4*atan(1/5)-atan(1/239))
                 '4,4,5,1/x,atan,*,239,1/x,atan,-,*
                 Case "drop"
@@ -4486,6 +4491,7 @@ Public Class Form1
                     dem(0) = dem(0) * Math.PI / 2
                 Case "r2grad"
                     dem(0) = dem(0) * 100
+                Case "="
                 Case "+"
                     dem(1) = dem(0) + dem(1)
                     Array.Copy(dem, 1, dem, 0, len)
@@ -4522,9 +4528,9 @@ Public Class Form1
                     dem = swapper2(dem)
                     dem(1) = Math.Log(dem(1), dem(0))
                     Array.Copy(dem, 1, dem, 0, len)
-                Case "1/x"
+                Case "1/x", "reci"
                     dem(0) = 1 / dem(0)
-                Case "sqrt"
+                Case "sqrt", "√"
                     dem(0) = Math.Sqrt(dem(0))
                 Case "cbrt"
                     dem(0) = Math.Pow(dem(0), 1 / 3)
@@ -4643,7 +4649,11 @@ Public Class Form1
         Next
         Dim k As Double = 0
         If RPN.Checked Then
-            k = rpndbl(str)
+            If CVTRPN.Checked Then
+                Dim p As New Polish
+                str = p.Main(str, LOOKSORDER.Checked)
+            End If
+            k = rpndbl(str.Replace(".float", ""))
         Else
             k = calcdbl(str)
         End If
@@ -5743,7 +5753,7 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub バージョンToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles バージョン.Click
+    Private Sub versioncheck(sender As System.Object, e As System.EventArgs) Handles バージョン.Click
         Dim v As New version
         v.ShowDialog()
         v.Close()
@@ -6163,4 +6173,7 @@ Public Class Form1
         LOOKSORDER.Checked = Not STACKORDER.Checked
     End Sub
 
+    Private Sub CVTRPN_Click(sender As System.Object, e As System.EventArgs) Handles CVTRPN.Click
+        CVTRPN.Checked = Not CVTRPN.Checked
+    End Sub
 End Class

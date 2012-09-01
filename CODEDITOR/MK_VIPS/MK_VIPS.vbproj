@@ -94,7 +94,8 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.vb" />
+    <Compile Include="CLASS\Class1.vb" />
+    <Compile Include="CLASS\RPN.vb" />
     <Compile Include="Form1.vb">
       <SubType>Form</SubType>
     </Compile>
