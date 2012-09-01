@@ -1,29 +1,35 @@
+2012/09/02
+逆数に"reci"を追加
+通常数式をRPN変換後処理するモードを追加
+atan2_(x,y)のxyが逆になってたので修正
+//スタック操作
+swap,drop
+//四則演算
+"+","-","/"
+//2引数が必要な関数(pow(x,y),logx(x,y)=lnY/lnX)
+"logx", "pow", "xrt", "yrt", "logy",
+"atan2_r", "atan2_g", "atan2_d", "atan2_",
+//角度変換,deg=度,rad=ラジアン,grad=グラード,r=∟
+deg2rad", "deg2grad", "deg2r",
+rad2deg", "rad2grad", "rad2r",
+"grad2deg", "grad2rad", "grad2r",
+"r2deg", "r2rad", "r2grad",
+//三角関数
+"tanhr", "coshr", "sinhr", _
+"tanhg", "coshg", "sinhg", _
+"tanhd", "coshd", "sinhd", _
+"tanh", "cosh", "sinh", _
+"atanr", "acosr", "asinr", "tanr", "cosr", "sinr", _
+"atang", "acosg", "asing", "tang", "cosg", "sing", _
+"atand", "acosd", "asind", "tand", "cosd", "sind", _
+"atan", "acos", "asin", "tan", "cos", "sin", _
+//他
+"sqrt", "cbrt", "log", "ln", "reci", "√"
+
+
 2012/08/31
 FLOATにRPNモードを追加,ENTERキーは","
 X,Yの順番をスタック/見た目えらべるようにした
-"drop","swap",
-"deg2rad","deg2grad","deg2r",
-"rad2deg","rad2grad","rad2r",
-"grad2deg","grad2rad","grad2r",
-"r2deg","r2rad","r2grad",
-"+","-","*","/",
-"1/x",
-"pow", "x^y","^"
-"rpow", "y^x",
-"xrt","yrt",
-"logy","logx",
-"sqrt","cbrt",
-"log","ln",
-"atand","atan","atanr","atang",
-"atan2_d","atan2_","atan2_r","atan2_g",
-"acosd","acos","acosr","acosg",
-"asind","asin","asinr","asing",
-"tanhd","tahn","tanhr","tanhg",
-"coshd","cohs","coshr","coshg",
-"sinhd","sinh","sinhr","sinhg",
-"tand","tan","tanr","tang",
-"cosd","cos","cosr","cosg",
-"sind","sin","sinr","sing"
 
 
 2012/08/29-1

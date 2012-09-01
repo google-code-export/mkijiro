@@ -56,6 +56,8 @@ Partial Class Form1
         Me.サブルーチン仮アドレスToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.バージョン = New System.Windows.Forms.ToolStripMenuItem()
         Me.savea = New System.Windows.Forms.Button()
+        Me.CVTRPN = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
@@ -295,23 +297,23 @@ Partial Class Form1
         '
         'RPN
         '
-        Me.RPN.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.STACKORDER, Me.LOOKSORDER})
+        Me.RPN.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CVTRPN, Me.ToolStripSeparator2, Me.STACKORDER, Me.LOOKSORDER})
         Me.RPN.Name = "RPN"
         Me.RPN.Size = New System.Drawing.Size(208, 22)
-        Me.RPN.Text = "FLOATRPN計算"
+        Me.RPN.Text = "FLOAT RPNモード"
         '
         'STACKORDER
         '
         Me.STACKORDER.Checked = True
         Me.STACKORDER.CheckState = System.Windows.Forms.CheckState.Checked
         Me.STACKORDER.Name = "STACKORDER"
-        Me.STACKORDER.Size = New System.Drawing.Size(158, 22)
+        Me.STACKORDER.Size = New System.Drawing.Size(196, 22)
         Me.STACKORDER.Text = "Y,X スタック順"
         '
         'LOOKSORDER
         '
         Me.LOOKSORDER.Name = "LOOKSORDER"
-        Me.LOOKSORDER.Size = New System.Drawing.Size(158, 22)
+        Me.LOOKSORDER.Size = New System.Drawing.Size(196, 22)
         Me.LOOKSORDER.Text = "X,Y 見た目順"
         '
         'サブルーチン仮アドレスToolStripMenuItem
@@ -334,6 +336,17 @@ Partial Class Form1
         Me.savea.TabIndex = 7
         Me.savea.Text = "ASM保存"
         Me.savea.UseVisualStyleBackColor = True
+        '
+        'CVTRPN
+        '
+        Me.CVTRPN.Name = "CVTRPN"
+        Me.CVTRPN.Size = New System.Drawing.Size(196, 22)
+        Me.CVTRPN.Text = "通常数式をRPNに変換"
+        '
+        'ToolStripSeparator2
+        '
+        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(193, 6)
         '
         'Form1
         '
@@ -395,5 +408,7 @@ Partial Class Form1
     Friend WithEvents サブルーチン仮アドレスToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents STACKORDER As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents LOOKSORDER As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents CVTRPN As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
 
 End Class
