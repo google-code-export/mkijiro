@@ -4399,9 +4399,10 @@ Public Class Form1
             Else
                 MessageBox.Show(str & "に該当するラベルがみつかりませんでした", "")
             End If
-            End If
+        End If
+
         minus = minus And 4294967295
-        If minus >= &H80000000 Then
+        If minus >= 2147483648 Then
             minus -= 4294967296
         End If
         Return CInt(minus)
