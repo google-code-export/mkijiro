@@ -28,11 +28,13 @@ Partial Class version
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
+        Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
         Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'Panel1
         '
+        Me.Panel1.Controls.Add(Me.LinkLabel2)
         Me.Panel1.Controls.Add(Me.LinkLabel1)
         Me.Panel1.Controls.Add(Me.Button1)
         Me.Panel1.Controls.Add(Me.Label3)
@@ -46,7 +48,7 @@ Partial Class version
         'LinkLabel1
         '
         Me.LinkLabel1.AutoSize = True
-        Me.LinkLabel1.Location = New System.Drawing.Point(45, 102)
+        Me.LinkLabel1.Location = New System.Drawing.Point(75, 103)
         Me.LinkLabel1.Name = "LinkLabel1"
         Me.LinkLabel1.Size = New System.Drawing.Size(73, 12)
         Me.LinkLabel1.TabIndex = 4
@@ -67,9 +69,9 @@ Partial Class version
         Me.Label3.AutoSize = True
         Me.Label3.Location = New System.Drawing.Point(18, 50)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(124, 12)
+        Me.Label3.Size = New System.Drawing.Size(142, 12)
         Me.Label3.TabIndex = 2
-        Me.Label3.Text = "BUILD:2012/09/02 0:23"
+        Me.Label3.Text = "BUILD:2012/09/02-1 17:22"
         '
         'Label1
         '
@@ -88,6 +90,16 @@ Partial Class version
         Me.Label2.Size = New System.Drawing.Size(107, 12)
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "CREATED BY (ﾟ∀ﾟ)"
+        '
+        'LinkLabel2
+        '
+        Me.LinkLabel2.AutoSize = True
+        Me.LinkLabel2.Location = New System.Drawing.Point(18, 103)
+        Me.LinkLabel2.Name = "LinkLabel2"
+        Me.LinkLabel2.Size = New System.Drawing.Size(47, 12)
+        Me.LinkLabel2.TabIndex = 5
+        Me.LinkLabel2.TabStop = True
+        Me.LinkLabel2.Text = "GITHUB"
         '
         'version
         '
@@ -109,4 +121,5 @@ Partial Class version
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
+    Friend WithEvents LinkLabel2 As System.Windows.Forms.LinkLabel
 End Class

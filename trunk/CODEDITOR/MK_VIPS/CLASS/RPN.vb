@@ -148,7 +148,7 @@ Class Polish
                            "atang", "acosg", "asing", "tang", "cosg", "sing", _
                            "atand", "acosd", "asind", "tand", "cosd", "sind", _
                            "atan", "acos", "asin", "tan", "cos", "sin", _
-                           "sqrt", "cbrt", "log", "ln", "reci", "√"}
+                           "sqrt", "cbrt", "log", "ln", "reci", "√", "abs", "chs"}
 
     Public Function Main(ByVal s As String, ByVal stack As Boolean) As String
         s = s.Replace(" ", String.Empty).ToLower
