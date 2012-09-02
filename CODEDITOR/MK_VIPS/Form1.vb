@@ -4463,6 +4463,10 @@ Public Class Form1
             Select Case ss(i).Trim
                 '4*(4*atan(1/5)-atan(1/239))
                 '4,4,5,1/x,atan,*,239,1/x,atan,-,*
+                Case "chs", "+/-"
+                    dem(0) = -dem(0)
+                Case "abs", "|x|"
+                    dem(0) = Math.Abs(dem(0))
                 Case "drop"
                     Array.Copy(dem, 1, dem, 0, len)
                 Case "swap"
@@ -5101,6 +5105,15 @@ Public Class Form1
     Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles cvt_asm2code.Click
         Dim sa As New StringBuilder
         Dim st As Integer = Convert.ToInt32(ADDR.Text, 16)
+        If MODE.SelectedIndex >= 6 Then
+            Dim jrra As New Regex("[ 　\t]?jr[ 　\t]+ra")
+            Dim jrm As Match = jrra.Match(ASM.Text)
+            If jrm.Success = False Then
+                MessageBox.Show("サブルーチンコードにはja ra が必ず必要です。")
+                Exit Sub
+            End If
+        End If
+
         If MODE.SelectedIndex = 5 Then
             cvtget(st, (ASM.Text & vbCrLf), 1)
             Dim ss As String() = Regex.Split(normalize, "setpc")
@@ -5406,9 +5419,6 @@ Public Class Form1
             Next
 
             Dim sss As String = sc.ToString
-            'For p = 0 To macroct - 1
-            '    sss = sss.Replace(macrost(p).Substring(0, macrost(p).IndexOf(" ")).Trim, "")
-            'Next
 
             ss = sss.Split(CChar(vbLf))
             normalize = sc.ToString
@@ -5470,6 +5480,7 @@ Public Class Form1
 
         If (selm And 1) = 0 Then
 
+            odd = False
             macros = False
             For Each s As String In ss
                 If s.Trim = "" Then
@@ -5542,32 +5553,32 @@ Public Class Form1
                                         sb.Append("_M 0x")
                                         sb.Append(BitConverter.ToInt32(b, k).ToString("X8"))
                                         sb.Append(" 0x")
-                                        odd = True
+                                        odd2 = True
                                     Else
                                         sb.AppendLine(BitConverter.ToInt32(b, k).ToString("X8"))
-                                        odd = False
+                                        odd2 = False
                                     End If
                                 Case 6
-                                    If odd = False Then
+                                    If odd2 = False Then
                                         sb.Append("_N 0x")
                                         sb.Append(BitConverter.ToInt32(b, k).ToString("X8"))
                                         sb.Append(" 0x")
                                         odd = True
                                     Else
                                         sb.AppendLine(BitConverter.ToInt32(b, k).ToString("X8"))
-                                        odd = False
+                                        odd2 = False
                                     End If
                                 Case 7
-                                    If odd = False Then
+                                    If odd2 = False Then
                                         sb.Append("_L 0x")
                                         cmfst = BitConverter.ToInt32(b, k).ToString("X8")
-                                        If modesel > 6 Then
+                                        If modesel > 7 Then
                                             cmfaddrval(0) = Convert.ToInt64(cmfst, 16)
                                         Else
                                             sb.Append(cmfst)
                                             sb.Append(" 0x")
                                         End If
-                                        odd = True
+                                        odd2 = True
                                     Else
                                         cmfst = BitConverter.ToInt32(b, k).ToString("X8")
                                         If modesel > 7 Then
@@ -5583,7 +5594,7 @@ Public Class Form1
                                         Else
                                             sb.AppendLine(cmfst)
                                         End If
-                                        odd = False
+                                        odd2 = False
                                     End If
                             End Select
                         End If
@@ -5671,7 +5682,7 @@ Public Class Form1
                             If odd = False Then
                                 sb.Append("_L ")
                                 cmfst = assembler(s.Trim.ToLower, Convert.ToString(i, 16))
-                                If modesel > 6 Then
+                                If modesel > 7 Then
                                     cmfaddrval(0) = Convert.ToInt64(cmfst, 16)
                                 Else
                                     sb.Append(cmfst)
@@ -5680,10 +5691,10 @@ Public Class Form1
                                 odd = True
                             Else
                                 cmfst = assembler(s.Trim.ToLower, Convert.ToString(i, 16))
-                                If modesel > 6 Then
+                                If modesel > 7 Then
                                     cmfaddrval(1) = Convert.ToInt64(cmfst, 16)
                                     cmfaddrval = EncryptCB(cmfaddrval)
-                                    If (modesel = 8) Then
+                                    If (modesel = 9) Then
                                         cmfaddrval = SwapFF(cmfaddrval)
                                         cmfaddrval = EncryptCB(cmfaddrval)
                                     End If
@@ -5726,7 +5737,7 @@ Public Class Form1
                 If odd = True Then
                     i += 8
                 End If
-                sb.Insert(0, "_L 0xF00000" & ((i And 255) >> 4).ToString("X2") & " 0x000000" & (MODE.SelectedIndex - 6).ToString("X2") & vbCrLf)
+                sb.Insert(0, "_L 0xF00000" & ((i And 255) >> 4).ToString("X2") & " 0x000000" & (MODE.SelectedIndex - 7).ToString("X2") & vbCrLf)
             End If
         End If
         Return sb.ToString
