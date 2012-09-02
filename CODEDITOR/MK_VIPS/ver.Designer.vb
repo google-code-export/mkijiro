@@ -23,12 +23,12 @@ Partial Class version
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
         Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -44,6 +44,16 @@ Partial Class version
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(174, 152)
         Me.Panel1.TabIndex = 3
+        '
+        'LinkLabel2
+        '
+        Me.LinkLabel2.AutoSize = True
+        Me.LinkLabel2.Location = New System.Drawing.Point(18, 103)
+        Me.LinkLabel2.Name = "LinkLabel2"
+        Me.LinkLabel2.Size = New System.Drawing.Size(47, 12)
+        Me.LinkLabel2.TabIndex = 5
+        Me.LinkLabel2.TabStop = True
+        Me.LinkLabel2.Text = "GITHUB"
         '
         'LinkLabel1
         '
@@ -71,7 +81,7 @@ Partial Class version
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(142, 12)
         Me.Label3.TabIndex = 2
-        Me.Label3.Text = "BUILD:2012/09/02-1 17:22"
+        Me.Label3.Text = "BUILD:2012/09/02-2 17:22"
         '
         'Label1
         '
@@ -90,16 +100,6 @@ Partial Class version
         Me.Label2.Size = New System.Drawing.Size(107, 12)
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "CREATED BY (ﾟ∀ﾟ)"
-        '
-        'LinkLabel2
-        '
-        Me.LinkLabel2.AutoSize = True
-        Me.LinkLabel2.Location = New System.Drawing.Point(18, 103)
-        Me.LinkLabel2.Name = "LinkLabel2"
-        Me.LinkLabel2.Size = New System.Drawing.Size(47, 12)
-        Me.LinkLabel2.TabIndex = 5
-        Me.LinkLabel2.TabStop = True
-        Me.LinkLabel2.Text = "GITHUB"
         '
         'version
         '
