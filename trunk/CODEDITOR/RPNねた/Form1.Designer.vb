@@ -95,7 +95,7 @@ Partial Class Form1
         Me.LOOKSORDER.Name = "LOOKSORDER"
         Me.LOOKSORDER.Size = New System.Drawing.Size(126, 40)
         Me.LOOKSORDER.TabIndex = 7
-        Me.LOOKSORDER.Text = "関数引数順番;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "□ ②,① スタック降順" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "☑ ①,② スタック昇順" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        Me.LOOKSORDER.Text = "関数引数順番;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "□ ②,① スタック昇順" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "☑ ①,② スタック降順" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         Me.LOOKSORDER.UseVisualStyleBackColor = True
         '
         'Button1
