@@ -51,13 +51,13 @@ Partial Class Form1
         Me.フォント = New System.Windows.Forms.ToolStripMenuItem()
         Me.設定ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.RPN = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CVTRPN = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.STACKORDER = New System.Windows.Forms.ToolStripMenuItem()
         Me.LOOKSORDER = New System.Windows.Forms.ToolStripMenuItem()
         Me.サブルーチン仮アドレスToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.バージョン = New System.Windows.Forms.ToolStripMenuItem()
         Me.savea = New System.Windows.Forms.Button()
-        Me.CVTRPN = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
@@ -297,24 +297,42 @@ Partial Class Form1
         '
         'RPN
         '
-        Me.RPN.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CVTRPN, Me.ToolStripSeparator2, Me.STACKORDER, Me.LOOKSORDER})
+        Me.RPN.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CVTRPN, Me.ToolStripSeparator2, Me.LOOKSORDER, Me.STACKORDER})
         Me.RPN.Name = "RPN"
         Me.RPN.Size = New System.Drawing.Size(208, 22)
         Me.RPN.Text = "FLOAT RPNモード"
+        Me.RPN.ToolTipText = "逆ポーランド記法で複数の式を処理して単精度浮動小数点数を出力します。" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "通常モード時は単体式のみ対応" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "通常モード;tan(45度) " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "RPN式;9,2,3,*" & _
+    ",6,*,9,+,tan"
+        '
+        'CVTRPN
+        '
+        Me.CVTRPN.Name = "CVTRPN"
+        Me.CVTRPN.Size = New System.Drawing.Size(172, 22)
+        Me.CVTRPN.Text = "数式をRPNに変換"
+        Me.CVTRPN.ToolTipText = "数式をRPN式に変換して処理します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "数式;tan(9+(2*3)*6)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "↓" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "RPN式;9,2,3,*,6,*,9,+,tan"
+        '
+        'ToolStripSeparator2
+        '
+        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(193, 6)
         '
         'STACKORDER
         '
-        Me.STACKORDER.Checked = True
-        Me.STACKORDER.CheckState = System.Windows.Forms.CheckState.Checked
         Me.STACKORDER.Name = "STACKORDER"
-        Me.STACKORDER.Size = New System.Drawing.Size(196, 22)
-        Me.STACKORDER.Text = "Y,X スタック順"
+        Me.STACKORDER.Size = New System.Drawing.Size(180, 22)
+        Me.STACKORDER.Text = "②,① スタック降順"
+        Me.STACKORDER.ToolTipText = "関数引数順番がスタック降順になります;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "pow(①,②)→②,①,pow" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "logx(①,②)→②,①,logx" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "logy(①,②)→②,①,logy" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "at" & _
+    "an2_(①,②)→②,①,atan2_" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "atan2ms_(①,②)→②,①,atan2ms_"
         '
         'LOOKSORDER
         '
+        Me.LOOKSORDER.Checked = True
+        Me.LOOKSORDER.CheckState = System.Windows.Forms.CheckState.Checked
         Me.LOOKSORDER.Name = "LOOKSORDER"
-        Me.LOOKSORDER.Size = New System.Drawing.Size(196, 22)
-        Me.LOOKSORDER.Text = "X,Y 見た目順"
+        Me.LOOKSORDER.Size = New System.Drawing.Size(180, 22)
+        Me.LOOKSORDER.Text = "①,② スタック昇順"
+        Me.LOOKSORDER.ToolTipText = "関数引数順番がスタック昇順になります" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "pow(①,②)→①,②,pow" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "logx(①,②)→①,②,logx" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "logy(①,②)→①,②,logy" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ata" & _
+    "n2_(①,②)→①,②,atan2_" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "atan2ms_(①,②)→①,②,atan2ms_"
         '
         'サブルーチン仮アドレスToolStripMenuItem
         '
@@ -336,17 +354,6 @@ Partial Class Form1
         Me.savea.TabIndex = 7
         Me.savea.Text = "ASM保存"
         Me.savea.UseVisualStyleBackColor = True
-        '
-        'CVTRPN
-        '
-        Me.CVTRPN.Name = "CVTRPN"
-        Me.CVTRPN.Size = New System.Drawing.Size(196, 22)
-        Me.CVTRPN.Text = "通常数式をRPNに変換"
-        '
-        'ToolStripSeparator2
-        '
-        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(193, 6)
         '
         'Form1
         '
