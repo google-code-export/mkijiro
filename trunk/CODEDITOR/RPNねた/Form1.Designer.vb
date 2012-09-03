@@ -40,6 +40,7 @@ Partial Class Form1
         Me.TextBox1.Location = New System.Drawing.Point(3, 27)
         Me.TextBox1.Multiline = True
         Me.TextBox1.Name = "TextBox1"
+        Me.TextBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.TextBox1.Size = New System.Drawing.Size(237, 43)
         Me.TextBox1.TabIndex = 1
         Me.TextBox1.Text = "4*atan(5^(-1))-atan(pow(239,-1))"
@@ -58,6 +59,7 @@ Partial Class Form1
         Me.TextBox2.Location = New System.Drawing.Point(3, 88)
         Me.TextBox2.Multiline = True
         Me.TextBox2.Name = "TextBox2"
+        Me.TextBox2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.TextBox2.Size = New System.Drawing.Size(237, 48)
         Me.TextBox2.TabIndex = 3
         '

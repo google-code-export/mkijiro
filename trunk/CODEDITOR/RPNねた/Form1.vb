@@ -184,6 +184,22 @@ Public Class Form1
                     dem = swapper2(dem)
                     dem(1) = Math.Log(dem(1), dem(0))
                     Array.Copy(dem, 1, dem, 0, len)
+                Case "hypot"
+                    dem(1) = Math.Sqrt(Math.Pow(dem(1), 2) + Math.Pow(dem(0), 2))
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "heron"
+                    'http://ja.wikipedia.org/wiki/%E3%83%98%E3%83%AD%E3%83%B3%E3%81%AE%E5%85%AC%E5%BC%8F
+                    'a < b+c
+                    'b < a+c
+                    'c < a+b
+                    Dim s As Double = (dem(0) + dem(1) + dem(2)) / 2
+                    dem(2) = Math.Sqrt(s * (s - dem(0)) * (s - dem(1)) * (s - dem(2)))
+                    Array.Copy(dem, 2, dem, 0, len - 2)
+                Case "bretschneider"
+                    'http://ja.wikipedia.org/wiki/%E3%83%96%E3%83%AC%E3%83%BC%E3%83%88%E3%82%B7%E3%83%A5%E3%83%8A%E3%82%A4%E3%83%80%E3%83%BC%E3%81%AE%E5%85%AC%E5%BC%8F
+                    Dim t As Double = (dem(5) + dem(4) + dem(2) + dem(3)) / 2
+                    dem(5) = Math.Sqrt(((t - dem(2)) * (t - dem(3)) * (t - dem(4)) * (t - dem(5))) - ((dem(2) * dem(3) * dem(4) * dem(5) * Math.Pow(Math.Cos((dem(0) + dem(1)) / 2), 2))))
+                    Array.Copy(dem, 5, dem, 0, len - 5)
                 Case "1/x", "reci"
                     dem(0) = 1 / dem(0)
                 Case "exp"
@@ -269,6 +285,78 @@ Public Class Form1
                 Case "sin", "sind", "sinr", "sing"
                     dem(0) = cvtdrg2rad(dem(0), ss(i).Trim.Remove(0, 3))
                     dem(0) = Math.Sin(dem(0))
+                Case "asechd", "asechr", "asechg", "asech"
+                    'ハイパーボリック(アークセカント(AsecH(x)))
+                    'Log((Sqrt(-x * x + 1) + 1) / x)
+                    dem(0) = Math.Log((Math.Sqrt(-dem(0) * dem(0) + 1) + 1) / dem(0))
+                    dem(1) = cvtdrg(dem(1), ss(i).Trim.Remove(0, 5))
+                Case "acschd", "acschr", "acschg", "acsch"
+                    'ハイパーボリック(アークコセカント(Acsch(x)))
+                    'Log((Sign(x) * Sqrt(x * x + 1) + 1) / x)
+                    dem(0) = Math.Log((Math.Sign(dem(0)) * Math.Sqrt(-dem(0) * dem(0) + 1) + 1) / dem(0))
+                    dem(1) = cvtdrg(dem(1), ss(i).Trim.Remove(0, 5))
+                Case "acothd", "acothr", "acothg", "acoth"
+                    'ハイパーボリック(アークコタンジェント(Acoth(x)))
+                    'Log((x + 1) / (x – 1)) / 2 
+                    dem(0) = Math.Log((dem(0) + 1) / (dem(0) - 1)) / 2
+                    dem(1) = cvtdrg(dem(1), ss(i).Trim.Remove(0, 5))
+                Case "actanhd", "actanhr", "actanhg", "actanh"
+                    'ハイパーボリック(アークコタンジェント(Acoth(x)))
+                    'Log((x + 1) / (x – 1)) / 2 
+                    dem(0) = Math.Log((dem(0) + 1) / (dem(0) - 1)) / 2
+                    dem(1) = cvtdrg(dem(1), ss(i).Trim.Remove(0, 6))
+                Case "actang", "actand", "actanr", "actan"
+                    'アークコタンジェント(Acot(x))
+                    '2 * Atan(1) - Atan(x) 
+                    dem(0) = 2 * Math.Atan(1) - Math.Atan(dem(0))
+                    dem(1) = cvtdrg(dem(1), ss(i).Trim.Remove(0, 5))
+                Case "acotg", "acotd", "acotr", "acot"
+                    'アークコタンジェント(Acot(x))
+                    '2 * Atan(1) - Atan(x) 
+                    dem(0) = 2 * Math.Atan(1) - Math.Atan(dem(0))
+                    dem(1) = cvtdrg(dem(1), ss(i).Trim.Remove(0, 4))
+                Case "asecg", "asecd", "asecr", "asec"
+                    'アークセカント(Asec(x))
+                    '2 * Atan(1) – Atan(Sign(x) / Sqrt(x * x – 1))
+                    dem(0) = 2 * Math.Atan(1) - Math.Atan(Math.Sign(dem(0)) / Math.Sqrt(dem(0) * dem(0) - 1))
+                    dem(1) = cvtdrg(dem(1), ss(i).Trim.Remove(0, 4))
+                Case "acscg", "acscd", "acscr", "acsc"
+                    'アークコセカント(Acsc(x))
+                    'Atan(Sign(x) / Sqrt(x * x – 1))
+                    dem(0) = Math.Atan(Math.Sign(dem(0) / Math.Sqrt(dem(0) * dem(0) - 1)))
+                Case "sechg", "sechd", "sechr", "sech"
+                    'ハイパーボリック(セカント(Sech(x)))
+                    '2 / (Exp(x) + Exp(-x))
+                    dem(0) = cvtdrg2rad(dem(0), ss(i).Trim.Remove(0, 4))
+                    dem(0) = 2 / (Math.Exp(dem(0)) + Math.Exp(-dem(0)))
+                Case "cschg", "cschd", "cschr", "csch"
+                    'ハイパーボリック(コセカント(Csch(x)))
+                    '2 / (Exp(x) – Exp(-x))
+                    dem(0) = cvtdrg2rad(dem(0), ss(i).Trim.Remove(0, 4))
+                    dem(0) = 2 / (Math.Exp(dem(0)) - Math.Exp(-dem(0)))
+                Case "ctanhg", "ctanhd", "ctanhr", "ctanh"
+                    'ハイパーボリック(コタンジェント(Coth(x)))
+                    '(Exp(x) + Exp(-x)) / (Exp(x) – Exp(-x)) 
+                    dem(0) = cvtdrg2rad(dem(0), ss(i).Trim.Remove(0, 5))
+                    dem(0) = (Math.Exp(dem(0)) + Math.Exp(-dem(0))) / (Math.Exp(dem(0)) - Math.Exp(-dem(0)))
+                Case "cothg", "cothd", "cothr", "coth"
+                    'ハイパーボリック(コタンジェント(Coth(x)))
+                    '(Exp(x) + Exp(-x)) / (Exp(x) – Exp(-x)) 
+                    dem(0) = cvtdrg2rad(dem(0), ss(i).Trim.Remove(0, 4))
+                    dem(0) = (Math.Exp(dem(0)) + Math.Exp(-dem(0))) / (Math.Exp(dem(0)) - Math.Exp(-dem(0)))
+                    dem(1) = cvtdrg(dem(1), ss(i).Trim.Remove(0, 4))
+                Case "ctang", "ctand", "ctanr", "ctan"
+                    dem(0) = cvtdrg2rad(dem(0), ss(i).Trim.Remove(0, 4))
+                    dem(0) = 1 / Math.Tan(dem(0))
+                Case "cotg", "cotd", "cotr", "cot"
+                    dem(0) = cvtdrg2rad(dem(0), ss(i).Trim.Remove(0, 3))
+                    dem(0) = 1 / Math.Tan(dem(0))
+                Case "cscg", "cscd", "cscr", "csc"
+                    dem(0) = cvtdrg2rad(dem(0), ss(i).Trim.Remove(0, 3))
+                    dem(0) = 1 / Math.Sin(dem(0))
+                Case "secg", "secd", "secr", "sec"
+                    dem(0) = cvtdrg2rad(dem(0), ss(i).Trim.Remove(0, 3))
+                    dem(0) = 1 / Math.Cos(dem(0))
                 Case Else
                     If (ss(i)).Trim <> "" Then
                         Array.Copy(dem, 0, dem, 1, len)

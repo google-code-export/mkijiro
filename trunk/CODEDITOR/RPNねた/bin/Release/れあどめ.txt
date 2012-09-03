@@ -23,6 +23,22 @@ rad2deg", "rad2grad", "rad2r",
 "dms2d", "hms2d"
 "d2rad", "d2g", "d2r", "rad2d", "rad2g", "g2d", "g2rad", "g2r", "r2d", "r2g"
 //éOäpä÷êî
+"asechd", "asechr", "asechg", "asech",
+"acschd", "acschr", "acschg", "acsch",
+"acothd", "acothr", "acothg", "acoth",
+"actanhd", "actanhr", "actanhg", "actanh",
+"actang", "actand", "actanr", "actan",
+"acotg", "acotd", "acotr", "acot",
+"asecg", "asecd", "asecr", "asec",
+"acscg", "acscd", "acscr", "acsc",
+"sechg", "sechd", "sechr", "sech"
+"cschg", "cschd", "cschr", "csch",
+"ctanhg", "ctanhd", "ctanhr", "ctanh",
+"cothg", "cothd", "cothr", "coth",
+"ctang", "ctand", "ctanr", "ctan",
+"cotg", "cotd", "cotr", "cot",
+"cscg", "cscd", "cscr", "csc",
+"secg", "secd", "secr", "sec",
 "atanhg", "atanhd", "atanhr", "atanh",
 "acoshg", "acoshd", "acoshr", "acosh",
 "acoshng", "acoshnd", "acoshnr", "acoshn",
@@ -40,7 +56,7 @@ rad2deg", "rad2grad", "rad2r",
 //ãtêî
 "1/x","reci"
 
-2012/09/03
+2012/09/04
 ä÷êîÇí«â¡
 
 2012/09/01
