@@ -93,9 +93,9 @@ Partial Class Form1
         Me.LOOKSORDER.CheckState = System.Windows.Forms.CheckState.Checked
         Me.LOOKSORDER.Location = New System.Drawing.Point(10, 143)
         Me.LOOKSORDER.Name = "LOOKSORDER"
-        Me.LOOKSORDER.Size = New System.Drawing.Size(101, 40)
+        Me.LOOKSORDER.Size = New System.Drawing.Size(126, 40)
         Me.LOOKSORDER.TabIndex = 7
-        Me.LOOKSORDER.Text = "関数処理順番;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "□Y,X スタック順" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "☑X,Y 見た目順"
+        Me.LOOKSORDER.Text = "関数引数順番;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "□ ②,① スタック降順" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "☑ ①,② スタック昇順" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         Me.LOOKSORDER.UseVisualStyleBackColor = True
         '
         'Button1

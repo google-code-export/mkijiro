@@ -1,25 +1,47 @@
 数式をRPNに変換して処理するやつです。
+
+//符号変換
+"chs", "+/-"
+"abs", "|x|"
 //四則演算
 "+","-","/"
-//2引数が必要な関数(pow(x,y),logx(x,y)=lnY/lnX)
-"logx", "pow", "xrt", "yrt", "logy",
+//2引数が必要な関数(pow(x,y),logx(x,y)=lnY/lnX),atan～msがつくやつはatan2ms_(y,x)
+"logx", "pow","^","x^y","rpow","y^x" "xrt", "yrt", "logy","logms"
 "atan2_r", "atan2_g", "atan2_d", "atan2_",
-//角度変換,deg=度,rad=ラジアン,grad=グラード,r=∟
+"atan2ms_g", "atan2ms_r", "atan2ms_d", "atan2ms_",
+"atanh2_d", "atanh2_g", "atanh2_r", "atanh2_",
+"atanh2ms_d", "atanh2ms_g", "atanh2ms_r", "atanh2ms_",
+//3引数が必要な関数(hms(x,y,x)=X時Y分Z秒)
+"dms>deg", "dms>d","hms>h"
+//角度変換,deg=度,rad=ラジアン,grad=グラード,r=∟ DMS/HMSはDD(HH).MMSSの擬似小数
+"dms2deg","hms2h","hms2deg",
 deg2rad", "deg2grad", "deg2r",
 rad2deg", "rad2grad", "rad2r",
 "grad2deg", "grad2rad", "grad2r",
 "r2deg", "r2rad", "r2grad",
+省略版
+"dms2d", "hms2d"
+"d2rad", "d2g", "d2r", "rad2d", "rad2g", "g2d", "g2rad", "g2r", "r2d", "r2g"
 //三角関数
-"tanhr", "coshr", "sinhr", _
-"tanhg", "coshg", "sinhg", _
-"tanhd", "coshd", "sinhd", _
-"tanh", "cosh", "sinh", _
-"atanr", "acosr", "asinr", "tanr", "cosr", "sinr", _
-"atang", "acosg", "asing", "tang", "cosg", "sing", _
-"atand", "acosd", "asind", "tand", "cosd", "sind", _
-"atan", "acos", "asin", "tan", "cos", "sin", _
-//他
-"sqrt", "cbrt", "log", "ln", "reci", "√"}
+"atanhg", "atanhd", "atanhr", "atanh",
+"acoshg", "acoshd", "acoshr", "acosh",
+"acoshng", "acoshnd", "acoshnr", "acoshn",
+"asinhg", "asinhd", "asinhr", "asinh",
+"tanhr", "coshr", "sinhr", 
+"tanhg", "coshg", "sinhg", 
+"tanhd", "coshd", "sinhd", 
+"tanh", "cosh", "sinh", 
+"atanr", "acosr", "asinr", "tanr", "cosr", "sinr",
+"atang", "acosg", "asing", "tang", "cosg", "sing", 
+"atand", "acosd", "asind", "tand", "cosd", "sind", 
+"atan", "acos", "asin", "tan", "cos", "sin", 
+//べき乗、対数関数
+"sqrt", "cbrt", "loge","log", "ln", , "√","logten", "logtwo", "logthree","√", "exp"
+//逆数
+"1/x","reci"
+
+2012/09/03
+関数を追加
 
 2012/09/01
 とりあえず作成
