@@ -21,6 +21,9 @@ certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
 0x8838DBF0 moviezone,pspfat should freeze after search/save...slim user use extraram setting
 
+2012/09/06
+vncos とvnasinのデコードを追加
+
 2012/01/17
 mtloとmthiが間違っていたので修正
 http://code.google.com/p/pops-gte/wiki/DisasmHints

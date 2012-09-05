@@ -2546,6 +2546,12 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 		vsel(a_opcode, 0, 2);
         break;
 //        { "vnsin.s", 0xD01A0000, 0xFFFF8080, "%zs, %ys" },
+        	
+        case 0xD01B:
+                pspDebugScreenPuts("vncos.");
+		vsel(a_opcode, 0, 2);
+        break;
+//        { "vnsin.s", 0xD01A0000, 0xFFFF8080, "%zs, %ys" },
 
         case 0xD01C:
                 pspDebugScreenPuts("vrexp2.");
@@ -2553,6 +2559,12 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
         break;
 //        { "vrexp2.s", 0xD01C0000, 0xFFFF8080, "%zs, %ys" },
 
+        	
+        case 0xD01F:
+                pspDebugScreenPuts("vnasin.");
+                vsel(a_opcode, 0, 2);
+        break;
+        	
         case 0xD020:
 		if((a_opcode & 0x80FF) == 0){
                 pspDebugScreenPuts("vrnds.s  ");

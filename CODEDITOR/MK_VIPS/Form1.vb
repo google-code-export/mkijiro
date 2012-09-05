@@ -687,8 +687,16 @@ Public Class Form1
 "vzero.q", "0xD0068080", "0xFFFFFF80", "%zq", _
 "vzero.s", "0xD0060000", "0xFFFFFF80", "%zs", _
 "vzero.t", "0xD0068000", "0xFFFFFF80", "%zt", _
-"mfvme", "0x68000000", "0xFC000000", "%t,%i", _
-"mtvme", "0xb0000000", "0xFC000000", "%t,%i"}
+"vncos.s", "0x68000000", "0xFC000000", "%zs,%i", _
+"vncos.p", "0xD01b0080", "0xFFFF8080", "%zp,%yp", _
+"vncos.q", "0xD01b8080", "0xFFFF8080", "%zq,%yq", _
+"vncos.s", "0xD01b0000", "0xFFFF8080", "%zs,%ys", _
+"vncos.t", "0xD01b8000", "0xFFFF8080", "%zt,%yt", _
+"vnasin.p", "0xD01f0080", "0xFFFF8080", "%zp,%yp", _
+"vnasin.q", "0xD01f8080", "0xFFFF8080", "%zq,%yq", _
+"vnasin.s", "0xD01f0000", "0xFFFF8080", "%zs,%ys", _
+"vnasin.t", "0xD01f8000", "0xFFFF8080", "%zt,%yt"
+                              }
 #End Region
 
     'decoder PRXTOOLの移植
@@ -2058,6 +2066,27 @@ Public Class Form1
                     hex = xyzt(ss(0), hex, 0)
                     hex = xyzt(ss(1), hex, 1)
 
+                ElseIf mips = "vnasin.p" Then
+                    '"vnasin.p", "0xD01f0080", "0xFFFF8080", "%zp,%yp", _
+                    hex = &HD01F0080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vnasin.q" Then
+                    '"vnasin.q", "0xD01f8080", "0xFFFF8080", "%zq,%yq", _
+                    hex = &HD01F8080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vnasin.s" Then
+                    '"vnasin.s", "0xD01f0000", "0xFFFF8080", "%zs,%ys", _
+                    hex = &HD01F0000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vnasin.t" Then
+                    '"vnasin.t", "0xD01f8000", "0xFFFF8080", "%zt,%yt", _
+                    hex = &HD01F8000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+
                 ElseIf mips = "vavg.p" Then
                     '"vavg.p", "0xD0470080", "0xFFFF8080", "%zp,%yp", _
                     hex = &HD0470080
@@ -2542,6 +2571,23 @@ Public Class Form1
                 ElseIf mips = "vnsin.t" Then
                     '"vnsin.t","0xD01A8000","0xFFFF8080","%zt,%yt",
                     hex = &HD01A8000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                ElseIf mips = "vncos.p" Then
+                    '"vncos.p","0xD01b0080","0xFFFF8080","%zp,%yp",
+                    hex = &HD01B0080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vncos.q" Then
+                    hex = &HD01B8080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vncos.s" Then
+                    hex = &HD01B0000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vncos.t" Then
+                    hex = &HD01B8000
                     hex = xyzt(ss(0), hex, 0)
                     hex = xyzt(ss(1), hex, 1)
                 ElseIf mips = "vocp.p" Then
@@ -3405,7 +3451,7 @@ Public Class Form1
                 ElseIf mips = ".word" Then
                     hex = valword(str.Trim)
                 ElseIf mips = ".float" Then
-                    hex = cvt_float(valfloat(str.Trim))
+                    hex = cvt_float(valfloat(str.Trim.Replace(".float", "")))
                 End If
 
                 asm = "0x" & Convert.ToString(hex, 16).ToUpper.PadLeft(8, "0"c)
@@ -4780,7 +4826,7 @@ Public Class Form1
                 Dim p As New Polish
                 str = p.Main(str, LOOKSORDER.Checked)
             End If
-            k = rpndbl(str.Replace(".float", ""))
+            k = rpndbl(str)
         Else
             k = calcdbl(str)
         End If
