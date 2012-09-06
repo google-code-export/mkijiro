@@ -2541,6 +2541,13 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
         break;
 //        { "vnrcp.s", 0xD0180000, 0xFFFF8080, "%zs, %ys" },
 
+        	
+        case 0xD019:
+                pspDebugScreenPuts("vnrsq.");
+		vsel(a_opcode, 0, 2);
+        break;
+
+        	
         case 0xD01A:
                 pspDebugScreenPuts("vnsin.");
 		vsel(a_opcode, 0, 2);
