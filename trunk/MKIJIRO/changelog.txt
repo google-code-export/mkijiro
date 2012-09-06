@@ -21,6 +21,9 @@ certain float,doesnot display (0.01,0.001)
 as for 8byte RAMeditor,strange copy position
 0x8838DBF0 moviezone,pspfat should freeze after search/save...slim user use extraram setting
 
+2012/09/07
+vfad,vavgがスカラー単位だったので修正
+
 2012/09/06
 vnlog2,vnsqrtも追加
 vncos とvnasinのデコードを追加

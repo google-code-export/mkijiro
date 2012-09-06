@@ -1,3 +1,6 @@
+2012/09/07
+vfad,vavgがスカラー単位だったので修正
+
 2012/09/06-3
 vcos.sが変換できなかったので修正
 vnlog2,vnsqrt,vnrsqを追加
@@ -218,5 +221,7 @@ ADDIU周辺が変だったので修正
 とりあえず作成,
 
 参考サイト
+http://forums.ps2dev.org/viewtopic.php?t=6929
+http://psp.jim.sh/svn/filedetails.php?repname=psp&path=%2Ftrunk%2Fpspgl%2Fpspgl_codegen.h&peg=1106
 http://psp.jim.sh/svn/log.php?repname=psp&path=%2Ftrunk%2Fprxtool%2F&isdir=1&all=1
 http://code.google.com/p/pops-gte/wiki/DisasmHints

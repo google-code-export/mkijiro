@@ -21,7 +21,6 @@ Rev 2206 - Blame - Compare with Previous - Last modification - View Log - RSS fe
 #define D 2
 unsigned char VFMODE=0;
 unsigned char VFR=0;
-unsigned char VNUM=0;
 unsigned char VMT=0;
 unsigned char vmatrix=0;
 unsigned char mipsNum[16];
@@ -201,7 +200,7 @@ void vectors(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
         sprintf(buffer, "S%d%d%d" , (a_opcode >> 18) & 7, (a_opcode >> 16) & 3, a_opcode & 3);
         a_opcode=4*((a_opcode>>(8*(2-a_slot)))& 0x1F) + (a_opcode & 0x3);
         }
-        else{ //VFR==0
+        else{//VFR==0
         sprintf(buffer, "S%d%d%d",((a_opcode>>(8*(2-a_slot)))>>2)& 0x7 , (a_opcode>>(8*(2-a_slot)))& 0x3 , (a_opcode>>(8*(2-a_slot))&0x7F)>>5);
         a_opcode=4*((a_opcode>>(8*(2-a_slot)))& 0x1F) + ((a_opcode>>(8*(2-a_slot))&0x7F)>>5);
         }
@@ -519,61 +518,62 @@ void vsel(unsigned int a_opcode, unsigned char VNUM, unsigned char a_more)
     case 0x00:
         pspDebugScreenPuts("s");
     	spaceman(a_more);
-        //for(i=0; i < a_more; i++){
-        //pspDebugScreenPuts(" ");
-        //}
+  	
         if(VNUM==1){
         vectors(a_opcode, 2, 0);
+        }
+        else if(VNUM==2){
         }
         else{
         vectors(a_opcode, 2, 1);
         if(VNUM == 3){
-        vectors(a_opcode, 1, 1);
-        vectors(a_opcode, 0, 0);
-        }
-        else{
-        vectors(a_opcode, 1, 0);
-        }
+     	   vectors(a_opcode, 1, 1);
+        	vectors(a_opcode, 0, 0);
+        	}
+        	else{
+        	vectors(a_opcode, 1, 0);
+        	}
         }
     break;
 
     case 0x0080:
         pspDebugScreenPuts("p");
     	spaceman(a_more);
-        //for(i=0; i < a_more; i++){
-        //pspDebugScreenPuts(" ");
-        //}
+  	
         if(((a_opcode  & 0xFF800000) != 0x64800000) &&
-	((a_opcode  & 0xFF800000) != 0x66000000) &&
-	((a_opcode  & 0xFF800000) != 0x67000000)){
-	VFR=4;}
+		((a_opcode  & 0xFF800000) != 0x66000000) &&
+		((a_opcode  & 0xFF800000) != 0x67000000)){
+		VFR=4;
+		}
+
         if(VNUM==1){
         vectors(a_opcode, 2, 0);
+        }
+        else if(VNUM==2){
         }
         else{
         vectors(a_opcode, 2, 1);
         if(VNUM == 3){
-        VFR=4;
-        if((a_opcode  & 0xFF800000) == 0xF0000000){ 
-	VMT=2;
-	}
-        vectors(a_opcode, 1, 1);
-        VFR=4;
-        if((a_opcode  & 0xFF800000) == 0xF0000000){
-	VMT=1;
-	}
-        vectors(a_opcode, 0, 0);
+			VFR=4;
+ 			if((a_opcode  & 0xFF800000) == 0xF0000000){ 
+			VMT=2;
+			}
+			vectors(a_opcode, 1, 1);
+		 	VFR=4;
+		 	if((a_opcode  & 0xFF800000) == 0xF0000000){
+			VMT=1;
+			}
+        	vectors(a_opcode, 0, 0);
         }
         else{
-        VFR=4;
-	    if((a_opcode  & 0xFFE00000) == 0xF3A00000){
-        VFR=0;
-		}
-        else if(((a_opcode  & 0xFF800000) == 0xF3800000) || 
-	((a_opcode  & 0xFF800000) == 0xF2000000)){
-	VMT=1;
-	}
-        vectors(a_opcode, 1, 0);
+			 VFR=4;
+	    	if((a_opcode  & 0xFFE00000) == 0xF3A00000){
+			VFR=0;
+			}
+			else if(((a_opcode  & 0xFF800000) == 0xF3800000) || ((a_opcode  & 0xFF800000) == 0xF2000000)){
+			VMT=1;
+			}
+			vectors(a_opcode, 1, 0);
         }
         }
     break;
@@ -581,28 +581,28 @@ void vsel(unsigned int a_opcode, unsigned char VNUM, unsigned char a_more)
     case 0x8000:
         pspDebugScreenPuts("t");
     	spaceman(a_more);
-        //for(i=0; i < a_more; i++){
-        //pspDebugScreenPuts(" ");
-        //}
+  	
         if(((a_opcode  & 0xFF800000) != 0x64800000) &&
-	((a_opcode  & 0xFF800000) != 0x66000000) &&
-	((a_opcode  & 0xFF800000) != 0x67000000)){
-	VFR=5;}
+		((a_opcode  & 0xFF800000) != 0x66000000) &&
+		((a_opcode  & 0xFF800000) != 0x67000000)){
+		VFR=5;}
         if(VNUM==1){
         vectors(a_opcode, 2, 0);
+        }
+        else if(VNUM==2){
         }
         else{
         vectors(a_opcode, 2, 1);
         if(VNUM == 3){
         VFR=5;
         if((a_opcode  & 0xFF800000) == 0xF0000000){ 
-	VMT=2;
-	}
+		VMT=2;
+		}
         vectors(a_opcode, 1, 1);
         VFR=5;
         if((a_opcode  & 0xFF800000) == 0xF0000000){
-	VMT=1;
-	}
+		VMT=1;
+		}
         vectors(a_opcode, 0, 0);
         }
         else{
@@ -611,9 +611,9 @@ void vsel(unsigned int a_opcode, unsigned char VNUM, unsigned char a_more)
 	    VFR=0;
 		}
         else if(((a_opcode  & 0xFF800000) == 0xF3800000) || 
-	((a_opcode  & 0xFF800000) == 0xF2000000)){
-	VMT=1;
-	}
+		((a_opcode  & 0xFF800000) == 0xF2000000)){
+		VMT=1;
+		}
         vectors(a_opcode, 1, 0);
         }
         }
@@ -622,15 +622,14 @@ void vsel(unsigned int a_opcode, unsigned char VNUM, unsigned char a_more)
     case 0x8080:
         pspDebugScreenPuts("q");
     	spaceman(a_more);
-        //for(i=0; i < a_more; i++){
-        //pspDebugScreenPuts(" ");
-        //}
         if(((a_opcode  & 0xFF800000) != 0x64800000) &&
 	((a_opcode  & 0xFF800000) != 0x66000000) &&
 	((a_opcode  & 0xFF800000) != 0x67000000)){
-	VFR=6;}
+		VFR=6;}
         if(VNUM==1){
         vectors(a_opcode, 2, 0);
+        }
+        else if(VNUM==2){
         }
         else{
         vectors(a_opcode, 2, 1);
@@ -652,9 +651,9 @@ void vsel(unsigned int a_opcode, unsigned char VNUM, unsigned char a_more)
 	    VFR=0;
 		}
         else if(((a_opcode  & 0xFF800000) == 0xF3800000) || 
-	((a_opcode  & 0xFF800000) == 0xF2000000)){
-	VMT=1;
-	}	
+		((a_opcode  & 0xFF800000) == 0xF2000000)){
+		VMT=1;
+		}	
         vectors(a_opcode, 1, 0);
         }
         }
@@ -2813,7 +2812,7 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
         case 0xD045:
 	if((a_opcode & 0x8080) == 0){
 		        pspDebugScreenPuts("vsocp.s  ");
-			VFR=4;
+				VFR=4;
 	     	 	vectors(a_opcode, 2, 1);
 	     	 	vectors(a_opcode, 1, 0);
 			}
@@ -2830,18 +2829,28 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 
         case 0xD046:
                 pspDebugScreenPuts("vfad.");
-                vsel(a_opcode, 0, 3);
+				vsel(a_opcode, 2, 3);
+				VFR=0;
+				vectors(a_opcode, 2, 1);
+				VFR=4;
+				vectors(a_opcode, 1, 0);
+        	
         break;
-//{ "vfad.p",  0xD0460080, 0xFFFF8080, "%zp, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vfad.q",  0xD0468080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vfad.t",  0xD0468000, 0xFFFF8080, "%zt, %yt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
+//{ "vfad.p",  0xD0460080, 0xFFFF8080, "%zs, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
+//{ "vfad.q",  0xD0468080, 0xFFFF8080, "%zs, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
+//{ "vfad.t",  0xD0468000, 0xFFFF8080, "%zs, %yt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
+        	
         case 0xD047:
-                pspDebugScreenPuts("vavg.");
-                vsel(a_opcode, 0, 3);
+            pspDebugScreenPuts("vavg.");
+				vsel(a_opcode, 2, 3);
+				VFR=0;
+				vectors(a_opcode, 2, 1);
+				VFR=4;
+				vectors(a_opcode, 1, 0);
         break;
-//{ "vavg.p",  0xD0470080, 0xFFFF8080, "%zp, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vavg.q",  0xD0478080, 0xFFFF8080, "%zq, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
-//{ "vavg.t",  0xD0478000, 0xFFFF8080, "%zt, %yt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
+//{ "vavg.p",  0xD0470080, 0xFFFF8080, "%zs, %yp" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
+//{ "vavg.q",  0xD0478080, 0xFFFF8080, "%zs, %yq" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
+//{ "vavg.t",  0xD0478000, 0xFFFF8080, "%zs, %yt" , ADDR_TYPE_NONE, INSTR_TYPE_PSP },
 	
 
 	case 0xD048:
