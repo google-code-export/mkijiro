@@ -1,6 +1,6 @@
-2012/09/06-2
+2012/09/06-3
 vcos.sが変換できなかったので修正
-vnlog2,vnsqrtを追加
+vnlog2,vnsqrt,vnrsqを追加
 vncos とvnasinのデコードを追加
 RPNモード時.float の文字が残ってパースされてたので修正
 
