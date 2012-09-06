@@ -2179,7 +2179,7 @@ Public Class Form1
                     hex = &HD0138080
                     hex = xyzq(ss(0), hex, 0)
                     hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vvcos.s" Then
+                ElseIf mips = "vcos.s" Then
                     '"vcos.s", "0xD0130000", "0xFFFF8080", "%zs,%ys", _
                     hex = &HD0130000
                     hex = xyzs(ss(0), hex, 0)
