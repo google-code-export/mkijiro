@@ -2560,9 +2560,21 @@ Encoding: 1010 11ss ssst tttt iiii iiii iiii iiii*/
 //        { "vrexp2.s", 0xD01C0000, 0xFFFF8080, "%zs, %ys" },
 
         	
+        	
+        case 0xD01D:
+                pspDebugScreenPuts("vnlog2.");
+                vsel(a_opcode, 0, 1);
+        break;
+        	
+        case 0xD01E:
+                pspDebugScreenPuts("vnsqrt.");
+                vsel(a_opcode, 0, 1);
+        break;
+        	
+        	
         case 0xD01F:
                 pspDebugScreenPuts("vnasin.");
-                vsel(a_opcode, 0, 2);
+                vsel(a_opcode, 0, 1);
         break;
         	
         case 0xD020:

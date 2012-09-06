@@ -695,7 +695,16 @@ Public Class Form1
 "vnasin.p", "0xD01f0080", "0xFFFF8080", "%zp,%yp", _
 "vnasin.q", "0xD01f8080", "0xFFFF8080", "%zq,%yq", _
 "vnasin.s", "0xD01f0000", "0xFFFF8080", "%zs,%ys", _
-"vnasin.t", "0xD01f8000", "0xFFFF8080", "%zt,%yt"
+"vnasin.t", "0xD01f8000", "0xFFFF8080", "%zt,%yt",
+"vncos.s", "0x68000000", "0xFC000000", "%zs,%i", _
+"vnlog2.p", "0xD01d0080", "0xFFFF8080", "%zp,%yp", _
+"vnlog2.q", "0xD01d8080", "0xFFFF8080", "%zq,%yq", _
+"vnlog2.s", "0xD01d0000", "0xFFFF8080", "%zs,%ys", _
+"vnlog2.t", "0xD01d8000", "0xFFFF8080", "%zt,%yt", _
+"vnsqrt.p", "0xD01e0080", "0xFFFF8080", "%zp,%yp", _
+"vnsqrt.q", "0xD01e8080", "0xFFFF8080", "%zq,%yq", _
+"vnsqrt.s", "0xD01e0000", "0xFFFF8080", "%zs,%ys", _
+"vnsqrt.t", "0xD01e8000", "0xFFFF8080", "%zt,%yt"
                               }
 #End Region
 
@@ -2406,6 +2415,27 @@ Public Class Form1
                     hex = &HD0158000
                     hex = xyzt(ss(0), hex, 0)
                     hex = xyzt(ss(1), hex, 1)
+
+                ElseIf mips = "vnlog2.p" Then
+                    '"vnlog2.p","0xD01D0080","0xFFFF8080","%zp,%yp",
+                    hex = &HD01D0080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vnlog2.q" Then
+                    '"vnlog2.q","0xD01D8080","0xFFFF8080","%zq,%yq",
+                    hex = &HD01D8080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vnlog2.s" Then
+                    '"vnlog2.s","0xD01D0000","0xFFFF8080","%zs,%ys",
+                    hex = &HD01D0000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vnlog2.t" Then
+                    '"vnlog2.t","0xD01D8000","0xFFFF8080","%zt,%yt",
+                    hex = &HD01D8000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
                 ElseIf mips = "vmax.p" Then
                     '"vmax.p","0x6D800080","0xFF808080","%zp,%yp,%xp",
                     hex = &H6D800080
@@ -2963,6 +2993,26 @@ Public Class Form1
                 ElseIf mips = "vsqrt.t" Then
                     '"vsqrt.t","0xD0168000","0xFFFF8080","%zt,%yt",
                     hex = &HD0168000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                ElseIf mips = "vnsqrt.p" Then
+                    '"vnsqrt.p","0xD01e0080","0xFFFF8080","%zp,%yp",
+                    hex = &HD01E0080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vnsqrt.q" Then
+                    '"vnsqrt.q","0xD01e8080","0xFFFF8080","%zq,%yq",
+                    hex = &HD01E8080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vnsqrt.s" Then
+                    '"vnsqrt.s","0xD01e0000","0xFFFF8080","%zs,%ys",
+                    hex = &HD01E0000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vnsqrt.t" Then
+                    '"vsqrt.t","0xD01e8000","0xFFFF8080","%zt,%yt",
+                    hex = &HD01E8000
                     hex = xyzt(ss(0), hex, 0)
                     hex = xyzt(ss(1), hex, 1)
                 ElseIf mips = "vsrt1.q" Then
