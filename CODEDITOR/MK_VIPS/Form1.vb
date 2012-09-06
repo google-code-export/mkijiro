@@ -436,9 +436,9 @@ Public Class Form1
 "vasin.q", "0xD0178080", "0xFFFF8080", "%zq,%yq", _
 "vasin.s", "0xD0170000", "0xFFFF8080", "%zs,%ys", _
 "vasin.t", "0xD0178000", "0xFFFF8080", "%zt,%yt", _
-"vavg.p", "0xD0470080", "0xFFFF8080", "%zp,%yp", _
-"vavg.q", "0xD0478080", "0xFFFF8080", "%zq,%yq", _
-"vavg.t", "0xD0478000", "0xFFFF8080", "%zt,%yt", _
+"vavg.p", "0xD0470080", "0xFFFF8080", "%zs,%yp", _
+"vavg.q", "0xD0478080", "0xFFFF8080", "%zs,%yq", _
+"vavg.t", "0xD0478000", "0xFFFF8080", "%zs,%yt", _
 "vbfy1.p", "0xD0420080", "0xFFFF8080", "%zp,%yp", _
 "vbfy1.q", "0xD0428080", "0xFFFF8080", "%zq,%yq", _
 "vbfy2.q", "0xD0438080", "0xFFFF8080", "%zq,%yq", _
@@ -502,9 +502,9 @@ Public Class Form1
 "vf2iz.q", "0xD2208080", "0xFFE08080", "%zq,%yq,%v5", _
 "vf2iz.s", "0xD2200000", "0xFFE08080", "%zs,%ys,%v5", _
 "vf2iz.t", "0xD2208000", "0xFFE08080", "%zt,%yt,%v5", _
-"vfad.p", "0xD0460080", "0xFFFF8080", "%zp,%yp", _
-"vfad.q", "0xD0468080", "0xFFFF8080", "%zq,%yq", _
-"vfad.t", "0xD0468000", "0xFFFF8080", "%zt,%yt", _
+"vfad.p", "0xD0460080", "0xFFFF8080", "%zs,%yp", _
+"vfad.q", "0xD0468080", "0xFFFF8080", "%zs,%yq", _
+"vfad.t", "0xD0468000", "0xFFFF8080", "%zs,%yt", _
 "vfim.s", "0xDF800000", "0xFF800000", "%xs,%vh", _
 "vflush", "0xFFFF040D", "0xFFFFFFFF", "", _
 "vh2f.p", "0xD0330080", "0xFFFF8080", "%zq,%yp", _
@@ -2101,19 +2101,19 @@ Public Class Form1
                     hex = xyzt(ss(1), hex, 1)
 
                 ElseIf mips = "vavg.p" Then
-                    '"vavg.p", "0xD0470080", "0xFFFF8080", "%zp,%yp", _
+                    '"vavg.p", "0xD0470080", "0xFFFF8080", "%zs,%yp", _
                     hex = &HD0470080
-                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzs(ss(0), hex, 0)
                     hex = xyzp(ss(1), hex, 1)
                 ElseIf mips = "vavg.q" Then
-                    '"vavg.q", "0xD0478080", "0xFFFF8080", "%zq,%yq", _
+                    '"vavg.q", "0xD0478080", "0xFFFF8080", "%zs,%yq", _
                     hex = &HD0478080
-                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzs(ss(0), hex, 0)
                     hex = xyzq(ss(1), hex, 1)
                 ElseIf mips = "vavg.t" Then
-                    '"vavg.t", "0xD0478000", "0xFFFF8080", "%zt,%yt", _
+                    '"vavg.t", "0xD0478000", "0xFFFF8080", "%zs,%yt", _
                     hex = &HD0478000
-                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzs(ss(0), hex, 0)
                     hex = xyzt(ss(1), hex, 1)
 
                 ElseIf mips = "vbfy1.p" Then
@@ -2290,19 +2290,19 @@ Public Class Form1
                     hex = xyzq(ss(1), hex, 1)
 
                 ElseIf mips = "vfad.p" Then
-                    '"vfad.p", "0xD0460080", "0xFFFF8080", "%zp,%yp", _
+                    '"vfad.p", "0xD0460080", "0xFFFF8080", "%zs,%yp", _
                     hex = &HD0460080
-                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzs(ss(0), hex, 0)
                     hex = xyzp(ss(1), hex, 1)
                 ElseIf mips = "vfad.q" Then
-                    '"vfad.q", "0xD0468080", "0xFFFF8080", "%zq,%yq", _
+                    '"vfad.q", "0xD0468080", "0xFFFF8080", "%zs,%yq", _
                     hex = &HD0468080
-                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzs(ss(0), hex, 0)
                     hex = xyzq(ss(1), hex, 1)
                 ElseIf mips = "vfad.t" Then
-                    '"vfad.t", "0xD0468000", "0xFFFF8080", "%zt,%yt", _
+                    '"vfad.t", "0xD0468000", "0xFFFF8080", "%zs,%yt", _
                     hex = &HD0468000
-                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzs(ss(0), hex, 0)
                     hex = xyzt(ss(1), hex, 1)
                 ElseIf mips = "vfim.s" Then
                     '"vfim.s", "0xDF800000", "0xFF800000", "%xs,%vh", _
