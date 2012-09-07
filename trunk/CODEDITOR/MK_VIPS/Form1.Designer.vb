@@ -53,24 +53,25 @@ Partial Class Form1
         Me.RPN = New System.Windows.Forms.ToolStripMenuItem()
         Me.CVTRPN = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
-        Me.STACKORDER = New System.Windows.Forms.ToolStripMenuItem()
         Me.LOOKSORDER = New System.Windows.Forms.ToolStripMenuItem()
+        Me.STACKORDER = New System.Windows.Forms.ToolStripMenuItem()
         Me.サブルーチン仮アドレスToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.バージョン = New System.Windows.Forms.ToolStripMenuItem()
         Me.savea = New System.Windows.Forms.Button()
-        Me.Panel1.SuspendLayout()
-        Me.Panel2.SuspendLayout()
-        Me.MenuStrip1.SuspendLayout()
-        Me.SuspendLayout()
+        Me.cr = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Panel1.SuspendLayout
+        Me.Panel2.SuspendLayout
+        Me.MenuStrip1.SuspendLayout
+        Me.SuspendLayout
         '
         'ASM
         '
-        Me.ASM.AllowDrop = True
-        Me.ASM.Font = New System.Drawing.Font("Verdana", 9.163636!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ASM.AllowDrop = true
+        Me.ASM.Font = New System.Drawing.Font("Verdana", 9.163636!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.ASM.ImeMode = System.Windows.Forms.ImeMode.NoControl
         Me.ASM.Location = New System.Drawing.Point(21, 54)
         Me.ASM.MaxLength = 0
-        Me.ASM.Multiline = True
+        Me.ASM.Multiline = true
         Me.ASM.Name = "ASM"
         Me.ASM.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.ASM.Size = New System.Drawing.Size(253, 318)
@@ -78,7 +79,7 @@ Partial Class Form1
         '
         'MODE
         '
-        Me.MODE.FormattingEnabled = True
+        Me.MODE.FormattingEnabled = true
         Me.MODE.Items.AddRange(New Object() {"NITEPR", "CWCHEAT", "PSPAR", "PMETAN", "CWCPOPS", "PSPAR(0xE)", "TEMPAR(0xC2)", "CMFUSION(0xF0)", "CMFUSION(0xF0,ENC1)", "CMFUSION(0xF0,ENC2)"})
         Me.MODE.Location = New System.Drawing.Point(15, 70)
         Me.MODE.Name = "MODE"
@@ -93,15 +94,15 @@ Partial Class Form1
         Me.cvt_asm2code.Size = New System.Drawing.Size(76, 41)
         Me.cvt_asm2code.TabIndex = 2
         Me.cvt_asm2code.Text = "ASM->コード変換"
-        Me.cvt_asm2code.UseVisualStyleBackColor = True
+        Me.cvt_asm2code.UseVisualStyleBackColor = true
         '
         'CODE
         '
-        Me.CODE.AllowDrop = True
-        Me.CODE.Font = New System.Drawing.Font("Verdana", 9.163636!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CODE.AllowDrop = true
+        Me.CODE.Font = New System.Drawing.Font("Verdana", 9.163636!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.CODE.Location = New System.Drawing.Point(291, 54)
         Me.CODE.MaxLength = 0
-        Me.CODE.Multiline = True
+        Me.CODE.Multiline = true
         Me.CODE.Name = "CODE"
         Me.CODE.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.CODE.Size = New System.Drawing.Size(354, 318)
@@ -118,7 +119,7 @@ Partial Class Form1
         '
         'Label1
         '
-        Me.Label1.AutoSize = True
+        Me.Label1.AutoSize = true
         Me.Label1.Location = New System.Drawing.Point(13, 56)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(57, 12)
@@ -127,7 +128,7 @@ Partial Class Form1
         '
         'Label2
         '
-        Me.Label2.AutoSize = True
+        Me.Label2.AutoSize = true
         Me.Label2.Location = New System.Drawing.Point(13, 13)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(65, 12)
@@ -154,11 +155,11 @@ Partial Class Form1
         Me.ASMSB.Size = New System.Drawing.Size(75, 23)
         Me.ASMSB.TabIndex = 7
         Me.ASMSB.Text = "ASM保存"
-        Me.ASMSB.UseVisualStyleBackColor = True
+        Me.ASMSB.UseVisualStyleBackColor = true
         '
         'Label3
         '
-        Me.Label3.AutoSize = True
+        Me.Label3.AutoSize = true
         Me.Label3.Location = New System.Drawing.Point(19, 39)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(60, 12)
@@ -167,7 +168,7 @@ Partial Class Form1
         '
         'Label4
         '
-        Me.Label4.AutoSize = True
+        Me.Label4.AutoSize = true
         Me.Label4.Location = New System.Drawing.Point(289, 39)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(50, 12)
@@ -191,7 +192,7 @@ Partial Class Form1
         Me.Button1.Size = New System.Drawing.Size(73, 41)
         Me.Button1.TabIndex = 2
         Me.Button1.Text = "_LMN除去"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.Button1.UseVisualStyleBackColor = true
         '
         'save2
         '
@@ -200,7 +201,7 @@ Partial Class Form1
         Me.save2.Size = New System.Drawing.Size(76, 41)
         Me.save2.TabIndex = 1
         Me.save2.Text = "コード保存"
-        Me.save2.UseVisualStyleBackColor = True
+        Me.save2.UseVisualStyleBackColor = true
         '
         'cnt_code2asm
         '
@@ -209,7 +210,7 @@ Partial Class Form1
         Me.cnt_code2asm.Size = New System.Drawing.Size(86, 41)
         Me.cnt_code2asm.TabIndex = 0
         Me.cnt_code2asm.Text = "コード->ASM変換"
-        Me.cnt_code2asm.UseVisualStyleBackColor = True
+        Me.cnt_code2asm.UseVisualStyleBackColor = true
         '
         'MenuStrip1
         '
@@ -297,46 +298,46 @@ Partial Class Form1
         '
         'RPN
         '
-        Me.RPN.Checked = True
+        Me.RPN.Checked = true
         Me.RPN.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.RPN.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CVTRPN, Me.ToolStripSeparator2, Me.LOOKSORDER, Me.STACKORDER})
+        Me.RPN.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CVTRPN, Me.cr, Me.ToolStripSeparator2, Me.LOOKSORDER, Me.STACKORDER})
         Me.RPN.Name = "RPN"
         Me.RPN.Size = New System.Drawing.Size(208, 22)
         Me.RPN.Text = "FLOAT RPNモード"
-        Me.RPN.ToolTipText = "逆ポーランド記法で複数の式を処理して単精度浮動小数点数を出力します。" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "通常モード時は単体式のみ対応" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "通常モード;tan(45度) " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "RPN式;9,2,3,*" & _
+        Me.RPN.ToolTipText = "逆ポーランド記法で複数の式を処理して単精度浮動小数点数を出力します。"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"通常モード時は単体式のみ対応"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"通常モード;tan(45度) "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"RPN式;9,2,3,*"& _ 
     ",6,*,9,+,tan"
         '
         'CVTRPN
         '
-        Me.CVTRPN.Checked = True
+        Me.CVTRPN.Checked = true
         Me.CVTRPN.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CVTRPN.Name = "CVTRPN"
         Me.CVTRPN.Size = New System.Drawing.Size(180, 22)
         Me.CVTRPN.Text = "数式をRPNに変換"
-        Me.CVTRPN.ToolTipText = "数式をRPN式に変換して処理します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "数式;tan(9+(2*3)*6)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "↓" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "RPN式;9,2,3,*,6,*,9,+,tan"
+        Me.CVTRPN.ToolTipText = "数式をRPN式に変換して処理します"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"数式;tan(9+(2*3)*6)"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"↓"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"RPN式;9,2,3,*,6,*,9,+,tan"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
         Me.ToolStripSeparator2.Size = New System.Drawing.Size(177, 6)
         '
+        'LOOKSORDER
+        '
+        Me.LOOKSORDER.Checked = true
+        Me.LOOKSORDER.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.LOOKSORDER.Name = "LOOKSORDER"
+        Me.LOOKSORDER.Size = New System.Drawing.Size(180, 22)
+        Me.LOOKSORDER.Text = "①,② スタック降順"
+        Me.LOOKSORDER.ToolTipText = "関数引数順番がスタック降順になります"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"pow(①,②)→①,②,pow"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"logx(①,②)→①,②,logx"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"logy(①,②)→①,②,logy"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"ata"& _ 
+    "n2_(①,②)→①,②,atan2_"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"atan2ms_(①,②)→①,②,atan2ms_"
+        '
         'STACKORDER
         '
         Me.STACKORDER.Name = "STACKORDER"
         Me.STACKORDER.Size = New System.Drawing.Size(180, 22)
         Me.STACKORDER.Text = "②,① スタック昇順"
-        Me.STACKORDER.ToolTipText = "関数引数順番がスタック昇順になります;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "pow(①,②)→②,①,pow" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "logx(①,②)→②,①,logx" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "logy(①,②)→②,①,logy" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "at" & _
-    "an2_(①,②)→②,①,atan2_" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "atan2ms_(①,②)→②,①,atan2ms_"
-        '
-        'LOOKSORDER
-        '
-        Me.LOOKSORDER.Checked = True
-        Me.LOOKSORDER.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.LOOKSORDER.Name = "LOOKSORDER"
-        Me.LOOKSORDER.Size = New System.Drawing.Size(180, 22)
-        Me.LOOKSORDER.Text = "①,② スタック降順"
-        Me.LOOKSORDER.ToolTipText = "関数引数順番がスタック降順になります" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "pow(①,②)→①,②,pow" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "logx(①,②)→①,②,logx" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "logy(①,②)→①,②,logy" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ata" & _
-    "n2_(①,②)→①,②,atan2_" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "atan2ms_(①,②)→①,②,atan2ms_"
+        Me.STACKORDER.ToolTipText = "関数引数順番がスタック昇順になります;"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"pow(①,②)→②,①,pow"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"logx(①,②)→②,①,logx"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"logy(①,②)→②,①,logy"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"at"& _ 
+    "an2_(①,②)→②,①,atan2_"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"atan2ms_(①,②)→②,①,atan2ms_"
         '
         'サブルーチン仮アドレスToolStripMenuItem
         '
@@ -357,11 +358,18 @@ Partial Class Form1
         Me.savea.Size = New System.Drawing.Size(75, 23)
         Me.savea.TabIndex = 7
         Me.savea.Text = "ASM保存"
-        Me.savea.UseVisualStyleBackColor = True
+        Me.savea.UseVisualStyleBackColor = true
+        '
+        'cr
+        '
+        Me.cr.Name = "cr"
+        Me.cr.Size = New System.Drawing.Size(180, 22)
+        Me.cr.Text = "*の省略"
+        Me.cr.ToolTipText = "(1)(2)=1*2"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"4(6)=4*6"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"4PIcosd(45)=4PI*cosd(45)"
         '
         'Form1
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 12!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(675, 488)
         Me.Controls.Add(Me.Panel2)
@@ -376,15 +384,15 @@ Partial Class Form1
         Me.Name = "Form1"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "MK_VIPS（＾ω＾）"
-        Me.Panel1.ResumeLayout(False)
-        Me.Panel1.PerformLayout()
-        Me.Panel2.ResumeLayout(False)
-        Me.MenuStrip1.ResumeLayout(False)
-        Me.MenuStrip1.PerformLayout()
-        Me.ResumeLayout(False)
-        Me.PerformLayout()
+        Me.Panel1.ResumeLayout(false)
+        Me.Panel1.PerformLayout
+        Me.Panel2.ResumeLayout(false)
+        Me.MenuStrip1.ResumeLayout(false)
+        Me.MenuStrip1.PerformLayout
+        Me.ResumeLayout(false)
+        Me.PerformLayout
 
-    End Sub
+End Sub
     Friend WithEvents ASM As System.Windows.Forms.TextBox
     Friend WithEvents MODE As System.Windows.Forms.ComboBox
     Friend WithEvents cvt_asm2code As System.Windows.Forms.Button
@@ -421,5 +429,6 @@ Partial Class Form1
     Friend WithEvents LOOKSORDER As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents CVTRPN As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents cr As System.Windows.Forms.ToolStripMenuItem
 
 End Class
