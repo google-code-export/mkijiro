@@ -5353,7 +5353,7 @@ Public Class Form1
                 Case ">>>", "srl" '論理シフト
                     tr = False
                     If dem(0) >= 32 Or dem(0) < 1 Then
-                        MessageBox.Show("シフトは1～31内の値でなくてはなりません")
+                        MessageBox.Show("シフトさせる範囲は1～31でなくてはなりません")
                         Return 0
                     Else
                         If (dem(1) And &H80000000) <> 0 Then
@@ -5362,13 +5362,13 @@ Public Class Form1
                         End If
                         dem(1) = dem(1) >> dem(0)
                         If tr = True Then
-                            dem(1) = dem(1) Or ((1 << dem(0)) >> 1)
+                            dem(1) = dem(1) Or ((1 << (31 - dem(0))))
                         End If
                     End If
                     Array.Copy(dem, 1, dem, 0, len)
                 Case "<<", "sll"
                     If dem(0) >= 32 Or dem(0) < 1 Then
-                        MessageBox.Show("シフトは1～31内の値でなくてはなりません")
+                        MessageBox.Show("シフトさせる範囲は1～31でなくてはなりません")
                         Return 0
                     Else
                         dem(1) = dem(1) << dem(0)
@@ -5377,7 +5377,7 @@ Public Class Form1
                 Case "ror"
                     'ror(0x87654321,16)
                     If dem(0) >= 32 Or dem(0) < 1 Then
-                        MessageBox.Show("シフトは1～31内の値でなくてはなりません")
+                        MessageBox.Show("シフトさせる範囲は1～31でなくてはなりません")
                         Return 0
                     Else
                         Dim msk As Integer = (&HFFFFFFFF << dem(0))
@@ -5389,7 +5389,7 @@ Public Class Form1
                 Case "rol"
                     'rol(0x87654321,16)
                     If dem(0) >= 32 Or dem(0) < 1 Then
-                        MessageBox.Show("シフトは1～31内の値でなくてはなりません")
+                        MessageBox.Show("シフトさせる範囲は1～31でなくてはなりません")
                         Return 0
                     Else
                         Dim msk As Integer = (&HFFFFFFFF << dem(0))
