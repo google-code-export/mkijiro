@@ -180,10 +180,14 @@ Class Polish
                            "atand", "acosd", "asind", "tand", "cosd", "sind", _
                            "atan", "acos", "asin", "tan", "cos", "sin", _
                            "heron", "bretschneider", "hypot", "sqrt", "cbrt", "logten", "logtwo", "logthree", "ln", "reci", "√", "exp", "loge", "log", "abs", "chs",
-                            "d2rad", "rad2d", "rad2g", "g2rad", "d2g", "g2d", "d2r", "g2r", "r2d", "r2g"
+                            "d2rad", "rad2d", "rad2g", "g2rad", "d2g", "g2d", "d2r", "g2r", "r2d", "r2g", _
+                           ">>>", ">>", "<<", "\", "&", "|", "and", "xor", "ror", "rol", "sll", "srl", "or", "not", "sra", "mod"
                            }
 
-    Public Function Main(ByVal s As String, ByVal stack As Boolean) As String
+    Dim kana As String() = {"ｵ", "ﾊ", "ｲ"}
+    Dim mathrp As String() = {"goldenratio", "pi", "e"}
+
+    Public Function Main(ByVal s As String, ByVal stack As Boolean, ByVal cr As Boolean, ByVal int As Boolean) As String
         s = s.Replace(" ", String.Empty).ToLower
         Dim rp As String() = Nothing
         Array.Resize(rp, rp2.Length)
@@ -198,9 +202,34 @@ Class Polish
             rp(i) = Encoding.GetEncoding(12000).GetString(BitConverter.GetBytes(c1))
         Next
 
-        For i = 0 To rp2.Length - 1
-            s = s.Replace(rp2(i), rp(i))
-        Next
+        If int = True Then
+            For i = rp2.Length - 16 To rp2.Length - 1
+                s = s.Replace(rp2(i), rp(i))
+            Next
+        Else
+            For i = 0 To rp2.Length - 17 '-1-16
+                s = s.Replace(rp2(i), rp(i))
+            Next
+        End If
+
+
+
+        If cr = True Then
+            For i = 0 To kana.Length - 1
+                s = s.Replace(mathrp(i), kana(i))
+            Next
+
+            Dim cross As New Regex("((ｵ|ﾊ|ｲ|\d)[A-Z\u00A1-\uF000\(]|\)\()")
+            Dim hosei As Match = cross.Match(s)
+            While hosei.Success
+                s = s.Replace(hosei.Value, hosei.Value.Insert(1, "*"))
+                hosei = hosei.NextMatch
+            End While
+
+            For i = 0 To kana.Length - 1
+                s = s.Replace(kana(i), mathrp(i))
+            Next
+        End If
 
 
         Dim root As Node = New Node(s)

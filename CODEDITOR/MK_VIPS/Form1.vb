@@ -49,6 +49,9 @@ Public Class Form1
                         If (tmp And 4) = 4 Then
                             CVTRPN.Checked = True
                         End If
+                        If (tmp And 8) = 8 Then
+                            cr.Checked = True
+                        End If
                     End If
                 End While
                 sr.Close()
@@ -94,6 +97,9 @@ Public Class Form1
             End If
             If CVTRPN.Checked = True Then
                 k += 4
+            End If
+            If cr.Checked = True Then
+                k += 8
             End If
             s = "RPN" & k.ToString
             sr.WriteLine(s)
@@ -3525,7 +3531,11 @@ Public Class Form1
                     hex = vp0123(ss(2), hex, 2)
                     hex = vp0123(ss(3).Replace("]", ""), hex, 3)
                 ElseIf mips = ".word" Then
-                    hex = valword(str.Trim)
+                    If RPN.Checked = True Then
+                        hex = valint(str.Replace(".word", "").Trim)
+                    Else
+                        hex = valword(str.Trim)
+                    End If
                 ElseIf mips = ".float" Then
                     hex = cvt_float(valfloat(str.Trim.Replace(".float", "")))
                 End If
@@ -4542,26 +4552,29 @@ Public Class Form1
 
     Private Function cvt_dbl(ByVal s As String) As Double
         Dim dem As Double = 0
-        Dim cnst As New Regex("-?(e|pi|goldenratio)")
+        Dim cnst As New Regex("-?(pi|goldenratio|e)")
         Dim cnstm As Match = cnst.Match(s)
         Dim frac As New Regex("-?\d+\.?\d*")
         Dim fracm As Match = frac.Match(s)
         If cnstm.Success Then
-            If cnstm.Value.Contains("e") Then
+            If cnstm.Value.Contains("goldenratio") Then
+                dem = ((1 + Math.Sqrt(5)) / 2)
+            ElseIf cnstm.Value.Contains("e") Then
                 dem = (Math.E)
             ElseIf cnstm.Value.Contains("pi") Then
                 dem = (Math.PI)
-            ElseIf cnstm.Value.Contains("goldendratio") Then
-                dem = ((1 + Math.Sqrt(5)) / 2)
             End If
             If cnstm.Value.Contains("-") Then
                 dem = -dem
+            End If
+            If fracm.Success Then
+                dem *= Convert.ToDouble(fracm.Value)
             End If
         ElseIf fracm.Success Then
             dem = Convert.ToDouble(fracm.Value)
         End If
 
-        Return dem
+            Return dem
     End Function
 
     Private Function swapper(ByVal dem As Double()) As Double()
@@ -4900,7 +4913,7 @@ Public Class Form1
         If RPN.Checked Then
             If CVTRPN.Checked Then
                 Dim p As New Polish
-                str = p.Main(str, LOOKSORDER.Checked)
+                str = p.Main(str, LOOKSORDER.Checked, cr.Checked, False)
             End If
             k = rpndbl(str)
         Else
@@ -5161,7 +5174,7 @@ Public Class Form1
         Dim g As Double
         Dim ff As New Regex("-?\d\.?\d*")
         Dim ffm As Match = ff.Match(str)
-        Dim valmu As New Regex("[+-]?(e|pi|goldenratio)")
+        Dim valmu As New Regex("[+-]?(pi|goldenratio|e)")
         Dim valmum As Match = valmu.Match(str)
 
         If ffm.Success Then
@@ -5194,6 +5207,237 @@ Public Class Form1
         End If
 
         Return f
+    End Function
+
+    Private Function swapperint(ByVal dem As Integer()) As Integer()
+        Dim demt As Integer
+        demt = dem(1)
+        dem(1) = dem(0)
+        dem(0) = demt
+        Return dem
+    End Function
+
+    Private Function cvt_int(ByVal s As String) As Integer
+        Dim dem As Integer = 0
+        Dim frac As New Regex("-?0x[0-9A-fa-f]{1,8}")
+        Dim fracm As Match = frac.Match(s)
+        Dim int As New Regex("-?\d{1,10}")
+        Dim intm As Match = int.Match(s)
+        Dim bin As New Regex("bin[01]{1,32}")
+        Dim binm As Match = bin.Match(s)
+        Dim oct As New Regex("oct[0-3]?[0-7]{1,10}")
+        Dim octm As Match = oct.Match(s)
+        Dim vallb As New Regex("s?(upper_|lower_)")
+        Dim vallbm As Match = vallb.Match(s)
+        Dim minus As Int64 = 0
+        If binm.Success Then
+            s = binm.Value.Remove(0, 3)
+            For i = 0 To s.Length - 1
+                dem = dem Or (CInt(s.Substring(s.Length - 1 - i, 1)) << i)
+            Next
+        ElseIf octm.Success Then
+            s = octm.Value.Remove(0, 3)
+            For i = 0 To s.Length - 1
+                dem = dem Or (CInt(s.Substring(s.Length - 1 - i, 1)) << (3 * i))
+            Next
+        ElseIf fracm.Success Then
+            dem = Convert.ToInt32(fracm.Value, 16)
+        ElseIf intm.Success Then
+            dem = Convert.ToInt32(intm.Value)
+        Else
+            Dim k As Integer = 0
+            Dim j As Integer = 0
+            Dim sl As Integer = 0
+            If vallbm.Success Then
+                If vallbm.Value.Contains("up") Then
+                    sl = 1
+                Else
+                    sl = 2
+                End If
+                If vallbm.Value.Contains("s") Then
+                    sl += 4
+                End If
+                s = s.Replace(vallbm.Value, "")
+            End If
+
+            For j = 0 To 255
+                If label(j) = s Then
+                    Exit For
+                End If
+            Next
+            If (j < 255) Then
+                k = label_addr(j)
+                If MODE.SelectedIndex = 4 Then
+                    If k >= &H9800000 Then
+                        k -= &H9800000
+                    End If
+                Else
+                    If k < &H1800000 Then
+                        k += &H8800000
+                    End If
+                End If
+                If (sl And 1) = 1 Then
+                    If (sl And 4) = 4 AndAlso (k And &HFFFF) >= &H8000 Then
+                        k = k >> 16
+                        k += 1
+                    Else
+                        k = k >> 16
+                    End If
+                ElseIf (sl And 2) = 2 Then
+                    k = k And &HFFFF
+                End If
+                dem = k
+            Else
+                MessageBox.Show(s & "に該当するラベルがみつかりませんでした", "")
+            End If
+        End If
+
+        Return dem
+    End Function
+
+    Private Function overflow(ByVal dem As Integer(), ByVal s As String) As Integer()
+        Dim i As Long = CLng(dem(0))
+        Dim k As Long = CLng(dem(1))
+        Dim mask As Long = 4294967295
+        Select Case s
+            Case "+"
+                k = k + i
+            Case "-"
+                k = k - i
+            Case "*"
+                k = k * i
+            Case "/"
+                k = CLng(k / i)
+        End Select
+        k = k And mask
+        If k > 2147483647 Then
+            k = k - 4294967296
+        End If
+        dem(1) = Convert.ToInt32(k)
+        Return dem
+    End Function
+
+    Private Function rpnint(ByVal str As String) As Integer
+        Dim ss As String() = str.ToLower.Split(CChar(","))
+        Dim len As Integer = ss.Length - 1
+        Dim dem(len) As Integer
+        Dim k As Long = 0
+        Dim tr As Boolean = False
+        For i = 0 To len
+            Select Case ss(i).Trim
+                Case "chs", "+/-"
+                    dem(0) = -dem(0)
+                Case "abs", "|x|"
+                    If dem(0) = -2147483648 Then
+                        dem(0) = 0
+                    End If
+                    If (dem(0) < 0) Then
+                        dem(0) = dem(0) - dem(0) - dem(0)
+                    End If
+                Case "drop"
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "swap"
+                    dem = swapperint(dem)
+                Case "="
+                Case "+", "-", "*", "/"
+                    dem = overflow(dem, ss(i))
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case ">>", "sra"
+                    If dem(0) >= 32 Or dem(0) < 0 Then
+                        MessageBox.Show("シフトは0～31内の値でなくてはなりません")
+                        Return 0
+                    Else
+                        dem(1) = dem(1) >> dem(0)
+                    End If
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case ">>>", "srl" '論理シフト
+                    tr = False
+                    If dem(0) >= 32 Or dem(0) < 1 Then
+                        MessageBox.Show("シフトは1～31内の値でなくてはなりません")
+                        Return 0
+                    Else
+                        If (dem(1) And &H80000000) <> 0 Then
+                            dem(1) = dem(1) And &H7FFFFFFF
+                            tr = True
+                        End If
+                        dem(1) = dem(1) >> dem(0)
+                        If tr = True Then
+                            dem(1) = dem(1) Or ((1 << dem(0)) >> 1)
+                        End If
+                    End If
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "<<", "sll"
+                    If dem(0) >= 32 Or dem(0) < 1 Then
+                        MessageBox.Show("シフトは1～31内の値でなくてはなりません")
+                        Return 0
+                    Else
+                        dem(1) = dem(1) << dem(0)
+                    End If
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "ror"
+                    'ror(0x87654321,16)
+                    If dem(0) >= 32 Or dem(0) < 1 Then
+                        MessageBox.Show("シフトは1～31内の値でなくてはなりません")
+                        Return 0
+                    Else
+                        Dim msk As Integer = (&HFFFFFFFF << dem(0))
+                        Dim tmp As Integer = (dem(1)) And Not msk
+                        dem(1) = (dem(1) >> dem(0)) And Not (&HFFFFFFFF << (32 - dem(0)))
+                        dem(1) = (dem(1) Or (tmp << (32 - dem(0))))
+                    End If
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "rol"
+                    'rol(0x87654321,16)
+                    If dem(0) >= 32 Or dem(0) < 1 Then
+                        MessageBox.Show("シフトは1～31内の値でなくてはなりません")
+                        Return 0
+                    Else
+                        Dim msk As Integer = (&HFFFFFFFF << dem(0))
+                        Dim tmp As Integer = (dem(1) >> (32 - dem(0))) And (Not msk)
+                        dem(1) = (dem(1) << dem(0))
+                        dem(1) = (dem(1) Or tmp)
+                    End If
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "\", "mod"
+                    dem(1) = dem(1) Mod dem(0)
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "&", "and"
+                    dem(1) = dem(1) And dem(0)
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "|", "or"
+                    dem(1) = dem(1) Or dem(0)
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "^", "xor"
+                    dem(1) = dem(1) Xor dem(0)
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "~", "not"
+                    dem(0) = dem(0) Xor &HFFFFFFFF
+                Case Else
+                    If (ss(i)).Trim <> "" Then
+                        Array.Copy(dem, 0, dem, 1, len)
+                        dem(0) = cvt_int((ss(i)))
+                    End If
+            End Select
+        Next
+
+        Return dem(0)
+    End Function
+
+    Function valint(ByVal str As String) As Integer
+
+        Dim i As Integer = 0
+        Dim k As Integer = 0
+        If RPN.Checked Then
+            If CVTRPN.Checked Then
+                Dim p As New Polish
+                str = p.Main(str.Replace("~", "not"), LOOKSORDER.Checked, False, True)
+            End If
+            k = rpnint(str)
+        Else
+            k = valword(str)
+        End If
+        Return k
+
     End Function
 
     Function reg_sel(ByVal s As String) As Integer
@@ -5427,6 +5671,7 @@ Public Class Form1
             Dim rg As String = ""
             Dim lst As String = ""
             Dim head As String = ""
+            Dim k As Integer = 0
             For Each s As String In ss
                 psdism = psdis.Match(s.Trim)
                 If psdism.Success Then
@@ -5467,9 +5712,16 @@ Public Class Form1
                             sc.Append(rg)
                             sc.Append(",lower_")
                             sc.AppendLine(lst)
-                        Case "li"
-                            Dim k = valword(s.Trim)
-                            rg = s.Substring(0, s.IndexOf(",")).Remove(0, 2).Trim
+                        Case "li", "mfloat"
+                            If head = "li" Then
+                                k = valword(s.Trim)
+                                rg = s.Substring(0, s.IndexOf(",")).Remove(0, 2).Trim
+                            Else
+                                lst = s.Remove(0, s.LastIndexOf(",") + 1).ToLower
+                                rg = s.Substring(0, s.IndexOf(",")).Remove(0, 6).Trim
+                                k = cvt_float(valfloat(lst))
+                            End If
+
                             If (k >> 16 <> 0) Then
                                 sc.Append("lui ")
                                 sc.Append(rg)
@@ -6431,5 +6683,9 @@ Public Class Form1
 
     Private Sub CVTRPN_Click(sender As System.Object, e As System.EventArgs) Handles CVTRPN.Click
         CVTRPN.Checked = Not CVTRPN.Checked
+    End Sub
+
+    Private Sub cr_Click(sender As System.Object, e As System.EventArgs) Handles cr.Click
+        cr.Checked = Not cr.Checked
     End Sub
 End Class
