@@ -219,7 +219,7 @@ Class Polish
                 s = s.Replace(mathrp(i), kana(i))
             Next
 
-            Dim cross As New Regex("((ｵ|ﾊ|ｲ|\d)[A-Z\u00A1-\uF000\(]|\)\()")
+            Dim cross As New Regex("((ｵ|ﾊ|ｲ|\d)[A-Z\u00A1-\u0200\(]|\)\()")
             Dim hosei As Match = cross.Match(s)
             While hosei.Success
                 s = s.Replace(hosei.Value, hosei.Value.Insert(1, "*"))
