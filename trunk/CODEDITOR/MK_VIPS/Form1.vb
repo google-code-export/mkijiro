@@ -696,7 +696,7 @@ Public Class Form1
 "vus2i.p", "0xD03A0080", "0xFFFF8080", "%zq,%yp", _
 "vus2i.s", "0xD03A0000", "0xFFFF8080", "%zp,%ys", _
 "vwb.q", "0xF8000002", "0xFC000002", "%Xq,%Y", _
-"vwbn.s", "0xD3000000", "0xFF008080", "%zs,%xs,%I", _
+"vwbn.s", "0xD3000000", "0xFF008080", "%zs,%ys,%N", _
 "vzero.p", "0xD0060080", "0xFFFFFF80", "%zp", _
 "vzero.q", "0xD0068080", "0xFFFFFF80", "%zq", _
 "vzero.s", "0xD0060000", "0xFFFFFF80", "%zs", _
@@ -821,6 +821,8 @@ Public Class Form1
                         End If
                         minus &= "0x" & k.ToString("X")
                         str = str.Replace("%i", minus)
+                    Case "N"
+                        str = str.Replace("%N", "0x" & (CInt(((hex >> 16) And &HFF)).ToString("X")))
                     Case "I"
                         str = str.Replace("%I", "0x" & (CInt((hex And &HFFFF)).ToString("X")))
                     Case "j"
@@ -3531,11 +3533,11 @@ Public Class Form1
                     hex = Xq(ss(0), hex)
                     hex = Y(" " & ss(1), hex)
                 ElseIf mips = "vwbn.s" Then
-                    '"vwbn.s","0xD3000000","0xFF008080","%zs,%xs,%I",
+                    '"vwbn.s","0xD3000000","0xFF008080","%zs,%ys,%I",
                     hex = &HD3000000
                     hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 2)
-                    hex = Imm(ss(2), hex)
+                    hex = xyzs(ss(1), hex, 1)
+                    hex = hex Or ((Imm(ss(2), 0) And &HFF) << 16)
                 ElseIf mips = "mfvme" Then
                     '"mfvme","0x68000000","0xFC000000","%t,%i",
                     hex = &H68000000
