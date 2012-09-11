@@ -110,6 +110,11 @@ Public Class Form1
                     dem = swapper(dem)
                 Case "swap3"
                     dem = swapper3(dem)
+                Case "cross"
+                    'dem(0),dem(1),dem(2) | dem(3),dem(4),dem(5)
+                    dem(2) = 
+                    dem(1) =
+                    dem(0) =
                 Case "dms2deg", "dms2d", "hms2h"
                     dem(0) = hmsdms(dem(0), 1)
                 Case "hms2deg", "hms2d"
