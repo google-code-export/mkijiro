@@ -362,7 +362,7 @@ void vrot(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
 		
         unsigned int opcode = a_opcode & VFPU_MASK_OP_SIZE;
         unsigned int rotators = (a_opcode >> 16) & 0x1f;
-        unsigned int opsize, rothi, rotlo, negation, i;
+        unsigned int opsize, rothi, rotlo, negation, i,t;
 
         //Determine the operand size so we'll know how many elements to output.
         if (opcode == VFPU_OP_SIZE_PAIR){
@@ -378,50 +378,37 @@ void vrot(unsigned int a_opcode, unsigned char a_slot, unsigned char a_more)
 
         pspDebugScreenPuts("[");
 
-        for (i = 0;;)
-        {
         
         if (rothi == rotlo)
         {
-                if (negation)
-                {
-                        elements[0] = 0x73;//-s
-                        elements[1] = 0x73;
-                        elements[2] = 0x73;
-                        elements[3] = 0x73;
-                }
-                else
-                {
-                        elements[0] = 0x73;
-                        elements[1] = 0x73;
-                        elements[2] = 0x73;
-                        elements[3] = 0x73;
-                }
+        	t=0x73;//s
         }
         else
         {
-                elements[0] = 0x30;//0
-                elements[1] = 0x30;
-                elements[2] = 0x30;
-                elements[3] = 0x30;
+            t = 0x30;//0
         }
-        if (negation){
-                elements[rothi] =0x73;//-s
-                }
-        else{
-                elements[rothi] =0x73;//s
-		        elements[rotlo] =0x63;//c
+	
+		for(i=0;i<4;i++)
+			elements[i]=t;
+
+        elements[rothi] =0x73;//s
+		elements[rotlo] =0x63;//c
+	
+		for (i = 0;;)
+		{
+				//neg+sin‚Ì‚Ý
+				if(negation && elements[i]==0x73){
+				pspDebugScreenPuts("-");
+				}
+    			sprintf(buffer, "%c", elements[i++]);
+				pspDebugScreenPuts(buffer);
+				if (i >= opsize)
+					break;
+
+				pspDebugScreenPuts(" ,");
 		}
-			   if(negation){
-			   pspDebugScreenPuts("-");
-			   }
-    		   sprintf(buffer, "%c", elements[i++]); pspDebugScreenPuts(buffer);
-                if (i >= opsize)
-                        break;
-               pspDebugScreenPuts(" ,");
-        }
 		
-        pspDebugScreenPuts("]");
+		pspDebugScreenPuts("]");
 }
 
 // [hlide] added print_vfpu_prefix

@@ -628,6 +628,7 @@ Public Class Form1
 "vrndi.s", "0xD0210000", "0xFFFFFF80", "%zs", _
 "vrndi.t", "0xD0218000", "0xFFFFFF80", "%zt", _
 "vrnds.s", "0xD0200000", "0xFFFF80FF", "%ys", _
+"vrot.s", "0xF3A00000", "0xFFE08080", "%zs,%ys,%vr", _
 "vrot.p", "0xF3A00080", "0xFFE08080", "%zp,%ys,%vr", _
 "vrot.q", "0xF3A08080", "0xFFE08080", "%zq,%ys,%vr", _
 "vrot.t", "0xF3A08000", "0xFFE08080", "%zt,%ys,%vr", _
@@ -1108,8 +1109,10 @@ Public Class Form1
             opsize = 2
         ElseIf (opcode = VFPU_OP_SIZE_TRIPLE) Then
             opsize = 3
-        Else
+        ElseIf (opcode = VFPU_OP_SIZE_QUAD) Then
             opsize = 4
+        Else
+            opsize = 1
             'opsize = (opcode = VFPU_OP_SIZE_QUAD) * 4 
             ';/* Sanity check. */
         End If
@@ -1119,30 +1122,18 @@ Public Class Form1
         negation = CUInt((rotators >> 4) And 1)
 
         If (rothi = rotlo) Then
-            If (negation <> 0) Then
-                elements(0) = "-s"
-                elements(1) = "-s"
-                elements(2) = "-s"
-                elements(3) = "-s"
-            Else
-                elements(0) = "s"
-                elements(1) = "s"
-                elements(2) = "s"
-                elements(3) = "s"
-            End If
+            elements(0) = "s"
+            elements(1) = "s"
+            elements(2) = "s"
+            elements(3) = "s"
         Else
-            elements(0) = "0"
-            elements(1) = "0"
-            elements(2) = "0"
-            elements(3) = "0"
+        elements(0) = "0"
+        elements(1) = "0"
+        elements(2) = "0"
+        elements(3) = "0"
         End If
 
-        If (negation <> 0) Then
-            elements(CInt(rothi)) = "-s"
-        Else
-            elements(CInt(rothi)) = "s"
-        End If
-
+        elements(CInt(rothi)) = "s"
         elements(CInt(rotlo)) = "c"
 
         ss = "["
@@ -1151,6 +1142,10 @@ Public Class Form1
         'for (i = 0;;)
         opsize = CUInt(opsize - 1)
         For i = 0 To opsize
+            If (negation <> 0 AndAlso elements(CInt(i)) = "s") Then
+                ss &= "-"
+            End If
+
             ss &= elements(CInt(i))
             'len += sprintf(output, "%s", elements[i++]);
             If (i >= opsize) Then
@@ -1177,7 +1172,6 @@ Public Class Form1
         Return ss
     End Function
 
-
     Function print_vfpu_reg(ByVal reg As Integer, ByVal offset As Integer, ByVal one As String, ByVal two As String) As String
         Dim ss As String
         If (CInt(reg >> 5) And 1) <> 0 Then
@@ -1188,7 +1182,6 @@ Public Class Form1
 
         Return ss
     End Function
-
 
     Function vfpureg(ByVal reg As Integer, ByVal s As String) As String
         Dim ss As String = ""
@@ -3548,6 +3541,12 @@ Public Class Form1
                     hex = &HB0000000
                     hex = reg_boolean_para(ss(0), hex, 1)
                     hex = Imm(ss(1), hex)
+                ElseIf mips = "vrot.s" Then
+                    '"vrot.s","0xF3A00000","0xFFE08080","%zs,%ys,%vr",
+                    hex = &HF3A00000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                    hex = VR(str, hex, 1)
                 ElseIf mips = "vrot.p" Then
                     '"vrot.p","0xF3A00080","0xFFE08080","%zp,%ys,%vr",
                     hex = &HF3A00080
@@ -3710,45 +3709,116 @@ Public Class Form1
     End Function
 
     Function VR(ByVal str As String, ByVal hex As Integer, ByVal m As Integer) As Integer
-        Dim s As String() = {
-            "[c,s,s,s]", "[s,c,0,0]", "[s,0,c,0]", "[s,0,0,c]", "[c,s,0,0]", "[s,c,s,s]", "[0,s,c,0]", "[0,s,0,c]", "[c,0,s,0]", "[0,c,s,0]", "[s,s,c,s]",
-            "[0,0,s,c]", "[c,0,0,s]", "[0,c,0,s]", "[0,0,c,s]", "[s,s,s,c]", "[c,-s,-s,-s]", "[-s,c,0,0]", "[-s,0,c,0]", "[-s,0,0,c]", "[c,-s,0,0]",
-            "[-s,c,-s,-s]", "[0,-s,c,0]", "[0,-s,0,c]", "[c,0,-s,0]", "[0,c,-s,0]", "[-s,-s,c,-s]", "[0,0,-s,c]", "[c,0,0,-s]", "[0,c,0,-s]", "[0,0,c,-s]", "[-s,-s,-s,c]"}
+        'Dim s As String() = {
+        '"[c,s,s,s]", "[s,c,0,0]", "[s,0,c,0]", "[s,0,0,c]", "[c,s,0,0]", "[s,c,s,s]", "[0,s,c,0]", "[0,s,0,c]", 
+        '"[c,0,s,0]", "[0,c,s,0]", "[s,s,c,s]", "[0,0,s,c]", "[c,0,0,s]", "[0,c,0,s]", "[0,0,c,s]", "[s,s,s,c]", 
+        '"[c,-s,-s,-s]", "[-s,c,0,0]", "[-s,0,c,0]", "[-s,0,0,c]", "[c,-s,0,0]",  "[-s,c,-s,-s]", "[0,-s,c,0]", "[0,-s,0,c]", 
+        '"[c,0,-s,0]", "[0,c,-s,0]", "[-s,-s,c,-s]", "[0,0,-s,c]", "[c,0,0,-s]", "[0,c,0,-s]", "[0,0,c,-s]", "[-s,-s,-s,c]"}
+
         Dim i As Integer = 0
-        Dim valk As New Regex("\[-?[cs0].*[,\/].*\]")
+        Dim csct As Integer = -1
+        Dim sct As Integer = -1
+        Dim zct As Integer = -1
+        Dim neg As Boolean = False
+        Dim lotlo As Integer = -1
+        Dim lothi As Integer = -1
+        Dim valk As New Regex("\[.+\]")
         Dim valkm As Match = valk.Match(str)
-        Dim st As String = ""
+        Dim cs0 As New Regex("(-?s|[c0])")
+        Dim cs0m As Match
+        Dim st(4) As String
         If valkm.Success Then
-            str = valkm.Value
-            str = str.Trim.Replace(" ", "").Replace("/", ",")
-            Dim ss As String() = str.Split(CChar(","))
-            If m = 4 AndAlso ss.Length = 4 Then
-                For i = 0 To 31
-                    If str = s(i) Then
-                        Exit For
+            cs0m = cs0.Match(valkm.Value)
+            While cs0m.Success
+                st(i) = cs0m.Value
+                If st(i) = "c" Then
+                    lotlo = i
+                    csct += 1
+                    If csct > 0 Then
+                        MessageBox.Show("コサインは1つだけ指定可能です")
+                        Return hex
                     End If
-                Next
-            ElseIf m = 3 AndAlso ss.Length = 3 Then
-                For i = 0 To 31
-                    st = s(i).Substring(0, s(i).LastIndexOf(",")) & "]"
-                    If str = st Then
-                        Exit For
+                ElseIf st(i) = "0" Then
+                    zct += 1
+                Else
+                    lothi = i
+                    sct += 1
+                    If st(i).Contains("-") Then
+                        neg = True
                     End If
-                Next
-            ElseIf m = 2 AndAlso ss.Length = 2 Then
-                For i = 0 To 31
-                    st = s(i).Substring(0, s(i).LastIndexOf(","))
-                    st = st.Substring(0, st.LastIndexOf(",")) & "]"
-                    If str = st Then
-                        Exit For
+                    If zct > 0 AndAlso sct > 1 Then
+                        MessageBox.Show("0がある場合-s,sは１つだけ指定可能です")
+                        Return hex
                     End If
-                Next
-            End If
-            If i = 32 Then
-                i = 0
+                    If neg = True AndAlso st(i) = "s" Then
+                        MessageBox.Show("サインの符号は1種類のみです。-s,sを同時に指定はできません")
+                        Return hex
+                    End If
+                End If
+                i += 1
+                cs0m = cs0m.NextMatch
+            End While
+
+            If m = 4 Then
+                If csct < 0 Then
+                    MessageBox.Show("コサインが指定されてません。最低1つは必要です")
+                    Return hex
+                End If
+                i = lotlo
+                'sが１つだけある
+                If lothi >= 0 AndAlso sct = 0 Then
+                    i = i Or ((lothi) << 2)
+                    'sが２つ以上
+                ElseIf lothi >= 0 AndAlso sct > 0 Then
+                    i = i Or ((lotlo) << 2)
+                End If
+            ElseIf m = 3 Then
+                'ない場合は自然と３
+                If lotlo = -1 Then
+                    lotlo = 3
+                End If
+                i = lotlo
+                If lothi >= 0 AndAlso sct = 0 Then
+                    i = i Or ((lothi) << 2)
+                ElseIf lothi >= 0 AndAlso sct > 0 Then
+                    i = i Or ((lotlo) << 2)
+                    '00Cパターン
+                Else
+                    i += 12
+                End If
+            ElseIf m = 2 Then
+                If lotlo = -1 Then
+                    lotlo = 2
+                End If
+                i = lotlo
+                If lothi >= 0 AndAlso sct = 0 Then
+                    i = i Or ((lothi) << 2)
+                ElseIf lothi >= 0 AndAlso sct > 0 Then
+                    i = i Or ((lotlo) << 2)
+                    '00
+                ElseIf zct = 1 Then
+                    i = 11
+                Else
+                    i += 8
+                End If
+            Else
+                Select Case st(0)
+                    Case "0"
+                        i = 6
+                    Case "c"
+                        i = 0
+                    Case "s", "-s"
+                        i = 1
+                End Select
             End If
         End If
+
+        If neg = True Then
+            i = i Or &H10
+        End If
+
         hex = hex Or (i << 16)
+
         Return hex
     End Function
 

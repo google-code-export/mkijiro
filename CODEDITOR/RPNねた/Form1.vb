@@ -110,11 +110,15 @@ Public Class Form1
                     dem = swapper(dem)
                 Case "swap3"
                     dem = swapper3(dem)
+                Case "dot"
+                    'dem(0),dem(1),dem(2) | dem(3),dem(4),dem(5)
+                    dem(5) = dem(0) * dem(3) + dem(1) * dem(4) + dem(2) * dem(5)
+                    Array.Copy(dem, 5, dem, 0, len - 5)
                 Case "cross"
                     'dem(0),dem(1),dem(2) | dem(3),dem(4),dem(5)
-                    dem(2) = 
-                    dem(1) =
-                    dem(0) =
+                    dem(2) = dem(0) * dem(4) - dem(1) * dem(3)
+                    dem(1) = dem(2) * dem(3) - dem(0) * dem(5)
+                    dem(0) = dem(1) * dem(5) - dem(2) * dem(4)
                 Case "dms2deg", "dms2d", "hms2h"
                     dem(0) = hmsdms(dem(0), 1)
                 Case "hms2deg", "hms2d"
@@ -156,6 +160,28 @@ Public Class Form1
                 Case "r2grad", "r2g"
                     dem(0) = dem(0) * 100
                 Case "="
+                Case "\"
+                    Dim k As Double = dem(0)
+                    Dim j As Double = dem(1)
+                    If k < 0 Then
+                        k = -k
+                    End If
+                    If j < 0 Then
+                        j = -j
+                    End If
+                    While (True)
+                        If j - k > 0 Then
+                            j -= k
+                        Else
+                            Exit While
+                        End If
+                    End While
+                    If dem(1) < 0 Then
+                        dem(1) = -j
+                    Else
+                        dem(1) = j
+                    End If
+                    Array.Copy(dem, 1, dem, 0, len)
                 Case "+"
                     dem(1) = dem(0) + dem(1)
                     Array.Copy(dem, 1, dem, 0, len)
@@ -573,6 +599,10 @@ Public Class Form1
     End Sub
 
     Private Sub CheckBox2_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles CheckBox2.CheckedChanged
+    End Sub
+
+    Private Sub Button3_Click(sender As System.Object, e As System.EventArgs)
+
     End Sub
 End Class
 

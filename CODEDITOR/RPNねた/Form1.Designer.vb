@@ -32,9 +32,9 @@ Partial Class Form1
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
-        Me.CheckBox2 = New System.Windows.Forms.CheckBox()
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox2 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -140,15 +140,15 @@ Partial Class Form1
         Me.Panel1.Size = New System.Drawing.Size(255, 245)
         Me.Panel1.TabIndex = 10
         '
-        'CheckBox1
+        'CheckBox3
         '
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(141, 181)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(64, 16)
-        Me.CheckBox1.TabIndex = 10
-        Me.CheckBox1.Text = "*の省略"
-        Me.CheckBox1.UseVisualStyleBackColor = True
+        Me.CheckBox3.AutoSize = True
+        Me.CheckBox3.Location = New System.Drawing.Point(141, 197)
+        Me.CheckBox3.Name = "CheckBox3"
+        Me.CheckBox3.Size = New System.Drawing.Size(81, 16)
+        Me.CheckBox3.TabIndex = 12
+        Me.CheckBox3.Text = "同時に計算"
+        Me.CheckBox3.UseVisualStyleBackColor = True
         '
         'CheckBox2
         '
@@ -160,15 +160,15 @@ Partial Class Form1
         Me.CheckBox2.Text = "INT"
         Me.CheckBox2.UseVisualStyleBackColor = True
         '
-        'CheckBox3
+        'CheckBox1
         '
-        Me.CheckBox3.AutoSize = True
-        Me.CheckBox3.Location = New System.Drawing.Point(141, 197)
-        Me.CheckBox3.Name = "CheckBox3"
-        Me.CheckBox3.Size = New System.Drawing.Size(81, 16)
-        Me.CheckBox3.TabIndex = 12
-        Me.CheckBox3.Text = "同時に計算"
-        Me.CheckBox3.UseVisualStyleBackColor = True
+        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.Location = New System.Drawing.Point(141, 181)
+        Me.CheckBox1.Name = "CheckBox1"
+        Me.CheckBox1.Size = New System.Drawing.Size(64, 16)
+        Me.CheckBox1.TabIndex = 10
+        Me.CheckBox1.Text = "*の省略"
+        Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'Form1
         '
