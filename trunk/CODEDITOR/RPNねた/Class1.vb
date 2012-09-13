@@ -88,6 +88,7 @@ Class Node
                 Case CChar("-") : priority = 2
                 Case CChar("*") : priority = 3
                 Case CChar("/") : priority = 3
+                Case CChar("\") : priority = 3
                 Case CChar("^") : priority = 4
                 Case CChar(",") : priority = 0
                     'Case "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
