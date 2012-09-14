@@ -1,3 +1,11 @@
+2012/09/14
+代替命令を追加
+case "vrot","vnrot" ''XOR0x100000したやつ
+Case "vfad", "vsum"　''合計値
+Case "vwbn.s", "vsbi.s"　''これだけ名前が違うんで他のやつと統一
++
+Case "vdet.q" ''s,tq存在　
+
 2012/09/13
 vrot.sを追加
 vrotに警告を追加
