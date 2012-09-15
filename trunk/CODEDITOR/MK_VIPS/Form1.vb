@@ -195,6 +195,13 @@ Public Class Form1
         '        unsigned int fraction = float16 & VFPU_MASK_FLOAT16_FRAC;
         '        float2int = (sign << 31) + ((exponent + 112) << 23) + (fraction << 13);
         exponent -= 112
+        If exponent > 30 Then
+            exponent = 31
+        ElseIf exponent < 0 Then
+            exponent = 0
+            fraction = 0
+        End If
+
         exponent <<= 10
         fraction >>= 13
         sign <<= 15
@@ -210,13 +217,14 @@ Public Class Form1
     End Function
 
     'IEE754単精度浮動小数点binary32を半精度浮動小数点binary16に変換の逆 Cから移植、VB.NET
-    Function converthalffloat2(ByVal b As Byte()) As String
-        Dim hex As Integer = BitConverter.ToInt16(b, 0)
+    Function converthalffloat2(ByVal s As String) As String
+        Dim hex As Integer = Convert.ToInt32(s, 16)
         Dim sign As Integer = (hex >> 15) And 1
         Dim exponent As Integer = (hex >> 10) And &H1F
         Dim fraction As Integer = (hex And &H3FF)
         Dim hf As String
-        '        WebSVN()
+
+        'WebSVN()
         'psp - Rev 2457
         '        Subversion(Repositories)
         'Rev:
@@ -244,14 +252,17 @@ Public Class Form1
         '        int exponent = (float16 >> VFPU_SH_FLOAT16_EXP) & VFPU_MASK_FLOAT16_EXP;
         '        unsigned int fraction = float16 & VFPU_MASK_FLOAT16_FRAC;
         '        float2int = (sign << 31) + ((exponent + 112) << 23) + (fraction << 13);
-        exponent += 112
+        If exponent = 0 AndAlso fraction = 0 Then
+        Else
+            exponent += 112
+        End If
         exponent <<= 23
         fraction <<= 13
         sign <<= 31
         hex = exponent + fraction
         hex = hex And &H7FFFFFFF
         hex += sign
-        hf = hex.ToString("X").PadLeft(8, "0"c)
+        hf = hex.ToString("X8")
 
         Return hf
     End Function
@@ -922,17 +933,15 @@ Public Class Form1
                                 str = str.Replace("%v" & ss(i + 1), minus)
                                 'output = print_int(IMM(opcode), output); i++; 
                             Case "h"
-                                Dim sss As String = ""
-                                Dim bytes As Byte() = str2bin(Convert.ToString(hex And &HFFFF, 16).PadRight(8, "0"c))
-                                Array.ConstrainedCopy(bytes, 2, bytes, 0, 2)
-                                Array.Resize(bytes, 2)
+                                Dim sss As String = (hex And &HFFFF).ToString("X4")
+                                Dim bytes As Byte() = str2bin("0000" & sss)
+
                                 If (bytes(1) And &H7F) < &H7C Then
-                                    Dim bytes2 As Byte() = str2bin(converthalffloat2(bytes))
-                                    If BitConverter.ToSingle(bytes2, 0) > 0.00009 Then
-                                        sss = BitConverter.ToSingle(bytes2, 0).ToString & "hf"
-                                    Else
-                                        sss = "0hf"
-                                    End If
+                                    sss = converthalffloat2(sss)
+                                    Dim bytes2 As Byte() = BitConverter.GetBytes(Convert.ToInt32(sss, 16))
+                                    sss = Convert.ToDecimal(BitConverter.ToSingle(bytes2, 0)).ToString
+                                    sss = sss & "hf"
+
                                 ElseIf (bytes(1) And &H7F) < &H7F Then
                                     If (bytes(1) And &H80) = 0 Then
                                         sss = "+"
@@ -1258,7 +1267,7 @@ Public Class Form1
             Dim asm As String = ""
             Dim mips As String = ""
 
-            Dim psdis As New Regex("(\t|\x20|　)*?(#|;).+$")
+            Dim psdis As New Regex("(\t|\x20|　)?(#|;).+$")
             Dim psdism As Match = psdis.Match(str)
             If psdism.Success Then
                 str = str.Substring(0, psdism.Index)
@@ -2382,6 +2391,9 @@ Public Class Form1
                             hex = hex Or &H7FFF
                         ElseIf str.Contains("-nan") Then
                             hex = hex Or &HFFFF
+                        Else
+                            str = str.Remove(0, str.IndexOf(",")).Trim
+                            hex = hex Or Convert.ToInt32(converthalffloat(cvt_float(valfloat(str)).ToString("X8")), 16)
                         End If
                     Case "viim.s"
                         '"viim.s", "0xDF000000", "0xFF800000", "%xs,%vi", _
@@ -5825,7 +5837,7 @@ Public Class Form1
         Dim macroct As Integer = 0
         If selm < 2 Then
 
-            Dim psdis As New Regex("(\t|\x20|　)*?(#|;|//).+$")
+            Dim psdis As New Regex("(\t| |　)?(#|;|//).+$")
             Dim llb As New Regex("^.*?:( |\t|　)+")
             Dim shead As New Regex("^[a-z0-9\._\-]+(\x20|\t)+")
             Dim sheadm As Match
@@ -6509,7 +6521,6 @@ Public Class Form1
     Private Sub 終了ToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles 終了.Click
         Me.Close()
     End Sub
-
 
     Private Sub フォント_Click(sender As System.Object, e As System.EventArgs) Handles フォント.Click
         Dim fd As New FontDialog()
