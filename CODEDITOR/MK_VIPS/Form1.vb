@@ -207,7 +207,7 @@ Public Class Form1
         sign <<= 15
         hex = exponent + fraction
         hex = hex And (&H7FFF)
-        If hex > &H7C00 Then '無限
+        If hex >= &H7C00 Then '無限
             hex = &H7F80 '数字以外のなにか
         End If
         hex += sign
