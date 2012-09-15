@@ -1060,7 +1060,7 @@ Public Class Form1
 
                 Else
                     If (abs_consthi <> 0) Then
-                        ss &= pfx_swz_names(CInt(swz_constlo))
+                        ss &= "|" & pfx_swz_names(CInt(swz_constlo)) & "|"
                         'len += sprintf(output+len, "|%s|", pfx_swz_names[swz_constlo]);
 
                     Else
@@ -1166,7 +1166,9 @@ Public Class Form1
 
     Function print_vfpu_const(ByVal k As Integer) As String
         Dim ss As String = ""
-        Dim vfpu_const_names As String() = {"", "VFPU_HUGE", "VFPU_SQRT2", "VFPU_SQRT1_2", "VFPU_2_SQRTPI", "VFPU_2_PI", "VFPU_1_PI", "VFPU_PI_4", "VFPU_PI_2", "VFPU_PI", "VFPU_E", "VFPU_LOG2E", "VFPU_LOG10E", "VFPU_LN2", "VFPU_LN10", "VFPU_2PI", "VFPU_PI_6", "VFPU_LOG10TWO", "VFPU_LOG2TEN", "VFPU_SQRT3_2"}
+        Dim vfpu_const_names As String() = {
+            "", "VFPU_HUGE", "VFPU_SQRT2", "VFPU_SQRT1_2", "VFPU_2_SQRTPI", "VFPU_2_PI", "VFPU_1_PI", "VFPU_PI_4", "VFPU_PI_2", "VFPU_PI",
+            "VFPU_E", "VFPU_LOG2E", "VFPU_LOG10E", "VFPU_LN2", "VFPU_LN10", "VFPU_2PI", "VFPU_PI_6", "VFPU_LOG10TWO", "VFPU_LOG2TEN", "VFPU_SQRT3_2"}
         If ((k > 0) AndAlso (k < 20)) Then
             ss = vfpu_const_names(k)
         Else
@@ -1244,7 +1246,6 @@ Public Class Form1
         End If
         Return vfpucmp(k)
     End Function
-
 
 #End Region
 
@@ -6070,7 +6071,53 @@ Public Class Form1
                             'ble $rs,$rt,Label 	slt $at,$rt,$rs; beq $at,$zero,Label    if(R[rt]>=R[rs]) PC=Label,(R[rt]<R[rs])PC+4
                             '                                                               rs<=rt
                         Case Else
-                            sc.AppendLine(s.Trim)
+                            If head <> "" AndAlso head(0) = "v" AndAlso head <> "vpfxd" AndAlso head <> "vpfxs" AndAlso head <> "vpfxt" Then
+                                Dim prifix As New Regex("\[.*?\]")
+                                Dim prifixm As Match = prifix.Match(s)
+                                Dim parg(3) As String
+                                Dim v As Integer = 0
+                                While prifixm.Success
+                                    parg(v) = prifixm.Value
+                                    s = s.Replace(prifixm.Value, "!" & v.ToString)
+                                    v += 1
+                                    prifixm = prifixm.NextMatch
+                                End While
+                                If v = 0 Then
+                                    sc.AppendLine(s.Trim)
+                                Else
+                                    Dim arg As String() = s.Split(CChar(","))
+                                    For k = 0 To decoder.Length - 4
+                                        If head = decoder(k) Then
+                                            Exit For
+                                        End If
+                                        k += 3
+                                    Next
+                                    Dim arg2 As String() = decoder(k + 3).Split(CChar(","))
+                                    For k = 0 To arg2.Length - 1
+                                        Select Case arg2(k)
+                                            Case "%zs", "%zp", "zt", "zq"
+                                                If arg(k).Contains("!") Then
+                                                    sc.Append("vpfxd ")
+                                                    sc.AppendLine(parg(CInt(arg(k).Remove(0, arg(k).Length - 1))))
+                                                End If
+                                            Case "%ys", "%yp", "%yt", "%yq"
+                                                If arg(k).Contains("!") Then
+                                                    sc.Append("vpfxs ")
+                                                    sc.AppendLine(parg(CInt(arg(k).Remove(0, arg(k).Length - 1))))
+                                                End If
+                                            Case "%xs", "%xp", "%xt", "%xq"
+                                                If arg(k).Contains("!") Then
+                                                    sc.Append("vpfxt ")
+                                                    sc.AppendLine(parg(CInt(arg(k).Remove(0, arg(k).Length - 1))))
+                                                End If
+                                        End Select
+                                    Next
+                                    sc.AppendLine(s.Trim)
+                                End If
+
+                            Else
+                                sc.AppendLine(s.Trim)
+                            End If
                     End Select
                 Else
                     sc.AppendLine(s.Trim)

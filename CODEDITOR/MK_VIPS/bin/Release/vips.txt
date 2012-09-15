@@ -1,3 +1,17 @@
+2012/09/15
+vpfxdのデコード時||絶対値がうまく出てなかったので修正
+vpfxd/s/tを通常のVFPU命令の要素の横に書いても変換するようにした
+vadd.s S20[,m,m,m],S10[x,y,z,w],S0[-x,-y-,-z,-w]
+vrot.p C020[,,m,m],S10[1/3,0,0,0],[s,c,c,c]
+↓
+vpfxd	[,m,m,m]
+vpfxs	[x,y,z,w]
+vpfxt	[-x,-y,-z,-w]
+vadd.s	S020,S010,S000
+vpfxd	[,,m,m]
+vpfxs	[1/3,0,0,0]
+vrot.p	C020,S010,[c ,s]
+
 2012/09/14
 代替命令を追加
 case "vrot","vnrot" ''XOR0x100000したやつ
