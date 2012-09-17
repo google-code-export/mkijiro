@@ -208,7 +208,8 @@ Public Class Form1
         hex = exponent + fraction
         hex = hex And (&H7FFF)
         If hex >= &H7C00 Then '無限
-            hex = &H7F80 '数字以外のなにか
+            hex = &H7C00
+            'hex = &H7F80 '数字以外のなにか
         End If
         hex += sign
         hf = hex.ToString("X").PadLeft(4, "0"c)
@@ -940,7 +941,6 @@ Public Class Form1
                                     sss = converthalffloat2(sss)
                                     Dim bytes2 As Byte() = BitConverter.GetBytes(Convert.ToInt32(sss, 16))
                                     sss = Convert.ToDecimal(BitConverter.ToSingle(bytes2, 0)).ToString
-                                    sss = sss & "hf"
 
                                 ElseIf (bytes(1) And &H7F) < &H7F Then
                                     If (bytes(1) And &H80) = 0 Then
@@ -6555,6 +6555,8 @@ Public Class Form1
         Dim pmem As Match
         Dim sbr As New Regex("0x(E[89]|F[0-9A-Fa-f]|C2)[0-9A-Fa-f]{6} 0x[0-9A-Fa-f]{8}")
         Dim sbm As Match
+        Dim pop As New Regex("[8][0-9A-Fa-f]{7} [0-9A-Fa-f]{4}")
+        Dim popm As Match
         Dim subrutin As Integer = 0
         Dim k As Integer = 0
         Dim l As Integer = 0
@@ -6572,6 +6574,7 @@ Public Class Form1
             pmem = pmetan.Match(ss(i))
             sbm = sbr.Match(ss(i))
             cdm = cd.Match(ss(i))
+            popm = pop.Match(ss(i))
             If pmem.Success Then
                 address(k) = Convert.ToInt32(pmem.Value.Substring(13, 8), 16)
                 values(k) = Convert.ToUInt32(pmem.Value.Substring(24, 8), 16)
@@ -6639,6 +6642,10 @@ Public Class Form1
                 address(k) = Convert.ToInt32(hm.Value.Substring(2, 8), 16)
                 values(k) = Convert.ToUInt32(hm.Value.Substring(13, 8), 16)
                 k += 1
+            ElseIf popm.Success Then
+                address(k) = Convert.ToInt32(popm.Value.Substring(0, 8), 16)
+                values(k) = Convert.ToUInt32(popm.Value.Substring(9, 4), 16)
+                k += 1
             End If
         Next
         Array.Resize(address, k)
@@ -6664,7 +6671,11 @@ Public Class Form1
 
         For i = 0 To k - 1
             If diff = 4 Then
+                diff = (address(i + 1) - address(i))
                 sb.AppendLine(decoders(values(i), CInt(address(i))))
+            ElseIf diff = 2 Then
+                sb.AppendLine(decoders((values(i + 1) << 16) Or values(i), CInt(address(i))))
+                i += 1
             Else
                 sb.AppendLine()
                 sb.Append("setpc" & vbTab & "0x")
@@ -6675,7 +6686,6 @@ Public Class Form1
                 sb.AppendLine(tmpadr.ToString("X"))
                 sb.AppendLine(decoders(values(i), (address(i))))
             End If
-            diff = (address(i + 1) - address(i))
         Next
 
         ASM.Text = sb.ToString
