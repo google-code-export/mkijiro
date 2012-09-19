@@ -82,7 +82,7 @@ Partial Class ver
         Me.builddate.Name = "builddate"
         Me.builddate.Size = New System.Drawing.Size(124, 12)
         Me.builddate.TabIndex = 7
-        Me.builddate.Text = "BUILD:2012/07/06 0:28"
+        Me.builddate.Text = "BUILD:2012/09/20 1:46"
         '
         'Label2
         '
