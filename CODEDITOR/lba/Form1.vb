@@ -59,8 +59,11 @@ Public Class Form1
                 lssort = (bs(7) >> 2) And 3
                 bool_exe.Text = (bs(7) And 3).ToString()
                 enc.Text = (bs(7) >> 4).ToString
-                If bs(8) = 1 Then
+                If (bs(8) And 1) = 1 Then
                     VIRTUAL.Checked = True
+                End If
+                If (bs(8) And 2) = 2 Then
+                    ZEBRA.Checked = True
                 End If
                 If bs(9) = 1 Then
                     tree.Checked = True
@@ -117,7 +120,6 @@ Public Class Form1
 
     End Sub
 
-
     Private Sub Timer1_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Timer1.Tick
         If tt = False Then
             t += 1
@@ -164,7 +166,10 @@ Public Class Form1
         Dim bb As Byte() = BitConverter.GetBytes((lssort << 2) + CInt(bool_exe.Text) + (CInt(enc.Text) << 4))
         Array.Copy(bb, 0, bs, 3, 1)
         If VIRTUAL.Checked = True Then
-            bs(4) = 1
+            bs(4) = CByte(bs(4) Or 1)
+        End If
+        If ZEBRA.Checked = True Then
+            bs(4) = CByte(bs(4) Or 2)
         End If
         If tree.Checked = True Then
             bs(5) = 1
@@ -555,7 +560,7 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub VIRTUAL_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles VIRTUAL.CheckedChanged
+    Private Sub VIRTUAL_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles VIRTUAL.CheckedChanged, ZEBRA.CheckedChanged
         If TreeView1.SelectedNode IsNot Nothing Then
             If VIRTUAL.Checked = False Then
                 If virtual_item.Length < CInt(addlistmax.Text) Then
@@ -901,7 +906,7 @@ Public Class Form1
 
     'ドラッグをキャンセルする
     Private Sub ListBox1_QueryContinueDrag(ByVal sender As Object, ByVal e As QueryContinueDragEventArgs) Handles ListView1.QueryContinueDrag, Me.QueryContinueDrag
-      
+
         'If e.Action = DragAction.Drop Then
         '    Dim pt As Point = Me.PointToClient(Form1.MousePosition)
         '    ' ListBox1以外でドロップされた場合
@@ -1365,6 +1370,51 @@ Public Class Form1
 
     End Function
 
+
+    Private Declare Function ExtractAssociatedIcon Lib "shell32" Alias "ExtractAssociatedIconA" (ByVal hInst As System.IntPtr, <MarshalAs(UnmanagedType.LPStr)> ByVal lpIconPath As String, ByRef lpiIcon As Integer) As System.IntPtr
+    Private Declare Function DestroyIcon Lib "user32" (ByVal hIcon As System.IntPtr) As Long
+
+    Function startpath_fix(ByVal p As String) As String
+        If p(p.Length - 1) <> "\" Then
+            p &= "\"
+        End If
+        Return p
+    End Function
+
+    Private Sub ListView1_RetrieveVirtualItem(ByVal sender As Object, ByVal e As System.Windows.Forms.RetrieveVirtualItemEventArgs) Handles ListView1.RetrieveVirtualItem
+        'リストビューにリストをセット 
+        e.Item = CType(virtual_item(e.ItemIndex).Clone, ListViewItem)
+
+    End Sub
+
+    Function list_item_sort(ByVal vi As Integer, ByVal ls As ListViewItem()) As ListViewItem()
+        Dim ss(vi - 1) As String
+        For i = 0 To vi - 1
+            ss(i) = ls(i).SubItems(lssort).Text
+            If lssort > 0 Then
+                ss(i) = ss(i).PadLeft(10, " "c)
+            End If
+        Next
+
+        Array.Sort(ss, ls)
+        Return ls
+    End Function
+
+    Function updatedir() As Boolean
+        ListView2.Items.Clear()
+        Dim itemx2 As New ListViewItem
+        Dim s As String = TreeView1.SelectedNode.FullPath
+        Dim rm As New Regex("\[\d+,\d+\]")
+        Dim m As Match = rm.Match(s)
+        While m.Success
+            s = s.Replace(m.Value, "")
+            m = m.NextMatch
+        End While
+        itemx2.Text = s
+        ListView2.Items.Add(itemx2)
+        Return True
+    End Function
+
     Function getlist_virtual(ByVal dst As Integer) As Boolean
         Try
             Dim start As DateTime = Now
@@ -1558,6 +1608,16 @@ Public Class Form1
             virtual_item = arraylistdir.Union(virtual_item).ToArray()
 
             ListView1.VirtualListSize = vi + mi
+
+
+            If ZEBRA.Checked = True Then
+                For zebracolor = 0 To virtual_item.Length - 1
+                    If (zebracolor And 1) = 1 Then
+                        virtual_item(zebracolor).BackColor = Color.WhiteSmoke
+                    End If
+                Next
+            End If
+
             ListView1.EndUpdate()
 
             updatedir()
@@ -1570,50 +1630,6 @@ Public Class Form1
             MessageBox.Show(ex.Message)
             Return True
         End Try
-    End Function
-
-    Private Declare Function ExtractAssociatedIcon Lib "shell32" Alias "ExtractAssociatedIconA" (ByVal hInst As System.IntPtr, <MarshalAs(UnmanagedType.LPStr)> ByVal lpIconPath As String, ByRef lpiIcon As Integer) As System.IntPtr
-    Private Declare Function DestroyIcon Lib "user32" (ByVal hIcon As System.IntPtr) As Long
-
-    Function startpath_fix(ByVal p As String) As String
-        If p(p.Length - 1) <> "\" Then
-            p &= "\"
-        End If
-        Return p
-    End Function
-
-    Private Sub ListView1_RetrieveVirtualItem(ByVal sender As Object, ByVal e As System.Windows.Forms.RetrieveVirtualItemEventArgs) Handles ListView1.RetrieveVirtualItem
-        'リストビューにリストをセット 
-        e.Item = CType(virtual_item(e.ItemIndex).Clone, ListViewItem)
-
-    End Sub
-
-    Function list_item_sort(ByVal vi As Integer, ByVal ls As ListViewItem()) As ListViewItem()
-        Dim ss(vi - 1) As String
-        For i = 0 To vi - 1
-            ss(i) = ls(i).SubItems(lssort).Text
-            If lssort > 0 Then
-                ss(i) = ss(i).PadLeft(10, " "c)
-            End If
-        Next
-
-        Array.Sort(ss, ls)
-        Return ls
-    End Function
-
-    Function updatedir() As Boolean
-        ListView2.Items.Clear()
-        Dim itemx2 As New ListViewItem
-        Dim s As String = TreeView1.SelectedNode.FullPath
-        Dim rm As New Regex("\[\d+,\d+\]")
-        Dim m As Match = rm.Match(s)
-        While m.Success
-            s = s.Replace(m.Value, "")
-            m = m.NextMatch
-        End While
-        itemx2.Text = s
-        ListView2.Items.Add(itemx2)
-        Return True
     End Function
 
     Function getlist(ByVal dst As Integer) As Boolean
@@ -1730,6 +1746,7 @@ Public Class Form1
                             If ((lba << 11) + filesize) > iso_len Then
                                 itemx.ImageIndex = itemx.ImageIndex Or 1
                             End If
+
                             arraylist(ni) = itemx
                             ni += 1
                             max -= 1
@@ -1775,6 +1792,14 @@ Public Class Form1
                 arraylist = list_item_sort(ni, arraylist)
                 arraylistdir = list_item_sort(mi, arraylistdir)
                 arraylist = arraylistdir.Union(arraylist).ToArray
+
+                If ZEBRA.Checked = True Then
+                    For zebracolor = 0 To arraylist.Length - 1
+                        If (zebracolor And 1) = 1 Then
+                            arraylist(zebracolor).BackColor = Color.WhiteSmoke
+                        End If
+                    Next
+                End If
 
                 ListView1.Items.AddRange(arraylist)
 

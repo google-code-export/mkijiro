@@ -85,6 +85,7 @@ Partial Class Form1
         Me.vlistmax = New System.Windows.Forms.TextBox()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
+        Me.ZEBRA = New System.Windows.Forms.CheckBox()
         Me.ContextMenuStrip2.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -110,25 +111,25 @@ Partial Class Form1
         '
         Me.ContextMenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TREECOLLASEToolStripMenuItem, Me.TREEEXPANDToolStripMenuItem, Me.SECTORVIEWTREE, Me.ToolStripSeparator1, Me.EXTRACTDATAToolStripMenuItem, Me.EXTRACTLBAToolStripMenuItem})
         Me.ContextMenuStrip2.Name = "ContextMenuStrip2"
-        Me.ContextMenuStrip2.Size = New System.Drawing.Size(194, 162)
+        Me.ContextMenuStrip2.Size = New System.Drawing.Size(172, 120)
         '
         'TREECOLLASEToolStripMenuItem
         '
         Me.TREECOLLASEToolStripMenuItem.Name = "TREECOLLASEToolStripMenuItem"
-        Me.TREECOLLASEToolStripMenuItem.Size = New System.Drawing.Size(193, 26)
+        Me.TREECOLLASEToolStripMenuItem.Size = New System.Drawing.Size(171, 22)
         Me.TREECOLLASEToolStripMenuItem.Text = "TREE COLLAPSE"
         '
         'TREEEXPANDToolStripMenuItem
         '
         Me.TREEEXPANDToolStripMenuItem.Name = "TREEEXPANDToolStripMenuItem"
-        Me.TREEEXPANDToolStripMenuItem.Size = New System.Drawing.Size(193, 26)
+        Me.TREEEXPANDToolStripMenuItem.Size = New System.Drawing.Size(171, 22)
         Me.TREEEXPANDToolStripMenuItem.Text = "TREE EXPAND"
         '
         'SECTORVIEWTREE
         '
         Me.SECTORVIEWTREE.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.PATHTABLEToolStripMenuItem})
         Me.SECTORVIEWTREE.Name = "SECTORVIEWTREE"
-        Me.SECTORVIEWTREE.Size = New System.Drawing.Size(193, 26)
+        Me.SECTORVIEWTREE.Size = New System.Drawing.Size(171, 22)
         Me.SECTORVIEWTREE.Text = "SECTORVIEW"
         '
         'PATHTABLEToolStripMenuItem
@@ -141,13 +142,13 @@ Partial Class Form1
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(190, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(168, 6)
         '
         'EXTRACTDATAToolStripMenuItem
         '
         Me.EXTRACTDATAToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.絶対パスで展開ToolStripMenuItem, Me.相対パスで展開ToolStripMenuItem})
         Me.EXTRACTDATAToolStripMenuItem.Name = "EXTRACTDATAToolStripMenuItem"
-        Me.EXTRACTDATAToolStripMenuItem.Size = New System.Drawing.Size(193, 26)
+        Me.EXTRACTDATAToolStripMenuItem.Size = New System.Drawing.Size(171, 22)
         Me.EXTRACTDATAToolStripMenuItem.Text = "EXTRACT DATA"
         '
         '絶対パスで展開ToolStripMenuItem
@@ -166,7 +167,7 @@ Partial Class Form1
         '
         Me.EXTRACTLBAToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ABSOLUTPATHToolStripMenuItem, Me.OFFSETPATHToolStripMenuItem})
         Me.EXTRACTLBAToolStripMenuItem.Name = "EXTRACTLBAToolStripMenuItem"
-        Me.EXTRACTLBAToolStripMenuItem.Size = New System.Drawing.Size(193, 26)
+        Me.EXTRACTLBAToolStripMenuItem.Size = New System.Drawing.Size(171, 22)
         Me.EXTRACTLBAToolStripMenuItem.Text = "EXTRACT LBA"
         '
         'ABSOLUTPATHToolStripMenuItem
@@ -243,35 +244,35 @@ Partial Class Form1
         '
         Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RUNAPPZ, Me.SECTORVIEW, Me.ToolStripSeparator2, Me.SAVEDATA, Me.SAVEDATAOFFSET})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(224, 114)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(199, 98)
         '
         'RUNAPPZ
         '
         Me.RUNAPPZ.Name = "RUNAPPZ"
-        Me.RUNAPPZ.Size = New System.Drawing.Size(223, 26)
+        Me.RUNAPPZ.Size = New System.Drawing.Size(198, 22)
         Me.RUNAPPZ.Text = "RUN APP"
         '
         'SECTORVIEW
         '
         Me.SECTORVIEW.Name = "SECTORVIEW"
-        Me.SECTORVIEW.Size = New System.Drawing.Size(223, 26)
+        Me.SECTORVIEW.Size = New System.Drawing.Size(198, 22)
         Me.SECTORVIEW.Text = "SECTORVIEW"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(220, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(195, 6)
         '
         'SAVEDATA
         '
         Me.SAVEDATA.Name = "SAVEDATA"
-        Me.SAVEDATA.Size = New System.Drawing.Size(223, 26)
+        Me.SAVEDATA.Size = New System.Drawing.Size(198, 22)
         Me.SAVEDATA.Text = "SAVE DATA"
         '
         'SAVEDATAOFFSET
         '
         Me.SAVEDATAOFFSET.Name = "SAVEDATAOFFSET"
-        Me.SAVEDATAOFFSET.Size = New System.Drawing.Size(223, 26)
+        Me.SAVEDATAOFFSET.Size = New System.Drawing.Size(198, 22)
         Me.SAVEDATAOFFSET.Text = "SAVE DATA(OFFSET)"
         '
         'dir
@@ -481,7 +482,7 @@ Partial Class Form1
         'tree
         '
         Me.tree.AutoSize = True
-        Me.tree.Location = New System.Drawing.Point(671, 419)
+        Me.tree.Location = New System.Drawing.Point(673, 420)
         Me.tree.Name = "tree"
         Me.tree.Size = New System.Drawing.Size(83, 16)
         Me.tree.TabIndex = 22
@@ -607,12 +608,23 @@ Partial Class Form1
         'Timer1
         '
         '
+        'ZEBRA
+        '
+        Me.ZEBRA.AutoSize = True
+        Me.ZEBRA.Location = New System.Drawing.Point(673, 442)
+        Me.ZEBRA.Name = "ZEBRA"
+        Me.ZEBRA.Size = New System.Drawing.Size(62, 16)
+        Me.ZEBRA.TabIndex = 29
+        Me.ZEBRA.Text = "ZEBRA"
+        Me.ZEBRA.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AllowDrop = True
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(785, 500)
+        Me.Controls.Add(Me.ZEBRA)
         Me.Controls.Add(Me.tree)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Controls.Add(Me.VIRTUAL)
@@ -715,5 +727,6 @@ Partial Class Form1
     Friend WithEvents Timer1 As System.Windows.Forms.Timer
     Friend WithEvents SECTORVIEWTREE As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents PATHTABLEToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ZEBRA As System.Windows.Forms.CheckBox
 
 End Class
