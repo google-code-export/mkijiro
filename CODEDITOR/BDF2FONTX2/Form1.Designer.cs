@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.button1 = new System.Windows.Forms.Button();
             this.CMFUSION = new System.Windows.Forms.GroupBox();
             this.CMGBK = new System.Windows.Forms.RadioButton();
@@ -40,6 +41,7 @@
             this.NOREMAP = new System.Windows.Forms.RadioButton();
             this.CP = new System.Windows.Forms.RadioButton();
             this.codepage = new System.Windows.Forms.TextBox();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.sekitxt = new System.Windows.Forms.ComboBox();
@@ -182,12 +184,21 @@
             // 
             // codepage
             // 
+            this.codepage.ContextMenuStrip = this.contextMenuStrip1;
+            this.codepage.ImeMode = System.Windows.Forms.ImeMode.Disable;
             this.codepage.Location = new System.Drawing.Point(148, 37);
             this.codepage.MaxLength = 5;
             this.codepage.Name = "codepage";
             this.codepage.Size = new System.Drawing.Size(41, 19);
             this.codepage.TabIndex = 5;
             this.codepage.Text = "936";
+            this.codepage.TextChanged += new System.EventHandler(this.codepage_TextChanged);
+            this.codepage.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.codepage_KeyPress);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             // 
             // groupBox1
             // 
@@ -219,7 +230,9 @@
             // 
             // sekitxt
             // 
+            this.sekitxt.ContextMenuStrip = this.contextMenuStrip1;
             this.sekitxt.FormattingEnabled = true;
+            this.sekitxt.ImeMode = System.Windows.Forms.ImeMode.Disable;
             this.sekitxt.Items.AddRange(new object[] {
             "\\n0x[0-9A-F]{4}\\t0x%J",
             "%J [0-9A-Fa-f]{4}"});
@@ -232,12 +245,14 @@
             // pos
             // 
             this.pos.Enabled = false;
+            this.pos.ImeMode = System.Windows.Forms.ImeMode.Disable;
             this.pos.Location = new System.Drawing.Point(87, 62);
             this.pos.MaxLength = 1;
             this.pos.Name = "pos";
             this.pos.Size = new System.Drawing.Size(28, 19);
             this.pos.TabIndex = 10;
             this.pos.Text = "3";
+            this.pos.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.codepage_KeyPress);
             // 
             // label1
             // 
@@ -262,7 +277,9 @@
             // 
             // JIS2SJIS
             // 
+            this.JIS2SJIS.ContextMenuStrip = this.contextMenuStrip1;
             this.JIS2SJIS.FormattingEnabled = true;
+            this.JIS2SJIS.ImeMode = System.Windows.Forms.ImeMode.Close;
             this.JIS2SJIS.Items.AddRange(new object[] {
             "S1奇数判定+S2シフト,S1を0xA1以上にシフトしXOR0x20でリマップ",
             "(S1奇数判定+S1S2ともにシフト),S1S2を調整",
@@ -280,17 +297,19 @@
             this.JIS2SJIS.Size = new System.Drawing.Size(196, 20);
             this.JIS2SJIS.TabIndex = 6;
             this.JIS2SJIS.SelectedIndexChanged += new System.EventHandler(this.JIS2SJIS_SelectedIndexChanged);
+            this.JIS2SJIS.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.JIS2SJIS_KeyPress);
             // 
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.button2.Location = new System.Drawing.Point(130, 296);
+            this.button2.Location = new System.Drawing.Point(134, 296);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(56, 20);
             this.button2.TabIndex = 8;
             this.button2.Text = "復元";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Visible = false;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // Form1
             // 
@@ -305,6 +324,7 @@
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "BDF2FONTX2";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.CMFUSION.ResumeLayout(false);
             this.CMFUSION.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -337,6 +357,7 @@
         private System.Windows.Forms.ComboBox sekitxt;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.RadioButton CMGBK;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
     }
 }
 
