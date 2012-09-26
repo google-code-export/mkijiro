@@ -14,12 +14,132 @@ namespace WindowsFormsApplication1
     public partial class Form1 : Form
     {
         string lastdir = "";
+        byte binversion = 1;
+
+
+        private bool checkver(byte b)
+        {
+            return ((b >> 2) == binversion);
+        }
 
         public Form1()
         {
             InitializeComponent();
             JIS2SJIS.SelectedIndex = 0;
             sekitxt.SelectedIndex = 0;
+
+
+            if (File.Exists(Application.StartupPath + "\\" + "setting"))
+            {
+                FileStream sr = new FileStream(Application.StartupPath + "\\" + "setting", FileMode.Open);
+                if (sr.Length > 10)
+                {
+                    byte[] bs = new byte[sr.Length];
+                    sr.Read(bs, 0, bs.Length);
+                    if (checkver(bs[0])){ //version
+                        if (bs[9] + 10 == bs.Length)
+                        {
+
+                            switch (bs[0] & 0x3)
+                            {
+                                case 0:
+                                    NOREMAP.Checked = true;
+                                    break;
+                                case 1:
+                                    SJIS.Checked = true;
+                                    break;
+                                case 2:
+                                    EUC.Checked = true;
+                                    break;
+                                case 3:
+                                    CP.Checked = true;
+                                    break;
+                            }
+                            JIS2SJIS.SelectedIndex = bs[1];
+
+                            switch (bs[2])
+                            {
+                                case 0:
+                                    radioButton1.Checked = true;
+                                    break;
+                                case 1:
+                                    CMF.Checked = true;
+                                    break;
+                                case 2:
+                                    FC.Checked = true;
+                                    break;
+                                case 3:
+                                    CMGBK.Checked = true;
+                                    break;
+                                case 4:
+                                    FILER.Checked = true;
+                                    break;
+                            }
+
+                            if (bs[3] != 0)
+                                SEIKI.Checked = true;
+
+                            pos.Text = bs[4].ToString();
+                            codepage.Text = BitConverter.ToInt32(bs, 5).ToString();
+
+                            int len = bs[9];
+                            Array.Copy(bs, 10, bs, 0, 9);
+                            Array.Resize(ref bs, 9);
+                            sekitxt.Text = Encoding.ASCII.GetString(bs);
+                        }
+                    }
+                }
+                sr.Close();
+            }
+        }
+
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            FileStream sr = new FileStream(Application.StartupPath + "\\" + "setting", FileMode.Create);
+            byte[] bs = new byte[10];
+            
+            if (SJIS.Checked)
+                    bs[0]=1;
+
+            if  (EUC.Checked)
+                    bs[0]=2;
+
+            if (CP.Checked)
+                bs[0] = 3;
+
+            bs[0] = (byte)(bs[0] | (binversion << 2));
+
+            bs[1] = Convert.ToByte(JIS2SJIS.SelectedIndex);
+
+            if (CMF.Checked)
+                bs[2] = 1;
+
+            if (FC.Checked)
+                    bs[2] = 2;
+            
+            if (CMGBK.Checked)
+                    bs[2] = 3;
+            
+            if (FILER.Checked)
+                    bs[2] = 4;
+
+
+            if (SEIKI.Checked)
+                bs[3] = 1;
+
+            bs[4] = (byte)(Convert.ToInt16(pos.Text));
+            byte[] cp;
+            cp = BitConverter.GetBytes(Convert.ToInt32(codepage.Text));
+            Array.Copy(cp, 0, bs, 5, 4);
+            byte[] str;
+            str = Encoding.ASCII.GetBytes(sekitxt.Text);
+            bs[9] = (byte)str.Length;
+            sr.Write(bs, 0, 10);
+            sr.Write(str, 0, bs[9]);
+
+            sr.Close();
+
         }
 
         private bool parse_ok(bool uni,int sel) {
@@ -1200,5 +1320,29 @@ namespace WindowsFormsApplication1
             }
 
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
+        
+
+        private void codepage_TextChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void codepage_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if ((e.KeyChar < '0' || e.KeyChar > '9') && e.KeyChar != '\b')
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void JIS2SJIS_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+
     }
 }
