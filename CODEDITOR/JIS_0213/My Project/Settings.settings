@@ -32,5 +32,8 @@
     <Setting Name="jisoutput" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">2004</Value>
     </Setting>
+    <Setting Name="big5order" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
