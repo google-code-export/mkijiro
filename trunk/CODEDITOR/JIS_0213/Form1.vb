@@ -23,6 +23,10 @@ Public Class Form1
             i += 1
         Next
 
+        If My.Settings.big5order = True Then
+            swaporder.Checked = True
+        End If
+
         If Directory.Exists(My.Settings.lastfile) = False Then
             My.Settings.lastfile = Application.StartupPath & "\"
         End If
@@ -54,7 +58,7 @@ Public Class Form1
 
     Dim parsetest As String() = {"table\sjis2004test.txt", "table\eucjis2004.txt", "table\big5hkscs.txt", "table\iso2022jp2004.txt", "table\eucjpms.txt"}
     Dim vstable As String() = {"table\sjisvsutf8", "table\eucvsutf8", "table\big5vsutf8", "table\eucvsutf8", "table\eucmsvsutf8"}
-    Dim unitable As String() = {"table\custom_utf32", "table\custom_utf32_2", "table\custom_utf32_3", "table\custom_utf32_2", "table\custom_utf32_4"}
+    Dim unitable As String() = {"table\custom_utf32", "table\custom_utf32_2", "table\custom_utf32_3", "table\custom_utf32_2", "table\custom_utf32_4", "table\custom_utf32_3s"}
 
     Private Function sel_num(ByVal sel As Integer, ByVal mode As Integer) As Integer
         sel = 0
@@ -748,6 +752,10 @@ Public Class Form1
             If File.Exists(Application.StartupPath & "\" & unitable(sel)) = True Then
                 bs = Encoding.GetEncoding(1200).GetBytes(TextBox1.Text)
                 Dim bss(CInt(bs.Length - 1) * 2) As Byte
+
+                If swaporder.Checked = False AndAlso sel = 2 Then
+                    sel = 5
+                End If
                 Dim tfs As New FileStream(Application.StartupPath & "\" & unitable(sel), FileMode.Open, FileAccess.Read)
                 Dim tbl(CInt(tfs.Length - 1)) As Byte
                 tfs.Read(tbl, 0, tbl.Length)
@@ -1894,4 +1902,8 @@ Public Class Form1
         Return True
     End Function
 
+    Private Sub swaporder_Click(sender As Object, e As EventArgs) Handles swaporder.Click
+        swaporder.Checked = Not swaporder.Checked
+        My.Settings.big5order = swaporder.Checked
+    End Sub
 End Class
