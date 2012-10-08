@@ -176,13 +176,37 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
-        Public Property big5order() As Boolean
+         Global.System.Configuration.DefaultSettingValueAttribute("GBK")>  _
+        Public Property cptype() As String
             Get
-                Return CType(Me("big5order"),Boolean)
+                Return CType(Me("cptype"),String)
             End Get
             Set
-                Me("big5order") = value
+                Me("cptype") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property unicodein() As String
+            Get
+                Return CType(Me("unicodein"),String)
+            End Get
+            Set
+                Me("unicodein") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property unicodeout() As String
+            Get
+                Return CType(Me("unicodeout"),String)
+            End Get
+            Set
+                Me("unicodeout") = value
             End Set
         End Property
     End Class
