@@ -23,16 +23,16 @@ Public Class Form1
             i += 1
         Next
 
-        If My.Settings.big5order = True Then
-            swaporder.Checked = True
-        End If
+
+        vstable(5) = My.Settings.unicodein
+        unitable(5) = My.Settings.unicodeout
 
         If Directory.Exists(My.Settings.lastfile) = False Then
             My.Settings.lastfile = Application.StartupPath & "\"
         End If
 
         If File.Exists(fsname) Then
-            
+
             If customcpmatch(My.Settings.mscodepage) = True Then
 
                 Dim fs As New FileStream(fsname, FileMode.Open, FileAccess.Read)
@@ -56,9 +56,9 @@ Public Class Form1
         End If
     End Sub
 
-    Dim parsetest As String() = {"table\sjis2004test.txt", "table\eucjis2004.txt", "table\big5hkscs.txt", "table\iso2022jp2004.txt", "table\eucjpms.txt"}
-    Dim vstable As String() = {"table\sjisvsutf8", "table\eucvsutf8", "table\big5vsutf8", "table\eucvsutf8", "table\eucmsvsutf8"}
-    Dim unitable As String() = {"table\custom_utf32", "table\custom_utf32_2", "table\custom_utf32_3", "table\custom_utf32_2", "table\custom_utf32_4", "table\custom_utf32_3s"}
+    Dim parsetest As String() = {"table\sjis2004test.txt", "table\eucjis2004.txt", "table\big5hkscs.txt", "table\iso2022jp2004.txt", "table\eucjpms.txt", "table\test.txt"}
+    Dim vstable As String() = {"table\sjisvsutf8", "table\eucvsutf8", "table\big5vsutf8", "table\eucvsutf8", "table\eucmsvsutf8", ""}
+    Dim unitable As String() = {"table\custom_utf32", "table\custom_utf32_2", "table\custom_utf32_3", "table\custom_utf32_2", "table\custom_utf32_4", ""}
 
     Private Function sel_num(ByVal sel As Integer, ByVal mode As Integer) As Integer
         sel = 0
@@ -70,12 +70,14 @@ Public Class Form1
             sel = 3
         ElseIf eucms.Checked = True Then
             sel = 4
+        ElseIf USECUSTOM.Checked = True Then
+            sel = 5
         End If
 
         Return sel
     End Function
 
-    Private Sub 開くToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles 開くToolStripMenuItem.Click
+    Private Sub OPENFILE_click(sender As System.Object, e As System.EventArgs) Handles OPENFILE.Click
         Dim ofd As New OpenFileDialog()
 
         ofd.InitialDirectory = My.Settings.lastfile
@@ -88,7 +90,7 @@ Public Class Form1
         If ofd.ShowDialog() = DialogResult.OK Then
 
             My.Settings.lastfile = Path.GetDirectoryName(ofd.FileName)
-            
+
             If customcpmatch(My.Settings.mscodepage) = True Then
 
                 Dim fs As New FileStream(ofd.FileName, FileMode.Open, FileAccess.Read)
@@ -129,6 +131,102 @@ Public Class Form1
         End If
     End Sub
 
+    Private Sub text_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles TextBox1.DragDrop
+        'コントロール内にドロップされたとき実行される
+        'ドロップされたすべてのファイル名を取得する
+        Dim fileName As String() = CType( _
+            e.Data.GetData(DataFormats.FileDrop, False), _
+            String())
+        Dim s As String = fileName(0)
+
+        If customcpmatch(My.Settings.mscodepage) = True Then
+
+            Dim fs As New FileStream(s, FileMode.Open, FileAccess.Read)
+            Dim bs(CInt(fs.Length - 1)) As Byte
+            fs.Read(bs, 0, bs.Length)
+            fs.Close()
+
+            Dim sel As Integer = 0
+            sel = sel_num(sel, 0)
+
+            TextBox1.Text = Encoding.GetEncoding(65001).GetString(customtable_parse(bs, sel))
+
+        Else
+            Dim fs As New FileStream(s, FileMode.Open, FileAccess.Read)
+            Dim bs(CInt(fs.Length - 1)) As Byte
+            fs.Read(bs, 0, bs.Length)
+            fs.Close()
+            TextBox1.Text = Encoding.GetEncoding(My.Settings.mscodepage).GetString(bs)
+
+        End If
+    End Sub
+
+    Private Sub Button3_Click(sender As System.Object, e As System.EventArgs) Handles READ.Click
+        Dim sel As Integer = 0
+        sel = sel_num(sel, 0)
+
+        If File.Exists(Application.StartupPath & "\" & parsetest(sel)) Then
+
+            Dim fs As New FileStream(parsetest(sel), FileMode.Open, FileAccess.Read)
+            Dim bs(CInt(fs.Length - 1)) As Byte
+            fs.Read(bs, 0, bs.Length)
+            fs.Close()
+
+            Dim codepage As Integer = GetCode(bs)
+            Label1.Text = codepage.ToString
+
+            TextBox1.Text = Encoding.GetEncoding(65001).GetString(customtable_parse(bs, sel))
+        Else
+            MessageBox.Show(parsetest(sel) & "がありません")
+        End If
+
+    End Sub
+
+    Function gouseimaru(ByVal pos As Integer) As Integer
+        Dim maru As Integer() = {&H304B, &H304D, &H304F, &H3051, &H3053, &H30AB, &H30AD, &H30AF, &H30B1, &H30B3, &H30BB, &H30C4, &H30C8, &H31F7}
+        For i = 0 To maru.Length - 1
+            If pos = maru(i) Then
+                Return i
+            End If
+        Next
+        Return -1
+    End Function
+
+    Function gouseiac(ByVal pos As Integer) As Integer
+        Dim maru As Integer() = {&H254, &H28C, &H259, &H25A}
+        For i = 0 To maru.Length - 1
+            If pos = maru(i) Then
+                Return i
+            End If
+        Next
+        Return -1
+    End Function
+
+    Private Sub ListBox1_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles TextBox1.DragEnter
+        'コントロール内にドラッグされたとき実行される
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            'ドラッグされたデータ形式を調べ、ファイルのときはコピーとする
+            e.Effect = DragDropEffects.Copy
+        Else
+            'ファイル以外は受け付けない
+            e.Effect = DragDropEffects.None
+        End If
+    End Sub
+
+    Dim customcodepage As Integer() = {2132004, 512132004, 202132004, 951, 21220932, 65536}
+
+    Private Function customcpmatch(ByVal enc As Integer) As Boolean
+
+        For i = 0 To customcodepage.Length - 1
+            If enc = customcodepage(i) Then
+                Return True
+            End If
+        Next
+
+        Return False
+
+    End Function
+
     Private Function customtable_parse(ByVal bs As Byte(), ByVal sel As Integer) As Byte()
 
         If File.Exists(Application.StartupPath & "\" & vstable(sel)) Then
@@ -152,7 +250,25 @@ Public Class Form1
             Dim k As Integer = 0
             Dim pos As Integer = 0
             Dim len As Integer = bs.Length
-            If SJIS.Checked = True Then
+            Dim cp As Integer = My.Settings.mscodepage
+            If cp = 65536 Then
+
+                Select Case My.Settings.cptype
+                    Case "SJIS"
+                        cp = 2132004
+
+                    Case "EUC"
+                        cp = 512132004
+
+                    Case "GBK"
+                        cp = 951
+                End Select
+
+
+            End If
+
+
+            If cp = 2132004 Then
                 'SJIS
                 While i < bs.Length
 
@@ -250,8 +366,8 @@ Public Class Form1
                 End While
 
                 'JIS
-            ElseIf JIS.Checked = True Then
-                
+            ElseIf cp = 202132004 Then
+
                 'JIS C 6226-1978 	1b 24 40 	ESC $ @
                 'JIS X 0208-1983 	1b 24 42 	ESC $ B
                 'JIS X 0208-1990 	1b 26 40 1b 24 42 	ESC & @ ESC $ B
@@ -453,8 +569,8 @@ Public Class Form1
 
                 End While
 
-                'EUC
-            ElseIf EUC.Checked = True Or eucms.Checked = True Then
+                'EUC/eucms
+            ElseIf cp = 512132004 Or cp = 21220932 Then
                 While i < bs.Length
                     c1 = bs(i)
                     If c1 < 128 Then
@@ -574,7 +690,7 @@ Public Class Form1
                 End While
 
                 'extra 'GBK/BIG5
-            ElseIf BIG5HK.Checked = True Then
+            ElseIf cp = 951 Then
                 While i < bs.Length
                     c1 = bs(i)
                     If c1 < 128 Then
@@ -639,105 +755,9 @@ Public Class Form1
 
         End If
 
-            Return bs
+        Return bs
 
     End Function
-
-    Private Sub Button3_Click(sender As System.Object, e As System.EventArgs) Handles READ.Click
-        Dim sel As Integer = 0
-        sel = sel_num(sel, 0)
-
-        If File.Exists(Application.StartupPath & "\" & parsetest(sel)) Then
-
-            Dim fs As New FileStream(parsetest(sel), FileMode.Open, FileAccess.Read)
-            Dim bs(CInt(fs.Length - 1)) As Byte
-            fs.Read(bs, 0, bs.Length)
-            fs.Close()
-
-            Dim codepage As Integer = GetCode(bs)
-            Label1.Text = codepage.ToString
-
-            TextBox1.Text = Encoding.GetEncoding(65001).GetString(customtable_parse(bs, sel))
-        Else
-            MessageBox.Show(parsetest(sel) & "がありません")
-        End If
-
-    End Sub
-
-    Function gouseimaru(ByVal pos As Integer) As Integer
-        Dim maru As Integer() = {&H304B, &H304D, &H304F, &H3051, &H3053, &H30AB, &H30AD, &H30AF, &H30B1, &H30B3, &H30BB, &H30C4, &H30C8, &H31F7}
-        For i = 0 To maru.Length - 1
-            If pos = maru(i) Then
-                Return i
-            End If
-        Next
-        Return -1
-    End Function
-
-    Function gouseiac(ByVal pos As Integer) As Integer
-        Dim maru As Integer() = {&H254, &H28C, &H259, &H25A}
-        For i = 0 To maru.Length - 1
-            If pos = maru(i) Then
-                Return i
-            End If
-        Next
-        Return -1
-    End Function
-
-    Private Sub ListBox1_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles TextBox1.DragEnter
-        'コントロール内にドラッグされたとき実行される
-        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
-            'ドラッグされたデータ形式を調べ、ファイルのときはコピーとする
-            e.Effect = DragDropEffects.Copy
-        Else
-            'ファイル以外は受け付けない
-            e.Effect = DragDropEffects.None
-        End If
-    End Sub
-
-    Dim customcodepage As Integer() = {2132004, 512132004, 202132004, 951, 21220932}
-
-    Private Function customcpmatch(ByVal enc As Integer) As Boolean
-
-        For i = 0 To customcodepage.Length - 1
-            If enc = customcodepage(i) Then
-                Return True
-            End If
-        Next
-
-        Return False
-
-    End Function
-
-    Private Sub ListBox1_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles TextBox1.DragDrop
-        'コントロール内にドロップされたとき実行される
-        'ドロップされたすべてのファイル名を取得する
-        Dim fileName As String() = CType( _
-            e.Data.GetData(DataFormats.FileDrop, False), _
-            String())
-        Dim s As String = fileName(0)
-
-        If customcpmatch(My.Settings.mscodepage) = True Then
-
-            Dim fs As New FileStream(s, FileMode.Open, FileAccess.Read)
-            Dim bs(CInt(fs.Length - 1)) As Byte
-            fs.Read(bs, 0, bs.Length)
-            fs.Close()
-
-            Dim sel As Integer = 0
-            sel = sel_num(sel, 0)
-
-            TextBox1.Text = Encoding.GetEncoding(65001).GetString(customtable_parse(bs, sel))
-
-        Else
-            Dim fs As New FileStream(s, FileMode.Open, FileAccess.Read)
-            Dim bs(CInt(fs.Length - 1)) As Byte
-            fs.Read(bs, 0, bs.Length)
-            fs.Close()
-            TextBox1.Text = Encoding.GetEncoding(My.Settings.mscodepage).GetString(bs)
-
-        End If
-    End Sub
 
     Private Function savefile(ByVal fsname As String) As Integer
 
@@ -753,9 +773,6 @@ Public Class Form1
                 bs = Encoding.GetEncoding(1200).GetBytes(TextBox1.Text)
                 Dim bss(CInt(bs.Length - 1) * 2) As Byte
 
-                If swaporder.Checked = False AndAlso sel = 2 Then
-                    sel = 5
-                End If
                 Dim tfs As New FileStream(Application.StartupPath & "\" & unitable(sel), FileMode.Open, FileAccess.Read)
                 Dim tbl(CInt(tfs.Length - 1)) As Byte
                 tfs.Read(tbl, 0, tbl.Length)
@@ -800,8 +817,26 @@ Public Class Form1
                 Dim hex As UInt16 = 0
                 Dim hex2 As UInt16 = 0
                 Dim pos As Int32 = 0
+                Dim cp = My.Settings.mscodepage
+
+                If cp = 65536 Then
+
+                    Select Case My.Settings.cptype
+                        Case "SJIS"
+                            cp = 2132004
+
+                        Case "EUC"
+                            cp = 512132004
+
+                        Case "GBK"
+                            cp = 951
+                    End Select
+
+
+                End If
+
                 'SJIS2004
-                If SJIS.Checked = True Then
+                If cp = 2132004 Then
                     While i < bs.Length
                         hex = BitConverter.ToUInt16(bs, i)
                         If hex >= &HD800 AndAlso hex <= &HDBFF Then
@@ -896,7 +931,7 @@ Public Class Form1
 
 
                     'JIS2004
-                ElseIf JIS.Checked = True Then
+                ElseIf cp = 202132004 Then
                     'JIS C 6226-1978 	1b 24 40 	ESC $ @
                     'JIS X 0208-1983 	1b 24 42 	ESC $ B
                     'JIS X 0208-1990 	1b 26 40 1b 24 42 	ESC & @ ESC $ B ※使用不可,208更新シーケンス
@@ -1111,13 +1146,13 @@ Public Class Form1
                                                 k += 4
                                             End If
 
-                                    Else
-                                        If mode <> 4 Then
-                                            mode = 4
-                                            Array.Copy(jis208, 0, bss, k, 3)
-                                            k += 3
+                                        Else
+                                            If mode <> 4 Then
+                                                mode = 4
+                                                Array.Copy(jis208, 0, bss, k, 3)
+                                                k += 3
+                                            End If
                                         End If
-                                    End If
                                     Else
                                         If mode <> 1 Then
                                             mode = 1
@@ -1182,123 +1217,78 @@ Public Class Form1
                     End If
 
                     'EUC2004,eucjpms
-                    ElseIf EUC.Checked = True Or eucms.Checked = True Then
-                        While i < bs.Length
-                            hex = BitConverter.ToUInt16(bs, i)
-                            If hex >= &HD800 AndAlso hex <= &HDBFF Then
-                                i += 2
-                                hex2 = BitConverter.ToUInt16(bs, i)
-                                If hex2 >= &HDC00 AndAlso hex2 <= &HDFFF Then
-                                    pos = (hex And &H3FF) * 1024 + (hex2 And &H3FF)
-                                    pos += &H10000
-                                Else
-                                    pos = tbl.Length
-                                End If
-                            Else
-                                pos = Convert.ToInt32(hex)
-                            End If
-                            If pos * 4 < tbl.Length Then
-                                Array.Copy(tbl, pos * 4, bss, k, 4)
-                                c1 = bss(k)
-                                c2 = bss(k + 1)
-                                c3 = bss(k + 2)
-
-                                If EUC.Checked = True AndAlso i + 4 <= bs.Length Then
-                                    hex2 = BitConverter.ToUInt16(bs, i + 2)
-                                Else
-                                    hex2 = 0
-                                End If
-
-                                If hex2 = &H309A AndAlso gouseimaru(pos) >= 0 Then
-                                    m = gouseimaru(pos)
-                                    l = 0
-                                    If m > 12 Then
-                                        l = 2
-                                        m = 0
-                                    ElseIf m > 4 Then
-                                        l = 1
-                                        m -= 5
-                                    End If
-                                    code = BitConverter.GetBytes(hmaru_euc(l) + &H100 * m)
-                                    Array.Copy(code, 0, bss, k, 4)
-                                    k += 2
-                                    i += 2
-
-                                ElseIf hex2 = &H300 AndAlso pos = &HE6 Then
-                                    code = BitConverter.GetBytes(ha_euc)
-                                    Array.Copy(code, 0, bss, k, 4)
-                                    k += 2
-                                    i += 2
-
-                                ElseIf hex2 = &H300 AndAlso gouseiac(pos) >= 0 Then
-                                    code = BitConverter.GetBytes(hac_euc + ((2 * gouseiac(pos)) * &H100))
-                                    Array.Copy(code, 0, bss, k, 4)
-                                    k += 2
-                                    i += 2
-
-                                ElseIf hex2 = &H301 AndAlso gouseiac(pos) >= 0 Then
-                                    code = BitConverter.GetBytes(hac_euc + ((2 * gouseiac(pos) + 1) * &H100))
-                                    Array.Copy(code, 0, bss, k, 4)
-                                    k += 2
-                                    i += 2
-
-                                ElseIf hex2 = &H2E9 AndAlso pos = &H2E5 Then
-                                    code = BitConverter.GetBytes(koe_euc + &H100)
-                                    Array.Copy(code, 0, bss, k, 4)
-                                    k += 2
-                                    i += 2
-
-                                ElseIf hex2 = &H2E5 AndAlso pos = &H2E9 Then
-                                    code = BitConverter.GetBytes(koe_euc)
-                                    Array.Copy(code, 0, bss, k, 4)
-                                    k += 2
-                                    i += 2
-                                Else
-                                    If pos < 128 Then
-                                        If pos < 32 AndAlso pos <> &HA AndAlso pos <> &HD AndAlso pos <> &H9 Then
-                                            pos = 32
-                                        End If
-                                        bss(k) = pos
-                                        k += 1
-                                    ElseIf c1 = 0 AndAlso c2 = 0 Then
-                                        Array.Copy(tofueuc, 0, bss, k, 2)
-                                        k += 2
-                                    ElseIf c1 = &H8E Then
-                                        k += 2
-                                    ElseIf c1 = &H8F Then
-                                        k += 3
-                                    ElseIf ((c1 + &H5F) And &HFF) < &H5E AndAlso c2 >= &HA1 Then
-                                        k += 2
-                                    Else
-                                        Array.Copy(tofueuc, 0, bss, k, 2)
-                                        k += 2
-                                    End If
-                                End If
-                            End If
+                ElseIf cp = 512132004 Or cp = 21220932 Then
+                    While i < bs.Length
+                        hex = BitConverter.ToUInt16(bs, i)
+                        If hex >= &HD800 AndAlso hex <= &HDBFF Then
                             i += 2
-                        End While
-                        'BIG5/GBK
-                    ElseIf BIG5HK.Checked = True Then
-                        While i < bs.Length
-                            hex = BitConverter.ToUInt16(bs, i)
-                            If hex >= &HD800 AndAlso hex <= &HDBFF Then
-                                i += 2
-                                hex2 = BitConverter.ToUInt16(bs, i)
-                                If hex2 >= &HDC00 AndAlso hex2 <= &HDFFF Then
-                                    pos = (hex And &H3FF) * 1024 + (hex2 And &H3FF)
-                                    pos += &H10000
-                                Else
-                                    pos = tbl.Length
-                                End If
+                            hex2 = BitConverter.ToUInt16(bs, i)
+                            If hex2 >= &HDC00 AndAlso hex2 <= &HDFFF Then
+                                pos = (hex And &H3FF) * 1024 + (hex2 And &H3FF)
+                                pos += &H10000
                             Else
-                                pos = Convert.ToInt32(hex)
+                                pos = tbl.Length
                             End If
-                            If pos * 4 < tbl.Length Then
-                                Array.Copy(tbl, pos * 4, bss, k, 4)
-                                c1 = bss(k)
-                                c2 = bss(k + 1)
-                                c3 = bss(k + 2)
+                        Else
+                            pos = Convert.ToInt32(hex)
+                        End If
+                        If pos * 4 < tbl.Length Then
+                            Array.Copy(tbl, pos * 4, bss, k, 4)
+                            c1 = bss(k)
+                            c2 = bss(k + 1)
+                            c3 = bss(k + 2)
 
+                            If EUC.Checked = True AndAlso i + 4 <= bs.Length Then
+                                hex2 = BitConverter.ToUInt16(bs, i + 2)
+                            Else
+                                hex2 = 0
+                            End If
+
+                            If hex2 = &H309A AndAlso gouseimaru(pos) >= 0 Then
+                                m = gouseimaru(pos)
+                                l = 0
+                                If m > 12 Then
+                                    l = 2
+                                    m = 0
+                                ElseIf m > 4 Then
+                                    l = 1
+                                    m -= 5
+                                End If
+                                code = BitConverter.GetBytes(hmaru_euc(l) + &H100 * m)
+                                Array.Copy(code, 0, bss, k, 4)
+                                k += 2
+                                i += 2
+
+                            ElseIf hex2 = &H300 AndAlso pos = &HE6 Then
+                                code = BitConverter.GetBytes(ha_euc)
+                                Array.Copy(code, 0, bss, k, 4)
+                                k += 2
+                                i += 2
+
+                            ElseIf hex2 = &H300 AndAlso gouseiac(pos) >= 0 Then
+                                code = BitConverter.GetBytes(hac_euc + ((2 * gouseiac(pos)) * &H100))
+                                Array.Copy(code, 0, bss, k, 4)
+                                k += 2
+                                i += 2
+
+                            ElseIf hex2 = &H301 AndAlso gouseiac(pos) >= 0 Then
+                                code = BitConverter.GetBytes(hac_euc + ((2 * gouseiac(pos) + 1) * &H100))
+                                Array.Copy(code, 0, bss, k, 4)
+                                k += 2
+                                i += 2
+
+                            ElseIf hex2 = &H2E9 AndAlso pos = &H2E5 Then
+                                code = BitConverter.GetBytes(koe_euc + &H100)
+                                Array.Copy(code, 0, bss, k, 4)
+                                k += 2
+                                i += 2
+
+                            ElseIf hex2 = &H2E5 AndAlso pos = &H2E9 Then
+                                code = BitConverter.GetBytes(koe_euc)
+                                Array.Copy(code, 0, bss, k, 4)
+                                k += 2
+                                i += 2
+                            Else
                                 If pos < 128 Then
                                     If pos < 32 AndAlso pos <> &HA AndAlso pos <> &HD AndAlso pos <> &H9 Then
                                         pos = 32
@@ -1306,34 +1296,79 @@ Public Class Form1
                                     bss(k) = pos
                                     k += 1
                                 ElseIf c1 = 0 AndAlso c2 = 0 Then
-                                    Array.Copy(tofuhk, 0, bss, k, 2)
+                                    Array.Copy(tofueuc, 0, bss, k, 2)
                                     k += 2
-                                    'skip
-                                ElseIf ((c1 + &H7F) And &HFF) < &H7E AndAlso c2 >= &H40 Then
+                                ElseIf c1 = &H8E Then
+                                    k += 2
+                                ElseIf c1 = &H8F Then
+                                    k += 3
+                                ElseIf ((c1 + &H5F) And &HFF) < &H5E AndAlso c2 >= &HA1 Then
                                     k += 2
                                 Else
-                                    Array.Copy(tofuhk, 0, bss, k, 2)
+                                    Array.Copy(tofueuc, 0, bss, k, 2)
                                     k += 2
                                 End If
                             End If
+                        End If
+                        i += 2
+                    End While
+                    'BIG5/GBK
+                ElseIf cp = 951 Then
+                    While i < bs.Length
+                        hex = BitConverter.ToUInt16(bs, i)
+                        If hex >= &HD800 AndAlso hex <= &HDBFF Then
                             i += 2
-                        End While
-                    End If
+                            hex2 = BitConverter.ToUInt16(bs, i)
+                            If hex2 >= &HDC00 AndAlso hex2 <= &HDFFF Then
+                                pos = (hex And &H3FF) * 1024 + (hex2 And &H3FF)
+                                pos += &H10000
+                            Else
+                                pos = tbl.Length
+                            End If
+                        Else
+                            pos = Convert.ToInt32(hex)
+                        End If
+                        If pos * 4 < tbl.Length Then
+                            Array.Copy(tbl, pos * 4, bss, k, 4)
+                            c1 = bss(k)
+                            c2 = bss(k + 1)
+                            c3 = bss(k + 2)
 
-
-
-                    fs.Write(bss, 0, k)
-                    fs.Close()
-                    Beep()
-                Else
-                    MessageBox.Show(unitable(sel) & "がありません")
+                            If pos < 128 Then
+                                If pos < 32 AndAlso pos <> &HA AndAlso pos <> &HD AndAlso pos <> &H9 Then
+                                    pos = 32
+                                End If
+                                bss(k) = pos
+                                k += 1
+                            ElseIf c1 = 0 AndAlso c2 = 0 Then
+                                Array.Copy(tofuhk, 0, bss, k, 2)
+                                k += 2
+                                'skip
+                            ElseIf ((c1 + &H7F) And &HFF) < &H7E AndAlso c2 >= &H40 Then
+                                k += 2
+                            Else
+                                Array.Copy(tofuhk, 0, bss, k, 2)
+                                k += 2
+                            End If
+                        End If
+                        i += 2
+                    End While
                 End If
-            Else
-                bs = Encoding.GetEncoding(My.Settings.usercp).GetBytes(TextBox1.Text)
-                fs.Write(bs, 0, bs.Length)
+
+
+
+                fs.Write(bss, 0, k)
                 fs.Close()
                 Beep()
+            Else
+                MessageBox.Show(unitable(sel) & "がありません")
             End If
+        Else
+            bs = Encoding.GetEncoding(My.Settings.usercp).GetBytes(TextBox1.Text)
+            fs.Write(bs, 0, bs.Length)
+            fs.Close()
+            Beep()
+        End If
         Return 0
 
     End Function
@@ -1781,15 +1816,25 @@ Public Class Form1
     End Sub
 
 
+    Private Sub eucms_Click(sender As System.Object, e As System.EventArgs) Handles eucms.Click
+        My.Settings.mscodepage = 21220932
+        restcodepage()
+    End Sub
+
+
     Private Sub JIS_Click(sender As System.Object, e As System.EventArgs) Handles JIS.Click
 
         My.Settings.mscodepage = 202132004
         restcodepage()
-
     End Sub
 
     Private Sub EX_Click(sender As System.Object, e As System.EventArgs) Handles BIG5HK.Click
         My.Settings.mscodepage = 951
+        restcodepage()
+    End Sub
+
+    Private Sub USECUSTOM_Click(sender As Object, e As EventArgs) Handles USECUSTOM.Click
+        My.Settings.mscodepage = 65536
         restcodepage()
     End Sub
 
@@ -1808,6 +1853,7 @@ Public Class Form1
         JIS.Checked = False
         eucms.Checked = False
         SELCP.Checked = False
+        USECUSTOM.Checked = False
 
         Select Case My.Settings.mscodepage
             Case 2132004
@@ -1826,9 +1872,14 @@ Public Class Form1
             Case 951
                 BIG5HK.Checked = True
 
+            Case 65536
+
+                USECUSTOM.Checked = True
+
             Case Else
                 SELCP.Checked = True
         End Select
+
         If My.Settings.mscodepage = My.Settings.usercp Then
             SELCP.ToolTipText = My.Settings.cpstr
         End If
@@ -1854,10 +1905,6 @@ Public Class Form1
         My.Settings.jis208 = JISX208.Checked
     End Sub
 
-    Private Sub eucms_Click(sender As System.Object, e As System.EventArgs) Handles eucms.Click
-        My.Settings.mscodepage = 21220932
-        restcodepage()
-    End Sub
 
     Private Sub JIS83_Click(sender As System.Object, e As System.EventArgs) Handles JIS83.Click
         My.Settings.jisoutput = 83
@@ -1902,8 +1949,13 @@ Public Class Form1
         Return True
     End Function
 
-    Private Sub swaporder_Click(sender As Object, e As EventArgs) Handles swaporder.Click
-        swaporder.Checked = Not swaporder.Checked
-        My.Settings.big5order = swaporder.Checked
+    Private Sub customtalbe_Click_1(sender As Object, e As EventArgs) Handles customtalbe.Click
+        Dim f As New Form4
+        f.ShowDialog()
+        f.Dispose()
+        vstable(5) = My.Settings.unicodein
+        unitable(5) = My.Settings.unicodeout
+
+
     End Sub
 End Class

@@ -32,8 +32,14 @@
     <Setting Name="jisoutput" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">2004</Value>
     </Setting>
-    <Setting Name="big5order" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+    <Setting Name="cptype" Type="System.String" Scope="User">
+      <Value Profile="(Default)">GBK</Value>
+    </Setting>
+    <Setting Name="unicodein" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="unicodeout" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>
