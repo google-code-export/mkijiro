@@ -47,6 +47,7 @@ Partial Class Form1
         Me.selmode = New System.Windows.Forms.ComboBox()
         Me.jis = New System.Windows.Forms.CheckBox()
         Me.Button1 = New System.Windows.Forms.Button()
+        Me.cpuni = New System.Windows.Forms.CheckBox()
         Me.Panel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
@@ -272,11 +273,22 @@ Partial Class Form1
         Me.Button1.UseVisualStyleBackColor = True
         Me.Button1.Visible = False
         '
+        'cpuni
+        '
+        Me.cpuni.AutoSize = True
+        Me.cpuni.Location = New System.Drawing.Point(146, 34)
+        Me.cpuni.Name = "cpuni"
+        Me.cpuni.Size = New System.Drawing.Size(70, 16)
+        Me.cpuni.TabIndex = 24
+        Me.cpuni.Text = "CP->UNI"
+        Me.cpuni.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(252, 257)
+        Me.Controls.Add(Me.cpuni)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.ComboBox1)
         Me.Controls.Add(Me.GroupBox1)
@@ -327,5 +339,6 @@ Partial Class Form1
     Friend WithEvents selmode As System.Windows.Forms.ComboBox
     Friend WithEvents jis As System.Windows.Forms.CheckBox
     Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents cpuni As System.Windows.Forms.CheckBox
 
 End Class

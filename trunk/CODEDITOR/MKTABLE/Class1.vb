@@ -6,7 +6,7 @@ Imports System.Text.RegularExpressions
 Public Class Class1
 
     'htmltable作成
-    Public Function txt_converthtml(ByVal mode As Integer, ByVal unic As Boolean) As Boolean
+    Public Function txt_converthtml(ByVal mode As Integer, ByVal unic As Boolean, ByVal cpuni As Boolean) As Boolean
         Try
 
             Dim bb As Byte() = Nothing
@@ -80,8 +80,16 @@ Public Class Class1
                     s = ssr.ReadLine()
                     ssss = s.Split(CChar(vbTab))
 
+
+                    If cpuni = True AndAlso ssss.Length >= 2 Then
+                        st = ssss(1)
+                        ssss(1) = ssss(0)
+                        ssss(0) = st
+                    End If
+
+
                     If ssss.Length > 1 Then
-                        unim = unicc.Match(ssss(0))
+                        unim = unicc.Match(ssss(1))
                         If unim.Success Then
                             st = unim.Value
                             If st.Contains("x") Then
@@ -139,7 +147,7 @@ Public Class Class1
                                     If fakejis < c1 Then
                                         fakejis = c1
                                     End If
-                                    
+
                                 ElseIf c1 = 0 AndAlso c2 <= &H7F Then
                                     euc = 0
 
@@ -314,7 +322,7 @@ Public Class Class1
                         End If
 
 
-                        unim = unicc.Match(ssss(1))
+                        unim = unicc.Match(ssss(0))
                         If unim.Success AndAlso ucp >= 0 Then
                             st = unim.Value
                             If st.Contains("x") Then
@@ -1264,7 +1272,7 @@ Public Class Class1
             sb.AppendLine(tf)
 
             Dim sw As New System.IO.StreamWriter(Application.StartupPath & "\test.html", False, System.Text.Encoding.GetEncoding(65001))
-            sw.Write(sb.ToString)
+        sw.Write(sb.ToString.Replace(vbNullChar, ""))
         sw.Close()
 
         If enc = 54936 Then
