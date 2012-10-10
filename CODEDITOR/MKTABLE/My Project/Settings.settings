@@ -68,5 +68,8 @@
 &lt;th width="6%"&gt;F&lt;/th&gt;
 &lt;/tr&gt;</Value>
     </Setting>
+    <Setting Name="cpuni" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

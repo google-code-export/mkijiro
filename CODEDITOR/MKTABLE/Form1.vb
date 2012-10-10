@@ -15,6 +15,7 @@ Public Class Form1
         EX.Checked = My.Settings.extra
         selmode.SelectedIndex = My.Settings.seljis
         ENCODE.SelectedIndex = My.Settings.selenc
+        cpuni.Checked = My.Settings.cpuni
 
     End Sub
 
@@ -170,6 +171,13 @@ Public Class Form1
                 While ssr.Peek() > -1
                     s = ssr.ReadLine()
                     ssss = s.Split(CChar(vbTab))
+
+                    If cpuni.Checked = True AndAlso ssss.Length >= 2 Then
+                        st = ssss(1)
+                        ssss(1) = ssss(0)
+                        ssss(0) = st
+                    End If
+
                     unim = uni.Match(ssss(0))
                     If unim.Success Then
                         st = unim.Value
@@ -206,11 +214,11 @@ Public Class Form1
                                     sth2 = sth2 And &H3FF
                                     sth = (sth << 10) + sth2 + &H10000
                                 Else
-                                    MessageBox.Show(st & "はサロゲートペアではありません")
+                                    'MessageBox.Show(st & "はサロゲートペアではありません")
                                     sth = &H3F
                                 End If
                             Else
-                                MessageBox.Show(st & "はサロゲートペアではありません")
+                                'MessageBox.Show(st & "はサロゲートペアではありません")
                                 sth = &H3F
                             End If
                         End If
@@ -431,6 +439,13 @@ Public Class Form1
             While ssr.Peek() > -1
                 s = ssr.ReadLine()
                 ssss = s.Split(CChar(vbTab))
+
+                If cpuni.Checked = True AndAlso ssss.Length >= 2 Then
+                    st = ssss(1)
+                    ssss(1) = ssss(0)
+                    ssss(0) = st
+                End If
+
                 unim = uni.Match(ssss(0))
                 If unim.Success Then
                     st = unim.Value
@@ -1018,6 +1033,13 @@ Public Class Form1
             While ssr.Peek() > -1
                 s = ssr.ReadLine()
                 ssss = s.Split(CChar(vbTab))
+
+                If cpuni.Checked = True AndAlso ssss.Length >= 2 Then
+                    st = ssss(1)
+                    ssss(1) = ssss(0)
+                    ssss(0) = st
+                End If
+
                 unim = uni.Match(ssss(0))
                 If unim.Success Then
                     st = unim.Value
@@ -1178,7 +1200,7 @@ Public Class Form1
     'TSVテキストUNICODE変換表をHTMLで可視化
     Private Function tsvtable_html(ByVal output As String, ByVal enc As Integer) As Boolean
         Dim cc As New Class1
-        cc.txt_converthtml(My.Settings.htmltblmode, My.Settings.mstable)
+        cc.txt_converthtml(My.Settings.htmltblmode, My.Settings.mstable, cpuni.Checked)
         Return True
     End Function
 
@@ -1733,5 +1755,10 @@ Public Class Form1
         Dim f As New Form2
         f.ShowDialog()
         f.Dispose()
+    End Sub
+
+    Private Sub cpuni_CheckedChanged(sender As Object, e As EventArgs) Handles cpuni.CheckedChanged
+
+        My.Settings.cpuni = cpuni.Checked
     End Sub
 End Class
