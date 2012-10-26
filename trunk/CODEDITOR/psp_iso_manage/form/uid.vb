@@ -11,7 +11,7 @@
             My.Settings.sabunindex = CInt(TextBox1.Text)
             Me.Close()
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(Me, ex.Message)
         End Try
     End Sub
 

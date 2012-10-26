@@ -186,7 +186,7 @@ Public Class umdisomanger
             AddHandler TreeView1.DragOver, AddressOf TreeView1_DragOver
             AddHandler TreeView1.DragDrop, AddressOf TreeView1_DragDrop
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(Me, ex.Message)
         End Try
 
     End Sub
@@ -195,7 +195,7 @@ Public Class umdisomanger
 
         If My.Settings.edit = True AndAlso My.Settings.alwayssave = False Then
             Dim dr As DialogResult
-            dr = MessageBox.Show(lang(49), Me.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+            dr = MessageBox.Show(Me, lang(49), Me.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If dr = DialogResult.No Or dr = Windows.Forms.DialogResult.Cancel Then
                 e.Cancel = True
             End If
@@ -286,7 +286,7 @@ Public Class umdisomanger
                     '"同じゲームがすで登録されてます" "ゲームID重複"
                     sb.Insert(0, lang(8) & vbCrLf)
                     Me.TopMost = False
-                    MessageBox.Show(sb.ToString, lang(9))
+                    MessageBox.Show(Me, sb.ToString, lang(9))
                     If My.Settings.topmost = True Then
                         Me.TopMost = False
                     End If
@@ -295,7 +295,7 @@ Public Class umdisomanger
             End If
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message, lang(7))
+            MessageBox.Show(Me, ex.Message, lang(7))
         End Try
     End Sub
 
@@ -448,7 +448,7 @@ Public Class umdisomanger
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message, lang(7))
+            MessageBox.Show(Me, ex.Message, lang(7))
         End Try
     End Sub
 
@@ -631,13 +631,13 @@ Public Class umdisomanger
                                 If File.Exists(gid) = True Then
                                     path = gid
                                 ElseIf bst(0) = &H43 AndAlso bst(1) = &H49 AndAlso bst(2) = &H53 AndAlso bst(3) = &H4F Then
-                                    If MessageBox.Show("CSOなのでアンパックが必要です、時間がかかりますがよろしいですか？", "アンパック", _
+                                    If MessageBox.Show(Me, "CSOなのでアンパックが必要です、時間がかかりますがよろしいですか？", "アンパック", _
                            MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
                                         If psf.unpack_cso(path, gid) = True Then
                                             Beep()
                                             path = gid
                                         Else
-                                            MessageBox.Show("アンパックに失敗しました")
+                                            MessageBox.Show(Me, "アンパックに失敗しました")
                                             Exit Sub
                                         End If
                                     Else
@@ -655,7 +655,7 @@ Public Class umdisomanger
                             hash = hash.ToUpper
                             Beep()
                         Else
-                            MessageBox.Show(path & lang(0), lang(1))
+                            MessageBox.Show(Me, path & lang(0), lang(1))
                             Exit Sub
                         End If
                     End If
@@ -759,16 +759,16 @@ Public Class umdisomanger
                         End If
                     Else
                         Beep()
-                        MessageBox.Show(lang(2) & hash & lang(3), lang(4))
+                        MessageBox.Show(Me, lang(2) & hash & lang(3), lang(4))
                     End If
 
                 End If
             Else
-                MessageBox.Show(lang(5), lang(6))
+                MessageBox.Show(Me, lang(5), lang(6))
             End If
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message, lang(7))
+            MessageBox.Show(Me, ex.Message, lang(7))
         End Try
 
 
@@ -826,7 +826,7 @@ Public Class umdisomanger
 
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message, lang(7))
+            MessageBox.Show(Me, ex.Message, lang(7))
         End Try
     End Sub
 
@@ -836,10 +836,10 @@ Public Class umdisomanger
 
             If psp = "" Then
                 Beep()
-                MessageBox.Show(lang(18), lang(19))
+                MessageBox.Show(Me, lang(18), lang(19))
             ElseIf free.ForeColor = Color.Red Then
                 Beep()
-                MessageBox.Show("空き容量が足りません", "MSFREE")
+                MessageBox.Show(Me, "空き容量が足りません", "MSFREE")
             Else
 
                 Dim treenode As TreeNode = TreeView1.SelectedNode
@@ -903,7 +903,7 @@ Public Class umdisomanger
 
                     Me.TopMost = False
 
-                    If psp <> "" AndAlso File.Exists(cp2) = False AndAlso MessageBox.Show(cp & lang(41), lang(42), _
+                    If psp <> "" AndAlso File.Exists(cp2) = False AndAlso MessageBox.Show(Me, cp & lang(41), lang(42), _
                    MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
                         If UMD = "PBP" Then
                             For Each s In files
@@ -920,16 +920,16 @@ Public Class umdisomanger
                         End If
                         Beep()
                         '"の転送が完了しました", "転送成功"
-                        MessageBox.Show(UMD & lang(16), lang(17))
+                        MessageBox.Show(Me, UMD & lang(16), lang(17))
                     ElseIf psp = "" Then
                         Beep()
                         '"PSPが見つかりません,USB接続していないかメモステフォーマット時に作成されるMEMSTICK.INDがないようです
                         '"PSP接続エラー
-                        MessageBox.Show(lang(18), lang(19))
+                        MessageBox.Show(Me, lang(18), lang(19))
                     ElseIf File.Exists(cp2) = True Then
                         Beep()
                         '"すでにPSPに転送されてます", "ファイル重複"
-                        MessageBox.Show(lang(20), lang(21))
+                        MessageBox.Show(Me, lang(20), lang(21))
                     End If
                 End If
 
@@ -964,7 +964,7 @@ Public Class umdisomanger
             End If
         Catch ex As Exception
             Beep()
-            MessageBox.Show(ex.Message, lang(1))
+            MessageBox.Show(Me, ex.Message, lang(1))
         End Try
     End Sub
 
@@ -1025,7 +1025,7 @@ Public Class umdisomanger
                         UMD = "PBP"
                     End If
                     '"PSPからファイルを削除してもよろしいですか？"
-                    If psp <> "" AndAlso File.Exists(cp2) = True AndAlso MessageBox.Show(lang(22), lang(14), _
+                    If psp <> "" AndAlso File.Exists(cp2) = True AndAlso MessageBox.Show(Me, lang(22), lang(14), _
                                MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
                         If UMD = "PBP" Then
                             For Each s In files
@@ -1047,7 +1047,7 @@ Public Class umdisomanger
                         End If
                         Beep()
                         '"を削除しました" & vbCrLf & cp2, "削除")
-                        MessageBox.Show(UMD & lang(23) & vbCrLf & cp2, lang(24))
+                        MessageBox.Show(Me, UMD & lang(23) & vbCrLf & cp2, lang(24))
                     End If
                 End If
 
@@ -1077,11 +1077,11 @@ Public Class umdisomanger
 
             Else
                 Beep()
-                MessageBox.Show(lang(18), lang(19))
+                MessageBox.Show(Me, lang(18), lang(19))
             End If
         Catch ex As Exception
             Beep()
-            MessageBox.Show(ex.Message, lang(1))
+            MessageBox.Show(Me, ex.Message, lang(1))
         End Try
     End Sub
 
@@ -1142,13 +1142,13 @@ Public Class umdisomanger
                         If File.Exists(gid) = True Then
                             path = gid
                         ElseIf bst(0) = &H43 AndAlso bst(1) = &H49 AndAlso bst(2) = &H53 AndAlso bst(3) = &H4F Then
-                            If MessageBox.Show("CSOなのでアンパックが必要です、時間がかかりますがよろしいですか？", "アンパック", _
+                            If MessageBox.Show(Me, "CSOなのでアンパックが必要です、時間がかかりますがよろしいですか？", "アンパック", _
                    MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
                                 If psf.unpack_cso(path, gid) = True Then
                                     Beep()
                                     path = gid
                                 Else
-                                    MessageBox.Show("アンパックに失敗しました")
+                                    MessageBox.Show(Me, "アンパックに失敗しました")
                                     Exit Sub
                                 End If
                             Else
@@ -1181,10 +1181,10 @@ Public Class umdisomanger
                     TreeView1.Focus()
 
                 Catch ex As Exception
-                    MessageBox.Show(ex.Message, lang(7))
+                    MessageBox.Show(Me, ex.Message, lang(7))
                 End Try
             Else
-                MessageBox.Show(path & lang(0), lang(1))
+                MessageBox.Show(Me, path & lang(0), lang(1))
             End If
         End If
     End Sub
@@ -1216,13 +1216,13 @@ Public Class umdisomanger
                         If File.Exists(gid) = True Then
                             path = gid
                         ElseIf bst(0) = &H43 AndAlso bst(1) = &H49 AndAlso bst(2) = &H53 AndAlso bst(3) = &H4F Then
-                            If MessageBox.Show("CSOなのでアンパックが必要です、時間がかかりますがよろしいですか？", "アンパック", _
+                            If MessageBox.Show(Me, "CSOなのでアンパックが必要です、時間がかかりますがよろしいですか？", "アンパック", _
                    MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
                                 If psf.unpack_cso(path, gid) = True Then
                                     Beep()
                                     path = gid
                                 Else
-                                    MessageBox.Show("アンパックに失敗しました")
+                                    MessageBox.Show(Me, "アンパックに失敗しました")
                                     Exit Sub
                                 End If
                             Else
@@ -1263,10 +1263,10 @@ Public Class umdisomanger
 
 
                 Catch ex As Exception
-                    MessageBox.Show(ex.Message, lang(7))
+                    MessageBox.Show(Me, ex.Message, lang(7))
                 End Try
             Else
-                MessageBox.Show(path & lang(0), lang(1))
+                MessageBox.Show(Me, path & lang(0), lang(1))
             End If
         End If
     End Sub
@@ -1297,13 +1297,13 @@ Public Class umdisomanger
                         If File.Exists(gid) = True Then
                             path = gid
                         ElseIf bst(0) = &H43 AndAlso bst(1) = &H49 AndAlso bst(2) = &H53 AndAlso bst(3) = &H4F Then
-                            If MessageBox.Show("CSOなのでアンパックが必要です、時間がかかりますがよろしいですか？", "アンパック", _
+                            If MessageBox.Show(Me, "CSOなのでアンパックが必要です、時間がかかりますがよろしいですか？", "アンパック", _
                    MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
                                 If psf.unpack_cso(path, gid) = True Then
                                     Beep()
                                     path = gid
                                 Else
-                                    MessageBox.Show("アンパックに失敗しました")
+                                    MessageBox.Show(Me, "アンパックに失敗しました")
                                     Exit Sub
                                 End If
                             Else
@@ -1343,10 +1343,10 @@ Public Class umdisomanger
                     TreeView1.Focus()
 
                 Catch ex As Exception
-                    MessageBox.Show(ex.Message, lang(7))
+                    MessageBox.Show(Me, ex.Message, lang(7))
                 End Try
             Else
-                MessageBox.Show(path & lang(0), lang(1))
+                MessageBox.Show(Me, path & lang(0), lang(1))
             End If
         End If
     End Sub
@@ -1368,11 +1368,11 @@ Public Class umdisomanger
                     calc_md5_Click(sender, e)
                     calc_sha_Click(sender, e)
                 Else
-                    MessageBox.Show(path & lang(0), lang(1))
+                    MessageBox.Show(Me, path & lang(0), lang(1))
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message, lang(7))
+            MessageBox.Show(Me, ex.Message, lang(7))
         End Try
     End Sub
 
@@ -1398,11 +1398,11 @@ Public Class umdisomanger
                     End If
 
                 Else
-                    MessageBox.Show(path & lang(0), lang(1))
+                    MessageBox.Show(Me, path & lang(0), lang(1))
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message, lang(7))
+            MessageBox.Show(Me, ex.Message, lang(7))
         End Try
     End Sub
 
@@ -1427,11 +1427,11 @@ Public Class umdisomanger
                     End If
 
                 Else
-                    MessageBox.Show(path & lang(0), lang(1))
+                    MessageBox.Show(Me, path & lang(0), lang(1))
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message, lang(7))
+            MessageBox.Show(Me, ex.Message, lang(7))
         End Try
     End Sub
 
@@ -1564,13 +1564,13 @@ Public Class umdisomanger
                 Next
                 If beeps = True Then
                     sb.Insert(0, lang(8) & vbCrLf)
-                    MessageBox.Show(sb.ToString, lang(9))
+                    MessageBox.Show(Me, sb.ToString, lang(9))
                 End If
                 My.Settings.isobase = Path.GetDirectoryName(paths(0))
             End If
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message, lang(7))
+            MessageBox.Show(Me, ex.Message, lang(7))
         End Try
     End Sub
 
@@ -1626,7 +1626,7 @@ Public Class umdisomanger
 
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message, lang(7))
+            MessageBox.Show(Me, ex.Message, lang(7))
         End Try
     End Sub
 
@@ -1741,7 +1741,7 @@ Public Class umdisomanger
                     If no_intro.Contains("crc FB3DF0B7") Then
                         check = True
                     Else
-                        MessageBox.Show("NO_INTRO DAT NOT FOUND")
+                        MessageBox.Show(Me, "NO_INTRO DAT NOT FOUND")
                         sw.Close()
                         Exit Sub
                     End If
@@ -1849,7 +1849,7 @@ Public Class umdisomanger
 
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message, lang(7))
+            MessageBox.Show(Me, ex.Message, lang(7))
         End Try
     End Sub
 
@@ -1923,7 +1923,7 @@ Public Class umdisomanger
 
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message, lang(7))
+            MessageBox.Show(Me, ex.Message, lang(7))
         End Try
     End Sub
 
@@ -2006,12 +2006,12 @@ Public Class umdisomanger
                 Dim errres As System.Net.HttpWebResponse = _
                     CType(ex.Response, System.Net.HttpWebResponse)
                 '応答したURIを表示する
-                'MessageBox.Show(errres.StatusCode & vbCrLf & errres.StatusDescription)
+                'MessageBox.Show(Me,errres.StatusCode & vbCrLf & errres.StatusDescription)
                 'Console.WriteLine(errres.ResponseUri)
                 '応答ステータスコードを表示する
                 'Console.WriteLine("{0}:{1}", errres.StatusCode, errres.StatusDescription)
             Else
-                MessageBox.Show(ex.Message)
+                MessageBox.Show(Me, ex.Message)
                 'Console.WriteLine(ex.Message)
             End If
             Return False
@@ -2031,14 +2031,14 @@ Public Class umdisomanger
 
         Try
             If TreeView1.SelectedNode.Level = 0 Then
-                If MessageBox.Show(lang(13), lang(14), _
+                If MessageBox.Show(Me, lang(13), lang(14), _
                    MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
                     TreeView1.SelectedNode.Remove()
                     My.Settings.edit = True
                 End If
             End If
             If TreeView1.SelectedNode.Level = 1 Then
-                If MessageBox.Show(lang(13), lang(14), _
+                If MessageBox.Show(Me, lang(13), lang(14), _
                    MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
                     TreeView1.SelectedNode.Parent.Remove()
                     My.Settings.edit = True
@@ -2047,7 +2047,7 @@ Public Class umdisomanger
 
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message, lang(7))
+            MessageBox.Show(Me, ex.Message, lang(7))
         End Try
     End Sub
 
@@ -2092,7 +2092,7 @@ Public Class umdisomanger
                 TreeView1.Focus()
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message, lang(7))
+            MessageBox.Show(Me, ex.Message, lang(7))
         End Try
     End Sub
 
@@ -2158,7 +2158,7 @@ Public Class umdisomanger
                 TreeView1.Focus()
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message, lang(7))
+            MessageBox.Show(Me, ex.Message, lang(7))
         End Try
     End Sub
 
@@ -2243,7 +2243,7 @@ Public Class umdisomanger
         Try
             Dim exe As String = FindAssociatedExecutableFile(impath)
             If exe = "" Then
-                MessageBox.Show("関連付けられたプログラムが見つかりませんでした。")
+                MessageBox.Show(Me, "関連付けられたプログラムが見つかりませんでした。")
                 Return False
             End If
             If File.Exists(impath) = True Then
@@ -2254,10 +2254,10 @@ Public Class umdisomanger
                     Process.Start(m.Value, p.Replace("%1", impath))
                 End If
             Else
-                MessageBox.Show("ユーザー画像が見つかりません")
+                MessageBox.Show(Me, "ユーザー画像が見つかりません")
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(Me, ex.Message)
         End Try
 
         Return True
@@ -2290,7 +2290,7 @@ Public Class umdisomanger
                 Me.Focus()
                 If picture = fileName(0) Then
 
-                ElseIf File.Exists(picture) = True AndAlso MessageBox.Show(lang(39) & picture & lang(40), lang(14), _
+                ElseIf File.Exists(picture) = True AndAlso MessageBox.Show(Me, lang(39) & picture & lang(40), lang(14), _
                MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
                     File.Delete(picture)
                     File.Copy(fileName(0), picture)
@@ -2306,7 +2306,7 @@ Public Class umdisomanger
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message, lang(7))
+            MessageBox.Show(Me, ex.Message, lang(7))
         End Try
     End Sub
 
@@ -2322,7 +2322,7 @@ Public Class umdisomanger
                 Me.Focus()
                 If picture = fileName(0) Then
 
-                ElseIf File.Exists(picture) = True AndAlso MessageBox.Show(lang(39) & picture & lang(40), lang(14), _
+                ElseIf File.Exists(picture) = True AndAlso MessageBox.Show(Me, lang(39) & picture & lang(40), lang(14), _
                MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
                     File.Delete(picture)
                     File.Copy(fileName(0), picture)
@@ -2338,7 +2338,7 @@ Public Class umdisomanger
             End If
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message, lang(7))
+            MessageBox.Show(Me, ex.Message, lang(7))
         End Try
     End Sub
 
@@ -2364,7 +2364,7 @@ Public Class umdisomanger
                 If ofd.ShowDialog() = DialogResult.OK Then
                     If picture = ofd.FileName Then
 
-                    ElseIf File.Exists(picture) = True AndAlso MessageBox.Show(lang(39) & picture & lang(40), lang(14), _
+                    ElseIf File.Exists(picture) = True AndAlso MessageBox.Show(Me, lang(39) & picture & lang(40), lang(14), _
                    MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
                         File.Delete(picture)
                         File.Copy(ofd.FileName, picture)
@@ -2381,7 +2381,7 @@ Public Class umdisomanger
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message, lang(7))
+            MessageBox.Show(Me, ex.Message, lang(7))
         End Try
     End Sub
 
@@ -2405,7 +2405,7 @@ Public Class umdisomanger
                 If ofd.ShowDialog() = DialogResult.OK Then
                     If picture = ofd.FileName Then
 
-                    ElseIf File.Exists(picture) = True AndAlso MessageBox.Show(lang(39) & picture & lang(40), lang(14), _
+                    ElseIf File.Exists(picture) = True AndAlso MessageBox.Show(Me, lang(39) & picture & lang(40), lang(14), _
                    MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
                         File.Delete(picture)
                         File.Copy(ofd.FileName, picture)
@@ -2422,7 +2422,7 @@ Public Class umdisomanger
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message, lang(7))
+            MessageBox.Show(Me, ex.Message, lang(7))
         End Try
     End Sub
 
@@ -2486,13 +2486,13 @@ Public Class umdisomanger
                                 If File.Exists(gid) = True Then
                                     path = gid
                                 ElseIf bst(0) = &H43 AndAlso bst(1) = &H49 AndAlso bst(2) = &H53 AndAlso bst(3) = &H4F Then
-                                    If MessageBox.Show("CSOなのでアンパックが必要です、時間がかかりますがよろしいですか？", "アンパック", _
+                                    If MessageBox.Show(Me, "CSOなのでアンパックが必要です、時間がかかりますがよろしいですか？", "アンパック", _
                            MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
                                         If psf.unpack_cso(path, gid) = True Then
                                             Beep()
                                             path = gid
                                         Else
-                                            MessageBox.Show("アンパックに失敗しました")
+                                            MessageBox.Show(Me, "アンパックに失敗しました")
                                             Exit Sub
                                         End If
                                     Else
@@ -2510,7 +2510,7 @@ Public Class umdisomanger
                             hash = hash.ToUpper
                         Else
                             '"が見つかりません", "エラー")
-                            MessageBox.Show(path & lang(0), lang(1))
+                            MessageBox.Show(Me, path & lang(0), lang(1))
                             Exit Sub
                         End If
                     End If
@@ -2630,17 +2630,17 @@ Public Class umdisomanger
                     Else
                         Beep()
                         'ISOと同じCRC32; "がみつかりませんでした", "CRC不一致")
-                        MessageBox.Show(lang(2) & hash & lang(3), lang(4))
+                        MessageBox.Show(Me, lang(2) & hash & lang(3), lang(4))
                     End If
 
                 End If
             Else
                 '"画像検索用のoffline用XMLがみつかりません", "XMLエラー"
-                MessageBox.Show(lang(5), lang(6))
+                MessageBox.Show(Me, lang(5), lang(6))
             End If
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message, lang(7))
+            MessageBox.Show(Me, ex.Message, lang(7))
         End Try
     End Sub
 
@@ -2724,7 +2724,7 @@ Public Class umdisomanger
                 My.Settings.datpath = ofd.FileName
             Else
                 '"DATではありません", "DAT"
-                MessageBox.Show(lang(48), lang(45))
+                MessageBox.Show(Me, lang(48), lang(45))
             End If
         End If
     End Sub
@@ -2821,7 +2821,7 @@ Public Class umdisomanger
 
             If dat.Value = "" Then
                 '"OFFLINE用のXMLではありません", "不明XML"
-                MessageBox.Show(lang(31), lang(32))
+                MessageBox.Show(Me, lang(31), lang(32))
             End If
         End If
     End Sub
@@ -3092,10 +3092,10 @@ Public Class umdisomanger
                 TreeView1.EndUpdate()
             Else
                 '"リネーム用DATがみつかりません", "DATエラー"
-                MessageBox.Show(lang(44), lang(45))
+                MessageBox.Show(Me, lang(44), lang(45))
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message, "")
+            MessageBox.Show(Me, ex.Message, "")
             TreeView1.EndUpdate()
         End Try
     End Sub
@@ -3237,10 +3237,10 @@ Public Class umdisomanger
                 Beep()
             Else
                 '"画像検索用のoffline用XMLがみつかりません", "XMLエラー"
-                MessageBox.Show(lang(5), lang(6))
+                MessageBox.Show(Me, lang(5), lang(6))
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message, "")
+            MessageBox.Show(Me, ex.Message, "")
             TreeView1.EndUpdate()
         End Try
     End Sub
@@ -3471,10 +3471,10 @@ Public Class umdisomanger
 
             Else
                 '"リネーム用DATがみつかりません", "DATエラー"
-                MessageBox.Show(lang(44), lang(45))
+                MessageBox.Show(Me, lang(44), lang(45))
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message, "")
+            MessageBox.Show(Me, ex.Message, "")
             TreeView1.EndUpdate()
         End Try
     End Sub
@@ -3829,10 +3829,10 @@ Public Class umdisomanger
                 Beep()
                 TreeView1.EndUpdate()
             Else
-                MessageBox.Show("XMLヘッダーに<imFoder>がありません")
+                MessageBox.Show(Me, "XMLヘッダーに<imFoder>がありません")
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message, "")
+            MessageBox.Show(Me, ex.Message, "")
             TreeView1.EndUpdate()
         End Try
     End Sub
@@ -3922,7 +3922,7 @@ Public Class umdisomanger
 
                 If dat.Value = "" Then
                     '"OFFLINE用のXMLではありません", "不明XML"
-                    MessageBox.Show(lang(31), lang(32))
+                    MessageBox.Show(Me, lang(31), lang(32))
                     Exit Sub
                 End If
 
@@ -4254,10 +4254,10 @@ Public Class umdisomanger
                 TreeView1.EndUpdate()
             Else
                 '"画像検索用のoffline用XMLがみつかりません", "XMLエラー"
-                MessageBox.Show(lang(5), lang(6))
+                MessageBox.Show(Me, lang(5), lang(6))
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message, "")
+            MessageBox.Show(Me, ex.Message, "")
             TreeView1.EndUpdate()
         End Try
     End Sub
