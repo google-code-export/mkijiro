@@ -33,63 +33,63 @@ Partial Class ver
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(19, 31)
+        Me.Label1.Location = New System.Drawing.Point(16, 27)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(179, 14)
+        Me.Label1.Size = New System.Drawing.Size(158, 12)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "UMD RAWIMAGE MANAGER "
         '
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(50, 65)
+        Me.Label2.Location = New System.Drawing.Point(43, 56)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(120, 14)
+        Me.Label2.Size = New System.Drawing.Size(107, 12)
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "CREATED BY (ﾟ∀ﾟ)"
         '
         'builddate
         '
         Me.builddate.AutoSize = True
-        Me.builddate.Location = New System.Drawing.Point(33, 93)
+        Me.builddate.Location = New System.Drawing.Point(28, 80)
         Me.builddate.Name = "builddate"
-        Me.builddate.Size = New System.Drawing.Size(153, 14)
+        Me.builddate.Size = New System.Drawing.Size(130, 12)
         Me.builddate.TabIndex = 2
-        Me.builddate.Text = "BUILD;2012/02/27 18:34"
+        Me.builddate.Text = "BUILD;2012/10/26 18:51"
         '
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(50, 124)
+        Me.Label4.Location = New System.Drawing.Point(43, 106)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(113, 14)
+        Me.Label4.Size = New System.Drawing.Size(95, 12)
         Me.Label4.TabIndex = 3
         Me.Label4.Text = "LICENCE: GPL v3"
         '
         'LinkLabel1
         '
         Me.LinkLabel1.AutoSize = True
-        Me.LinkLabel1.Location = New System.Drawing.Point(65, 149)
+        Me.LinkLabel1.Location = New System.Drawing.Point(56, 128)
         Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(89, 14)
+        Me.LinkLabel1.Size = New System.Drawing.Size(73, 12)
         Me.LinkLabel1.TabIndex = 4
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "GOOGLESVN"
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(68, 177)
+        Me.Button1.Location = New System.Drawing.Point(58, 152)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
+        Me.Button1.Size = New System.Drawing.Size(64, 20)
         Me.Button1.TabIndex = 5
         Me.Button1.Text = "UPDATE"
         Me.Button1.UseVisualStyleBackColor = True
         '
         'ver
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(225, 211)
+        Me.ClientSize = New System.Drawing.Size(193, 181)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.LinkLabel1)
         Me.Controls.Add(Me.Label4)

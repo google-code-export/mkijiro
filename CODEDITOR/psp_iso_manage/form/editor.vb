@@ -25,15 +25,15 @@ Public Class editor
         If gname.Text = "" Then
             Beep()
             '"管理名が空です",
-            MessageBox.Show(m.lang(34), m.lang(1))
+            MessageBox.Show(Me, m.lang(34), m.lang(1))
         ElseIf gid.Text = "" Then
             Beep()
             '"ゲームIDが空です"
-            MessageBox.Show(m.lang(35), m.lang(1))
+            MessageBox.Show(Me, m.lang(35), m.lang(1))
         ElseIf File.Exists(fpath.Text) = False Then
             Beep()
             '"指定したファイルが存在しません"
-            MessageBox.Show(m.lang(36), m.lang(1))
+            MessageBox.Show(Me, m.lang(36), m.lang(1))
         Else
             If impath.Text = "" Then
                 impath.Text = gname.Text
@@ -82,7 +82,7 @@ Public Class editor
 
             Else
                 '"UMDRAWイメージ,PBPではありません"
-                MessageBox.Show(m.lang(37), m.lang(1))
+                MessageBox.Show(Me, m.lang(37), m.lang(1))
             End If
             My.Settings.isobase = Path.GetDirectoryName(ofd.FileName)
         End If
@@ -123,10 +123,10 @@ Public Class editor
                     End If
                 End If
             Else
-                MessageBox.Show(m.lang(37), m.lang(1))
+                MessageBox.Show(Me, m.lang(37), m.lang(1))
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message, m.lang(7))
+            MessageBox.Show(Me, ex.Message, m.lang(7))
         End Try
     End Sub
 
