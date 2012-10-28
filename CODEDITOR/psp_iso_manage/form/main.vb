@@ -1115,6 +1115,9 @@ Public Class umdisomanger
 
     Private Sub calc_crc_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles calc_crc.Click
 
+        Dim t1 As Integer = System.Environment.TickCount
+
+
         Dim treenode As TreeNode = TreeView1.SelectedNode
         If treenode IsNot Nothing Then
             My.Settings.edit = True
@@ -1187,6 +1190,9 @@ Public Class umdisomanger
                 MessageBox.Show(Me, path & lang(0), lang(1))
             End If
         End If
+
+        Label8.Text = (System.Environment.TickCount - t1).ToString
+
     End Sub
 
 

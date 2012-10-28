@@ -3118,4 +3118,14 @@ Public Class MERGE
     End Sub
 #End Region
 
+    'Private Sub 復号ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 復号ToolStripMenuItem.Click
+
+    '    k = Convert.ToUInt32(ss.Substring(0, 8), 16)
+    '                k ^= 0xD6F73BEE
+
+    'End Sub
+
+    'Private Sub 暗号化ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 暗号化ToolStripMenuItem.Click
+
+    'End Sub
 End Class

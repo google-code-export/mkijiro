@@ -113,4 +113,9 @@ Public Class CRC32
         Return New Byte() {CByte(((x >> 24) And &HFF)), CByte(((x >> 16) And &HFF)), CByte(((x >> 8) And &HFF)), CByte((x And &HFF))}
 
     End Function
+
+
+
+
+
 End Class

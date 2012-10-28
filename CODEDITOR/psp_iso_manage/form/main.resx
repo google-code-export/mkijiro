@@ -122,10 +122,10 @@
     <value>MS UI Gothic, 7.8pt</value>
   </data>
   <data name="CRCimage.Location" type="System.Drawing.Point, System.Drawing">
-    <value>375, 38</value>
+    <value>321, 33</value>
   </data>
   <data name="CRCimage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>82, 21</value>
+    <value>70, 18</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="CRCimage.TabIndex" type="System.Int32, mscorlib">
@@ -144,49 +144,49 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;CRCimage.ZOrder" xml:space="preserve">
-    <value>34</value>
+    <value>35</value>
   </data>
   <metadata name="ContextMenuStrip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>214, 17</value>
   </metadata>
   <data name="cnt_install.Size" type="System.Drawing.Size, System.Drawing">
-    <value>166, 26</value>
+    <value>148, 22</value>
   </data>
   <data name="cnt_install.Text" xml:space="preserve">
     <value>INSTALL</value>
   </data>
   <data name="ToolStripSeparator6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>163, 6</value>
+    <value>145, 6</value>
   </data>
   <data name="rg_add.Size" type="System.Drawing.Size, System.Drawing">
-    <value>166, 26</value>
+    <value>148, 22</value>
   </data>
   <data name="rg_add.Text" xml:space="preserve">
     <value>ADD</value>
   </data>
   <data name="rg_edit.Size" type="System.Drawing.Size, System.Drawing">
-    <value>166, 26</value>
+    <value>148, 22</value>
   </data>
   <data name="rg_edit.Text" xml:space="preserve">
     <value>EDIT</value>
   </data>
   <data name="rg_del.Size" type="System.Drawing.Size, System.Drawing">
-    <value>166, 26</value>
+    <value>148, 22</value>
   </data>
   <data name="rg_del.Text" xml:space="preserve">
     <value>DEL</value>
   </data>
   <data name="ToolStripSeparator5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>163, 6</value>
+    <value>145, 6</value>
   </data>
   <data name="VIEW.Size" type="System.Drawing.Size, System.Drawing">
-    <value>166, 26</value>
+    <value>148, 22</value>
   </data>
   <data name="VIEW.Text" xml:space="preserve">
     <value>VIEW JAKET</value>
   </data>
   <data name="ContextMenuStrip2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>167, 146</value>
+    <value>149, 126</value>
   </data>
   <data name="&gt;&gt;ContextMenuStrip2.Name" xml:space="preserve">
     <value>ContextMenuStrip2</value>
@@ -195,10 +195,10 @@
     <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="TreeView1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 38</value>
+    <value>9, 33</value>
   </data>
   <data name="TreeView1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>242, 411</value>
+    <value>208, 353</value>
   </data>
   <data name="TreeView1.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -213,16 +213,16 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;TreeView1.ZOrder" xml:space="preserve">
-    <value>26</value>
+    <value>27</value>
   </data>
   <data name="GAMEID.Font" type="System.Drawing.Font, System.Drawing">
     <value>MS UI Gothic, 7.8pt</value>
   </data>
   <data name="GAMEID.Location" type="System.Drawing.Point, System.Drawing">
-    <value>410, 277</value>
+    <value>351, 237</value>
   </data>
   <data name="GAMEID.Size" type="System.Drawing.Size, System.Drawing">
-    <value>48, 21</value>
+    <value>41, 18</value>
   </data>
   <data name="GAMEID.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -240,16 +240,16 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;GAMEID.ZOrder" xml:space="preserve">
-    <value>38</value>
+    <value>39</value>
   </data>
   <data name="PFS.Font" type="System.Drawing.Font, System.Drawing">
     <value>MS UI Gothic, 7.8pt</value>
   </data>
   <data name="PFS.Location" type="System.Drawing.Point, System.Drawing">
-    <value>552, 250</value>
+    <value>473, 214</value>
   </data>
   <data name="PFS.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 21</value>
+    <value>57, 18</value>
   </data>
   <data name="PFS.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -267,25 +267,25 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;PFS.ZOrder" xml:space="preserve">
-    <value>36</value>
+    <value>37</value>
   </data>
   <metadata name="ContextMenuStrip3.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>543, 17</value>
   </metadata>
   <data name="changeimage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>175, 26</value>
+    <value>157, 22</value>
   </data>
   <data name="changeimage.Text" xml:space="preserve">
     <value>change image</value>
   </data>
   <data name="editimage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>175, 26</value>
+    <value>157, 22</value>
   </data>
   <data name="editimage.Text" xml:space="preserve">
     <value>edit image</value>
   </data>
   <data name="ContextMenuStrip3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>176, 56</value>
+    <value>158, 48</value>
   </data>
   <data name="&gt;&gt;ContextMenuStrip3.Name" xml:space="preserve">
     <value>ContextMenuStrip3</value>
@@ -294,10 +294,10 @@
     <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="PictureBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>260, 64</value>
+    <value>223, 55</value>
   </data>
   <data name="PictureBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>108, 181</value>
+    <value>93, 155</value>
   </data>
   <data name="PictureBox1.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -312,16 +312,16 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;PictureBox1.ZOrder" xml:space="preserve">
-    <value>28</value>
+    <value>29</value>
   </data>
   <data name="managename.Location" type="System.Drawing.Point, System.Drawing">
-    <value>318, 249</value>
+    <value>273, 213</value>
   </data>
   <data name="managename.MaxLength" type="System.Int32, mscorlib">
     <value>64</value>
   </data>
   <data name="managename.Size" type="System.Drawing.Size, System.Drawing">
-    <value>227, 21</value>
+    <value>195, 19</value>
   </data>
   <data name="managename.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -336,25 +336,25 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;managename.ZOrder" xml:space="preserve">
-    <value>37</value>
+    <value>38</value>
   </data>
   <metadata name="ContextMenuStrip4.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>730, 17</value>
   </metadata>
   <data name="ChangeImage2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>208, 26</value>
+    <value>184, 22</value>
   </data>
   <data name="ChangeImage2.Text" xml:space="preserve">
     <value>change screenshot</value>
   </data>
   <data name="EditImage2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>208, 26</value>
+    <value>184, 22</value>
   </data>
   <data name="EditImage2.Text" xml:space="preserve">
     <value>edit screenshot</value>
   </data>
   <data name="ContextMenuStrip4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>209, 78</value>
+    <value>185, 48</value>
   </data>
   <data name="&gt;&gt;ContextMenuStrip4.Name" xml:space="preserve">
     <value>ContextMenuStrip4</value>
@@ -363,10 +363,10 @@
     <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="PictureBox2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>375, 65</value>
+    <value>321, 56</value>
   </data>
   <data name="PictureBox2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>320, 181</value>
+    <value>274, 155</value>
   </data>
   <data name="PictureBox2.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -381,16 +381,16 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;PictureBox2.ZOrder" xml:space="preserve">
-    <value>32</value>
+    <value>33</value>
   </data>
   <data name="Label1.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="Label1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>257, 252</value>
+    <value>220, 216</value>
   </data>
   <data name="Label1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>43, 14</value>
+    <value>37, 12</value>
   </data>
   <data name="Label1.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
@@ -408,16 +408,16 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;Label1.ZOrder" xml:space="preserve">
-    <value>39</value>
+    <value>40</value>
   </data>
   <data name="movepsp.Font" type="System.Drawing.Font, System.Drawing">
     <value>MS UI Gothic, 7.8pt</value>
   </data>
   <data name="movepsp.Location" type="System.Drawing.Point, System.Drawing">
-    <value>258, 401</value>
+    <value>221, 344</value>
   </data>
   <data name="movepsp.Size" type="System.Drawing.Size, System.Drawing">
-    <value>81, 21</value>
+    <value>69, 18</value>
   </data>
   <data name="movepsp.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -435,16 +435,16 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;movepsp.ZOrder" xml:space="preserve">
-    <value>24</value>
+    <value>25</value>
   </data>
   <data name="google.Font" type="System.Drawing.Font, System.Drawing">
     <value>MS UI Gothic, 7.8pt</value>
   </data>
   <data name="google.Location" type="System.Drawing.Point, System.Drawing">
-    <value>463, 38</value>
+    <value>397, 33</value>
   </data>
   <data name="google.Size" type="System.Drawing.Size, System.Drawing">
-    <value>82, 21</value>
+    <value>70, 18</value>
   </data>
   <data name="google.TabIndex" type="System.Int32, mscorlib">
     <value>10</value>
@@ -462,7 +462,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;google.ZOrder" xml:space="preserve">
-    <value>33</value>
+    <value>34</value>
   </data>
   <metadata name="ContextMenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
@@ -481,13 +481,13 @@
     <value>Disable</value>
   </data>
   <data name="drivelettter.Location" type="System.Drawing.Point, System.Drawing">
-    <value>506, 402</value>
+    <value>434, 345</value>
   </data>
   <data name="drivelettter.MaxLength" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
   <data name="drivelettter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>26, 21</value>
+    <value>23, 19</value>
   </data>
   <data name="drivelettter.TabIndex" type="System.Int32, mscorlib">
     <value>11</value>
@@ -502,16 +502,16 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;drivelettter.ZOrder" xml:space="preserve">
-    <value>21</value>
+    <value>22</value>
   </data>
   <data name="lockdriveletter.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="lockdriveletter.Location" type="System.Drawing.Point, System.Drawing">
-    <value>370, 404</value>
+    <value>317, 346</value>
   </data>
   <data name="lockdriveletter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>114, 18</value>
+    <value>101, 16</value>
   </data>
   <data name="lockdriveletter.TabIndex" type="System.Int32, mscorlib">
     <value>12</value>
@@ -529,16 +529,16 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;lockdriveletter.ZOrder" xml:space="preserve">
-    <value>19</value>
+    <value>20</value>
   </data>
   <data name="Label2.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="Label2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>538, 279</value>
+    <value>461, 239</value>
   </data>
   <data name="Label2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>64, 14</value>
+    <value>54, 12</value>
   </data>
   <data name="Label2.TabIndex" type="System.Int32, mscorlib">
     <value>13</value>
@@ -556,16 +556,16 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;Label2.ZOrder" xml:space="preserve">
-    <value>29</value>
+    <value>30</value>
   </data>
   <data name="Label3.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="Label3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>538, 304</value>
+    <value>461, 261</value>
   </data>
   <data name="Label3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>71, 14</value>
+    <value>59, 12</value>
   </data>
   <data name="Label3.TabIndex" type="System.Int32, mscorlib">
     <value>14</value>
@@ -583,16 +583,16 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;Label3.ZOrder" xml:space="preserve">
-    <value>22</value>
+    <value>23</value>
   </data>
   <data name="Label4.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="Label4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>260, 306</value>
+    <value>223, 262</value>
   </data>
   <data name="Label4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>51, 14</value>
+    <value>43, 12</value>
   </data>
   <data name="Label4.TabIndex" type="System.Int32, mscorlib">
     <value>15</value>
@@ -610,16 +610,16 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;Label4.ZOrder" xml:space="preserve">
-    <value>18</value>
+    <value>19</value>
   </data>
   <data name="Label5.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="Label5.Location" type="System.Drawing.Point, System.Drawing">
-    <value>258, 334</value>
+    <value>221, 286</value>
   </data>
   <data name="Label5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>36, 14</value>
+    <value>30, 12</value>
   </data>
   <data name="Label5.TabIndex" type="System.Int32, mscorlib">
     <value>16</value>
@@ -637,16 +637,16 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;Label5.ZOrder" xml:space="preserve">
-    <value>27</value>
+    <value>28</value>
   </data>
   <data name="Label6.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="Label6.Location" type="System.Drawing.Point, System.Drawing">
-    <value>261, 367</value>
+    <value>224, 315</value>
   </data>
   <data name="Label6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>50, 14</value>
+    <value>42, 12</value>
   </data>
   <data name="Label6.TabIndex" type="System.Int32, mscorlib">
     <value>17</value>
@@ -664,16 +664,16 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;Label6.ZOrder" xml:space="preserve">
-    <value>15</value>
+    <value>16</value>
   </data>
   <data name="isosize.Location" type="System.Drawing.Point, System.Drawing">
-    <value>608, 276</value>
+    <value>521, 237</value>
   </data>
   <data name="isosize.MaxLength" type="System.Int32, mscorlib">
     <value>10</value>
   </data>
   <data name="isosize.Size" type="System.Drawing.Size, System.Drawing">
-    <value>83, 21</value>
+    <value>72, 19</value>
   </data>
   <data name="isosize.TabIndex" type="System.Int32, mscorlib">
     <value>18</value>
@@ -688,16 +688,16 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;isosize.ZOrder" xml:space="preserve">
-    <value>35</value>
+    <value>36</value>
   </data>
   <data name="isolba.Location" type="System.Drawing.Point, System.Drawing">
-    <value>608, 301</value>
+    <value>521, 258</value>
   </data>
   <data name="isolba.MaxLength" type="System.Int32, mscorlib">
     <value>10</value>
   </data>
   <data name="isolba.Size" type="System.Drawing.Size, System.Drawing">
-    <value>83, 21</value>
+    <value>72, 19</value>
   </data>
   <data name="isolba.TabIndex" type="System.Int32, mscorlib">
     <value>19</value>
@@ -712,19 +712,19 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;isolba.ZOrder" xml:space="preserve">
-    <value>31</value>
+    <value>32</value>
   </data>
   <data name="crc.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>Disable</value>
   </data>
   <data name="crc.Location" type="System.Drawing.Point, System.Drawing">
-    <value>318, 303</value>
+    <value>273, 260</value>
   </data>
   <data name="crc.MaxLength" type="System.Int32, mscorlib">
     <value>8</value>
   </data>
   <data name="crc.Size" type="System.Drawing.Size, System.Drawing">
-    <value>88, 21</value>
+    <value>76, 19</value>
   </data>
   <data name="crc.TabIndex" type="System.Int32, mscorlib">
     <value>20</value>
@@ -739,19 +739,19 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;crc.ZOrder" xml:space="preserve">
-    <value>12</value>
+    <value>13</value>
   </data>
   <data name="md5hash.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>Disable</value>
   </data>
   <data name="md5hash.Location" type="System.Drawing.Point, System.Drawing">
-    <value>317, 331</value>
+    <value>272, 284</value>
   </data>
   <data name="md5hash.MaxLength" type="System.Int32, mscorlib">
     <value>32</value>
   </data>
   <data name="md5hash.Size" type="System.Drawing.Size, System.Drawing">
-    <value>228, 21</value>
+    <value>196, 19</value>
   </data>
   <data name="md5hash.TabIndex" type="System.Int32, mscorlib">
     <value>21</value>
@@ -766,19 +766,19 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;md5hash.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>12</value>
   </data>
   <data name="sha.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>Disable</value>
   </data>
   <data name="sha.Location" type="System.Drawing.Point, System.Drawing">
-    <value>317, 364</value>
+    <value>272, 312</value>
   </data>
   <data name="sha.MaxLength" type="System.Int32, mscorlib">
     <value>40</value>
   </data>
   <data name="sha.Size" type="System.Drawing.Size, System.Drawing">
-    <value>288, 21</value>
+    <value>247, 19</value>
   </data>
   <data name="sha.TabIndex" type="System.Int32, mscorlib">
     <value>22</value>
@@ -793,16 +793,16 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;sha.ZOrder" xml:space="preserve">
-    <value>13</value>
+    <value>14</value>
   </data>
   <data name="Label7.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="Label7.Location" type="System.Drawing.Point, System.Drawing">
-    <value>260, 279</value>
+    <value>223, 239</value>
   </data>
   <data name="Label7.Size" type="System.Drawing.Size, System.Drawing">
-    <value>59, 14</value>
+    <value>50, 12</value>
   </data>
   <data name="Label7.TabIndex" type="System.Int32, mscorlib">
     <value>23</value>
@@ -820,19 +820,19 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;Label7.ZOrder" xml:space="preserve">
-    <value>17</value>
+    <value>18</value>
   </data>
   <data name="gid.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>Disable</value>
   </data>
   <data name="gid.Location" type="System.Drawing.Point, System.Drawing">
-    <value>318, 276</value>
+    <value>273, 237</value>
   </data>
   <data name="gid.MaxLength" type="System.Int32, mscorlib">
     <value>10</value>
   </data>
   <data name="gid.Size" type="System.Drawing.Size, System.Drawing">
-    <value>88, 21</value>
+    <value>76, 19</value>
   </data>
   <data name="gid.TabIndex" type="System.Int32, mscorlib">
     <value>24</value>
@@ -847,16 +847,16 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;gid.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>8</value>
   </data>
   <data name="calc_crc.Font" type="System.Drawing.Font, System.Drawing">
     <value>MS UI Gothic, 7.8pt</value>
   </data>
   <data name="calc_crc.Location" type="System.Drawing.Point, System.Drawing">
-    <value>410, 304</value>
+    <value>351, 261</value>
   </data>
   <data name="calc_crc.Size" type="System.Drawing.Size, System.Drawing">
-    <value>47, 21</value>
+    <value>40, 18</value>
   </data>
   <data name="calc_crc.TabIndex" type="System.Int32, mscorlib">
     <value>25</value>
@@ -874,16 +874,16 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;calc_crc.ZOrder" xml:space="preserve">
-    <value>16</value>
+    <value>17</value>
   </data>
   <data name="calc_md5.Font" type="System.Drawing.Font, System.Drawing">
     <value>MS UI Gothic, 7.8pt</value>
   </data>
   <data name="calc_md5.Location" type="System.Drawing.Point, System.Drawing">
-    <value>553, 331</value>
+    <value>474, 284</value>
   </data>
   <data name="calc_md5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>52, 21</value>
+    <value>45, 18</value>
   </data>
   <data name="calc_md5.TabIndex" type="System.Int32, mscorlib">
     <value>26</value>
@@ -901,16 +901,16 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;calc_md5.ZOrder" xml:space="preserve">
-    <value>20</value>
+    <value>21</value>
   </data>
   <data name="calc_sha.Font" type="System.Drawing.Font, System.Drawing">
     <value>MS UI Gothic, 7.8pt</value>
   </data>
   <data name="calc_sha.Location" type="System.Drawing.Point, System.Drawing">
-    <value>611, 364</value>
+    <value>524, 312</value>
   </data>
   <data name="calc_sha.Size" type="System.Drawing.Size, System.Drawing">
-    <value>49, 21</value>
+    <value>42, 18</value>
   </data>
   <data name="calc_sha.TabIndex" type="System.Int32, mscorlib">
     <value>27</value>
@@ -928,16 +928,16 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;calc_sha.ZOrder" xml:space="preserve">
-    <value>14</value>
+    <value>15</value>
   </data>
   <data name="all_hash.Font" type="System.Drawing.Font, System.Drawing">
     <value>MS UI Gothic, 7.8pt</value>
   </data>
   <data name="all_hash.Location" type="System.Drawing.Point, System.Drawing">
-    <value>611, 332</value>
+    <value>524, 285</value>
   </data>
   <data name="all_hash.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 21</value>
+    <value>57, 18</value>
   </data>
   <data name="all_hash.TabIndex" type="System.Int32, mscorlib">
     <value>28</value>
@@ -955,16 +955,16 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;all_hash.ZOrder" xml:space="preserve">
-    <value>30</value>
+    <value>31</value>
   </data>
   <data name="tree_apply.Font" type="System.Drawing.Font, System.Drawing">
     <value>MS UI Gothic, 7.8pt</value>
   </data>
   <data name="tree_apply.Location" type="System.Drawing.Point, System.Drawing">
-    <value>608, 401</value>
+    <value>521, 344</value>
   </data>
   <data name="tree_apply.Size" type="System.Drawing.Size, System.Drawing">
-    <value>82, 21</value>
+    <value>70, 18</value>
   </data>
   <data name="tree_apply.TabIndex" type="System.Int32, mscorlib">
     <value>29</value>
@@ -982,13 +982,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;tree_apply.ZOrder" xml:space="preserve">
-    <value>25</value>
+    <value>26</value>
   </data>
   <metadata name="MenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>411, 17</value>
   </metadata>
   <data name="ADD.Size" type="System.Drawing.Size, System.Drawing">
-    <value>228, 26</value>
+    <value>203, 22</value>
   </data>
   <data name="ADD.Text" xml:space="preserve">
     <value>ADD IMAGE/PBP</value>
@@ -998,10 +998,10 @@
 if you want to add  many files,drag&amp;drop files from explorer</value>
   </data>
   <data name="ToolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>225, 6</value>
+    <value>200, 6</value>
   </data>
   <data name="SAVELS.Size" type="System.Drawing.Size, System.Drawing">
-    <value>228, 26</value>
+    <value>203, 22</value>
   </data>
   <data name="SAVELS.Text" xml:space="preserve">
     <value>SAVE LIST</value>
@@ -1010,7 +1010,7 @@ if you want to add  many files,drag&amp;drop files from explorer</value>
     <value>save gamelist</value>
   </data>
   <data name="EXPORTPSPINS.Size" type="System.Drawing.Size, System.Drawing">
-    <value>228, 26</value>
+    <value>203, 22</value>
   </data>
   <data name="EXPORTPSPINS.Text" xml:space="preserve">
     <value>EXPORT PSPINS LIST</value>
@@ -1022,166 +1022,166 @@ some japanesechara contain 0x7C( | ),it will replace
 －ポл榎掛弓芸鋼旨楯酢掃竹倒培怖翻慾處嘶斈忿掟桍毫烟痞窩縹艚蛞諫轎閖驂黥埈蒴僴礰</value>
   </data>
   <data name="disck_ver.Size" type="System.Drawing.Size, System.Drawing">
-    <value>186, 26</value>
+    <value>167, 22</value>
   </data>
   <data name="disck_ver.Text" xml:space="preserve">
     <value>ADD DISCKVER</value>
   </data>
   <data name="ROMCODEs.Size" type="System.Drawing.Size, System.Drawing">
-    <value>186, 26</value>
+    <value>167, 22</value>
   </data>
   <data name="ROMCODEs.Text" xml:space="preserve">
     <value>ADD ROMCODE</value>
   </data>
   <data name="SAVE_clrmamepro.Size" type="System.Drawing.Size, System.Drawing">
-    <value>228, 26</value>
+    <value>203, 22</value>
   </data>
   <data name="SAVE_clrmamepro.Text" xml:space="preserve">
     <value>EXPORT clrmamepro</value>
   </data>
   <data name="exportxml.Size" type="System.Drawing.Size, System.Drawing">
-    <value>228, 26</value>
+    <value>203, 22</value>
   </data>
   <data name="exportxml.Text" xml:space="preserve">
     <value>EXPORT XML</value>
   </data>
   <data name="diffCMPRO.Size" type="System.Drawing.Size, System.Drawing">
-    <value>130, 26</value>
+    <value>118, 22</value>
   </data>
   <data name="diffCMPRO.Text" xml:space="preserve">
     <value>CMPRO</value>
   </data>
   <data name="sabunindex.Size" type="System.Drawing.Size, System.Drawing">
-    <value>70, 22</value>
+    <value>68, 22</value>
   </data>
   <data name="diffXML.Size" type="System.Drawing.Size, System.Drawing">
-    <value>130, 26</value>
+    <value>118, 22</value>
   </data>
   <data name="diffXML.Text" xml:space="preserve">
     <value>XML</value>
   </data>
   <data name="ToolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>228, 26</value>
+    <value>203, 22</value>
   </data>
   <data name="ToolStripMenuItem1.Text" xml:space="preserve">
     <value>MAKE DIFF</value>
   </data>
   <data name="ToolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>225, 6</value>
+    <value>200, 6</value>
   </data>
   <data name="CLOSEToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>228, 26</value>
+    <value>203, 22</value>
   </data>
   <data name="CLOSEToolStripMenuItem.Text" xml:space="preserve">
     <value>CLOSE</value>
   </data>
   <data name="menufile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>53, 25</value>
+    <value>46, 22</value>
   </data>
   <data name="menufile.Text" xml:space="preserve">
     <value>FILE</value>
   </data>
   <data name="mane_sort_up.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 26</value>
+    <value>175, 22</value>
   </data>
   <data name="mane_sort_up.Text" xml:space="preserve">
     <value>ascending order</value>
   </data>
   <data name="mane_sort_down.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 26</value>
+    <value>175, 22</value>
   </data>
   <data name="mane_sort_down.Text" xml:space="preserve">
     <value>descending order</value>
   </data>
   <data name="name_sort.Size" type="System.Drawing.Size, System.Drawing">
-    <value>155, 26</value>
+    <value>140, 22</value>
   </data>
   <data name="name_sort.Text" xml:space="preserve">
     <value>NAME</value>
   </data>
   <data name="gid_sort_up.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 26</value>
+    <value>175, 22</value>
   </data>
   <data name="gid_sort_up.Text" xml:space="preserve">
     <value>ascending order</value>
   </data>
   <data name="gid_sort_down.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 26</value>
+    <value>175, 22</value>
   </data>
   <data name="gid_sort_down.Text" xml:space="preserve">
     <value>descending order</value>
   </data>
   <data name="ToolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>197, 6</value>
+    <value>172, 6</value>
   </data>
   <data name="sort_jp.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 26</value>
+    <value>175, 22</value>
   </data>
   <data name="sort_jp.Text" xml:space="preserve">
     <value>priror JAP</value>
   </data>
   <data name="PpriorUSAToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 26</value>
+    <value>175, 22</value>
   </data>
   <data name="PpriorUSAToolStripMenuItem.Text" xml:space="preserve">
     <value>prior USA</value>
   </data>
   <data name="PriorEUToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 26</value>
+    <value>175, 22</value>
   </data>
   <data name="PriorEUToolStripMenuItem.Text" xml:space="preserve">
     <value>prior EU</value>
   </data>
   <data name="GAMEID_sort.Size" type="System.Drawing.Size, System.Drawing">
-    <value>155, 26</value>
+    <value>140, 22</value>
   </data>
   <data name="GAMEID_sort.Text" xml:space="preserve">
     <value>GAMEID</value>
   </data>
   <data name="psf_sort_up.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 26</value>
+    <value>175, 22</value>
   </data>
   <data name="psf_sort_up.Text" xml:space="preserve">
     <value>ascending order</value>
   </data>
   <data name="psf_sort_down.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 26</value>
+    <value>175, 22</value>
   </data>
   <data name="psf_sort_down.Text" xml:space="preserve">
     <value>descending order</value>
   </data>
   <data name="PSFtitle_sort.Size" type="System.Drawing.Size, System.Drawing">
-    <value>155, 26</value>
+    <value>140, 22</value>
   </data>
   <data name="PSFtitle_sort.Text" xml:space="preserve">
     <value>PSF_TITLE</value>
   </data>
   <data name="file_sort_up.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 26</value>
+    <value>175, 22</value>
   </data>
   <data name="file_sort_up.Text" xml:space="preserve">
     <value>ascending order</value>
   </data>
   <data name="file_sort_down.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 26</value>
+    <value>175, 22</value>
   </data>
   <data name="file_sort_down.Text" xml:space="preserve">
     <value>descending order</value>
   </data>
   <data name="file_sort.Size" type="System.Drawing.Size, System.Drawing">
-    <value>155, 26</value>
+    <value>140, 22</value>
   </data>
   <data name="file_sort.Text" xml:space="preserve">
     <value>FILENAME</value>
   </data>
   <data name="sort.Size" type="System.Drawing.Size, System.Drawing">
-    <value>61, 25</value>
+    <value>53, 22</value>
   </data>
   <data name="sort.Text" xml:space="preserve">
     <value>SORT</value>
   </data>
   <data name="RMXML.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 26</value>
+    <value>144, 22</value>
   </data>
   <data name="RMXML.Text" xml:space="preserve">
     <value>XML</value>
@@ -1190,7 +1190,7 @@ some japanesechara contain 0x7C( | ),it will replace
     <value>USE OFFLINE XMLFILE</value>
   </data>
   <data name="RMDAT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 26</value>
+    <value>144, 22</value>
   </data>
   <data name="RMDAT.Text" xml:space="preserve">
     <value>DAT</value>
@@ -1199,46 +1199,46 @@ some japanesechara contain 0x7C( | ),it will replace
     <value>USE NOINTRO DATFILE</value>
   </data>
   <data name="ToolStripSeparator4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>157, 6</value>
+    <value>141, 6</value>
   </data>
   <data name="MNAME.Size" type="System.Drawing.Size, System.Drawing">
-    <value>146, 26</value>
+    <value>133, 22</value>
   </data>
   <data name="MNAME.Text" xml:space="preserve">
     <value>NAME</value>
   </data>
   <data name="FILEPATH.Size" type="System.Drawing.Size, System.Drawing">
-    <value>146, 26</value>
+    <value>133, 22</value>
   </data>
   <data name="FILEPATH.Text" xml:space="preserve">
     <value>FILEPATH</value>
   </data>
   <data name="MNEN.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 26</value>
+    <value>144, 22</value>
   </data>
   <data name="MNEN.Text" xml:space="preserve">
     <value>TARGET</value>
   </data>
   <data name="pathcrc.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 26</value>
+    <value>144, 22</value>
   </data>
   <data name="pathcrc.Text" xml:space="preserve">
     <value>ADD CRC32</value>
   </data>
   <data name="RENAME.Size" type="System.Drawing.Size, System.Drawing">
-    <value>81, 25</value>
+    <value>69, 22</value>
   </data>
   <data name="RENAME.Text" xml:space="preserve">
     <value>RENAME</value>
   </data>
   <data name="GUITOP.Size" type="System.Drawing.Size, System.Drawing">
-    <value>235, 26</value>
+    <value>206, 22</value>
   </data>
   <data name="GUITOP.Text" xml:space="preserve">
     <value>TOPMOST</value>
   </data>
   <data name="xmlselect.Size" type="System.Drawing.Size, System.Drawing">
-    <value>235, 26</value>
+    <value>206, 22</value>
   </data>
   <data name="xmlselect.Text" xml:space="preserve">
     <value>select XML</value>
@@ -1248,7 +1248,7 @@ some japanesechara contain 0x7C( | ),it will replace
 IF MATCH CRC32 IN XML,apply name &amp; iamges</value>
   </data>
   <data name="rename_dat.Size" type="System.Drawing.Size, System.Drawing">
-    <value>235, 26</value>
+    <value>206, 22</value>
   </data>
   <data name="rename_dat.Text" xml:space="preserve">
     <value>select dat</value>
@@ -1257,7 +1257,7 @@ IF MATCH CRC32 IN XML,apply name &amp; iamges</value>
     <value>SELECT clrmamepro DATFILE</value>
   </data>
   <data name="editpspdir.Size" type="System.Drawing.Size, System.Drawing">
-    <value>235, 26</value>
+    <value>206, 22</value>
   </data>
   <data name="editpspdir.Text" xml:space="preserve">
     <value>edit pspdir list</value>
@@ -1269,7 +1269,7 @@ right click on treeview,you can change destination
 X:\PSP\GAME\</value>
   </data>
   <data name="ToolStripMenuItem2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>235, 26</value>
+    <value>206, 22</value>
   </data>
   <data name="ToolStripMenuItem2.Text" xml:space="preserve">
     <value>cso unpack dir</value>
@@ -1279,37 +1279,37 @@ X:\PSP\GAME\</value>
 if you have big ramdisk,it's bsest dir.</value>
   </data>
   <data name="XMLヘッダフッター編集ToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>235, 26</value>
+    <value>206, 22</value>
   </data>
   <data name="XMLヘッダフッター編集ToolStripMenuItem.Text" xml:space="preserve">
     <value>XML HEADER/FOOTER</value>
   </data>
   <data name="ALSAVE.Size" type="System.Drawing.Size, System.Drawing">
-    <value>235, 26</value>
+    <value>206, 22</value>
   </data>
   <data name="ALSAVE.Text" xml:space="preserve">
     <value>ALWAYS SAVELIST</value>
   </data>
   <data name="setting.Size" type="System.Drawing.Size, System.Drawing">
-    <value>84, 25</value>
+    <value>74, 22</value>
   </data>
   <data name="setting.Text" xml:space="preserve">
     <value>SETTING</value>
   </data>
   <data name="online.Size" type="System.Drawing.Size, System.Drawing">
-    <value>195, 26</value>
+    <value>174, 22</value>
   </data>
   <data name="online.Text" xml:space="preserve">
     <value>ONLINEHELP(JP)</value>
   </data>
   <data name="version.Size" type="System.Drawing.Size, System.Drawing">
-    <value>195, 26</value>
+    <value>174, 22</value>
   </data>
   <data name="version.Text" xml:space="preserve">
     <value>VERSION</value>
   </data>
   <data name="HELPToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>57, 25</value>
+    <value>50, 22</value>
   </data>
   <data name="HELPToolStripMenuItem.Text" xml:space="preserve">
     <value>HELP</value>
@@ -1318,10 +1318,10 @@ if you have big ramdisk,it's bsest dir.</value>
     <value>0, 0</value>
   </data>
   <data name="MenuStrip1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 2, 0, 2</value>
+    <value>4, 2, 0, 2</value>
   </data>
   <data name="MenuStrip1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>705, 29</value>
+    <value>604, 26</value>
   </data>
   <data name="MenuStrip1.TabIndex" type="System.Int32, mscorlib">
     <value>30</value>
@@ -1339,16 +1339,16 @@ if you have big ramdisk,it's bsest dir.</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;MenuStrip1.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="del_psp.Font" type="System.Drawing.Font, System.Drawing">
     <value>MS UI Gothic, 7.8pt</value>
   </data>
   <data name="del_psp.Location" type="System.Drawing.Point, System.Drawing">
-    <value>256, 428</value>
+    <value>219, 367</value>
   </data>
   <data name="del_psp.Size" type="System.Drawing.Size, System.Drawing">
-    <value>95, 21</value>
+    <value>81, 18</value>
   </data>
   <data name="del_psp.TabIndex" type="System.Int32, mscorlib">
     <value>31</value>
@@ -1366,16 +1366,16 @@ if you have big ramdisk,it's bsest dir.</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;del_psp.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>10</value>
   </data>
   <data name="t_gid.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="t_gid.Location" type="System.Drawing.Point, System.Drawing">
-    <value>370, 429</value>
+    <value>317, 368</value>
   </data>
   <data name="t_gid.Size" type="System.Drawing.Size, System.Drawing">
-    <value>134, 18</value>
+    <value>120, 16</value>
   </data>
   <data name="t_gid.TabIndex" type="System.Int32, mscorlib">
     <value>32</value>
@@ -1393,16 +1393,16 @@ if you have big ramdisk,it's bsest dir.</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;t_gid.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>9</value>
   </data>
   <data name="crc_xml.Font" type="System.Drawing.Font, System.Drawing">
     <value>MS UI Gothic, 7.8pt</value>
   </data>
   <data name="crc_xml.Location" type="System.Drawing.Point, System.Drawing">
-    <value>625, 250</value>
+    <value>536, 214</value>
   </data>
   <data name="crc_xml.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 21</value>
+    <value>57, 18</value>
   </data>
   <data name="crc_xml.TabIndex" type="System.Int32, mscorlib">
     <value>33</value>
@@ -1420,16 +1420,16 @@ if you have big ramdisk,it's bsest dir.</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;crc_xml.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>11</value>
   </data>
   <data name="free.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="free.Location" type="System.Drawing.Point, System.Drawing">
-    <value>518, 433</value>
+    <value>444, 371</value>
   </data>
   <data name="free.Size" type="System.Drawing.Size, System.Drawing">
-    <value>111, 14</value>
+    <value>96, 12</value>
   </data>
   <data name="free.TabIndex" type="System.Int32, mscorlib">
     <value>34</value>
@@ -1447,16 +1447,16 @@ if you have big ramdisk,it's bsest dir.</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;free.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>7</value>
   </data>
   <data name="sony.Font" type="System.Drawing.Font, System.Drawing">
     <value>MS UI Gothic, 7.85454559pt</value>
   </data>
   <data name="sony.Location" type="System.Drawing.Point, System.Drawing">
-    <value>553, 38</value>
+    <value>474, 33</value>
   </data>
   <data name="sony.Size" type="System.Drawing.Size, System.Drawing">
-    <value>65, 21</value>
+    <value>56, 18</value>
   </data>
   <data name="sony.TabIndex" type="System.Int32, mscorlib">
     <value>35</value>
@@ -1474,7 +1474,7 @@ if you have big ramdisk,it's bsest dir.</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;sony.ZOrder" xml:space="preserve">
-    <value>23</value>
+    <value>24</value>
   </data>
   <data name="SAVELS2.Font" type="System.Drawing.Font, System.Drawing">
     <value>MS UI Gothic, 7.85454559pt</value>
@@ -1483,10 +1483,10 @@ if you have big ramdisk,it's bsest dir.</value>
     <value>NoControl</value>
   </data>
   <data name="SAVELS2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>261, 38</value>
+    <value>224, 33</value>
   </data>
   <data name="SAVELS2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>78, 20</value>
+    <value>67, 17</value>
   </data>
   <data name="SAVELS2.TabIndex" type="System.Int32, mscorlib">
     <value>37</value>
@@ -1504,25 +1504,49 @@ if you have big ramdisk,it's bsest dir.</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;SAVELS2.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
-  <metadata name="$this.Language" type="System.Globalization.CultureInfo, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>ja</value>
-  </metadata>
+  <data name="Label8.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="Label8.Location" type="System.Drawing.Point, System.Drawing">
+    <value>547, 36</value>
+  </data>
+  <data name="Label8.Size" type="System.Drawing.Size, System.Drawing">
+    <value>9, 12</value>
+  </data>
+  <data name="Label8.TabIndex" type="System.Int32, mscorlib">
+    <value>38</value>
+  </data>
+  <data name="Label8.Text" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="&gt;&gt;Label8.Name" xml:space="preserve">
+    <value>Label8</value>
+  </data>
+  <data name="&gt;&gt;Label8.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Label8.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;Label8.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>7, 14</value>
+    <value>6, 12</value>
   </data>
   <data name="$this.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>705, 463</value>
+    <value>604, 401</value>
   </data>
   <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
-    <value>715, 506</value>
+    <value>615, 439</value>
   </data>
   <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
     <value>CenterScreen</value>

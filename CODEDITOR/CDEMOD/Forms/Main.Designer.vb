@@ -202,6 +202,10 @@ Partial Class MERGE
         Me.curr_line = New System.Windows.Forms.Label()
         Me.コード形式 = New System.Windows.Forms.Label()
         Me.tt = New System.Windows.Forms.Label()
+        Me.CODEFREAKToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.暗号化ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.復号ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator18 = New System.Windows.Forms.ToolStripSeparator()
         Me.treeopen.SuspendLayout()
         Me.ContextMenus.SuspendLayout()
         Me.tool_menu.SuspendLayout()
@@ -941,9 +945,9 @@ Partial Class MERGE
         '
         'ContextMenus
         '
-        Me.ContextMenus.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cntparser, Me.dgedit, Me.ToolStripSeparator4, Me.cntclose, Me.cntexpand, Me.ToolStripSeparator5, Me.hankaku, Me.CNchar, Me.ToolStripSeparator6, Me.cntexe, Me.ToolStripSeparator11, Me.NodeConvert, Me.useFTP})
+        Me.ContextMenus.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cntparser, Me.dgedit, Me.ToolStripSeparator4, Me.cntclose, Me.cntexpand, Me.ToolStripSeparator5, Me.hankaku, Me.CNchar, Me.ToolStripSeparator6, Me.cntexe, Me.ToolStripSeparator11, Me.NodeConvert, Me.useFTP, Me.ToolStripSeparator18, Me.CODEFREAKToolStripMenuItem})
         Me.ContextMenus.Name = "ContextMenuStrip1"
-        Me.ContextMenus.Size = New System.Drawing.Size(185, 248)
+        Me.ContextMenus.Size = New System.Drawing.Size(185, 276)
         '
         'cntparser
         '
@@ -1030,25 +1034,25 @@ Partial Class MERGE
         'clipboad
         '
         Me.clipboad.Name = "clipboad"
-        Me.clipboad.Size = New System.Drawing.Size(160, 22)
+        Me.clipboad.Size = New System.Drawing.Size(182, 22)
         Me.clipboad.Text = "クリップボード"
         '
         'CMFexport
         '
         Me.CMFexport.Name = "CMFexport"
-        Me.CMFexport.Size = New System.Drawing.Size(160, 22)
+        Me.CMFexport.Size = New System.Drawing.Size(182, 22)
         Me.CMFexport.Text = "CMF出力"
         '
         'SCMexport
         '
         Me.SCMexport.Name = "SCMexport"
-        Me.SCMexport.Size = New System.Drawing.Size(160, 22)
+        Me.SCMexport.Size = New System.Drawing.Size(182, 22)
         Me.SCMexport.Text = "SCM出力"
         '
         'FCTXT
         '
         Me.FCTXT.Name = "FCTXT"
-        Me.FCTXT.Size = New System.Drawing.Size(160, 22)
+        Me.FCTXT.Size = New System.Drawing.Size(182, 22)
         Me.FCTXT.Text = "FCTXT出力"
         '
         'TABexport
@@ -1617,6 +1621,30 @@ Partial Class MERGE
         Me.tt.Text = "Label2"
         Me.tt.Visible = False
         '
+        'CODEFREAKToolStripMenuItem
+        '
+        Me.CODEFREAKToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.復号ToolStripMenuItem, Me.暗号化ToolStripMenuItem})
+        Me.CODEFREAKToolStripMenuItem.Name = "CODEFREAKToolStripMenuItem"
+        Me.CODEFREAKToolStripMenuItem.Size = New System.Drawing.Size(184, 22)
+        Me.CODEFREAKToolStripMenuItem.Text = "CODEFREAK"
+        '
+        '暗号化ToolStripMenuItem
+        '
+        Me.暗号化ToolStripMenuItem.Name = "暗号化ToolStripMenuItem"
+        Me.暗号化ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.暗号化ToolStripMenuItem.Text = "暗号化"
+        '
+        '復号ToolStripMenuItem
+        '
+        Me.復号ToolStripMenuItem.Name = "復号ToolStripMenuItem"
+        Me.復号ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.復号ToolStripMenuItem.Text = "復号"
+        '
+        'ToolStripSeparator18
+        '
+        Me.ToolStripSeparator18.Name = "ToolStripSeparator18"
+        Me.ToolStripSeparator18.Size = New System.Drawing.Size(181, 6)
+        '
         'MERGE
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
@@ -1853,5 +1881,9 @@ Partial Class MERGE
     Friend WithEvents URL編集ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator8 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents ブラウザ変更 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator18 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents CODEFREAKToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents 復号ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents 暗号化ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class

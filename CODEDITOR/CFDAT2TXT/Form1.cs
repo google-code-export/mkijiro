@@ -213,11 +213,15 @@ namespace WindowsFormsApplication1
             StringBuilder sb = new StringBuilder();
             Regex r = new Regex("[0-9A-Fa-f]{8} [0-9A-Fa-f]{8}");
             Match mr;
+            Boolean enc = checkBox2.Checked;
+            uint cf = 0;
+            Boolean encok= false;
             int pos = 0;
             if (checkBox1.Checked == false)
             {
                 foreach (TreeNode n in treeView1.Nodes)
                 {
+                    encok = false;
                     sb.Append("\"");
                     sb.Append(rpstringout(n.Text));
                     sb.AppendLine("\"");
@@ -227,12 +231,34 @@ namespace WindowsFormsApplication1
                     {
                         sb.AppendLine(rpstringout(m.Text));
                         mr = r.Match(rpstringout(m.Tag.ToString()));
+
+
                         while (mr.Success == true)
                         {
                             sb.Append("$");
-                            sb.AppendLine(mr.Value);
+                            if (encok == true)
+                            {
+                                sb.AppendLine(codefreakdec(mr.Value));
+                            }
+                            else
+                            {
+                                sb.AppendLine(mr.Value);
+                            }
+
+                            if (enc = true && m.Text == "(M)")
+                            {
+                                cf = Convert.ToUInt32(mr.Value.Substring(9, 8), 16);
+                                if ((cf & 0x800) == 0)
+                                {
+                                    encok = true;
+                                }
+                            }
+
+
                             mr = mr.NextMatch();
                         }
+
+
                         pos = m.Tag.ToString().IndexOf("''");
                         if (pos > 0)
                         {
@@ -245,6 +271,7 @@ namespace WindowsFormsApplication1
             {
                 foreach (TreeNode n in treeView1.Nodes)
                 {
+                    encok = false;
                     sb.Append("_S ");
                     sb.AppendLine(rpstringout(n.Tag.ToString()));
                     sb.Append("_G ");
@@ -258,12 +285,31 @@ namespace WindowsFormsApplication1
                         while (mr.Success == true)
                         {
                             sb.Append("_L 0x");
-                            sb.AppendLine(mr.Value.Insert(9,"0x"));
+                            if (encok == true)
+                            {
+                                sb.AppendLine(codefreakdec(mr.Value).Insert(9, "0x"));
+                            }
+                            else
+                            {
+                                sb.AppendLine(mr.Value.Insert(9, "0x"));
+                            }
                             mr = mr.NextMatch();
                         }
                         pos = m.Tag.ToString().IndexOf("''");
                         if(pos>0){
                         sb.AppendLine( rpstringout((m.Tag.ToString().Remove(0, pos).Replace("''", "#"))));
+                            }
+                        }
+                        else if (enc = true && m.Text == "(M)")
+                        {
+                            mr = r.Match(rpstringout(m.Tag.ToString()));
+                            if (mr.Success == true)
+                            {
+                                cf = Convert.ToUInt32(mr.Value.Substring(9, 8), 16);
+                                if ((cf & 0x800) == 0)
+                                {
+                                    encok = true;
+                                }
                             }
                         }
                     }
@@ -272,6 +318,23 @@ namespace WindowsFormsApplication1
             StreamWriter sw = new StreamWriter("converted_cf.txt", false, Encoding.GetEncoding(1201));
             sw.Write(sb.ToString());
             sw.Close();
+        }
+
+        private string codefreakdec(string basest){
+            StringBuilder sb = new StringBuilder();
+                uint codefreak = 0;
+        string[] s = basest.Split('\n');
+        foreach (string ss in s)
+        {
+        if (ss.Length > 8)
+        {
+        codefreak = Convert.ToUInt32(ss.Substring(0, 8), 16);
+        codefreak ^= 0xD6F73BEE;
+        sb.Append(codefreak.ToString("X8"));
+        sb.Append(ss.Remove(0,8).TrimEnd());
+        }
+        }
+            return sb.ToString();
         }
 
         private void oPENToolStripMenuItem_Click(object sender, EventArgs e)
@@ -289,6 +352,11 @@ namespace WindowsFormsApplication1
             CF2TXT.Form2 f = new  CF2TXT.Form2();
             f.ShowDialog();
             f.Dispose();
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
         
     }
