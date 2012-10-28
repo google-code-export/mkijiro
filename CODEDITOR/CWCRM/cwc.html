@@ -10,6 +10,7 @@
    	return 0;
 	}
 
+
 	function pad(text, len)
 	{
 		var textLen=text.length;
@@ -93,12 +94,13 @@ var CWCLIMIT=document.form1.elements[1].checked;
 var CFFIX=document.form1.elements[2].checked;
 var DESERIAL=document.form1.elements[3].checked;
 var CMFFCSP=document.form1.elements[4].checked;
-var ARNULLFIX=document.form1.elements[5].checked;
-var RMD4DC=document.form1.elements[6].checked;
-var ARLIMIT=document.form1.elements[7].checked;
-var ADDNO=document.form1.elements[8].checked;
-var RMNO=document.form1.elements[9].checked;
-var HEXVALUE=document.form1.elements[10].checked;
+var CFENC=document.form1.elements[5].checked;
+var ARNULLFIX=document.form1.elements[6].checked;
+var RMD4DC=document.form1.elements[7].checked;
+var ARLIMIT=document.form1.elements[8].checked;
+var ADDNO=document.form1.elements[9].checked;
+var RMNO=document.form1.elements[10].checked;
+var HEXVALUE=document.form1.elements[11].checked;
 var RMCWC=document.emu.elements[0].checked;
 var REPST=eval(document.st.elements[0].value);
 var RP=REPST.toString(16);
@@ -369,6 +371,12 @@ var name=0;
 			vhead=value>>28;
 			jline=address&0xFF;
 			eline=(address>>16)&0xFF;
+			
+			if(CFENC!=0)
+			{
+			address=(address^0xD6F73BEE)>>>0
+			}
+			
 			if(bkDecompress==1 && serial==0)
 			{
 				if(FCJOKER!=0 && chead==-3 && (vhead==1 || vhead==3) && mode==0)
@@ -657,7 +665,7 @@ var name=0;
 
 <center><font size="5" color="#C090F0"><b>
 invaid string+space remover/decompresser/fixer for cwcheat code<br>
-20120127 modded by sanik nitePrCV,debugbrowser GoogelChome/MozzillaFirefox <a href="cwc_removerold.html">old</a><br></b></font>
+20121028 modded by sanik nitePrCV,debugbrowser GoogelChome/MozzillaFirefox <a href="cwc_removerold.html">old</a><br></b></font>
 ※IEはIE9でないとjava速度がいまいちなので1万行超える場合chromeかfirefox4推奨 <a href="http://memorva.jp/internet/pc/browser_benchmark.php">javabench</a><br>
 <form name="asc2hex">
 CWCheat/ActionReplay code:<br><textarea name="text" rows="10" cols="50"></textarea><br>
@@ -673,6 +681,7 @@ CWCheat/ActionReplay code:<br><textarea name="text" rows="10" cols="50"></textar
 <p class="cwc"><input type="checkbox" name="cffix" value="ok"  >CODEFREAKFIX(CFの100行制限で分割,ポインタコードに判定を追加)</p>
 <p class="cwc"><input type="checkbox" name="serial" value="ok" >DecompressSerialCodes(シリアルコードを分解,長くなるので注意)</p>
 <p class="cwc"><input type="checkbox" name="special" value="ok">RmCMF/FCSpCodes(CMF/FREECHEATの特殊コードを除去,0xCを0x2に変更)</p>
+<p class="cwc"><input type="checkbox" name="cfenc" value="ok" >DecryptCODEFREAKCodes(コードフリーク暗号コードの復号)</p>
 <font color="#C0F060"><center>#AR特殊オプション(フリーズ対策)</center></font>
 <p class="ar"><input type="checkbox" name="null" value="ok"   >AVOIDNULLCODEBGUG(コード無しフリーズの修正,ダミーの0xCFを付加)</p>
 <p class="ar"><input type="checkbox" name="d4_dc" value="ok"  >RemoveNull0xDC,0xD4(0xDC,0xD4の右コード0の場合除去)</p>
@@ -684,7 +693,7 @@ CWCheat/ActionReplay code:<br><textarea name="text" rows="10" cols="50"></textar
 <input type="checkbox" name="hex" value="ok">ForceHEX(0xがないものでも強制16進数扱いにする)<br>
 </form>
 <form name="emu">
-<font color="#C0F060">#JPCPS特殊オプション</font><br>
+<font color="#C0F060">#JPCPS(旧VER)特殊オプション</font><br>
 <input type="checkbox" name="jpcps" value="ok">REMOVE CWCHEADER(CWCの_Lを除去して出力)<br>
 </form>
 <form name="st">
