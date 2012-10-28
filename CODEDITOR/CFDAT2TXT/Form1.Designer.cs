@@ -44,6 +44,11 @@
             this.fILEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.oPENToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cONVERTTXTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.eNCODEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.uTF16BE1201 = new System.Windows.Forms.ToolStripMenuItem();
+            this.sJIS932 = new System.Windows.Forms.ToolStripMenuItem();
+            this.eUC51932 = new System.Windows.Forms.ToolStripMenuItem();
+            this.gBK936 = new System.Windows.Forms.ToolStripMenuItem();
             this.vERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.menuStrip1.SuspendLayout();
@@ -167,6 +172,7 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fILEToolStripMenuItem,
+            this.eNCODEToolStripMenuItem,
             this.vERToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -196,6 +202,47 @@
             this.cONVERTTXTToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.cONVERTTXTToolStripMenuItem.Text = "CONVERT TXT";
             this.cONVERTTXTToolStripMenuItem.Click += new System.EventHandler(this.cONVERTTXTToolStripMenuItem_Click);
+            // 
+            // eNCODEToolStripMenuItem
+            // 
+            this.eNCODEToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.uTF16BE1201,
+            this.sJIS932,
+            this.eUC51932,
+            this.gBK936});
+            this.eNCODEToolStripMenuItem.Name = "eNCODEToolStripMenuItem";
+            this.eNCODEToolStripMenuItem.Size = new System.Drawing.Size(69, 22);
+            this.eNCODEToolStripMenuItem.Text = "ENCODE";
+            // 
+            // uTF16BE1201
+            // 
+            this.uTF16BE1201.Checked = true;
+            this.uTF16BE1201.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.uTF16BE1201.Name = "uTF16BE1201";
+            this.uTF16BE1201.Size = new System.Drawing.Size(167, 22);
+            this.uTF16BE1201.Text = "UTF16BE(1201)";
+            this.uTF16BE1201.Click += new System.EventHandler(this.eNCODEToolStripMenuItem_Click);
+            // 
+            // sJIS932
+            // 
+            this.sJIS932.Name = "sJIS932";
+            this.sJIS932.Size = new System.Drawing.Size(167, 22);
+            this.sJIS932.Text = "SJIS(932)";
+            this.sJIS932.Click += new System.EventHandler(this.eNCODEToolStripMenuItem_Click);
+            // 
+            // eUC51932
+            // 
+            this.eUC51932.Name = "eUC51932";
+            this.eUC51932.Size = new System.Drawing.Size(167, 22);
+            this.eUC51932.Text = "EUC-JP(51932)";
+            this.eUC51932.Click += new System.EventHandler(this.eNCODEToolStripMenuItem_Click);
+            // 
+            // gBK936
+            // 
+            this.gBK936.Name = "gBK936";
+            this.gBK936.Size = new System.Drawing.Size(167, 22);
+            this.gBK936.Text = "GBK(936)";
+            this.gBK936.Click += new System.EventHandler(this.eNCODEToolStripMenuItem_Click);
             // 
             // vERToolStripMenuItem
             // 
@@ -238,6 +285,7 @@
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "CFDAT2TXT";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -265,6 +313,11 @@
         private System.Windows.Forms.ToolStripMenuItem cONVERTTXTToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem vERToolStripMenuItem;
         private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.ToolStripMenuItem eNCODEToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sJIS932;
+        private System.Windows.Forms.ToolStripMenuItem eUC51932;
+        private System.Windows.Forms.ToolStripMenuItem gBK936;
+        private System.Windows.Forms.ToolStripMenuItem uTF16BE1201;
     }
 }
 

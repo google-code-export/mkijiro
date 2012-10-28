@@ -13,10 +13,74 @@ namespace WindowsFormsApplication1
 {
     public partial class Form1 : Form
     {
+
+        uint cpm = 0;
+
         public Form1()
         {
             InitializeComponent();
+            if (File.Exists(Application.StartupPath + "\\config"))
+            {
+                FileStream fs = new FileStream(Application.StartupPath + "\\config", FileMode.Open, FileAccess.Read);
+                byte[] bs = new byte[20];
+                fs.Read(bs, 0, 20);
+                fs.Close();
+                if (bs[0] != 0)
+                {
+                    checkBox1.Checked = true;
+                }
+                if (bs[1] != 0)
+                {
+                    checkBox2.Checked = true;
+                }
+                uint cp = 0;
+
+                cpsel("");
+                cp = BitConverter.ToUInt16(bs, 2);
+                cpm = cp;
+                switch (cp)
+                {
+                    case 932:
+                        sJIS932.Checked = true;
+                        break;
+                    case 51932:
+                        eUC51932.Checked = true;
+                        break;
+                    case 936:
+                        gBK936.Checked = true;
+                        break;
+                    case 1201:
+                        uTF16BE1201.Checked = true;
+                        break;
+                }
+
+            }
         }
+
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+
+            FileStream fs = new FileStream(Application.StartupPath + "\\config", FileMode.Create, FileAccess.Write);
+            byte[] bs = new byte[20];
+            if (checkBox1.Checked == true) {
+                bs[0] = 1;
+            }
+            if (checkBox2.Checked == true)
+            {
+                bs[1] = 1;
+            }
+            byte[] cps = BitConverter.GetBytes(cpm);
+            Array.Copy(cps, 0, bs, 2, 4);
+
+            fs.Write(bs, 0, 20);
+            fs.Close();
+
+        }
+
+
+
+
               private void button1_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
@@ -315,9 +379,32 @@ namespace WindowsFormsApplication1
                     }
                 }
             }
-            StreamWriter sw = new StreamWriter("converted_cf.txt", false, Encoding.GetEncoding(1201));
+
+            StreamWriter sw = new StreamWriter("converted_cf.txt", false, Encoding.GetEncoding(getcp()));
             sw.Write(sb.ToString());
             sw.Close();
+        }
+
+        private int getcp() { 
+            uint cp=0;
+            if (sJIS932.Checked == true) {
+                cp = 932;
+            }
+            if (gBK936.Checked == true)
+            {
+                cp = 936;
+            }
+            if (eUC51932.Checked == true)
+            {
+                cp = 51932;
+            }
+            if (uTF16BE1201.Checked == true)
+            {
+                cp =1201;
+            }
+            cpm = cp;
+
+            return Convert.ToInt32(cp);
         }
 
         private string codefreakdec(string basest){
@@ -358,6 +445,44 @@ namespace WindowsFormsApplication1
         {
 
         }
+
+        private void cpsel(string s){
+     
+        
+            sJIS932.Checked = false;
+            gBK936.Checked = false;
+            eUC51932.Checked = false;
+            uTF16BE1201.Checked = false;
+            if (s.Contains("SJIS")) {
+
+                sJIS932.Checked = true;
+            }
+            if (s.Contains("UTF"))
+            {
+
+                uTF16BE1201.Checked = true;
+            }
+            if (s.Contains("GBK"))
+                gBK936.Checked = true;
+            {
+
+            }
+            if (s.Contains("EUC"))
+            {
+
+                eUC51932.Checked = true;
+            }
+            getcp();
+        }
+
+
+        private void eNCODEToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string s = sender.ToString();
+            cpsel(s);
+
+        }
+
         
     }
  }
