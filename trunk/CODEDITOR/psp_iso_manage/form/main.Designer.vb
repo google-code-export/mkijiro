@@ -126,6 +126,7 @@ Partial Class umdisomanger
         Me.free = New System.Windows.Forms.Label()
         Me.sony = New System.Windows.Forms.Button()
         Me.SAVELS2 = New System.Windows.Forms.Button()
+        Me.Label8 = New System.Windows.Forms.Label()
         Me.ContextMenuStrip2.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenuStrip3.SuspendLayout()
@@ -688,10 +689,16 @@ Partial Class umdisomanger
         Me.SAVELS2.Name = "SAVELS2"
         Me.SAVELS2.UseVisualStyleBackColor = True
         '
+        'Label8
+        '
+        resources.ApplyResources(Me.Label8, "Label8")
+        Me.Label8.Name = "Label8"
+        '
         'umdisomanger
         '
         resources.ApplyResources(Me, "$this")
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.Controls.Add(Me.Label8)
         Me.Controls.Add(Me.SAVELS2)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Controls.Add(Me.free)
@@ -843,5 +850,6 @@ Partial Class umdisomanger
     Friend WithEvents ContextMenuStrip4 As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents ChangeImage2 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents EditImage2 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents Label8 As System.Windows.Forms.Label
 
 End Class

@@ -45,6 +45,7 @@
             this.oPENToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cONVERTTXTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.vERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -136,7 +137,7 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(386, 58);
+            this.checkBox1.Location = new System.Drawing.Point(393, 58);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(96, 16);
             this.checkBox1.TabIndex = 9;
@@ -203,11 +204,23 @@
             this.vERToolStripMenuItem.Text = "VER";
             this.vERToolStripMenuItem.Click += new System.EventHandler(this.vERToolStripMenuItem_Click);
             // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Location = new System.Drawing.Point(393, 80);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(101, 16);
+            this.checkBox2.TabIndex = 13;
+            this.checkBox2.Text = "DECRYPTCWC";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(505, 423);
+            this.Controls.Add(this.checkBox2);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.cmtb);
             this.Controls.Add(this.checkBox1);
@@ -251,6 +264,7 @@
         private System.Windows.Forms.ToolStripMenuItem oPENToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cONVERTTXTToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem vERToolStripMenuItem;
+        private System.Windows.Forms.CheckBox checkBox2;
     }
 }
 

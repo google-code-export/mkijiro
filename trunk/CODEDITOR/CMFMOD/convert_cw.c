@@ -79,17 +79,28 @@ static char* read_line(char *p, char *buf)
 		i=0;
 		while(p[i]!=0x0A && p[i]!=0x0D){
 			if(p[i++]==0) {
+				if(i<300){
 				strcpy(buf,p);
+				}
+				else{
+				mips_memcpy(buf,p,300);
+				}
 				return 0;
 			}
 		}
 		while(p[i]==0x0A || p[i]==0x0D){
 			p[i++]=0;
-		}		
-		strcpy(buf,p);
+		}
+		
+				if(i<300){
+				strcpy(buf,p);
+				}
+				else{
+				mips_memcpy(buf,p,300);
+				}
 		p=(char *)((unsigned int)p+i);
 	}while(buf[0]!='_');
-		
+	
 	if(p[0]!=0) return p;
 	else return 0;
 }
@@ -164,10 +175,8 @@ static int read_cwdb(char *filename, char *gameid)
 	//金手指码部分	
 		p=read_line(p,cw_buf);
 		
-		//if(cw_buf[0]!='_') goto READOUT;
-		
-		if(*(char *)(&cw_buf[0])=='_'){
-		if(*(char *)(&cw_buf[1])=='C'){
+		if(cw_buf[0]=='_'){
+		if(cw_buf[1]=='C'){
 			if(nullcode==1) {
 			t.addr=0x8800000;
 			t.value=0;
@@ -185,7 +194,7 @@ static int read_cwdb(char *filename, char *gameid)
 		t.name[31]=0;
 		nullcode=1;
 		}
-		else if(*(char *)(&cw_buf[1])=='L'){
+		else if(cw_buf[1]=='L'){
 			nullcode=0;
 			if(repeat<5){
 				if(repeat==0) {
@@ -208,6 +217,9 @@ static int read_cwdb(char *filename, char *gameid)
 			t.type=0;
 			t.lock=lock;
 			if(mem_table_add(&t)<0) goto READOUT;
+		}
+		else if(cw_buf[1]=='S'){
+			break;
 		}
 		}
 		if(p==0) break;
