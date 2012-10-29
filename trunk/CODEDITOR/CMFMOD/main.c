@@ -353,7 +353,7 @@ static void replace_keymap(SceCtrlData *ctl, SceUID thd)
 		int i;
 		for(i=0;i<16;i++)
 		{
-			u32 skey = keyset.keymap_skey[i];				
+			u32 skey = keyset.keymap_skey[i];
 			if(skey && ((skey&btn)==skey))
 			{
 				tempkey |= skey;
@@ -400,10 +400,10 @@ static void replace_keyturbo(SceCtrlData *ctl, SceUID thd)
 	if(thd==main_ctx.thid1)
 	{
 		int i;
-		u32 tempkey=0,tempmap=0;		
+		u32 tempkey=0,tempmap=0;
 		for(i=0;i<12;i++)
 		{		
-			u32 key=turbo_key_tab[i];			
+			u32 key=turbo_key_tab[i];
 			if((keyset.turbokey&key) && (ctl->Buttons&key)){
 				tempkey |= key;
 				tempmap |= key;
