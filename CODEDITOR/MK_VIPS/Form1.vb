@@ -6918,4 +6918,29 @@ Public Class Form1
     Private Sub cr_Click(sender As System.Object, e As System.EventArgs) Handles cr.Click
         cr.Checked = Not cr.Checked
     End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        Dim ss As String() = CODE.Text.Split(CChar(vbLf))
+        Dim rg As New Regex("^_L 0x[0-9A-Fa-f]{8} 0x[0-9A-Fa-f]{8}")
+        Dim m As Match
+        Dim sb As New StringBuilder
+        Dim k As Integer
+        For Each s In ss
+            m = rg.Match(s)
+            If m.Success Then
+                k = Convert.ToInt32(s.Substring(5, 8), 16)
+                k = k Xor &HD6F73BEE
+                sb.Append("_L 0x")
+                sb.Append(k.ToString("X8"))
+                sb.AppendLine(s.Remove(0, 13))
+
+            Else
+                sb.AppendLine(s.Trim)
+            End If
+
+        Next
+
+        CODE.Text = sb.ToString
+
+    End Sub
 End Class
