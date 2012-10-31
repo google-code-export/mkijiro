@@ -159,17 +159,17 @@ function func() {
   str = str + tx(yy,pbase,1,"CODEFEAK","_L ",0x10000000,0xD6F73BEE);
   str = str + tx(xx,pbase,1,"PMETAN","_NRW 0x40000000 ",0,0);
   str = str + tx(xx,pbase,2,"NITEPR","",0);
-  str = str + "\r\n";
+  document.cvcode.elements[0].value =   str 
   }
   if(yy !=""){
-  str = str + "//ユニット名\r\n";
+  str = "//ユニット名\r\n";
   str = str + tx(yy,ubase,0,"CWC","_L ",0x10000000,0);
   str = str + tx(yy,ubase,0,"PSPAR","_M ",0x18800000,0);
   str = str + tx(yy,ubase,0,"CODEFEAK","_L ",0x10000000,0xD6F73BEE);
   str = str + tx(yy,ubase,0,"PMETAN","_NRW 0x40000000 ",0,0);
   str = str + tx(yy,ubase,2,"NITEPR","",0,0);
+  document.cvcode2.elements[0].value =   str 
   }
-  document.cvcode.elements[0].value =   str 
 }
 	function pad(text, len)
 	{
@@ -232,23 +232,28 @@ function tx(text, baseaddress,bools,head,cwcar,add,xor) {
 2012/10/31(推奨ぶらうざIE9・FIREFOX,CHORME,OPERA　要JAVASCRIPT)</h2>
 </center>
 <form>
-<p class="cwc"><input type="radio" name="mode" value="0" id="s1" onclick="onChangemode();" >ハニーサウンド/グルーヴィーチューン</p>
+<p class="cwc"><input type="radio" name="mode" value="0" id="s1" checked onclick="onChangemode();" >ハニーサウンド/グルーヴィーチューン</p>
 <p class="cwc"><input type="radio" name="mode" value="1" id="s2" onclick="onChangemode();" >ファンキーノート </p>
 </form>
 <form name="FORM1" action="#">
 <p class="cwc">プロデューサー名ベースアドレス</p>
-<p class="cwc"><input type="text" value="0x3C4CAC" name="CP1200B" onblur="inputcheck();" style="ime-mode: disabled" onkeypress="numField(event)" onkeydown="ieNumField(event)"></p>
+<p class="cwc"><input type="text" value="0x3C4CAC" name="CP1200B" maxlength=10 onblur="inputcheck();" style="ime-mode: disabled" onkeypress="numField(event)" onkeydown="ieNumField(event)"></p>
 <p class="cwc">プロデューサー名</p>
-<p class="cwc"><input type="text" value="あいます" name="CP1200"></p>
+<p class="cwc"><input type="text" value="あいます" name="CP1200" maxlength=10></p>
 <p class="cwc">ユニット名ベースアドレス</p>
-<p class="cwc"><input type="text"value="0x3C9B48" name="CP1200_2B" onblur="inputcheck();" style="ime-mode: disabled" onkeypress="numField(event)" onkeydown="ieNumField(event)"></p>
+<p class="cwc"><input type="text"value="0x3C9B48" name="CP1200_2B"maxlength=10 onblur="inputcheck();" style="ime-mode: disabled" onkeypress="numField(event)" onkeydown="ieNumField(event)"></p>
 <p class="cwc">ユニット名</p>
-<p class="cwc"><input type="text" value="竜宮小町" name="CP1200_2"></p>
+<p class="cwc"><input type="text" value="竜宮小町" name="CP1200_2" maxlength=10></p>
 <p class="cwc">
 <input type="button" value="変換" onclick="func()">
 <input type="button" value="リセット" onclick="init()"></p>
 </form>
 <form name="cvcode">
+<p class="cwc">プロデューサー名コード</p>
+<p class="cwc"><textarea name="text" rows="10" cols="50"></textarea></p>
+</form>
+<form name="cvcode2">
+<p class="cwc">ユニット名コード</p>
 <p class="cwc"><textarea name="text" rows="10" cols="50"></textarea></p>
 </form><br>
 <div align="left">
