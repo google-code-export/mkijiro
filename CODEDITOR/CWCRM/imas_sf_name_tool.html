@@ -208,7 +208,11 @@ function tx(text, baseaddress,bools,head,cwcar,add,xor) {
         return result;
         
     result = result + "_C0 " + head +"\r\n";
-    for (var i = 0; i < text.length; i++) {
+    var max =text.length;
+    if(max>8){
+    max=8;
+    }
+    for (var i = 0; i < max; i++) {
         c = text.charCodeAt(i);
         result = result + cwcar + decDigi((((baseaddress +add)^xor)>>>0).toString(16),8) + " " + decDigi(c.toString(16),len) +"\r\n";
         if(bools){
@@ -238,11 +242,11 @@ function tx(text, baseaddress,bools,head,cwcar,add,xor) {
 <p class="cwc">プロデューサー名ベースアドレス</p>
 <p class="cwc"><input type="text" value="0x3C4CAC" name="CP1200B" maxlength=10 onblur="inputcheck();" style="ime-mode: disabled" onkeypress="numField(event)" onkeydown="ieNumField(event)"></p>
 <p class="cwc">プロデューサー名</p>
-<p class="cwc"><input type="text" value="あいます" name="CP1200" maxlength=10></p>
+<p class="cwc"><input type="text" value="あいます" name="CP1200" maxlength=8></p>
 <p class="cwc">ユニット名ベースアドレス</p>
 <p class="cwc"><input type="text"value="0x3C9B48" name="CP1200_2B"maxlength=10 onblur="inputcheck();" style="ime-mode: disabled" onkeypress="numField(event)" onkeydown="ieNumField(event)"></p>
 <p class="cwc">ユニット名</p>
-<p class="cwc"><input type="text" value="竜宮小町" name="CP1200_2" maxlength=10></p>
+<p class="cwc"><input type="text" value="竜宮小町" name="CP1200_2" maxlength=8></p>
 <p class="cwc">
 <input type="button" value="変換" onclick="func()">
 <input type="button" value="リセット" onclick="init()"></p>
