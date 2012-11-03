@@ -117,1150 +117,567 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="CRCimage.Font" type="System.Drawing.Font, System.Drawing">
-    <value>MS UI Gothic, 7.8pt</value>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="sha.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Disable</value>
   </data>
-  <data name="CRCimage.Location" type="System.Drawing.Point, System.Drawing">
-    <value>321, 33</value>
-  </data>
-  <data name="CRCimage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>70, 18</value>
-  </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="CRCimage.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="CRCimage.Text" xml:space="preserve">
-    <value>CRC IMAGE</value>
-  </data>
-  <data name="&gt;&gt;CRCimage.Name" xml:space="preserve">
-    <value>CRCimage</value>
-  </data>
-  <data name="&gt;&gt;CRCimage.Type" xml:space="preserve">
+  <data name="&gt;&gt;del_psp.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;CRCimage.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;CRCimage.ZOrder" xml:space="preserve">
-    <value>35</value>
-  </data>
-  <metadata name="ContextMenuStrip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>214, 17</value>
-  </metadata>
-  <data name="cnt_install.Size" type="System.Drawing.Size, System.Drawing">
-    <value>148, 22</value>
-  </data>
-  <data name="cnt_install.Text" xml:space="preserve">
-    <value>INSTALL</value>
-  </data>
-  <data name="ToolStripSeparator6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>145, 6</value>
-  </data>
-  <data name="rg_add.Size" type="System.Drawing.Size, System.Drawing">
-    <value>148, 22</value>
-  </data>
-  <data name="rg_add.Text" xml:space="preserve">
-    <value>ADD</value>
-  </data>
-  <data name="rg_edit.Size" type="System.Drawing.Size, System.Drawing">
-    <value>148, 22</value>
-  </data>
-  <data name="rg_edit.Text" xml:space="preserve">
-    <value>EDIT</value>
-  </data>
-  <data name="rg_del.Size" type="System.Drawing.Size, System.Drawing">
-    <value>148, 22</value>
-  </data>
-  <data name="rg_del.Text" xml:space="preserve">
-    <value>DEL</value>
-  </data>
-  <data name="ToolStripSeparator5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>145, 6</value>
-  </data>
-  <data name="VIEW.Size" type="System.Drawing.Size, System.Drawing">
-    <value>148, 22</value>
-  </data>
-  <data name="VIEW.Text" xml:space="preserve">
-    <value>VIEW JAKET</value>
-  </data>
-  <data name="ContextMenuStrip2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>149, 126</value>
-  </data>
-  <data name="&gt;&gt;ContextMenuStrip2.Name" xml:space="preserve">
-    <value>ContextMenuStrip2</value>
-  </data>
-  <data name="&gt;&gt;ContextMenuStrip2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="TreeView1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>9, 33</value>
-  </data>
-  <data name="TreeView1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>208, 353</value>
-  </data>
-  <data name="TreeView1.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;TreeView1.Name" xml:space="preserve">
-    <value>TreeView1</value>
-  </data>
-  <data name="&gt;&gt;TreeView1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TreeView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;TreeView1.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;TreeView1.ZOrder" xml:space="preserve">
-    <value>27</value>
-  </data>
-  <data name="GAMEID.Font" type="System.Drawing.Font, System.Drawing">
-    <value>MS UI Gothic, 7.8pt</value>
-  </data>
-  <data name="GAMEID.Location" type="System.Drawing.Point, System.Drawing">
-    <value>351, 237</value>
-  </data>
-  <data name="GAMEID.Size" type="System.Drawing.Size, System.Drawing">
-    <value>41, 18</value>
-  </data>
-  <data name="GAMEID.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="GAMEID.Text" xml:space="preserve">
-    <value>GET</value>
-  </data>
-  <data name="&gt;&gt;GAMEID.Name" xml:space="preserve">
-    <value>GAMEID</value>
-  </data>
-  <data name="&gt;&gt;GAMEID.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;GAMEID.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;GAMEID.ZOrder" xml:space="preserve">
-    <value>39</value>
-  </data>
-  <data name="PFS.Font" type="System.Drawing.Font, System.Drawing">
-    <value>MS UI Gothic, 7.8pt</value>
-  </data>
-  <data name="PFS.Location" type="System.Drawing.Point, System.Drawing">
-    <value>473, 214</value>
-  </data>
-  <data name="PFS.Size" type="System.Drawing.Size, System.Drawing">
-    <value>57, 18</value>
-  </data>
-  <data name="PFS.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="PFS.Text" xml:space="preserve">
-    <value>GETPSF</value>
-  </data>
-  <data name="&gt;&gt;PFS.Name" xml:space="preserve">
-    <value>PFS</value>
-  </data>
-  <data name="&gt;&gt;PFS.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;PFS.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;PFS.ZOrder" xml:space="preserve">
-    <value>37</value>
-  </data>
-  <metadata name="ContextMenuStrip3.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>543, 17</value>
-  </metadata>
-  <data name="changeimage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>157, 22</value>
-  </data>
-  <data name="changeimage.Text" xml:space="preserve">
-    <value>change image</value>
-  </data>
-  <data name="editimage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>157, 22</value>
-  </data>
-  <data name="editimage.Text" xml:space="preserve">
-    <value>edit image</value>
-  </data>
-  <data name="ContextMenuStrip3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>158, 48</value>
-  </data>
-  <data name="&gt;&gt;ContextMenuStrip3.Name" xml:space="preserve">
-    <value>ContextMenuStrip3</value>
-  </data>
-  <data name="&gt;&gt;ContextMenuStrip3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="PictureBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>223, 55</value>
-  </data>
-  <data name="PictureBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>93, 155</value>
-  </data>
-  <data name="PictureBox1.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="&gt;&gt;PictureBox1.Name" xml:space="preserve">
-    <value>PictureBox1</value>
-  </data>
-  <data name="&gt;&gt;PictureBox1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;PictureBox1.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;PictureBox1.ZOrder" xml:space="preserve">
-    <value>29</value>
-  </data>
-  <data name="managename.Location" type="System.Drawing.Point, System.Drawing">
-    <value>273, 213</value>
-  </data>
-  <data name="managename.MaxLength" type="System.Int32, mscorlib">
-    <value>64</value>
-  </data>
-  <data name="managename.Size" type="System.Drawing.Size, System.Drawing">
-    <value>195, 19</value>
-  </data>
-  <data name="managename.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="&gt;&gt;managename.Name" xml:space="preserve">
-    <value>managename</value>
-  </data>
-  <data name="&gt;&gt;managename.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;managename.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;managename.ZOrder" xml:space="preserve">
-    <value>38</value>
-  </data>
-  <metadata name="ContextMenuStrip4.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>730, 17</value>
-  </metadata>
-  <data name="ChangeImage2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>184, 22</value>
-  </data>
-  <data name="ChangeImage2.Text" xml:space="preserve">
-    <value>change screenshot</value>
-  </data>
-  <data name="EditImage2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>184, 22</value>
-  </data>
-  <data name="EditImage2.Text" xml:space="preserve">
-    <value>edit screenshot</value>
-  </data>
-  <data name="ContextMenuStrip4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>185, 48</value>
-  </data>
-  <data name="&gt;&gt;ContextMenuStrip4.Name" xml:space="preserve">
-    <value>ContextMenuStrip4</value>
-  </data>
-  <data name="&gt;&gt;ContextMenuStrip4.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="PictureBox2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>321, 56</value>
-  </data>
-  <data name="PictureBox2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>274, 155</value>
-  </data>
-  <data name="PictureBox2.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
-  </data>
-  <data name="&gt;&gt;PictureBox2.Name" xml:space="preserve">
-    <value>PictureBox2</value>
-  </data>
-  <data name="&gt;&gt;PictureBox2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
+    <value>CenterScreen</value>
   </data>
   <data name="&gt;&gt;PictureBox2.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;PictureBox2.ZOrder" xml:space="preserve">
-    <value>33</value>
-  </data>
-  <data name="Label1.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="Label1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>220, 216</value>
-  </data>
-  <data name="Label1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>37, 12</value>
-  </data>
-  <data name="Label1.TabIndex" type="System.Int32, mscorlib">
-    <value>8</value>
-  </data>
-  <data name="Label1.Text" xml:space="preserve">
-    <value>NAME</value>
-  </data>
-  <data name="&gt;&gt;Label1.Name" xml:space="preserve">
-    <value>Label1</value>
-  </data>
-  <data name="&gt;&gt;Label1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Label1.Parent" xml:space="preserve">
+  <data name="&gt;&gt;MenuStrip1.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;Label1.ZOrder" xml:space="preserve">
-    <value>40</value>
+  <data name="&gt;&gt;file_sort.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="movepsp.Font" type="System.Drawing.Font, System.Drawing">
-    <value>MS UI Gothic, 7.8pt</value>
+  <data name="&gt;&gt;mane_sort_up.Name" xml:space="preserve">
+    <value>mane_sort_up</value>
   </data>
-  <data name="movepsp.Location" type="System.Drawing.Point, System.Drawing">
-    <value>221, 344</value>
-  </data>
-  <data name="movepsp.Size" type="System.Drawing.Size, System.Drawing">
-    <value>69, 18</value>
-  </data>
-  <data name="movepsp.TabIndex" type="System.Int32, mscorlib">
-    <value>9</value>
-  </data>
-  <data name="movepsp.Text" xml:space="preserve">
-    <value>install</value>
-  </data>
-  <data name="&gt;&gt;movepsp.Name" xml:space="preserve">
-    <value>movepsp</value>
-  </data>
-  <data name="&gt;&gt;movepsp.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;movepsp.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;movepsp.ZOrder" xml:space="preserve">
-    <value>25</value>
-  </data>
-  <data name="google.Font" type="System.Drawing.Font, System.Drawing">
-    <value>MS UI Gothic, 7.8pt</value>
-  </data>
-  <data name="google.Location" type="System.Drawing.Point, System.Drawing">
-    <value>397, 33</value>
-  </data>
-  <data name="google.Size" type="System.Drawing.Size, System.Drawing">
-    <value>70, 18</value>
-  </data>
-  <data name="google.TabIndex" type="System.Int32, mscorlib">
-    <value>10</value>
-  </data>
-  <data name="google.Text" xml:space="preserve">
-    <value>GOOGLE</value>
-  </data>
-  <data name="&gt;&gt;google.Name" xml:space="preserve">
-    <value>google</value>
-  </data>
-  <data name="&gt;&gt;google.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;google.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;google.ZOrder" xml:space="preserve">
-    <value>34</value>
-  </data>
-  <metadata name="ContextMenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
-  <data name="ContextMenuStrip1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>61, 4</value>
-  </data>
-  <data name="&gt;&gt;ContextMenuStrip1.Name" xml:space="preserve">
-    <value>ContextMenuStrip1</value>
-  </data>
-  <data name="&gt;&gt;ContextMenuStrip1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="drivelettter.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Disable</value>
-  </data>
-  <data name="drivelettter.Location" type="System.Drawing.Point, System.Drawing">
-    <value>434, 345</value>
-  </data>
-  <data name="drivelettter.MaxLength" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="drivelettter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>23, 19</value>
-  </data>
-  <data name="drivelettter.TabIndex" type="System.Int32, mscorlib">
-    <value>11</value>
-  </data>
-  <data name="&gt;&gt;drivelettter.Name" xml:space="preserve">
-    <value>drivelettter</value>
-  </data>
-  <data name="&gt;&gt;drivelettter.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;drivelettter.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;drivelettter.ZOrder" xml:space="preserve">
-    <value>22</value>
-  </data>
-  <data name="lockdriveletter.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="lockdriveletter.Location" type="System.Drawing.Point, System.Drawing">
-    <value>317, 346</value>
-  </data>
-  <data name="lockdriveletter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>101, 16</value>
-  </data>
-  <data name="lockdriveletter.TabIndex" type="System.Int32, mscorlib">
-    <value>12</value>
-  </data>
-  <data name="lockdriveletter.Text" xml:space="preserve">
-    <value>lock driveletter</value>
-  </data>
-  <data name="&gt;&gt;lockdriveletter.Name" xml:space="preserve">
-    <value>lockdriveletter</value>
-  </data>
-  <data name="&gt;&gt;lockdriveletter.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lockdriveletter.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;lockdriveletter.ZOrder" xml:space="preserve">
-    <value>20</value>
-  </data>
-  <data name="Label2.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="Label2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>461, 239</value>
-  </data>
-  <data name="Label2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>54, 12</value>
-  </data>
-  <data name="Label2.TabIndex" type="System.Int32, mscorlib">
-    <value>13</value>
-  </data>
-  <data name="Label2.Text" xml:space="preserve">
-    <value>FILESIZE;</value>
-  </data>
-  <data name="&gt;&gt;Label2.Name" xml:space="preserve">
-    <value>Label2</value>
-  </data>
-  <data name="&gt;&gt;Label2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Label2.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;Label2.ZOrder" xml:space="preserve">
-    <value>30</value>
-  </data>
-  <data name="Label3.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="Label3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>461, 261</value>
-  </data>
-  <data name="Label3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>59, 12</value>
-  </data>
-  <data name="Label3.TabIndex" type="System.Int32, mscorlib">
-    <value>14</value>
-  </data>
-  <data name="Label3.Text" xml:space="preserve">
-    <value>LBA*2048;</value>
-  </data>
-  <data name="&gt;&gt;Label3.Name" xml:space="preserve">
-    <value>Label3</value>
-  </data>
-  <data name="&gt;&gt;Label3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Label3.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;Label3.ZOrder" xml:space="preserve">
-    <value>23</value>
-  </data>
-  <data name="Label4.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="Label4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>223, 262</value>
-  </data>
-  <data name="Label4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>43, 12</value>
-  </data>
-  <data name="Label4.TabIndex" type="System.Int32, mscorlib">
-    <value>15</value>
-  </data>
-  <data name="Label4.Text" xml:space="preserve">
-    <value>CRC32;</value>
-  </data>
-  <data name="&gt;&gt;Label4.Name" xml:space="preserve">
-    <value>Label4</value>
-  </data>
-  <data name="&gt;&gt;Label4.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Label4.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;Label4.ZOrder" xml:space="preserve">
-    <value>19</value>
-  </data>
-  <data name="Label5.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="Label5.Location" type="System.Drawing.Point, System.Drawing">
-    <value>221, 286</value>
-  </data>
-  <data name="Label5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>30, 12</value>
-  </data>
-  <data name="Label5.TabIndex" type="System.Int32, mscorlib">
-    <value>16</value>
-  </data>
-  <data name="Label5.Text" xml:space="preserve">
-    <value>MD5;</value>
-  </data>
-  <data name="&gt;&gt;Label5.Name" xml:space="preserve">
-    <value>Label5</value>
-  </data>
-  <data name="&gt;&gt;Label5.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Label5.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;Label5.ZOrder" xml:space="preserve">
-    <value>28</value>
-  </data>
-  <data name="Label6.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="Label6.Location" type="System.Drawing.Point, System.Drawing">
-    <value>224, 315</value>
-  </data>
-  <data name="Label6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>42, 12</value>
-  </data>
-  <data name="Label6.TabIndex" type="System.Int32, mscorlib">
-    <value>17</value>
-  </data>
-  <data name="Label6.Text" xml:space="preserve">
-    <value>SHA-1;</value>
-  </data>
-  <data name="&gt;&gt;Label6.Name" xml:space="preserve">
-    <value>Label6</value>
-  </data>
-  <data name="&gt;&gt;Label6.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Label6.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;Label6.ZOrder" xml:space="preserve">
-    <value>16</value>
-  </data>
-  <data name="isosize.Location" type="System.Drawing.Point, System.Drawing">
-    <value>521, 237</value>
-  </data>
-  <data name="isosize.MaxLength" type="System.Int32, mscorlib">
-    <value>10</value>
-  </data>
-  <data name="isosize.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 19</value>
-  </data>
-  <data name="isosize.TabIndex" type="System.Int32, mscorlib">
-    <value>18</value>
-  </data>
-  <data name="&gt;&gt;isosize.Name" xml:space="preserve">
-    <value>isosize</value>
-  </data>
-  <data name="&gt;&gt;isosize.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;isosize.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;isosize.ZOrder" xml:space="preserve">
-    <value>36</value>
-  </data>
-  <data name="isolba.Location" type="System.Drawing.Point, System.Drawing">
-    <value>521, 258</value>
-  </data>
-  <data name="isolba.MaxLength" type="System.Int32, mscorlib">
-    <value>10</value>
-  </data>
-  <data name="isolba.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 19</value>
-  </data>
-  <data name="isolba.TabIndex" type="System.Int32, mscorlib">
-    <value>19</value>
-  </data>
-  <data name="&gt;&gt;isolba.Name" xml:space="preserve">
-    <value>isolba</value>
-  </data>
-  <data name="&gt;&gt;isolba.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;isolba.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;isolba.ZOrder" xml:space="preserve">
-    <value>32</value>
-  </data>
-  <data name="crc.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Disable</value>
-  </data>
-  <data name="crc.Location" type="System.Drawing.Point, System.Drawing">
-    <value>273, 260</value>
-  </data>
-  <data name="crc.MaxLength" type="System.Int32, mscorlib">
-    <value>8</value>
-  </data>
-  <data name="crc.Size" type="System.Drawing.Size, System.Drawing">
-    <value>76, 19</value>
-  </data>
-  <data name="crc.TabIndex" type="System.Int32, mscorlib">
-    <value>20</value>
-  </data>
-  <data name="&gt;&gt;crc.Name" xml:space="preserve">
-    <value>crc</value>
-  </data>
-  <data name="&gt;&gt;crc.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;crc.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;crc.ZOrder" xml:space="preserve">
-    <value>13</value>
-  </data>
-  <data name="md5hash.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Disable</value>
-  </data>
-  <data name="md5hash.Location" type="System.Drawing.Point, System.Drawing">
-    <value>272, 284</value>
-  </data>
-  <data name="md5hash.MaxLength" type="System.Int32, mscorlib">
-    <value>32</value>
-  </data>
-  <data name="md5hash.Size" type="System.Drawing.Size, System.Drawing">
-    <value>196, 19</value>
-  </data>
-  <data name="md5hash.TabIndex" type="System.Int32, mscorlib">
-    <value>21</value>
-  </data>
-  <data name="&gt;&gt;md5hash.Name" xml:space="preserve">
-    <value>md5hash</value>
-  </data>
-  <data name="&gt;&gt;md5hash.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;md5hash.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;md5hash.ZOrder" xml:space="preserve">
-    <value>12</value>
-  </data>
-  <data name="sha.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Disable</value>
-  </data>
-  <data name="sha.Location" type="System.Drawing.Point, System.Drawing">
-    <value>272, 312</value>
-  </data>
-  <data name="sha.MaxLength" type="System.Int32, mscorlib">
-    <value>40</value>
-  </data>
-  <data name="sha.Size" type="System.Drawing.Size, System.Drawing">
-    <value>247, 19</value>
-  </data>
-  <data name="sha.TabIndex" type="System.Int32, mscorlib">
-    <value>22</value>
-  </data>
-  <data name="&gt;&gt;sha.Name" xml:space="preserve">
-    <value>sha</value>
-  </data>
-  <data name="&gt;&gt;sha.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;sha.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;sha.ZOrder" xml:space="preserve">
-    <value>14</value>
-  </data>
-  <data name="Label7.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="Label7.Location" type="System.Drawing.Point, System.Drawing">
-    <value>223, 239</value>
-  </data>
-  <data name="Label7.Size" type="System.Drawing.Size, System.Drawing">
-    <value>50, 12</value>
-  </data>
-  <data name="Label7.TabIndex" type="System.Int32, mscorlib">
-    <value>23</value>
-  </data>
-  <data name="Label7.Text" xml:space="preserve">
-    <value>GAMEID;</value>
-  </data>
-  <data name="&gt;&gt;Label7.Name" xml:space="preserve">
-    <value>Label7</value>
-  </data>
-  <data name="&gt;&gt;Label7.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Label7.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;Label7.ZOrder" xml:space="preserve">
-    <value>18</value>
-  </data>
-  <data name="gid.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Disable</value>
-  </data>
-  <data name="gid.Location" type="System.Drawing.Point, System.Drawing">
-    <value>273, 237</value>
-  </data>
-  <data name="gid.MaxLength" type="System.Int32, mscorlib">
-    <value>10</value>
-  </data>
-  <data name="gid.Size" type="System.Drawing.Size, System.Drawing">
-    <value>76, 19</value>
-  </data>
-  <data name="gid.TabIndex" type="System.Int32, mscorlib">
-    <value>24</value>
-  </data>
-  <data name="&gt;&gt;gid.Name" xml:space="preserve">
-    <value>gid</value>
-  </data>
-  <data name="&gt;&gt;gid.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;gid.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;gid.ZOrder" xml:space="preserve">
-    <value>8</value>
-  </data>
-  <data name="calc_crc.Font" type="System.Drawing.Font, System.Drawing">
-    <value>MS UI Gothic, 7.8pt</value>
-  </data>
-  <data name="calc_crc.Location" type="System.Drawing.Point, System.Drawing">
-    <value>351, 261</value>
-  </data>
-  <data name="calc_crc.Size" type="System.Drawing.Size, System.Drawing">
-    <value>40, 18</value>
-  </data>
-  <data name="calc_crc.TabIndex" type="System.Int32, mscorlib">
-    <value>25</value>
-  </data>
-  <data name="calc_crc.Text" xml:space="preserve">
-    <value>CALC</value>
-  </data>
-  <data name="&gt;&gt;calc_crc.Name" xml:space="preserve">
-    <value>calc_crc</value>
-  </data>
-  <data name="&gt;&gt;calc_crc.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;calc_crc.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;calc_crc.ZOrder" xml:space="preserve">
-    <value>17</value>
-  </data>
-  <data name="calc_md5.Font" type="System.Drawing.Font, System.Drawing">
-    <value>MS UI Gothic, 7.8pt</value>
-  </data>
-  <data name="calc_md5.Location" type="System.Drawing.Point, System.Drawing">
-    <value>474, 284</value>
-  </data>
-  <data name="calc_md5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>45, 18</value>
-  </data>
-  <data name="calc_md5.TabIndex" type="System.Int32, mscorlib">
-    <value>26</value>
-  </data>
-  <data name="calc_md5.Text" xml:space="preserve">
-    <value>CALC</value>
-  </data>
-  <data name="&gt;&gt;calc_md5.Name" xml:space="preserve">
-    <value>calc_md5</value>
-  </data>
-  <data name="&gt;&gt;calc_md5.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;calc_md5.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;calc_md5.ZOrder" xml:space="preserve">
-    <value>21</value>
-  </data>
-  <data name="calc_sha.Font" type="System.Drawing.Font, System.Drawing">
-    <value>MS UI Gothic, 7.8pt</value>
-  </data>
-  <data name="calc_sha.Location" type="System.Drawing.Point, System.Drawing">
-    <value>524, 312</value>
-  </data>
-  <data name="calc_sha.Size" type="System.Drawing.Size, System.Drawing">
-    <value>42, 18</value>
-  </data>
-  <data name="calc_sha.TabIndex" type="System.Int32, mscorlib">
-    <value>27</value>
-  </data>
-  <data name="calc_sha.Text" xml:space="preserve">
-    <value>CALC</value>
-  </data>
-  <data name="&gt;&gt;calc_sha.Name" xml:space="preserve">
-    <value>calc_sha</value>
-  </data>
-  <data name="&gt;&gt;calc_sha.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;calc_sha.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;calc_sha.ZOrder" xml:space="preserve">
-    <value>15</value>
-  </data>
-  <data name="all_hash.Font" type="System.Drawing.Font, System.Drawing">
-    <value>MS UI Gothic, 7.8pt</value>
-  </data>
-  <data name="all_hash.Location" type="System.Drawing.Point, System.Drawing">
-    <value>524, 285</value>
-  </data>
-  <data name="all_hash.Size" type="System.Drawing.Size, System.Drawing">
-    <value>57, 18</value>
-  </data>
-  <data name="all_hash.TabIndex" type="System.Int32, mscorlib">
-    <value>28</value>
-  </data>
-  <data name="all_hash.Text" xml:space="preserve">
-    <value>ALLHASH</value>
-  </data>
-  <data name="&gt;&gt;all_hash.Name" xml:space="preserve">
-    <value>all_hash</value>
-  </data>
-  <data name="&gt;&gt;all_hash.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;all_hash.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;all_hash.ZOrder" xml:space="preserve">
-    <value>31</value>
-  </data>
-  <data name="tree_apply.Font" type="System.Drawing.Font, System.Drawing">
-    <value>MS UI Gothic, 7.8pt</value>
-  </data>
-  <data name="tree_apply.Location" type="System.Drawing.Point, System.Drawing">
-    <value>521, 344</value>
-  </data>
-  <data name="tree_apply.Size" type="System.Drawing.Size, System.Drawing">
-    <value>70, 18</value>
-  </data>
-  <data name="tree_apply.TabIndex" type="System.Int32, mscorlib">
-    <value>29</value>
-  </data>
-  <data name="tree_apply.Text" xml:space="preserve">
-    <value>SAVEINFO</value>
-  </data>
-  <data name="&gt;&gt;tree_apply.Name" xml:space="preserve">
-    <value>tree_apply</value>
-  </data>
-  <data name="&gt;&gt;tree_apply.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tree_apply.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;tree_apply.ZOrder" xml:space="preserve">
-    <value>26</value>
-  </data>
-  <metadata name="MenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>411, 17</value>
-  </metadata>
-  <data name="ADD.Size" type="System.Drawing.Size, System.Drawing">
-    <value>203, 22</value>
-  </data>
-  <data name="ADD.Text" xml:space="preserve">
-    <value>ADD IMAGE/PBP</value>
-  </data>
-  <data name="ADD.ToolTipText" xml:space="preserve">
-    <value>add image/pbp you want
-if you want to add  many files,drag&amp;drop files from explorer</value>
-  </data>
-  <data name="ToolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 6</value>
-  </data>
-  <data name="SAVELS.Size" type="System.Drawing.Size, System.Drawing">
-    <value>203, 22</value>
-  </data>
-  <data name="SAVELS.Text" xml:space="preserve">
-    <value>SAVE LIST</value>
-  </data>
-  <data name="SAVELS.ToolTipText" xml:space="preserve">
-    <value>save gamelist</value>
-  </data>
-  <data name="EXPORTPSPINS.Size" type="System.Drawing.Size, System.Drawing">
-    <value>203, 22</value>
-  </data>
-  <data name="EXPORTPSPINS.Text" xml:space="preserve">
-    <value>EXPORT PSPINS LIST</value>
-  </data>
-  <data name="EXPORTPSPINS.ToolTipText" xml:space="preserve">
-    <value>export PSPINSsytyle gamelist
-some japanesechara contain 0x7C( | ),it will replace
-//INSbadchara(these contains 0x7C | )
-－ポл榎掛弓芸鋼旨楯酢掃竹倒培怖翻慾處嘶斈忿掟桍毫烟痞窩縹艚蛞諫轎閖驂黥埈蒴僴礰</value>
-  </data>
-  <data name="disck_ver.Size" type="System.Drawing.Size, System.Drawing">
-    <value>167, 22</value>
-  </data>
-  <data name="disck_ver.Text" xml:space="preserve">
-    <value>ADD DISCKVER</value>
-  </data>
-  <data name="ROMCODEs.Size" type="System.Drawing.Size, System.Drawing">
-    <value>167, 22</value>
-  </data>
-  <data name="ROMCODEs.Text" xml:space="preserve">
-    <value>ADD ROMCODE</value>
-  </data>
-  <data name="SAVE_clrmamepro.Size" type="System.Drawing.Size, System.Drawing">
-    <value>203, 22</value>
-  </data>
-  <data name="SAVE_clrmamepro.Text" xml:space="preserve">
-    <value>EXPORT clrmamepro</value>
-  </data>
-  <data name="exportxml.Size" type="System.Drawing.Size, System.Drawing">
-    <value>203, 22</value>
-  </data>
-  <data name="exportxml.Text" xml:space="preserve">
-    <value>EXPORT XML</value>
-  </data>
-  <data name="diffCMPRO.Size" type="System.Drawing.Size, System.Drawing">
-    <value>118, 22</value>
-  </data>
-  <data name="diffCMPRO.Text" xml:space="preserve">
-    <value>CMPRO</value>
-  </data>
-  <data name="sabunindex.Size" type="System.Drawing.Size, System.Drawing">
-    <value>68, 22</value>
-  </data>
-  <data name="diffXML.Size" type="System.Drawing.Size, System.Drawing">
-    <value>118, 22</value>
-  </data>
-  <data name="diffXML.Text" xml:space="preserve">
-    <value>XML</value>
-  </data>
-  <data name="ToolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>203, 22</value>
-  </data>
-  <data name="ToolStripMenuItem1.Text" xml:space="preserve">
-    <value>MAKE DIFF</value>
-  </data>
-  <data name="ToolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 6</value>
-  </data>
-  <data name="CLOSEToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>203, 22</value>
-  </data>
-  <data name="CLOSEToolStripMenuItem.Text" xml:space="preserve">
-    <value>CLOSE</value>
-  </data>
-  <data name="menufile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>46, 22</value>
-  </data>
-  <data name="menufile.Text" xml:space="preserve">
-    <value>FILE</value>
-  </data>
-  <data name="mane_sort_up.Size" type="System.Drawing.Size, System.Drawing">
-    <value>175, 22</value>
-  </data>
-  <data name="mane_sort_up.Text" xml:space="preserve">
-    <value>ascending order</value>
-  </data>
-  <data name="mane_sort_down.Size" type="System.Drawing.Size, System.Drawing">
-    <value>175, 22</value>
-  </data>
-  <data name="mane_sort_down.Text" xml:space="preserve">
-    <value>descending order</value>
-  </data>
-  <data name="name_sort.Size" type="System.Drawing.Size, System.Drawing">
-    <value>140, 22</value>
-  </data>
-  <data name="name_sort.Text" xml:space="preserve">
-    <value>NAME</value>
-  </data>
-  <data name="gid_sort_up.Size" type="System.Drawing.Size, System.Drawing">
-    <value>175, 22</value>
-  </data>
-  <data name="gid_sort_up.Text" xml:space="preserve">
-    <value>ascending order</value>
-  </data>
-  <data name="gid_sort_down.Size" type="System.Drawing.Size, System.Drawing">
-    <value>175, 22</value>
-  </data>
-  <data name="gid_sort_down.Text" xml:space="preserve">
-    <value>descending order</value>
-  </data>
-  <data name="ToolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>172, 6</value>
-  </data>
-  <data name="sort_jp.Size" type="System.Drawing.Size, System.Drawing">
-    <value>175, 22</value>
-  </data>
-  <data name="sort_jp.Text" xml:space="preserve">
-    <value>priror JAP</value>
-  </data>
-  <data name="PpriorUSAToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>175, 22</value>
-  </data>
-  <data name="PpriorUSAToolStripMenuItem.Text" xml:space="preserve">
-    <value>prior USA</value>
-  </data>
-  <data name="PriorEUToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>175, 22</value>
-  </data>
-  <data name="PriorEUToolStripMenuItem.Text" xml:space="preserve">
-    <value>prior EU</value>
-  </data>
-  <data name="GAMEID_sort.Size" type="System.Drawing.Size, System.Drawing">
-    <value>140, 22</value>
-  </data>
-  <data name="GAMEID_sort.Text" xml:space="preserve">
-    <value>GAMEID</value>
-  </data>
-  <data name="psf_sort_up.Size" type="System.Drawing.Size, System.Drawing">
-    <value>175, 22</value>
-  </data>
-  <data name="psf_sort_up.Text" xml:space="preserve">
-    <value>ascending order</value>
-  </data>
-  <data name="psf_sort_down.Size" type="System.Drawing.Size, System.Drawing">
-    <value>175, 22</value>
-  </data>
-  <data name="psf_sort_down.Text" xml:space="preserve">
-    <value>descending order</value>
-  </data>
-  <data name="PSFtitle_sort.Size" type="System.Drawing.Size, System.Drawing">
-    <value>140, 22</value>
-  </data>
-  <data name="PSFtitle_sort.Text" xml:space="preserve">
-    <value>PSF_TITLE</value>
-  </data>
-  <data name="file_sort_up.Size" type="System.Drawing.Size, System.Drawing">
-    <value>175, 22</value>
-  </data>
-  <data name="file_sort_up.Text" xml:space="preserve">
-    <value>ascending order</value>
-  </data>
-  <data name="file_sort_down.Size" type="System.Drawing.Size, System.Drawing">
-    <value>175, 22</value>
-  </data>
-  <data name="file_sort_down.Text" xml:space="preserve">
-    <value>descending order</value>
-  </data>
-  <data name="file_sort.Size" type="System.Drawing.Size, System.Drawing">
-    <value>140, 22</value>
-  </data>
-  <data name="file_sort.Text" xml:space="preserve">
-    <value>FILENAME</value>
-  </data>
-  <data name="sort.Size" type="System.Drawing.Size, System.Drawing">
-    <value>53, 22</value>
-  </data>
-  <data name="sort.Text" xml:space="preserve">
-    <value>SORT</value>
-  </data>
-  <data name="RMXML.Size" type="System.Drawing.Size, System.Drawing">
-    <value>144, 22</value>
-  </data>
-  <data name="RMXML.Text" xml:space="preserve">
-    <value>XML</value>
-  </data>
-  <data name="RMXML.ToolTipText" xml:space="preserve">
-    <value>USE OFFLINE XMLFILE</value>
-  </data>
-  <data name="RMDAT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>144, 22</value>
-  </data>
-  <data name="RMDAT.Text" xml:space="preserve">
-    <value>DAT</value>
-  </data>
-  <data name="RMDAT.ToolTipText" xml:space="preserve">
-    <value>USE NOINTRO DATFILE</value>
-  </data>
-  <data name="ToolStripSeparator4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>141, 6</value>
-  </data>
-  <data name="MNAME.Size" type="System.Drawing.Size, System.Drawing">
-    <value>133, 22</value>
-  </data>
-  <data name="MNAME.Text" xml:space="preserve">
-    <value>NAME</value>
-  </data>
-  <data name="FILEPATH.Size" type="System.Drawing.Size, System.Drawing">
-    <value>133, 22</value>
-  </data>
-  <data name="FILEPATH.Text" xml:space="preserve">
-    <value>FILEPATH</value>
-  </data>
-  <data name="MNEN.Size" type="System.Drawing.Size, System.Drawing">
-    <value>144, 22</value>
-  </data>
-  <data name="MNEN.Text" xml:space="preserve">
-    <value>TARGET</value>
-  </data>
-  <data name="pathcrc.Size" type="System.Drawing.Size, System.Drawing">
-    <value>144, 22</value>
-  </data>
-  <data name="pathcrc.Text" xml:space="preserve">
-    <value>ADD CRC32</value>
-  </data>
-  <data name="RENAME.Size" type="System.Drawing.Size, System.Drawing">
-    <value>69, 22</value>
-  </data>
-  <data name="RENAME.Text" xml:space="preserve">
-    <value>RENAME</value>
-  </data>
-  <data name="GUITOP.Size" type="System.Drawing.Size, System.Drawing">
-    <value>206, 22</value>
+  <data name="&gt;&gt;USEMD5.Name" xml:space="preserve">
+    <value>USEMD5</value>
   </data>
   <data name="GUITOP.Text" xml:space="preserve">
     <value>TOPMOST</value>
   </data>
-  <data name="xmlselect.Size" type="System.Drawing.Size, System.Drawing">
-    <value>206, 22</value>
+  <data name="&gt;&gt;crc.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="xmlselect.Text" xml:space="preserve">
-    <value>select XML</value>
+  <data name="PFS.Text" xml:space="preserve">
+    <value>GETPSF</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="Label7.Size" type="System.Drawing.Size, System.Drawing">
+    <value>50, 12</value>
+  </data>
+  <data name="Label2.Text" xml:space="preserve">
+    <value>FILESIZE;</value>
+  </data>
+  <data name="&gt;&gt;Label1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="TreeView1.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;GAMEID.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="drivelettter.Location" type="System.Drawing.Point, System.Drawing">
+    <value>434, 345</value>
+  </data>
+  <data name="&gt;&gt;changeimage.Name" xml:space="preserve">
+    <value>changeimage</value>
+  </data>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>6, 12</value>
+  </data>
+  <data name="ContextMenuStrip4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>185, 48</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>604, 401</value>
+  </data>
+  <data name="&gt;&gt;rg_del.Name" xml:space="preserve">
+    <value>rg_del</value>
+  </data>
+  <data name="&gt;&gt;calc_sha.Name" xml:space="preserve">
+    <value>calc_sha</value>
+  </data>
+  <data name="file_sort_up.Size" type="System.Drawing.Size, System.Drawing">
+    <value>175, 22</value>
+  </data>
+  <data name="&gt;&gt;calc_md5.Name" xml:space="preserve">
+    <value>calc_md5</value>
+  </data>
+  <data name="crc.TabIndex" type="System.Int32, mscorlib">
+    <value>20</value>
+  </data>
+  <data name="&gt;&gt;PSFtitle_sort.Name" xml:space="preserve">
+    <value>PSFtitle_sort</value>
+  </data>
+  <data name="&gt;&gt;Label4.ZOrder" xml:space="preserve">
+    <value>19</value>
+  </data>
+  <data name="&gt;&gt;calc_crc.ZOrder" xml:space="preserve">
+    <value>17</value>
+  </data>
+  <data name="diffXML.Size" type="System.Drawing.Size, System.Drawing">
+    <value>118, 22</value>
+  </data>
+  <data name="lockdriveletter.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="free.Size" type="System.Drawing.Size, System.Drawing">
+    <value>96, 12</value>
+  </data>
+  <data name="&gt;&gt;disck_ver.Name" xml:space="preserve">
+    <value>disck_ver</value>
+  </data>
+  <data name="GAMEID.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="md5hash.MaxLength" type="System.Int32, mscorlib">
+    <value>32</value>
+  </data>
+  <data name="&gt;&gt;Label5.ZOrder" xml:space="preserve">
+    <value>28</value>
+  </data>
+  <data name="&gt;&gt;ToolStripSeparator4.Name" xml:space="preserve">
+    <value>ToolStripSeparator4</value>
+  </data>
+  <data name="&gt;&gt;GUITOP.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Label6.Text" xml:space="preserve">
+    <value>SHA-1;</value>
+  </data>
+  <data name="&gt;&gt;setting.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="rg_add.Text" xml:space="preserve">
+    <value>ADD</value>
+  </data>
+  <data name="&gt;&gt;rg_del.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="CRCimage.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="pathcrc.Text" xml:space="preserve">
+    <value>ADD HASH</value>
+  </data>
+  <data name="isosize.Size" type="System.Drawing.Size, System.Drawing">
+    <value>72, 19</value>
+  </data>
+  <data name="sony.Size" type="System.Drawing.Size, System.Drawing">
+    <value>56, 18</value>
+  </data>
+  <data name="file_sort_down.Size" type="System.Drawing.Size, System.Drawing">
+    <value>175, 22</value>
+  </data>
+  <data name="&gt;&gt;sony.ZOrder" xml:space="preserve">
+    <value>24</value>
+  </data>
+  <data name="menufile.Size" type="System.Drawing.Size, System.Drawing">
+    <value>46, 22</value>
+  </data>
+  <data name="&gt;&gt;PFS.ZOrder" xml:space="preserve">
+    <value>37</value>
+  </data>
+  <data name="gid_sort_up.Text" xml:space="preserve">
+    <value>ascending order</value>
+  </data>
+  <data name="&gt;&gt;Label3.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="t_gid.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="t_gid.TabIndex" type="System.Int32, mscorlib">
+    <value>32</value>
   </data>
   <data name="xmlselect.ToolTipText" xml:space="preserve">
     <value>SELECT OFFLINE XML
 IF MATCH CRC32 IN XML,apply name &amp; iamges</value>
   </data>
-  <data name="rename_dat.Size" type="System.Drawing.Size, System.Drawing">
-    <value>206, 22</value>
+  <data name="Label1.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
   </data>
-  <data name="rename_dat.Text" xml:space="preserve">
-    <value>select dat</value>
+  <data name="&gt;&gt;sha.Name" xml:space="preserve">
+    <value>sha</value>
   </data>
-  <data name="rename_dat.ToolTipText" xml:space="preserve">
-    <value>SELECT clrmamepro DATFILE</value>
+  <data name="sha.TabIndex" type="System.Int32, mscorlib">
+    <value>22</value>
   </data>
-  <data name="editpspdir.Size" type="System.Drawing.Size, System.Drawing">
-    <value>206, 22</value>
+  <data name="&gt;&gt;ToolStripSeparator5.Name" xml:space="preserve">
+    <value>ToolStripSeparator5</value>
   </data>
-  <data name="editpspdir.Text" xml:space="preserve">
-    <value>edit pspdir list</value>
+  <data name="movepsp.Location" type="System.Drawing.Point, System.Drawing">
+    <value>221, 344</value>
+  </data>
+  <data name="managename.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;MenuStrip1.Name" xml:space="preserve">
+    <value>MenuStrip1</value>
+  </data>
+  <data name="disck_ver.Size" type="System.Drawing.Size, System.Drawing">
+    <value>167, 22</value>
+  </data>
+  <data name="sony.Text" xml:space="preserve">
+    <value>$ONY</value>
+  </data>
+  <data name="PictureBox2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>321, 56</value>
+  </data>
+  <data name="&gt;&gt;RMDAT.Name" xml:space="preserve">
+    <value>RMDAT</value>
+  </data>
+  <data name="&gt;&gt;PriorEUToolStripMenuItem.Name" xml:space="preserve">
+    <value>PriorEUToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;rename_dat.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Label6.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;del_psp.ZOrder" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="ADD.Size" type="System.Drawing.Size, System.Drawing">
+    <value>203, 22</value>
+  </data>
+  <data name="md5hash.TabIndex" type="System.Int32, mscorlib">
+    <value>21</value>
+  </data>
+  <data name="&gt;&gt;CRCimage.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Label5.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;isolba.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;tree_apply.ZOrder" xml:space="preserve">
+    <value>26</value>
+  </data>
+  <data name="PFS.Font" type="System.Drawing.Font, System.Drawing">
+    <value>MS UI Gothic, 7.8pt</value>
+  </data>
+  <data name="Label4.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="RMDAT.ToolTipText" xml:space="preserve">
+    <value>USE NOINTRO DATFILE</value>
+  </data>
+  <data name="del_psp.Font" type="System.Drawing.Font, System.Drawing">
+    <value>MS UI Gothic, 7.8pt</value>
+  </data>
+  <data name="&gt;&gt;Label5.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;managename.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="SAVE_clrmamepro.Size" type="System.Drawing.Size, System.Drawing">
+    <value>203, 22</value>
+  </data>
+  <data name="&gt;&gt;ToolStripSeparator3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gid.Name" xml:space="preserve">
+    <value>gid</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>UMD RAWIMAGE MANAGER</value>
+  </data>
+  <data name="&gt;&gt;sony.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;GAMEID.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;sabunindex.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lockdriveletter.Name" xml:space="preserve">
+    <value>lockdriveletter</value>
+  </data>
+  <data name="drivelettter.MaxLength" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;movepsp.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;SAVELS2.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;crc_xml.ZOrder" xml:space="preserve">
+    <value>11</value>
+  </data>
+  <data name="&gt;&gt;CRCimage.ZOrder" xml:space="preserve">
+    <value>35</value>
+  </data>
+  <data name="lockdriveletter.Text" xml:space="preserve">
+    <value>lock driveletter</value>
+  </data>
+  <data name="&gt;&gt;lockdriveletter.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="CRCimage.Size" type="System.Drawing.Size, System.Drawing">
+    <value>70, 18</value>
+  </data>
+  <data name="&gt;&gt;CLOSEToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;RMDAT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="SAVELS.Size" type="System.Drawing.Size, System.Drawing">
+    <value>203, 22</value>
+  </data>
+  <data name="&gt;&gt;movepsp.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="Label1.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;isosize.Name" xml:space="preserve">
+    <value>isosize</value>
+  </data>
+  <data name="Label4.Location" type="System.Drawing.Point, System.Drawing">
+    <value>223, 262</value>
+  </data>
+  <data name="&gt;&gt;drivelettter.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="rg_add.Size" type="System.Drawing.Size, System.Drawing">
+    <value>148, 22</value>
+  </data>
+  <data name="&gt;&gt;Label1.ZOrder" xml:space="preserve">
+    <value>40</value>
+  </data>
+  <data name="EditImage2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>184, 22</value>
+  </data>
+  <data name="&gt;&gt;ToolStripMenuItem1.Name" xml:space="preserve">
+    <value>ToolStripMenuItem1</value>
+  </data>
+  <data name="isolba.TabIndex" type="System.Int32, mscorlib">
+    <value>19</value>
+  </data>
+  <data name="&gt;&gt;psf_sort_up.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="tree_apply.Text" xml:space="preserve">
+    <value>SAVEINFO</value>
+  </data>
+  <data name="&gt;&gt;ToolStripMenuItem2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;xmlselect.Name" xml:space="preserve">
+    <value>xmlselect</value>
+  </data>
+  <data name="ToolStripMenuItem1.Text" xml:space="preserve">
+    <value>MAKE DIFF</value>
+  </data>
+  <data name="&gt;&gt;USEMD5.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;calc_crc.Name" xml:space="preserve">
+    <value>calc_crc</value>
+  </data>
+  <data name="PFS.Location" type="System.Drawing.Point, System.Drawing">
+    <value>473, 214</value>
+  </data>
+  <data name="&gt;&gt;all_hash.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="PictureBox1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>223, 55</value>
+  </data>
+  <data name="gid.Location" type="System.Drawing.Point, System.Drawing">
+    <value>273, 237</value>
+  </data>
+  <data name="diffCMPRO.Size" type="System.Drawing.Size, System.Drawing">
+    <value>118, 22</value>
+  </data>
+  <data name="&gt;&gt;Label8.Name" xml:space="preserve">
+    <value>Label8</value>
+  </data>
+  <data name="tree_apply.Size" type="System.Drawing.Size, System.Drawing">
+    <value>70, 18</value>
+  </data>
+  <data name="&gt;&gt;GAMEID.Name" xml:space="preserve">
+    <value>GAMEID</value>
+  </data>
+  <data name="&gt;&gt;ContextMenuStrip4.Name" xml:space="preserve">
+    <value>ContextMenuStrip4</value>
+  </data>
+  <data name="TreeView1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>9, 33</value>
+  </data>
+  <data name="&gt;&gt;rg_edit.Name" xml:space="preserve">
+    <value>rg_edit</value>
+  </data>
+  <data name="name_sort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>140, 22</value>
+  </data>
+  <data name="&gt;&gt;gid.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="Label1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>37, 12</value>
+  </data>
+  <data name="&gt;&gt;crc.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="crc.Size" type="System.Drawing.Size, System.Drawing">
+    <value>76, 19</value>
+  </data>
+  <data name="psf_sort_up.Text" xml:space="preserve">
+    <value>ascending order</value>
+  </data>
+  <data name="&gt;&gt;ToolStripMenuItem1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;MNEN.Name" xml:space="preserve">
+    <value>MNEN</value>
+  </data>
+  <data name="&gt;&gt;file_sort.Name" xml:space="preserve">
+    <value>file_sort</value>
+  </data>
+  <data name="&gt;&gt;ROMCODEs.Name" xml:space="preserve">
+    <value>ROMCODEs</value>
+  </data>
+  <data name="all_hash.Text" xml:space="preserve">
+    <value>ALLHASH</value>
+  </data>
+  <data name="Label5.TabIndex" type="System.Int32, mscorlib">
+    <value>16</value>
+  </data>
+  <data name="SAVELS.Text" xml:space="preserve">
+    <value>SAVE LIST</value>
+  </data>
+  <data name="PictureBox2.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="t_gid.Text" xml:space="preserve">
+    <value>transfer by gameid</value>
+  </data>
+  <data name="google.Location" type="System.Drawing.Point, System.Drawing">
+    <value>397, 33</value>
+  </data>
+  <data name="online.Size" type="System.Drawing.Size, System.Drawing">
+    <value>174, 22</value>
+  </data>
+  <data name="&gt;&gt;t_gid.Name" xml:space="preserve">
+    <value>t_gid</value>
+  </data>
+  <data name="VIEW.Text" xml:space="preserve">
+    <value>VIEW JAKET</value>
+  </data>
+  <data name="gid.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Disable</value>
+  </data>
+  <data name="Label6.TabIndex" type="System.Int32, mscorlib">
+    <value>17</value>
+  </data>
+  <data name="&gt;&gt;isosize.ZOrder" xml:space="preserve">
+    <value>36</value>
+  </data>
+  <data name="&gt;&gt;PpriorUSAToolStripMenuItem.Name" xml:space="preserve">
+    <value>PpriorUSAToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;isosize.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;managename.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;diffCMPRO.Name" xml:space="preserve">
+    <value>diffCMPRO</value>
+  </data>
+  <data name="RMXML.ToolTipText" xml:space="preserve">
+    <value>USE OFFLINE XMLFILE</value>
+  </data>
+  <data name="&gt;&gt;crc.Name" xml:space="preserve">
+    <value>crc</value>
+  </data>
+  <data name="all_hash.Location" type="System.Drawing.Point, System.Drawing">
+    <value>524, 285</value>
+  </data>
+  <data name="VIEW.Size" type="System.Drawing.Size, System.Drawing">
+    <value>148, 22</value>
+  </data>
+  <data name="&gt;&gt;Label3.Name" xml:space="preserve">
+    <value>Label3</value>
+  </data>
+  <data name="CRCimage.Font" type="System.Drawing.Font, System.Drawing">
+    <value>MS UI Gothic, 7.8pt</value>
+  </data>
+  <data name="RMXML.Size" type="System.Drawing.Size, System.Drawing">
+    <value>222, 22</value>
+  </data>
+  <data name="&gt;&gt;ContextMenuStrip2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="SAVELS2.Text" xml:space="preserve">
+    <value>SAVELIST</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;MNAME.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="isolba.Location" type="System.Drawing.Point, System.Drawing">
+    <value>521, 258</value>
+  </data>
+  <data name="calc_sha.TabIndex" type="System.Int32, mscorlib">
+    <value>27</value>
+  </data>
+  <data name="USEMD5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>222, 22</value>
+  </data>
+  <data name="&gt;&gt;Label6.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ToolStripSeparator6.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Label4.TabIndex" type="System.Int32, mscorlib">
+    <value>15</value>
+  </data>
+  <data name="ToolStripSeparator4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>219, 6</value>
+  </data>
+  <data name="&gt;&gt;gid.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="free.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;Label3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="md5hash.Size" type="System.Drawing.Size, System.Drawing">
+    <value>196, 19</value>
+  </data>
+  <data name="&gt;&gt;calc_sha.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="GAMEID_sort.Text" xml:space="preserve">
+    <value>GAMEID</value>
+  </data>
+  <data name="Label2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>461, 239</value>
+  </data>
+  <data name="lockdriveletter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>101, 16</value>
+  </data>
+  <data name="&gt;&gt;SAVELS2.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;drivelettter.ZOrder" xml:space="preserve">
+    <value>22</value>
+  </data>
+  <data name="movepsp.Text" xml:space="preserve">
+    <value>install</value>
+  </data>
+  <data name="&gt;&gt;managename.ZOrder" xml:space="preserve">
+    <value>38</value>
+  </data>
+  <data name="Label8.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
   <data name="editpspdir.ToolTipText" xml:space="preserve">
     <value>edit  copy to pspdir
@@ -1268,668 +685,1263 @@ right click on treeview,you can change destination
 //example
 X:\PSP\GAME\</value>
   </data>
-  <data name="ToolStripMenuItem2.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="&gt;&gt;sabunindex.Name" xml:space="preserve">
+    <value>sabunindex</value>
+  </data>
+  <data name="&gt;&gt;Label3.ZOrder" xml:space="preserve">
+    <value>23</value>
+  </data>
+  <data name="&gt;&gt;gid_sort_down.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Label2.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="rg_edit.Text" xml:space="preserve">
+    <value>EDIT</value>
+  </data>
+  <data name="&gt;&gt;editpspdir.Name" xml:space="preserve">
+    <value>editpspdir</value>
+  </data>
+  <data name="all_hash.Size" type="System.Drawing.Size, System.Drawing">
+    <value>57, 18</value>
+  </data>
+  <data name="google.Text" xml:space="preserve">
+    <value>GOOGLE</value>
+  </data>
+  <data name="&gt;&gt;Label6.Name" xml:space="preserve">
+    <value>Label6</value>
+  </data>
+  <data name="&gt;&gt;calc_md5.ZOrder" xml:space="preserve">
+    <value>21</value>
+  </data>
+  <data name="&gt;&gt;GAMEID_sort.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rg_edit.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="ROMCODEs.Text" xml:space="preserve">
+    <value>ADD ROMCODE</value>
+  </data>
+  <data name="editimage.Text" xml:space="preserve">
+    <value>edit image</value>
+  </data>
+  <data name="&gt;&gt;psf_sort_down.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="GAMEID.Location" type="System.Drawing.Point, System.Drawing">
+    <value>351, 237</value>
+  </data>
+  <data name="Label6.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="CLOSEToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>203, 22</value>
+  </data>
+  <data name="&gt;&gt;EXPORTPSPINS.Name" xml:space="preserve">
+    <value>EXPORTPSPINS</value>
+  </data>
+  <data name="&gt;&gt;SAVELS.Name" xml:space="preserve">
+    <value>SAVELS</value>
+  </data>
+  <data name="&gt;&gt;sort_jp.Name" xml:space="preserve">
+    <value>sort_jp</value>
+  </data>
+  <data name="&gt;&gt;calc_sha.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;RMXML.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="md5hash.Location" type="System.Drawing.Point, System.Drawing">
+    <value>272, 284</value>
+  </data>
+  <data name="&gt;&gt;TreeView1.ZOrder" xml:space="preserve">
+    <value>27</value>
+  </data>
+  <data name="calc_md5.TabIndex" type="System.Int32, mscorlib">
+    <value>26</value>
+  </data>
+  <data name="TreeView1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>208, 353</value>
+  </data>
+  <data name="&gt;&gt;ContextMenuStrip3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="RMDAT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>222, 22</value>
+  </data>
+  <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>615, 439</value>
+  </data>
+  <data name="&gt;&gt;RENAME.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="sha.MaxLength" type="System.Int32, mscorlib">
+    <value>40</value>
+  </data>
+  <data name="Label3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>461, 261</value>
+  </data>
+  <data name="&gt;&gt;isolba.ZOrder" xml:space="preserve">
+    <value>32</value>
+  </data>
+  <data name="&gt;&gt;crc.ZOrder" xml:space="preserve">
+    <value>13</value>
+  </data>
+  <data name="SAVE_clrmamepro.Text" xml:space="preserve">
+    <value>EXPORT clrmamepro</value>
+  </data>
+  <data name="MenuStrip1.Text" xml:space="preserve">
+    <value>MenuStrip1</value>
+  </data>
+  <data name="RMDAT.Text" xml:space="preserve">
+    <value>DAT</value>
+  </data>
+  <data name="SAVELS2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>224, 33</value>
+  </data>
+  <data name="psf_sort_down.Text" xml:space="preserve">
+    <value>descending order</value>
+  </data>
+  <data name="gid.Size" type="System.Drawing.Size, System.Drawing">
+    <value>76, 19</value>
+  </data>
+  <data name="crc_xml.Location" type="System.Drawing.Point, System.Drawing">
+    <value>536, 214</value>
+  </data>
+  <data name="setting.Text" xml:space="preserve">
+    <value>SETTING</value>
+  </data>
+  <data name="&gt;&gt;MenuStrip1.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;ToolStripSeparator1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Label6.Location" type="System.Drawing.Point, System.Drawing">
+    <value>224, 315</value>
+  </data>
+  <data name="&gt;&gt;md5hash.Name" xml:space="preserve">
+    <value>md5hash</value>
+  </data>
+  <data name="&gt;&gt;PictureBox2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="all_hash.TabIndex" type="System.Int32, mscorlib">
+    <value>28</value>
+  </data>
+  <data name="&gt;&gt;google.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;PictureBox1.Name" xml:space="preserve">
+    <value>PictureBox1</value>
+  </data>
+  <data name="GAMEID.Font" type="System.Drawing.Font, System.Drawing">
+    <value>MS UI Gothic, 7.8pt</value>
+  </data>
+  <data name="Label3.Text" xml:space="preserve">
+    <value>LBA*2048;</value>
+  </data>
+  <data name="gid_sort_down.Text" xml:space="preserve">
+    <value>descending order</value>
+  </data>
+  <data name="&gt;&gt;Label8.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;sha.ZOrder" xml:space="preserve">
+    <value>14</value>
+  </data>
+  <data name="calc_crc.Location" type="System.Drawing.Point, System.Drawing">
+    <value>351, 261</value>
+  </data>
+  <data name="&gt;&gt;rg_add.Name" xml:space="preserve">
+    <value>rg_add</value>
+  </data>
+  <data name="MenuStrip1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>604, 26</value>
+  </data>
+  <data name="mane_sort_down.Size" type="System.Drawing.Size, System.Drawing">
+    <value>175, 22</value>
+  </data>
+  <data name="&gt;&gt;md5hash.ZOrder" xml:space="preserve">
+    <value>12</value>
+  </data>
+  <data name="&gt;&gt;drivelettter.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;crc_xml.Name" xml:space="preserve">
+    <value>crc_xml</value>
+  </data>
+  <data name="ToolStripSeparator6.Size" type="System.Drawing.Size, System.Drawing">
+    <value>145, 6</value>
+  </data>
+  <data name="file_sort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>140, 22</value>
+  </data>
+  <data name="&gt;&gt;isosize.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="CRCimage.Location" type="System.Drawing.Point, System.Drawing">
+    <value>321, 33</value>
+  </data>
+  <data name="&gt;&gt;tree_apply.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;PictureBox1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="gid_sort_up.Size" type="System.Drawing.Size, System.Drawing">
+    <value>175, 22</value>
+  </data>
+  <data name="diffXML.Text" xml:space="preserve">
+    <value>XML</value>
+  </data>
+  <data name="&gt;&gt;menufile.Name" xml:space="preserve">
+    <value>menufile</value>
+  </data>
+  <data name="&gt;&gt;gid_sort_up.Name" xml:space="preserve">
+    <value>gid_sort_up</value>
+  </data>
+  <data name="&gt;&gt;Label4.Name" xml:space="preserve">
+    <value>Label4</value>
+  </data>
+  <data name="md5hash.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Disable</value>
+  </data>
+  <data name="sony.Location" type="System.Drawing.Point, System.Drawing">
+    <value>474, 33</value>
+  </data>
+  <data name="ChangeImage2.Text" xml:space="preserve">
+    <value>change screenshot</value>
+  </data>
+  <data name="&gt;&gt;menufile.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;sony.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="free.TabIndex" type="System.Int32, mscorlib">
+    <value>34</value>
+  </data>
+  <data name="sony.TabIndex" type="System.Int32, mscorlib">
+    <value>35</value>
+  </data>
+  <data name="crc_xml.Text" xml:space="preserve">
+    <value>XML</value>
+  </data>
+  <data name="isosize.Location" type="System.Drawing.Point, System.Drawing">
+    <value>521, 237</value>
+  </data>
+  <data name="CRCimage.Text" xml:space="preserve">
+    <value>CRC IMAGE</value>
+  </data>
+  <data name="gid.TabIndex" type="System.Int32, mscorlib">
+    <value>24</value>
+  </data>
+  <data name="HELPToolStripMenuItem.Text" xml:space="preserve">
+    <value>HELP</value>
+  </data>
+  <data name="&gt;&gt;t_gid.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="XMLヘッダフッター編集ToolStripMenuItem.Text" xml:space="preserve">
+    <value>XML HEADER/FOOTER</value>
+  </data>
+  <data name="&gt;&gt;TreeView1.Name" xml:space="preserve">
+    <value>TreeView1</value>
+  </data>
+  <data name="&gt;&gt;del_psp.Name" xml:space="preserve">
+    <value>del_psp</value>
+  </data>
+  <data name="&gt;&gt;sort.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="free.Text" xml:space="preserve">
+    <value>MSFREE;unknown</value>
+  </data>
+  <data name="all_hash.Font" type="System.Drawing.Font, System.Drawing">
+    <value>MS UI Gothic, 7.8pt</value>
+  </data>
+  <data name="MNEN.Text" xml:space="preserve">
+    <value>TARGET</value>
+  </data>
+  <data name="Label7.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;free.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="PSFtitle_sort.Text" xml:space="preserve">
+    <value>PSF_TITLE</value>
+  </data>
+  <data name="&gt;&gt;pathcrc.Name" xml:space="preserve">
+    <value>pathcrc</value>
+  </data>
+  <data name="editpspdir.Size" type="System.Drawing.Size, System.Drawing">
     <value>206, 22</value>
   </data>
-  <data name="ToolStripMenuItem2.Text" xml:space="preserve">
-    <value>cso unpack dir</value>
+  <data name="&gt;&gt;name_sort.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="sort_jp.Text" xml:space="preserve">
+    <value>priror JAP</value>
+  </data>
+  <data name="&gt;&gt;VIEW.Name" xml:space="preserve">
+    <value>VIEW</value>
+  </data>
+  <data name="ALSAVE.Size" type="System.Drawing.Size, System.Drawing">
+    <value>206, 22</value>
+  </data>
+  <data name="movepsp.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="google.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="&gt;&gt;ToolStripSeparator4.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="PriorEUToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>175, 22</value>
+  </data>
+  <data name="&gt;&gt;Label4.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="HELPToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>50, 22</value>
+  </data>
+  <data name="crc_xml.TabIndex" type="System.Int32, mscorlib">
+    <value>33</value>
+  </data>
+  <data name="&gt;&gt;del_psp.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="del_psp.Location" type="System.Drawing.Point, System.Drawing">
+    <value>219, 367</value>
+  </data>
+  <data name="&gt;&gt;free.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="movepsp.Font" type="System.Drawing.Font, System.Drawing">
+    <value>MS UI Gothic, 7.8pt</value>
+  </data>
+  <data name="calc_md5.Text" xml:space="preserve">
+    <value>CALC</value>
+  </data>
+  <data name="Label3.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="Label2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>54, 12</value>
+  </data>
+  <data name="t_gid.Size" type="System.Drawing.Size, System.Drawing">
+    <value>120, 16</value>
+  </data>
+  <data name="&gt;&gt;SAVELS2.Name" xml:space="preserve">
+    <value>SAVELS2</value>
+  </data>
+  <data name="Label4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>43, 12</value>
+  </data>
+  <data name="&gt;&gt;xmlselect.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ContextMenuStrip1.Name" xml:space="preserve">
+    <value>ContextMenuStrip1</value>
+  </data>
+  <data name="managename.MaxLength" type="System.Int32, mscorlib">
+    <value>64</value>
+  </data>
+  <data name="&gt;&gt;ToolStripSeparator5.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;free.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="MNAME.Text" xml:space="preserve">
+    <value>NAME</value>
+  </data>
+  <data name="cnt_install.Text" xml:space="preserve">
+    <value>INSTALL</value>
+  </data>
+  <data name="&gt;&gt;gid.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;PFS.Name" xml:space="preserve">
+    <value>PFS</value>
+  </data>
+  <data name="&gt;&gt;sha.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;CRCimage.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;Label6.ZOrder" xml:space="preserve">
+    <value>16</value>
+  </data>
+  <data name="MNEN.Size" type="System.Drawing.Size, System.Drawing">
+    <value>222, 22</value>
+  </data>
+  <data name="&gt;&gt;movepsp.ZOrder" xml:space="preserve">
+    <value>25</value>
+  </data>
+  <data name="&gt;&gt;PFS.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Label7.Name" xml:space="preserve">
+    <value>Label7</value>
   </data>
   <data name="ToolStripMenuItem2.ToolTipText" xml:space="preserve">
     <value>change cso unpack directory
 if you have big ramdisk,it's bsest dir.</value>
   </data>
-  <data name="XMLヘッダフッター編集ToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>206, 22</value>
+  <data name="editimage.Size" type="System.Drawing.Size, System.Drawing">
+    <value>157, 22</value>
   </data>
-  <data name="XMLヘッダフッター編集ToolStripMenuItem.Text" xml:space="preserve">
-    <value>XML HEADER/FOOTER</value>
+  <data name="calc_crc.Font" type="System.Drawing.Font, System.Drawing">
+    <value>MS UI Gothic, 7.8pt</value>
   </data>
-  <data name="ALSAVE.Size" type="System.Drawing.Size, System.Drawing">
-    <value>206, 22</value>
+  <data name="ToolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 6</value>
   </data>
-  <data name="ALSAVE.Text" xml:space="preserve">
-    <value>ALWAYS SAVELIST</value>
+  <data name="exportxml.Size" type="System.Drawing.Size, System.Drawing">
+    <value>203, 22</value>
   </data>
-  <data name="setting.Size" type="System.Drawing.Size, System.Drawing">
-    <value>74, 22</value>
+  <data name="&gt;&gt;XMLヘッダフッター編集ToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="setting.Text" xml:space="preserve">
-    <value>SETTING</value>
+  <data name="&gt;&gt;Label2.ZOrder" xml:space="preserve">
+    <value>30</value>
   </data>
-  <data name="online.Size" type="System.Drawing.Size, System.Drawing">
-    <value>174, 22</value>
+  <data name="&gt;&gt;FILEPATH.Name" xml:space="preserve">
+    <value>FILEPATH</value>
   </data>
-  <data name="online.Text" xml:space="preserve">
-    <value>ONLINEHELP(JP)</value>
+  <data name="rg_del.Text" xml:space="preserve">
+    <value>DEL</value>
   </data>
-  <data name="version.Size" type="System.Drawing.Size, System.Drawing">
-    <value>174, 22</value>
-  </data>
-  <data name="version.Text" xml:space="preserve">
-    <value>VERSION</value>
-  </data>
-  <data name="HELPToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>50, 22</value>
-  </data>
-  <data name="HELPToolStripMenuItem.Text" xml:space="preserve">
-    <value>HELP</value>
-  </data>
-  <data name="MenuStrip1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="MenuStrip1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 2, 0, 2</value>
-  </data>
-  <data name="MenuStrip1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>604, 26</value>
+  <data name="&gt;&gt;Label1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="MenuStrip1.TabIndex" type="System.Int32, mscorlib">
     <value>30</value>
   </data>
-  <data name="MenuStrip1.Text" xml:space="preserve">
-    <value>MenuStrip1</value>
-  </data>
-  <data name="&gt;&gt;MenuStrip1.Name" xml:space="preserve">
-    <value>MenuStrip1</value>
-  </data>
-  <data name="&gt;&gt;MenuStrip1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.MenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;MenuStrip1.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;MenuStrip1.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="del_psp.Font" type="System.Drawing.Font, System.Drawing">
-    <value>MS UI Gothic, 7.8pt</value>
-  </data>
-  <data name="del_psp.Location" type="System.Drawing.Point, System.Drawing">
-    <value>219, 367</value>
-  </data>
-  <data name="del_psp.Size" type="System.Drawing.Size, System.Drawing">
-    <value>81, 18</value>
-  </data>
-  <data name="del_psp.TabIndex" type="System.Int32, mscorlib">
-    <value>31</value>
-  </data>
-  <data name="del_psp.Text" xml:space="preserve">
-    <value>remove</value>
-  </data>
-  <data name="&gt;&gt;del_psp.Name" xml:space="preserve">
-    <value>del_psp</value>
-  </data>
-  <data name="&gt;&gt;del_psp.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;del_psp.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;del_psp.ZOrder" xml:space="preserve">
-    <value>10</value>
-  </data>
-  <data name="t_gid.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="t_gid.Location" type="System.Drawing.Point, System.Drawing">
-    <value>317, 368</value>
-  </data>
-  <data name="t_gid.Size" type="System.Drawing.Size, System.Drawing">
-    <value>120, 16</value>
-  </data>
-  <data name="t_gid.TabIndex" type="System.Int32, mscorlib">
-    <value>32</value>
-  </data>
-  <data name="t_gid.Text" xml:space="preserve">
-    <value>transfer by gameid</value>
-  </data>
-  <data name="&gt;&gt;t_gid.Name" xml:space="preserve">
-    <value>t_gid</value>
-  </data>
-  <data name="&gt;&gt;t_gid.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="Label2.TabIndex" type="System.Int32, mscorlib">
+    <value>13</value>
   </data>
   <data name="&gt;&gt;t_gid.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;t_gid.ZOrder" xml:space="preserve">
-    <value>9</value>
+  <data name="file_sort.Text" xml:space="preserve">
+    <value>FILENAME</value>
   </data>
-  <data name="crc_xml.Font" type="System.Drawing.Font, System.Drawing">
-    <value>MS UI Gothic, 7.8pt</value>
+  <data name="name_sort.Text" xml:space="preserve">
+    <value>NAME</value>
   </data>
-  <data name="crc_xml.Location" type="System.Drawing.Point, System.Drawing">
-    <value>536, 214</value>
+  <data name="&gt;&gt;file_sort_down.Name" xml:space="preserve">
+    <value>file_sort_down</value>
   </data>
-  <data name="crc_xml.Size" type="System.Drawing.Size, System.Drawing">
-    <value>57, 18</value>
+  <data name="PFS.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
   </data>
-  <data name="crc_xml.TabIndex" type="System.Int32, mscorlib">
-    <value>33</value>
+  <data name="ToolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>172, 6</value>
   </data>
-  <data name="crc_xml.Text" xml:space="preserve">
-    <value>XML</value>
-  </data>
-  <data name="&gt;&gt;crc_xml.Name" xml:space="preserve">
-    <value>crc_xml</value>
-  </data>
-  <data name="&gt;&gt;crc_xml.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;crc_xml.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;crc_xml.ZOrder" xml:space="preserve">
-    <value>11</value>
-  </data>
-  <data name="free.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="free.Location" type="System.Drawing.Point, System.Drawing">
-    <value>444, 371</value>
-  </data>
-  <data name="free.Size" type="System.Drawing.Size, System.Drawing">
-    <value>96, 12</value>
-  </data>
-  <data name="free.TabIndex" type="System.Int32, mscorlib">
-    <value>34</value>
-  </data>
-  <data name="free.Text" xml:space="preserve">
-    <value>MSFREE;unknown</value>
-  </data>
-  <data name="&gt;&gt;free.Name" xml:space="preserve">
-    <value>free</value>
-  </data>
-  <data name="&gt;&gt;free.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;free.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;free.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
-  <data name="sony.Font" type="System.Drawing.Font, System.Drawing">
-    <value>MS UI Gothic, 7.85454559pt</value>
-  </data>
-  <data name="sony.Location" type="System.Drawing.Point, System.Drawing">
-    <value>474, 33</value>
-  </data>
-  <data name="sony.Size" type="System.Drawing.Size, System.Drawing">
-    <value>56, 18</value>
-  </data>
-  <data name="sony.TabIndex" type="System.Int32, mscorlib">
-    <value>35</value>
-  </data>
-  <data name="sony.Text" xml:space="preserve">
-    <value>$ONY</value>
-  </data>
-  <data name="&gt;&gt;sony.Name" xml:space="preserve">
-    <value>sony</value>
-  </data>
-  <data name="&gt;&gt;sony.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;sony.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;sony.ZOrder" xml:space="preserve">
-    <value>24</value>
-  </data>
-  <data name="SAVELS2.Font" type="System.Drawing.Font, System.Drawing">
-    <value>MS UI Gothic, 7.85454559pt</value>
-  </data>
-  <data name="SAVELS2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="SAVELS2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>224, 33</value>
-  </data>
-  <data name="SAVELS2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>67, 17</value>
-  </data>
-  <data name="SAVELS2.TabIndex" type="System.Int32, mscorlib">
-    <value>37</value>
-  </data>
-  <data name="SAVELS2.Text" xml:space="preserve">
-    <value>SAVELIST</value>
-  </data>
-  <data name="&gt;&gt;SAVELS2.Name" xml:space="preserve">
-    <value>SAVELS2</value>
-  </data>
-  <data name="&gt;&gt;SAVELS2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;SAVELS2.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;SAVELS2.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="Label8.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="Label8.Location" type="System.Drawing.Point, System.Drawing">
-    <value>547, 36</value>
-  </data>
-  <data name="Label8.Size" type="System.Drawing.Size, System.Drawing">
-    <value>9, 12</value>
-  </data>
-  <data name="Label8.TabIndex" type="System.Int32, mscorlib">
-    <value>38</value>
-  </data>
-  <data name="Label8.Text" xml:space="preserve">
-    <value> </value>
-  </data>
-  <data name="&gt;&gt;Label8.Name" xml:space="preserve">
-    <value>Label8</value>
-  </data>
-  <data name="&gt;&gt;Label8.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Label8.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;Label8.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>6, 12</value>
-  </data>
-  <data name="$this.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>604, 401</value>
-  </data>
-  <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
-    <value>615, 439</value>
-  </data>
-  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
-    <value>CenterScreen</value>
-  </data>
-  <data name="$this.Text" xml:space="preserve">
-    <value>UMD RAWIMAGE MANAGER</value>
-  </data>
-  <data name="&gt;&gt;cnt_install.Name" xml:space="preserve">
-    <value>cnt_install</value>
-  </data>
-  <data name="&gt;&gt;cnt_install.Type" xml:space="preserve">
+  <data name="&gt;&gt;PpriorUSAToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;ToolStripSeparator6.Name" xml:space="preserve">
-    <value>ToolStripSeparator6</value>
+  <data name="movepsp.Size" type="System.Drawing.Size, System.Drawing">
+    <value>69, 18</value>
   </data>
-  <data name="&gt;&gt;ToolStripSeparator6.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rg_add.Name" xml:space="preserve">
-    <value>rg_add</value>
-  </data>
-  <data name="&gt;&gt;rg_add.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rg_edit.Name" xml:space="preserve">
-    <value>rg_edit</value>
-  </data>
-  <data name="&gt;&gt;rg_edit.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rg_del.Name" xml:space="preserve">
-    <value>rg_del</value>
-  </data>
-  <data name="&gt;&gt;rg_del.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ToolStripSeparator5.Name" xml:space="preserve">
-    <value>ToolStripSeparator5</value>
-  </data>
-  <data name="&gt;&gt;ToolStripSeparator5.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;VIEW.Name" xml:space="preserve">
-    <value>VIEW</value>
-  </data>
-  <data name="&gt;&gt;VIEW.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;changeimage.Name" xml:space="preserve">
-    <value>changeimage</value>
-  </data>
-  <data name="&gt;&gt;changeimage.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;editimage.Name" xml:space="preserve">
-    <value>editimage</value>
-  </data>
-  <data name="&gt;&gt;editimage.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ChangeImage2.Name" xml:space="preserve">
-    <value>ChangeImage2</value>
-  </data>
-  <data name="&gt;&gt;ChangeImage2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;EditImage2.Name" xml:space="preserve">
-    <value>EditImage2</value>
-  </data>
-  <data name="&gt;&gt;EditImage2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;menufile.Name" xml:space="preserve">
-    <value>menufile</value>
-  </data>
-  <data name="&gt;&gt;menufile.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ADD.Name" xml:space="preserve">
-    <value>ADD</value>
-  </data>
-  <data name="&gt;&gt;ADD.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ToolStripSeparator2.Name" xml:space="preserve">
-    <value>ToolStripSeparator2</value>
-  </data>
-  <data name="&gt;&gt;ToolStripSeparator2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;SAVELS.Name" xml:space="preserve">
-    <value>SAVELS</value>
-  </data>
-  <data name="&gt;&gt;SAVELS.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;EXPORTPSPINS.Name" xml:space="preserve">
-    <value>EXPORTPSPINS</value>
-  </data>
-  <data name="&gt;&gt;EXPORTPSPINS.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;SAVE_clrmamepro.Name" xml:space="preserve">
-    <value>SAVE_clrmamepro</value>
-  </data>
-  <data name="&gt;&gt;SAVE_clrmamepro.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;disck_ver.Name" xml:space="preserve">
-    <value>disck_ver</value>
+  <data name="&gt;&gt;HELPToolStripMenuItem.Name" xml:space="preserve">
+    <value>HELPToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;disck_ver.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;ROMCODEs.Name" xml:space="preserve">
-    <value>ROMCODEs</value>
+  <data name="calc_md5.Location" type="System.Drawing.Point, System.Drawing">
+    <value>474, 284</value>
   </data>
-  <data name="&gt;&gt;ROMCODEs.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;exportxml.Name" xml:space="preserve">
-    <value>exportxml</value>
-  </data>
-  <data name="&gt;&gt;exportxml.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ToolStripMenuItem1.Name" xml:space="preserve">
-    <value>ToolStripMenuItem1</value>
-  </data>
-  <data name="&gt;&gt;ToolStripMenuItem1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;diffCMPRO.Name" xml:space="preserve">
-    <value>diffCMPRO</value>
-  </data>
-  <data name="&gt;&gt;diffCMPRO.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;diffXML.Name" xml:space="preserve">
-    <value>diffXML</value>
-  </data>
-  <data name="&gt;&gt;diffXML.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;sabunindex.Name" xml:space="preserve">
-    <value>sabunindex</value>
-  </data>
-  <data name="&gt;&gt;sabunindex.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ToolStripSeparator3.Name" xml:space="preserve">
-    <value>ToolStripSeparator3</value>
-  </data>
-  <data name="&gt;&gt;ToolStripSeparator3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;CLOSEToolStripMenuItem.Name" xml:space="preserve">
-    <value>CLOSEToolStripMenuItem</value>
-  </data>
-  <data name="&gt;&gt;CLOSEToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;sort.Name" xml:space="preserve">
-    <value>sort</value>
-  </data>
-  <data name="&gt;&gt;sort.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;name_sort.Name" xml:space="preserve">
-    <value>name_sort</value>
-  </data>
-  <data name="&gt;&gt;name_sort.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;mane_sort_up.Name" xml:space="preserve">
-    <value>mane_sort_up</value>
-  </data>
-  <data name="&gt;&gt;mane_sort_up.Type" xml:space="preserve">
+  <data name="&gt;&gt;changeimage.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;mane_sort_down.Name" xml:space="preserve">
     <value>mane_sort_down</value>
   </data>
-  <data name="&gt;&gt;mane_sort_down.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="mane_sort_up.Text" xml:space="preserve">
+    <value>ascending order</value>
   </data>
-  <data name="&gt;&gt;GAMEID_sort.Name" xml:space="preserve">
-    <value>GAMEID_sort</value>
+  <data name="&gt;&gt;movepsp.Name" xml:space="preserve">
+    <value>movepsp</value>
   </data>
-  <data name="&gt;&gt;GAMEID_sort.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;lockdriveletter.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
-  <data name="&gt;&gt;gid_sort_up.Name" xml:space="preserve">
-    <value>gid_sort_up</value>
+  <data name="calc_crc.TabIndex" type="System.Int32, mscorlib">
+    <value>25</value>
   </data>
   <data name="&gt;&gt;gid_sort_up.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;gid_sort_down.Name" xml:space="preserve">
-    <value>gid_sort_down</value>
+  <data name="&gt;&gt;PFS.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
-  <data name="&gt;&gt;gid_sort_down.Type" xml:space="preserve">
+  <data name="&gt;&gt;ChangeImage2.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;ToolStripSeparator1.Name" xml:space="preserve">
-    <value>ToolStripSeparator1</value>
+  <data name="calc_sha.Size" type="System.Drawing.Size, System.Drawing">
+    <value>42, 18</value>
   </data>
-  <data name="&gt;&gt;ToolStripSeparator1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;editimage.Name" xml:space="preserve">
+    <value>editimage</value>
   </data>
-  <data name="&gt;&gt;sort_jp.Name" xml:space="preserve">
-    <value>sort_jp</value>
+  <data name="&gt;&gt;ContextMenuStrip1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;sort_jp.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;PpriorUSAToolStripMenuItem.Name" xml:space="preserve">
-    <value>PpriorUSAToolStripMenuItem</value>
-  </data>
-  <data name="&gt;&gt;PpriorUSAToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;PriorEUToolStripMenuItem.Name" xml:space="preserve">
-    <value>PriorEUToolStripMenuItem</value>
-  </data>
-  <data name="&gt;&gt;PriorEUToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;PSFtitle_sort.Name" xml:space="preserve">
-    <value>PSFtitle_sort</value>
-  </data>
-  <data name="&gt;&gt;PSFtitle_sort.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;psf_sort_up.Name" xml:space="preserve">
-    <value>psf_sort_up</value>
-  </data>
-  <data name="&gt;&gt;psf_sort_up.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;psf_sort_down.Name" xml:space="preserve">
-    <value>psf_sort_down</value>
-  </data>
-  <data name="&gt;&gt;psf_sort_down.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;file_sort.Name" xml:space="preserve">
-    <value>file_sort</value>
-  </data>
-  <data name="&gt;&gt;file_sort.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;file_sort_up.Name" xml:space="preserve">
-    <value>file_sort_up</value>
-  </data>
-  <data name="&gt;&gt;file_sort_up.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;file_sort_down.Name" xml:space="preserve">
-    <value>file_sort_down</value>
-  </data>
-  <data name="&gt;&gt;file_sort_down.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;RENAME.Name" xml:space="preserve">
-    <value>RENAME</value>
-  </data>
-  <data name="&gt;&gt;RENAME.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="del_psp.Text" xml:space="preserve">
+    <value>remove</value>
   </data>
   <data name="&gt;&gt;RMXML.Name" xml:space="preserve">
     <value>RMXML</value>
   </data>
-  <data name="&gt;&gt;RMXML.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;RMDAT.Name" xml:space="preserve">
-    <value>RMDAT</value>
-  </data>
-  <data name="&gt;&gt;RMDAT.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ToolStripSeparator4.Name" xml:space="preserve">
-    <value>ToolStripSeparator4</value>
-  </data>
-  <data name="&gt;&gt;ToolStripSeparator4.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;MNEN.Name" xml:space="preserve">
-    <value>MNEN</value>
-  </data>
-  <data name="&gt;&gt;MNEN.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;MNAME.Name" xml:space="preserve">
-    <value>MNAME</value>
-  </data>
-  <data name="&gt;&gt;MNAME.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;FILEPATH.Name" xml:space="preserve">
-    <value>FILEPATH</value>
-  </data>
-  <data name="&gt;&gt;FILEPATH.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;pathcrc.Name" xml:space="preserve">
-    <value>pathcrc</value>
-  </data>
-  <data name="&gt;&gt;pathcrc.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;setting.Name" xml:space="preserve">
-    <value>setting</value>
-  </data>
-  <data name="&gt;&gt;setting.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;GUITOP.Name" xml:space="preserve">
     <value>GUITOP</value>
   </data>
-  <data name="&gt;&gt;GUITOP.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="isolba.Size" type="System.Drawing.Size, System.Drawing">
+    <value>72, 19</value>
   </data>
-  <data name="&gt;&gt;xmlselect.Name" xml:space="preserve">
-    <value>xmlselect</value>
+  <data name="mane_sort_down.Text" xml:space="preserve">
+    <value>descending order</value>
   </data>
-  <data name="&gt;&gt;xmlselect.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="managename.Size" type="System.Drawing.Size, System.Drawing">
+    <value>195, 19</value>
   </data>
-  <data name="&gt;&gt;rename_dat.Name" xml:space="preserve">
-    <value>rename_dat</value>
-  </data>
-  <data name="&gt;&gt;rename_dat.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;editpspdir.Name" xml:space="preserve">
-    <value>editpspdir</value>
-  </data>
-  <data name="&gt;&gt;editpspdir.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ToolStripMenuItem2.Name" xml:space="preserve">
-    <value>ToolStripMenuItem2</value>
-  </data>
-  <data name="&gt;&gt;ToolStripMenuItem2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;XMLヘッダフッター編集ToolStripMenuItem.Name" xml:space="preserve">
-    <value>XMLヘッダフッター編集ToolStripMenuItem</value>
-  </data>
-  <data name="&gt;&gt;XMLヘッダフッター編集ToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ALSAVE.Name" xml:space="preserve">
-    <value>ALSAVE</value>
-  </data>
-  <data name="&gt;&gt;ALSAVE.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;HELPToolStripMenuItem.Name" xml:space="preserve">
-    <value>HELPToolStripMenuItem</value>
+  <data name="managename.Location" type="System.Drawing.Point, System.Drawing">
+    <value>273, 213</value>
   </data>
   <data name="&gt;&gt;HELPToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;online.Name" xml:space="preserve">
-    <value>online</value>
+  <data name="isosize.TabIndex" type="System.Int32, mscorlib">
+    <value>18</value>
   </data>
-  <data name="&gt;&gt;online.Type" xml:space="preserve">
+  <data name="&gt;&gt;all_hash.ZOrder" xml:space="preserve">
+    <value>31</value>
+  </data>
+  <data name="&gt;&gt;calc_sha.ZOrder" xml:space="preserve">
+    <value>15</value>
+  </data>
+  <data name="&gt;&gt;MenuStrip1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.MenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="PpriorUSAToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>175, 22</value>
+  </data>
+  <data name="ChangeImage2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>184, 22</value>
+  </data>
+  <data name="&gt;&gt;editpspdir.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;version.Name" xml:space="preserve">
-    <value>version</value>
+  <data name="lockdriveletter.TabIndex" type="System.Int32, mscorlib">
+    <value>12</value>
   </data>
-  <data name="&gt;&gt;version.Type" xml:space="preserve">
+  <data name="drivelettter.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Disable</value>
+  </data>
+  <data name="&gt;&gt;exportxml.Name" xml:space="preserve">
+    <value>exportxml</value>
+  </data>
+  <data name="calc_sha.Location" type="System.Drawing.Point, System.Drawing">
+    <value>524, 312</value>
+  </data>
+  <data name="crc_xml.Font" type="System.Drawing.Font, System.Drawing">
+    <value>MS UI Gothic, 7.8pt</value>
+  </data>
+  <data name="&gt;&gt;file_sort_down.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="changeimage.Size" type="System.Drawing.Size, System.Drawing">
+    <value>157, 22</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>umdisomanger</value>
   </data>
-  <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;ToolStripMenuItem2.Name" xml:space="preserve">
+    <value>ToolStripMenuItem2</value>
   </data>
+  <data name="online.Text" xml:space="preserve">
+    <value>ONLINEHELP(JP)</value>
+  </data>
+  <data name="Label7.Text" xml:space="preserve">
+    <value>GAMEID;</value>
+  </data>
+  <data name="del_psp.TabIndex" type="System.Int32, mscorlib">
+    <value>31</value>
+  </data>
+  <data name="&gt;&gt;online.Name" xml:space="preserve">
+    <value>online</value>
+  </data>
+  <data name="&gt;&gt;MNAME.Name" xml:space="preserve">
+    <value>MNAME</value>
+  </data>
+  <data name="&gt;&gt;setting.Name" xml:space="preserve">
+    <value>setting</value>
+  </data>
+  <data name="Label7.TabIndex" type="System.Int32, mscorlib">
+    <value>23</value>
+  </data>
+  <data name="Label6.Size" type="System.Drawing.Size, System.Drawing">
+    <value>42, 12</value>
+  </data>
+  <data name="EXPORTPSPINS.Size" type="System.Drawing.Size, System.Drawing">
+    <value>203, 22</value>
+  </data>
+  <data name="ROMCODEs.Size" type="System.Drawing.Size, System.Drawing">
+    <value>167, 22</value>
+  </data>
+  <data name="&gt;&gt;Label7.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="sha.Location" type="System.Drawing.Point, System.Drawing">
+    <value>272, 312</value>
+  </data>
+  <data name="&gt;&gt;calc_crc.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="ContextMenuStrip1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>61, 4</value>
+  </data>
+  <data name="rename_dat.Size" type="System.Drawing.Size, System.Drawing">
+    <value>206, 22</value>
+  </data>
+  <data name="Label8.Location" type="System.Drawing.Point, System.Drawing">
+    <value>547, 36</value>
+  </data>
+  <data name="&gt;&gt;md5hash.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;CRCimage.Name" xml:space="preserve">
+    <value>CRCimage</value>
+  </data>
+  <data name="&gt;&gt;editimage.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="ContextMenuStrip2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>149, 126</value>
+  </data>
+  <data name="&gt;&gt;ToolStripSeparator2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="rename_dat.ToolTipText" xml:space="preserve">
+    <value>SELECT clrmamepro DATFILE</value>
+  </data>
+  <data name="&gt;&gt;isolba.Name" xml:space="preserve">
+    <value>isolba</value>
+  </data>
+  <data name="PictureBox1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>93, 155</value>
+  </data>
+  <data name="&gt;&gt;ContextMenuStrip4.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;calc_crc.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;version.Name" xml:space="preserve">
+    <value>version</value>
+  </data>
+  <data name="sort.Text" xml:space="preserve">
+    <value>SORT</value>
+  </data>
+  <data name="&gt;&gt;sort_jp.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="RENAME.Text" xml:space="preserve">
+    <value>RENAME</value>
+  </data>
+  <data name="&gt;&gt;all_hash.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="tree_apply.Font" type="System.Drawing.Font, System.Drawing">
+    <value>MS UI Gothic, 7.8pt</value>
+  </data>
+  <data name="t_gid.Location" type="System.Drawing.Point, System.Drawing">
+    <value>317, 368</value>
+  </data>
+  <data name="version.Text" xml:space="preserve">
+    <value>VERSION</value>
+  </data>
+  <data name="&gt;&gt;sony.Name" xml:space="preserve">
+    <value>sony</value>
+  </data>
+  <data name="&gt;&gt;GAMEID.ZOrder" xml:space="preserve">
+    <value>39</value>
+  </data>
+  <data name="SAVELS2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="EXPORTPSPINS.ToolTipText" xml:space="preserve">
+    <value>export PSPINSsytyle gamelist
+some japanesechara contain 0x7C( | ),it will replace
+//INSbadchara(these contains 0x7C | )
+－ポл榎掛弓芸鋼旨楯酢掃竹倒培怖翻慾處嘶斈忿掟桍毫烟痞窩縹艚蛞諫轎閖驂黥埈蒴僴礰</value>
+  </data>
+  <data name="tree_apply.TabIndex" type="System.Int32, mscorlib">
+    <value>29</value>
+  </data>
+  <data name="calc_crc.Size" type="System.Drawing.Size, System.Drawing">
+    <value>40, 18</value>
+  </data>
+  <data name="diffCMPRO.Text" xml:space="preserve">
+    <value>CMPRO</value>
+  </data>
+  <data name="free.Location" type="System.Drawing.Point, System.Drawing">
+    <value>444, 371</value>
+  </data>
+  <data name="&gt;&gt;EditImage2.Name" xml:space="preserve">
+    <value>EditImage2</value>
+  </data>
+  <data name="&gt;&gt;ContextMenuStrip3.Name" xml:space="preserve">
+    <value>ContextMenuStrip3</value>
+  </data>
+  <data name="&gt;&gt;ChangeImage2.Name" xml:space="preserve">
+    <value>ChangeImage2</value>
+  </data>
+  <data name="PpriorUSAToolStripMenuItem.Text" xml:space="preserve">
+    <value>prior USA</value>
+  </data>
+  <data name="Label1.Text" xml:space="preserve">
+    <value>NAME</value>
+  </data>
+  <data name="&gt;&gt;ToolStripSeparator2.Name" xml:space="preserve">
+    <value>ToolStripSeparator2</value>
+  </data>
+  <data name="PictureBox2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>274, 155</value>
+  </data>
+  <data name="Label5.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;name_sort.Name" xml:space="preserve">
+    <value>name_sort</value>
+  </data>
+  <data name="&gt;&gt;online.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;diffCMPRO.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="RENAME.Size" type="System.Drawing.Size, System.Drawing">
+    <value>69, 22</value>
+  </data>
+  <data name="&gt;&gt;psf_sort_up.Name" xml:space="preserve">
+    <value>psf_sort_up</value>
+  </data>
+  <data name="Label5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>30, 12</value>
+  </data>
+  <data name="Label5.Location" type="System.Drawing.Point, System.Drawing">
+    <value>221, 286</value>
+  </data>
+  <data name="&gt;&gt;diffXML.Name" xml:space="preserve">
+    <value>diffXML</value>
+  </data>
+  <data name="MNAME.Size" type="System.Drawing.Size, System.Drawing">
+    <value>152, 22</value>
+  </data>
+  <data name="EditImage2.Text" xml:space="preserve">
+    <value>edit screenshot</value>
+  </data>
+  <data name="&gt;&gt;sha.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="mane_sort_up.Size" type="System.Drawing.Size, System.Drawing">
+    <value>175, 22</value>
+  </data>
+  <data name="ToolStripMenuItem2.Text" xml:space="preserve">
+    <value>cso unpack dir</value>
+  </data>
+  <data name="Label1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>220, 216</value>
+  </data>
+  <data name="&gt;&gt;TreeView1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TreeView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="setting.Size" type="System.Drawing.Size, System.Drawing">
+    <value>74, 22</value>
+  </data>
+  <data name="crc.MaxLength" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="&gt;&gt;EXPORTPSPINS.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;TreeView1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;diffXML.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="PriorEUToolStripMenuItem.Text" xml:space="preserve">
+    <value>prior EU</value>
+  </data>
+  <data name="drivelettter.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="del_psp.Size" type="System.Drawing.Size, System.Drawing">
+    <value>81, 18</value>
+  </data>
+  <data name="ADD.Text" xml:space="preserve">
+    <value>ADD IMAGE/PBP</value>
+  </data>
+  <data name="&gt;&gt;isolba.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="ToolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>203, 22</value>
+  </data>
+  <data name="EXPORTPSPINS.Text" xml:space="preserve">
+    <value>EXPORT PSPINS LIST</value>
+  </data>
+  <data name="PFS.Size" type="System.Drawing.Size, System.Drawing">
+    <value>57, 18</value>
+  </data>
+  <data name="pathcrc.Size" type="System.Drawing.Size, System.Drawing">
+    <value>222, 22</value>
+  </data>
+  <data name="&gt;&gt;PSFtitle_sort.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ToolStripSeparator3.Name" xml:space="preserve">
+    <value>ToolStripSeparator3</value>
+  </data>
+  <data name="&gt;&gt;ADD.Name" xml:space="preserve">
+    <value>ADD</value>
+  </data>
+  <data name="calc_sha.Font" type="System.Drawing.Font, System.Drawing">
+    <value>MS UI Gothic, 7.8pt</value>
+  </data>
+  <data name="&gt;&gt;ContextMenuStrip2.Name" xml:space="preserve">
+    <value>ContextMenuStrip2</value>
+  </data>
+  <data name="tree_apply.Location" type="System.Drawing.Point, System.Drawing">
+    <value>521, 344</value>
+  </data>
+  <data name="disck_ver.Text" xml:space="preserve">
+    <value>ADD DISCKVER</value>
+  </data>
+  <data name="&gt;&gt;google.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="exportxml.Text" xml:space="preserve">
+    <value>EXPORT XML</value>
+  </data>
+  <data name="crc.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Disable</value>
+  </data>
+  <data name="&gt;&gt;PriorEUToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="FILEPATH.Text" xml:space="preserve">
+    <value>FILEPATH</value>
+  </data>
+  <data name="changeimage.Text" xml:space="preserve">
+    <value>change image</value>
+  </data>
+  <data name="MenuStrip1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 2, 0, 2</value>
+  </data>
+  <data name="&gt;&gt;tree_apply.Name" xml:space="preserve">
+    <value>tree_apply</value>
+  </data>
+  <data name="Label8.Size" type="System.Drawing.Size, System.Drawing">
+    <value>9, 12</value>
+  </data>
+  <data name="drivelettter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>23, 19</value>
+  </data>
+  <data name="&gt;&gt;MNEN.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="calc_md5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>45, 18</value>
+  </data>
+  <data name="GAMEID.Text" xml:space="preserve">
+    <value>GET</value>
+  </data>
+  <data name="crc.Location" type="System.Drawing.Point, System.Drawing">
+    <value>273, 260</value>
+  </data>
+  <data name="Label3.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
+  </data>
+  <data name="rg_del.Size" type="System.Drawing.Size, System.Drawing">
+    <value>148, 22</value>
+  </data>
+  <data name="GAMEID.Size" type="System.Drawing.Size, System.Drawing">
+    <value>41, 18</value>
+  </data>
+  <data name="isosize.MaxLength" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="sha.Size" type="System.Drawing.Size, System.Drawing">
+    <value>247, 19</value>
+  </data>
+  <data name="&gt;&gt;calc_md5.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Label8.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="ADD.ToolTipText" xml:space="preserve">
+    <value>add image/pbp you want
+if you want to add  many files,drag&amp;drop files from explorer</value>
+  </data>
+  <data name="SAVELS2.TabIndex" type="System.Int32, mscorlib">
+    <value>37</value>
+  </data>
+  <data name="&gt;&gt;PictureBox2.Name" xml:space="preserve">
+    <value>PictureBox2</value>
+  </data>
+  <data name="&gt;&gt;managename.Name" xml:space="preserve">
+    <value>managename</value>
+  </data>
+  <data name="isolba.MaxLength" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="FILEPATH.Size" type="System.Drawing.Size, System.Drawing">
+    <value>152, 22</value>
+  </data>
+  <data name="Label3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 12</value>
+  </data>
+  <data name="sort_jp.Size" type="System.Drawing.Size, System.Drawing">
+    <value>175, 22</value>
+  </data>
+  <data name="sabunindex.Size" type="System.Drawing.Size, System.Drawing">
+    <value>68, 22</value>
+  </data>
+  <data name="&gt;&gt;tree_apply.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;crc_xml.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="MenuStrip1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="&gt;&gt;Label2.Name" xml:space="preserve">
+    <value>Label2</value>
+  </data>
+  <data name="&gt;&gt;SAVE_clrmamepro.Name" xml:space="preserve">
+    <value>SAVE_clrmamepro</value>
+  </data>
+  <data name="Label8.TabIndex" type="System.Int32, mscorlib">
+    <value>38</value>
+  </data>
+  <data name="Label2.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;mane_sort_down.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="gid.MaxLength" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="&gt;&gt;ALSAVE.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cnt_install.Name" xml:space="preserve">
+    <value>cnt_install</value>
+  </data>
+  <data name="ALSAVE.Text" xml:space="preserve">
+    <value>ALWAYS SAVELIST</value>
+  </data>
+  <data name="SAVELS2.Font" type="System.Drawing.Font, System.Drawing">
+    <value>MS UI Gothic, 7.85454559pt</value>
+  </data>
+  <data name="&gt;&gt;version.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="calc_md5.Font" type="System.Drawing.Font, System.Drawing">
+    <value>MS UI Gothic, 7.8pt</value>
+  </data>
+  <data name="gid_sort_down.Size" type="System.Drawing.Size, System.Drawing">
+    <value>175, 22</value>
+  </data>
+  <data name="xmlselect.Text" xml:space="preserve">
+    <value>select XML</value>
+  </data>
+  <data name="&gt;&gt;psf_sort_down.Name" xml:space="preserve">
+    <value>psf_sort_down</value>
+  </data>
+  <data name="&gt;&gt;Label7.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;EditImage2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="ToolStripMenuItem2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>206, 22</value>
+  </data>
+  <data name="version.Size" type="System.Drawing.Size, System.Drawing">
+    <value>174, 22</value>
+  </data>
+  <data name="&gt;&gt;Label4.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Label8.Text" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="&gt;&gt;calc_md5.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;ROMCODEs.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="GUITOP.Size" type="System.Drawing.Size, System.Drawing">
+    <value>206, 22</value>
+  </data>
+  <data name="cnt_install.Size" type="System.Drawing.Size, System.Drawing">
+    <value>148, 22</value>
+  </data>
+  <data name="&gt;&gt;RENAME.Name" xml:space="preserve">
+    <value>RENAME</value>
+  </data>
+  <data name="&gt;&gt;FILEPATH.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Label4.Text" xml:space="preserve">
+    <value>CRC32;</value>
+  </data>
+  <data name="lockdriveletter.Location" type="System.Drawing.Point, System.Drawing">
+    <value>317, 346</value>
+  </data>
+  <data name="&gt;&gt;all_hash.Name" xml:space="preserve">
+    <value>all_hash</value>
+  </data>
+  <data name="&gt;&gt;Label1.Name" xml:space="preserve">
+    <value>Label1</value>
+  </data>
+  <data name="&gt;&gt;gid_sort_down.Name" xml:space="preserve">
+    <value>gid_sort_down</value>
+  </data>
+  <data name="calc_sha.Text" xml:space="preserve">
+    <value>CALC</value>
+  </data>
+  <data name="xmlselect.Size" type="System.Drawing.Size, System.Drawing">
+    <value>206, 22</value>
+  </data>
+  <data name="PSFtitle_sort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>140, 22</value>
+  </data>
+  <data name="&gt;&gt;cnt_install.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Label8.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="google.Size" type="System.Drawing.Size, System.Drawing">
+    <value>70, 18</value>
+  </data>
+  <data name="file_sort_down.Text" xml:space="preserve">
+    <value>descending order</value>
+  </data>
+  <data name="CLOSEToolStripMenuItem.Text" xml:space="preserve">
+    <value>CLOSE</value>
+  </data>
+  <data name="ContextMenuStrip3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>158, 48</value>
+  </data>
+  <data name="USEMD5.Text" xml:space="preserve">
+    <value>USE MD5 WITH DATFILE</value>
+  </data>
+  <data name="&gt;&gt;exportxml.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ADD.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="psf_sort_up.Size" type="System.Drawing.Size, System.Drawing">
+    <value>175, 22</value>
+  </data>
+  <data name="&gt;&gt;google.ZOrder" xml:space="preserve">
+    <value>34</value>
+  </data>
+  <data name="&gt;&gt;GAMEID_sort.Name" xml:space="preserve">
+    <value>GAMEID_sort</value>
+  </data>
+  <data name="ToolStripSeparator5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>145, 6</value>
+  </data>
+  <data name="&gt;&gt;SAVELS.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;free.Name" xml:space="preserve">
+    <value>free</value>
+  </data>
+  <data name="crc_xml.Size" type="System.Drawing.Size, System.Drawing">
+    <value>57, 18</value>
+  </data>
+  <data name="rename_dat.Text" xml:space="preserve">
+    <value>select dat</value>
+  </data>
+  <data name="menufile.Text" xml:space="preserve">
+    <value>FILE</value>
+  </data>
+  <data name="SAVELS.ToolTipText" xml:space="preserve">
+    <value>save gamelist</value>
+  </data>
+  <data name="&gt;&gt;SAVE_clrmamepro.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;sort.Name" xml:space="preserve">
+    <value>sort</value>
+  </data>
+  <data name="PictureBox1.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;PictureBox2.ZOrder" xml:space="preserve">
+    <value>33</value>
+  </data>
+  <data name="editpspdir.Text" xml:space="preserve">
+    <value>edit pspdir list</value>
+  </data>
+  <data name="SAVELS2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>67, 17</value>
+  </data>
+  <data name="&gt;&gt;PictureBox1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;Label5.Name" xml:space="preserve">
+    <value>Label5</value>
+  </data>
+  <data name="google.Font" type="System.Drawing.Font, System.Drawing">
+    <value>MS UI Gothic, 7.8pt</value>
+  </data>
+  <data name="sony.Font" type="System.Drawing.Font, System.Drawing">
+    <value>MS UI Gothic, 7.85454559pt</value>
+  </data>
+  <data name="&gt;&gt;VIEW.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Label2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="GAMEID_sort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>140, 22</value>
+  </data>
+  <data name="XMLヘッダフッター編集ToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>206, 22</value>
+  </data>
+  <data name="&gt;&gt;lockdriveletter.ZOrder" xml:space="preserve">
+    <value>20</value>
+  </data>
+  <data name="sort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>53, 22</value>
+  </data>
+  <data name="&gt;&gt;crc_xml.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;CLOSEToolStripMenuItem.Name" xml:space="preserve">
+    <value>CLOSEToolStripMenuItem</value>
+  </data>
+  <data name="$this.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;ToolStripSeparator1.Name" xml:space="preserve">
+    <value>ToolStripSeparator1</value>
+  </data>
+  <data name="&gt;&gt;ALSAVE.Name" xml:space="preserve">
+    <value>ALSAVE</value>
+  </data>
+  <data name="psf_sort_down.Size" type="System.Drawing.Size, System.Drawing">
+    <value>175, 22</value>
+  </data>
+  <data name="&gt;&gt;file_sort_up.Name" xml:space="preserve">
+    <value>file_sort_up</value>
+  </data>
+  <data name="&gt;&gt;SAVELS2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;file_sort_up.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ToolStripSeparator6.Name" xml:space="preserve">
+    <value>ToolStripSeparator6</value>
+  </data>
+  <data name="Label5.Text" xml:space="preserve">
+    <value>MD5;</value>
+  </data>
+  <data name="RMXML.Text" xml:space="preserve">
+    <value>XML</value>
+  </data>
+  <data name="&gt;&gt;PictureBox1.ZOrder" xml:space="preserve">
+    <value>29</value>
+  </data>
+  <data name="Label7.Location" type="System.Drawing.Point, System.Drawing">
+    <value>223, 239</value>
+  </data>
+  <data name="ToolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 6</value>
+  </data>
+  <data name="&gt;&gt;Label7.ZOrder" xml:space="preserve">
+    <value>18</value>
+  </data>
+  <data name="calc_crc.Text" xml:space="preserve">
+    <value>CALC</value>
+  </data>
+  <data name="&gt;&gt;t_gid.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;md5hash.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;mane_sort_up.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="file_sort_up.Text" xml:space="preserve">
+    <value>ascending order</value>
+  </data>
+  <data name="&gt;&gt;rename_dat.Name" xml:space="preserve">
+    <value>rename_dat</value>
+  </data>
+  <data name="&gt;&gt;rg_add.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;google.Name" xml:space="preserve">
+    <value>google</value>
+  </data>
+  <data name="&gt;&gt;XMLヘッダフッター編集ToolStripMenuItem.Name" xml:space="preserve">
+    <value>XMLヘッダフッター編集ToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;pathcrc.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="rg_edit.Size" type="System.Drawing.Size, System.Drawing">
+    <value>148, 22</value>
+  </data>
+  <data name="&gt;&gt;drivelettter.Name" xml:space="preserve">
+    <value>drivelettter</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ContextMenuStrip4.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>730, 17</value>
+  </metadata>
+  <metadata name="MenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>411, 17</value>
+  </metadata>
+  <metadata name="ContextMenuStrip3.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>543, 17</value>
+  </metadata>
+  <metadata name="ContextMenuStrip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>214, 17</value>
+  </metadata>
+  <metadata name="ContextMenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
 </root>

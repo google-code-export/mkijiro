@@ -155,6 +155,9 @@
     <EmbeddedResource Include="form\extra.resx">
       <DependentUpon>extra.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="form\main.ja-JP.resx">
+      <DependentUpon>main.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="form\uid.resx">
       <DependentUpon>uid.vb</DependentUpon>
     </EmbeddedResource>

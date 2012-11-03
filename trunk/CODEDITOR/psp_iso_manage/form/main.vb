@@ -101,25 +101,15 @@ Public Class umdisomanger
                 My.Settings.pspinsdir = Application.StartupPath & "\"
             End If
 
-            If My.Settings.filenamecrc = True Then
-                pathcrc.Checked = True
-            End If
-
-            If My.Settings.topmost = True Then
-                Me.TopMost = True
-                GUITOP.Checked = True
-            End If
-
-
-            If My.Settings.lockdrive = True Then
-                lockdriveletter.Checked = True
-            End If
-
-
-            If My.Settings.pspgid = True Then
-                t_gid.Checked = True
-            End If
-
+            pathcrc.Checked = True = My.Settings.filenamecrc
+            lockdriveletter.Checked = My.Settings.lockdrive = True
+            t_gid.Checked = My.Settings.pspgid = True
+            disck_ver.Checked = My.Settings.diskver
+            ROMCODEs.Checked = My.Settings.romcode
+            Me.TopMost = My.Settings.topmost
+            GUITOP.Checked = My.Settings.topmost
+            ALSAVE.Checked = My.Settings.alwayssave
+            USEMD5.Checked = My.Settings.usemd5
 
             If (1 And My.Settings.rename) = 1 Then
                 FILEPATH.Checked = True
@@ -128,17 +118,7 @@ Public Class umdisomanger
                 MNAME.Checked = True
             End If
 
-            If My.Settings.diskver = True Then
-                disck_ver.Checked = True
-            End If
 
-            If My.Settings.romcode = True Then
-                ROMCODEs.Checked = True
-            End If
-
-            If My.Settings.alwayssave = True Then
-                ALSAVE.Checked = True
-            End If
             If File.Exists(My.Settings.datpath) = False Then
                 My.Settings.datpath = Application.StartupPath & "\datas\nanamitan.dat"
             End If
@@ -2958,8 +2938,7 @@ Public Class umdisomanger
             Dim dat As String = My.Settings.datpath
             check = False
             Dim utf8nobom As New UTF8Encoding
-            Dim ci As System.Globalization.CompareInfo = _
-    System.Globalization.CompareInfo.GetCompareInfo("ja-JP")
+            Dim ci As System.Globalization.CompareInfo = System.Globalization.CompareInfo.GetCompareInfo("ja-JP")
             If File.Exists(dat) = True Then
                 My.Settings.edit = True
 
@@ -3023,6 +3002,7 @@ Public Class umdisomanger
                 If s.Contains("crc FB3DF0B7") Then
                     check = True
                 End If
+                Dim md5pr As Boolean = My.Settings.usemd5
                 Dim ss As String = ""
                 Dim rp As String = ""
                 Dim path As String = ""
@@ -3038,54 +3018,104 @@ Public Class umdisomanger
                             If b.Index = 0 Then
                                 path = b.Tag.ToString
                             End If
-                            If b.Text.Contains("CRC32") Then
-                                ss = b.Text.Remove(0, 6).Trim
-                                Dim mask As String = "crc " & ss & " .*?\)\r\n"
-                                Dim r As New Regex(mask, RegexOptions.ECMAScript)
-                                Dim m As Match = r.Match(s)
-                                'ss = "crc " & ss & " md5"
-                                'hit = s.IndexOf(ss)
-                                'If hit > 0 Then
-                                If m.Success Then
-                                    hit = m.Index
-                                    ss = s.Remove(hit + 8, s.Length - (hit + 8))
-                                    hit = ss.LastIndexOf("name """)
-                                    ss = ss.Remove(0, hit + 6)
-                                    hit = ss.IndexOf("""")
-                                    ss = ss.Remove(hit, ss.Length - hit)
-                                    If My.Settings.filenamecrc = True Then
-                                        Dim cr As New Regex("\[[0-9A-Fa-f]{8}\}", RegexOptions.ECMAScript)
-                                        Dim crcs As Match = cr.Match(ss)
-                                        If crcs.Success Then
-                                        ElseIf ss.Length > 4 Then
-                                            ss = ss.Insert(ss.Length - 4, " [" & b.Text.Remove(0, 6).Trim & "]")
+                            If md5pr = True Then
+                                If b.Text.Contains("MD5") Then
+                                    ss = b.Text.Remove(0, 5).Trim
+                                    Dim mask As String = "md5 " & ss & " .*?\)\r\n"
+                                    Dim r As New Regex(mask, RegexOptions.ECMAScript)
+                                    Dim m As Match = r.Match(s)
+                                    If m.Success Then
+                                        hit = m.Index
+                                        ss = s.Remove(hit + 8, s.Length - (hit + 8))
+                                        hit = ss.LastIndexOf("name """)
+                                        ss = ss.Remove(0, hit + 6)
+                                        hit = ss.IndexOf("""")
+                                        ss = ss.Remove(hit, ss.Length - hit)
+                                        If My.Settings.filenamecrc = True Then
+                                            Dim cr As New Regex("\[[0-9A-Fa-f]{8}\}", RegexOptions.ECMAScript)
+                                            Dim crcs As Match = cr.Match(ss)
+                                            If crcs.Success Then
+                                            ElseIf ss.Length > 4 Then
+                                                ss = ss.Insert(ss.Length - 4, " [" & b.Text.Remove(0, 6).Trim & "]")
+                                            End If
                                         End If
-                                    End If
-                                    ss = ss.Replace(".iso", "")
-                                    rp = System.IO.Path.GetDirectoryName(path) & "\" & ss & System.IO.Path.GetExtension(path).ToLower
+                                        ss = ss.Replace(".iso", "")
+                                        rp = System.IO.Path.GetDirectoryName(path) & "\" & ss & System.IO.Path.GetExtension(path).ToLower
 
-                                    If MNAME.Checked = False AndAlso FILEPATH.Checked = False Then
-                                        b.Parent.Checked = True
-                                    End If
-                                    If MNAME.Checked = True Then
-                                        b.Parent.Text = ss.Replace(".iso", "")
-                                        b.Parent.Checked = True
-                                    End If
-                                    If FILEPATH.Checked = True Then
-                                        If ci.Compare(rp, path, System.Globalization.CompareOptions.IgnoreCase) = 0 Then
-                                            b.Parent.Checked = True
-                                        ElseIf File.Exists(rp) Then
-
-                                        Else
-                                            File.Move(path, rp)
-                                            b.Parent.Nodes(0).Tag = rp
+                                        If MNAME.Checked = False AndAlso FILEPATH.Checked = False Then
                                             b.Parent.Checked = True
                                         End If
+                                        If MNAME.Checked = True Then
+                                            b.Parent.Text = ss.Replace(".iso", "")
+                                            b.Parent.Checked = True
+                                        End If
+                                        If FILEPATH.Checked = True Then
+                                            If ci.Compare(rp, path, System.Globalization.CompareOptions.IgnoreCase) = 0 Then
+                                                b.Parent.Checked = True
+                                            ElseIf File.Exists(rp) = True Then
+
+                                            ElseIf File.Exists(path) = True Then
+                                                File.Move(path, rp)
+                                                b.Parent.Nodes(0).Tag = rp
+                                                b.Parent.Checked = True
+                                            End If
+                                        End If
+                                        If m.Value.Contains("baddump") AndAlso b.Parent.Name.Contains("BADDUMP") = False Then
+                                            b.Parent.Name = "BADDUMP" & vbCrLf & b.Parent.Name
+                                        ElseIf m.Value.Contains("verified") AndAlso b.Parent.Name.Contains("VRIFIED") = False Then
+                                            b.Parent.Name = "VRIFIED" & vbCrLf & b.Parent.Name
+                                        End If
                                     End If
-                                    If m.Value.Contains("baddump") AndAlso b.Parent.Name.Contains("BADDUMP") = False Then
-                                        b.Parent.Name = "BADDUMP" & vbCrLf & b.Parent.Name
-                                    ElseIf m.Value.Contains("verified") AndAlso b.Parent.Name.Contains("VRIFIED") = False Then
-                                        b.Parent.Name = "VRIFIED" & vbCrLf & b.Parent.Name
+                                End If
+
+                            Else
+
+                                If b.Text.Contains("CRC32") Then
+                                    ss = b.Text.Remove(0, 6).Trim
+                                    Dim mask As String = "crc " & ss & " .*?\)\r\n"
+                                    Dim r As New Regex(mask, RegexOptions.ECMAScript)
+                                    Dim m As Match = r.Match(s)
+                                    If m.Success Then
+                                        hit = m.Index
+                                        ss = s.Remove(hit + 8, s.Length - (hit + 8))
+                                        hit = ss.LastIndexOf("name """)
+                                        ss = ss.Remove(0, hit + 6)
+                                        hit = ss.IndexOf("""")
+                                        ss = ss.Remove(hit, ss.Length - hit)
+                                        If My.Settings.filenamecrc = True Then
+                                            Dim cr As New Regex("\[[0-9A-Fa-f]{8}\}", RegexOptions.ECMAScript)
+                                            Dim crcs As Match = cr.Match(ss)
+                                            If crcs.Success Then
+                                            ElseIf ss.Length > 4 Then
+                                                ss = ss.Insert(ss.Length - 4, " [" & b.Text.Remove(0, 6).Trim & "]")
+                                            End If
+                                        End If
+                                        ss = ss.Replace(".iso", "")
+                                        rp = System.IO.Path.GetDirectoryName(path) & "\" & ss & System.IO.Path.GetExtension(path).ToLower
+
+                                        If MNAME.Checked = False AndAlso FILEPATH.Checked = False Then
+                                            b.Parent.Checked = True
+                                        End If
+                                        If MNAME.Checked = True Then
+                                            b.Parent.Text = ss.Replace(".iso", "")
+                                            b.Parent.Checked = True
+                                        End If
+                                        If FILEPATH.Checked = True Then
+                                            If ci.Compare(rp, path, System.Globalization.CompareOptions.IgnoreCase) = 0 Then
+                                                b.Parent.Checked = True
+                                            ElseIf File.Exists(rp) Then
+
+                                            ElseIf File.Exists(path) = True Then
+                                                File.Move(path, rp)
+                                                b.Parent.Nodes(0).Tag = rp
+                                                b.Parent.Checked = True
+                                            End If
+                                        End If
+                                        If m.Value.Contains("baddump") AndAlso b.Parent.Name.Contains("BADDUMP") = False Then
+                                            b.Parent.Name = "BADDUMP" & vbCrLf & b.Parent.Name
+                                        ElseIf m.Value.Contains("verified") AndAlso b.Parent.Name.Contains("VRIFIED") = False Then
+                                            b.Parent.Name = "VRIFIED" & vbCrLf & b.Parent.Name
+                                        End If
                                     End If
                                 End If
                             End If
@@ -3223,9 +3253,9 @@ Public Class umdisomanger
                                     If FILEPATH.Checked = True Then
                                         If ci.Compare(rp, path, System.Globalization.CompareOptions.IgnoreCase) = 0 Then
                                             b.Parent.Checked = True
-                                        ElseIf File.Exists(rp) Then
+                                        ElseIf File.Exists(rp) = True Then
 
-                                        Else
+                                        ElseIf File.Exists(path) Then
                                             File.Move(path, rp)
                                             b.Parent.Nodes(0).Tag = rp
                                             b.Parent.Checked = True
@@ -4429,6 +4459,14 @@ Public Class umdisomanger
             pathcrc.Checked = False
             My.Settings.filenamecrc = False
         End If
+    End Sub
+
+
+    Private Sub USEMD5ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles USEMD5.Click
+
+        USEMD5.Checked = Not USEMD5.Checked
+        My.Settings.usemd5 = USEMD5.Checked
+
     End Sub
 
     Private Sub ToolStripMenuItem2_Click_1(sender As System.Object, e As System.EventArgs) Handles ToolStripMenuItem2.Click
