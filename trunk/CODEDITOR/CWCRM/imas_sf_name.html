@@ -1,0 +1,303 @@
+<script type="text/javascript">
+<!--
+//http://js4web.seesaa.net/article/155849375.html
+//http://winofsql.jp/sh/html/javascript_input_restrict.htm
+function numField(evt) {
+
+	var btype = window.navigator.userAgent.toLowerCase();
+
+	// *************************************************
+	// Firefox
+	// *************************************************
+	if ( btype.indexOf("firefox") > -1  || btype.indexOf("chrome") > -1) {
+		if ( 48 <= evt.charCode && evt.charCode <= 57 ) {
+			return;
+		}
+		if ( 0x41 <= evt.charCode && evt.charCode <= 0x46 ) {
+			return;
+		}
+		if ( 0x61 <= evt.charCode && evt.charCode <= 0x66 ) {
+			return;
+		}
+		if ( 0x78 == evt.charCode) {
+			return;
+		}
+		if ( evt.charCode == 0 ) {
+			if ( evt.keyCode == 8 || evt.keyCode  == 46 ||evt.keyCode == 37 || evt.keyCode  == 39) {
+				return;
+			}
+		}
+		evt.preventDefault();
+	}
+
+	// *************************************************
+	// IE、Opera
+	// *************************************************
+	if ( btype.indexOf("msie") > -1 || btype.indexOf("opera") > -1	) {
+		if ( 48 <= evt.keyCode && evt.keyCode <= 57 ) {
+			return;
+		}
+		if ( 0x61 <= evt.charCode && evt.charCode <= 0x66 ) {
+			return;
+		}
+		if ( 0x78 == evt.charCode) {
+			return;
+		}
+		if ( evt.keyCode == 8 || evt.keyCode  == 46 || evt.keyCode == 37 || evt.keyCode  == 39) {
+			return;
+		}
+		evt.returnValue = false;
+	}
+
+}
+
+
+function ieNumField(evt) {
+ 
+var btype = window.navigator.userAgent.toLowerCase();
+
+var xx=evt.keyCode;
+// *************************************************
+// IE
+// *************************************************
+if ( btype.indexOf("msie") > -1 ) {
+if ( 48 <= evt.keyCode && evt.keyCode <= 57 ) {
+return;
+}
+if ( 0x61 <= evt.charCode && evt.charCode <= 0x66 ) {
+			return;
+}
+if ( 0x78 == evt.charCode) {
+			return;
+}
+if ( 96 <= evt.keyCode && evt.keyCode <= 105 ) {
+return;
+}
+if ( evt.keyCode == 8 || evt.keyCode  == 46 ||evt.keyCode == 37 || evt.keyCode  == 39) {
+return;
+}
+evt.returnValue = false;
+}
+}
+
+
+	function inputcheck() {
+	   var str = document.FORM1.CP1200B.value;
+	   var str2 = document.FORM1.CP1200_2B.value;
+	re = new RegExp("^0x[0-9A-Fa-f]+$");
+	if (re.test(str)==false) {
+      alert("エラー(プロデューサー用ベースアドレス);\r\n0x0付きの16進数のみで入力して下さい");
+      document.FORM1.CP1200B.value="0x0";
+      return 1;
+   	}
+   	else{
+  var pbase= eval(str);
+	  if(addresscheck(pbase)==0){
+      alert("エラー(プロデューサー用ベースアドレス);\r\nユーザーメモリの範囲外です\r\n相対アドレス0x0～0x1800000\r\n絶対アドレス0x8800000～0xA000000");
+      return 1;
+      }
+   	}
+   	
+	if (re.test(str2)==false) {
+      alert("エラー(ユニット名用ベースアドレス)\r\n0x0付きの16進数のみで入力して下さい");
+      document.FORM1.CP1200_2B.value="0x0";
+      return 1;
+   	}
+   	else{
+  var ubase= eval(str2);
+	  if(addresscheck(ubase)==0){
+      alert("エラー(プロデューサー用ベースアドレス);\r\nユーザーメモリの範囲外です\r\n相対アドレス0x0～0x1800000\r\n絶対アドレス0x8800000～0xA000000");
+      return 1;
+		}
+   	}
+   	return 0;
+	}
+	
+	function addresscheck(addr)
+	{	
+	  return ((addr>=0 && addr < 0x1800000) || (addr>=0x8800000 && addr < 0xA000000));
+	}
+
+
+function init() {
+  document.FORM1.CP1200.value="あいます";
+  document.FORM1.CP1200_2.value="竜宮小町";
+  onChangemode();
+  }
+
+
+function onChangemode() {
+    var radioList  = document.getElementsByName("mode");
+    
+    var i=0;
+for(i=0; i<radioList.length; i++){
+if (radioList[i].checked) {
+break;
+}}
+
+    if(i==0){
+  document.FORM1.CP1200B.value="0x3C4CAC";
+  document.FORM1.CP1200_2B.value="0x3C9B48";
+    }
+    if(i==1){
+  document.FORM1.CP1200B.value="0x3C4CEC";
+  document.FORM1.CP1200_2B.value="0x3C9B88";
+    }
+    
+    }
+
+function func() {
+if(inputcheck()==1){
+   	return 0;
+}
+if(txlencheck()==1){
+	return 0;
+}
+
+
+  var xx = document.FORM1.CP1200.value;
+  var yy = document.FORM1.CP1200_2.value;
+  var pbase= eval(document.FORM1.CP1200B.value);
+  var ubase= eval(document.FORM1.CP1200_2B.value);
+  var str = "";
+  if(xx !=""){
+  str ="//プロデューサー名\r\n";
+  str = str + tx(xx,pbase,1,"_C0 CWCHEAT","_L ",0x10000000);
+  str = str + tx(xx,pbase,1,"_C0 PSPAR","_M ",0x18800000);
+  str = str + tx(xx,pbase,5,"_C0 CODEFEAK","_L ",0x10000000);
+  str = str + tx(xx,pbase,1,"_C0 PMETAN","_NRW 0x40000000 ",0);
+  str = str + tx(xx,pbase,3,"#NITEPR","",0);
+  document.cvcode.elements[0].value =   str 
+  }
+  if(yy !=""){
+  str = "//ユニット名\r\n";
+  str = str + tx(yy,ubase,0,"_C0 CWCHEAT","_L ",0x10000000);
+  str = str + tx(yy,ubase,0,"_C0 PSPAR","_M ",0x18800000);
+  str = str + tx(yy,ubase,4,"_C0 CODEFEAK","_L ",0x10000000);
+  str = str + tx(yy,ubase,0,"_C0 PMETAN","_NRW 0x40000000 ",0);
+  str = str + tx(yy,ubase,2,"#NITEPR","",0);
+  
+  document.cvcode2.elements[0].value = str 
+  }
+}
+
+	function pad(text, len)
+	{
+		var textLen=text.length;
+		if(textLen  < len)
+		{
+			len-=textLen;
+			while(len > 0)
+			{
+				text='0'+text;
+				len--;
+			}
+		}
+		return text;
+	}
+
+
+function decDigi(d, len)
+	{
+		var text=pad(d.toString(16), len);
+		text=text.toUpperCase();
+		text='0x'+text;
+		return text;
+}
+
+
+function txlencheck()
+{
+  var xx = document.FORM1.CP1200.value;
+  var yy = document.FORM1.CP1200_2.value;
+  if(xx.length>8){
+      alert("エラー(プロデューサー名);\r\nプロデューサー名の最大文字数8文字をこえてます");
+  	return 1;
+  }
+  if(yy.length>10){
+      alert("エラー(ユニット名);\r\nユニット名の最大文字数10文字をこえてます");
+  	return 1;
+  }
+	return 0;
+}
+
+function tx(text, baseaddress,bools,head,cwcar,add) {
+    var result = "";
+    baseaddress=baseaddress & 0x9FFFFFE;
+    if(baseaddress>= 0x880000){
+    baseaddress=baseaddress -0x8800000;
+    }
+    var c;
+    var xor=0;
+    var len =8;
+    var max =text.length;
+    if(bools & 4){
+    xor=0xD6F73BEE;
+    }    
+    
+    if(bools & 2){
+    len=4;
+    }
+    bools = bools & 1;
+    if(bools){
+    if(max>8){max=8;}
+    }
+    else{
+    if(max>10){max=10;}
+    }
+    
+    if (text == null)
+        return result;
+        
+    result = result + head +"\r\n";
+    for (var i = 0; i < max; i++) {
+        c = text.charCodeAt(i);
+        result = result + cwcar + decDigi((((baseaddress +add)^xor)>>>0).toString(16),8) + " " + decDigi(c.toString(16),len) +"\r\n";
+        if(bools){
+        result = result + cwcar + decDigi((((baseaddress　+ add +0x12)^xor)>>>0).toString(16),8) + " " + decDigi(c.toString(16),len) +"\r\n";
+        }
+        baseaddress +=2;
+    } 
+    result = result + cwcar + decDigi((((baseaddress + add)^xor)>>>0).toString(16),8) + " " + decDigi(0x00,len) +"\r\n";
+    if(bools){
+    result = result + cwcar + decDigi((((baseaddress + add +0x12)^xor)>>>0).toString(16),8) + " " + decDigi(0x50,len) +"\r\n";
+    result = result + cwcar + decDigi((((baseaddress + add +0x14)^xor)>>>0).toString(16),8) + " " + decDigi(0x00,len) +"\r\n";
+    }
+        
+    return result;
+}
+
+// -->
+</script>
+<center><h2>あいどるますたーしゃいにふぇすた名前変更つーる<br>
+2012/11/02(推奨ぶらうざIE9,FIREFOX,CHORME,OPERA 要JAVASCRIPT)</h2>
+</center>
+<form>
+<p class="green">１．対象のゲームを下のラジオボタンから選んで下さい</p>
+<p class="cwc"><input type="radio" name="mode" value="0" id="s1" checked onclick="onChangemode();" >ハニーサウンド/グルーヴィーチューン</p>
+<p class="cwc"><input type="radio" name="mode" value="1" id="s2" onclick="onChangemode();" >ファンキーノート </p>
+</form>
+<form name="FORM1" action="#">
+<p class="green">２．プロデューサー名,ユニット名を入力して変換ボタンを押して下さい。</p>
+<p class="cwc">※ベースアドレスはDLCやアップデートなどでアドレスが変わった場合に対応するためなので変更はいまのところ不要</p>
+<p class="cwc">プロデューサー名ベースアドレス</p>
+<p class="cwc"><input type="text" value="0x3C4CAC" name="CP1200B" maxlength=10 onblur="inputcheck();" style="ime-mode: disabled" onkeypress="numField(event)" onkeydown="ieNumField(event)"></p>
+<p class="cwc">プロデューサー名</p>
+<p class="cwc"><input type="text" value="あいます" name="CP1200" onblur="inputcheck();" maxlength=8></p>
+<p class="cwc">ユニット名ベースアドレス</p>
+<p class="cwc"><input type="text"value="0x3C9B48" name="CP1200_2B"maxlength=10 onblur="inputcheck();" style="ime-mode: disabled" onkeypress="numField(event)" onkeydown="ieNumField(event)"></p>
+<p class="cwc">ユニット名</p>
+<p class="cwc"><input type="text" value="竜宮小町" name="CP1200_2" onblur="txlencheck();" maxlength=10></p>
+<p class="cwc">
+<input type="button" value="変換" onclick="func()">
+<input type="button" value="リセット" onclick="init()"></p>
+<p class="cwc">※変換後のコードは CWCHEAT,PSPAR(プロアクションリプレイ),CODEFREAK(コードフリーク暗号モード),PMETAN,NITEPR の順で出力されます</p>
+</form>
+<form name="cvcode">
+<p class="cwc">プロデューサー名コード</p>
+<p class="cwc"><textarea name="text" rows="10" cols="50"></textarea></p>
+</form>
+<form name="cvcode2">
+<p class="cwc">ユニット名コード</p>
+<p class="cwc"><textarea name="text" rows="10" cols="50"></textarea></p>
+</form><br>
