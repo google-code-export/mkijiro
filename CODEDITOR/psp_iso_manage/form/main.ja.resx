@@ -127,6 +127,12 @@
   <data name="CRCimage.Text" xml:space="preserve">
     <value>CRC画像検索</value>
   </data>
+  <data name="ContextMenuStrip2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>230, 126</value>
+  </data>
+  <data name="TreeView1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>208, 355</value>
+  </data>
   <data name="cnt_install.Size" type="System.Drawing.Size, System.Drawing">
     <value>229, 22</value>
   </data>
@@ -163,20 +169,8 @@
   <data name="VIEW.Text" xml:space="preserve">
     <value>ジャケット/UMD画像を見る</value>
   </data>
-  <data name="ContextMenuStrip2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>230, 126</value>
-  </data>
-  <data name="TreeView1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>9, 33</value>
-  </data>
-  <data name="TreeView1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>208, 355</value>
-  </data>
   <data name="GAMEID.Location" type="System.Drawing.Point, System.Drawing">
     <value>354, 243</value>
-  </data>
-  <data name="GAMEID.Size" type="System.Drawing.Size, System.Drawing">
-    <value>41, 18</value>
   </data>
   <data name="GAMEID.Text" xml:space="preserve">
     <value>取得</value>
@@ -184,11 +178,14 @@
   <data name="PFS.Location" type="System.Drawing.Point, System.Drawing">
     <value>469, 220</value>
   </data>
-  <data name="PFS.Size" type="System.Drawing.Size, System.Drawing">
-    <value>57, 18</value>
-  </data>
   <data name="PFS.Text" xml:space="preserve">
     <value>PSF取得</value>
+  </data>
+  <data name="ContextMenuStrip3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>137, 48</value>
+  </data>
+  <data name="PictureBox1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>89, 155</value>
   </data>
   <data name="changeimage.Size" type="System.Drawing.Size, System.Drawing">
     <value>136, 22</value>
@@ -202,20 +199,17 @@
   <data name="editimage.Text" xml:space="preserve">
     <value>画像の編集</value>
   </data>
-  <data name="ContextMenuStrip3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>137, 48</value>
-  </data>
-  <data name="PictureBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>223, 55</value>
-  </data>
-  <data name="PictureBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>89, 155</value>
-  </data>
   <data name="managename.Location" type="System.Drawing.Point, System.Drawing">
     <value>271, 219</value>
   </data>
   <data name="managename.Size" type="System.Drawing.Size, System.Drawing">
     <value>186, 19</value>
+  </data>
+  <data name="ContextMenuStrip4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>209, 48</value>
+  </data>
+  <data name="PictureBox2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>317, 55</value>
   </data>
   <data name="ChangeImage2.Size" type="System.Drawing.Size, System.Drawing">
     <value>208, 22</value>
@@ -229,15 +223,6 @@
   <data name="EditImage2.Text" xml:space="preserve">
     <value>スクリーンショット編集</value>
   </data>
-  <data name="ContextMenuStrip4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>209, 48</value>
-  </data>
-  <data name="PictureBox2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>317, 55</value>
-  </data>
-  <data name="PictureBox2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>274, 155</value>
-  </data>
   <data name="Label1.Location" type="System.Drawing.Point, System.Drawing">
     <value>224, 222</value>
   </data>
@@ -250,26 +235,11 @@
   <data name="movepsp.Location" type="System.Drawing.Point, System.Drawing">
     <value>223, 345</value>
   </data>
-  <data name="movepsp.Size" type="System.Drawing.Size, System.Drawing">
-    <value>69, 18</value>
-  </data>
   <data name="movepsp.Text" xml:space="preserve">
     <value>PSPへ転送</value>
   </data>
-  <data name="google.Location" type="System.Drawing.Point, System.Drawing">
-    <value>397, 33</value>
-  </data>
-  <data name="google.Size" type="System.Drawing.Size, System.Drawing">
-    <value>70, 18</value>
-  </data>
   <data name="drivelettter.Location" type="System.Drawing.Point, System.Drawing">
     <value>434, 344</value>
-  </data>
-  <data name="drivelettter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>23, 19</value>
-  </data>
-  <data name="lockdriveletter.Location" type="System.Drawing.Point, System.Drawing">
-    <value>317, 346</value>
   </data>
   <data name="lockdriveletter.Size" type="System.Drawing.Size, System.Drawing">
     <value>119, 16</value>
@@ -298,20 +268,11 @@
   <data name="Label4.Location" type="System.Drawing.Point, System.Drawing">
     <value>225, 274</value>
   </data>
-  <data name="Label4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>43, 12</value>
-  </data>
   <data name="Label5.Location" type="System.Drawing.Point, System.Drawing">
     <value>225, 297</value>
   </data>
-  <data name="Label5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>30, 12</value>
-  </data>
   <data name="Label6.Location" type="System.Drawing.Point, System.Drawing">
     <value>224, 323</value>
-  </data>
-  <data name="Label6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>42, 12</value>
   </data>
   <data name="isosize.Location" type="System.Drawing.Point, System.Drawing">
     <value>493, 243</value>
@@ -327,9 +288,6 @@
   </data>
   <data name="crc.Location" type="System.Drawing.Point, System.Drawing">
     <value>273, 268</value>
-  </data>
-  <data name="crc.Size" type="System.Drawing.Size, System.Drawing">
-    <value>76, 19</value>
   </data>
   <data name="md5hash.Location" type="System.Drawing.Point, System.Drawing">
     <value>271, 295</value>
@@ -355,14 +313,8 @@
   <data name="gid.Location" type="System.Drawing.Point, System.Drawing">
     <value>273, 243</value>
   </data>
-  <data name="gid.Size" type="System.Drawing.Size, System.Drawing">
-    <value>76, 19</value>
-  </data>
   <data name="calc_crc.Location" type="System.Drawing.Point, System.Drawing">
     <value>353, 269</value>
-  </data>
-  <data name="calc_crc.Size" type="System.Drawing.Size, System.Drawing">
-    <value>40, 18</value>
   </data>
   <data name="calc_crc.Text" xml:space="preserve">
     <value>計算</value>
@@ -403,6 +355,15 @@
   <data name="tree_apply.Text" xml:space="preserve">
     <value>ツリーに反映</value>
   </data>
+  <data name="MenuStrip1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>599, 26</value>
+  </data>
+  <data name="menufile.Size" type="System.Drawing.Size, System.Drawing">
+    <value>68, 22</value>
+  </data>
+  <data name="menufile.Text" xml:space="preserve">
+    <value>ファイル</value>
+  </data>
   <data name="ADD.Size" type="System.Drawing.Size, System.Drawing">
     <value>180, 22</value>
   </data>
@@ -431,6 +392,12 @@ please drag&amp;dropg files from explore,if you want to add many  files</value>
   <data name="EXPORTPSPINS.Text" xml:space="preserve">
     <value>PSPINS形式で出力</value>
   </data>
+  <data name="SAVE_clrmamepro.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="SAVE_clrmamepro.Text" xml:space="preserve">
+    <value>CMPRO形式で出力</value>
+  </data>
   <data name="disck_ver.Size" type="System.Drawing.Size, System.Drawing">
     <value>244, 22</value>
   </data>
@@ -449,12 +416,6 @@ please drag&amp;dropg files from explore,if you want to add many  files</value>
 [b] baddump,バッドダンプ
 [-(size)k] lack of sector,サイズ欠け</value>
   </data>
-  <data name="SAVE_clrmamepro.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
-  </data>
-  <data name="SAVE_clrmamepro.Text" xml:space="preserve">
-    <value>CMPRO形式で出力</value>
-  </data>
   <data name="exportxml.Size" type="System.Drawing.Size, System.Drawing">
     <value>180, 22</value>
   </data>
@@ -465,25 +426,6 @@ please drag&amp;dropg files from explore,if you want to add many  files</value>
     <value>OFFLINE用XMLを出力します(ID1番から)
 画像も変換するため多少時間がかかります
 diffフォルダにimgとDATができます</value>
-  </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="diffCMPRO.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="diffCMPRO.Size" type="System.Drawing.Size, System.Drawing">
-    <value>118, 22</value>
-  </data>
-  <data name="sabunindex.Size" type="System.Drawing.Size, System.Drawing">
-    <value>162, 22</value>
-  </data>
-  <data name="sabunindex.Text" xml:space="preserve">
-    <value>出力時最初のID</value>
-  </data>
-  <data name="diffXML.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="diffXML.Size" type="System.Drawing.Size, System.Drawing">
-    <value>118, 22</value>
   </data>
   <data name="ToolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
     <value>180, 22</value>
@@ -497,6 +439,19 @@ diffフォルダにimgとDATができます</value>
 XMLは被らないようINDEX指定が必要です
 diffフォルダにimgとDATができます</value>
   </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="diffCMPRO.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="diffXML.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="sabunindex.Size" type="System.Drawing.Size, System.Drawing">
+    <value>162, 22</value>
+  </data>
+  <data name="sabunindex.Text" xml:space="preserve">
+    <value>出力時最初のID</value>
+  </data>
   <data name="ToolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
     <value>177, 6</value>
   </data>
@@ -506,11 +461,17 @@ diffフォルダにimgとDATができます</value>
   <data name="CLOSEToolStripMenuItem.Text" xml:space="preserve">
     <value>終了</value>
   </data>
-  <data name="menufile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>68, 22</value>
+  <data name="sort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>44, 22</value>
   </data>
-  <data name="menufile.Text" xml:space="preserve">
-    <value>ファイル</value>
+  <data name="sort.Text" xml:space="preserve">
+    <value>整列</value>
+  </data>
+  <data name="name_sort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>146, 22</value>
+  </data>
+  <data name="name_sort.Text" xml:space="preserve">
+    <value>管理名</value>
   </data>
   <data name="mane_sort_up.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 22</value>
@@ -524,11 +485,11 @@ diffフォルダにimgとDATができます</value>
   <data name="mane_sort_down.Text" xml:space="preserve">
     <value>降順</value>
   </data>
-  <data name="name_sort.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="GAMEID_sort.Size" type="System.Drawing.Size, System.Drawing">
     <value>146, 22</value>
   </data>
-  <data name="name_sort.Text" xml:space="preserve">
-    <value>管理名</value>
+  <data name="GAMEID_sort.Text" xml:space="preserve">
+    <value>ゲームID</value>
   </data>
   <data name="gid_sort_up.Size" type="System.Drawing.Size, System.Drawing">
     <value>148, 22</value>
@@ -563,11 +524,11 @@ diffフォルダにimgとDATができます</value>
   <data name="PriorEUToolStripMenuItem.Text" xml:space="preserve">
     <value>欧州優先</value>
   </data>
-  <data name="GAMEID_sort.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="PSFtitle_sort.Size" type="System.Drawing.Size, System.Drawing">
     <value>146, 22</value>
   </data>
-  <data name="GAMEID_sort.Text" xml:space="preserve">
-    <value>ゲームID</value>
+  <data name="PSFtitle_sort.Text" xml:space="preserve">
+    <value>PSFタイトル</value>
   </data>
   <data name="psf_sort_up.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 22</value>
@@ -581,11 +542,11 @@ diffフォルダにimgとDATができます</value>
   <data name="psf_sort_down.Text" xml:space="preserve">
     <value>降順</value>
   </data>
-  <data name="PSFtitle_sort.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="file_sort.Size" type="System.Drawing.Size, System.Drawing">
     <value>146, 22</value>
   </data>
-  <data name="PSFtitle_sort.Text" xml:space="preserve">
-    <value>PSFタイトル</value>
+  <data name="file_sort.Text" xml:space="preserve">
+    <value>ファイル名</value>
   </data>
   <data name="file_sort_up.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 22</value>
@@ -599,32 +560,36 @@ diffフォルダにimgとDATができます</value>
   <data name="file_sort_down.Text" xml:space="preserve">
     <value>降順</value>
   </data>
-  <data name="file_sort.Size" type="System.Drawing.Size, System.Drawing">
-    <value>146, 22</value>
+  <data name="RENAME.Size" type="System.Drawing.Size, System.Drawing">
+    <value>68, 22</value>
   </data>
-  <data name="file_sort.Text" xml:space="preserve">
-    <value>ファイル名</value>
-  </data>
-  <data name="sort.Size" type="System.Drawing.Size, System.Drawing">
-    <value>44, 22</value>
-  </data>
-  <data name="sort.Text" xml:space="preserve">
-    <value>整列</value>
+  <data name="RENAME.Text" xml:space="preserve">
+    <value>リネーム</value>
   </data>
   <data name="RMXML.Size" type="System.Drawing.Size, System.Drawing">
-    <value>162, 22</value>
+    <value>244, 22</value>
   </data>
   <data name="RMXML.ToolTipText" xml:space="preserve">
     <value>RENAME FILE,USE OFFLINE XML</value>
   </data>
   <data name="RMDAT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>162, 22</value>
+    <value>244, 22</value>
   </data>
   <data name="RMDAT.ToolTipText" xml:space="preserve">
     <value>RENAME FILE, USE NOINTRO DATFILE</value>
   </data>
   <data name="ToolStripSeparator4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>159, 6</value>
+    <value>241, 6</value>
+  </data>
+  <data name="MNEN.Size" type="System.Drawing.Size, System.Drawing">
+    <value>244, 22</value>
+  </data>
+  <data name="MNEN.Text" xml:space="preserve">
+    <value>対象</value>
+  </data>
+  <data name="MNEN.ToolTipText" xml:space="preserve">
+    <value>リネーム対応対象の指定
+両方共OFFの場合はあうかどうかのテストモードになります</value>
   </data>
   <data name="MNAME.Size" type="System.Drawing.Size, System.Drawing">
     <value>148, 22</value>
@@ -638,27 +603,23 @@ diffフォルダにimgとDATができます</value>
   <data name="FILEPATH.Text" xml:space="preserve">
     <value>ファイルパス</value>
   </data>
-  <data name="MNEN.Size" type="System.Drawing.Size, System.Drawing">
-    <value>162, 22</value>
-  </data>
-  <data name="MNEN.Text" xml:space="preserve">
-    <value>対象</value>
-  </data>
-  <data name="MNEN.ToolTipText" xml:space="preserve">
-    <value>リネーム対応対象の指定
-両方共OFFの場合はあうかどうかのテストモードになります</value>
-  </data>
   <data name="pathcrc.Size" type="System.Drawing.Size, System.Drawing">
-    <value>162, 22</value>
+    <value>244, 22</value>
   </data>
   <data name="pathcrc.Text" xml:space="preserve">
-    <value>CRC32をつける</value>
+    <value>ファイル名にハッシュを付ける</value>
   </data>
-  <data name="RENAME.Size" type="System.Drawing.Size, System.Drawing">
-    <value>68, 22</value>
+  <data name="USEMD5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>244, 22</value>
   </data>
-  <data name="RENAME.Text" xml:space="preserve">
-    <value>リネーム</value>
+  <data name="USEMD5.Text" xml:space="preserve">
+    <value>DAT使用時はMD5を使う</value>
+  </data>
+  <data name="setting.Size" type="System.Drawing.Size, System.Drawing">
+    <value>44, 22</value>
+  </data>
+  <data name="setting.Text" xml:space="preserve">
+    <value>設定</value>
   </data>
   <data name="GUITOP.Size" type="System.Drawing.Size, System.Drawing">
     <value>209, 22</value>
@@ -723,11 +684,11 @@ RAMDISKが2GB以上ある場合はアンパック後の
   <data name="ALSAVE.Text" xml:space="preserve">
     <value>終了時リストを必ず保存</value>
   </data>
-  <data name="setting.Size" type="System.Drawing.Size, System.Drawing">
-    <value>44, 22</value>
+  <data name="HELPToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>56, 22</value>
   </data>
-  <data name="setting.Text" xml:space="preserve">
-    <value>設定</value>
+  <data name="HELPToolStripMenuItem.Text" xml:space="preserve">
+    <value>ヘルプ</value>
   </data>
   <data name="online.Size" type="System.Drawing.Size, System.Drawing">
     <value>172, 22</value>
@@ -740,19 +701,6 @@ RAMDISKが2GB以上ある場合はアンパック後の
   </data>
   <data name="version.Text" xml:space="preserve">
     <value>バージョン</value>
-  </data>
-  <data name="HELPToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>56, 22</value>
-  </data>
-  <data name="HELPToolStripMenuItem.Text" xml:space="preserve">
-    <value>ヘルプ</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="MenuStrip1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 2, 0, 2</value>
-  </data>
-  <data name="MenuStrip1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>599, 26</value>
   </data>
   <data name="del_psp.Location" type="System.Drawing.Point, System.Drawing">
     <value>224, 369</value>
@@ -775,9 +723,6 @@ RAMDISKが2GB以上ある場合はアンパック後の
   <data name="crc_xml.Location" type="System.Drawing.Point, System.Drawing">
     <value>531, 219</value>
   </data>
-  <data name="crc_xml.Size" type="System.Drawing.Size, System.Drawing">
-    <value>57, 18</value>
-  </data>
   <data name="crc_xml.Text" xml:space="preserve">
     <value>XML検索</value>
   </data>
@@ -790,28 +735,10 @@ RAMDISKが2GB以上ある場合はアンパック後の
   <data name="free.Text" xml:space="preserve">
     <value>MS空き;不明</value>
   </data>
-  <data name="sony.Location" type="System.Drawing.Point, System.Drawing">
-    <value>474, 33</value>
-  </data>
-  <data name="sony.Size" type="System.Drawing.Size, System.Drawing">
-    <value>56, 18</value>
-  </data>
-  <data name="SAVELS2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>224, 33</value>
-  </data>
-  <data name="SAVELS2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>67, 17</value>
-  </data>
   <data name="SAVELS2.Text" xml:space="preserve">
     <value>リスト保存</value>
   </data>
-  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>6, 12</value>
-  </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
     <value>599, 401</value>
-  </data>
-  <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
-    <value>615, 439</value>
   </data>
 </root>

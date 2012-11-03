@@ -172,5 +172,8 @@ X:\PSP\GAME660\</Value>
     <Setting Name="unpackdir" Type="System.String" Scope="User">
       <Value Profile="(Default)">unpack\</Value>
     </Setting>
+    <Setting Name="usemd5" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
