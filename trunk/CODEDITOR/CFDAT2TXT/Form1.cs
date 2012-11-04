@@ -93,6 +93,46 @@ namespace WindowsFormsApplication1
             }
         }
 
+              private void SAVE_Click(object sender, EventArgs e)
+              {
+                if  (treeView1.SelectedNode != null) {
+                    TreeNode edittree = treeView1.SelectedNode;
+
+
+                    if (edittree.Level == 0)
+                    {
+                        edittree.Text = gtitle.Text;
+                    }
+                    if (edittree.Level == 1)
+                    {
+
+                        edittree.Text = codename.Text;
+                        Regex r = new Regex("[0-9A-Fa-f]{8} [0-9A-Fa-f]{8}");
+                        Match mr = r.Match(codehex.Text.Replace("0x", ""));
+                        StringBuilder sb = new StringBuilder();
+                        while (mr.Success) {
+                            sb.AppendLine(mr.Value);
+                            if (edittree.Index == 0)
+                            {
+                                gameid.Text = cf2sceid(mr.Value.Replace(" ",""));
+                                edittree.Parent.Tag = gameid.Text;
+                                break;
+                            }
+                            mr = mr.NextMatch();
+                        }
+                        if (sb.Length > 0)
+                        {
+                            edittree.Tag = sb.ToString();
+                        }
+                    }
+                
+                }
+
+
+              }
+
+
+
         private void parse(string fs) {
                   //CP1201　UFT16ビッグエンディアンでコードフリークDATを読む
                   StreamReader sr = new StreamReader(fs, Encoding.GetEncoding(1201));
@@ -196,6 +236,7 @@ namespace WindowsFormsApplication1
             return s;
         }
 
+
         private byte hexed(string s)
         {
                 return    Convert.ToByte(s, 16);
@@ -203,20 +244,36 @@ namespace WindowsFormsApplication1
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            codename.Text = "";
+            codehex.Text = "";
             cmtb.Text = "";
-            if (treeView1.SelectedNode.Level == 0)
+            gtitle.Enabled = false;
+            codename.Enabled = false;
+            codehex.Enabled = false;
+            cmtb.Enabled = false;
+
+            if (treeView1.SelectedNode != null)
             {
-                gameid.Text = treeView1.SelectedNode.Tag.ToString();
-            }
-            else
-            {
-                codename.Text = treeView1.SelectedNode.Text;
-                Regex rg = new Regex("''");
-                string[] ss = rg.Split(treeView1.SelectedNode.Tag.ToString());
-                codehex.Text = ss[0];
-                for (int i = 1; i < ss.Length; i++)
+                if (treeView1.SelectedNode.Level == 0)
                 {
-                    cmtb.Text += ss[i];
+                    gtitle.Text = treeView1.SelectedNode.Text;
+                    gameid.Text = treeView1.SelectedNode.Tag.ToString();
+                    gtitle.Enabled = true;
+
+                }
+                else
+                {
+                    codename.Enabled = true;
+                    codehex.Enabled = true;
+                    cmtb.Enabled = true;
+                    codename.Text = treeView1.SelectedNode.Text;
+                    Regex rg = new Regex("''");
+                    string[] ss = rg.Split(treeView1.SelectedNode.Tag.ToString());
+                    codehex.Text = ss[0];
+                    for (int i = 1; i < ss.Length; i++)
+                    {
+                        cmtb.Text += ss[i];
+                    }
                 }
             }
         }
@@ -385,6 +442,80 @@ namespace WindowsFormsApplication1
             sw.Close();
         }
 
+
+        private void OUTDAT_Click(object sender, EventArgs e)
+        {            
+            StringBuilder sb = new StringBuilder();
+            Regex r = new Regex("[0-9A-Fa-f]{8} [0-9A-Fa-f]{8}");
+            Match mr;
+            Boolean enc = checkBox2.Checked;
+            uint cf = 0;
+            Boolean encok= false;
+                foreach (TreeNode n in treeView1.Nodes)
+                {
+                    encok = false;
+                    sb.Append("䜠");
+                    sb.Append(n.Text);
+                    sb.Append("ਊ");
+                    foreach (TreeNode m in n.Nodes)
+                    {
+                        
+                       if (m.Text == "(M)")
+                        {
+                            mr = r.Match(rpstringout(m.Tag.ToString()));
+                            if (mr.Success == true)
+                            {
+
+                                sb.Append("䴠");
+                                cf = Convert.ToUInt32(mr.Value.Substring(9, 8), 16);
+                                if ((cf & 0x800) == 0)
+                                {
+                                    encok = true;
+                                    sb.Append(mr.Value.Substring(0,8));
+                                    cf = (cf & 0xFFFFF0FF) | 0x800;
+                                    sb.Append(cf.ToString("X8"));
+                                }
+                                else
+                                {
+                                    sb.Append(mr.Value).Replace(" ", "");
+                                }
+                                sb.Append("ਊ");
+                            }
+                        }
+                        else if (m.Text != "(M)")
+                        {
+                            sb.Append("䐠");
+                            sb.Append(rpstringout(m.Text));
+                            sb.Append("ਊ");
+                            mr = r.Match(rpstringout(m.Tag.ToString()));
+                            while (mr.Success == true)
+                            {
+                                sb.Append("䌠");
+                                if (encok == true)
+                                {
+                                    sb.Append(codefreakdec(mr.Value).Replace(" ",""));
+                                }
+                                else
+                                {
+                                    sb.Append(mr.Value).Replace(" ", "");
+                                }
+                                sb.Append("ਊ");
+                                mr = mr.NextMatch();
+                            }
+                        }
+                    }
+                }
+
+            const bool bigEndian = true;
+            const bool bom = true;
+            Encoding nobomcp1201= new UnicodeEncoding(bigEndian, !bom);
+            StreamWriter sw = new StreamWriter("converted_cf.dat", false, nobomcp1201);
+            sw.Write(sb.ToString());
+            sw.Close();
+
+           
+        }
+
         private int getcp() { 
             uint cp=0;
             if (sJIS932.Checked == true) {
@@ -422,16 +553,6 @@ namespace WindowsFormsApplication1
         }
         }
             return sb.ToString();
-        }
-
-        private void oPENToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            button1_Click(sender, e);
-        }
-
-        private void cONVERTTXTToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OUT_Click(sender,e);
         }
 
         private void vERToolStripMenuItem_Click(object sender, EventArgs e)
@@ -482,6 +603,17 @@ namespace WindowsFormsApplication1
             cpsel(s);
 
         }
+
+        private void checkBox1_Click(object sender, EventArgs e)
+        {
+            checkBox1.Checked = !checkBox1.Checked;
+        }
+
+        private void checkBox2_Click(object sender, EventArgs e)
+        {
+            checkBox2.Checked = !checkBox2.Checked;
+        }
+
 
         
     }
