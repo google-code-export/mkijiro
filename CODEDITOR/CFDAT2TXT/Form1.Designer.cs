@@ -29,28 +29,31 @@
         private void InitializeComponent()
         {
             this.treeView1 = new System.Windows.Forms.TreeView();
-            this.button1 = new System.Windows.Forms.Button();
             this.gameid = new System.Windows.Forms.TextBox();
             this.codename = new System.Windows.Forms.TextBox();
             this.codehex = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.OUT = new System.Windows.Forms.Button();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.cmtb = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fILEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.oPENToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cONVERTTXTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.OPEN = new System.Windows.Forms.ToolStripMenuItem();
+            this.CONVERTTXT = new System.Windows.Forms.ToolStripMenuItem();
             this.eNCODEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uTF16BE1201 = new System.Windows.Forms.ToolStripMenuItem();
             this.sJIS932 = new System.Windows.Forms.ToolStripMenuItem();
             this.eUC51932 = new System.Windows.Forms.ToolStripMenuItem();
             this.gBK936 = new System.Windows.Forms.ToolStripMenuItem();
             this.vERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.CONVERTDAT = new System.Windows.Forms.ToolStripMenuItem();
+            this.sETTINGToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.SAVE = new System.Windows.Forms.Button();
+            this.checkBox1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkBox2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.label5 = new System.Windows.Forms.Label();
+            this.gtitle = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -66,28 +69,19 @@
             this.treeView1.DragDrop += new System.Windows.Forms.DragEventHandler(this.treeView1_DragDrop);
             this.treeView1.DragEnter += new System.Windows.Forms.DragEventHandler(this.treeView1_DragEnter);
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(282, 29);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "LOAD DAT";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // gameid
             // 
             this.gameid.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.gameid.Location = new System.Drawing.Point(287, 91);
+            this.gameid.Location = new System.Drawing.Point(289, 87);
             this.gameid.Name = "gameid";
+            this.gameid.ReadOnly = true;
             this.gameid.Size = new System.Drawing.Size(100, 25);
             this.gameid.TabIndex = 2;
             // 
             // codename
             // 
             this.codename.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.codename.Location = new System.Drawing.Point(287, 137);
+            this.codename.Location = new System.Drawing.Point(287, 141);
             this.codename.Name = "codename";
             this.codename.Size = new System.Drawing.Size(204, 25);
             this.codename.TabIndex = 3;
@@ -114,7 +108,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(289, 119);
+            this.label2.Location = new System.Drawing.Point(287, 126);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(68, 12);
             this.label2.TabIndex = 6;
@@ -123,31 +117,11 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(287, 73);
+            this.label3.Location = new System.Drawing.Point(287, 72);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(48, 12);
             this.label3.TabIndex = 7;
             this.label3.Text = "GAMEID";
-            // 
-            // OUT
-            // 
-            this.OUT.Location = new System.Drawing.Point(376, 29);
-            this.OUT.Name = "OUT";
-            this.OUT.Size = new System.Drawing.Size(115, 23);
-            this.OUT.TabIndex = 8;
-            this.OUT.Text = "CONVERT TXT";
-            this.OUT.UseVisualStyleBackColor = true;
-            this.OUT.Click += new System.EventHandler(this.OUT_Click);
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(393, 58);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(96, 16);
-            this.checkBox1.TabIndex = 9;
-            this.checkBox1.Text = "CWCFORMAT";
-            this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // cmtb
             // 
@@ -162,7 +136,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(291, 324);
+            this.label4.Location = new System.Drawing.Point(287, 327);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(61, 12);
             this.label4.TabIndex = 11;
@@ -173,6 +147,7 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fILEToolStripMenuItem,
             this.eNCODEToolStripMenuItem,
+            this.sETTINGToolStripMenuItem,
             this.vERToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -183,25 +158,26 @@
             // fILEToolStripMenuItem
             // 
             this.fILEToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.oPENToolStripMenuItem,
-            this.cONVERTTXTToolStripMenuItem});
+            this.OPEN,
+            this.CONVERTTXT,
+            this.CONVERTDAT});
             this.fILEToolStripMenuItem.Name = "fILEToolStripMenuItem";
             this.fILEToolStripMenuItem.Size = new System.Drawing.Size(46, 22);
             this.fILEToolStripMenuItem.Text = "FILE";
             // 
-            // oPENToolStripMenuItem
+            // OPEN
             // 
-            this.oPENToolStripMenuItem.Name = "oPENToolStripMenuItem";
-            this.oPENToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.oPENToolStripMenuItem.Text = "OPEN";
-            this.oPENToolStripMenuItem.Click += new System.EventHandler(this.oPENToolStripMenuItem_Click);
+            this.OPEN.Name = "OPEN";
+            this.OPEN.Size = new System.Drawing.Size(160, 22);
+            this.OPEN.Text = "ファイルを開く";
+            this.OPEN.Click += new System.EventHandler(this.button1_Click);
             // 
-            // cONVERTTXTToolStripMenuItem
+            // CONVERTTXT
             // 
-            this.cONVERTTXTToolStripMenuItem.Name = "cONVERTTXTToolStripMenuItem";
-            this.cONVERTTXTToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.cONVERTTXTToolStripMenuItem.Text = "CONVERT TXT";
-            this.cONVERTTXTToolStripMenuItem.Click += new System.EventHandler(this.cONVERTTXTToolStripMenuItem_Click);
+            this.CONVERTTXT.Name = "CONVERTTXT";
+            this.CONVERTTXT.Size = new System.Drawing.Size(160, 22);
+            this.CONVERTTXT.Text = "TXTで保存";
+            this.CONVERTTXT.Click += new System.EventHandler(this.OUT_Click);
             // 
             // eNCODEToolStripMenuItem
             // 
@@ -251,34 +227,84 @@
             this.vERToolStripMenuItem.Text = "VER";
             this.vERToolStripMenuItem.Click += new System.EventHandler(this.vERToolStripMenuItem_Click);
             // 
+            // CONVERTDAT
+            // 
+            this.CONVERTDAT.Name = "CONVERTDAT";
+            this.CONVERTDAT.Size = new System.Drawing.Size(160, 22);
+            this.CONVERTDAT.Text = "DATで保存";
+            this.CONVERTDAT.Click += new System.EventHandler(this.OUTDAT_Click);
+            // 
+            // sETTINGToolStripMenuItem
+            // 
+            this.sETTINGToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.checkBox1,
+            this.checkBox2});
+            this.sETTINGToolStripMenuItem.Name = "sETTINGToolStripMenuItem";
+            this.sETTINGToolStripMenuItem.Size = new System.Drawing.Size(74, 22);
+            this.sETTINGToolStripMenuItem.Text = "SETTING";
+            // 
+            // SAVE
+            // 
+            this.SAVE.Location = new System.Drawing.Point(410, 91);
+            this.SAVE.Name = "SAVE";
+            this.SAVE.Size = new System.Drawing.Size(75, 23);
+            this.SAVE.TabIndex = 14;
+            this.SAVE.Text = "SAVE";
+            this.SAVE.UseVisualStyleBackColor = true;
+            this.SAVE.Click += new System.EventHandler(this.SAVE_Click);
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.Checked = true;
+            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(267, 22);
+            this.checkBox1.Text = "CWC形式でTXT出力する";
+            this.checkBox1.ToolTipText = "TXT出力時CWCHEAT\r\n_L 0x12345678 0xABCDEF000";
+            this.checkBox1.Click += new System.EventHandler(this.checkBox1_Click);
+            // 
             // checkBox2
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(393, 80);
             this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(101, 16);
-            this.checkBox2.TabIndex = 13;
-            this.checkBox2.Text = "DECRYPTCWC";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
+            this.checkBox2.Size = new System.Drawing.Size(267, 22);
+            this.checkBox2.Text = "CODEFREAK暗号コードを復号する";
+            this.checkBox2.ToolTipText = "CODEFRAK暗号コードを復号して保存します\r\nDAT保存時は(M)の下3桁に800を追加してCWC生コードモードにします\r\nアドレス部;XORMASK 0xD" +
+    "6F73BEE\r\n";
+            this.checkBox2.Click += new System.EventHandler(this.checkBox2_Click);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(287, 29);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(67, 12);
+            this.label5.TabIndex = 15;
+            this.label5.Text = "GAMETITLE";
+            // 
+            // gtitle
+            // 
+            this.gtitle.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.gtitle.Location = new System.Drawing.Point(287, 44);
+            this.gtitle.Name = "gtitle";
+            this.gtitle.Size = new System.Drawing.Size(204, 25);
+            this.gtitle.TabIndex = 16;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(505, 423);
-            this.Controls.Add(this.checkBox2);
+            this.Controls.Add(this.gtitle);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.SAVE);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.cmtb);
-            this.Controls.Add(this.checkBox1);
-            this.Controls.Add(this.OUT);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.codehex);
             this.Controls.Add(this.codename);
             this.Controls.Add(this.gameid);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.treeView1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
@@ -296,28 +322,31 @@
         #endregion
 
         private System.Windows.Forms.TreeView treeView1;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox gameid;
         private System.Windows.Forms.TextBox codename;
         private System.Windows.Forms.TextBox codehex;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button OUT;
-        private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.TextBox cmtb;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fILEToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem oPENToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem cONVERTTXTToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem OPEN;
+        private System.Windows.Forms.ToolStripMenuItem CONVERTTXT;
         private System.Windows.Forms.ToolStripMenuItem vERToolStripMenuItem;
-        private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.ToolStripMenuItem eNCODEToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sJIS932;
         private System.Windows.Forms.ToolStripMenuItem eUC51932;
         private System.Windows.Forms.ToolStripMenuItem gBK936;
         private System.Windows.Forms.ToolStripMenuItem uTF16BE1201;
+        private System.Windows.Forms.ToolStripMenuItem CONVERTDAT;
+        private System.Windows.Forms.ToolStripMenuItem sETTINGToolStripMenuItem;
+        private System.Windows.Forms.Button SAVE;
+        private System.Windows.Forms.ToolStripMenuItem checkBox1;
+        private System.Windows.Forms.ToolStripMenuItem checkBox2;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox gtitle;
     }
 }
 
