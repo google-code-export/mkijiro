@@ -28,7 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.treeView1 = new System.Windows.Forms.TreeView();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ゲーム追加 = new System.Windows.Forms.ToolStripMenuItem();
+            this.コード追加 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.コード削除 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.パーサー = new System.Windows.Forms.ToolStripMenuItem();
+            this.コード暗号化復号 = new System.Windows.Forms.ToolStripMenuItem();
             this.gameid = new System.Windows.Forms.TextBox();
             this.codename = new System.Windows.Forms.TextBox();
             this.codehex = new System.Windows.Forms.TextBox();
@@ -41,37 +50,101 @@
             this.fILEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.OPEN = new System.Windows.Forms.ToolStripMenuItem();
             this.CONVERTTXT = new System.Windows.Forms.ToolStripMenuItem();
+            this.CONVERTDAT = new System.Windows.Forms.ToolStripMenuItem();
             this.eNCODEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uTF16BE1201 = new System.Windows.Forms.ToolStripMenuItem();
             this.sJIS932 = new System.Windows.Forms.ToolStripMenuItem();
             this.eUC51932 = new System.Windows.Forms.ToolStripMenuItem();
             this.gBK936 = new System.Windows.Forms.ToolStripMenuItem();
-            this.vERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.CONVERTDAT = new System.Windows.Forms.ToolStripMenuItem();
+            this.PARSER = new System.Windows.Forms.ToolStripMenuItem();
             this.sETTINGToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.SAVE = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.ToolStripMenuItem();
             this.checkBox2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.vERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.SAVE = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.gtitle = new System.Windows.Forms.TextBox();
+            this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // treeView1
             // 
             this.treeView1.AllowDrop = true;
+            this.treeView1.ContextMenuStrip = this.contextMenuStrip1;
             this.treeView1.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.treeView1.Location = new System.Drawing.Point(12, 29);
             this.treeView1.Name = "treeView1";
             this.treeView1.Size = new System.Drawing.Size(248, 380);
             this.treeView1.TabIndex = 0;
+            this.treeView1.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.TreeView1_ItemDrag);
             this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
-            this.treeView1.DragDrop += new System.Windows.Forms.DragEventHandler(this.treeView1_DragDrop);
+            this.treeView1.DragDrop += new System.Windows.Forms.DragEventHandler(this.TreeView1_DragDrop);
             this.treeView1.DragEnter += new System.Windows.Forms.DragEventHandler(this.treeView1_DragEnter);
+            this.treeView1.DragOver += new System.Windows.Forms.DragEventHandler(this.TreeView1_DragOver);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ゲーム追加,
+            this.コード追加,
+            this.toolStripSeparator1,
+            this.コード削除,
+            this.toolStripSeparator2,
+            this.パーサー,
+            this.コード暗号化復号});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(178, 126);
+            // 
+            // ゲーム追加
+            // 
+            this.ゲーム追加.Name = "ゲーム追加";
+            this.ゲーム追加.Size = new System.Drawing.Size(177, 22);
+            this.ゲーム追加.Text = "ゲーム追加";
+            this.ゲーム追加.Click += new System.EventHandler(this.ゲーム追加_Click);
+            // 
+            // コード追加
+            // 
+            this.コード追加.Name = "コード追加";
+            this.コード追加.Size = new System.Drawing.Size(177, 22);
+            this.コード追加.Text = "コード追加";
+            this.コード追加.Click += new System.EventHandler(this.コード追加_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(174, 6);
+            // 
+            // コード削除
+            // 
+            this.コード削除.Name = "コード削除";
+            this.コード削除.Size = new System.Drawing.Size(177, 22);
+            this.コード削除.Text = "コード削除";
+            this.コード削除.Click += new System.EventHandler(this.コード削除_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(174, 6);
+            // 
+            // パーサー
+            // 
+            this.パーサー.Name = "パーサー";
+            this.パーサー.Size = new System.Drawing.Size(177, 22);
+            this.パーサー.Text = "パーサー";
+            this.パーサー.Click += new System.EventHandler(this.PARSER_Click);
+            // 
+            // コード暗号化復号
+            // 
+            this.コード暗号化復号.Name = "コード暗号化復号";
+            this.コード暗号化復号.Size = new System.Drawing.Size(177, 22);
+            this.コード暗号化復号.Text = "コード暗号化/復号";
+            this.コード暗号化復号.Click += new System.EventHandler(this.コード暗号化復号ToolStripMenuItem_Click);
             // 
             // gameid
             // 
             this.gameid.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.gameid.ImeMode = System.Windows.Forms.ImeMode.Disable;
             this.gameid.Location = new System.Drawing.Point(289, 87);
             this.gameid.Name = "gameid";
             this.gameid.ReadOnly = true;
@@ -80,6 +153,7 @@
             // 
             // codename
             // 
+            this.codename.Enabled = false;
             this.codename.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.codename.Location = new System.Drawing.Point(287, 141);
             this.codename.Name = "codename";
@@ -88,13 +162,16 @@
             // 
             // codehex
             // 
-            this.codehex.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.codehex.Enabled = false;
+            this.codehex.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.codehex.ImeMode = System.Windows.Forms.ImeMode.Disable;
             this.codehex.Location = new System.Drawing.Point(287, 188);
             this.codehex.Multiline = true;
             this.codehex.Name = "codehex";
             this.codehex.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.codehex.Size = new System.Drawing.Size(204, 128);
             this.codehex.TabIndex = 4;
+            this.codehex.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox1_KeyPress);
             // 
             // label1
             // 
@@ -129,6 +206,7 @@
             this.cmtb.Location = new System.Drawing.Point(287, 342);
             this.cmtb.Multiline = true;
             this.cmtb.Name = "cmtb";
+            this.cmtb.ReadOnly = true;
             this.cmtb.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.cmtb.Size = new System.Drawing.Size(204, 67);
             this.cmtb.TabIndex = 10;
@@ -147,6 +225,7 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fILEToolStripMenuItem,
             this.eNCODEToolStripMenuItem,
+            this.PARSER,
             this.sETTINGToolStripMenuItem,
             this.vERToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
@@ -178,6 +257,13 @@
             this.CONVERTTXT.Size = new System.Drawing.Size(160, 22);
             this.CONVERTTXT.Text = "TXTで保存";
             this.CONVERTTXT.Click += new System.EventHandler(this.OUT_Click);
+            // 
+            // CONVERTDAT
+            // 
+            this.CONVERTDAT.Name = "CONVERTDAT";
+            this.CONVERTDAT.Size = new System.Drawing.Size(160, 22);
+            this.CONVERTDAT.Text = "DATで保存";
+            this.CONVERTDAT.Click += new System.EventHandler(this.OUTDAT_Click);
             // 
             // eNCODEToolStripMenuItem
             // 
@@ -220,19 +306,12 @@
             this.gBK936.Text = "GBK(936)";
             this.gBK936.Click += new System.EventHandler(this.eNCODEToolStripMenuItem_Click);
             // 
-            // vERToolStripMenuItem
+            // PARSER
             // 
-            this.vERToolStripMenuItem.Name = "vERToolStripMenuItem";
-            this.vERToolStripMenuItem.Size = new System.Drawing.Size(43, 22);
-            this.vERToolStripMenuItem.Text = "VER";
-            this.vERToolStripMenuItem.Click += new System.EventHandler(this.vERToolStripMenuItem_Click);
-            // 
-            // CONVERTDAT
-            // 
-            this.CONVERTDAT.Name = "CONVERTDAT";
-            this.CONVERTDAT.Size = new System.Drawing.Size(160, 22);
-            this.CONVERTDAT.Text = "DATで保存";
-            this.CONVERTDAT.Click += new System.EventHandler(this.OUTDAT_Click);
+            this.PARSER.Name = "PARSER";
+            this.PARSER.Size = new System.Drawing.Size(66, 22);
+            this.PARSER.Text = "PARSER";
+            this.PARSER.Click += new System.EventHandler(this.PARSER_Click);
             // 
             // sETTINGToolStripMenuItem
             // 
@@ -242,16 +321,6 @@
             this.sETTINGToolStripMenuItem.Name = "sETTINGToolStripMenuItem";
             this.sETTINGToolStripMenuItem.Size = new System.Drawing.Size(74, 22);
             this.sETTINGToolStripMenuItem.Text = "SETTING";
-            // 
-            // SAVE
-            // 
-            this.SAVE.Location = new System.Drawing.Point(410, 91);
-            this.SAVE.Name = "SAVE";
-            this.SAVE.Size = new System.Drawing.Size(75, 23);
-            this.SAVE.TabIndex = 14;
-            this.SAVE.Text = "SAVE";
-            this.SAVE.UseVisualStyleBackColor = true;
-            this.SAVE.Click += new System.EventHandler(this.SAVE_Click);
             // 
             // checkBox1
             // 
@@ -272,6 +341,23 @@
     "6F73BEE\r\n";
             this.checkBox2.Click += new System.EventHandler(this.checkBox2_Click);
             // 
+            // vERToolStripMenuItem
+            // 
+            this.vERToolStripMenuItem.Name = "vERToolStripMenuItem";
+            this.vERToolStripMenuItem.Size = new System.Drawing.Size(43, 22);
+            this.vERToolStripMenuItem.Text = "VER";
+            this.vERToolStripMenuItem.Click += new System.EventHandler(this.vERToolStripMenuItem_Click);
+            // 
+            // SAVE
+            // 
+            this.SAVE.Location = new System.Drawing.Point(410, 91);
+            this.SAVE.Name = "SAVE";
+            this.SAVE.Size = new System.Drawing.Size(75, 23);
+            this.SAVE.TabIndex = 14;
+            this.SAVE.Text = "SAVE";
+            this.SAVE.UseVisualStyleBackColor = true;
+            this.SAVE.Click += new System.EventHandler(this.SAVE_Click);
+            // 
             // label5
             // 
             this.label5.AutoSize = true;
@@ -283,6 +369,7 @@
             // 
             // gtitle
             // 
+            this.gtitle.Enabled = false;
             this.gtitle.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.gtitle.Location = new System.Drawing.Point(287, 44);
             this.gtitle.Name = "gtitle";
@@ -312,6 +399,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "CFDAT2TXT";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+            this.contextMenuStrip1.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -347,6 +435,15 @@
         private System.Windows.Forms.ToolStripMenuItem checkBox2;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox gtitle;
+        private System.Windows.Forms.ToolStripMenuItem PARSER;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem ゲーム追加;
+        private System.Windows.Forms.ToolStripMenuItem コード追加;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem パーサー;
+        private System.Windows.Forms.ToolStripMenuItem コード暗号化復号;
+        private System.Windows.Forms.ToolStripMenuItem コード削除;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
     }
 }
 
