@@ -13,6 +13,7 @@ char LANG_TABLETITLE [] __attribute__(   (  aligned( 1 ), section( ".data" )  ) 
 char LANG_TABLEP3 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "○ 変更";
 char LANG_TABLEP4 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "× 変更";
 char LANG_NEWADDR [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "こーど追加";
+char LANG_NEWADDR2 [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "こーど追加(CODEFREAK)";
 
 char LANG_SEARCH [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "検索:";
 
@@ -41,8 +42,8 @@ char LANG_CINP1 [][19] __attribute__(   (  aligned( 1 ), section( ".data" )  )  
 "SELECT  大小  英文",
 "SELECT  全角入力"
 };
-char LANG_CINPHEX [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) ={"16進数   "};
-char LANG_CINPDEC [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) ={"10進数   "};
+char LANG_CINPHEX [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) ={"16進数　　　 "};
+char LANG_CINPDEC [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) ={"10進数　　　 "};
 char LANG_CINPFLOATDEC [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) ={"浮動小数点"};
 //layout.c
 char LAYOUT_READ_HELP [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "START りねーむ,SEL 削除,□ FATロング名切替";
