@@ -200,6 +200,9 @@ int ui_menu(int x, int y, const char ** item, int count, int pagecount, int sidx
 		int rs = -1;
 		if(cbfunc == NULL || (rs = cbfunc(key, &sidx, &topidx)) < 0){
 			oidx = sidx - topidx;
+			if(rs==-2){
+			return  - sidx -1;
+			}
 			switch(key)
 			{
 			case PSP_CTRL_UP:

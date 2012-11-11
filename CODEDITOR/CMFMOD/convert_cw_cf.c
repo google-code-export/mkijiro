@@ -21,6 +21,8 @@
 #define DB_SECT (32*1024)
 #define READDB_SECT (64*1024)
 
+char cfencription=0;
+
 static char CWDB_DIR [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "ms0:/PICTURE/CWC/cheat.db";
 //static char pattern[]__attribute__(   (  aligned( 1 ), section( ".data" )  )   )={0x0A,'_','S'};
 
@@ -105,6 +107,42 @@ static char* read_line(char *p, char *buf)
 	else return 0;
 }
 
+/*
+static char* read_cf(char *p, char *buf)
+{
+	int i;
+	buf[0]=0;
+	do{
+		i=0;
+		while(p[i]!=0x0A && p[i+1]!=0xA){
+			if(p[i]==0) {
+				if(i<300){
+				strcpy(buf,p);
+				}
+				else{
+				mips_memcpy(buf,p,300);
+				}
+				return 0;
+			}
+			p+=2;
+		}
+		while(p[i]==0x0A || p[i+1]==0x0A){
+			p+=2;
+			p[i]=0;
+		}
+		
+				if(i<300){
+				strcpy(buf,p);
+				}
+				else{
+				mips_memcpy(buf,p,300);
+				}
+		p=(char *)((unsigned int)p+i);
+	}while(buf[0]!='_');
+	
+	if(p[0]!=0) return p;
+	else return 0;
+}*/
 
 static char* read_name(char *p, char *buf, int len)
 {
@@ -118,6 +156,7 @@ static char* read_name(char *p, char *buf, int len)
 	buf[x]=0;
 	return (char*)(p+x);
 }
+
 
 static int read_cwdb(char *filename, char *gameid)
 {
@@ -172,12 +211,16 @@ static int read_cwdb(char *filename, char *gameid)
 	char namebuf[80];
 	char *namep;
 	char nullcode=0;
+	char enc=0;
 	while(1){
 	//金手指码部分	
 		p=read_line(p,cw_buf);
 		
 		if(cw_buf[0]=='_'){
-		if(cw_buf[1]=='C'){
+		if(cw_buf[1]=='E'){
+			enc=!enc;
+		}
+		else if(cw_buf[1]=='C'){
 			if(nullcode==1) {
 			t.addr=0x8800000;
 			t.value=0;
@@ -211,7 +254,11 @@ static int read_cwdb(char *filename, char *gameid)
 				t.name[1]=0;
 			}
 			char *tempptr;
-			address=(strtoul(cw_buf+2,&tempptr,16)^0xd6f73bee) +0x08800000;
+			address=strtoul(cw_buf+2,&tempptr,16);
+			if(enc){
+			address ^=0xd6f73bee;
+			}
+			address +=+0x08800000;
 			val=strtoul(tempptr,NULL,16);
 			t.addr=address;
 			t.value=val;
@@ -229,6 +276,8 @@ static int read_cwdb(char *filename, char *gameid)
 	
 READOUT:
 	closefile(&pf);
+	cfencription=enc;
+	
 	return 0;
 }
 

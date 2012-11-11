@@ -40,6 +40,7 @@ typedef struct
 	unsigned int val;
 }  VISUALCODE;
 
+extern char cfencription;
 
 typedef struct
 {
@@ -1365,6 +1366,8 @@ extern void mem_table_savecw()
 {
 	char s[300];
 	char fn[80];
+	char enc=cfencription;
+	int addr=0;
 	if(mem_gv.mem_table_size==0) return;
 	sceIoMkdir(CMF_DIR, 0777);
 	mips_memcpy(fn, ui_get_gamename(), 29);
@@ -1398,6 +1401,10 @@ extern void mem_table_savecw()
 		fn[64]=0;
 		sprintf(s,"_G %s\n",fn);
 		sceIoWrite(fd, s, strlen(s));
+		if(enc){
+		sprintf(s,"_E\n",fn);
+		sceIoWrite(fd, s, strlen(s));
+		}
 	//int i,j;
 	for(i = 0; i < mem_gv.mem_table_size;){
 		sprintf(fn,"_C%d ",mem_gv.mem_table[i].lock);
@@ -1411,7 +1418,12 @@ extern void mem_table_savecw()
 			if(j==i){
 				sceIoWrite(fd, fn, strlen(fn));
 			}
-			sprintf(s,"_L 0x%08X 0x%08X\n",mem_table_ConvertTabType(&mem_gv.mem_table[j]),mem_gv.mem_table[j].value);
+			
+			addr=mem_table_ConvertTabType(&mem_gv.mem_table[j]);
+		if(enc){
+			addr ^=0xD6F73BEE;
+		}			
+			sprintf(s,"_L 0x%08X 0x%08X\n",addr,mem_gv.mem_table[j].value);
 			sceIoWrite(fd, s, strlen(s)); 			
 		}
 		i = j;

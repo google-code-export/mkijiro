@@ -533,7 +533,7 @@ static int layout_get_table_item(const char * prompt, p_mem_table table)
 	while(1)
 	{
 		ui_cls();
-		font_output(110, 56, prompt);
+		font_output(110, 55, prompt);
 		memset(table->name, 0, 12);
 		strcpy(table->name, "New");
 		font_output(110, 68, LANG_COMMENT);

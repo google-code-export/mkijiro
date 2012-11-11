@@ -52,8 +52,11 @@
 
 #define MEMCLEARLINE_END 92
 #define MEMCLEARLINE_START 90
+#define CFMODECHANGE 0x310
 
 #include "ja_layout_sjis.c"
+
+extern char cfencription;
 
 typedef struct{
 	int width;
@@ -533,7 +536,7 @@ static int layout_get_table_item(const char * prompt, p_mem_table table)
 	while(1)
 	{
 		ui_cls();
-		font_output(110, 56, prompt);
+		font_output(110, 55, prompt);
 		memset(table->name, 0, 12);
 		strcpy(table->name, "New");
 		font_output(110, 68, LANG_COMMENT);
@@ -660,25 +663,49 @@ static void layout_table_display(const char **s)
 static void layout_table_printname(p_mem_table table, int idx)
 {
 	char sname[12];
+	int addr=0;
 	mips_memcpy(sname,table[idx].name, 10);
 	sname[10]=0;
-	sprintf((char *)&g_text_array[idx][0], "%-10s 0x%08X 0x%08X %-4s%4s", sname, (table[idx].addr - 0x08800000)^0xD6F73BEE, table[idx].value, menu_change[table[idx].type], menu_yesno[1 - table[idx].lock]);
+	addr=(table[idx].addr - 0x08800000);
+	if(cfencription){
+	addr^=0xD6F73BEE;
+	}
+	sprintf((char *)&g_text_array[idx][0], "%-10s 0x%08X 0x%08X %-4s%4s", sname, addr, table[idx].value, menu_change[table[idx].type], menu_yesno[1 - table[idx].lock]);
 	layout_table_display(layout_table_detail);
 }
 
+
+//コード編集
 static int layout_table_cb(unsigned int key, int *id, int *topid)
 {
 	int idx = *id;
 	p_mem_table table;
-	layout_gv.tc = mem_get_table(&table);
+	layout_gv.tc = mem_get_table(&table);	
+	
+	char cfenc=0;
+	if((PSP_CTRL_LEFT & key) == PSP_CTRL_LEFT){
+		cfenc=1;
+	}
 	unsigned int compareval;
-	if((config.swap && key == PSP_CTRL_CROSS) || (!config.swap && key == PSP_CTRL_CIRCLE))
+	
+	
+	if((config.swap && (key & PSP_CTRL_CROSS) == PSP_CTRL_CROSS) || (!config.swap && (key & PSP_CTRL_CIRCLE) == PSP_CTRL_CIRCLE))
 	{
 		while(1)
 		{
+			if(cfenc!=0){
+			font_fillrect(100, 158, 379, 231);
+			font_output(110, 158, "//CODEFREAKMODE ");
+			layout_gv.sa = (table[idx].addr - 0x08800000)^0xD6F73BEE;
+			}
+			else{
 			font_fillrect(100, 168, 379, 231);
-			font_output(110, 170, LANG_ADDRESS);
 			layout_gv.sa = table[idx].addr - 0x08800000;
+			}
+			
+			font_output(110, 170, LANG_ADDRESS);
+			
+			
 			int r = ui_input_hex(164, 170, layout_gv.sa, &layout_gv.sa, 0, 0xFFFFFFFF);
 			if(r < 0)
 				break;
@@ -707,7 +734,12 @@ static int layout_table_cb(unsigned int key, int *id, int *topid)
 				continue;
 			t_mem_table t;
 			mips_memcpy(t.name, table[idx].name, 31);
+			if(cfenc){
+				t.addr = (layout_gv.sa ^ 0xD6F73BEE) + 0x08800000;
+			}
+			else{
 			t.addr = layout_gv.sa + 0x08800000;
+			}
 			t.value = layout_gv.sv;
 			t.type = idx1;
 			t.lock = table[idx].lock;
@@ -746,7 +778,7 @@ static int layout_table_cb(unsigned int key, int *id, int *topid)
 				sprintf((char *)((&g_text_array[i][0])+37), "%4s", menu_yesno[1 - table[i].lock]);
 			return 3;
 	}
-	else if(key == PSP_CTRL_START)
+	else if(key == PSP_CTRL_START || key == (PSP_CTRL_START|PSP_CTRL_LEFT))
 	{
 		t_mem_table t;
 		if(layout_gv.sa != 0)
@@ -756,13 +788,32 @@ static int layout_table_cb(unsigned int key, int *id, int *topid)
 /* 			p_mem_table table;
 			layout_gv.tc = mem_get_table(&table); */
 			//if(layout_gv.tc > idx)
-				t.addr = table[idx].addr - 0x08800000;
+			if(cfenc!=0){
+			t.addr  = (table[idx].addr - 0x08800000)^0xD6F73BEE;
+			}
+			else{
+			t.addr = table[idx].addr - 0x08800000;
+			}
+			
 			//else
 				//t.addr = 0;
 		}
-		if(layout_get_table_item(LANG_NEWADDR, &t) < 0)
+		char *p;
+		p=LANG_NEWADDR;
+			if(cfenc!=0){
+		p=LANG_NEWADDR2;
+			}
+		
+		if(layout_get_table_item(p, &t) < 0)
 			return 2;
+		
+		
+		if(cfenc!=0){
+		t.addr  = (t.addr ^0xD6F73BEE)+ 0x08800000;
+		}
+		else{
 		t.addr += 0x08800000;
+		}
 		//mem_table_add(&t);
 		mem_table_insert(&t, idx);
 		return 2;
@@ -771,6 +822,10 @@ static int layout_table_cb(unsigned int key, int *id, int *topid)
 	{
 		mem_table_delete(idx);
 		return 2;
+	}
+	else if(key == CFMODECHANGE){
+		cfencription=!cfencription;
+		return -2;
 	}
  	else{
 		if(key == PSP_ANA_UP){
@@ -881,7 +936,8 @@ table_summary:
 		else
 			idx = nc_buf[nidx];
 	}
-
+	int addr=0;
+	char enc=cfencription;
 	while(1)
 	{
 		p_mem_table table;
@@ -889,7 +945,12 @@ table_summary:
 		for(i = 0; i < layout_gv.tc; i ++){
 			mips_memcpy(s, table[i].name, 10);
 			s[10] = 0;
-			sprintf((char *)&text_array[i][0], "%-11s0x%08X 0x%08X %-4s%4s", s, (table[i].addr - 0x08800000)^0xD6F73BEE, table[i].value, menu_change[table[i].type], menu_yesno[1 - table[i].lock]);
+			addr=(table[i].addr - 0x08800000);
+			if(enc){
+				addr^=0xD6F73BEE;
+			}
+			sprintf((char *)&text_array[i][0], "%-11s0x%08X 0x%08X %-4s%4s", s, addr, table[i].value, menu_change[table[i].type], menu_yesno[1 - table[i].lock]);
+
 		}
 		layout_table_display(layout_table_detail);
 		idx = ui_menu(110, 68, text_array, layout_gv.tc, 10, idx, layout_table_cb);

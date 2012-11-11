@@ -33,6 +33,7 @@ extern char LANG_TABLEP3 [] ;
 extern char LANG_TABLEP4 [] ;
 
 extern char LANG_NEWADDR [] ;
+extern char LANG_NEWADDR2 [] ;
 
 extern char LANG_SEARCH [] ;
 
