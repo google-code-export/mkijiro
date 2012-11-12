@@ -179,7 +179,7 @@ int ui_menu(int x, int y, const char ** item, int count, int pagecount, int sidx
 		switch(rp)
 		{
 		case 2:
-			font_fillrect(x, y - 2, 379, y + pagecount * 12 - 3);
+			font_fillrect(x, y - 2, 379, y + pagecount * 12 );//-3
 			if(pagecount < count)
 			{
 				font_line(x + 1, y - 2, x + 1, y + pagecount * 12 - 3);

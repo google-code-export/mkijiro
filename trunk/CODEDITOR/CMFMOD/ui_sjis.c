@@ -179,7 +179,7 @@ int ui_menu(int x, int y, const char ** item, int count, int pagecount, int sidx
 		switch(rp)
 		{
 		case 2:
-			font_fillrect(x, y - 2, 379, y + pagecount * 12 - 3);
+			font_fillrect(x, y - 2, 379, y + pagecount * 12 );//-3
 			if(pagecount < count)
 			{
 				font_line(x + 1, y - 2, x + 1, y + pagecount * 12 - 3);
@@ -190,7 +190,7 @@ int ui_menu(int x, int y, const char ** item, int count, int pagecount, int sidx
 				font_output(x + 12, y + i * 12, item[i + topidx]);
 		case 1:
 			//if(rp == 1)
-				font_fillrect(x + 4, y + oidx * 12 - 2, x + 11, y + oidx * 12 + 9);
+			font_fillrect(x + 4, y + oidx * 12 - 2, x + 11, y + oidx * 12 + 9);
 			font_output(x + 4, y + (sidx - topidx) * 12, ">");
 			font_refresh();
 			rp = 0;

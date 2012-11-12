@@ -1,5 +1,6 @@
 extern int convert(char *);
 extern int convert_cmf(char *);
+extern int convert_cf(char *);
 
 #define MAX_READ_BUFFER 64*1024
 
