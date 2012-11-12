@@ -785,18 +785,12 @@ static int layout_table_cb(unsigned int key, int *id, int *topid)
 			t.addr = layout_gv.sa;
 		else
 		{
-/* 			p_mem_table table;
-			layout_gv.tc = mem_get_table(&table); */
-			//if(layout_gv.tc > idx)
 			if(cfenc!=0){
 			t.addr  = (table[idx].addr - 0x08800000)^0xD6F73BEE;
 			}
 			else{
 			t.addr = table[idx].addr - 0x08800000;
 			}
-			
-			//else
-				//t.addr = 0;
 		}
 		char *p;
 		p=LANG_NEWADDR;
@@ -949,7 +943,7 @@ table_summary:
 			if(enc){
 				addr^=0xD6F73BEE;
 			}
-			sprintf((char *)&text_array[i][0], "%-11s0x%08X 0x%08X %-4s%4s", s, addr, table[i].value, menu_change[table[i].type], menu_yesno[1 - table[i].lock]);
+			sprintf((char *)&text_array[i][0], "%-10s 0x%08X 0x%08X %-4s%4s", s, addr, table[i].value, menu_change[table[i].type], menu_yesno[1 - table[i].lock]);
 
 		}
 		layout_table_display(layout_table_detail);
@@ -1277,6 +1271,7 @@ static void layout_savetab()
 	mem_table_save(idx);
 }
 
+//保存メニュー
 static void layout_save()
 {
 	int idx;
@@ -2373,8 +2368,11 @@ static int img_popsdoc(char* filename)
 	return 1;
 }
 
+//#define CFDAT 9
+//,"dat"
+
 static char layout_read_ext[][4] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = {
-"txt","fnt","set","cmf","mem","dat","png","jpg","mcr",
+"txt","fnt","set","cmf","mem","dat","png","jpg","mcr"
 };
 
 static void strip_filename(char *filename, int idx)
@@ -2553,7 +2551,7 @@ static int	layout_read_cb(unsigned int key, int *id, int *topid)
 }
 
 static void * layout_read_fun[] = {
-layout_read_text,write_psfont,keyset_load,convert_cmf,write_mem,img_popsdoc,img_view,img_view,import_psx_mc,
+layout_read_text,write_psfont,keyset_load,convert_cmf,write_mem,img_popsdoc,img_view,img_view,import_psx_mc//,convert_cf
 };
 
 #define FAT_FILEATTR_READONLY	0x01
@@ -2827,6 +2825,7 @@ static void layout_key()
 	}
 }
 
+//読込メニュー
 static void layout_load()
 {
 	int idx;
@@ -2839,8 +2838,9 @@ static void layout_load()
 			layout_read(layout_read_ext[3],NULL);
 			return;
 		case 1:
-			layout_loadtab();
-			layout_gv.table_idx = 0;
+			if(convert_cf(ui_get_gamename())==0)
+				layout_table();
+			return;
 			return;
 		case 2:
 			if(convert(ui_get_gamename())==0)
@@ -2921,6 +2921,8 @@ static void layout_img()
 
 static char dictstr[DICT_MAXWORD_LEN];
 static int lidx;
+
+//全体メニュー
 extern int layout_menu()
 {
 	ctrl_waitrelease();

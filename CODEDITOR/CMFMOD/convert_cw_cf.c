@@ -24,6 +24,7 @@
 char cfencription=0;
 
 static char CWDB_DIR [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "ms0:/PICTURE/CWC/cheat.db";
+static char CF_DIR [] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "ms0:/PICTURE/CWC/cf.dat";
 //static char pattern[]__attribute__(   (  aligned( 1 ), section( ".data" )  )   )={0x0A,'_','S'};
 
 int openfile(const char *filename, PspFile *pFile)
@@ -72,6 +73,37 @@ static int read_sect(int cur, PspFile *pf)
 	return (cur+i+1);
 }
 
+static int read_sect_cf(int cur, PspFile *pf)
+{
+	int readsize;
+	sceIoLseek32(pf->fd, cur, PSP_SEEK_SET);
+	readsize = sceIoRead(pf->fd, pf->buf, READDB_SECT);
+	if(readsize<READDB_SECT){
+		if(readsize>0) pf->buf[readsize]=0;
+		return 0;
+	}
+	
+	//バッファ半分から検索開始
+	int i=DB_SECT;
+	while(1){
+		//G0x20存在、リードサイズを超えみつかったら終了
+		if(*((unsigned short*)(&pf->buf[i]))==0x0A0A){
+			if(*((unsigned short*)(&pf->buf[i+2]))==0x2047){
+			break;
+			}
+		}
+		else if(i>readsize){
+		return -1;
+		}
+		
+		i+=2;
+	}
+
+	pf->buf[i]=0;
+	pf->buf[i+1]=0;
+	return (cur+i+2);
+}
+
 //響函'_'蝕兵議佩,肇廣瞥佩
 static char* read_line(char *p, char *buf)
 {
@@ -81,11 +113,11 @@ static char* read_line(char *p, char *buf)
 		i=0;
 		while(p[i]!=0x0A && p[i]!=0x0D){
 			if(p[i++]==0) {
-				if(i<300){
+				if(i<100){
 				strcpy(buf,p);
 				}
 				else{
-				mips_memcpy(buf,p,300);
+				mips_memcpy(buf,p,100);
 				}
 				return 0;
 			}
@@ -94,11 +126,11 @@ static char* read_line(char *p, char *buf)
 			p[i++]=0;
 		}
 		
-				if(i<300){
+				if(i<100){
 				strcpy(buf,p);
 				}
 				else{
-				mips_memcpy(buf,p,300);
+				mips_memcpy(buf,p,100);
 				}
 		p=(char *)((unsigned int)p+i);
 	}while(buf[0]!='_');
@@ -107,42 +139,51 @@ static char* read_line(char *p, char *buf)
 	else return 0;
 }
 
-/*
-static char* read_cf(char *p, char *buf)
+static char* read_cfline(char *p, char *buf)
 {
 	int i;
-	buf[0]=0;
-	do{
+	*((unsigned short*)(&buf[0]))=0x0;
+	while(1){
 		i=0;
-		while(p[i]!=0x0A && p[i+1]!=0xA){
-			if(p[i]==0) {
-				if(i<300){
-				strcpy(buf,p);
+		while(*((unsigned short*)(p+i))!=0x0A0A){
+			if(*((unsigned short*)(p+i))==0x0){
+				if(i<100){
+				memcpy(buf,p,i);
 				}
 				else{
-				mips_memcpy(buf,p,300);
+				memcpy(buf,p,100);
 				}
 				return 0;
 			}
-			p+=2;
+			i+=2;
 		}
-		while(p[i]==0x0A || p[i+1]==0x0A){
-			p+=2;
-			p[i]=0;
+		*((unsigned short*)(p+i))=0x0;
+			i+=2;
+		
+		if(i<100){
+		memcpy(buf,p,i);
+		}
+		else{
+		memcpy(buf,p,100);
 		}
 		
-				if(i<300){
-				strcpy(buf,p);
-				}
-				else{
-				mips_memcpy(buf,p,300);
-				}
-		p=(char *)((unsigned int)p+i);
-	}while(buf[0]!='_');
-	
-	if(p[0]!=0) return p;
-	else return 0;
-}*/
+		p=p+i;
+		
+		//BIGENDIAN!!
+		switch(*((unsigned short*)(&buf[0]))){
+		case 0x2047:
+		case 0x204D:
+		case 0x2044:
+		case 0x2043:
+			goto exit;
+		break;
+		}
+	}
+	exit:
+		
+	if(*((unsigned short*)(p))==0x0) return 0;
+	else return p;
+}
 
 static char* read_name(char *p, char *buf, int len)
 {
@@ -157,12 +198,191 @@ static char* read_name(char *p, char *buf, int len)
 	return (char*)(p+x);
 }
 
+void sceid2cfid(char *codename,char *gameid){
+	
+		char buf[1];
+		int k=0,j=0,l=0;
+		for(;k<16;k+=2,l++){
+			if(l&1){
+			sprintf(buf,"%1X",gameid[j]&0xF);
+			j++;
+			}
+			else{
+			sprintf(buf,"%1X",gameid[j]>>4);
+			}
+		codename[k]=0;
+		codename[k+1]=buf[0];
+		}
+		for(j=0;k<26;k+=2,j++){
+		codename[k]=0;
+		codename[k+1]=gameid[5+j];
+		}
+		codename[26]=0;
+	
+	
+	return ;
+}
+
+static int read_cf(char *filename, char *gameid)
+{
+	int pos=0;
+	char *p;
+	char cw_buf[100];
+	u32 address=0,val=0;
+	t_mem_table	t;
+	PspFile pf;	
+	
+	if(openfile(filename, &pf)==0) return 1;
+	
+	//if(gameid!=NULL){
+		char codename[27];
+		sceid2cfid(codename,gameid);
+		
+		//do{
+		/*	pos=read_sect_cf(pos,&pf);
+			p=read_cfline(p,cw_buf);
+			if (memcmp(p+2, codename, 26) == 0){
+				p=pf.buf;
+			}
+			else{
+			p=0;
+			}*/
+			
+	/*int fd = sceIoOpen("ms0:/debug.txt", PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
+	sceIoWrite(fd, codename,0x40);
+	sceIoWrite(fd, pf.buf,0x40);
+	if(p>0){
+	sceIoWrite(fd, p,0x40);
+	}
+	sceIoClose(fd);*/
+			
+			//if(p){p=pf.buf; break;}
+		//}while(pos);
+	//}
+	//else{
+		if(read_sect_cf(pos,&pf)==-1){
+		closefile(&pf);
+		return 1;
+		}
+		p=pf.buf;
+	//}
+	
+	if(p==0) {
+	closefile(&pf);
+	return 1;
+	}
+	
+	
+	t_encodepack pack;
+	if(encode_init(&pack) == 0){
+		encode_utf16_conv(p, NULL,&pack,MAX_READ_BUFFER);
+	}
+	else{
+		encode_free(&pack);
+		closefile(&pf);
+		return 1;
+	}
+	encode_free(&pack);
+	
+	//SJISに変換されているか
+	//int fd = sceIoOpen("ms0:/db1.txt", PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
+	//sceIoWrite(fd, p,READDB_SECT);
+	//sceIoClose(fd);
+	//int fd = sceIoOpen("ms0:/db2.txt", PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
+	//sprintf(cw_buf,"%s %X %X",codename,&p[0],&pf.buf[0]);
+	//sceIoWrite(fd, cw_buf,32);
+	//sceIoClose(fd);
+	
+	p=read_line(p,cw_buf);
+	mips_memcpy(ui_get_gamename()+12,cw_buf+2,0x40);
+	
+	char enc=0;
+	int repeat=0;
+	int lock =0;
+	char namebuf[31];
+	char cwc[9];
+	char *namep;
+	char nullcode=0;
+		
+	while(1){
+		p=read_line(p,cw_buf);
+		
+	if(cw_buf[0]=='_'){
+		if(cw_buf[1]=='E'){
+			mips_memcpy(cwc,cw_buf+10,8);
+			val=strtoul(cwc,NULL,16);
+			if((val & 0x800)==0){
+			enc=!enc;
+			}
+		}
+		else if(cw_buf[1]=='C'){
+			if(nullcode==1) {
+			t.addr=0x8800000;
+			t.value=0;
+			t.type=0;
+			t.lock=0;
+			if(mem_table_add(&t)<0) goto READOUT;
+			}
+		repeat=0;
+		namep = namebuf;
+		mips_memcpy(namebuf,cw_buf+2,30);
+		lock = 0;
+		namep = read_name(namep, t.name, 10);
+		mips_memcpy(t.name,namebuf,30);
+		t.name[30]=0;
+		t.name[31]=0;
+		nullcode=1;
+		}
+		else if(cw_buf[1]=='L'){
+			nullcode=0;
+			if(repeat<5){
+				if(repeat==0) {
+				}
+				else{
+					t.name[0] = '+';
+					namep = read_name(namep, t.name+1, 9);
+				}
+				repeat++;
+			}
+			else{
+				t.name[0]='+';
+				t.name[1]=0;
+			}
+			mips_memcpy(cwc,cw_buf+2,8);
+			address=strtoul(cwc,NULL,16);
+			if(enc){
+			address ^=0xd6f73bee;
+			}
+			address +=0x08800000;
+			mips_memcpy(cwc,cw_buf+10,8);
+			val=strtoul(cwc,NULL,16);
+			t.addr=address;
+			t.value=val;
+			t.type=0;
+			t.lock=lock;
+			if(mem_table_add(&t)<0) goto READOUT;
+		}
+		else if(cw_buf[1]=='G'){
+			break;
+		}
+	}
+	if(p==0) break;
+	if(p[0]=='_' && p[1]=='G') break;
+	}
+	
+READOUT:
+	closefile(&pf);
+	cfencription=enc;
+	
+	return 0;
+}
+
 
 static int read_cwdb(char *filename, char *gameid)
 {
 	int pos=0;
 	char *p;
-	char cw_buf[300];
+	char cw_buf[100];
 	u32 address,val;
 	t_mem_table	t;
 	PspFile pf;
@@ -249,7 +469,7 @@ static int read_cwdb(char *filename, char *gameid)
 				}
 				repeat++;
 			}
-			else{//strcpy(t.name,"+");
+			else{
 				t.name[0]='+';
 				t.name[1]=0;
 			}
@@ -258,7 +478,7 @@ static int read_cwdb(char *filename, char *gameid)
 			if(enc){
 			address ^=0xd6f73bee;
 			}
-			address +=+0x08800000;
+			address +=0x08800000;
 			val=strtoul(tempptr,NULL,16);
 			t.addr=address;
 			t.value=val;
@@ -291,5 +511,12 @@ int convert_cmf(char *filename)
 {
 	read_cwdb(filename, NULL);
 	return 0;
+}
+
+
+int convert_cf(char *id)
+{
+	if(read_cf(CF_DIR,id)!=0) return 1;
+	else return 0;
 }
 

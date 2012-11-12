@@ -71,6 +71,18 @@ char FILE_ENCODE(){
 	return filemode;
 }
 
+static int ucs2be_mbtowc (ucs4_t *pwc, const unsigned char *s, int n)
+{
+  if (n >= 2) {
+    if (s[0] >= 0xd8 && s[0] < 0xe0) {
+      return RET_ILSEQ;
+    } else {
+      *pwc = (s[0] << 8) + s[1];
+      return 2;
+    }
+  }
+  return RET_TOOFEW(0);
+}
 
 //ワイド関数utf8をutf32に戻す,libconvのコピペ
 static int utf8_mbtowc(ucs4_t *pwc, const unsigned char *s, int n)
@@ -201,6 +213,29 @@ int encode_uni2cjk_noram(const unsigned char *uni,unsigned char *cjk){
 	}
 	return transcount;
 }
+
+
+/*
+int encode_utf16_conv_noram(const unsigned char *ucs, unsigned char *cjk,int len)
+{
+	
+	int i = 0, j = 0;
+	if(cjk == NULL) cjk = (unsigned char *)ucs;
+
+	while(i < len)
+	{
+		ucs4_t u = 0x1FFF;
+		int p = utf16_mbtowc(&u, ucs + i, len - i);
+		if(p < 0)
+			break;
+		if(u > 0xFFFF)
+			u = 0x1FFF;
+		j += encode_uni2cjk_noram((unsigned char*)&u,cjk + j);
+		i += p;
+	}
+	cjk[j] = 0;
+	return j;
+}*/
 
 extern int encode_utf8_conv_noram(const unsigned char *ucs, unsigned char *cjk)
 {
@@ -363,6 +398,34 @@ static int encode_uni2cjk(const unsigned char *uni,unsigned char *cjk, p_encodep
 		}
 	}
 	return transcount;
+}
+
+
+int encode_utf16_conv(const unsigned char *ucs, unsigned char *cjk, p_encodepack pack,int len)
+{
+	int i = 0, j = 0,p=0;
+	if(cjk == NULL) cjk = (unsigned char *)ucs;
+
+	//テーブルをCWC風ヘッダに改造	
+	*((u16 *)(&pack->UNI_CJK[0x0a0a*2]))=0x0A0D;
+	*((u16 *)(&pack->UNI_CJK[0x4720*2]))=0x475F;//G
+	*((u16 *)(&pack->UNI_CJK[0x4D20*2]))=0x455F;//E
+	*((u16 *)(&pack->UNI_CJK[0x4420*2]))=0x435F;//C
+	*((u16 *)(&pack->UNI_CJK[0x4320*2]))=0x4C5F;//L
+	
+	while(i < len)
+	{
+		ucs4_t u = 0x1FFF;
+		p = ucs2be_mbtowc(&u, ucs + i,len-i);
+		if(p < 0)
+			break;
+		if(u > 0xFFFF)
+			u = 0x1FFF;
+		j += encode_uni2cjk((unsigned char*)&u, cjk + j,pack);
+		i += p;
+	}
+	cjk[j] = 0;
+	return j;
 }
 
 
