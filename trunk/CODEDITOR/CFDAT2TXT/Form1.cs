@@ -602,7 +602,7 @@ namespace WindowsFormsApplication1
                     foreach (TreeNode m in n.Nodes)
                     {
                         
-                       if (m.Text == "(M)")
+                       if (m.Index ==0)
                         {
                             mr = r.Match(rpstringout(m.Tag.ToString()));
                             if (mr.Success == true)
@@ -610,7 +610,7 @@ namespace WindowsFormsApplication1
 
                                 sw.Write("䴠");
                                 cf = Convert.ToUInt32(mr.Value.Substring(9, 8), 16);
-                                if ((cf & 0x800) == 0)
+                                if ((enc==true) &&((cf & 0x800) == 0))
                                 {
                                     encok = true;
                                     sw.Write(mr.Value.Substring(0,8));
@@ -624,7 +624,7 @@ namespace WindowsFormsApplication1
                                 sw.Write("ਊ");
                             }
                         }
-                        else if (m.Text != "(M)")
+                        else
                         {
                             sw.Write("䐠");
                             sw.Write(rpstringout(m.Text));
