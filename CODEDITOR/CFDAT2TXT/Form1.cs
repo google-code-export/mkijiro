@@ -15,6 +15,7 @@ namespace WindowsFormsApplication1
     {
 
         uint cpm = 0;
+        string lastfile = "";
 
         public Form1()
         {
@@ -87,6 +88,7 @@ namespace WindowsFormsApplication1
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 parse(ofd.FileName);
+                lastfile = ofd.FileName;
             }
         }
 
@@ -288,6 +290,7 @@ namespace WindowsFormsApplication1
                 if (File.Exists(fileName[0]) == true)
                 {
                     parse(fileName[0]);
+                    lastfile =fileName[0];
                 }
             }
             //ドロップされたデータがTreeNodeか調べる
@@ -469,13 +472,30 @@ namespace WindowsFormsApplication1
         private void OUT_Click(object sender, EventArgs e)
         {
 
+            //SaveFileDialogクラスのインスタンスを作成
+            SaveFileDialog sfd = new SaveFileDialog();
+
+            sfd.FileName = Path.GetFileNameWithoutExtension(lastfile);
+            //はじめに表示されるフォルダを指定する
+            sfd.InitialDirectory = 　Application.StartupPath;
+            //[ファイルの種類]に表示される選択肢を指定する
+            sfd.Filter =    "TXTファイル(*.txt;)|*.txt";
+
+            sfd.Title = "保存先のファイルを選択してください";
+            //ダイアログボックスを閉じる前に現在のディレクトリを復元するようにする
+            sfd.RestoreDirectory = true;
+
+            //ダイアログを表示する
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+
             Regex r = new Regex("[0-9A-Fa-f]{8} [0-9A-Fa-f]{8}");
             Match mr;
             Boolean enc = checkBox2.Checked;
             uint cf = 0;
             Boolean encok= false;
             int pos = 0;
-            StreamWriter sw = new StreamWriter("converted_cf.txt", false, Encoding.GetEncoding(getcp()));
+            StreamWriter sw = new StreamWriter(sfd.FileName, false, Encoding.GetEncoding(getcp()));
             if (checkBox1.Checked == false)
             {
                 foreach (TreeNode n in treeView1.Nodes)
@@ -504,12 +524,15 @@ namespace WindowsFormsApplication1
                                 sw.WriteLine(mr.Value);
                             }
 
-                            if (enc = true && m.Text == "(M)")
+                            if  (m.Text == "(M)")
                             {
                                 cf = Convert.ToUInt32(mr.Value.Substring(9, 8), 16);
                                 if ((cf & 0x800) == 0)
                                 {
-                                    encok = true;
+                                    if (enc == true)
+                                    {
+                                        encok = true;
+                                    }
                                 }
                             }
 
@@ -559,7 +582,7 @@ namespace WindowsFormsApplication1
                         sw.WriteLine( rpstringout((m.Tag.ToString().Remove(0, pos).Replace("''", "#"))));
                             }
                         }
-                        else if (enc = true && m.Text == "(M)")
+                        else if ( m.Text == "(M)")
                         {
                             mr = r.Match(rpstringout(m.Tag.ToString()));
                             if (mr.Success == true)
@@ -567,7 +590,11 @@ namespace WindowsFormsApplication1
                                 cf = Convert.ToUInt32(mr.Value.Substring(9, 8), 16);
                                 if ((cf & 0x800) == 0)
                                 {
+                                    if(enc == true){
                                     encok = true;
+                                     }
+                                    sw.Write("_E 0x");
+                                    sw.WriteLine(mr.Value.Insert(9, "0x"));
                                 }
                             }
                         }
@@ -576,23 +603,43 @@ namespace WindowsFormsApplication1
             }
 
             sw.Close();
+
+            }
         }
 
 
         private void OUTDAT_Click(object sender, EventArgs e)
         {            
 
-            Regex r = new Regex("[0-9A-Fa-f]{8} [0-9A-Fa-f]{8}");
-            Match mr;
-            Boolean enc = checkBox2.Checked;
-            uint cf = 0;
-            Boolean encok= false;
+            
+            //SaveFileDialogクラスのインスタンスを作成
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.FileName = Path.GetFileNameWithoutExtension(lastfile);
+
+            //はじめに表示されるフォルダを指定する
+            sfd.InitialDirectory = 　Application.StartupPath;
+            //[ファイルの種類]に表示される選択肢を指定する
+            sfd.Filter =    "DATファイル(*.dat;)|*.dat";
+
+            sfd.Title = "保存先のファイルを選択してください";
+            //ダイアログボックスを閉じる前に現在のディレクトリを復元するようにする
+            sfd.RestoreDirectory = true;
+
+            //ダイアログを表示する
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+
+                Regex r = new Regex("[0-9A-Fa-f]{8} [0-9A-Fa-f]{8}");
+                Match mr;
+                Boolean enc = checkBox2.Checked;
+                uint cf = 0;
+                Boolean encok = false;
 
 
-            const bool bigEndian = true;
-            const bool bom = true;
-            Encoding nobomcp1201 = new UnicodeEncoding(bigEndian, !bom);
-            StreamWriter sw = new StreamWriter("converted_cf.dat", false, nobomcp1201);
+                const bool bigEndian = true;
+                const bool bom = true;
+                Encoding nobomcp1201 = new UnicodeEncoding(bigEndian, !bom);
+                StreamWriter sw = new StreamWriter(sfd.FileName, false, nobomcp1201);
                 foreach (TreeNode n in treeView1.Nodes)
                 {
                     encok = false;
@@ -601,8 +648,8 @@ namespace WindowsFormsApplication1
                     sw.Write("ਊ");
                     foreach (TreeNode m in n.Nodes)
                     {
-                        
-                       if (m.Index ==0)
+
+                        if (m.Index == 0)
                         {
                             mr = r.Match(rpstringout(m.Tag.ToString()));
                             if (mr.Success == true)
@@ -610,10 +657,10 @@ namespace WindowsFormsApplication1
 
                                 sw.Write("䴠");
                                 cf = Convert.ToUInt32(mr.Value.Substring(9, 8), 16);
-                                if ((enc==true) &&((cf & 0x800) == 0))
+                                if ((enc == true) && ((cf & 0x800) == 0))
                                 {
                                     encok = true;
-                                    sw.Write(mr.Value.Substring(0,8));
+                                    sw.Write(mr.Value.Substring(0, 8));
                                     cf = (cf & 0xFFFFF0FF) | 0x800;
                                     sw.Write(cf.ToString("X8"));
                                 }
@@ -635,7 +682,7 @@ namespace WindowsFormsApplication1
                                 sw.Write("䌠");
                                 if (encok == true)
                                 {
-                                    sw.Write(codefreakdec(mr.Value).Replace(" ",""));
+                                    sw.Write(codefreakdec(mr.Value).Replace(" ", ""));
                                 }
                                 else
                                 {
@@ -648,7 +695,8 @@ namespace WindowsFormsApplication1
                     }
                 }
 
-            sw.Close();           
+                sw.Close();
+            }
         }
 
         private int getcp() { 
