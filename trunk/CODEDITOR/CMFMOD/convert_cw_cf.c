@@ -53,7 +53,7 @@ int closefile(PspFile *pFile)
 	return 0;
 }
 //響函匯粁猟周,參'算佩_S'葎潤崩
-static int read_sect(int cur, PspFile *pf)
+int read_sect(int cur, PspFile *pf)
 {
 	int readsize;
 	sceIoLseek32(pf->fd, cur, PSP_SEEK_SET);
@@ -65,7 +65,12 @@ static int read_sect(int cur, PspFile *pf)
 	int i=DB_SECT;
 	while(1){
 		//if(memcmp(pf->buf+i,pattern,3)==0) break;
-		if(pf->buf[i]==0x0A && pf->buf[i+1]=='_' && pf->buf[i+2]=='S') break;
+		if(pf->buf[i]==0x0A && pf->buf[i+1]=='_' && pf->buf[i+2]=='S'){
+		break;
+		}
+		else if(i>readsize){
+		return -1;
+		}
 		i++;
 	}
 
@@ -73,39 +78,8 @@ static int read_sect(int cur, PspFile *pf)
 	return (cur+i+1);
 }
 
-static int read_sect_cf(int cur, PspFile *pf)
-{
-	int readsize;
-	sceIoLseek32(pf->fd, cur, PSP_SEEK_SET);
-	readsize = sceIoRead(pf->fd, pf->buf, READDB_SECT);
-	if(readsize<READDB_SECT){
-		if(readsize>0) pf->buf[readsize]=0;
-		return 0;
-	}
-	
-	//バッファ半分から検索開始
-	int i=DB_SECT;
-	while(1){
-		//G0x20存在、リードサイズを超えみつかったら終了
-		if(*((unsigned short*)(&pf->buf[i]))==0x0A0A){
-			if(*((unsigned short*)(&pf->buf[i+2]))==0x2047){
-			break;
-			}
-		}
-		else if(i>readsize){
-		return -1;
-		}
-		
-		i+=2;
-	}
-
-	pf->buf[i]=0;
-	pf->buf[i+1]=0;
-	return (cur+i+2);
-}
-
 //響函'_'蝕兵議佩,肇廣瞥佩
-static char* read_line(char *p, char *buf)
+char* read_line(char *p, char *buf)
 {
 	int i;
 	buf[0]=0;
@@ -139,6 +113,7 @@ static char* read_line(char *p, char *buf)
 	else return 0;
 }
 
+/*
 static char* read_cfline(char *p, char *buf)
 {
 	int i;
@@ -157,7 +132,7 @@ static char* read_cfline(char *p, char *buf)
 			}
 			i+=2;
 		}
-		*((unsigned short*)(p+i))=0x0;
+		//((unsigned short*)(p+i))=0x0;
 			i+=2;
 		
 		if(i<100){
@@ -183,9 +158,9 @@ static char* read_cfline(char *p, char *buf)
 		
 	if(*((unsigned short*)(p))==0x0) return 0;
 	else return p;
-}
+}*/
 
-static char* read_name(char *p, char *buf, int len)
+char* read_name(char *p, char *buf, int len)
 {
 	int x = 0;
 	do{
@@ -198,187 +173,8 @@ static char* read_name(char *p, char *buf, int len)
 	return (char*)(p+x);
 }
 
-void sceid2cfid(char *codename,char *gameid){
-	
-		char buf[1];
-		int k=0,j=0,l=0;
-		for(;k<16;k+=2,l++){
-			if(l&1){
-			sprintf(buf,"%1X",gameid[j]&0xF);
-			j++;
-			}
-			else{
-			sprintf(buf,"%1X",gameid[j]>>4);
-			}
-		codename[k]=0;
-		codename[k+1]=buf[0];
-		}
-		for(j=0;k<26;k+=2,j++){
-		codename[k]=0;
-		codename[k+1]=gameid[5+j];
-		}
-		codename[26]=0;
-	
-	
-	return ;
-}
 
-static int read_cf(char *filename, char *gameid)
-{
-	int pos=0;
-	char *p;
-	char cw_buf[100];
-	u32 address=0,val=0;
-	t_mem_table	t;
-	PspFile pf;	
-	
-	if(openfile(filename, &pf)==0) return 1;
-	
-	//if(gameid!=NULL){
-		char codename[27];
-		sceid2cfid(codename,gameid);
-		
-		//do{
-		/*	pos=read_sect_cf(pos,&pf);
-			p=read_cfline(p,cw_buf);
-			if (memcmp(p+2, codename, 26) == 0){
-				p=pf.buf;
-			}
-			else{
-			p=0;
-			}*/
-			
-	/*int fd = sceIoOpen("ms0:/debug.txt", PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
-	sceIoWrite(fd, codename,0x40);
-	sceIoWrite(fd, pf.buf,0x40);
-	if(p>0){
-	sceIoWrite(fd, p,0x40);
-	}
-	sceIoClose(fd);*/
-			
-			//if(p){p=pf.buf; break;}
-		//}while(pos);
-	//}
-	//else{
-		if(read_sect_cf(pos,&pf)==-1){
-		closefile(&pf);
-		return 1;
-		}
-		p=pf.buf;
-	//}
-	
-	if(p==0) {
-	closefile(&pf);
-	return 1;
-	}
-	
-	
-	t_encodepack pack;
-	if(encode_init(&pack) == 0){
-		encode_utf16_conv(p, NULL,&pack,MAX_READ_BUFFER);
-	}
-	else{
-		encode_free(&pack);
-		closefile(&pf);
-		return 1;
-	}
-	encode_free(&pack);
-	
-	//SJISに変換されているか
-	//int fd = sceIoOpen("ms0:/db1.txt", PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
-	//sceIoWrite(fd, p,READDB_SECT);
-	//sceIoClose(fd);
-	//int fd = sceIoOpen("ms0:/db2.txt", PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
-	//sprintf(cw_buf,"%s %X %X",codename,&p[0],&pf.buf[0]);
-	//sceIoWrite(fd, cw_buf,32);
-	//sceIoClose(fd);
-	
-	p=read_line(p,cw_buf);
-	mips_memcpy(ui_get_gamename()+12,cw_buf+2,0x40);
-	
-	char enc=0;
-	int repeat=0;
-	int lock =0;
-	char namebuf[31];
-	char cwc[9];
-	char *namep;
-	char nullcode=0;
-		
-	while(1){
-		p=read_line(p,cw_buf);
-		
-	if(cw_buf[0]=='_'){
-		if(cw_buf[1]=='E'){
-			mips_memcpy(cwc,cw_buf+10,8);
-			val=strtoul(cwc,NULL,16);
-			if((val & 0x800)==0){
-			enc=!enc;
-			}
-		}
-		else if(cw_buf[1]=='C'){
-			if(nullcode==1) {
-			t.addr=0x8800000;
-			t.value=0;
-			t.type=0;
-			t.lock=0;
-			if(mem_table_add(&t)<0) goto READOUT;
-			}
-		repeat=0;
-		namep = namebuf;
-		mips_memcpy(namebuf,cw_buf+2,30);
-		lock = 0;
-		namep = read_name(namep, t.name, 10);
-		mips_memcpy(t.name,namebuf,30);
-		t.name[30]=0;
-		t.name[31]=0;
-		nullcode=1;
-		}
-		else if(cw_buf[1]=='L'){
-			nullcode=0;
-			if(repeat<5){
-				if(repeat==0) {
-				}
-				else{
-					t.name[0] = '+';
-					namep = read_name(namep, t.name+1, 9);
-				}
-				repeat++;
-			}
-			else{
-				t.name[0]='+';
-				t.name[1]=0;
-			}
-			mips_memcpy(cwc,cw_buf+2,8);
-			address=strtoul(cwc,NULL,16);
-			if(enc){
-			address ^=0xd6f73bee;
-			}
-			address +=0x08800000;
-			mips_memcpy(cwc,cw_buf+10,8);
-			val=strtoul(cwc,NULL,16);
-			t.addr=address;
-			t.value=val;
-			t.type=0;
-			t.lock=lock;
-			if(mem_table_add(&t)<0) goto READOUT;
-		}
-		else if(cw_buf[1]=='G'){
-			break;
-		}
-	}
-	if(p==0) break;
-	if(p[0]=='_' && p[1]=='G') break;
-	}
-	
-READOUT:
-	closefile(&pf);
-	cfencription=enc;
-	
-	return 0;
-}
-
-
-static int read_cwdb(char *filename, char *gameid)
+int read_cwdb(char *filename, char *gameid)
 {
 	int pos=0;
 	char *p;
@@ -500,6 +296,255 @@ READOUT:
 	
 	return 0;
 }
+
+
+void ascii2wide(char *codename,char *ascii){
+	
+		int k=0,j=0;
+		for(k=0;k<26;k+=2,j++){
+		codename[k]=0;
+		codename[k+1]=ascii[j];
+		}
+		codename[26]=0;
+	
+	return ;
+}
+
+
+void sceid2cfid(char *codename,char *gameid){
+	
+		char buf[1];
+		int k=0,j=0;
+		for(;k<8;k++){
+			if(k&1){
+			sprintf(buf,"%1X",gameid[j]&0xF);
+			j++;
+			}
+			else{
+			sprintf(buf,"%1X",gameid[j]>>4);
+			}
+		codename[k]=buf[0];
+		}
+		codename[8]=0;
+	
+	return;
+}
+
+int read_sect_cf(int cur, PspFile *pf)
+{
+	int readsize;
+	sceIoLseek32(pf->fd, cur, PSP_SEEK_SET);
+	readsize = sceIoRead(pf->fd, pf->buf, READDB_SECT);
+	//ファイル最終
+	if(readsize<READDB_SECT){
+		if(readsize>0){
+		//O埋め
+		*((u16 *)(&pf->buf[readsize]))=0;
+		}
+		return 0;
+	}
+	
+	//バッファ半分から検索開始
+	int i=DB_SECT;
+	while(1){
+		//G0x20存在、リードサイズを超え/みつかったら終了
+		if(*((unsigned short*)(&pf->buf[i]))==0x0A0A){
+			if(*((unsigned short*)(&pf->buf[i+2]))==0x2047){
+			break;
+			}
+		}
+		else if(i>readsize){
+		return -1;
+		}
+		
+		i+=2;
+	}
+	
+	//最後を閉じる
+	*((u16 *)(&pf->buf[i+2]))=0;
+	return (cur+i+2);
+}
+
+int codefreak_utf16be_seek(char *p,char *cmp){
+	int i=0,game=0,temp=0;
+	while(i<READDB_SECT){
+		
+		temp=p+i;
+		
+		//BIG_ENDIAN!!、なぜか0x0a0a判定を追加すると動かなくなる
+		switch(*((unsigned short*)(temp))){
+		case 0x2047://G+x20
+			game=temp;
+		break;
+		case 0x204D://M+0x20
+			temp+=2;
+			if(memcmp(temp,cmp,26)==0){
+				return game;
+			}
+		break;
+		}
+		i+=2;
+	}
+		
+	return 0;
+
+}
+
+int read_cf(char *filename, char *gameid)
+{
+	int pos=0;
+	char *p;
+	char cw_buf[100];
+	u32 address=0,val=0;
+	t_mem_table	t;
+	PspFile pf;	
+	
+	if(openfile(filename, &pf)==0) return 1;
+	
+	if(gameid!=NULL){
+		char codename[27];
+		int total = 0;
+		sceid2cfid(cw_buf,gameid);
+		mips_memcpy(cw_buf+8,gameid+5,5);
+		ascii2wide(codename,cw_buf);
+		///*
+		do{
+			total=pos;
+			pos=read_sect_cf(pos,&pf);
+			p=codefreak_utf16be_seek(pf.buf,codename);
+			if(p){break;}
+		}while(pos);
+		//*/
+			
+	/*
+	int fd = sceIoOpen("ms0:/debug.txt", PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
+	sceIoWrite(fd, codename,0x20);
+	sceIoWrite(fd, pf.buf,0x80);
+	if(p==0){
+	sceIoWrite(fd,"owata",4);
+	}
+	sceIoClose(fd);
+	*/
+	}
+	else{
+		if(read_sect_cf(pos,&pf)==-1){
+		closefile(&pf);
+		return 1;
+		}
+		p=pf.buf;
+	}
+	
+	if(p==0) {
+	closefile(&pf);
+	return 1;
+	}
+	
+	
+	t_encodepack pack;
+	if(encode_init(&pack) == 0){
+		encode_utf16_conv(p, NULL,&pack,MAX_READ_BUFFER);
+	}
+	else{
+		encode_free(&pack);
+		closefile(&pf);
+		return 1;
+	}
+	encode_free(&pack);
+	
+	//SJISに変換されているか
+	//int fd;
+	//fd = sceIoOpen("ms0:/db1.txt", PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
+	//sceIoWrite(fd, p,READDB_SECT);
+	//sceIoClose(fd);
+	//fd = sceIoOpen("ms0:/db2.txt", PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
+	//sprintf(cw_buf,"%s %X %X",codename,&p[0],&pf.buf[0]);
+	//sceIoWrite(fd, cw_buf,32);
+	//sceIoClose(fd);
+	
+	p=read_line(p,cw_buf);
+	mips_memcpy(ui_get_gamename()+12,cw_buf+2,0x40);
+	
+	char enc=0;
+	int repeat=0;
+	int lock =0;
+	char namebuf[31];
+	char cwc[9];
+	char *namep;
+	char nullcode=0;
+		
+	while(1){
+		p=read_line(p,cw_buf);
+		
+	if(cw_buf[0]=='_'){
+		if(cw_buf[1]=='E'){
+			mips_memcpy(cwc,cw_buf+10,8);
+			val=strtoul(cwc,NULL,16);
+			if((val & 0x800)==0){
+			enc=!enc;
+			}
+		}
+		else if(cw_buf[1]=='C'){
+			if(nullcode==1) {
+			t.addr=0x8800000;
+			t.value=0;
+			t.type=0;
+			t.lock=0;
+			if(mem_table_add(&t)<0) goto READOUT;
+			}
+		repeat=0;
+		namep = namebuf;
+		mips_memcpy(namebuf,cw_buf+2,30);
+		lock = 0;
+		namep = read_name(namep, t.name, 10);
+		mips_memcpy(t.name,namebuf,30);
+		t.name[30]=0;
+		t.name[31]=0;
+		nullcode=1;
+		}
+		else if(cw_buf[1]=='L'){
+			nullcode=0;
+			if(repeat<5){
+				if(repeat==0) {
+				}
+				else{
+					t.name[0] = '+';
+					namep = read_name(namep, t.name+1, 9);
+				}
+				repeat++;
+			}
+			else{
+				t.name[0]='+';
+				t.name[1]=0;
+			}
+			mips_memcpy(cwc,cw_buf+2,8);
+			address=strtoul(cwc,NULL,16);
+			if(enc){
+			address ^=0xd6f73bee;
+			}
+			address +=0x08800000;
+			mips_memcpy(cwc,cw_buf+10,8);
+			val=strtoul(cwc,NULL,16);
+			t.addr=address;
+			t.value=val;
+			t.type=0;
+			t.lock=lock;
+			if(mem_table_add(&t)<0) goto READOUT;
+		}
+		else if(cw_buf[1]=='G'){
+			break;
+		}
+	}
+	if(p==0) break;
+	if(p[0]=='_' && p[1]=='G') break;
+	}
+	
+READOUT:
+	closefile(&pf);
+	cfencription=enc;
+	
+	return 0;
+}
+
 
 int convert(char *id)
 {

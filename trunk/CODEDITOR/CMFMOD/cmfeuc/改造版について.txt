@@ -18,6 +18,12 @@ MPLUS	12x13
 JISKAN	12x12(JIS213)
 
 
+2012/11/20
+CF.DATのIDシークを追加
+_Eヘッダ出力時CFIDを出すように変更
+TXTDBの改行コードをCRLFに変更
+PSPE1000対策に起動ボタンをSELECT＋DOWNに変更
+
 2012/11/11
 CODEFREAKとりえあえずコード入力対応版を追加
 十字キー←押しながら○/ｘでCF暗号入力

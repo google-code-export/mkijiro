@@ -152,6 +152,10 @@ Partial Class MERGE
         Me.ftpcmf = New System.Windows.Forms.ToolStripMenuItem()
         Me.ftpscm = New System.Windows.Forms.ToolStripMenuItem()
         Me.ftptab = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator18 = New System.Windows.Forms.ToolStripSeparator()
+        Me.CODEFREAKToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.復号ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.暗号化ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.iconset = New System.Windows.Forms.ImageList(Me.components)
         Me.open_file = New System.Windows.Forms.OpenFileDialog()
         Me.GID_tb = New System.Windows.Forms.TextBox()
@@ -202,10 +206,6 @@ Partial Class MERGE
         Me.curr_line = New System.Windows.Forms.Label()
         Me.コード形式 = New System.Windows.Forms.Label()
         Me.tt = New System.Windows.Forms.Label()
-        Me.CODEFREAKToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.暗号化ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.復号ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator18 = New System.Windows.Forms.ToolStripSeparator()
         Me.treeopen.SuspendLayout()
         Me.ContextMenus.SuspendLayout()
         Me.tool_menu.SuspendLayout()
@@ -891,8 +891,7 @@ Partial Class MERGE
         Me.CFEDIT.Name = "CFEDIT"
         Me.CFEDIT.Size = New System.Drawing.Size(363, 22)
         Me.CFEDIT.Text = "CFDATを(M)付きで変換する"
-        Me.CFEDIT.ToolTipText = "読み込み時マスターコード(M)がゲームの一番初めのコードに表示されるようになります。" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(M)がある場合、保存時にマスターコードとして優先して出力します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(M)" & _
-    "なしの場合,ゲームIDフォームのULJM-00000XXXを変換して出力します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "XXXがない場合は820,CWCモードとして出力します。"
+        Me.CFEDIT.ToolTipText = resources.GetString("CFEDIT.ToolTipText")
         '
         'ARBINhanzen
         '
@@ -947,7 +946,7 @@ Partial Class MERGE
         '
         Me.ContextMenus.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cntparser, Me.dgedit, Me.ToolStripSeparator4, Me.cntclose, Me.cntexpand, Me.ToolStripSeparator5, Me.hankaku, Me.CNchar, Me.ToolStripSeparator6, Me.cntexe, Me.ToolStripSeparator11, Me.NodeConvert, Me.useFTP, Me.ToolStripSeparator18, Me.CODEFREAKToolStripMenuItem})
         Me.ContextMenus.Name = "ContextMenuStrip1"
-        Me.ContextMenus.Size = New System.Drawing.Size(185, 276)
+        Me.ContextMenus.Size = New System.Drawing.Size(185, 254)
         '
         'cntparser
         '
@@ -1092,6 +1091,30 @@ Partial Class MERGE
         Me.ftptab.Size = New System.Drawing.Size(153, 22)
         Me.ftptab.Text = "TAB転送"
         '
+        'ToolStripSeparator18
+        '
+        Me.ToolStripSeparator18.Name = "ToolStripSeparator18"
+        Me.ToolStripSeparator18.Size = New System.Drawing.Size(181, 6)
+        '
+        'CODEFREAKToolStripMenuItem
+        '
+        Me.CODEFREAKToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.復号ToolStripMenuItem, Me.暗号化ToolStripMenuItem})
+        Me.CODEFREAKToolStripMenuItem.Name = "CODEFREAKToolStripMenuItem"
+        Me.CODEFREAKToolStripMenuItem.Size = New System.Drawing.Size(184, 22)
+        Me.CODEFREAKToolStripMenuItem.Text = "CODEFREAK"
+        '
+        '復号ToolStripMenuItem
+        '
+        Me.復号ToolStripMenuItem.Name = "復号ToolStripMenuItem"
+        Me.復号ToolStripMenuItem.Size = New System.Drawing.Size(112, 22)
+        Me.復号ToolStripMenuItem.Text = "復号"
+        '
+        '暗号化ToolStripMenuItem
+        '
+        Me.暗号化ToolStripMenuItem.Name = "暗号化ToolStripMenuItem"
+        Me.暗号化ToolStripMenuItem.Size = New System.Drawing.Size(112, 22)
+        Me.暗号化ToolStripMenuItem.Text = "暗号化"
+        '
         'iconset
         '
         Me.iconset.ImageStream = CType(resources.GetObject("iconset.ImageStream"), System.Windows.Forms.ImageListStreamer)
@@ -1108,7 +1131,7 @@ Partial Class MERGE
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.GID_tb.Enabled = False
         Me.GID_tb.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.GID_tb.ImeMode = System.Windows.Forms.ImeMode.Alpha
+        Me.GID_tb.ImeMode = System.Windows.Forms.ImeMode.Disable
         Me.GID_tb.Location = New System.Drawing.Point(321, 131)
         Me.GID_tb.MaxLength = 13
         Me.GID_tb.Name = "GID_tb"
@@ -1187,7 +1210,7 @@ Partial Class MERGE
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.cl_tb.Enabled = False
         Me.cl_tb.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.cl_tb.ImeMode = System.Windows.Forms.ImeMode.Alpha
+        Me.cl_tb.ImeMode = System.Windows.Forms.ImeMode.Disable
         Me.cl_tb.Location = New System.Drawing.Point(321, 207)
         Me.cl_tb.MaxLength = 0
         Me.cl_tb.Multiline = True
@@ -1620,30 +1643,6 @@ Partial Class MERGE
         Me.tt.TabIndex = 36
         Me.tt.Text = "Label2"
         Me.tt.Visible = False
-        '
-        'CODEFREAKToolStripMenuItem
-        '
-        Me.CODEFREAKToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.復号ToolStripMenuItem, Me.暗号化ToolStripMenuItem})
-        Me.CODEFREAKToolStripMenuItem.Name = "CODEFREAKToolStripMenuItem"
-        Me.CODEFREAKToolStripMenuItem.Size = New System.Drawing.Size(184, 22)
-        Me.CODEFREAKToolStripMenuItem.Text = "CODEFREAK"
-        '
-        '暗号化ToolStripMenuItem
-        '
-        Me.暗号化ToolStripMenuItem.Name = "暗号化ToolStripMenuItem"
-        Me.暗号化ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-        Me.暗号化ToolStripMenuItem.Text = "暗号化"
-        '
-        '復号ToolStripMenuItem
-        '
-        Me.復号ToolStripMenuItem.Name = "復号ToolStripMenuItem"
-        Me.復号ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-        Me.復号ToolStripMenuItem.Text = "復号"
-        '
-        'ToolStripSeparator18
-        '
-        Me.ToolStripSeparator18.Name = "ToolStripSeparator18"
-        Me.ToolStripSeparator18.Size = New System.Drawing.Size(181, 6)
         '
         'MERGE
         '

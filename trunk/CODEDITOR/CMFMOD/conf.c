@@ -50,7 +50,7 @@ extern void conf_get_keyname(unsigned int key, char * res)
 extern void conf_load()
 {
 	//memset(&config, 0, sizeof(config));
-	config.skey = PSP_CTRL_NOTE;
+	config.skey =  PSP_CTRL_SELECT || PSP_CTRL_DOWN;//PSP_CTRL_NOTE;
 	config.ssskey = PSP_CTRL_VOLDOWN + PSP_CTRL_SELECT;
 	config.bg_color = 0xb0c0c0c0;
 	config.txtrowbytes = 54;
