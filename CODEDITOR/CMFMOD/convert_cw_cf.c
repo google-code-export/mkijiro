@@ -365,6 +365,24 @@ int read_sect_cf(int cur, PspFile *pf)
 	return (cur+i+2);
 }
 
+/*
+int mem_cmpkai(char *s1,char *s2,int len){
+    const unsigned char  *p1 = (const unsigned char *)s1;
+    const unsigned char  *p2 = (const unsigned char *)s2;
+	p1++;
+	p2++;
+	
+	while(len){
+		if(*p1 != *p2){
+			return 1;
+		}
+		p1+=2;
+		p2+=2;
+		len-=2;
+	}
+	return 0;
+}*/
+
 int codefreak_utf16be_seek(char *p,char *cmp){
 	int i=0,game=0,temp=0;
 	while(i<READDB_SECT){
@@ -373,6 +391,9 @@ int codefreak_utf16be_seek(char *p,char *cmp){
 		
 		//BIG_ENDIAN!!、なぜか0x0a0a判定を追加すると動かなくなる
 		switch(*((unsigned short*)(temp))){
+		case 0 :
+			return 0;
+			break;
 		case 0x2047://G+x20
 			game=temp;
 		break;
@@ -389,6 +410,7 @@ int codefreak_utf16be_seek(char *p,char *cmp){
 	return 0;
 
 }
+
 
 int read_cf(char *filename, char *gameid)
 {
@@ -419,9 +441,9 @@ int read_cf(char *filename, char *gameid)
 	/*
 	int fd = sceIoOpen("ms0:/debug.txt", PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
 	sceIoWrite(fd, codename,0x20);
-	sceIoWrite(fd, pf.buf,0x80);
-	if(p==0){
-	sceIoWrite(fd,"owata",4);
+	sceIoWrite(fd, pf.buf,READDB_SECT);
+	if(p>0){
+	sceIoWrite(fd,p,0x100);
 	}
 	sceIoClose(fd);
 	*/
