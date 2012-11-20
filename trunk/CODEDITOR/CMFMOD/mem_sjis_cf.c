@@ -1396,7 +1396,7 @@ extern void mem_table_savecw()
 		fn[10]=0;
 		sprintf(s,"_S %s\r\n",fn);
 		sceIoWrite(fd, s, strlen(s));
-		mips_memcpy(fn,fn+12,64);
+		mips_memcpy(fn,ui_get_gamename()+12,64);
 		fn[64]=0;
 		sprintf(s,"_G %s\r\n",fn);
 		sceIoWrite(fd, s, strlen(s));
