@@ -1374,17 +1374,18 @@ extern void mem_table_savecw()
 	if(ui_input_string(120, 68, fn, 29) < 1)
 		return ;
 
-	char cmf[]=".cmf\x0";
 	int i=0;
 	int j=0;
 	int fd;
 	
+	int i=0, j=0;
+	int fd;
+	
 	SJIS_UTF8SJIS(fn,40);
-	strcat(fn,cmf);
 
 	filter_filename(fn); //DOSKILLER
 
-	sprintf(s, "%s/%s", CMF_DIR, fn);
+	sprintf(s, "%s/%s.cmf", CMF_DIR, fn);
 
 
 	fd = sceIoOpen(s, PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
@@ -1399,56 +1400,46 @@ extern void mem_table_savecw()
 		mips_memcpy(fn,ui_get_gamename(),10);
 		fn[10]=0;
 	
-		sprintf(p,"_S %s\r\n",fn);
-		p+=strlen(p);
+		p+=sprintf(p,"_S %s\r\n",fn);
 	
 		mips_memcpy(fn,ui_get_gamename()+12,64);
-		fn[64]=0;	
-		sprintf(p,"_G %s\r\n",fn);
-		p+=strlen(p);
+		fn[64]=0;
+		p+=sprintf(p,"_G %s\r\n",fn);
 	
-	/*	if(enc){
+		/*if(enc){
 		sceid2cfid(fn,ui_get_gamename());
 		
 		sprintf(p,"_E 0x%s 0x00000020\r\n",fn);
 		mips_memcpy(p+16,ui_get_gamename()+5,5);
-		p+=strlen(p);
+		p=strchr(p, 0);
 			
 		}*/
-	
-	
-	//int i,j;
+	int k=0;
 	
 	for(i = 0; i < mem_gv.mem_table_size;){
-		sprintf(fn,"_C%d ",mem_gv.mem_table[i].lock);
-		int k = mem_table_walkforward(i);
+		k = mem_table_walkforward(i);
 		if(k==mem_gv.mem_table_size-1){
 			if(i==mem_gv.mem_table_size-1 || mem_gv.mem_table[k].name[0]=='+') k = mem_gv.mem_table_size;
 		}
-		strcat(fn,mem_gv.mem_table[i].name);
-		strcat(fn,"\r\n");
+		
+		p+=sprintf(p,"_C%d %s\r\n",mem_gv.mem_table[i].lock,mem_gv.mem_table[i].name);
+		
 		for(j=i;j<k;j++){
 			if(p-p_backup>WRITE_BUFFER-64){
+			sceIoWrite(fd, p_backup, p-p_backup);
 			p=p_backup;
-			sceIoWrite(fd, p, strlen(p));
 			}
 			
-			if(j==i){
-			mips_memcpy(p,fn,strlen(fn));
-			p+=strlen(fn);
-			}
-			
-			//addr=mem_table_ConvertTabType(&mem_gv.mem_table[j]);
+			addr=mem_table_ConvertTabType(&mem_gv.mem_table[j]);
 		//if(enc){
 		//	addr ^=0xD6F73BEE;
 		//}			
-			sprintf(p,"_L 0x%08X 0x%08X\r\n",mem_table_ConvertTabType(&mem_gv.mem_table[j]),mem_gv.mem_table[j].value);
-			p+=strlen(p);
+			p+=sprintf(p,"_L 0x%08X 0x%08X\r\n",addr,mem_gv.mem_table[j].value);
 		}
 		i = j;
 	}	
+	sceIoWrite(fd, p_backup, p-p_backup);
 	p=p_backup;
-	sceIoWrite(fd, p, strlen(p));
 		
 	sfree(p);
 	sceIoClose(fd);
