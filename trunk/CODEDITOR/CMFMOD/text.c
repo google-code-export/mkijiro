@@ -19,6 +19,7 @@
 #include <pspkernel.h>
 #include <pspsysmem_kernel.h>
 #include <pspsuspend.h>
+#include <string.h>
 #include "layout.h"
 #include "text.h"
 #include "font.h"
@@ -48,13 +49,40 @@ extern int text_open(const char * filename, int rowbytes, p_txtpack txtpack)
 		return 1;
 	}
 	
- 	bzero(txtpack->txt->buf, l);
-	txtpack->txt->buf[l] = 0;
+ 	memset(txtpack->txt->buf,0, l+4);
 	sceIoLseek32(fd, 0, PSP_SEEK_SET);
 	sceIoRead(fd, txtpack->txt->buf, l);
 	sceIoClose(fd);
 	txtpack->txt->size = l;
-
+	
+	
+	#ifdef UNICODE_TXT
+	//UTF8
+	if(memcmp(txtpack->txt->buf,"\xEF\xBB\xBF",3)==0){
+	t_encodepack pack;
+	if(encode_init(&pack) == 0)
+	{
+	txtpack->txt->size =encode_utf8_conv(txtpack->txt->buf+3, txtpack->txt->buf,&pack);
+		encode_free(&pack);
+	}
+	}//utf16BOM,BE
+	else if(memcmp(txtpack->txt->buf,"\xFE\xFF",2)==0){
+	t_encodepack pack;
+	if(encode_init(&pack) == 0){
+		txtpack->txt->size =encode_utf16_conv(txtpack->txt->buf+2,txtpack->txt->buf,&pack,l);
+		encode_free(&pack);
+	}
+	}//utf16BOM,le
+	else if(memcmp(txtpack->txt->buf,"\xFF\xFE",2)==0){
+	t_encodepack pack;
+	if(encode_init(&pack) == 0){
+		txtpack->txt->size =encode_utf16_2_conv(txtpack->txt->buf+2, txtpack->txt->buf,&pack,l);
+		encode_free(&pack);
+	}
+	}
+	#endif
+	
+	
 #ifdef BIG5_ENCODE_TEXT
 	t_encodepack pack;
 	if(big5_init((char *)txtpack->txt->rows,&pack)==0 && encode_init(&pack)==0){
