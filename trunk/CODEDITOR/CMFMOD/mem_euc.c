@@ -1431,6 +1431,7 @@ extern void mem_table_savecw()
 			if(p-p_backup>WRITE_BUFFER-64){
 			p=p_backup;
 			sceIoWrite(fd, p, strlen(p));
+			p[0]=0;
 			}
 			
 			if(j==i){

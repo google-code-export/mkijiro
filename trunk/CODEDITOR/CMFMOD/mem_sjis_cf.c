@@ -1404,44 +1404,27 @@ extern void mem_table_savecw()
 	char *p= malloc(WRITE_BUFFER);
 	char *p_backup;
 	p_backup=p;
-	//int ct=0;
 	
 		mips_memcpy(fn,ui_get_gamename(),10);
 		fn[10]=0;
 	
-		//sprintf(s,"_S %s\r\n",fn);
-		//mips_memcpy(p+ct,s,strlen(s));
-		//ct+=strlen(s);
 		sprintf(p,"_S %s\r\n",fn);
 		p+=strlen(p);
 	
 		mips_memcpy(fn,ui_get_gamename()+12,64);
-		fn[64]=0;	
-		//sprintf(s,"_G %s\r\n",fn);
-		//mips_memcpy(p+ct,s,strlen(s));
-		//ct+=strlen(s);
+		fn[64]=0;
 		sprintf(p,"_G %s\r\n",fn);
 		p+=strlen(p);
 	
 		if(enc){
 		sceid2cfid(fn,ui_get_gamename());
 		
-		//sprintf(s,"_E 0x%s 0x00000020\r\n",fn);
-		//mips_memcpy(s+16,ui_get_gamename()+5,5);
-		//mips_memcpy(p+ct,s,strlen(s));
-		//ct+=strlen(s);
 		sprintf(p,"_E 0x%s 0x00000020\r\n",fn);
 		mips_memcpy(p+16,ui_get_gamename()+5,5);
 		p+=strlen(p);
 			
 		}
-	//sceIoWrite(fd, p, ct);
-	//ct=0;
-	//p=p_backup;
-	//sceIoWrite(fd, p, strlen(p));
 	
-	
-	//int i,j;
 	
 	for(i = 0; i < mem_gv.mem_table_size;){
 		sprintf(fn,"_C%d ",mem_gv.mem_table[i].lock);
@@ -1452,16 +1435,12 @@ extern void mem_table_savecw()
 		strcat(fn,mem_gv.mem_table[i].name);
 		strcat(fn,"\r\n");
 		for(j=i;j<k;j++){
-			if(p-p_backup>WRITE_BUFFER-64){//(ct>2048-64){
-			//sceIoWrite(fd, p, ct);
-			//ct=0;
+			if(p-p_backup>WRITE_BUFFER-64){
 			p=p_backup;
 			sceIoWrite(fd, p, strlen(p));
 			}
 			
 			if(j==i){
-			//mips_memcpy(p+ct,fn,strlen(fn));
-			//ct+=strlen(fn);
 			mips_memcpy(p,fn,strlen(fn));
 			p+=strlen(fn);
 			}
@@ -1470,15 +1449,11 @@ extern void mem_table_savecw()
 		if(enc){
 			addr ^=0xD6F73BEE;
 		}			
-			//sprintf(s,"_L 0x%08X 0x%08X\r\n",addr,mem_gv.mem_table[j].value);
-			//mips_memcpy(p+ct,s,strlen(s));
-			//ct+=strlen(s);
 			sprintf(p,"_L 0x%08X 0x%08X\r\n",addr,mem_gv.mem_table[j].value);
 			p+=strlen(p);
 		}
 		i = j;
 	}	
-	//sceIoWrite(fd, p, ct);
 	p=p_backup;
 	sceIoWrite(fd, p, strlen(p));
 		
