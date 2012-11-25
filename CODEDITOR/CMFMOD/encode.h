@@ -9,9 +9,15 @@ unsigned char *UNI_CJK;
 extern int encode_init(p_encodepack);
 extern void encode_free(p_encodepack);
 
+extern char FILE_ENCODE();
+
 //extern int encode_ucs_conv(const unsigned char *ucs, unsigned char *cjk);
 extern int encode_utf8_conv(const unsigned char *ucs, unsigned char *cjk, p_encodepack pack);
 extern int encode_utf8_conv_noram(const unsigned char *ucs, unsigned char *cjk);
+#ifdef UNICODE_TXT
+extern int encode_utf16_conv(const unsigned char *ucs, unsigned char *cjk, p_encodepack pack,int len);
+extern int encode_utf16_2_conv(const unsigned char *ucs, unsigned char *cjk, p_encodepack pack,int len);
+#endif
 
 #ifdef EXTEND_UINX_CODE
 extern int UTF8SJIS_EUC(unsigned char *msg, int len);

@@ -5,6 +5,7 @@
 #include <pspdisplay.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include <pspctrl.h>
 #include <psppower.h>
 #include <pspsysmem_kernel.h>
@@ -56,6 +57,7 @@ int closefile(PspFile *pFile)
 int read_sect(int cur, PspFile *pf)
 {
 	int readsize;
+	int last=READDB_SECT;
 	sceIoLseek32(pf->fd, cur, PSP_SEEK_SET);
 	readsize = sceIoRead(pf->fd, pf->buf, READDB_SECT);
 	if(readsize<READDB_SECT){
@@ -65,11 +67,12 @@ int read_sect(int cur, PspFile *pf)
 	int i=DB_SECT;
 	while(1){
 		//if(memcmp(pf->buf+i,pattern,3)==0) break;
-		if(pf->buf[i]==0x0A && pf->buf[i+1]=='_' && pf->buf[i+2]=='S'){
-		break;
+		if(pf->buf[i]==0x0A){
+			last=i;
+		if(pf->buf[i+1]=='_' && pf->buf[i+2]=='S'){	break;}
 		}
 		else if(i>readsize){
-		return -1;
+			i=last;
 		}
 		i++;
 	}
@@ -226,6 +229,7 @@ int read_cwdb(char *filename, char *gameid)
 	int lock =0;
 	char namebuf[80];
 	char *namep;
+	namep=namebuf;
 	char nullcode=0;
 	char enc=0;
 	while(1){
@@ -297,15 +301,16 @@ READOUT:
 	return 0;
 }
 
+#ifdef UNICODE_TXT
 
-void ascii2wide(char *codename,char *ascii){
+void ascii2wide(char *codename,char *ascii,int len){
 	
 		int k=0,j=0;
-		for(k=0;k<26;k+=2,j++){
+		for(k=0;k<len;k+=2,j++){
 		codename[k]=0;
 		codename[k+1]=ascii[j];
 		}
-		codename[26]=0;
+		codename[len]=0;
 	
 	return ;
 }
@@ -333,6 +338,7 @@ void sceid2cfid(char *codename,char *gameid){
 int read_sect_cf(int cur, PspFile *pf)
 {
 	int readsize;
+	int last=READDB_SECT;
 	sceIoLseek32(pf->fd, cur, PSP_SEEK_SET);
 	readsize = sceIoRead(pf->fd, pf->buf, READDB_SECT);
 	//ファイル最終
@@ -349,12 +355,13 @@ int read_sect_cf(int cur, PspFile *pf)
 	while(1){
 		//G0x20存在、リードサイズを超え/みつかったら終了
 		if(*((unsigned short*)(&pf->buf[i]))==0x0A0A){
+			last=i;
 			if(*((unsigned short*)(&pf->buf[i+2]))==0x2047){
 			break;
 			}
 		}
 		else if(i>readsize){
-		return -1;
+			i=last;
 		}
 		
 		i+=2;
@@ -365,29 +372,13 @@ int read_sect_cf(int cur, PspFile *pf)
 	return (cur+i+2);
 }
 
-/*
-int mem_cmpkai(char *s1,char *s2,int len){
-    const unsigned char  *p1 = (const unsigned char *)s1;
-    const unsigned char  *p2 = (const unsigned char *)s2;
-	p1++;
-	p2++;
-	
-	while(len){
-		if(*p1 != *p2){
-			return 1;
-		}
-		p1+=2;
-		p2+=2;
-		len-=2;
-	}
-	return 0;
-}*/
-
-int codefreak_utf16be_seek(char *p,char *cmp){
-	int i=0,game=0,temp=0;
+char* codefreak_utf16be_seek(char *p,char *cmp){
+	int i=0;
+	char *temp,*game;
+	game=0;
 	while(i<READDB_SECT){
 		
-		temp=p+i;
+		temp=(char *)((unsigned int)p+i);
 		
 		//BIG_ENDIAN!!、なぜか0x0a0a判定を追加すると動かなくなる
 		switch(*((unsigned short*)(temp))){
@@ -428,13 +419,16 @@ int read_cf(char *filename, char *gameid)
 		int total = 0;
 		sceid2cfid(cw_buf,gameid);
 		mips_memcpy(cw_buf+8,gameid+5,5);
-		ascii2wide(codename,cw_buf);
+		ascii2wide(codename,cw_buf,26);
 		///*
 		do{
 			total=pos;
 			pos=read_sect_cf(pos,&pf);
 			p=codefreak_utf16be_seek(pf.buf,codename);
-			if(p){break;}
+			if(p){
+				read_sect_cf(total+p-pf.buf,&pf);
+				p=pf.buf;
+				break;}
 		}while(pos);
 		//*/
 			
@@ -449,10 +443,7 @@ int read_cf(char *filename, char *gameid)
 	*/
 	}
 	else{
-		if(read_sect_cf(pos,&pf)==-1){
-		closefile(&pf);
-		return 1;
-		}
+		read_sect_cf(pos,&pf);
 		p=pf.buf;
 	}
 	
@@ -465,13 +456,12 @@ int read_cf(char *filename, char *gameid)
 	t_encodepack pack;
 	if(encode_init(&pack) == 0){
 		encode_utf16_conv(p, NULL,&pack,MAX_READ_BUFFER);
+		encode_free(&pack);
 	}
 	else{
-		encode_free(&pack);
 		closefile(&pf);
 		return 1;
 	}
-	encode_free(&pack);
 	
 	//SJISに変換されているか
 	//int fd;
@@ -492,6 +482,7 @@ int read_cf(char *filename, char *gameid)
 	char namebuf[31];
 	char cwc[9];
 	char *namep;
+		namep = namebuf;
 	char nullcode=0;
 		
 	while(1){
@@ -568,6 +559,13 @@ READOUT:
 }
 
 
+int convert_cf(char *id)
+{
+	if(read_cf(CF_DIR,id)!=0) return 1;
+	else return 0;
+}
+#endif
+
 int convert(char *id)
 {
 	if(read_cwdb(CWDB_DIR,id)!=0) return 1;
@@ -580,10 +578,4 @@ int convert_cmf(char *filename)
 	return 0;
 }
 
-
-int convert_cf(char *id)
-{
-	if(read_cf(CF_DIR,id)!=0) return 1;
-	else return 0;
-}
 

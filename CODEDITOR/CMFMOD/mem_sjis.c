@@ -542,7 +542,7 @@ static void mem_write_value(int *idx)
 							adr -= adr_offset;
 						}
 						adr_offset += temp;
-						if((adr)>0x8800000 && (adr)<0xa000000){//保证是有效的地址
+						if((adr)>0x8800000 && (adr)<0xa000000){//塀洟暸歰槬媍媤浀
 							switch(back)
 							{
 							case 0x0:
@@ -698,7 +698,7 @@ static int mem_add_result(unsigned int addr)
 {
 	mem_search.result[mem_search.count ++] = addr;
 	mem_search.totalcount ++;
-	if(mem_search.count == RESULT_NUM)		//每1024个搜索结果写一次文件
+	if(mem_search.count == RESULT_NUM)		//抆1024岕杙枟弫崨槻櫣娞椔廃
 	{
 		switch(mem_search.state)
 		{
@@ -863,7 +863,7 @@ static int mem_search_normal(unsigned int value, int (*eq_func)(unsigned int add
 				}
 			mem_add_finish();
 		}
-		else		//上次搜索结果未超过RESULT_NUM,完全存在内存里
+		else		//昻娞杙枟弫崨棽奒崫RESULT_NUM,棅敥婁氊捸婁愴
 		{
 			mem_search.orgcount = mem_search.totalcount;
 			mips_memcpy(mem_search.orgres, mem_search.result, mem_search.orgcount * sizeof(unsigned int));
@@ -878,7 +878,7 @@ static int mem_search_normal(unsigned int value, int (*eq_func)(unsigned int add
 			mem_add_finish();
 		}
 		break;
-	case 2:			//上次搜索结果存在文件里
+	case 2:			//昻娞杙枟弫崨婁氊椔廃愴
 		mem_search.state = 0;
 		mem_search.count = mem_search.totalcount = 0;
 		mem_search.bfd = sceIoOpen(msfn[mem_search.idx], PSP_O_RDONLY, 0777);
@@ -1314,10 +1314,10 @@ extern void filter_filename(char *s)
 	char filename_encode=FILE_ENCODE();
 	while(s[i]!=0)
 	{
-		//SJISスキップ
+		//SJIS僗僉僢僾
 		if((filename_encode==1)&&((u8)((s[i] ^ 0x20)-0xA1) <(u8)0x3C)){
-			//SJIS认跋嘲
-			if((((s[i+1]+0xC0)&0xFF)<0xBC) || (s[i+1]==0x7F)){
+			//SJIS斖埻奜
+			if((((s[i+1]+0xC0)&0xFF)<=0xBC) && (s[i+1]!=0x7F)){
 			}
 			else{
 			s[i]=0x81;
@@ -1390,15 +1390,35 @@ extern void mem_table_savecw()
 	fd = sceIoOpen(s, PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
 	if(fd < 0) return;
 	
+#define WRITE_BUFFER 2048
+	
+	char *p= malloc(WRITE_BUFFER);
+	char *p_backup;
+	p_backup=p;
+	
 		mips_memcpy(fn,ui_get_gamename(),10);
 		fn[10]=0;
-		sprintf(s,"_S %s\r\n",fn);
-		sceIoWrite(fd, s, strlen(s));
+	
+		sprintf(p,"_S %s\r\n",fn);
+		p+=strlen(p);
+	
 		mips_memcpy(fn,ui_get_gamename()+12,64);
-		fn[64]=0;
-		sprintf(s,"_G %s\r\n",fn);
-		sceIoWrite(fd, s, strlen(s));
+		fn[64]=0;	
+		sprintf(p,"_G %s\r\n",fn);
+		p+=strlen(p);
+	
+	/*	if(enc){
+		sceid2cfid(fn,ui_get_gamename());
+		
+		sprintf(p,"_E 0x%s 0x00000020\r\n",fn);
+		mips_memcpy(p+16,ui_get_gamename()+5,5);
+		p+=strlen(p);
+			
+		}*/
+	
+	
 	//int i,j;
+	
 	for(i = 0; i < mem_gv.mem_table_size;){
 		sprintf(fn,"_C%d ",mem_gv.mem_table[i].lock);
 		int k = mem_table_walkforward(i);
@@ -1407,15 +1427,30 @@ extern void mem_table_savecw()
 		}
 		strcat(fn,mem_gv.mem_table[i].name);
 		strcat(fn,"\r\n");
-		for(j=i;j<k;j++){		
-			if(j==i){
-				sceIoWrite(fd, fn, strlen(fn));
+		for(j=i;j<k;j++){
+			if(p-p_backup>WRITE_BUFFER-64){
+			p=p_backup;
+			sceIoWrite(fd, p, strlen(p));
 			}
-			sprintf(s,"_L 0x%08X 0x%08X\r\n",mem_table_ConvertTabType(&mem_gv.mem_table[j]),mem_gv.mem_table[j].value);
-			sceIoWrite(fd, s, strlen(s)); 			
+			
+			if(j==i){
+			mips_memcpy(p,fn,strlen(fn));
+			p+=strlen(fn);
+			}
+			
+			//addr=mem_table_ConvertTabType(&mem_gv.mem_table[j]);
+		//if(enc){
+		//	addr ^=0xD6F73BEE;
+		//}			
+			sprintf(p,"_L 0x%08X 0x%08X\r\n",mem_table_ConvertTabType(&mem_gv.mem_table[j]),mem_gv.mem_table[j].value);
+			p+=strlen(p);
 		}
 		i = j;
 	}	
+	p=p_backup;
+	sceIoWrite(fd, p, strlen(p));
+		
+	sfree(p);
 	sceIoClose(fd);
 }
 
