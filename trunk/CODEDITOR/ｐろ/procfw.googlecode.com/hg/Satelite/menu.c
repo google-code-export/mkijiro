@@ -345,8 +345,6 @@ char *convert_table[]={"\x0","ms0:/seplugins/table/sjis","ms0:/seplugins/table/e
 
 int utf8video(){
 	char nulls[] = "NULL\x0";
-	//char buffer[2048];
-	
 	char *buffer;
 	//char buffer[2048];
 	SceUID tbl_buf = sceKernelAllocPartitionMemory(1 ? 2 : 1, "", PSP_SMEM_High, 2048, NULL);
@@ -386,35 +384,37 @@ int utf8video(){
 				sceIoRead(fd,buffer,2048);
 				i = 6;
 				
-		while (1)
+					while (1)
 					{
 						//if (buffer[i] == 0x50 && buffer[i + 1] == 0x53 && buffer[i + 2] == 0x50 && buffer[i + 3] == 0x5f && buffer[i + 4] == 0x47) break;
-						if (buffer[i] == 0x55 && buffer[i + 1] == 0x4D &&buffer[i + 2] == 0x44 && buffer[i + 3] == 0x5f && buffer[i + 4] == 0x56) {break;}
+						//if (buffer[i] == 0x55 && buffer[i + 1] == 0x4D &&buffer[i + 2] == 0x44 && buffer[i + 3] == 0x5f && buffer[i + 4] == 0x56) {break;}
+						if (memcmp(&buffer[i],"\x55\x4D\x44\x5F\x56",5)==0){break;}
 						if (i > 2038) {
-		sceIoClose(fd);
-	/*	sprintf(buffer,"root");
-		fd=sceIoOpen("ms0:/log", PSP_O_CREAT | PSP_O_WRONLY , 0777);
-		sceIoWrite(fd, buffer,4);
-		sceIoClose(fd);*/
-				 return 0;}
-						i++;
+						goto exit;
+						/*sprintf(buffer,"root");
+						fd=sceIoOpen("ms0:/log", PSP_O_CREAT | PSP_O_WRONLY , 0777);
+						sceIoWrite(fd, buffer,4);
+						sceIoClose(fd);*/
+				 		}
+					i++;
 					}
-		memcpy(&lba,&buffer[i-6],4);
+				memcpy(&lba,&buffer[i-6],4);
 				lba=lba*2048;
-		sceIoLseek(fd, lba, PSP_SEEK_SET);
+				sceIoLseek(fd, lba, PSP_SEEK_SET);
 				sceIoRead(fd,buffer,2048);
 					i = 31;
 
 					while (1)
 					{
-						if (buffer[i] == 0x50 && buffer[i + 1] == 0x41 && buffer[i + 2] == 0x52 && buffer[i + 3] == 0x41) {break;}
-						if (i > 2038) { 
-				sceIoClose(fd);
-	/*	sprintf(buffer,"psf");
-		fd=sceIoOpen("ms0:/log", PSP_O_CREAT | PSP_O_WRONLY , 0777);
-		sceIoWrite(fd, buffer,4);
-		sceIoClose(fd);*/
-  return 0; }
+						//if (buffer[i] == 0x50 && buffer[i + 1] == 0x41 && buffer[i + 2] == 0x52 && buffer[i + 3] == 0x41) {break;}
+						if (memcmp(&buffer[i],"\x50\x41\x52\x41",4)==0){break;}
+						if (i > 2038) {
+						goto exit;
+						/*	sprintf(buffer,"psf");
+						fd=sceIoOpen("ms0:/log", PSP_O_CREAT | PSP_O_WRONLY , 0777);
+						sceIoWrite(fd, buffer,4);
+						sceIoClose(fd);*/
+						}
 						i++;
 					}
 
@@ -429,16 +429,15 @@ int utf8video(){
 
 					while (1)
 					{
-if (buffer[k]==0x54 && buffer[k+1]==0x49 && buffer[k+2]==0x54 && buffer[k+3]==0x4C){break;}
+						//(buffer[k]==0x54 && buffer[k+1]==0x49 && buffer[k+2]==0x54 && buffer[k+3]==0x4C)
+						if (memcmp(&buffer[k],"\x54\x49\x54\x4C",4)==0){break;}
 						if (buffer[k] == 0){ct++;}
 						if (ct == z)
 						{
-				sceIoClose(fd);
-		/* fd=sceIoOpen("ms0:/log", PSP_O_CREAT | PSP_O_WRONLY , 0777);
-		sceIoWrite(fd, buffer,2048);
-		sceIoClose(fd);*/
-
-						  return 0;
+						goto exit;
+				/* fd=sceIoOpen("ms0:/log", PSP_O_CREAT | PSP_O_WRONLY , 0777);
+				sceIoWrite(fd, buffer,2048);
+			sceIoClose(fd);*/
 						}
 
 					k++;
@@ -455,11 +454,14 @@ if (buffer[k]==0x54 && buffer[k+1]==0x49 && buffer[k+2]==0x54 && buffer[k+3]==0x
 		sceIoClose(fd);*/
 		
 		}
-		else{;
-		sceIoClose(fd);return 0;}
+		else{
+			goto exit;
+		}
 		}
 		else{
-		sceIoClose(fd);return 0;
+		exit:
+		sceIoClose(fd);
+			return 0;
 		}
 		sceIoClose(fd);
 	}
