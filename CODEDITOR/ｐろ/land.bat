@@ -1,1 +1,0 @@
-wget -r -t3 -c -N -Q20m -l4 -L -k -np -p http://ijiro.daiwa-hotcom.com/data/IJIRO/PROJAP/index.html
