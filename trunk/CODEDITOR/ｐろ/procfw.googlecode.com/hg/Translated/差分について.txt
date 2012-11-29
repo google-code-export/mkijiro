@@ -1,6 +1,11 @@
 PROCFWのNIGHTLYBUID用の全角表示差分です。
 ビルドしないとつかえません。
 
+2012/11/30
+テーブル変換バッファをヒープに変更
+UTF_8BOM抜きをmemcmpに変更
+wgetのbatファイルがlandのままだったので修正
+
 --ファイル配置--
 /seplugins
 font_recovery_zenkaku.txt	フォントファイルパスの記述,日本語パスを含む場合は保存はUTF-8(BOM有無どちらでも可)にしてください

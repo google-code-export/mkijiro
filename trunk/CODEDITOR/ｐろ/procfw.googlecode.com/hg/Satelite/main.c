@@ -308,6 +308,7 @@ int load_recovery_font_select(void)
 	if(memcmp(g_cur_font_select,"\xEF\xBB\xBF",3)==0){
 		memmove(g_cur_font_select,g_cur_font_select+3,253);
 	}
+	
 	sceIoClose(fd);
 
 	fd = sceIoOpen( g_cur_font_select, PSP_O_RDONLY, 0777);
