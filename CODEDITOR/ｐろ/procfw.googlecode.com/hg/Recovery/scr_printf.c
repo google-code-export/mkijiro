@@ -695,16 +695,15 @@ int proDebugScreenSetFontFile(const char *file, int is_user)
 	SceUID fd;
 	size_t f_si;
 	int ret;
-	int file_len=strlen(file);
 	void *buf;
 	
 	//UTF-8BOM‰ñ”ð
 	if(memcmp(file,"\xEF\xBB\xBF",3)==0){
-		file+=3;
+		memmove(file,file+3,252);
 	}
 
 	fd = sceIoOpen(file, PSP_O_RDONLY, 0777);
-
+	
 	if(fd < 0) {
 		return fd;
 	}

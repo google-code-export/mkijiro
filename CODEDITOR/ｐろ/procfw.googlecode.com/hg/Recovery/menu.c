@@ -434,7 +434,7 @@ int utf82sjis()
 	unsigned char code=0;
 	char *msg;
 	char *p;
-	p = get_recovery_fontname((size_t)(g_font_cur_sel));
+	p = (char *)get_recovery_fontname((size_t)(g_font_cur_sel));
 	msg = strrchr(p, '/');
 	p=convert_table[zenkaku];
 	if(msg != NULL) {

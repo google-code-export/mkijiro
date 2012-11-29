@@ -302,11 +302,11 @@ int load_recovery_font_select(void)
 	}
 	}
 
-	sceIoRead(fd, g_cur_font_select, sizeof(g_cur_font_select));
+	sceIoRead(fd, g_cur_font_select, 256);
 	
 	//バイトオーダー回避
-	if((u8)g_cur_font_select[0]==0xEF){
-	memmove(&g_cur_font_select[0],&g_cur_font_select[3],strlen(g_cur_font_select)-3);
+	if(memcmp(g_cur_font_select,"\xEF\xBB\xBF",3)==0){
+		memmove(g_cur_font_select,g_cur_font_select+3,253);
 	}
 	sceIoClose(fd);
 

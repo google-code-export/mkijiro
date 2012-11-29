@@ -1,0 +1,28 @@
+PROCFWのNIGHTLYBUID用の全角表示差分です。
+ビルドしないとつかえません。
+
+--ファイル配置--
+/seplugins
+font_recovery_zenkaku.txt	フォントファイルパスの記述,日本語パスを含む場合は保存はUTF-8(BOM有無どちらでも可)にしてください
+zenkaku_recovery_jp.txt	SJIS用RECの翻訳ファイル
+zenkaku_satelite_jp.txt	SJIS用VSHの翻訳ファイル
+zenkaku_euc_recovery_jp.txt	EUC用RECの翻訳ファイル
+zenkaku_euc_satelite_jp.txt	EUC用RECの翻訳ファイル
+
+/seplugins/kanji
+ここに全角用SJISかEUCのFONTX2フォントファイルを配置して下さい,拡張子は.fnt/.pf./.tlfにしてください
+BDFファイルから変換してFONTX2を作成する場合はBDF2FONTx2で作成して下さい
+
+/seplugins/table
+sjis	各種文字変換用の1:１のテーブルファイルです,同梱してるのはCP932のみ
+euc		SJIS:EUC：UTF-8=2:2:4
+utf8
+
+--VSH--
+全角表示
+STARTボタンでPARAM.SFO<->ファイル名の表示切替
+
+--REC--
+全角表示
+
+BY (ﾟ∀ﾟ)

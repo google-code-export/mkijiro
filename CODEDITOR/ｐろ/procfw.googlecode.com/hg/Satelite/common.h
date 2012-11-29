@@ -100,6 +100,8 @@ size_t umdvideolist_count(UmdVideoList *list);
 void umdvideolist_clear(UmdVideoList *list);
 int umdvideolist_find(UmdVideoList *list, const char *search);
 void umdvideolist_init(UmdVideoList *list);
+int utf8video();
+
 
 extern u32 psp_fw_version;
 extern UmdVideoList g_umdlist;
