@@ -133,7 +133,7 @@ void fontlist_init(FontList *list)
 	list->tail = &list->head;
 	list->count = 0;
 }
-extern zenkaku;
+extern int zenkaku;
 char g_cur_font_select[256];
 
 int load_recovery_font_select(void)

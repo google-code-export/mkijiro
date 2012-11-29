@@ -272,6 +272,7 @@ extern int zenkaku;
 char *toufuarray[]={"  ","\x81\xA0","\xA2\xA2"};
 char *convert_table[]={"\x0","ms0:/seplugins/table/sjis","ms0:/seplugins/table/euc-jp"};
 
+/*
 typedef unsigned int ucs4_t;
 typedef unsigned int dword;
 typedef unsigned char byte;
@@ -354,9 +355,6 @@ int utf8_mbtowc(ucs4_t *pwc,unsigned char *s, int n)
 		return RET_ILSEQ;
 }
 
- //encode_utf8_conv_noram((unsigned char *)&msg[0]);
-	
-
 //ƒƒ‚ƒŠŽg‚í‚È‚¢”Å
 int encode_uni2cjk_noram(unsigned char *uni,unsigned char *cjk){
 	int transcount = 0;
@@ -414,12 +412,17 @@ int encode_utf8_conv_noram(unsigned char *ucs)
 	cjk[j] = 0;
 	memcpy(&stm[0],&cjk[0],128);
 	return j;
-}
+}*/
 
 
 int utf82sjis()
 {
-	char buffer[2048];
+	char *buffer;
+	//char buffer[2048];
+	SceUID tbl_buf = sceKernelAllocPartitionMemory(1 ? 2 : 1, "", PSP_SMEM_High, 2048, NULL);
+	void *buf;
+	buf=sceKernelGetBlockHeadAddr(tbl_buf);
+	buffer=buf;
 	int seek=0;
 	int k=0;
 	int kk=0;
@@ -437,9 +440,7 @@ int utf82sjis()
 	if(msg != NULL) {
 	msg++;
 	int z= strlen(msg);
-	if(z>128){
-	z=128;
-	}
+	if(z>128){z=128;}
 	
 		while(i < z){
 			code= (u8)msg[i];
@@ -534,6 +535,8 @@ int utf82sjis()
 	stm[16]=0;
 	}
 	
+	sceKernelFreePartitionMemory(tbl_buf);
+	
 return 0;
 }
 
@@ -552,8 +555,8 @@ static int display_recovery_font(struct MenuEntry* entry, char *buf, int size)
 		ok=0;
 	}
 	if(ok==1){
-	encode_utf8_conv_noram(fontname);
-	//utf82sjis();
+	//encode_utf8_conv_noram(fontname);
+	utf82sjis();
 	ok=2;
 	}
 	if(ok==2){
