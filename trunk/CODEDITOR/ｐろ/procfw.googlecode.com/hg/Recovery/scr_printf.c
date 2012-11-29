@@ -698,9 +698,9 @@ int proDebugScreenSetFontFile(const char *file, int is_user)
 	int file_len=strlen(file);
 	void *buf;
 	
-	//バイトオーダー回避
-	if(((u8)file[0]==0xEF) &&(file_len >3)){
-	memmove(&file[0],&file[3],file_len-3);
+	//UTF-8BOM回避
+	if(memcmp(file,"\xEF\xBB\xBF",3)==0){
+		file+=3;
 	}
 
 	fd = sceIoOpen(file, PSP_O_RDONLY, 0777);

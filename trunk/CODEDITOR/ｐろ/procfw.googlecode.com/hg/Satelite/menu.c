@@ -345,7 +345,15 @@ char *convert_table[]={"\x0","ms0:/seplugins/table/sjis","ms0:/seplugins/table/e
 
 int utf8video(){
 	char nulls[] = "NULL\x0";
-	char buffer[2048];
+	//char buffer[2048];
+	
+	char *buffer;
+	//char buffer[2048];
+	SceUID tbl_buf = sceKernelAllocPartitionMemory(1 ? 2 : 1, "", PSP_SMEM_High, 2048, NULL);
+	void *buf;
+	buf=sceKernelGetBlockHeadAddr(tbl_buf);
+	buffer=buf;
+	
 	int seek=0;
 	int k=0;
 	int z=0;
@@ -550,6 +558,8 @@ if (buffer[k]==0x54 && buffer[k+1]==0x49 && buffer[k+2]==0x54 && buffer[k+3]==0x
 			stm[k]=0;
 			stm[20]=0;
 			stm[21]=0;
+		
+	sceKernelFreePartitionMemory(tbl_buf);
 		
 return 1;
 }
