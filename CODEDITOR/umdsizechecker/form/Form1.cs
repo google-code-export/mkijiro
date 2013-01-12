@@ -18,6 +18,15 @@ using System.Globalization;
 namespace WindowsFormsApplication1
 {
 
+
+    class MSDOS
+    {
+        [DllImport("kernel32.dll")]
+        public static extern int GetShortPathName(string longPath, StringBuilder shortPathBuffer, int bufferSize);
+
+    } 
+
+
     public partial class Form1 : Form
     {
         
@@ -73,13 +82,18 @@ namespace WindowsFormsApplication1
                         checkBox1.Checked = true;
                         checkBox2.Checked = true;
                     }
-                    if (s.Contains("BUFFER"))
+                    else if (s.Contains("BUFFER"))
                     {
                         textBox2.Text = s.Remove(0, 6);
                     }
-                    if (s.Contains("OPENDIR"))
+                    else if (s.Contains("OPENDIR"))
                     {
                         open_dir = s.Remove(0, 7);
+                    }
+                    else if (s.Contains("DOS83"))
+                    {
+                        checkBox3.Checked = true;
+                        checkBox4.Checked = true;
                     }
                 }
                 sr.Close();
@@ -252,6 +266,10 @@ namespace WindowsFormsApplication1
             {
                 s.Append("OPENDIR");
                 s.AppendLine(open_dir);
+            }
+            if (checkBox3.Checked == true)
+            {
+                s.AppendLine("DOS83");
             }
             sr.Write(s.ToString());
             
@@ -561,6 +579,34 @@ namespace WindowsFormsApplication1
             }
         }
 
+
+        private string dos83(string s)
+        {
+            string[] ss = s.Split('.');
+
+            if (ss.Length >= 2)
+            {
+                if (ss[0].Length > 6)
+                {
+                    ss[0] = ss[0].Substring(0, 6);
+                }
+                s = ss[0] + "~1." + ss[1];
+                s = s.ToUpper();
+            }
+            
+
+            //int bufferSize = 260;
+            //StringBuilder shortPathBuffer = new StringBuilder(bufferSize);
+            //MSDOS.GetShortPathName(s, shortPathBuffer, bufferSize);
+
+            //string shortPath = shortPathBuffer.ToString();
+
+
+
+
+            return s;
+        }
+
         //ID
         private void button2_Click(object sender, EventArgs e)//gid
         {
@@ -572,10 +618,16 @@ namespace WindowsFormsApplication1
                 fs.Read(gid, 0, 10);
                 fs.Close();
                 string rpname = Encoding.GetEncoding(0).GetString(gid) + ".ISO";
+
+                if (checkBox3.Checked == true) { 
+
+                    rpname= dos83(rpname);
+                }
+
                 textBox1.Text = dic[21].Replace("%s",rpname);//"にリネームしました";
                 int last = isofile.LastIndexOf("\\") + 1;
                 rpname = isofile.Substring(0, last) + rpname;
-                if (System.IO.File.Exists(rpname))
+                if (System.IO.File.Exists(rpname)==true)
                 {
                     textBox1.Text = dic[22];//"同じ名前が存在します";
                 }
@@ -606,6 +658,13 @@ namespace WindowsFormsApplication1
                 if (rpname != "")
                 {
                     rpname += ".ISO";
+
+                    if (checkBox3.Checked == true)
+                    {
+
+                        rpname = dos83(rpname);
+                    }
+
                     textBox1.Text = dic[21].Replace("%s", rpname);
                     int last = isofile.LastIndexOf("\\") + 1;
                     rpname = isofile.Substring(0, last) + rpname;
@@ -781,6 +840,13 @@ namespace WindowsFormsApplication1
                         }
                     }
 
+
+                    if (checkBox3.Checked == true)
+                    {
+
+                        rpname = dos83(rpname);
+                    }
+
                     textBox1.Text = dic[21].Replace("%s",rpname);
                     int last = isofile.LastIndexOf("\\") + 1;
                     rpname = isofile.Substring(0, last) + rpname;
@@ -924,6 +990,14 @@ namespace WindowsFormsApplication1
                 byte[] gid = new byte[10];
                 Array.Copy(source, 0x373, gid, 0, 10);
                 string rpname = Encoding.GetEncoding(0).GetString(gid) + ".CSO";
+
+
+                if (checkBox4.Checked == true)
+                {
+
+                    rpname = dos83(rpname);
+                }
+
                 textBox1.Text = dic[21].Replace("%s",rpname);
                 int last = isofile.LastIndexOf("\\") + 1;
                 rpname = isofile.Substring(0, last) + rpname;
@@ -1005,10 +1079,16 @@ namespace WindowsFormsApplication1
             Array.Copy(source,0x28, isohead, 0, 32);
             string rpname = Encoding.GetEncoding(0).GetString(isohead).Trim();
             rpname += ".CSO";
+
+            if (checkBox4.Checked == true)
+            {
+                rpname = dos83(rpname);
+            }
+
             textBox1.Text = dic[21].Replace("%s",rpname);
             int last = isofile.LastIndexOf("\\") + 1;
             rpname = isofile.Substring(0, last) + rpname;
-             if (System.IO.File.Exists(rpname))
+             if (System.IO.File.Exists(rpname)==true)
               {
                 textBox1.Text =dic[22];
               }
@@ -1028,7 +1108,7 @@ namespace WindowsFormsApplication1
         //PSF_CISO
         private void button8_Click(object sender, System.EventArgs e)
         {
-
+            
             if (System.IO.File.Exists(isofile))
             {
                 System.IO.FileStream fs = new System.IO.FileStream(isofile, System.IO.FileMode.Open, System.IO.FileAccess.Read);
@@ -1269,10 +1349,17 @@ namespace WindowsFormsApplication1
                     }
 
                     fs.Close();
+
+
+                    if (checkBox4.Checked == true)
+                    {
+                      rpname = dos83(rpname);
+                    }
+
                     textBox1.Text += dic[21].Replace("%s",rpname);
                     int last = isofile.LastIndexOf("\\") + 1;
                     rpname = isofile.Substring(0, last) + rpname;
-                    if (System.IO.File.Exists(rpname))
+                    if (System.IO.File.Exists(rpname)==true)
                     {
                         textBox1.Text =dic[22];
                     }
@@ -1422,6 +1509,18 @@ namespace WindowsFormsApplication1
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
              checkBox1.Checked = checkBox2.Checked;
+        }
+
+        private void checkBox3_CheckedChanged(object sender, EventArgs e)
+        {
+
+            checkBox4.Checked = checkBox3.Checked;
+        }
+
+        private void checkBox4_CheckedChanged(object sender, EventArgs e)
+        {
+
+            checkBox3.Checked = checkBox4.Checked;
         }
 
 

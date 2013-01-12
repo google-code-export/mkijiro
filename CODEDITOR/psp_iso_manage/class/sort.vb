@@ -3,6 +3,9 @@ Imports System.IO
 
 'ICOMPAREはインデックスを破壊する?のでつかわない
 Class sort
+
+
+
     'さんぷるどおりだとうごくがなぜかうまくいかないので代替関数
     Public Function sort_game(ByVal mode As String) As Boolean
         Dim m As umdisomanger = umdisomanger
@@ -93,42 +96,42 @@ Class sort
         Else
             Array.Sort(s)
         End If
-            Dim j As Integer = 1
-            Dim k As Integer = 0
-            Dim y As Integer = 0
-            Dim commaindex As Integer = 0
-            Dim ss As String
-            If mode.Contains("UP") Then
-                While k < z
-                    commaindex = s(j).LastIndexOf(",") + 1
-                    ss = s(j).Substring(commaindex, s(j).Length - commaindex)
-                    y = CInt(ss)
-                    Dim cln As TreeNode = CType(m.TreeView1.Nodes(y).Clone(), TreeNode)
-                    m.TreeView1.Nodes.Add(cln)
-                    k += 1
-                    j += 1
-                End While
-            ElseIf mode.Contains("DW") Then
-                j = z
-                While k < z
-                    commaindex = s(j).LastIndexOf(",") + 1
-                    ss = s(j).Substring(commaindex, s(j).Length - commaindex)
-                    y = CInt(ss)
-                    Dim cln As TreeNode = CType(m.TreeView1.Nodes(y).Clone(), TreeNode)
-                    m.TreeView1.Nodes.Add(cln)
-                    k += 1
-                    j -= 1
-                End While
-            End If
+        Dim j As Integer = 1
+        Dim k As Integer = 0
+        Dim y As Integer = 0
+        Dim commaindex As Integer = 0
+        Dim ss As String
+        If mode.Contains("UP") Then
+            While k < z
+                commaindex = s(j).LastIndexOf(",") + 1
+                ss = s(j).Substring(commaindex, s(j).Length - commaindex)
+                y = CInt(ss)
+                Dim cln As TreeNode = CType(m.TreeView1.Nodes(y).Clone(), TreeNode)
+                m.TreeView1.Nodes.Add(cln)
+                k += 1
+                j += 1
+            End While
+        ElseIf mode.Contains("DW") Then
+            j = z
+            While k < z
+                commaindex = s(j).LastIndexOf(",") + 1
+                ss = s(j).Substring(commaindex, s(j).Length - commaindex)
+                y = CInt(ss)
+                Dim cln As TreeNode = CType(m.TreeView1.Nodes(y).Clone(), TreeNode)
+                m.TreeView1.Nodes.Add(cln)
+                k += 1
+                j -= 1
+            End While
+        End If
 
-            For p = 0 To z - 1
-                m.TreeView1.Nodes.Remove(m.TreeView1.Nodes(0))
-            Next
-            m.TreeView1.Focus()
-            m.TreeView1.EndUpdate() ' Update the changes made to the tree view.
+        For p = 0 To z - 1
+            m.TreeView1.Nodes.Remove(m.TreeView1.Nodes(0))
+        Next
+        m.TreeView1.Focus()
+        m.TreeView1.EndUpdate() ' Update the changes made to the tree view.
 
 
-            Return True
+        Return True
     End Function
 
 End Class

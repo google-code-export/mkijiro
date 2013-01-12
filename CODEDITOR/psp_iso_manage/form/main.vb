@@ -6,6 +6,18 @@ Imports System.IO
 Imports System.Media
 Imports System.Drawing
 Imports System.Globalization
+Imports System.Runtime.InteropServices
+
+
+Module Module1
+
+    <DllImport("kernel32.dll")> _
+    Public Function GetShortPathName(ByVal longPath As String, ByVal shortPathBuffer As StringBuilder, ByVal bufferLength As Integer) As Integer
+    End Function
+
+
+End Module
+
 
 Public Class umdisomanger
     Friend psx As Boolean = False
@@ -810,9 +822,76 @@ Public Class umdisomanger
         End Try
     End Sub
 
+    Private Function msdos83(ByVal s As String) As String
+
+        'Dim ss As String() = s.Split(CChar("."))
+        'If ss.Length >= 2 Then
+        '    If ss(0).Length > 6 Then
+        '        ss(0) = ss(0).Substring(0, 6)
+        '    End If
+        '    s = ss(0) & "~1." & ss(ss.Length - 1)
+
+        'End If
+
+        Dim bufferLength As Integer = 260
+        Dim shortPathBuffer As New StringBuilder(bufferLength)
+        Module1.GetShortPathName(s, shortPathBuffer, bufferLength)
+
+        Dim shortPath As String = shortPathBuffer.ToString()
+
+        Return shortPath
+    End Function
+
+
+
+
+    Private Sub VITAMSDOS83ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles VITAMSDOS83ToolStripMenuItem.Click
+
+
+        If Directory.Exists(My.Settings.vitasavedir) Then
+
+            Dim treenode As TreeNode = TreeView1.SelectedNode
+            If treenode IsNot Nothing Then
+                If treenode.Level = 0 Then
+                    treenode = treenode.Nodes(0)
+                Else
+                    treenode = treenode.Parent.Nodes(0)
+                End If
+                Dim cp As String = treenode.Tag.ToString
+
+                If File.Exists(cp) = False Then
+                    Beep()
+                    MessageBox.Show(Me, "コピー元のファイルが見つかりません", "FILE EXIST")
+                    Exit Sub
+
+                End If
+
+                Dim cp2 As String = My.Settings.vitasavedir & "\" & msdos83(Path.GetFileName(cp))
+
+                If File.Exists(cp2) = False Then
+                    My.Computer.FileSystem.CopyFile(cp, cp2, FileIO.UIOption.AllDialogs)
+                    Beep()
+                Else
+                    Beep()
+                    MessageBox.Show(Me, "すでに同じMSDOS8.3形式の名前が存在します", "FILE EXIST")
+                End If
+
+            End If
+        Else
+            Beep()
+            MessageBox.Show(Me, "VITAのセーブフォルダが指定されてないか見つかりません", "NO VITA SAVEDATA")
+        End If
+
+
+    End Sub
+
+
+
     Private Sub move_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles movepsp.Click, cnt_install.Click
         Try
             Dim psp As String = findpsp()
+
+
 
             If psp = "" Then
                 Beep()
@@ -895,8 +974,7 @@ Public Class umdisomanger
                             Next
 
                         Else
-                            My.Computer.FileSystem.CopyFile( _
-                              cp, cp2, FileIO.UIOption.AllDialogs)
+                            My.Computer.FileSystem.CopyFile(cp, cp2, FileIO.UIOption.AllDialogs)
                         End If
                         Beep()
                         '"の転送が完了しました", "転送成功"
@@ -4482,5 +4560,35 @@ Public Class umdisomanger
         End If
     End Sub
 #End Region
+
+    Private Sub VITASAVEDATAToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles VITASAVEDATAToolStripMenuItem.Click
+        Dim fbd As New FolderBrowserDialog
+
+        '上部に表示する説明テキストを指定する
+        fbd.Description = "フォルダを指定してください。"
+        'ルートフォルダを指定する
+        'デフォルトでDesktop
+        fbd.RootFolder = Environment.SpecialFolder.Desktop
+        '最初に選択するフォルダを指定する
+        'RootFolder以下にあるフォルダである必要がある
+
+        fbd.SelectedPath = "C:\"
+
+        If Directory.Exists(My.Settings.vitasavedir) Then
+            fbd.SelectedPath = My.Settings.vitasavedir
+        End If
+
+        'ユーザーが新しいフォルダを作成できるようにする
+        'デフォルトでTrue
+        fbd.ShowNewFolderButton = True
+
+        'ダイアログを表示する
+        If fbd.ShowDialog(Me) = DialogResult.OK Then
+            '選択されたフォルダを表示する
+            My.Settings.vitasavedir = fbd.SelectedPath
+        End If
+
+
+    End Sub
 
 End Class

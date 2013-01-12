@@ -175,5 +175,8 @@ X:\PSP\GAME660\</Value>
     <Setting Name="usemd5" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="vitasavedir" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>
