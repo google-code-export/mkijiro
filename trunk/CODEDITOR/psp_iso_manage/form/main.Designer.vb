@@ -28,6 +28,8 @@ Partial Class umdisomanger
         Me.TreeView1 = New System.Windows.Forms.TreeView()
         Me.ContextMenuStrip2 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.cnt_install = New System.Windows.Forms.ToolStripMenuItem()
+        Me.VITAMSDOS83ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.PACKHOMEBREWVITASAVEToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator()
         Me.rg_add = New System.Windows.Forms.ToolStripMenuItem()
         Me.rg_edit = New System.Windows.Forms.ToolStripMenuItem()
@@ -116,6 +118,7 @@ Partial Class umdisomanger
         Me.rename_dat = New System.Windows.Forms.ToolStripMenuItem()
         Me.editpspdir = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.VITASAVEDATAToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.XMLヘッダフッター編集ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ALSAVE = New System.Windows.Forms.ToolStripMenuItem()
         Me.HELPToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -159,7 +162,18 @@ Partial Class umdisomanger
         'cnt_install
         '
         resources.ApplyResources(Me.cnt_install, "cnt_install")
+        Me.cnt_install.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.VITAMSDOS83ToolStripMenuItem, Me.PACKHOMEBREWVITASAVEToolStripMenuItem})
         Me.cnt_install.Name = "cnt_install"
+        '
+        'VITAMSDOS83ToolStripMenuItem
+        '
+        resources.ApplyResources(Me.VITAMSDOS83ToolStripMenuItem, "VITAMSDOS83ToolStripMenuItem")
+        Me.VITAMSDOS83ToolStripMenuItem.Name = "VITAMSDOS83ToolStripMenuItem"
+        '
+        'PACKHOMEBREWVITASAVEToolStripMenuItem
+        '
+        resources.ApplyResources(Me.PACKHOMEBREWVITASAVEToolStripMenuItem, "PACKHOMEBREWVITASAVEToolStripMenuItem")
+        Me.PACKHOMEBREWVITASAVEToolStripMenuItem.Name = "PACKHOMEBREWVITASAVEToolStripMenuItem"
         '
         'ToolStripSeparator6
         '
@@ -606,7 +620,7 @@ Partial Class umdisomanger
         'setting
         '
         resources.ApplyResources(Me.setting, "setting")
-        Me.setting.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GUITOP, Me.xmlselect, Me.rename_dat, Me.editpspdir, Me.ToolStripMenuItem2, Me.XMLヘッダフッター編集ToolStripMenuItem, Me.ALSAVE})
+        Me.setting.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GUITOP, Me.xmlselect, Me.rename_dat, Me.editpspdir, Me.ToolStripMenuItem2, Me.VITASAVEDATAToolStripMenuItem, Me.XMLヘッダフッター編集ToolStripMenuItem, Me.ALSAVE})
         Me.setting.Name = "setting"
         '
         'GUITOP
@@ -633,6 +647,11 @@ Partial Class umdisomanger
         '
         resources.ApplyResources(Me.ToolStripMenuItem2, "ToolStripMenuItem2")
         Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
+        '
+        'VITASAVEDATAToolStripMenuItem
+        '
+        resources.ApplyResources(Me.VITASAVEDATAToolStripMenuItem, "VITASAVEDATAToolStripMenuItem")
+        Me.VITASAVEDATAToolStripMenuItem.Name = "VITASAVEDATAToolStripMenuItem"
         '
         'XMLヘッダフッター編集ToolStripMenuItem
         '
@@ -858,5 +877,8 @@ Partial Class umdisomanger
     Friend WithEvents EditImage2 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Label8 As System.Windows.Forms.Label
     Friend WithEvents USEMD5 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents VITASAVEDATAToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents VITAMSDOS83ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents PACKHOMEBREWVITASAVEToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class

@@ -50,6 +50,8 @@
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.button9 = new System.Windows.Forms.Button();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -60,10 +62,9 @@
             // 
             this.button1.AllowDrop = true;
             this.button1.Font = new System.Drawing.Font("MS UI Gothic", 7.854546F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.button1.Location = new System.Drawing.Point(14, 12);
-            this.button1.Margin = new System.Windows.Forms.Padding(4);
+            this.button1.Location = new System.Drawing.Point(12, 10);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(107, 28);
+            this.button1.Size = new System.Drawing.Size(92, 24);
             this.button1.TabIndex = 1;
             this.button1.Text = "ファイル読み込み";
             this.button1.UseVisualStyleBackColor = true;
@@ -72,13 +73,12 @@
             // textBox1
             // 
             this.textBox1.AllowDrop = true;
-            this.textBox1.Location = new System.Drawing.Point(14, 48);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.textBox1.Location = new System.Drawing.Point(12, 41);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBox1.ShortcutsEnabled = false;
-            this.textBox1.Size = new System.Drawing.Size(201, 70);
+            this.textBox1.Size = new System.Drawing.Size(173, 61);
             this.textBox1.TabIndex = 2;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
@@ -86,10 +86,9 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("ＭＳ ゴシック", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label1.Location = new System.Drawing.Point(14, 129);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(12, 111);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(112, 14);
+            this.label1.Size = new System.Drawing.Size(95, 12);
             this.label1.TabIndex = 3;
             this.label1.Text = "ファイルサイズ:";
             // 
@@ -97,20 +96,18 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("ＭＳ ゴシック", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label2.Location = new System.Drawing.Point(14, 146);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(12, 125);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(112, 14);
+            this.label2.Size = new System.Drawing.Size(95, 12);
             this.label2.TabIndex = 4;
             this.label2.Text = "セクター算出　:";
             // 
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("MS UI Gothic", 7.854546F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.button2.Location = new System.Drawing.Point(15, 22);
-            this.button2.Margin = new System.Windows.Forms.Padding(4);
+            this.button2.Location = new System.Drawing.Point(13, 19);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(88, 28);
+            this.button2.Size = new System.Drawing.Size(75, 24);
             this.button2.TabIndex = 5;
             this.button2.Text = "ゲームID";
             this.button2.UseVisualStyleBackColor = true;
@@ -119,10 +116,9 @@
             // button3
             // 
             this.button3.Font = new System.Drawing.Font("MS UI Gothic", 7.854546F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.button3.Location = new System.Drawing.Point(15, 56);
-            this.button3.Margin = new System.Windows.Forms.Padding(4);
+            this.button3.Location = new System.Drawing.Point(13, 48);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(88, 28);
+            this.button3.Size = new System.Drawing.Size(75, 24);
             this.button3.TabIndex = 6;
             this.button3.Text = "PSFタイトル";
             this.button3.UseVisualStyleBackColor = true;
@@ -131,10 +127,9 @@
             // button4
             // 
             this.button4.Font = new System.Drawing.Font("MS UI Gothic", 7.854546F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.button4.Location = new System.Drawing.Point(109, 22);
-            this.button4.Margin = new System.Windows.Forms.Padding(4);
+            this.button4.Location = new System.Drawing.Point(93, 19);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(88, 28);
+            this.button4.Size = new System.Drawing.Size(75, 24);
             this.button4.TabIndex = 7;
             this.button4.Text = "ISOラベル";
             this.button4.UseVisualStyleBackColor = true;
@@ -142,16 +137,15 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.checkBox3);
             this.groupBox1.Controls.Add(this.checkBox1);
             this.groupBox1.Controls.Add(this.button4);
             this.groupBox1.Controls.Add(this.button3);
             this.groupBox1.Controls.Add(this.button2);
             this.groupBox1.Enabled = false;
-            this.groupBox1.Location = new System.Drawing.Point(7, 169);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.groupBox1.Location = new System.Drawing.Point(6, 145);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox1.Size = new System.Drawing.Size(207, 90);
+            this.groupBox1.Size = new System.Drawing.Size(179, 95);
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "ISOリネーム";
@@ -159,9 +153,9 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(113, 64);
+            this.checkBox1.Location = new System.Drawing.Point(94, 54);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(64, 18);
+            this.checkBox1.Size = new System.Drawing.Size(57, 16);
             this.checkBox1.TabIndex = 8;
             this.checkBox1.Text = "mecab";
             this.checkBox1.UseVisualStyleBackColor = true;
@@ -171,9 +165,9 @@
             // 
             this.button5.Enabled = false;
             this.button5.Font = new System.Drawing.Font("MS UI Gothic", 7.854546F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.button5.Location = new System.Drawing.Point(121, 18);
+            this.button5.Location = new System.Drawing.Point(104, 15);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(66, 22);
+            this.button5.Size = new System.Drawing.Size(57, 19);
             this.button5.TabIndex = 9;
             this.button5.Text = "開始";
             this.button5.UseVisualStyleBackColor = true;
@@ -185,9 +179,9 @@
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.textBox2);
             this.groupBox2.Controls.Add(this.button5);
-            this.groupBox2.Location = new System.Drawing.Point(7, 265);
+            this.groupBox2.Location = new System.Drawing.Point(8, 246);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(207, 46);
+            this.groupBox2.Size = new System.Drawing.Size(177, 39);
             this.groupBox2.TabIndex = 10;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "余剰サイズトリム";
@@ -195,18 +189,18 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(89, 22);
+            this.label4.Location = new System.Drawing.Point(76, 19);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(29, 14);
+            this.label4.Size = new System.Drawing.Size(25, 12);
             this.label4.TabIndex = 12;
             this.label4.Text = "MiB";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(5, 22);
+            this.label3.Location = new System.Drawing.Point(4, 19);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(44, 14);
+            this.label3.Size = new System.Drawing.Size(37, 12);
             this.label3.TabIndex = 11;
             this.label3.Text = "バッファ";
             // 
@@ -214,11 +208,11 @@
             // 
             this.textBox2.Font = new System.Drawing.Font("MS UI Gothic", 9.163636F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.textBox2.ImeMode = System.Windows.Forms.ImeMode.Disable;
-            this.textBox2.Location = new System.Drawing.Point(48, 20);
+            this.textBox2.Location = new System.Drawing.Point(41, 17);
             this.textBox2.MaxLength = 4;
             this.textBox2.Name = "textBox2";
             this.textBox2.ShortcutsEnabled = false;
-            this.textBox2.Size = new System.Drawing.Size(37, 21);
+            this.textBox2.Size = new System.Drawing.Size(32, 20);
             this.textBox2.TabIndex = 10;
             this.textBox2.Text = "32";
             this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
@@ -227,9 +221,9 @@
             // 
             this.sectorview.Enabled = false;
             this.sectorview.Font = new System.Drawing.Font("MS UI Gothic", 7.854546F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.sectorview.Location = new System.Drawing.Point(128, 12);
+            this.sectorview.Location = new System.Drawing.Point(110, 10);
             this.sectorview.Name = "sectorview";
-            this.sectorview.Size = new System.Drawing.Size(85, 28);
+            this.sectorview.Size = new System.Drawing.Size(73, 24);
             this.sectorview.TabIndex = 11;
             this.sectorview.Text = "セクタビュー";
             this.sectorview.UseVisualStyleBackColor = true;
@@ -238,9 +232,9 @@
             // button6
             // 
             this.button6.Font = new System.Drawing.Font("MS UI Gothic", 7.854546F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.button6.Location = new System.Drawing.Point(13, 22);
+            this.button6.Location = new System.Drawing.Point(11, 19);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(85, 28);
+            this.button6.Size = new System.Drawing.Size(73, 24);
             this.button6.TabIndex = 12;
             this.button6.Text = "ゲームID";
             this.button6.UseVisualStyleBackColor = true;
@@ -248,9 +242,9 @@
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(104, 22);
+            this.button7.Location = new System.Drawing.Point(89, 19);
             this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(88, 28);
+            this.button7.Size = new System.Drawing.Size(75, 24);
             this.button7.TabIndex = 13;
             this.button7.Text = "ISOラベル";
             this.button7.UseVisualStyleBackColor = true;
@@ -258,13 +252,14 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.checkBox4);
             this.groupBox3.Controls.Add(this.button8);
             this.groupBox3.Controls.Add(this.checkBox2);
             this.groupBox3.Controls.Add(this.button6);
             this.groupBox3.Controls.Add(this.button7);
-            this.groupBox3.Location = new System.Drawing.Point(234, 169);
+            this.groupBox3.Location = new System.Drawing.Point(212, 125);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(207, 90);
+            this.groupBox3.Size = new System.Drawing.Size(177, 94);
             this.groupBox3.TabIndex = 14;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "CSOリネーム";
@@ -273,9 +268,9 @@
             // button8
             // 
             this.button8.Font = new System.Drawing.Font("MS UI Gothic", 7.854546F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.button8.Location = new System.Drawing.Point(13, 56);
+            this.button8.Location = new System.Drawing.Point(11, 48);
             this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(85, 28);
+            this.button8.Size = new System.Drawing.Size(73, 24);
             this.button8.TabIndex = 15;
             this.button8.Text = "PSFタイトル";
             this.button8.UseVisualStyleBackColor = true;
@@ -284,9 +279,9 @@
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(114, 63);
+            this.checkBox2.Location = new System.Drawing.Point(98, 54);
             this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(64, 18);
+            this.checkBox2.Size = new System.Drawing.Size(57, 16);
             this.checkBox2.TabIndex = 14;
             this.checkBox2.Text = "mecab";
             this.checkBox2.UseVisualStyleBackColor = true;
@@ -296,9 +291,9 @@
             // 
             this.groupBox4.AutoSize = true;
             this.groupBox4.Controls.Add(this.button9);
-            this.groupBox4.Location = new System.Drawing.Point(247, 265);
+            this.groupBox4.Location = new System.Drawing.Point(212, 227);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(192, 66);
+            this.groupBox4.Size = new System.Drawing.Size(165, 58);
             this.groupBox4.TabIndex = 15;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "CSOアンパック";
@@ -307,20 +302,42 @@
             // button9
             // 
             this.button9.Font = new System.Drawing.Font("MS UI Gothic", 7.854546F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.button9.Location = new System.Drawing.Point(54, 22);
+            this.button9.Location = new System.Drawing.Point(46, 19);
             this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(75, 24);
+            this.button9.Size = new System.Drawing.Size(64, 21);
             this.button9.TabIndex = 0;
             this.button9.Text = "開始";
             this.button9.UseVisualStyleBackColor = true;
             this.button9.Click += new System.EventHandler(this.button9_Click);
             // 
+            // checkBox3
+            // 
+            this.checkBox3.AutoSize = true;
+            this.checkBox3.Location = new System.Drawing.Point(94, 73);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(54, 16);
+            this.checkBox3.TabIndex = 16;
+            this.checkBox3.Text = "dos83";
+            this.checkBox3.UseVisualStyleBackColor = true;
+            this.checkBox3.CheckedChanged += new System.EventHandler(this.checkBox3_CheckedChanged);
+            // 
+            // checkBox4
+            // 
+            this.checkBox4.AutoSize = true;
+            this.checkBox4.Location = new System.Drawing.Point(98, 73);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(54, 16);
+            this.checkBox4.TabIndex = 16;
+            this.checkBox4.Text = "dos83";
+            this.checkBox4.UseVisualStyleBackColor = true;
+            this.checkBox4.CheckedChanged += new System.EventHandler(this.checkBox4_CheckedChanged);
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(453, 340);
+            this.ClientSize = new System.Drawing.Size(388, 296);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.sectorview);
@@ -331,7 +348,6 @@
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button1);
             this.Location = new System.Drawing.Point(200, 200);
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "UMDさいず";
@@ -374,6 +390,8 @@
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Button button9;
+        private System.Windows.Forms.CheckBox checkBox3;
+        private System.Windows.Forms.CheckBox checkBox4;
     }
 }
 
