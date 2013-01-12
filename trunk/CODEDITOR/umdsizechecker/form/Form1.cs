@@ -6,8 +6,8 @@ using System.Media;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 using System.IO;
+using System.Windows.Forms;
 using Microsoft.VisualBasic;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
@@ -18,13 +18,6 @@ using System.Globalization;
 namespace WindowsFormsApplication1
 {
 
-
-    class MSDOS
-    {
-        [DllImport("kernel32.dll")]
-        public static extern int GetShortPathName(string longPath, StringBuilder shortPathBuffer, int bufferSize);
-
-    } 
 
 
     public partial class Form1 : Form
@@ -590,8 +583,7 @@ namespace WindowsFormsApplication1
                 {
                     ss[0] = ss[0].Substring(0, 6);
                 }
-                s = ss[0] + "~1." + ss[1];
-                s = s.ToUpper();
+                s = ss[0] + "^1." + ss[1];
             }
             
 
@@ -601,11 +593,47 @@ namespace WindowsFormsApplication1
 
             //string shortPath = shortPathBuffer.ToString();
 
-
-
-
-            return s;
+            return s.ToUpper();
         }
+
+
+        private string dosfilerenamer(string cp,string cp2)
+        {
+
+            if (MessageBox.Show("すでにMSDOS8.3同じ名前が存在します,数字を増やしてリネームしますか？", "FILE EXIST", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
+            {
+                string dir = Path.GetDirectoryName(cp);
+
+                string bn = Path.GetFileName(cp2).Substring(0, Path.GetFileName(cp2).LastIndexOf("^"));
+                string ext = Path.GetExtension(cp2);
+                int i = 0;
+                for (i = 1; i < 10; i++)
+                {
+                    cp2 = dir + "\\" + bn + "^" + i.ToString("D1") + ext;
+                    if (File.Exists(cp2) == false)
+                    {
+                        File.Move(cp, cp2);
+                        return "";
+                    }
+                }
+
+                bn = bn.Substring(0, bn.Length - 1);
+                for (i = 1; i < 100; i++)
+                {
+                    cp2 = dir + "\\" + bn + "^" + i.ToString("D2") + ext;
+                    if (File.Exists(cp2) == false)
+                    {
+                        File.Move(cp, cp2);
+                        return "";
+                    }
+                }
+
+                MessageBox.Show(this, "ファイル名5文字~99個以上は対応してません", "MSDOS");
+            }
+
+            return "";
+        }
+
 
         //ID
         private void button2_Click(object sender, EventArgs e)//gid
@@ -630,6 +658,10 @@ namespace WindowsFormsApplication1
                 if (System.IO.File.Exists(rpname)==true)
                 {
                     textBox1.Text = dic[22];//"同じ名前が存在します";
+                    if (checkBox3.Checked == true)
+                    {
+                        dosfilerenamer(isofile, rpname);
+                    }
                 }
                 else
                 {
@@ -670,7 +702,11 @@ namespace WindowsFormsApplication1
                     rpname = isofile.Substring(0, last) + rpname;
                     if (System.IO.File.Exists(rpname))
                     {
-                        textBox1.Text =dic[22];
+                        textBox1.Text = dic[22];
+                        if (checkBox3.Checked == true)
+                        {
+                            dosfilerenamer(isofile, rpname);
+                        }
                     }
                     else
                     {
@@ -852,7 +888,11 @@ namespace WindowsFormsApplication1
                     rpname = isofile.Substring(0, last) + rpname;
                     if (System.IO.File.Exists(rpname))
                     {
-                        textBox1.Text =dic[22];
+                        textBox1.Text = dic[22];
+                        if (checkBox3.Checked == true)
+                        {
+                            dosfilerenamer(isofile, rpname);
+                        }
                     }
                     else
                     {
@@ -1003,7 +1043,11 @@ namespace WindowsFormsApplication1
                 rpname = isofile.Substring(0, last) + rpname;
                 if (System.IO.File.Exists(rpname))
                 {
-                    textBox1.Text =dic[22];
+                    textBox1.Text = dic[22];
+                    if (checkBox3.Checked == true)
+                    {
+                        dosfilerenamer(isofile, rpname);
+                    }
                 }
                 else
                 {
@@ -1090,7 +1134,11 @@ namespace WindowsFormsApplication1
             rpname = isofile.Substring(0, last) + rpname;
              if (System.IO.File.Exists(rpname)==true)
               {
-                textBox1.Text =dic[22];
+                  textBox1.Text = dic[22];
+                  if (checkBox3.Checked == true)
+                  {
+                      dosfilerenamer(isofile, rpname);
+                  }
               }
                else
               {
@@ -1361,7 +1409,11 @@ namespace WindowsFormsApplication1
                     rpname = isofile.Substring(0, last) + rpname;
                     if (System.IO.File.Exists(rpname)==true)
                     {
-                        textBox1.Text =dic[22];
+                        textBox1.Text = dic[22];
+                        if (checkBox3.Checked == true)
+                        {
+                            dosfilerenamer(isofile, rpname);
+                        }
                     }
                     else
                     {
@@ -1526,4 +1578,13 @@ namespace WindowsFormsApplication1
 
 
     }
+    
+
+    class MSDOS
+    {
+        [DllImport("kernel32.dll")]
+        public static extern int GetShortPathName(string longPath, StringBuilder shortPathBuffer, int bufferSize);
+
+    } 
+
 }
