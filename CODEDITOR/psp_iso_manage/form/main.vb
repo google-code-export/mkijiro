@@ -829,7 +829,7 @@ Public Class umdisomanger
             If ss(0).Length > 6 Then
                 ss(0) = ss(0).Substring(0, 6)
             End If
-            s = ss(0) & "~1." & ss(ss.Length - 1)
+            s = ss(0) & "^1." & ss(ss.Length - 1)
 
         End If
 
@@ -873,7 +873,7 @@ Public Class umdisomanger
                     Beep()
                 Else
                     Beep()
-                    If MessageBox.Show(Me, "すでに同じMSDOS8.3形式の名前が存在します,数字を増やしてリネームしますか？", "FILE EXIST", MessageBoxButtons.YesNoCancel, _
+                    If MessageBox.Show(Me, "すでにMSDOS8.3同じ名前が存在します,数字を増やしてリネームしますか？", "FILE EXIST", MessageBoxButtons.YesNoCancel, _
                                              MessageBoxIcon.Exclamation, _
                                              MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
 
@@ -881,7 +881,7 @@ Public Class umdisomanger
                         Dim ext As String = Path.GetExtension(cp2)
                         Dim i As Integer = 0
                         For i = 1 To 9
-                            cp2 = My.Settings.vitasavedir & "\" & bn & "~" & i.ToString("D1") & ext
+                            cp2 = My.Settings.vitasavedir & "\" & bn & "^" & i.ToString("D1") & ext
                             If File.Exists(cp2) = False Then
                                 My.Computer.FileSystem.CopyFile(cp, cp2, FileIO.UIOption.AllDialogs)
                                 Beep()
@@ -891,7 +891,7 @@ Public Class umdisomanger
 
                         bn = bn.Substring(0, bn.Length - 1)
                         For i = 1 To 99
-                            cp2 = My.Settings.vitasavedir & "\" & bn & "~" & i.ToString("D2") & ext
+                            cp2 = My.Settings.vitasavedir & "\" & bn & "^" & i.ToString("D2") & ext
                             If File.Exists(cp2) = False Then
                                 My.Computer.FileSystem.CopyFile(cp, cp2, FileIO.UIOption.AllDialogs)
                                 Beep()
