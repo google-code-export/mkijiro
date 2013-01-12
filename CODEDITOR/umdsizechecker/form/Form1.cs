@@ -583,7 +583,7 @@ namespace WindowsFormsApplication1
                 {
                     ss[0] = ss[0].Substring(0, 6);
                 }
-                s = ss[0] + "^1." + ss[1];
+                s = ss[0] + "N1." + ss[1];
             }
             
 
@@ -604,12 +604,12 @@ namespace WindowsFormsApplication1
             {
                 string dir = Path.GetDirectoryName(cp);
 
-                string bn = Path.GetFileName(cp2).Substring(0, Path.GetFileName(cp2).LastIndexOf("^"));
+                string bn = Path.GetFileNameWithoutExtension(cp2).Substring(0, Path.GetFileName(cp2).LastIndexOf("N"));
                 string ext = Path.GetExtension(cp2);
                 int i = 0;
                 for (i = 1; i < 10; i++)
                 {
-                    cp2 = dir + "\\" + bn + "^" + i.ToString("D1") + ext;
+                    cp2 = dir + "\\" + bn + "N" + i.ToString("D1") + ext;
                     if (File.Exists(cp2) == false)
                     {
                         File.Move(cp, cp2);
@@ -620,7 +620,7 @@ namespace WindowsFormsApplication1
                 bn = bn.Substring(0, bn.Length - 1);
                 for (i = 1; i < 100; i++)
                 {
-                    cp2 = dir + "\\" + bn + "^" + i.ToString("D2") + ext;
+                    cp2 = dir + "\\" + bn + "N" + i.ToString("D2") + ext;
                     if (File.Exists(cp2) == false)
                     {
                         File.Move(cp, cp2);
