@@ -824,22 +824,22 @@ Public Class umdisomanger
 
     Private Function msdos83(ByVal s As String) As String
 
-        'Dim ss As String() = s.Split(CChar("."))
-        'If ss.Length >= 2 Then
-        '    If ss(0).Length > 6 Then
-        '        ss(0) = ss(0).Substring(0, 6)
-        '    End If
-        '    s = ss(0) & "~1." & ss(ss.Length - 1)
+        Dim ss As String() = s.Split(CChar("."))
+        If ss.Length >= 2 Then
+            If ss(0).Length > 6 Then
+                ss(0) = ss(0).Substring(0, 6)
+            End If
+            s = ss(0) & "~1." & ss(ss.Length - 1)
 
-        'End If
+        End If
 
-        Dim bufferLength As Integer = 260
-        Dim shortPathBuffer As New StringBuilder(bufferLength)
-        Module1.GetShortPathName(s, shortPathBuffer, bufferLength)
+        'Dim bufferLength As Integer = 500
+        'Dim shortPathBuffer As New StringBuilder(bufferLength)
+        'Module1.GetShortPathName(s, shortPathBuffer, bufferLength)
 
-        Dim shortPath As String = shortPathBuffer.ToString()
+        'Dim shortPath As String = shortPathBuffer.ToString()
 
-        Return shortPath
+        Return s.ToUpper
     End Function
 
 
@@ -873,8 +873,39 @@ Public Class umdisomanger
                     Beep()
                 Else
                     Beep()
-                    MessageBox.Show(Me, "すでに同じMSDOS8.3形式の名前が存在します", "FILE EXIST")
-                End If
+                    If MessageBox.Show(Me, "すでに同じMSDOS8.3形式の名前が存在します,数字を増やしてリネームしますか？", "FILE EXIST", MessageBoxButtons.YesNoCancel, _
+                                             MessageBoxIcon.Exclamation, _
+                                             MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
+
+                        Dim bn As String = Path.GetFileName(cp2).Substring(0, Path.GetFileName(cp2).LastIndexOf("~"))
+                        Dim ext As String = Path.GetExtension(cp2)
+                        Dim i As Integer = 0
+                        For i = 1 To 9
+                            cp2 = My.Settings.vitasavedir & "\" & bn & "~" & i.ToString("D1") & ext
+                            If File.Exists(cp2) = False Then
+                                My.Computer.FileSystem.CopyFile(cp, cp2, FileIO.UIOption.AllDialogs)
+                                Beep()
+                                Exit Sub
+                            End If
+                        Next
+
+                        bn = bn.Substring(0, bn.Length - 1)
+                        For i = 1 To 99
+                            cp2 = My.Settings.vitasavedir & "\" & bn & "~" & i.ToString("D2") & ext
+                            If File.Exists(cp2) = False Then
+                                My.Computer.FileSystem.CopyFile(cp, cp2, FileIO.UIOption.AllDialogs)
+                                Beep()
+                                Exit Sub
+                            End If
+                        Next
+
+                        Beep()
+                        MessageBox.Show(Me, "ファイル名5文字~99個以上は対応してません", "MSDOS")
+
+                    End If
+
+
+                    End If
 
             End If
         Else
