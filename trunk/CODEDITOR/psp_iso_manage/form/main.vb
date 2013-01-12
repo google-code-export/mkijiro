@@ -829,7 +829,7 @@ Public Class umdisomanger
             If ss(0).Length > 6 Then
                 ss(0) = ss(0).Substring(0, 6)
             End If
-            s = ss(0) & "^1." & ss(ss.Length - 1)
+            s = ss(0) & "N1." & ss(ss.Length - 1)
 
         End If
 
@@ -877,11 +877,11 @@ Public Class umdisomanger
                                              MessageBoxIcon.Exclamation, _
                                              MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
 
-                        Dim bn As String = Path.GetFileName(cp2).Substring(0, Path.GetFileName(cp2).LastIndexOf("~"))
+                        Dim bn As String = Path.GetFileNameWithoutExtension(cp2).Substring(0, Path.GetFileName(cp2).LastIndexOf("N"))
                         Dim ext As String = Path.GetExtension(cp2)
                         Dim i As Integer = 0
                         For i = 1 To 9
-                            cp2 = My.Settings.vitasavedir & "\" & bn & "^" & i.ToString("D1") & ext
+                            cp2 = My.Settings.vitasavedir & "\" & bn & "N" & i.ToString("D1") & ext
                             If File.Exists(cp2) = False Then
                                 My.Computer.FileSystem.CopyFile(cp, cp2, FileIO.UIOption.AllDialogs)
                                 Beep()
@@ -891,7 +891,7 @@ Public Class umdisomanger
 
                         bn = bn.Substring(0, bn.Length - 1)
                         For i = 1 To 99
-                            cp2 = My.Settings.vitasavedir & "\" & bn & "^" & i.ToString("D2") & ext
+                            cp2 = My.Settings.vitasavedir & "\" & bn & "N" & i.ToString("D2") & ext
                             If File.Exists(cp2) = False Then
                                 My.Computer.FileSystem.CopyFile(cp, cp2, FileIO.UIOption.AllDialogs)
                                 Beep()
