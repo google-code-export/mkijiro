@@ -7,7 +7,7 @@ FASTLOADERとかのダミー埋めによるBADDAUMP判定はあやしいので注意
 VITA8.3制限の詳細がわからないのでとりあえず
 半角英数以外はなくすように変更
 VITAREGEXのとこで変更可能
-Regex unkonwvita = new Regex("[^A-Za-z0-9 \\.\\-]"); //-はいけるっぽい
+Regex unkonwvita = new Regex("[^A-Za-z0-9\\.\\-]"); //-はいけるっぽい
 
 2013/01/13
 ちるだだと転送できないっぽいので^に変更

@@ -881,7 +881,7 @@ Public Class umdisomanger
                     Beep()
                 Else
                     Beep()
-                    If MessageBox.Show(Me, "すでにMSDOS8.3同じ名前が存在します,数字を増やしてリネームしますか？", "FILE EXIST", MessageBoxButtons.YesNoCancel, _
+                    If MessageBox.Show(Me, "すでに同じ名前が存在します,数字を増やしてリネームしますか？", "FILE EXIST", MessageBoxButtons.YesNoCancel, _
                                              MessageBoxIcon.Exclamation, _
                                              MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
 
@@ -920,6 +920,53 @@ Public Class umdisomanger
             Beep()
             MessageBox.Show(Me, "VITAのセーブフォルダが指定されてないか見つかりません", "NO VITA SAVEDATA")
         End If
+
+
+    End Sub
+
+
+    Private Sub ToolStripMenuItem4_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem4.Click
+
+
+        If Directory.Exists(My.Settings.vitasavedir) Then
+
+            Dim treenode As TreeNode = TreeView1.SelectedNode
+            If treenode IsNot Nothing Then
+                If treenode.Level = 0 Then
+                    treenode = treenode.Nodes(0)
+                Else
+                    treenode = treenode.Parent.Nodes(0)
+                End If
+                Dim cp As String = treenode.Tag.ToString
+
+                If File.Exists(cp) = False Then
+                    Beep()
+                    MessageBox.Show(Me, "コピー元のファイルが見つかりません", "FILE EXIST")
+                    Exit Sub
+
+                End If
+                
+                If Regex.IsMatch(crc.Text, "[0-9-A-F]{8}", System.Text.RegularExpressions.RegexOptions.ECMAScript) Then
+
+
+                    Dim cp2 As String = My.Settings.vitasavedir & "\" & crc.Text & Path.GetExtension(cp).ToUpper
+
+                    If File.Exists(cp2) = False Then
+                        My.Computer.FileSystem.CopyFile(cp, cp2, FileIO.UIOption.AllDialogs)
+                        Beep()
+                    End If
+                Else
+                    Beep()
+                    MessageBox.Show(Me, "CRC32が未計算です", "NO CRC32")
+
+                End If
+
+            End If
+        Else
+            Beep()
+            MessageBox.Show(Me, "VITAのセーブフォルダが指定されてないか見つかりません", "NO VITA SAVEDATA")
+        End If
+
 
 
     End Sub
@@ -4640,4 +4687,12 @@ Public Class umdisomanger
         End If
         f.Dispose()
     End Sub
+
+    Private Sub OPENVITASAVEDATAFOLDERToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OPENVITASAVEDATAFOLDERToolStripMenuItem.Click
+
+        If Directory.Exists(My.Settings.vitasavedir) Then
+            System.Diagnostics.Process.Start(My.Settings.vitasavedir)
+        End If
+    End Sub
+
 End Class
