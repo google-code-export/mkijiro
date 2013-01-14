@@ -824,6 +824,14 @@ Public Class umdisomanger
 
     Private Function msdos83(ByVal s As String) As String
 
+        Dim rr As Regex = New Regex(My.Settings.vitamask)
+        Dim m As Match = rr.Match(s)
+        While m.Success
+            s = s.Replace(m.Value, "")
+            m = m.NextMatch
+        End While
+
+
         Dim ss As String() = s.Split(CChar("."))
         If ss.Length >= 2 Then
             If ss(0).Length > 6 Then
@@ -4622,4 +4630,14 @@ Public Class umdisomanger
 
     End Sub
 
+    Private Sub ToolStripMenuItem3_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem3.Click
+        Dim f As New vita
+
+        Me.TopMost = False
+        f.ShowDialog()
+        If My.Settings.topmost = True Then
+            Me.TopMost = True
+        End If
+        f.Dispose()
+    End Sub
 End Class

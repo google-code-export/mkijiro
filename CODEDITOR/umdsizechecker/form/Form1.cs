@@ -88,6 +88,10 @@ namespace WindowsFormsApplication1
                         checkBox3.Checked = true;
                         checkBox4.Checked = true;
                     }
+                    else if (s.Contains("MASK"))
+                    {
+                        textBox1.Text = s.Remove(0, 4);
+                    }
                 }
                 sr.Close();
             }
@@ -264,6 +268,11 @@ namespace WindowsFormsApplication1
             {
                 s.AppendLine("DOS83");
             }
+            if (textBox1.Text!="")
+            {
+                s.Append("MASK");
+                s.AppendLine(textBox1.Text);
+            }
             sr.Write(s.ToString());
             
             sr.Close();
@@ -281,7 +290,7 @@ namespace WindowsFormsApplication1
             this.textBox1.DragEnter += new
             System.Windows.Forms.DragEventHandler(this.textBox1_DragEnter);
             this.groupBox3.Location = new Point(7, 169);
-            this.groupBox4.Location = new Point(7, 265);
+            this.groupBox4.Location = new Point(7, 273);
             this.MinimumSize = new Size(244, 383);
             this.MaximumSize = new Size(244, 383);
           }
@@ -575,7 +584,18 @@ namespace WindowsFormsApplication1
 
         private string dos83(string s)
         {
+
+            Regex rip = new Regex(textBox1.Text);
+            Match r = rip.Match(s);
+            while (r.Success)
+            {
+                s = s.Replace(r.Value, "");
+                r = r.NextMatch();
+            }
+
             string[] ss = s.Split('.');
+
+
 
             if (ss.Length >= 2)
             {
@@ -593,6 +613,8 @@ namespace WindowsFormsApplication1
 
             //string shortPath = shortPathBuffer.ToString();
 
+
+
             return s.ToUpper();
         }
 
@@ -600,7 +622,7 @@ namespace WindowsFormsApplication1
         private string dosfilerenamer(string cp,string cp2)
         {
 
-            if (MessageBox.Show("すでにMSDOS8.3同じ名前が存在します,数字を増やしてリネームしますか？", "FILE EXIST", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
+            if (MessageBox.Show("すでに同じ名前が存在します,数字を増やしてリネームしますか？", "FILE EXIST", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
             {
                 string dir = Path.GetDirectoryName(cp);
 
@@ -1575,7 +1597,15 @@ namespace WindowsFormsApplication1
             checkBox3.Checked = checkBox4.Checked;
         }
 
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+            textBox4.Text = textBox3.Text;
+        }
 
+        private void textBox4_TextChanged(object sender, EventArgs e)
+        {
+            textBox3.Text = textBox4.Text;
+        }
 
     }
     
