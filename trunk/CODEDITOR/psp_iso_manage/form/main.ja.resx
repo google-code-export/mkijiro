@@ -127,6 +127,33 @@
   <data name="CRCimage.Text" xml:space="preserve">
     <value>CRC画像検索</value>
   </data>
+  <data name="VITAMSDOS83ToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>314, 22</value>
+  </data>
+  <data name="VITAMSDOS83ToolStripMenuItem.Text" xml:space="preserve">
+    <value>VITAフォルダにISOをコピー(VITA8.3形式)</value>
+  </data>
+  <data name="ToolStripMenuItem4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>290, 22</value>
+  </data>
+  <data name="ToolStripMenuItem4.Text" xml:space="preserve">
+    <value>VITAフォルダにISOをコピー(CRC32)</value>
+  </data>
+  <data name="ToolStripMenuItem4.ToolTipText" xml:space="preserve">
+    <value>ファイル名を[CRC32].ISO/CSOにしてコピーします</value>
+  </data>
+  <data name="PACKHOMEBREWVITASAVEToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>289, 22</value>
+  </data>
+  <data name="PACKHOMEBREWVITASAVEToolStripMenuItem.Text" xml:space="preserve">
+    <value>VITAフォルダにHBをパックしてコピー</value>
+  </data>
+  <data name="OPENVITASAVEDATAFOLDERToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>290, 22</value>
+  </data>
+  <data name="OPENVITASAVEDATAFOLDERToolStripMenuItem.Text" xml:space="preserve">
+    <value>VITAセーブデータフォルダを開く</value>
+  </data>
   <data name="cnt_install.Size" type="System.Drawing.Size, System.Drawing">
     <value>229, 22</value>
   </data>
@@ -164,22 +191,10 @@
     <value>ジャケット/UMD画像を見る</value>
   </data>
   <data name="ContextMenuStrip2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>230, 126</value>
+    <value>230, 148</value>
   </data>
   <data name="TreeView1.Size" type="System.Drawing.Size, System.Drawing">
     <value>208, 355</value>
-  </data>
-  <data name="VITAMSDOS83ToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>289, 22</value>
-  </data>
-  <data name="VITAMSDOS83ToolStripMenuItem.Text" xml:space="preserve">
-    <value>VITAフォルダにISOをコピー</value>
-  </data>
-  <data name="PACKHOMEBREWVITASAVEToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>289, 22</value>
-  </data>
-  <data name="PACKHOMEBREWVITASAVEToolStripMenuItem.Text" xml:space="preserve">
-    <value>VITAフォルダにHBをパックしてコピー</value>
   </data>
   <data name="GAMEID.Location" type="System.Drawing.Point, System.Drawing">
     <value>354, 243</value>
@@ -634,13 +649,13 @@ diffフォルダにimgとDATができます</value>
     <value>設定</value>
   </data>
   <data name="GUITOP.Size" type="System.Drawing.Size, System.Drawing">
-    <value>212, 22</value>
+    <value>242, 22</value>
   </data>
   <data name="GUITOP.Text" xml:space="preserve">
     <value>常に前面に表示</value>
   </data>
   <data name="xmlselect.Size" type="System.Drawing.Size, System.Drawing">
-    <value>212, 22</value>
+    <value>242, 22</value>
   </data>
   <data name="xmlselect.Text" xml:space="preserve">
     <value>画像検索用XML指定</value>
@@ -650,7 +665,7 @@ diffフォルダにimgとDATができます</value>
 IF MATCH CRC32 IN XML,NAME AND IMAGE APPLIED</value>
   </data>
   <data name="rename_dat.Size" type="System.Drawing.Size, System.Drawing">
-    <value>212, 22</value>
+    <value>242, 22</value>
   </data>
   <data name="rename_dat.Text" xml:space="preserve">
     <value>リネーム用DAT指定</value>
@@ -661,7 +676,7 @@ IF MATCH CRC32 IN DAT
 files are renamed</value>
   </data>
   <data name="editpspdir.Size" type="System.Drawing.Size, System.Drawing">
-    <value>212, 22</value>
+    <value>242, 22</value>
   </data>
   <data name="editpspdir.Text" xml:space="preserve">
     <value>転送先リスト編集</value>
@@ -673,7 +688,7 @@ right click on treeview,you can edit copydir
 X:\PSP\GAME\</value>
   </data>
   <data name="ToolStripMenuItem2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>212, 22</value>
+    <value>242, 22</value>
   </data>
   <data name="ToolStripMenuItem2.Text" xml:space="preserve">
     <value>CSOアンパック</value>
@@ -685,19 +700,25 @@ RAMDISKが2GB以上ある場合はアンパック後の
 ハッシュ計算がHDDより数倍早いので推奨</value>
   </data>
   <data name="VITASAVEDATAToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>212, 22</value>
+    <value>242, 22</value>
   </data>
   <data name="VITASAVEDATAToolStripMenuItem.Text" xml:space="preserve">
     <value>VITA転送用フォルダ指定</value>
   </data>
+  <data name="ToolStripMenuItem3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>242, 22</value>
+  </data>
+  <data name="ToolStripMenuItem3.Text" xml:space="preserve">
+    <value>VITA8.3制限ファイル名マスク</value>
+  </data>
   <data name="XMLヘッダフッター編集ToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>212, 22</value>
+    <value>242, 22</value>
   </data>
   <data name="XMLヘッダフッター編集ToolStripMenuItem.Text" xml:space="preserve">
     <value>XMLヘッダフッター編集</value>
   </data>
   <data name="ALSAVE.Size" type="System.Drawing.Size, System.Drawing">
-    <value>212, 22</value>
+    <value>242, 22</value>
   </data>
   <data name="ALSAVE.Text" xml:space="preserve">
     <value>終了時リストを必ず保存</value>
