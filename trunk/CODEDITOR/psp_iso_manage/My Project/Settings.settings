@@ -178,5 +178,8 @@ X:\PSP\GAME660\</Value>
     <Setting Name="vitasavedir" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="vitamask" Type="System.String" Scope="User">
+      <Value Profile="(Default)">[^A-Za-z0-9 \\.\\-]</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

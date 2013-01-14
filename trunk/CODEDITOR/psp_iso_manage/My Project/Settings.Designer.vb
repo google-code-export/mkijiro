@@ -386,6 +386,18 @@ Namespace My
                 Me("vitasavedir") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("[^A-Za-z0-9 \\.\\-]")>  _
+        Public Property vitamask() As String
+            Get
+                Return CType(Me("vitamask"),String)
+            End Get
+            Set
+                Me("vitamask") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

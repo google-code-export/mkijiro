@@ -98,6 +98,12 @@
     <Compile Include="form\extra.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="form\vita.Designer.vb">
+      <DependentUpon>vita.vb</DependentUpon>
+    </Compile>
+    <Compile Include="form\vita.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="form\uid.Designer.vb">
       <DependentUpon>uid.vb</DependentUpon>
     </Compile>
@@ -154,6 +160,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="form\extra.resx">
       <DependentUpon>extra.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form\vita.resx">
+      <DependentUpon>vita.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="form\main.ja-JP.resx">
       <DependentUpon>main.vb</DependentUpon>
