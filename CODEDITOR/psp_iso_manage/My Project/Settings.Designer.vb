@@ -389,7 +389,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("[^A-Za-z0-9\\.\\-]")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("[^A-Za-z0-9\.\-_]")>  _
         Public Property vitamask() As String
             Get
                 Return CType(Me("vitamask"),String)
