@@ -179,7 +179,7 @@ X:\PSP\GAME660\</Value>
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="vitamask" Type="System.String" Scope="User">
-      <Value Profile="(Default)">[^A-Za-z0-9\\.\\-]</Value>
+      <Value Profile="(Default)">[^A-Za-z0-9\.\-_]</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -592,18 +592,25 @@ namespace WindowsFormsApplication1
                 s = s.Replace(r.Value, "");
                 r = r.NextMatch();
             }
-
+            
             string[] ss = s.Split('.');
 
 
 
             if (ss.Length >= 2)
             {
+                if (ss.Length >= 3)
+                {
+                    ss[0] = s.Substring(0, s.LastIndexOf("."));
+                }
+
                 if (ss[0].Length > 6)
                 {
                     ss[0] = ss[0].Substring(0, 6);
                 }
-                s = ss[0] + "N1." + ss[1];
+                s = ss[0].Replace(".", "_") + "N1." + ss[ss.Length - 1].Replace(".", "_");
+
+
             }
             
 

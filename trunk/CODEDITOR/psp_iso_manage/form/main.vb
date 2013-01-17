@@ -834,10 +834,14 @@ Public Class umdisomanger
 
         Dim ss As String() = s.Split(CChar("."))
         If ss.Length >= 2 Then
+            If ss.Length >= 3 Then
+                ss(0) = s.Substring(0, s.LastIndexOf("."))
+            End If
             If ss(0).Length > 6 Then
                 ss(0) = ss(0).Substring(0, 6)
             End If
-            s = ss(0) & "N1." & ss(ss.Length - 1)
+
+            s = ss(0).Replace(".", "_") & "N1." & ss(ss.Length - 1).Replace(".", "_")
 
         End If
 
