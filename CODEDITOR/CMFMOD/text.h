@@ -18,6 +18,9 @@
 
 #ifndef _TEXT_H
 #define _TEXT_H
+
+#define vitapath "ms0:/PSP/SAVEDATA/NPJH00016DATA00/PLUGINS.TXT"
+
 #define MAX_TEXTROW_COUNT 7000
 typedef struct {
 	const char * start;
@@ -39,5 +42,6 @@ extern int text_open(const char * filename, int rowbytes, p_txtpack txtpack);
 extern int text_rows(p_txtpack txtpack);
 extern p_textrow text_read(int row, p_txtpack txtpack);
 extern void text_close(p_txtpack txtpack);
+extern void text_update(p_txtpack txtpack);
 
 #endif
