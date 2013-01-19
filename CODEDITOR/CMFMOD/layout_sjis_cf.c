@@ -1688,6 +1688,7 @@ static int layout_read_text(char * fname)
 		case PSP_CTRL_TRIANGLE:
 			#ifdef VITA
 			if(FLAGVITA){
+			layout_filepos(fname, &cr, 1, 4);
 			text_update(&txtpack);
 			}
 			break;
@@ -1695,6 +1696,7 @@ static int layout_read_text(char * fname)
 		case PSP_CTRL_SQUARE:
 			if(FLAGVITA){
 			text_enable(&txtpack,cr+1,textrows);
+			rp = 1; //reprint
 			}
 			break;
 			
@@ -3076,7 +3078,10 @@ extern int layout_menu()
 			}
 			break;
 		case 13:
-			usb_LoadUSB(gameplaying());
+				#ifdef VITA
+				#else
+				usb_LoadUSB(gameplaying());
+				#endif
 			break;
 		default:
 			idx = -1;

@@ -40,7 +40,11 @@ static char menu_main10[] __attribute__(   (  aligned( 1 ), section( ".data" )  
 static char menu_main11[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "‚Ü‚­‚ëŠÇ—";
 static char menu_main12[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "‰æ‘œ‰{——";
 static char menu_main13[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "G—p€–Ú";
+#ifdef VITA
+static char menu_main14[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "";
+#else
 static char menu_main14[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) = "USB Ú‘±";
+#endif
 
 static const char * menu_main[] __attribute__(   (  aligned( 1 ), section( ".data" )  )   ) =
 {
