@@ -153,6 +153,7 @@ extern void text_close(p_txtpack txtpack)
 	sfree(txtpack->txt);
 }
 
+#ifdef VITA
 extern void text_update(p_txtpack txtpack)
 {
 	char *p;
@@ -160,6 +161,13 @@ extern void text_update(p_txtpack txtpack)
 			int ft = sceIoOpen(vitapath, PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
 			sceIoWrite(ft,p,txtpack->txt->size);
 			sceIoClose(ft);
+}
+
+void swapflag(char *p){
+		if(p[0] ==0x30 ||p[0] ==0x31)
+		{
+			p[0]=p[0]^1;
+		}
 }
 
 extern void text_enable(p_txtpack txtpack,int cr,int end)
@@ -180,17 +188,11 @@ extern void text_enable(p_txtpack txtpack,int cr,int end)
 		}
 		if(i==cr){
 		swap:
-		
-			p-=2;
-		if(p[0] ==0x30 ||p[0] ==0x31)
-		{
-			p[0]=p[0]^1;
-		}
-			p++;
-		if(p[0] ==0x30 ||p[0] ==0x31)
-		{
-			p[0]=p[0]^1;
-		}
+		p-=2;
+			swapflag(p);
+		p++;
+			swapflag(p);
+			
 			
 		break;
 		}
@@ -198,3 +200,4 @@ extern void text_enable(p_txtpack txtpack,int cr,int end)
 		p++;
 	}
 }
+#endif
