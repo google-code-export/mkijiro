@@ -1562,6 +1562,10 @@ static void layout_filepos(char *fname, int *cr, int rw, int len)		//rw==0 read;
 #define TEXT_BASE_Y	28
 #define TEXT_Y		242
 
+#ifdef VITA
+char FLAGVITA =0;
+#endif
+
 static int layout_read_text(char * fname)
 {
 #define TXT_LINES	12
@@ -1610,19 +1614,24 @@ static int layout_read_text(char * fname)
 				font_line(TEXT_LINE_X_BASE, 54 + 167 * cr / (textrows + TXT_LINES-1), TEXT_LINE_X_BASE, 54 + 167 * (cr + TXT_LINES) / (textrows + TXT_LINES-1));
 				font_line(TEXT_LINE_X_BASE+2, 54 + 167 * cr / (textrows + TXT_LINES-1), TEXT_LINE_X_BASE+2, 54 + 167 * (cr + TXT_LINES) / (textrows + TXT_LINES-1));
 			}
-			sprintf(rowstr, "%d/%d", cr + 1, textrows);
+			sprintf(rowstr, "%d/%d", cr + 1, textrows);//¥Ú¡¼¥¸
 			font_output(320, 232, rowstr);
 			font_output(102, 34, LAYOUT_READTEXT_SAVEHELP);
 			rp = 0;
 			font_switch_refresh();
 		}
-		switch(ctrl_waitmask(PSP_CTRL_SELECT|PSP_CTRL_TRIANGLE | PSP_CTRL_LTRIGGER | PSP_CTRL_RTRIGGER | PSP_CTRL_UP | PSP_CTRL_DOWN | PSP_CTRL_LEFT | PSP_CTRL_RIGHT | PSP_CTRL_CIRCLE | PSP_CTRL_CROSS | PSP_CTRL_START))
+		switch(ctrl_waitmask(PSP_CTRL_SELECT|PSP_CTRL_TRIANGLE | PSP_CTRL_SQUARE | PSP_CTRL_LTRIGGER | PSP_CTRL_RTRIGGER | PSP_CTRL_UP | PSP_CTRL_DOWN | PSP_CTRL_LEFT | PSP_CTRL_RIGHT | PSP_CTRL_CIRCLE | PSP_CTRL_CROSS | PSP_CTRL_START))
 		{
 		case PSP_CTRL_CIRCLE:
 		case PSP_CTRL_CROSS:
 			rp = -1;
 			fileinfo.orgtxtcr = cr;
-			break;
+			
+			#ifdef VITA
+			FLAGVITA =0;
+			#endif
+			
+			break;			
 		case PSP_CTRL_LTRIGGER:
  			if(cr > 0)
 			{
@@ -1677,6 +1686,22 @@ static int layout_read_text(char * fname)
 			layout_filepos(fname, &cr, 1, 4);
 			break;
 		case PSP_CTRL_TRIANGLE:
+			#ifdef VITA
+			if(FLAGVITA){
+			text_update(&txtpack);
+			}
+			break;
+			
+		case PSP_CTRL_SQUARE:
+			if(FLAGVITA){
+			text_enable(&txtpack,cr+1,textrows);
+			}
+			break;
+			
+			#else
+			
+			#endif
+			
 		case PSP_CTRL_SELECT:
 			fileinfo.orgtxtcr = cr;
 			fileinfo.autotxtread = 1;
@@ -3017,10 +3042,15 @@ extern int layout_menu()
 				switch(sub_idx)
 				{
 				case 0:
+					#ifdef VITA
+					FLAGVITA=1;
+					layout_read_text(vitapath);
+					#else
 					sceDisplayGetBrightness(&cur, 0);
 					ui_input_dec(110+12*10, 12*6+56, cur, &cur, 28, 99);
 					g_bright = cur;
 					sceDisplaySetBrightness(cur, 0);
+					#endif
 					break;
 				case 1:
 					layout_read(layout_read_ext[1],NULL);
@@ -3032,8 +3062,13 @@ extern int layout_menu()
 					export_psx_mc();
 					break;
 				case 4:
+					#ifdef VITA
+					
+					#else
 					scePowerRequestStandby();
 					freeBG();
+					#endif
+					
 					return 0;
 				default:
 					break;

@@ -1378,8 +1378,6 @@ extern void mem_table_savecw()
 	int j=0;
 	int fd;
 	
-	int i=0, j=0;
-	int fd;
 	
 	SJIS_UTF8SJIS(fn,40);
 
@@ -1396,6 +1394,7 @@ extern void mem_table_savecw()
 	char *p= malloc(WRITE_BUFFER);
 	char *p_backup;
 	p_backup=p;
+	int addr=0;
 	
 		mips_memcpy(fn,ui_get_gamename(),10);
 		fn[10]=0;

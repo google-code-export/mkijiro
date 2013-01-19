@@ -1373,6 +1373,7 @@ extern void mem_table_savecw()
 	
 	char *p= malloc(WRITE_BUFFER);
 	char *p_backup;
+	int addr=0;
 	p_backup=p;
 	
 		mips_memcpy(fn,ui_get_gamename(),10);

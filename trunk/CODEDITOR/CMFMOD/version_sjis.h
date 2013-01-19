@@ -24,7 +24,7 @@
 #define VER_BUILD 37
 
 //#define VER_STR "(http://koro.3322.org:8081/)"
-#define VER_STR "SJISMOD20121125(ijiro.daiwa-hotcom.com)"
+#define VER_STR "SJISMOD2013/01/19(ijiro.daiwa-hotcom.com)"
 
 
 #endif

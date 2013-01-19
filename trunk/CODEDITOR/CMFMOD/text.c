@@ -152,3 +152,49 @@ extern void text_close(p_txtpack txtpack)
 	sfree(txtpack->txt->buf);
 	sfree(txtpack->txt);
 }
+
+extern void text_update(p_txtpack txtpack)
+{
+	char *p;
+	p=txtpack->txt->buf;
+			int ft = sceIoOpen(vitapath, PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
+			sceIoWrite(ft,p,txtpack->txt->size);
+			sceIoClose(ft);
+}
+
+extern void text_enable(p_txtpack txtpack,int cr,int end)
+{
+	char *p;
+	p=txtpack->txt->buf;
+	int i=0;
+	
+	for(i=0;i<end;){
+	
+		if(p[0] =='\n')
+		{
+			i++;
+		}
+		else if(p[0] ==0)
+		{
+			goto swap;
+		}
+		if(i==cr){
+		swap:
+		
+			p-=2;
+		if(p[0] ==0x30 ||p[0] ==0x31)
+		{
+			p[0]=p[0]^1;
+		}
+			p++;
+		if(p[0] ==0x30 ||p[0] ==0x31)
+		{
+			p[0]=p[0]^1;
+		}
+			
+		break;
+		}
+		
+		p++;
+	}
+}

@@ -65,6 +65,9 @@ ifdef UNICODE
 CFLAGS += -DUNICODE_TXT
 endif
 
+ifdef VITA
+CFLAGS += -DVITA
+endif
 
 ifdef JISX0213
 CFLAGS += -DJISX0213
