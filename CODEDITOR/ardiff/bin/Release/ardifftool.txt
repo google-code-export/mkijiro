@@ -11,6 +11,9 @@ winmegerで比較結果のHTMを出力
 diff.htmにして鶴で比較
 
 
+2013/02/08
+NETFRAMEWROK4.5からNETFRAMEWROKNET4に変更
+
 2013/01/10
 出力が変なとこがあったの修正
 HTMLの実体参照がまざってるとごっごる変換URIに含められないので変換(&amp;→＆)
