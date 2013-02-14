@@ -1413,16 +1413,16 @@ Public Class load_db
 
                             cflag = 4
 
+                            If (bs(psparx2 + arflagct) And (1 << arbitshifter)) <> 0 Then
+                                cflag += 64
+                                cnode.ImageIndex = 6
+                            End If
                             If (bs(psparx + arflagct) And (1 << arbitshifter)) <> 0 Then
                                 cflag += 16
                                 cnode.ImageIndex = 4
                             End If
                             If (bs(psparx1 + arflagct) And (1 << arbitshifter)) = 0 Then
                                 cflag += 1
-                            End If
-                            If (bs(psparx2 + arflagct) And (1 << arbitshifter)) <> 0 Then
-                                cflag += 64
-                                cnode.ImageIndex = 3
                             End If
 
                             arbitshifter += 1

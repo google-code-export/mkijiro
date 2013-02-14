@@ -903,6 +903,7 @@ Partial Class MERGE
         Me.GOOGLESVN.Name = "GOOGLESVN"
         Me.GOOGLESVN.Size = New System.Drawing.Size(194, 22)
         Me.GOOGLESVN.Text = "GOOGLESVNからDL"
+        Me.GOOGLESVN.ToolTipText = "実験版含む最新版"
         '
         'ToolStripSeparator8
         '
@@ -1214,6 +1215,7 @@ Partial Class MERGE
         Me.iconset.Images.SetKeyName(3, "code selected.png")
         Me.iconset.Images.SetKeyName(4, "code_hidden")
         Me.iconset.Images.SetKeyName(5, "hide_game.png")
+        Me.iconset.Images.SetKeyName(6, "zip.png")
         '
         'GID_tb
         '
