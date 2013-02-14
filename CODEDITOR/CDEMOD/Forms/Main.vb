@@ -1786,17 +1786,17 @@ Public Class MERGE
 
             codetree.SelectedNode.ImageIndex = 2
 
+            If FOLDER.Checked = True Then
+                cflag += 64
+                codetree.SelectedNode.ImageIndex = 6
+            End If
             If HIDDEN.Checked = True Then
                 cflag += 16
                 codetree.SelectedNode.ImageIndex = 4
             End If
 
-            If FOLDER.Checked = True Then
-                cflag += 64
-                codetree.SelectedNode.ImageIndex = 3
-            End If
 
-            buffer = Convert.ToChar(cflag) & vbCrLf
+            'buffer = Convert.ToChar(cflag) & vbCrLf
 
             If PSX = True Then
                 Dim r As New System.Text.RegularExpressions.Regex("[0-9a-fA-F]{8} [0-9a-zA-Z?]{4}", System.Text.RegularExpressions.RegexOptions.IgnoreCase)
@@ -1857,6 +1857,9 @@ Public Class MERGE
 
                 buffer &= "#" & dgtext.Text.Trim & vbCrLf
                 buffer &= "#" & dmtext.Text.Trim & vbCrLf
+
+
+                buffer = Convert.ToChar(cflag) & vbCrLf & buffer
 
 
                 If codetree.SelectedNode.Index = 0 AndAlso codetree.SelectedNode.Text = "(M)" Then
@@ -2212,21 +2215,23 @@ Public Class MERGE
                             TEMP.Checked = True
                         ElseIf (cp(0) And 4) = 4 Then
                             PSPAR.Checked = True
-                        Else
-                            CWC.Checked = True
-                        End If
+
+                            Else
+                                CWC.Checked = True
+                            End If
+
+                            If (cp(0) And 64) <> 0 Then
+                                FOLDER.Checked = True
+                                codetree.SelectedNode.SelectedImageIndex = 6
+                            End If
+
+                            If (cp(0) And 16) <> 0 Then
+                                HIDDEN.Checked = True
+                                codetree.SelectedNode.SelectedImageIndex = 4
+                            End If
 
 
-                        If (cp(0) And 16) <> 0 Then
-                            HIDDEN.Checked = True
-                            codetree.SelectedNode.SelectedImageIndex = 4
-                        End If
-
-                        If (cp(0) And 64) <> 0 Then
-                            FOLDER.Checked = True
-                        End If
-
-                        skip = True
+                            skip = True
 
                     End If
 
