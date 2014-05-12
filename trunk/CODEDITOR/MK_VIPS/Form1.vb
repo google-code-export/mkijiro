@@ -5850,12 +5850,12 @@ Public Class Form1
             For Each s As String In ss
                 psdism = psdis.Match(s.Trim)
                 If psdism.Success Then
-                    s = s.Substring(0, psdism.Index)
+                    s = s.Trim().Substring(0, psdism.Index)
                 End If
                 llbm = llb.Match(s.Trim)
                 If llbm.Success Then
                     sc.AppendLine(llbm.Value.Trim)
-                    s = s.Remove(0, llbm.Length)
+                    s = s.Trim().Remove(0, llbm.Length)
                 End If
                 sheadm = shead.Match(s.Trim)
                 s = s.Trim
@@ -5916,7 +5916,7 @@ Public Class Form1
                                 sc.AppendLine((k And &HFFFF).ToString("X4"))
                             End If
                             If k = 0 Then
-                                sc.Append(s.Trim)
+                                sc.AppendLine(s.Trim)
                             End If
                         Case ".ascii"
                             rg = s.Remove(0, 6).Trim
