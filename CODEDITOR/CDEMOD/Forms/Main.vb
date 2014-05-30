@@ -1855,8 +1855,13 @@ Public Class MERGE
                     Next
                 End If
 
-                buffer &= "#" & dgtext.Text.Trim & vbCrLf
-                buffer &= "#" & dmtext.Text.Trim & vbCrLf
+                If (dgtext.Text.Trim <> "") Then
+                    buffer &= "#" & dgtext.Text.Trim & vbCrLf
+                End If
+
+                If (dmtext.Text.Trim <> "") Then
+                    buffer &= "#" & dmtext.Text.Trim & vbCrLf
+                End If
 
 
                 buffer = Convert.ToChar(cflag) & vbCrLf & buffer
